@@ -85,8 +85,8 @@ namespace GpuSim
 			DrawUnitEffect = new EzEffect(Content, "Shaders\\DrawUnit");
 			BasicEffect = new EzEffect(Content, "Shaders\\BasicEffect");
 			//compute = new EzEffect(Content, "Shaders\\GameOfLife");
-			compute1 = new EzEffect(Content, "Shaders\\Unit");
-			compute2 = new EzEffect(Content, "Shaders\\Unit2");
+            compute1 = new EzEffect(Content, "Shaders\\Movement_Phase1");
+            compute2 = new EzEffect(Content, "Shaders\\Movement_Phase2");
 
 			const int w = 1024, h = 1024;
 			texture = new RenderTarget2D(graphics.GraphicsDevice, w, h);
@@ -223,7 +223,7 @@ namespace GpuSim
 			GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
 
 			// Check if we need to do a simulation update
-			if (UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates)
+            if (UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates)
 			{
 				SecondsSinceLastUpdate -= DelayBetweenUpdates;
 

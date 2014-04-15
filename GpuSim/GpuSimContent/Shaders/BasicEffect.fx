@@ -1,15 +1,15 @@
-#include "RootEffect.fx"
+#include "root.fx"
 
-PixelToFrame SimplePixelShader(VertexToPixel PSIn)
+PixelToFrame SimplePixelShader(VertexToPixel psin)
 {
     PixelToFrame Output = (PixelToFrame)0;
 
-	float4 lookup = tex2D(TextureSampler,  PSIn.TexCoords);
-	float4 lookup2 = tex2D(TextureSampler,  PSIn.TexCoords / 50);
-	float4 lookup3 = tex2D(TextureSampler,  PSIn.TexCoords / 150);
+	float4 lookup = tex2D(TextureSampler,  psin.TexCoords);
+	float4 lookup2 = tex2D(TextureSampler,  psin.TexCoords / 50);
+	float4 lookup3 = tex2D(TextureSampler,  psin.TexCoords / 150);
 
     Output.Color = (lookup + float4(1,1,1,1)) * (lookup2 + float4(1,1,1,1)) / 8 + lookup3 / 4;
-	Output.Color *= PSIn.Color;
+	Output.Color *= psin.Color;
     return Output;
 }
 
