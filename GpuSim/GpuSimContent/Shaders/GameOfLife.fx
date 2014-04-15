@@ -1,4 +1,4 @@
-#include "RootEffect.fx"
+#include "root.fx"
 
 float GoL_calc(float val, float current)
 {

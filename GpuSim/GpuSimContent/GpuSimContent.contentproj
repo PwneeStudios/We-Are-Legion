@@ -14,6 +14,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <PlatformTarget>x86</PlatformTarget>
@@ -49,11 +50,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Shaders\RootEffect.fx">
-      <Name>RootEffect</Name>
+    <None Include="Shaders\root.fx">
+      <Name>root</Name>
       <Importer>EffectImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
-    </Compile>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Shaders\GameOfLife.fx">
@@ -63,15 +64,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Shaders\Unit.fx">
-      <Name>Unit</Name>
+    <Compile Include="Shaders\Movement_Phase1.fx">
+      <Name>Movement_Phase1</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Shaders\Unit2.fx">
-      <Name>Unit2</Name>
+    <Compile Include="Shaders\Movement_Phase2.fx">
+      <Name>Movement_Phase2</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>

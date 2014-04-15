@@ -9,7 +9,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-using CoreEngine;
+using System.Diagnostics;
+
+using FragSharpFramework;
 
 namespace GpuSim
 {
@@ -21,37 +23,91 @@ namespace GpuSim
 		}
 	}
 
+    public class Quad
+    {
+        VertexPositionColorTexture[] vertexData;
+
+        const int TOP_LEFT = 0;
+        const int TOP_RIGHT = 1;
+        const int BOTTOM_RIGHT = 2;
+        const int BOTTOM_LEFT = 3;
+
+        static int[] indexData = new int[] { 
+            TOP_LEFT, BOTTOM_RIGHT, BOTTOM_LEFT,
+            TOP_LEFT, TOP_RIGHT,    BOTTOM_RIGHT,
+        };
+
+        public Quad(vec2 PositionBl, vec2 PositionTr, vec2 UvBl, vec2 UvTr)
+        {
+            SetupVertices(PositionBl, PositionTr, UvBl, UvTr);
+        }
+
+        public void SetupVertices(vec2 PositionBl, vec2 PositionTr, vec2 UvBl, vec2 UvTr)
+        {
+            const float Z = 0.0f;
+
+            vec3 _PositionBl = new vec3(PositionBl.x, PositionBl.y, Z);
+            vec3 _PositionTr = new vec3(PositionTr.x, PositionTr.y, Z);
+            vec3 _PositionBr = new vec3(PositionTr.x, PositionBl.y, Z);
+            vec3 _PositionTl = new vec3(PositionBl.x, PositionTr.y, Z);
+
+            vec2 _UvBl = new vec2(UvBl.x, UvTr.y);
+            vec2 _UvTr = new vec2(UvTr.x, UvBl.y);
+            vec2 _UvBr = new vec2(UvTr.x, UvTr.y);
+            vec2 _UvTl = new vec2(UvBl.x, UvBl.y);
+
+            vertexData = new VertexPositionColorTexture[4];
+            vertexData[TOP_LEFT]     = new VertexPositionColorTexture(_PositionTl, Color.White, _UvTl);
+            vertexData[TOP_RIGHT]    = new VertexPositionColorTexture(_PositionTr, Color.White, _UvTr);
+            vertexData[BOTTOM_RIGHT] = new VertexPositionColorTexture(_PositionBr, Color.White, _UvBr);
+            vertexData[BOTTOM_LEFT]  = new VertexPositionColorTexture(_PositionBl, Color.White, _UvBl);
+        }
+
+        public void Draw(GraphicsDevice GraphicsDevice)
+        {
+            GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, 0, 4, indexData, 0, 2);
+        }
+    }
+
+    public class GridHelper
+    {
+        public static GraphicsDevice GraphicsDevice;
+
+        static Quad UnitSquare = new Quad(new vec2(-1, -1), new vec2(1, 1), new vec2(0, 0), new vec2(1, 1));
+
+        public static void Initialize(GraphicsDevice GraphicsDevice)
+        {
+            GridHelper.GraphicsDevice = GraphicsDevice;
+        }
+
+        public static void DrawGrid()
+        {
+            UnitSquare.Draw(GraphicsDevice);
+        }
+    }
+
 	/// <summary>
 	/// This is the main type for your game
 	/// </summary>
-	public class Game1 : Microsoft.Xna.Framework.Game
+	public class Pinnacle : Game
 	{
-		const bool UnlimitedSpeed = false;
+		const bool UnlimitedSpeed = true;
 
-		Vector2 CameraPos = Vector2.Zero;
+		vec2 CameraPos = vec2.Zero;
 		float CameraZoom = 30;
+        float CameraAspect = 1;
+        vec4 camvec { get { return new vec4(CameraPos.x, CameraPos.y, CameraZoom, CameraZoom); } }
 
 		public KeyboardState CurKeyboard, PrevKeyboard;
 		public MouseState CurMouse, PrevMouse;
 
-		const int TOP_LEFT = 0;
-		const int TOP_RIGHT = 1;
-		const int BOTTOM_RIGHT = 2;
-		const int BOTTOM_LEFT = 3;
-
 		GraphicsDeviceManager graphics;
-
-		EzEffect DrawUnitEffect, BasicEffect, compute1, compute2;
-		public EffectParameter fx_Texture, fx_CameraAspect, fx_CameraPos;
 
 		RenderTarget2D target1, target2, texture;
 
 		Texture2D UnitTexture, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16, GroundTexture;
 
-		VertexPositionColorTexture[] vertexData, ground_vertexData;
-		int[] indexData;
-
-		public Game1()
+		public Pinnacle()
 		{
 			graphics = new GraphicsDeviceManager(this);
 
@@ -72,8 +128,47 @@ namespace GpuSim
 			b = temp;
 		}
 
+		static Color[] _clr;
+		void UpdateGrid(Color[] clr, int w, int h)
+		{
+			for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				int index = i * h + j;
+				Color lookup = clr[index];
+				int dir = (int)lookup.R;
+
+				int index2;
+				switch (dir)
+				{
+					case 1: index2 = (i + 1 + w) % w * h + (j + 0 + h) % h; break;
+					case 2: index2 = (i + 0 + w) % w * h + (j + 1 + h) % h; break;
+					case 3: index2 = (i - 1 + w) % w * h + (j + 0 + h) % h; break;
+					case 4: index2 = (i + 0 + w) % w * h + (j - 1 + h) % h; break;
+					default: continue;
+				}
+
+				if (clr[index2].R == 0)
+				{
+					clr[index2] = lookup;
+					clr[index] = Color.Transparent;
+				}
+				else
+				{
+					dir++;
+					if (dir > 4) dir = 1;
+					clr[index].R = (byte)dir;
+				}
+			}}
+		}
+
+        Quad Ground;
+
 		protected override void Initialize()
 		{
+            FragSharp.Initialize(Content);
+
+            GridHelper.Initialize(GraphicsDevice);
+
 			UnitTexture = Content.Load<Texture2D>("Art\\kid");
 			UnitTexture_2 = Content.Load<Texture2D>("Art\\kid_2");
 			UnitTexture_4 = Content.Load<Texture2D>("Art\\kid_4");
@@ -82,11 +177,8 @@ namespace GpuSim
 
 			GroundTexture = Content.Load<Texture2D>("Art\\Grass");
 
-			DrawUnitEffect = new EzEffect(Content, "Shaders\\DrawUnit");
-			BasicEffect = new EzEffect(Content, "Shaders\\BasicEffect");
-			//compute = new EzEffect(Content, "Shaders\\GameOfLife");
-			compute1 = new EzEffect(Content, "Shaders\\Unit");
-			compute2 = new EzEffect(Content, "Shaders\\Unit2");
+            float GroundRepeat = 100;
+            Ground = new Quad(new vec2(-1, -1), new vec2(1, 1), new vec2(0, 0), new vec2(1, 1) * GroundRepeat);
 
 			const int w = 1024, h = 1024;
 			texture = new RenderTarget2D(graphics.GraphicsDevice, w, h);
@@ -96,65 +188,69 @@ namespace GpuSim
 			for (int i = 0; i < w; i++)
 			for (int j = 0; j < h; j++)
 			{
-				// Unit Test
-				//if (i > w/4 && i < 3*w/4 && j > h/4 && j < 3*h/4 && rnd.NextDouble() > .25)
-				if (rnd.NextDouble() > .8)
-				{
-					int dir = rnd.Next(1, 5);
-					int g = rnd.Next(0, 255);
-					if (rnd.NextDouble() > .5)
-						g = 2;
-					else
-						g = 0;
+                if (rnd.NextDouble() > 0.8)
+                //if (i == w / 2 && j == h / 2)
+                //if (Math.Abs(i - w / 2) < 500)
+                //if (j == h / 2)
+                //if (i % 9 == 0)
+                //if (j % 9 == 0 || i % 9 == 0)
+                if (true)
+                {
+                    int dir = rnd.Next(1, 5);
+                    //dir = 2;
 
-					dir = 2;
-					clr[i * h + j] = new Color(dir, g, rnd.Next(1, 255), rnd.Next(1, 255));
-				}
+                    int g = 0;
+                    //int g = rnd.Next(0, 255);
+                    //if (rnd.NextDouble() > .5)
+                    //    g = 2;
+                    //else
+                    //    g = 0;
+
+                    int b = 0;
+                    //int b = rnd.Next(0, 255);
+
+                    clr[i * h + j] = new Color(dir, g, b, rnd.Next(1, 255));
+                }
+
+                //// Unit Test
+                ////if (i > w/4 && i < 3*w/4 && j > h/4 && j < 3*h/4 && rnd.NextDouble() > .25)
+                //if (rnd.NextDouble() > .8)
+                //{
+                //    int dir = rnd.Next(1, 5);
+                //    int g = rnd.Next(0, 255);
+                //    if (rnd.NextDouble() > .5)
+                //        g = 2;
+                //    else
+                //        g = 0;
+
+                //    //dir = 2;
+                //    int b = rnd.Next(0, 255);
+                //    clr[i * h + j] = new Color(dir, g, b, rnd.Next(1, 255));
+                //}
 				else
 				{
 					clr[i * h + j] = new Color(0, 0, 0, 0);
 				}
 			}
+
+            //Stopwatch t = new Stopwatch();
+            //t.Start();
+            //int iterations = 10;
+            //for (int i = 0; i < iterations; i++)
+            //{
+            //    UpdateGrid(clr, w, h);
+            //}
+            //t.Stop();
+            //double avg = t.Elapsed.TotalSeconds / iterations;
+            //Console.WriteLine("Average cpu time: {0}", avg);
+
 			texture.SetData(clr);
 
 			target1 = new RenderTarget2D(graphics.GraphicsDevice, w, h);
 			target2 = new RenderTarget2D(graphics.GraphicsDevice, w, h);
 			target2.SetData(clr);
 
-			SetupVertices(Color.White);
-			SetupIndices();
-
 			base.Initialize();
-		}
-
-		private void SetupVertices(Color color)
-		{
-			const float HALF_SIDE = 1.0f;
-			const float Z = 0.0f;
-
-			vertexData = new VertexPositionColorTexture[4];
-			vertexData[TOP_LEFT] = new VertexPositionColorTexture(new Vector3(-HALF_SIDE, HALF_SIDE, Z), color, new Vector2(0, 0));
-			vertexData[TOP_RIGHT] = new VertexPositionColorTexture(new Vector3(HALF_SIDE, HALF_SIDE, Z), color, new Vector2(1, 0));
-			vertexData[BOTTOM_RIGHT] = new VertexPositionColorTexture(new Vector3(HALF_SIDE, -HALF_SIDE, Z), color, new Vector2(1, 1));
-			vertexData[BOTTOM_LEFT] = new VertexPositionColorTexture(new Vector3(-HALF_SIDE, -HALF_SIDE, Z), color, new Vector2(0, 1));
-
-			ground_vertexData = new VertexPositionColorTexture[4];
-			ground_vertexData[TOP_LEFT] = new VertexPositionColorTexture(1 * new Vector3(-HALF_SIDE, HALF_SIDE, Z), color, 100 * new Vector2(0, 0));
-			ground_vertexData[TOP_RIGHT] = new VertexPositionColorTexture(1 * new Vector3(HALF_SIDE, HALF_SIDE, Z), color, 100 * new Vector2(1, 0));
-			ground_vertexData[BOTTOM_RIGHT] = new VertexPositionColorTexture(1 * new Vector3(HALF_SIDE, -HALF_SIDE, Z), color, 100 * new Vector2(1, 1));
-			ground_vertexData[BOTTOM_LEFT] = new VertexPositionColorTexture(1 * new Vector3(-HALF_SIDE, -HALF_SIDE, Z), color, 100 * new Vector2(0, 1));
-		}
-
-		private void SetupIndices()
-		{
-			indexData = new int[6];
-			indexData[0] = TOP_LEFT;
-			indexData[1] = BOTTOM_RIGHT;
-			indexData[2] = BOTTOM_LEFT;
-
-			indexData[3] = TOP_LEFT;
-			indexData[4] = TOP_RIGHT;
-			indexData[5] = BOTTOM_RIGHT;
 		}
 
 		/// <summary>
@@ -188,7 +284,7 @@ namespace GpuSim
 			CurKeyboard = Keyboard.GetState();
 
 			CurMouse = Mouse.GetState();
-			Vector2 DeltaMousPos = new Vector2(CurMouse.X - PrevMouse.X, CurMouse.Y - PrevMouse.Y);
+			vec2 DeltaMousPos = new vec2(CurMouse.X - PrevMouse.X, CurMouse.Y - PrevMouse.Y);
 			float DeltaMouseScroll = CurMouse.ScrollWheelValue - PrevMouse.ScrollWheelValue;
 			PrevMouse = CurMouse;
 
@@ -199,14 +295,14 @@ namespace GpuSim
 
 			float MoveRate = .00165f;
 			if (CurMouse.LeftButton == ButtonState.Pressed)
-				CameraPos += DeltaMousPos / CameraZoom * MoveRate * new Vector2(-1, 1);
+				CameraPos += DeltaMousPos / CameraZoom * MoveRate * new vec2(-1, 1);
 
 			base.Update(gameTime);
 		}
 
-		const double DelayBetweenUpdates = .5;
+		const double DelayBetweenUpdates = 2;
 		double SecondsSinceLastUpdate = DelayBetweenUpdates;
-		float PercentSimStepComplete = 0;
+		public static float PercentSimStepComplete = 0;
 
 		/// <summary>
 		/// This is called when the game should draw itself.
@@ -223,12 +319,13 @@ namespace GpuSim
 			GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
 
 			// Check if we need to do a simulation update
-			if (UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates)
-			{
-				SecondsSinceLastUpdate -= DelayBetweenUpdates;
+            //if (UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates)
+            if (SecondsSinceLastUpdate > DelayBetweenUpdates)
+            {
+                SecondsSinceLastUpdate -= DelayBetweenUpdates;
 
-				SimulationUpdate();
-			}
+                SimulationUpdate();
+            }
 
 			// Choose texture
 			Texture2D draw_texture = null;
@@ -250,13 +347,11 @@ namespace GpuSim
 
 			PercentSimStepComplete = (float)(SecondsSinceLastUpdate / DelayBetweenUpdates);
 
-			BasicEffect.Set(CameraPos, CameraZoom, GroundTexture);
-			GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, ground_vertexData, 0, 4, indexData, 0, 2);
+            DrawGrass.Use(camvec, CameraAspect, GroundTexture);
+            Ground.Draw(GraphicsDevice);
 
-			DrawUnitEffect.PercentSimStepComplete.SetValue(PercentSimStepComplete);
-			DrawUnitEffect.drawTexture.SetValue(draw_texture);
-			DrawUnitEffect.Set(CameraPos, CameraZoom, texture, target2);
-			GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, 0, 4, indexData, 0, 2);
+            DrawUnit.Use(camvec, CameraAspect, texture, target2, draw_texture, PercentSimStepComplete);
+            GridHelper.DrawGrid();
 
 			base.Draw(gameTime);
 		}
@@ -267,18 +362,15 @@ namespace GpuSim
 			GraphicsDevice.SetRenderTarget(target1);
 			GraphicsDevice.Clear(Color.Transparent);
 
-			compute1.Set(texture);
-			GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, 0, 4, indexData, 0, 2);
+            Movement_Phase1.Use(new vec4(0,0,1,1), 1, texture, Output: target1);
+            GridHelper.DrawGrid();
 
 			// Draw texture to target 2
-			if (compute2 != null)
-			{
-				GraphicsDevice.SetRenderTarget(target2);
-				GraphicsDevice.Clear(Color.Transparent);
+			GraphicsDevice.SetRenderTarget(target2);
+			GraphicsDevice.Clear(Color.Transparent);
 
-				compute2.Set(target1, texture);
-				GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, 0, 4, indexData, 0, 2);
-			}
+            Movement_Phase2.Use(new vec4(0,0,1,1), 1, target1, texture, Output: target1);
+            GridHelper.DrawGrid();
 
 			Swap(ref texture, ref target2);
 		}
