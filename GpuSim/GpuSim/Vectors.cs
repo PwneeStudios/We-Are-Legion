@@ -96,6 +96,7 @@ namespace FragSharpFramework
         [Hlsl("z")]
         public float z;
 
+        [Hlsl("xy")]
         public vec2 xy { get { return new vec2(x, y); } set { x = value.x; y = value.y; } }
 
         public static implicit operator Vector3(vec3 v)
@@ -135,7 +136,10 @@ namespace FragSharpFramework
         [Hlsl("w")]
         public float w;
 
+        [Hlsl("xy")]
         public vec2 xy { get { return new vec2(x, y); } set { x = value.x; y = value.y; } }
+
+        [Hlsl("xyz")]
         public vec3 xyz { get { return new vec3(x, y, z); } set { x = value.x; y = value.y; z = value.z; } }
 
         [Hlsl("r")]

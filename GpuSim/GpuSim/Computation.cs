@@ -149,39 +149,24 @@ namespace GpuSim
     public partial class GridComputation : BaseShader
     {
         [VertexShader]
-        VertexOut GridVertexShader(Vertex data, vec4 cameraPos, float cameraAspect)
+        VertexOut GridVertexShader(Vertex data)
         {
             VertexOut Output = VertexOut.Zero;
 
             Output.Position.w = 1;
-
-            Output.Position.x = (data.Position.x - cameraPos.x) / cameraAspect * cameraPos.z;
-            Output.Position.y = (data.Position.y - cameraPos.y) * cameraPos.w;
-
+            Output.Position.xy = data.Position.xy;
             Output.TexCoords = data.TextureCoordinate;
-            Output.Color = data.Color;
 
             return Output;
         }
     }
 
-    public partial class Movement_Phase1 : BaseShader
+    public partial class Movement_Phase1 : GridComputation
     {
         [FragmentShader]
         unit FragmentShader(VertexOut vertex, UnitField Current)
         {
             unit output = unit.Nothing;
-
-            //unit check = Current[UpOne];
-            //if (abs(check.direction - Dir.Up) < .01)
-            //{
-            //    return check;
-            //}
-            //else
-            //{
-            //    unit _here = Current[Here];
-            //    return _here;
-            //}
 
 	        // Check four directions to see if something is incoming
 	        unit right = Current[RightOne];
@@ -240,7 +225,7 @@ namespace GpuSim
         }
     }
 
-    public partial class Movement_Phase2 : BaseShader
+    public partial class Movement_Phase2 : GridComputation
     {
         [FragmentShader]
         unit FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous)

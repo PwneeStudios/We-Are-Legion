@@ -20,8 +20,6 @@ struct PixelToFrame
 };
 
 // The following are variables used by the vertex shader (vertex parameters).
-float4 vs_param_cameraPos;
-float vs_param_cameraAspect;
 
 // The following are variables used by the fragment shader (fragment parameters).
 // Texture Sampler for fs_param_Current, using register location 1
@@ -50,10 +48,8 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 {
     VertexToPixel Output = (VertexToPixel)0;
     Output.Position.w = 1;
-    Output.Position.x = (inPos.x - vs_param_cameraPos.x) / vs_param_cameraAspect * vs_param_cameraPos.z;
-    Output.Position.y = (inPos.y - vs_param_cameraPos.y) * vs_param_cameraPos.w;
+    Output.Position.xy = inPos.xy;
     Output.TexCoords = inTexCoords;
-    Output.Color = inColor;
     return Output;
 }
 
@@ -62,27 +58,30 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0, 0, 0, 0);
-    float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
-    if (abs(right.r - 0.01176471) < .001)
+    if (true)
     {
-        output = right;
+        float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
+        if (abs(right.r - 0.01176471) < .001)
+        {
+            output = right;
+        }
+        float4 up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
+        if (abs(up.r - 0.01568628) < .001)
+        {
+            output = up;
+        }
+        float4 left = tex2D(fs_param_Current, psin.TexCoords + (float2(-1, 0)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
+        if (abs(left.r - 0.003921569) < .001)
+        {
+            output = left;
+        }
+        float4 down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -1)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
+        if (abs(down.r - 0.007843138) < .001)
+        {
+            output = down;
+        }
+        output.g = 0.0;
     }
-    float4 up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
-    if (abs(up.r - 0.01568628) < .001)
-    {
-        output = up;
-    }
-    float4 left = tex2D(fs_param_Current, psin.TexCoords + (float2(-1, 0)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
-    if (abs(left.r - 0.003921569) < .001)
-    {
-        output = left;
-    }
-    float4 down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -1)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
-    if (abs(down.r - 0.007843138) < .001)
-    {
-        output = down;
-    }
-    output.g = 0.0;
     float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
     if (IsValid(here.r))
     {

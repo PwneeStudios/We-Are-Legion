@@ -20,8 +20,6 @@ struct PixelToFrame
 };
 
 // The following are variables used by the vertex shader (vertex parameters).
-float4 vs_param_cameraPos;
-float vs_param_cameraAspect;
 
 // The following are variables used by the fragment shader (fragment parameters).
 // Texture Sampler for fs_param_Current, using register location 1
@@ -85,10 +83,8 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 {
     VertexToPixel Output = (VertexToPixel)0;
     Output.Position.w = 1;
-    Output.Position.x = (inPos.x - vs_param_cameraPos.x) / vs_param_cameraAspect * vs_param_cameraPos.z;
-    Output.Position.y = (inPos.y - vs_param_cameraPos.y) * vs_param_cameraPos.w;
+    Output.Position.xy = inPos.xy;
     Output.TexCoords = inTexCoords;
-    Output.Color = inColor;
     return Output;
 }
 

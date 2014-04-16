@@ -23,69 +23,6 @@ namespace GpuSim
 		}
 	}
 
-    public class Quad
-    {
-        VertexPositionColorTexture[] vertexData;
-
-        const int TOP_LEFT = 0;
-        const int TOP_RIGHT = 1;
-        const int BOTTOM_RIGHT = 2;
-        const int BOTTOM_LEFT = 3;
-
-        static int[] indexData = new int[] { 
-            TOP_LEFT, BOTTOM_RIGHT, BOTTOM_LEFT,
-            TOP_LEFT, TOP_RIGHT,    BOTTOM_RIGHT,
-        };
-
-        public Quad(vec2 PositionBl, vec2 PositionTr, vec2 UvBl, vec2 UvTr)
-        {
-            SetupVertices(PositionBl, PositionTr, UvBl, UvTr);
-        }
-
-        public void SetupVertices(vec2 PositionBl, vec2 PositionTr, vec2 UvBl, vec2 UvTr)
-        {
-            const float Z = 0.0f;
-
-            vec3 _PositionBl = new vec3(PositionBl.x, PositionBl.y, Z);
-            vec3 _PositionTr = new vec3(PositionTr.x, PositionTr.y, Z);
-            vec3 _PositionBr = new vec3(PositionTr.x, PositionBl.y, Z);
-            vec3 _PositionTl = new vec3(PositionBl.x, PositionTr.y, Z);
-
-            vec2 _UvBl = new vec2(UvBl.x, UvTr.y);
-            vec2 _UvTr = new vec2(UvTr.x, UvBl.y);
-            vec2 _UvBr = new vec2(UvTr.x, UvTr.y);
-            vec2 _UvTl = new vec2(UvBl.x, UvBl.y);
-
-            vertexData = new VertexPositionColorTexture[4];
-            vertexData[TOP_LEFT]     = new VertexPositionColorTexture(_PositionTl, Color.White, _UvTl);
-            vertexData[TOP_RIGHT]    = new VertexPositionColorTexture(_PositionTr, Color.White, _UvTr);
-            vertexData[BOTTOM_RIGHT] = new VertexPositionColorTexture(_PositionBr, Color.White, _UvBr);
-            vertexData[BOTTOM_LEFT]  = new VertexPositionColorTexture(_PositionBl, Color.White, _UvBl);
-        }
-
-        public void Draw(GraphicsDevice GraphicsDevice)
-        {
-            GraphicsDevice.DrawUserIndexedPrimitives(PrimitiveType.TriangleList, vertexData, 0, 4, indexData, 0, 2);
-        }
-    }
-
-    public class GridHelper
-    {
-        public static GraphicsDevice GraphicsDevice;
-
-        static Quad UnitSquare = new Quad(new vec2(-1, -1), new vec2(1, 1), new vec2(0, 0), new vec2(1, 1));
-
-        public static void Initialize(GraphicsDevice GraphicsDevice)
-        {
-            GridHelper.GraphicsDevice = GraphicsDevice;
-        }
-
-        public static void DrawGrid()
-        {
-            UnitSquare.Draw(GraphicsDevice);
-        }
-    }
-
 	/// <summary>
 	/// This is the main type for your game
 	/// </summary>
@@ -128,7 +65,6 @@ namespace GpuSim
 			b = temp;
 		}
 
-		static Color[] _clr;
 		void UpdateGrid(Color[] clr, int w, int h)
 		{
 			for (int i = 0; i < w; i++) {
@@ -165,7 +101,7 @@ namespace GpuSim
 
 		protected override void Initialize()
 		{
-            FragSharp.Initialize(Content);
+            FragSharp.Initialize(Content, GraphicsDevice);
 
             GridHelper.Initialize(GraphicsDevice);
 
@@ -319,8 +255,8 @@ namespace GpuSim
 			GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
 
 			// Check if we need to do a simulation update
-            //if (UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates)
-            if (SecondsSinceLastUpdate > DelayBetweenUpdates)
+            if (UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates)
+            //if (SecondsSinceLastUpdate > DelayBetweenUpdates)
             {
                 SecondsSinceLastUpdate -= DelayBetweenUpdates;
 
@@ -359,18 +295,10 @@ namespace GpuSim
 		private void SimulationUpdate()
 		{
 			// Draw texture to target 1
-			GraphicsDevice.SetRenderTarget(target1);
-			GraphicsDevice.Clear(Color.Transparent);
-
-            Movement_Phase1.Use(new vec4(0,0,1,1), 1, texture, Output: target1);
-            GridHelper.DrawGrid();
+            Movement_Phase1.Use(texture, Output: target1);
 
 			// Draw texture to target 2
-			GraphicsDevice.SetRenderTarget(target2);
-			GraphicsDevice.Clear(Color.Transparent);
-
-            Movement_Phase2.Use(new vec4(0,0,1,1), 1, target1, texture, Output: target1);
-            GridHelper.DrawGrid();
+            Movement_Phase2.Use(target1, texture, Output: target2);
 
 			Swap(ref texture, ref target2);
 		}
