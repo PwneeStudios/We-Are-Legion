@@ -236,7 +236,7 @@ namespace GpuSim
 			base.Update(gameTime);
 		}
 
-		const double DelayBetweenUpdates = 2;
+		const double DelayBetweenUpdates = .5;
 		double SecondsSinceLastUpdate = DelayBetweenUpdates;
 		public static float PercentSimStepComplete = 0;
 

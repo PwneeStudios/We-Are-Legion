@@ -24,7 +24,30 @@ namespace GpuSim
             pos.x += SpriteSize.x * (((int)(PercentSimStepComplete / SpriteSize.x) + (int)(cycle_offset * 255)) % 5) * data.b;
             pos.y += (data.direction * 255 - 1) * SpriteSize.y;
 
-            return Texture[pos];
+            //return Texture[pos];
+            var clr = Texture[pos];
+
+            if (data.a > .75)
+            {
+                float r = clr.r;
+                clr.r = clr.g;
+                clr.g = r;
+            }
+            else if (data.a > .5)
+            {
+                float b = clr.b;
+                clr.b = clr.g;
+                clr.g = b;
+            }
+            else if (data.a > .25)
+            {
+                float r = clr.r;
+                clr.r = clr.b;
+                clr.b = r;
+            }
+
+            return clr;
+
             //return rgba(1,1,1,1);
             //return Circle(pos);
             //return tex2D(TextureSampler, pos);
