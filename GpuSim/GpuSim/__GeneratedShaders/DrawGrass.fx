@@ -26,7 +26,7 @@ float vs_param_cameraAspect;
 // The following are variables used by the fragment shader (fragment parameters).
 // Texture Sampler for fs_param_Texture, using register location 1
 float2 fs_param_Texture_size;
-float2 fs_param_Texture_d;
+float2 fs_param_Texture_dxdy;
 
 Texture fs_param_Texture_Texture;
 sampler fs_param_Texture : register(s1) = sampler_state

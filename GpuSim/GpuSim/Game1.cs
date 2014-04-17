@@ -28,7 +28,7 @@ namespace GpuSim
 	/// </summary>
 	public class Pinnacle : Game
 	{
-		const bool UnlimitedSpeed = true;
+		const bool UnlimitedSpeed = false;
 
 		vec2 CameraPos = vec2.Zero;
 		float CameraZoom = 30;

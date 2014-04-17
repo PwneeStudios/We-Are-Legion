@@ -26,7 +26,7 @@ float vs_param_cameraAspect;
 // The following are variables used by the fragment shader (fragment parameters).
 // Texture Sampler for fs_param_Current, using register location 1
 float2 fs_param_Current_size;
-float2 fs_param_Current_d;
+float2 fs_param_Current_dxdy;
 
 Texture fs_param_Current_Texture;
 sampler fs_param_Current : register(s1) = sampler_state
@@ -41,7 +41,7 @@ sampler fs_param_Current : register(s1) = sampler_state
 
 // Texture Sampler for fs_param_Previous, using register location 2
 float2 fs_param_Previous_size;
-float2 fs_param_Previous_d;
+float2 fs_param_Previous_dxdy;
 
 Texture fs_param_Previous_Texture;
 sampler fs_param_Previous : register(s2) = sampler_state
@@ -56,7 +56,7 @@ sampler fs_param_Previous : register(s2) = sampler_state
 
 // Texture Sampler for fs_param_Texture, using register location 3
 float2 fs_param_Texture_size;
-float2 fs_param_Texture_d;
+float2 fs_param_Texture_dxdy;
 
 Texture fs_param_Texture_Texture;
 sampler fs_param_Texture : register(s3) = sampler_state
@@ -72,15 +72,15 @@ sampler fs_param_Texture : register(s3) = sampler_state
 float fs_param_PercentSimStepComplete;
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 get_subcell_pos(VertexToPixel vertex)
+float2 get_subcell_pos(VertexToPixel vertex, float2 grid_size)
 {
-    float2 coords = vertex.TexCoords * float2(1024.0, 1024.0);
+    float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
     float j = floor(coords.y);
     return coords - float2(i, j);
 }
 
-float4 Sprite(VertexToPixel psin, float4 data, float2 pos, float cycle_offset, sampler Texture, float2 Texture_size, float2 Texture_d, float PercentSimStepComplete)
+float4 Sprite(VertexToPixel psin, float4 data, float2 pos, float cycle_offset, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float PercentSimStepComplete)
 {
     if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
     {
@@ -120,9 +120,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0, 0, 0, 0);
-    float4 cur = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
-    float4 pre = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
-    float2 subcell_pos = get_subcell_pos(psin);
+    float4 cur = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
+    float4 pre = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * fs_param_Previous_dxdy);
+    float2 subcell_pos = get_subcell_pos(psin, fs_param_Current_size);
     if (abs(cur.a - pre.a) < .001 && cur.a != 0)
     {
         if (fs_param_PercentSimStepComplete > 0.5)
@@ -130,7 +130,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             pre = cur;
         }
         pre.b = 0;
-        output += Sprite(psin, pre, subcell_pos, cur.a, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_d, fs_param_PercentSimStepComplete);
+        output += Sprite(psin, pre, subcell_pos, cur.a, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_PercentSimStepComplete);
     }
     else
     {
@@ -138,13 +138,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             float2 vel = direction_to_vec(cur.r);
             cur.b = 1;
-            output += Sprite(psin, cur, subcell_pos + (1 - fs_param_PercentSimStepComplete) * vel, cur.a, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_d, fs_param_PercentSimStepComplete);
+            output += Sprite(psin, cur, subcell_pos + (1 - fs_param_PercentSimStepComplete) * vel, cur.a, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_PercentSimStepComplete);
         }
         if (IsValid(pre.r))
         {
             float2 vel = direction_to_vec(pre.r);
             pre.b = 1;
-            output += Sprite(psin, pre, subcell_pos - fs_param_PercentSimStepComplete * vel, pre.a, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_d, fs_param_PercentSimStepComplete);
+            output += Sprite(psin, pre, subcell_pos - fs_param_PercentSimStepComplete * vel, pre.a, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_PercentSimStepComplete);
         }
     }
     __FinalOutput.Color = output;

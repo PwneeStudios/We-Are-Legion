@@ -1,5 +1,3 @@
-using System;
-
 namespace GpuSim
 {
 #if WINDOWS || XBOX

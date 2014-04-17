@@ -60,6 +60,9 @@
     <XnaCompressContent>true</XnaCompressContent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FragSharpFramework">
+      <HintPath>..\..\..\..\FragSharp\FragSharpFramework\bin\x86\Release\FragSharpFramework.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
     </Reference>
@@ -107,14 +110,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Computation.cs" />
-    <Compile Include="__ExtensionBoilerplate.cs" />
-    <Compile Include="Vectors.cs" />
-    <Compile Include="FragSharp.cs" />
-    <Compile Include="__ShaderBoilerplate.cs" />
+    <Compile Include="Drawing\BaseShader.cs" />
+    <Compile Include="Drawing\DrawGrass.cs" />
+    <Compile Include="Simulation\Movement.cs" />
+    <Compile Include="Drawing\DrawUnit.cs" />
+    <Compile Include="Simulation\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="__FragSharp\__ExtensionBoilerplate.cs" />
+    <Compile Include="__FragSharp\__ShaderBoilerplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

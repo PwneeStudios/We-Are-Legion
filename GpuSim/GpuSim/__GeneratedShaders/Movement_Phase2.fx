@@ -24,7 +24,7 @@ struct PixelToFrame
 // The following are variables used by the fragment shader (fragment parameters).
 // Texture Sampler for fs_param_Current, using register location 1
 float2 fs_param_Current_size;
-float2 fs_param_Current_d;
+float2 fs_param_Current_dxdy;
 
 Texture fs_param_Current_Texture;
 sampler fs_param_Current : register(s1) = sampler_state
@@ -39,7 +39,7 @@ sampler fs_param_Current : register(s1) = sampler_state
 
 // Texture Sampler for fs_param_Previous, using register location 2
 float2 fs_param_Previous_size;
-float2 fs_param_Previous_d;
+float2 fs_param_Previous_dxdy;
 
 Texture fs_param_Previous_Texture;
 sampler fs_param_Previous : register(s2) = sampler_state
@@ -92,9 +92,9 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 result = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
-    float4 prior = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
-    float4 ahead = tex2D(fs_param_Current, psin.TexCoords + (dir_to_vec(prior.r)) * float2(1.0 / 1024.0, 1.0 / 1024.0));
+    float4 result = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
+    float4 prior = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * fs_param_Previous_dxdy);
+    float4 ahead = tex2D(fs_param_Current, psin.TexCoords + (dir_to_vec(prior.r)) * fs_param_Current_dxdy);
     if (abs(ahead.g - 0.0) < .001 && abs(ahead.r - prior.r) < .001)
     {
         result = float4(0, 0, 0, 0);
