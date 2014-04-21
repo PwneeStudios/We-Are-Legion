@@ -54,12 +54,27 @@ sampler fs_param_Previous : register(s2) = sampler_state
     AddressV  = Wrap;
 };
 
-// Texture Sampler for fs_param_Texture, using register location 3
+// Texture Sampler for fs_param_Paths, using register location 3
+float2 fs_param_Paths_size;
+float2 fs_param_Paths_dxdy;
+
+Texture fs_param_Paths_Texture;
+sampler fs_param_Paths : register(s3) = sampler_state
+{
+    texture   = <fs_param_Paths_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Wrap;
+    AddressV  = Wrap;
+};
+
+// Texture Sampler for fs_param_Texture, using register location 4
 float2 fs_param_Texture_size;
 float2 fs_param_Texture_dxdy;
 
 Texture fs_param_Texture_Texture;
-sampler fs_param_Texture : register(s3) = sampler_state
+sampler fs_param_Texture : register(s4) = sampler_state
 {
     texture   = <fs_param_Texture_Texture>;
     MipFilter = Point;
@@ -80,40 +95,21 @@ float2 get_subcell_pos(VertexToPixel vertex, float2 grid_size)
     return coords - float2(i, j);
 }
 
-float4 Sprite(VertexToPixel psin, float4 data, float2 pos, float cycle_offset, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float PercentSimStepComplete)
+bool Something(float4 u)
+{
+    return u.r > 0;
+}
+
+float4 Sprite(VertexToPixel psin, float4 data, float2 pos, float anim, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
     {
         return float4(0, 0, 0, 0);
     }
-    pos *= float2(1.0 / 5.0, 1.0 / 4.0);
-    pos.x += float2(1.0 / 5.0, 1.0 / 4.0).x * (((int)(PercentSimStepComplete / float2(1.0 / 5.0, 1.0 / 4.0).x) + (int)(cycle_offset * 255)) % 5) * data.b;
-    pos.y += (data.r * 255 - 1) * float2(1.0 / 5.0, 1.0 / 4.0).y;
+    pos.x += ((int)(floor(frame)) % 5);
+    pos.y += (anim * 255 - 1 + 4 * data.a * 255);
+    pos *= float2(1.0 / 5.0, 1.0 / 8.0);
     float4 clr = tex2D(Texture, pos);
-    if (data.a > 0.75)
-    {
-        float r = clr.r;
-        clr.r = clr.g;
-        clr.g = r;
-    }
-    else
-    {
-        if (data.a > 0.5)
-        {
-            float b = clr.b;
-            clr.b = clr.g;
-            clr.g = b;
-        }
-        else
-        {
-            if (data.a > 0.25)
-            {
-                float r = clr.r;
-                clr.r = clr.b;
-                clr.b = r;
-            }
-        }
-    }
     return clr;
 }
 
@@ -147,29 +143,27 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0, 0, 0, 0);
     float4 cur = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 pre = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * fs_param_Previous_dxdy);
+    float4 path = tex2D(fs_param_Paths, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_dxdy);
     float2 subcell_pos = get_subcell_pos(psin, fs_param_Current_size);
-    if (abs(cur.a - pre.a) < .001 && cur.a != 0)
+    if (Something(cur) && abs(cur.g - 0.003921569) < .001)
     {
         if (fs_param_PercentSimStepComplete > 0.5)
         {
             pre = cur;
         }
-        pre.b = 0;
-        output += Sprite(psin, pre, subcell_pos, cur.a, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_PercentSimStepComplete);
+        output += Sprite(psin, pre, subcell_pos, pre.r, 0, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
     else
     {
         if (IsValid(cur.r))
         {
-            float2 vel = direction_to_vec(cur.r);
-            cur.b = 1;
-            output += Sprite(psin, cur, subcell_pos + (1 - fs_param_PercentSimStepComplete) * vel, cur.a, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_PercentSimStepComplete);
+            float2 vel = direction_to_vec(cur.b);
+            output += Sprite(psin, cur, subcell_pos + (1 - fs_param_PercentSimStepComplete) * vel, cur.b, fs_param_PercentSimStepComplete * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
         if (IsValid(pre.r))
         {
             float2 vel = direction_to_vec(pre.r);
-            pre.b = 1;
-            output += Sprite(psin, pre, subcell_pos - fs_param_PercentSimStepComplete * vel, pre.a, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_PercentSimStepComplete);
+            output += Sprite(psin, pre, subcell_pos - fs_param_PercentSimStepComplete * vel, pre.r, fs_param_PercentSimStepComplete * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
     }
     __FinalOutput.Color = output;

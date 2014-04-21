@@ -37,14 +37,14 @@ sampler fs_param_Current : register(s1) = sampler_state
     AddressV  = Wrap;
 };
 
-// Texture Sampler for fs_param_Next, using register location 2
-float2 fs_param_Next_size;
-float2 fs_param_Next_dxdy;
+// Texture Sampler for fs_param_Select, using register location 2
+float2 fs_param_Select_size;
+float2 fs_param_Select_dxdy;
 
-Texture fs_param_Next_Texture;
-sampler fs_param_Next : register(s2) = sampler_state
+Texture fs_param_Select_Texture;
+sampler fs_param_Select : register(s2) = sampler_state
 {
-    texture   = <fs_param_Next_Texture>;
+    texture   = <fs_param_Select_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -52,33 +52,9 @@ sampler fs_param_Next : register(s2) = sampler_state
     AddressV  = Wrap;
 };
 
-// Texture Sampler for fs_param_Paths, using register location 3
-float2 fs_param_Paths_size;
-float2 fs_param_Paths_dxdy;
-
-Texture fs_param_Paths_Texture;
-sampler fs_param_Paths : register(s3) = sampler_state
-{
-    texture   = <fs_param_Paths_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
-};
+bool fs_param_Deselect;
 
 // The following methods are included because they are referenced by the fragment shader.
-bool IsValid(float direction)
-{
-    return direction > 0;
-}
-
-float2 dir_to_vec(float direction)
-{
-    float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
-    return IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
-}
-
 bool Something(float4 u)
 {
     return u.r > 0;
@@ -98,20 +74,20 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 next = tex2D(fs_param_Next, psin.TexCoords + (float2(0, 0)) * fs_param_Next_dxdy);
     float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    float4 ahead = tex2D(fs_param_Next, psin.TexCoords + (dir_to_vec(here.r)) * fs_param_Next_dxdy);
-    if (abs(ahead.g - 0.0) < .001 && abs(ahead.r - here.r) < .001)
+    float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
+    if (Something(select))
     {
-        next = float4(0, 0, 0, 0);
+        here.a = 0.003921569;
     }
-    next.b = next.r;
-    float4 path = tex2D(fs_param_Paths, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_dxdy);
-    if (Something(next) && (path.g > 0 || path.b > 0) && IsValid(path.r))
+    else
     {
-        next.r = path.r;
+        if (fs_param_Deselect)
+        {
+            here.a = 0.0;
+        }
     }
-    __FinalOutput.Color = next;
+    __FinalOutput.Color = here;
     return __FinalOutput;
 }
 

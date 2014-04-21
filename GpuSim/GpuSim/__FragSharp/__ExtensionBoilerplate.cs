@@ -96,6 +96,29 @@ namespace GpuSim
             return new unit(v.x / w.x, v.y / w.y, v.z / w.z, v.w / w.w);
         }
 
+        public static bool operator ==(unit v, unit w)
+        {
+            return
+                v.x == w.x &&
+                v.y == w.y &&
+                v.z == w.z &&
+                v.w == w.w;
+        }
+
+        public static bool operator !=(unit v, unit w)
+        {
+            return
+                v.x != w.x ||
+                v.y != w.y ||
+                v.z != w.z ||
+                v.w != w.w;
+        }
+
+        public static unit operator -(unit v)
+        {
+            return new unit(-v.x, -v.y, -v.z, -v.w);
+        }
+
         public static implicit operator Vector4(unit v)
         {
             return new Vector4(v.x, v.y, v.z, v.w);

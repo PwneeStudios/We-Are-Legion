@@ -20,7 +20,15 @@ namespace GpuSim
         public float direction { get { return r; } set { r = value; } }
 
         [Hlsl("g")]
-        public float change { get { return r; } set { r = value; } }
+        public float change { get { return g; } set { g = value; } }
+
+        [Hlsl("b")]
+        public float prior_direction { get { return b; } set { b = value; } }
+
+        public static explicit operator unit(vec4 v)
+        {
+            return new unit(v.x, v.y, v.z, v.w);
+        }
 
         public static readonly unit Nothing = new unit(0, 0, 0, 0);
     }

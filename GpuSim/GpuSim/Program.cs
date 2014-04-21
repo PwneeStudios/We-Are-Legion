@@ -8,7 +8,7 @@ namespace GpuSim
         /// </summary>
         static void Main(string[] args)
         {
-            using (Pinnacle game = new Pinnacle())
+            using (M3ngineGame game = new M3ngineGame())
             {
                 game.Run();
             }

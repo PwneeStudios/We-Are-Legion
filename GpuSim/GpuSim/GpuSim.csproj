@@ -111,13 +111,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Drawing\BaseShader.cs" />
+    <Compile Include="Drawing\DrawMouse.cs" />
     <Compile Include="Drawing\DrawGrass.cs" />
+    <Compile Include="Simulation\Pathfinding.cs" />
     <Compile Include="Simulation\Movement.cs" />
     <Compile Include="Drawing\DrawUnit.cs" />
     <Compile Include="Simulation\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Game1.cs" />
+    <Compile Include="M3ngineGame.cs" />
     <Compile Include="__FragSharp\__ExtensionBoilerplate.cs" />
     <Compile Include="__FragSharp\__ShaderBoilerplate.cs" />
   </ItemGroup>
@@ -161,7 +163,7 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <PropertyGroup>
-    <PreBuildEvent>"C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\Debug\FragSharp.exe" $(ProjectDir) $(TargetDir)</PreBuildEvent>
+    <PreBuildEvent>"C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\Release\FragSharp.exe" $(ProjectDir) $(TargetDir)</PreBuildEvent>
   </PropertyGroup>
   <!--
       To modify your build process, add your task inside one of the targets below and uncomment it. 

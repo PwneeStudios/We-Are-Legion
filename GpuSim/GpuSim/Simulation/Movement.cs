@@ -38,20 +38,26 @@ namespace GpuSim
     public partial class Movement_Phase2 : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous)
+        unit FragmentShader(VertexOut vertex, UnitField Current, UnitField Next, UnitField Paths)
         {
-            unit result = Current[Here];
-            unit prior = Previous[Here];
+            unit next = Next[Here];
+            unit here = Current[Here];
 
-            unit ahead = Current[dir_to_vec(prior.direction)];
-            if (ahead.change == Change.Moved && ahead.direction == prior.direction)
-                result = unit.Nothing;
+            unit ahead = Next[dir_to_vec(here.direction)];
+            if (ahead.change == Change.Moved && ahead.direction == here.direction)
+                next = unit.Nothing;
+
+            next.prior_direction = next.direction;
 
             // If unit hasn't moved, change direction
-            if (result.a == prior.a && Something(result))
-                TurnLeft(ref result);
+            //if (next.a == here.a && Something(next))
+            //    TurnLeft(ref next);
 
-            return result;
+            unit path = Paths[Here];
+            if (Something(next) && (path.g > 0 || path.b > 0) && IsValid(path.direction))
+                next.direction = path.direction;
+
+            return next;
         }
     }
 }
