@@ -28,7 +28,7 @@ namespace GpuSim
         public static KeyboardState CurKeyboard, PrevKeyboard;
 
         public static MouseState CurMouse, PrevMouse;
-        public static vec2 MousePos;
+        public static vec2 MousePos, MousePosPrev;
 
         public static vec2 DeltaMousPos;
         public static float DeltaMouseScroll;
@@ -36,6 +36,7 @@ namespace GpuSim
         public static void Update()
         {
             PrevMouse = CurMouse;
+            MousePosPrev = MousePos;
 
             CurKeyboard = Keyboard.GetState();
 
@@ -60,6 +61,23 @@ namespace GpuSim
             get
             {
                 return CurMouse.LeftButton  == ButtonState.Pressed;
+            }
+        }
+
+        public static bool RightMousePressed
+        {
+            get
+            {
+                return CurMouse.RightButton  == ButtonState.Pressed &&
+                       PrevMouse.RightButton == ButtonState.Released;
+            }
+        }
+
+        public static bool RightMouseDown
+        {
+            get
+            {
+                return CurMouse.RightButton == ButtonState.Pressed;
             }
         }
     }
@@ -88,12 +106,13 @@ namespace GpuSim
 
         RenderTarget2D
             Temp1, Temp2,
-            Previous, Current,
-            Paths;
+            Previous, Current, Extra1, Extra2,
+            Paths_Right, Paths_Left, Paths_Up, Paths_Down;
 
 		Texture2D
             UnitTexture, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
-            GroundTexture, MouseTexture;
+            GroundTexture,
+            SelectCircle, SelectCircle_Data;
 
 		public M3ngineGame()
 		{
@@ -167,6 +186,8 @@ namespace GpuSim
 
 		protected override void Initialize()
 		{
+            //var effect = Content.Load<Effect>("Shaders/__Test");
+
             FragSharp.Initialize(Content, GraphicsDevice);
 
             GridHelper.Initialize(GraphicsDevice);
@@ -179,49 +200,85 @@ namespace GpuSim
 
 			GroundTexture = Content.Load<Texture2D>("Art\\Grass");
 
-            MouseTexture = Content.Load<Texture2D>("Art\\MouseSelect");
+            SelectCircle      = Content.Load<Texture2D>("Art\\SelectCircle");
+            SelectCircle_Data = Content.Load<Texture2D>("Art\\SelectCircle_Data");
 
             float GroundRepeat = 100;
             Ground = new RectangleQuad(new vec2(-1, -1), new vec2(1, 1), new vec2(0, 0), new vec2(1, 1) * GroundRepeat);
 
 			const int w = 1024, h = 1024;
-			Current = new RenderTarget2D(graphics.GraphicsDevice, w, h);
-			Color[] clr = new Color[w * h];
-			Current.GetData(clr);
-			var rnd = new System.Random();
-			for (int i = 0; i < w; i++)
-			for (int j = 0; j < h; j++)
-			{
-                if (rnd.NextDouble() > 0.8)
+            
+            Current  = MakeTarget(w, h);
+            Previous = MakeTarget(w, h);
+            Extra1 = MakeTarget(w, h);
+            Extra2 = MakeTarget(w, h);
+
+            InitialConditions(w, h);
+
+            Temp1 = MakeTarget(w, h);
+            Temp2 = MakeTarget(w, h);
+            
+            Paths_Right = MakeTarget(w, h);
+            Paths_Left  = MakeTarget(w, h);
+            Paths_Up    = MakeTarget(w, h);
+            Paths_Down  = MakeTarget(w, h);
+
+			base.Initialize();
+		}
+
+        void InitialConditions(int w, int h)
+        {
+            Color[] clr = new Color[w * h];
+            Color[] xtr1 = new Color[w * h];
+            Color[] xtr2 = new Color[w * h];
+
+            Current.GetData(clr);
+
+            var rnd = new System.Random();
+            for (int i = 0; i < w; i++)
+            for (int j = 0; j < h; j++)
+            {
+                if (false)
+                //if (rnd.NextDouble() > 0.85f)
                 //if (i == w / 2 && j == h / 2)
                 //if (Math.Abs(i - w / 2) < 500)
                 //if (j == h / 2)
                 //if (i % 9 == 0)
                 //if (j % 9 == 0 || i % 9 == 0)
                 {
+                    //int dir = rnd.Next(1, 5);
                     int dir = rnd.Next(1, 5);
-                    int type = rnd.Next(0, 0);
+                    
+                    int action = 0;
 
                     int g = 0;
                     int b = 0;
 
-                    clr[i * h + j] = new Color(dir, g, b, type);
+                    //int dest = rnd.Next(1, 5);
+                    int dest = 0;
+
+                    clr[i * h + j] = new Color(dir, g, b, action);
+                    xtr1[i * h + j] = new Color(dest, 0, 0, 0);
+                    xtr2[i * h + j] = new Color(0, 0, 0, 0);
                 }
-				else
-				{
-					clr[i * h + j] = new Color(0, 0, 0, 0);
-				}
-			}
+                else
+                {
+                    clr[i * h + j] = new Color(0, 0, 0, 0);
+                    xtr1[i * h + j] = new Color(0, 0, 0, 0);
+                    xtr2[i * h + j] = new Color(0, 0, 0, 0);
+                }
+            }
 
-			Current.SetData(clr);
+            Current.SetData(clr);
+            Previous.SetData(clr);
+            Extra1.SetData(xtr1);
+            Extra2.SetData(xtr1);
+        }
 
-			Temp1    = new RenderTarget2D(graphics.GraphicsDevice, w, h);
-            Temp2    = new RenderTarget2D(graphics.GraphicsDevice, w, h);
-			Previous = new RenderTarget2D(graphics.GraphicsDevice, w, h); Previous.SetData(clr);
-            Paths    = new RenderTarget2D(graphics.GraphicsDevice, w, h);
-
-			base.Initialize();
-		}
+        private RenderTarget2D MakeTarget(int w, int h)
+        {
+            return new RenderTarget2D(graphics.GraphicsDevice, w, h);
+        }
 
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
@@ -253,6 +310,13 @@ namespace GpuSim
 
             InputInfo.Update();
 
+            //const float MaxZoomOut = 5.33333f, MaxZoomIn = 200;
+            const float MaxZoomOut = 1, MaxZoomIn = 200;
+
+            // Zoom all the way out
+            if (Keys.Space.Pressed())
+                CameraZoom = MaxZoomOut;
+
             // Zoom in/out, into the location of the cursor
             var world_mouse_pos = GetWorldCoordinate(InputInfo.MousePos);
             var hold_camvec = camvec;
@@ -265,8 +329,8 @@ namespace GpuSim
             if      (Keys.X.Pressed() || Keys.E.Pressed()) CameraZoom /= KeyZoomRate;
             else if (Keys.Z.Pressed() || Keys.Q.Pressed()) CameraZoom *= KeyZoomRate;
 
-            if (CameraZoom < 1) CameraZoom = 1;
-            if (CameraZoom > 1000) CameraZoom = 1000;
+            if (CameraZoom < MaxZoomOut) CameraZoom = MaxZoomOut;
+            if (CameraZoom > MaxZoomIn)  CameraZoom = MaxZoomIn;
 
             var shifted = GetShiftedCamera(InputInfo.MousePos, camvec, world_mouse_pos);
             CameraPos = shifted;
@@ -278,7 +342,7 @@ namespace GpuSim
             //    CameraPos += InputInfo.DeltaMousPos / CameraZoom * MoveRate_ClickAndDrag * new vec2(-1, 1);
 
             // Move the camera via: Push Edge
-            float MoveRate_PushEdge = .065f;
+            float MoveRate_PushEdge = .07f;
             var push_dir = vec2.Zero;
             float EdgeRatio = .1f;
             push_dir.x += -Restrict((EdgeRatio * Screen.x -     InputInfo.MousePos.x) / (EdgeRatio * Screen.x), 0, 1);
@@ -295,7 +359,7 @@ namespace GpuSim
             if (Keys.Right.Pressed() || Keys.D.Pressed()) dir.x =  1;
             if (Keys.Left .Pressed() || Keys.A.Pressed()) dir.x = -1;
 
-            float MoveRate_Keyboard = .05f;
+            float MoveRate_Keyboard = .07f;
             CameraPos += dir / CameraZoom * MoveRate_Keyboard;
 
 
@@ -311,7 +375,8 @@ namespace GpuSim
 			base.Update(gameTime);
 		}
 
-		const double DelayBetweenUpdates = .5;
+        const double DelayBetweenUpdates = .3333;
+        //const double DelayBetweenUpdates = .1;
 		double SecondsSinceLastUpdate = DelayBetweenUpdates;
 		public static float PercentSimStepComplete = 0;
 
@@ -344,7 +409,7 @@ namespace GpuSim
 
 			// Choose texture
 			Texture2D draw_texture = null;
-			float z = 12;
+            float z = 14;
 			if (CameraZoom > z)
 				draw_texture = UnitTexture;
 			else if (CameraZoom > z/2)
@@ -353,8 +418,8 @@ namespace GpuSim
 				draw_texture = UnitTexture_4;
 			else if (CameraZoom > z/8)
 				draw_texture = UnitTexture_8;
-			else
-				draw_texture = UnitTexture_16;
+            else
+                draw_texture = UnitTexture_16;
 
 			// Draw texture to screen
 			GraphicsDevice.SetRenderTarget(null);
@@ -365,17 +430,28 @@ namespace GpuSim
             DrawGrass.Using(camvec, CameraAspect, GroundTexture);
             Ground.Draw(GraphicsDevice);
 
-            DrawUnit.Using(camvec, CameraAspect, Current, Previous, Paths, draw_texture, PercentSimStepComplete);
+            if (CameraZoom > z / 8)
+                DrawUnit.Using(camvec, CameraAspect, Extra1, Current, Previous, draw_texture, PercentSimStepComplete);
+            else
+                DrawUnitZoomedOut.Using(camvec, CameraAspect, Current, Previous, draw_texture, PercentSimStepComplete);
             GridHelper.DrawGrid();
 
 
             vec2 WorldCord = GetWorldCoordinate(InputInfo.MousePos);
 
-            DrawMouse.Using(camvec, CameraAspect, MouseTexture);
+            DrawMouse.Using(camvec, CameraAspect, SelectCircle);
             RectangleQuad.Draw(GraphicsDevice, WorldCord, vec2.Ones * .2f / CameraZoom);
 
 			base.Draw(gameTime);
 		}
+
+        vec2 ScreenToGridCoordinates(vec2 pos)
+        {
+            var world = GetWorldCoordinate(pos);
+            world.y = -world.y;
+
+            return Screen * (world + vec2.Ones) / 2;
+        }
 
         vec2 GetWorldCoordinate(vec2 pos)
         {
@@ -401,36 +477,81 @@ namespace GpuSim
 
         void PathUpdate()
         {
-            Pathfinding.Apply(Paths, Current, Output: Temp1);
-            Pathfinding.Apply(Temp1, Current, Output: Temp2);
-            Swap(ref Paths, ref Temp2);
+            Pathfinding_Right.Apply(Paths_Right, Current, Output: Temp1);
+            Swap(ref Paths_Right, ref Temp1);
+
+            Pathfinding_Left.Apply(Paths_Left, Current, Output: Temp1);
+            Swap(ref Paths_Left, ref Temp1);
+
+            Pathfinding_Up.Apply(Paths_Up, Current, Output: Temp1);
+            Swap(ref Paths_Up, ref Temp1);
+
+            Pathfinding_Down.Apply(Paths_Down, Current, Output: Temp1);
+            Swap(ref Paths_Down, ref Temp1);            
         }
 
         void SelectionUpdate()
         {
-            vec2 WorldCord = GetWorldCoordinate(InputInfo.MousePos);
+            vec2 WorldCord     = GetWorldCoordinate(InputInfo.MousePos);
+            vec2 WorldCordPrev = GetWorldCoordinate(InputInfo.MousePosPrev);
 
-            bool Deselect  = InputInfo.LeftMousePressed;
+            bool Deselect  = InputInfo.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed();
             bool Selecting = InputInfo.LeftMouseDown;
 
-            DataDrawMouse.Using(Output: Temp1, Clear: Color.Transparent);
+            DataDrawMouse.Using(SelectCircle_Data, Output: Temp1, Clear: Color.Transparent);
             if (Selecting)
-                RectangleQuad.Draw(GraphicsDevice, WorldCord, vec2.Ones * .2f / CameraZoom);
+            {
+                vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
 
-            ActionSelect.Apply(Current, Temp1, Deselect, Output: Temp2);
+                for (int i = 0; i <= 10; i++)
+                {
+                    float t = i / 10.0f;
+                    var pos = t * WorldCordPrev + (1-t) * WorldCord;
+                    RectangleQuad.Draw(GraphicsDevice, pos - shift, vec2.Ones * .2f / CameraZoom);
+                }
+            }
+
+            var action = InputInfo.RightMousePressed ? SimShader.UnitAction.Attacking : SimShader.UnitAction.NoChange;
+            ActionSelect.Apply(Current, Temp1, Deselect, action, Output: Temp2);
             Swap(ref Temp2, ref Current);
 
-            ActionSelect.Apply(Previous, Temp1, Deselect, Output: Temp2);
+            ActionSelect.Apply(Previous, Temp1, Deselect, SimShader.UnitAction.NoChange, Output: Temp2);
             Swap(ref Temp2, ref Previous);
+
+            if (Keys.F.Pressed())
+            {
+                ActionSpawn.Apply(Current, Temp1, Output: Temp2);
+                Swap(ref Temp2, ref Current);
+            }
+
+            if (InputInfo.RightMousePressed)
+            {
+                //var click_pos = InputInfo.MousePos;
+                var pos = ScreenToGridCoordinates(InputInfo.MousePos);
+                
+                ActionAttack .Apply(Current, Extra1, pos, Output: Temp1);
+                Swap(ref Extra1, ref Temp1);
+
+                ActionAttack2.Apply(Current, Extra2, pos, Output: Temp1);
+                Swap(ref Extra2, ref Temp1);
+            }
         }
 
 		void SimulationUpdate()
 		{
-            Movement_Phase1.Apply(Current,               Output: Temp1);
-            Movement_Phase2.Apply(Current, Temp1, Paths, Output: Temp2);
-            
+            Movement_Phase1.Apply(Current, Output: Temp1);
+            Movement_Phase2.Apply(Current, Temp1, Output: Temp2);
+
             Swap(ref Current, ref Previous);
             Swap(ref Temp2, ref Current);
+
+            Movement_Phase3.Apply(Extra1, Current, Output: Temp1);
+            Swap(ref Extra1, ref Temp1);
+            Movement_Phase3.Apply(Extra2, Current, Output: Temp1);
+            Swap(ref Extra2, ref Temp1);
+
+            Movement_Phase4.Apply(Extra1, Extra2, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
+            Swap(ref Current, ref Temp1);
 		}
 	}
 }

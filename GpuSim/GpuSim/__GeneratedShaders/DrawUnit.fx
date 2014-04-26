@@ -24,49 +24,49 @@ float4 vs_param_cameraPos;
 float vs_param_cameraAspect;
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Current, using register location 1
+// Texture Sampler for fs_param_Extra, using register location 1
+float2 fs_param_Extra_size;
+float2 fs_param_Extra_dxdy;
+
+Texture fs_param_Extra_Texture;
+sampler fs_param_Extra : register(s1) = sampler_state
+{
+    texture   = <fs_param_Extra_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_Current, using register location 2
 float2 fs_param_Current_size;
 float2 fs_param_Current_dxdy;
 
 Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s1) = sampler_state
+sampler fs_param_Current : register(s2) = sampler_state
 {
     texture   = <fs_param_Current_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Previous, using register location 2
+// Texture Sampler for fs_param_Previous, using register location 3
 float2 fs_param_Previous_size;
 float2 fs_param_Previous_dxdy;
 
 Texture fs_param_Previous_Texture;
-sampler fs_param_Previous : register(s2) = sampler_state
+sampler fs_param_Previous : register(s3) = sampler_state
 {
     texture   = <fs_param_Previous_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
-};
-
-// Texture Sampler for fs_param_Paths, using register location 3
-float2 fs_param_Paths_size;
-float2 fs_param_Paths_dxdy;
-
-Texture fs_param_Paths_Texture;
-sampler fs_param_Paths : register(s3) = sampler_state
-{
-    texture   = <fs_param_Paths_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 // Texture Sampler for fs_param_Texture, using register location 4
@@ -87,7 +87,7 @@ sampler fs_param_Texture : register(s4) = sampler_state
 float fs_param_PercentSimStepComplete;
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 get_subcell_pos(VertexToPixel vertex, float2 grid_size)
+float2 GpuSim__DrawUnit__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -95,33 +95,46 @@ float2 get_subcell_pos(VertexToPixel vertex, float2 grid_size)
     return coords - float2(i, j);
 }
 
-bool Something(float4 u)
+bool GpuSim__SimShader__Something(float4 u)
 {
     return u.r > 0;
 }
 
-float4 Sprite(VertexToPixel psin, float4 data, float2 pos, float anim, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+bool GpuSim__SimShader__selected(float4 u)
+{
+    float val = u.b;
+    return val >= 0.01960784;
+}
+
+float4 GpuSim__DrawUnit__Sprite(VertexToPixel psin, float4 data, float2 pos, float anim, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
     {
         return float4(0, 0, 0, 0);
     }
+    float selected_offset = GpuSim__SimShader__selected(data) ? 4 : 0;
     pos.x += ((int)(floor(frame)) % 5);
-    pos.y += (anim * 255 - 1 + 4 * data.a * 255);
+    pos.y += (floor(anim * 255 + 0.5) - 1 + selected_offset);
     pos *= float2(1.0 / 5.0, 1.0 / 8.0);
     float4 clr = tex2D(Texture, pos);
     return clr;
 }
 
-bool IsValid(float direction)
+bool GpuSim__SimShader__IsValid(float direction)
 {
     return direction > 0;
 }
 
-float2 direction_to_vec(float direction)
+float2 GpuSim__DrawUnit__direction_to_vec(float direction)
 {
     float angle = (direction * 255 - 1) * (3.141593 / 2.0);
-    return IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return GpuSim__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+}
+
+float GpuSim__SimShader__prior_direction(float4 u)
+{
+    float val = u.b;
+    return val % 0.01960784;
 }
 
 // Compiled vertex shader
@@ -143,27 +156,26 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0, 0, 0, 0);
     float4 cur = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 pre = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * fs_param_Previous_dxdy);
-    float4 path = tex2D(fs_param_Paths, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_dxdy);
-    float2 subcell_pos = get_subcell_pos(psin, fs_param_Current_size);
-    if (Something(cur) && abs(cur.g - 0.003921569) < .001)
+    float2 subcell_pos = GpuSim__DrawUnit__get_subcell_pos(psin, fs_param_Current_size);
+    if (GpuSim__SimShader__Something(cur) && abs(cur.g - 0.003921569) < .001)
     {
         if (fs_param_PercentSimStepComplete > 0.5)
         {
             pre = cur;
         }
-        output += Sprite(psin, pre, subcell_pos, pre.r, 0, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+        output += GpuSim__DrawUnit__Sprite(psin, pre, subcell_pos, pre.r, 0, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
     else
     {
-        if (IsValid(cur.r))
+        if (GpuSim__SimShader__IsValid(cur.r))
         {
-            float2 vel = direction_to_vec(cur.b);
-            output += Sprite(psin, cur, subcell_pos + (1 - fs_param_PercentSimStepComplete) * vel, cur.b, fs_param_PercentSimStepComplete * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+            float2 vel = GpuSim__DrawUnit__direction_to_vec(GpuSim__SimShader__prior_direction(cur));
+            output += GpuSim__DrawUnit__Sprite(psin, cur, subcell_pos + (1 - fs_param_PercentSimStepComplete) * vel, GpuSim__SimShader__prior_direction(cur), fs_param_PercentSimStepComplete * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
-        if (IsValid(pre.r))
+        if (GpuSim__SimShader__IsValid(pre.r))
         {
-            float2 vel = direction_to_vec(pre.r);
-            output += Sprite(psin, pre, subcell_pos - fs_param_PercentSimStepComplete * vel, pre.r, fs_param_PercentSimStepComplete * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+            float2 vel = GpuSim__DrawUnit__direction_to_vec(pre.r);
+            output += GpuSim__DrawUnit__Sprite(psin, pre, subcell_pos - fs_param_PercentSimStepComplete * vel, pre.r, fs_param_PercentSimStepComplete * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
     }
     __FinalOutput.Color = output;

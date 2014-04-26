@@ -22,6 +22,20 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
+// Texture Sampler for fs_param_data_texture, using register location 1
+float2 fs_param_data_texture_size;
+float2 fs_param_data_texture_dxdy;
+
+Texture fs_param_data_texture_Texture;
+sampler fs_param_data_texture : register(s1) = sampler_state
+{
+    texture   = <fs_param_data_texture_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Wrap;
+    AddressV  = Wrap;
+};
 
 // The following methods are included because they are referenced by the fragment shader.
 
@@ -39,8 +53,16 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    __FinalOutput.Color = float4(1, 1, 1, 1);
-    return __FinalOutput;
+    if (tex2D(fs_param_data_texture, psin.TexCoords + (float2(0, 0)) * fs_param_data_texture_dxdy).r > 0)
+    {
+        __FinalOutput.Color = float4(1, 1, 1, 1);
+        return __FinalOutput;
+    }
+    else
+    {
+        __FinalOutput.Color = float4(0, 0, 0, 0);
+        return __FinalOutput;
+    }
 }
 
 // Shader compilation

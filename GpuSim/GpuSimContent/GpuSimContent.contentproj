@@ -43,48 +43,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Shaders\BasicEffect.fx">
-      <Name>BasicEffect</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Shaders\root.fx">
-      <Name>root</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>PassThroughProcessor</Processor>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Shaders\GameOfLife.fx">
-      <Name>GameOfLife</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Shaders\Movement_Phase1.fx">
-      <Name>Movement_Phase1</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Shaders\Movement_Phase2.fx">
-      <Name>Movement_Phase2</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Art\katzen.png">
-      <Name>katzen</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Art\kid.png">
       <Name>kid</Name>
       <Importer>TextureImporter</Importer>
@@ -96,13 +54,6 @@
       <Name>Grass</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Shaders\DrawUnit.fx">
-      <Name>DrawUnit</Name>
-      <Importer>EffectImporter</Importer>
-      <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -130,10 +81,24 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Art\MouseSelect.png">
-      <Name>MouseSelect</Name>
+    <Compile Include="Art\SelectCircle.png">
+      <Name>SelectCircle</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Art\SelectCircle_Data.png">
+      <Name>SelectCircle_Data</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Shaders\__Test.fx">
+      <Name>__Test</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

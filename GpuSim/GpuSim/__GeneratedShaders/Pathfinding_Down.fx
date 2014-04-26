@@ -33,8 +33,8 @@ sampler fs_param_Path : register(s1) = sampler_state
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 // Texture Sampler for fs_param_Current, using register location 2
@@ -48,40 +48,20 @@ sampler fs_param_Current : register(s2) = sampler_state
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Something(float4 u)
+bool GpuSim__SimShader__Something(float4 u)
 {
     return u.r > 0;
 }
 
-// Compiled vertex shader
-VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
+float4 GpuSim__PathHelper__Propagate(VertexToPixel psin, sampler Path, float2 Path_size, float2 Path_dxdy, sampler Current, float2 Current_size, float2 Current_dxdy, float4 output)
 {
-    VertexToPixel Output = (VertexToPixel)0;
-    Output.Position.w = 1;
-    Output.Position.xy = inPos.xy;
-    Output.TexCoords = inTexCoords;
-    return Output;
-}
-
-// Compiled fragment shader
-PixelToFrame FragmentShader(VertexToPixel psin)
-{
-    PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 output = float4(0, 0, 0, 0);
-    float r = length(psin.TexCoords - float2(0.5, 0.5));
-    if (abs(r - 0.3) < 0.00125)
-    {
-        output.b = 0.003921569;
-        __FinalOutput.Color = output;
-        return __FinalOutput;
-    }
-    float4 data = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    float4 right = tex2D(fs_param_Path, psin.TexCoords + (float2(1, 0)) * fs_param_Path_dxdy), up = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 1)) * fs_param_Path_dxdy), left = tex2D(fs_param_Path, psin.TexCoords + (float2(-1, 0)) * fs_param_Path_dxdy), down = tex2D(fs_param_Path, psin.TexCoords + (float2(0, -1)) * fs_param_Path_dxdy), here = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 0)) * fs_param_Path_dxdy);
+    float4 data = tex2D(Current, psin.TexCoords + (float2(0, 0)) * Current_dxdy);
+    float4 right = tex2D(Path, psin.TexCoords + (float2(1, 0)) * Path_dxdy), up = tex2D(Path, psin.TexCoords + (float2(0, 1)) * Path_dxdy), left = tex2D(Path, psin.TexCoords + (float2(-(1), 0)) * Path_dxdy), down = tex2D(Path, psin.TexCoords + (float2(0, -(1))) * Path_dxdy), here = tex2D(Path, psin.TexCoords + (float2(0, 0)) * Path_dxdy);
     float val_right = 255 * right.g + right.b, val_up = 255 * up.g + up.b, val_left = 255 * left.g + left.b, val_down = 255 * down.g + down.b, val_here = 255 * here.g + here.b;
     float min = 255;
     if (val_here > 0 && val_here < min)
@@ -110,12 +90,36 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         output.r = 0.01568628;
     }
     min = min + 0.003921569;
-    if (Something(data))
+    if (GpuSim__SimShader__Something(data))
     {
-        min += 0.003921569;
     }
-    output.g = min / 255;
+    output.g = floor(min) / 255.0;
     output.b = min - floor(min);
+    return output;
+}
+
+// Compiled vertex shader
+VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
+{
+    VertexToPixel Output = (VertexToPixel)0;
+    Output.Position.w = 1;
+    Output.Position.xy = inPos.xy;
+    Output.TexCoords = inTexCoords;
+    return Output;
+}
+
+// Compiled fragment shader
+PixelToFrame FragmentShader(VertexToPixel psin)
+{
+    PixelToFrame __FinalOutput = (PixelToFrame)0;
+    float4 output = float4(0, 0, 0, 0);
+    if (psin.TexCoords.y - 2 * fs_param_Path_dxdy.y < 0)
+    {
+        output.b = 0.003921569;
+        __FinalOutput.Color = output;
+        return __FinalOutput;
+    }
+    output = GpuSim__PathHelper__Propagate(psin, fs_param_Path, fs_param_Path_size, fs_param_Path_dxdy, fs_param_Current, fs_param_Current_size, fs_param_Current_dxdy, output);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

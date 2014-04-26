@@ -37,10 +37,28 @@ sampler fs_param_Current : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__Something(float4 u)
+// Texture Sampler for fs_param_Extra2, using register location 2
+float2 fs_param_Extra2_size;
+float2 fs_param_Extra2_dxdy;
+
+Texture fs_param_Extra2_Texture;
+sampler fs_param_Extra2 : register(s2) = sampler_state
 {
-    return u.r > 0;
+    texture   = <fs_param_Extra2_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+float2 fs_param_Destination;
+
+// The following methods are included because they are referenced by the fragment shader.
+bool GpuSim__SimShader__selected(float4 u)
+{
+    float val = u.b;
+    return val >= 0.01960784;
 }
 
 // Compiled vertex shader
@@ -57,44 +75,15 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy), output = float4(0, 0, 0, 0);
-    if (GpuSim__SimShader__Something(here))
+    float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
+    float4 extra2 = tex2D(fs_param_Extra2, psin.TexCoords + (float2(0, 0)) * fs_param_Extra2_dxdy);
+    if (GpuSim__SimShader__selected(here))
     {
-        output = here;
-        output.g = 0.003921569;
-        __FinalOutput.Color = output;
-        return __FinalOutput;
+        float angle = atan2(psin.TexCoords.y - fs_param_Destination.y * fs_param_Current_dxdy.y, psin.TexCoords.x - fs_param_Destination.x * fs_param_Current_dxdy.x);
+        extra2.a = (angle + 3.14159) / (2 * 3.14159);
     }
-    float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy);
-    if (right.a != 0.0 && abs(right.r - 0.01176471) < .001)
-    {
-        output = right;
-    }
-    if (up.a != 0.0 && abs(up.r - 0.01568628) < .001)
-    {
-        output = up;
-    }
-    if (left.a != 0.0 && abs(left.r - 0.003921569) < .001)
-    {
-        output = left;
-    }
-    if (down.a != 0.0 && abs(down.r - 0.007843138) < .001)
-    {
-        output = down;
-    }
-    if (GpuSim__SimShader__Something(output))
-    {
-        output.g = 0.0;
-        __FinalOutput.Color = output;
-        return __FinalOutput;
-    }
-    else
-    {
-        output = here;
-        output.g = 0.003921569;
-        __FinalOutput.Color = output;
-        return __FinalOutput;
-    }
+    __FinalOutput.Color = extra2;
+    return __FinalOutput;
 }
 
 // Shader compilation

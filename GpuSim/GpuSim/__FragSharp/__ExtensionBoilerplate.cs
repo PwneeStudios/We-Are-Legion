@@ -39,6 +39,9 @@ namespace GpuSim
         [Hlsl("xy")]
         public vec2 xy { get { return new vec2(x, y); } set { x = value.x; y = value.y; } }
 
+        [Hlsl("zw")]
+        public vec2 zw { get { return new vec2(z, w); } set { z = value.x; w = value.y; } }
+
         [Hlsl("xyz")]
         public vec3 xyz { get { return new vec3(x, y, z); } set { x = value.x; y = value.y; z = value.z; } }
 
@@ -54,7 +57,15 @@ namespace GpuSim
         [Hlsl("a")]
         public float a { get { return w; } set { w = value; } }
 
+        [Hlsl("rgb")]
         public vec3 rgb { get { return xyz; } set { xyz = value; } }
+
+        [Hlsl("rg")]
+        public vec2 rg { get { return xy; } set { xy = value; } }
+
+        [Hlsl("ba")]
+        public vec2 ba { get { return zw; } set { zw = value; } }
+
 
         public static unit operator *(float a, unit v)
         {
@@ -130,6 +141,140 @@ namespace GpuSim
         }
 
         public static readonly unit Zero = new unit(0, 0, 0, 0);
+    }
+}
+
+namespace GpuSim
+{
+    [Hlsl("float4")]
+    public partial struct extra2
+    {
+        [Hlsl("float4")]
+        public extra2(float x, float y, float z, float w)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+        }
+
+        [Hlsl("x")]
+        public float x;
+
+        [Hlsl("y")]
+        public float y;
+
+        [Hlsl("z")]
+        public float z;
+
+        [Hlsl("w")]
+        public float w;
+
+        [Hlsl("xy")]
+        public vec2 xy { get { return new vec2(x, y); } set { x = value.x; y = value.y; } }
+
+        [Hlsl("zw")]
+        public vec2 zw { get { return new vec2(z, w); } set { z = value.x; w = value.y; } }
+
+        [Hlsl("xyz")]
+        public vec3 xyz { get { return new vec3(x, y, z); } set { x = value.x; y = value.y; z = value.z; } }
+
+        [Hlsl("r")]
+        public float r { get { return x; } set { x = value; } }
+
+        [Hlsl("g")]
+        public float g { get { return y; } set { y = value; } }
+
+        [Hlsl("b")]
+        public float b { get { return z; } set { z = value; } }
+
+        [Hlsl("a")]
+        public float a { get { return w; } set { w = value; } }
+
+        [Hlsl("rgb")]
+        public vec3 rgb { get { return xyz; } set { xyz = value; } }
+
+        [Hlsl("rg")]
+        public vec2 rg { get { return xy; } set { xy = value; } }
+
+        [Hlsl("ba")]
+        public vec2 ba { get { return zw; } set { zw = value; } }
+
+
+        public static extra2 operator *(float a, extra2 v)
+        {
+            return new extra2(a * v.x, a * v.y, a * v.z, a * v.w);
+        }
+
+        public static extra2 operator *(extra2 v, float a)
+        {
+            return new extra2(a * v.x, a * v.y, a * v.z, a * v.w);
+        }
+
+        public static extra2 operator /(float a, extra2 v)
+        {
+            return new extra2(a / v.x, a / v.y, a / v.z, a / v.w);
+        }
+
+        public static extra2 operator /(extra2 v, float a)
+        {
+            return new extra2(v.x / a, v.y / a, v.z / a, v.w / a);
+        }
+
+        public static extra2 operator +(extra2 v, extra2 w)
+        {
+            return new extra2(v.x + w.x, v.y + w.y, v.z + w.z, v.w + w.w);
+        }
+
+        public static extra2 operator -(extra2 v, extra2 w)
+        {
+            return new extra2(v.x - w.x, v.y - w.y, v.z - w.z, v.w - w.w);
+        }
+
+        public static extra2 operator *(extra2 v, extra2 w)
+        {
+            return new extra2(v.x * w.x, v.y * w.y, v.z * w.z, v.w * w.w);
+        }
+
+        public static extra2 operator /(extra2 v, extra2 w)
+        {
+            return new extra2(v.x / w.x, v.y / w.y, v.z / w.z, v.w / w.w);
+        }
+
+        public static bool operator ==(extra2 v, extra2 w)
+        {
+            return
+                v.x == w.x &&
+                v.y == w.y &&
+                v.z == w.z &&
+                v.w == w.w;
+        }
+
+        public static bool operator !=(extra2 v, extra2 w)
+        {
+            return
+                v.x != w.x ||
+                v.y != w.y ||
+                v.z != w.z ||
+                v.w != w.w;
+        }
+
+        public static extra2 operator -(extra2 v)
+        {
+            return new extra2(-v.x, -v.y, -v.z, -v.w);
+        }
+
+        public static implicit operator Vector4(extra2 v)
+        {
+            return new Vector4(v.x, v.y, v.z, v.w);
+        }
+
+        public static explicit operator extra2(Vector4 v)
+        {
+            return new extra2(v.X, v.Y, v.Z, v.W);
+        }
+
+        public static readonly extra2 Zero = new extra2(0, 0, 0, 0);
     }
 }
 

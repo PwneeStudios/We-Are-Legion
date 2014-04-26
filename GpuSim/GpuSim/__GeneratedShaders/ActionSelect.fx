@@ -33,8 +33,8 @@ sampler fs_param_Current : register(s1) = sampler_state
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 // Texture Sampler for fs_param_Select, using register location 2
@@ -48,16 +48,35 @@ sampler fs_param_Select : register(s2) = sampler_state
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 bool fs_param_Deselect;
 
+float fs_param_action;
+
 // The following methods are included because they are referenced by the fragment shader.
-bool Something(float4 u)
+bool GpuSim__SimShader__Something(float4 u)
 {
     return u.r > 0;
+}
+
+float GpuSim__SimShader__prior_direction(float4 u)
+{
+    float val = u.b;
+    return val % 0.01960784;
+}
+
+void GpuSim__SimShader__set_selected(inout float4 u, bool selected)
+{
+    u.b = GpuSim__SimShader__prior_direction(u) + (selected ? 0.01960784 : 0.0);
+}
+
+bool GpuSim__SimShader__selected(float4 u)
+{
+    float val = u.b;
+    return val >= 0.01960784;
 }
 
 // Compiled vertex shader
@@ -76,16 +95,20 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    if (Something(select))
+    if (GpuSim__SimShader__Something(select))
     {
-        here.a = 0.003921569;
+        GpuSim__SimShader__set_selected(here, true);
     }
     else
     {
         if (fs_param_Deselect)
         {
-            here.a = 0.0;
+            GpuSim__SimShader__set_selected(here, false);
         }
+    }
+    if (GpuSim__SimShader__Something(here) && GpuSim__SimShader__selected(here) && fs_param_action < 0.04705882)
+    {
+        here.a = fs_param_action;
     }
     __FinalOutput.Color = here;
     return __FinalOutput;

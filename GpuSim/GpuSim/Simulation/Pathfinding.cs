@@ -2,25 +2,103 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
-    public partial class Pathfinding : SimShader
+    // Circle
+    //var r = length(vertex.TexCoords - vec(.5f, .5f));
+    //if (abs(r - .3f) < .00125)
+    //{
+    //    output.b = _1;
+    //    return output;
+    //}
+
+    // Debug paths
+    //unit path = Paths[Here];
+    //output.r = path.direction * 50;
+    //if (path.direction == Dir.Left) output.r = 1;
+    //if (path.direction == Dir.Right) output.g = 1;
+    //if (path.direction == Dir.Up) output.b = 1;
+    //if (path.direction == Dir.Down) output.a = 1;
+
+    public partial class Pathfinding_Down : SimShader
     {
         [FragmentShader]
         unit FragmentShader(VertexOut vertex, UnitField Path, UnitField Current)
         {
             unit output = unit.Nothing;
 
-            var r = length(vertex.TexCoords - vec(.5f, .5f));
-            if (abs(r - .3f) < .00125)
+            if (vertex.TexCoords.y - 2 * Path.DxDy.y < 0)
             {
                 output.b = _1;
                 return output;
             }
 
+            output = PathHelper.Propagate(Path, Current, output);
+
+            return output;
+        }
+    }
+
+    public partial class Pathfinding_Up : SimShader
+    {
+        [FragmentShader]
+        unit FragmentShader(VertexOut vertex, UnitField Path, UnitField Current)
+        {
+            unit output = unit.Nothing;
+
+            if (vertex.TexCoords.y + 2 * Path.DxDy.y > 1)
+            {
+                output.b = _1;
+                return output;
+            }
+
+            output = PathHelper.Propagate(Path, Current, output);
+
+            return output;
+        }
+    }
+
+    public partial class Pathfinding_Left : SimShader
+    {
+        [FragmentShader]
+        unit FragmentShader(VertexOut vertex, UnitField Path, UnitField Current)
+        {
+            unit output = unit.Nothing;
+
+            if (vertex.TexCoords.x - 2 * Path.DxDy.x < 0)
+            {
+                output.b = _1;
+                return output;
+            }
+
+            output = PathHelper.Propagate(Path, Current, output);
+
+            return output;
+        }
+    }
+
+    public partial class Pathfinding_Right : SimShader
+    {
+        [FragmentShader]
+        unit FragmentShader(VertexOut vertex, UnitField Path, UnitField Current)
+        {
+            unit output = unit.Nothing;
+            
+            if (vertex.TexCoords.x + 2 * Path.DxDy.x > 1)
+            {
+                output.b = _1;
+                return output;
+            }
+
+            output = PathHelper.Propagate(Path, Current, output);
+
+            return output;
+        }
+    }
+
+    public class PathHelper : SimShader
+    {
+        public static unit Propagate(UnitField Path, UnitField Current, unit output)
+        {
             unit data = Current[Here];
-            //if (Something(data))
-            //{
-            //    output.a = 1;
-            //}
 
             unit
                 right = Path[RightOne],
@@ -65,12 +143,17 @@ namespace GpuSim
 
             min = min + _1;
 
+            //|| data.direction != output.direction || data.action == Action.Stopped))
             if (Something(data))
-                min += _1;
+            {
+                //if (data.change == Change.Stayed)
+                //if (data.direction != output.direction || data.action == Action.Stopped)
+                //if (data.action == Action.Stopped)
+                //    min += _1;
+            }
 
-            output.g = min / 255;
+            output.g = floor(min) / 255.0f;
             output.b = min - floor(min);
-
             return output;
         }
     }

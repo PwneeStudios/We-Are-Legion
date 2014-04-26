@@ -2,6 +2,36 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
+    public partial class DrawUnitZoomedOut : DrawUnit
+    {
+        color Presence(unit data)
+        {
+            return Something(data) ?
+                (selected(data) ? rgb(0x54c96b) : rgb(0x917c82)) :
+                rgba(0,0,0,0);
+        }
+
+        [FragmentShader]
+        color FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous, Sampler Texture, float PercentSimStepComplete)
+        {
+            color output = color.TransparentBlack;
+
+            unit
+                right = Current[RightOne],
+                up    = Current[UpOne],
+                left  = Current[LeftOne],
+                down  = Current[DownOne],
+                here  = Current[Here];
+
+            output =    .5f *
+                            .25f * (Presence(right) + Presence(up) + Presence(left) + Presence(down))
+                      + .5f *
+                             Presence(here);
+            
+            return output;
+        }
+    }
+
     public partial class DrawUnit : BaseShader
     {
         readonly vec2 SpriteSize = vec(1.0f / 5.0f, 1.0f / 8.0f);
@@ -15,16 +45,16 @@ namespace GpuSim
                 return rgba(0, 0, 0, 0);
         }
 
-        color Sprite(unit data, vec2 pos, float anim, float frame, Sampler Texture)
+        protected color Sprite(unit data, vec2 pos, float anim, float frame, Sampler Texture)
         {
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            pos.x += ((int)(floor(frame)) % 5);
-            pos.y += (anim * 255 - 1 + 4 * data.a * 255);
-            pos *= SpriteSize;
+            float selected_offset = selected(data) ? 4 : 0;
 
-            //pos.y += data.a * _4 * SpriteSize.y;
+            pos.x += ((int)(floor(frame)) % 5);
+            pos.y += (floor(anim * 255 + .5f) - 1 + selected_offset);
+            pos *= SpriteSize;
 
             var clr = Texture[pos];
 
@@ -71,25 +101,19 @@ namespace GpuSim
 
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous, UnitField Paths, Sampler Texture, float PercentSimStepComplete)
+        color FragmentShader(VertexOut vertex, UnitField Extra, UnitField Current, UnitField Previous, Sampler Texture, float PercentSimStepComplete)
         {
             color output = color.TransparentBlack;
 
             unit cur = Current[Here];
 	        unit pre = Previous[Here];
 
-            unit path = Paths[Here];
-            
-            //output.r = path.direction * 50;
-            //if (path.direction == Dir.Left) output.r = 1;
-            //if (path.direction == Dir.Right) output.g = 1;
-            //if (path.direction == Dir.Up) output.b = 1;
-            //if (path.direction == Dir.Down) output.a = 1;
+            //unit extra = Extra[Here];
+            //output = .2f * (color)extra;
 
             vec2 subcell_pos = get_subcell_pos(vertex, Current.Size);
 
             if (Something(cur) && cur.change == Change.Stayed)
-            //if (cur.a == pre.a && cur.a != 0)
 	        {
 		        if (PercentSimStepComplete > .5) pre = cur;
 
@@ -99,9 +123,9 @@ namespace GpuSim
             {
                 if (IsValid(cur.direction))
                 {
-                    vec2 vel = direction_to_vec(cur.prior_direction);
+                    vec2 vel = direction_to_vec(prior_direction(cur));
 
-                    output += Sprite(cur, subcell_pos + (1 - PercentSimStepComplete) * vel, cur.prior_direction, PercentSimStepComplete * 5, Texture);
+                    output += Sprite(cur, subcell_pos + (1 - PercentSimStepComplete) * vel, prior_direction(cur), PercentSimStepComplete * 5, Texture);
                 }
 
                 if (IsValid(pre.direction))
@@ -111,6 +135,8 @@ namespace GpuSim
                     output += Sprite(pre, subcell_pos - PercentSimStepComplete * vel, pre.direction, PercentSimStepComplete * 5, Texture);
                 }
             }
+
+            //output.a *= 2; // Increase alpha when zoomed out for better visibility
 
             return output;
         }
