@@ -135,6 +135,16 @@ namespace GpuSim
             return new Vector4(v.x, v.y, v.z, v.w);
         }
 
+        public static implicit operator unit(color v)
+        {
+            return new unit(v.x, v.y, v.z, v.w);
+        }
+
+        public static implicit operator color(unit v)
+        {
+            return new color(v.x, v.y, v.z, v.w);
+        }
+
         public static explicit operator unit(Vector4 v)
         {
             return new unit(v.X, v.Y, v.Z, v.W);
@@ -267,6 +277,16 @@ namespace GpuSim
         public static implicit operator Vector4(extra2 v)
         {
             return new Vector4(v.x, v.y, v.z, v.w);
+        }
+
+        public static implicit operator extra2(color v)
+        {
+            return new extra2(v.x, v.y, v.z, v.w);
+        }
+
+        public static implicit operator color(extra2 v)
+        {
+            return new color(v.x, v.y, v.z, v.w);
         }
 
         public static explicit operator extra2(Vector4 v)

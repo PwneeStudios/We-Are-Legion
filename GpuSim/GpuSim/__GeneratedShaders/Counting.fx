@@ -22,14 +22,14 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_PreviousLevel, using register location 1
-float2 fs_param_PreviousLevel_size;
-float2 fs_param_PreviousLevel_dxdy;
+// Texture Sampler for fs_param_Units, using register location 1
+float2 fs_param_Units_size;
+float2 fs_param_Units_dxdy;
 
-Texture fs_param_PreviousLevel_Texture;
-sampler fs_param_PreviousLevel : register(s1) = sampler_state
+Texture fs_param_Units_Texture;
+sampler fs_param_Units : register(s1) = sampler_state
 {
-    texture   = <fs_param_PreviousLevel_Texture>;
+    texture   = <fs_param_Units_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -38,11 +38,9 @@ sampler fs_param_PreviousLevel : register(s1) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float GpuSim__SimShader__unpack_coord(float2 packed)
+bool GpuSim__SimShader__Something(float4 u)
 {
-    float coord = 0;
-    coord = (255 * packed.x + packed.y) * 255;
-    return coord;
+    return u.r > 0;
 }
 
 float2 GpuSim__SimShader__pack_coord(float x)
@@ -51,6 +49,17 @@ float2 GpuSim__SimShader__pack_coord(float x)
     packed.x = floor(x / 255.0);
     packed.y = x - packed.x * 255.0;
     return packed / 255.0;
+}
+
+bool GpuSim__SimShader__selected(float4 u)
+{
+    float val = u.b;
+    return val >= 0.01960784;
+}
+
+bool GpuSim__SimShader__SomethingSelected(float4 u)
+{
+    return GpuSim__SimShader__Something(u) && GpuSim__SimShader__selected(u);
 }
 
 // Compiled vertex shader
@@ -68,10 +77,44 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float2 uv = psin.TexCoords;
-    float4 TL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy), TR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy), BL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy), BR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy);
-    float count = GpuSim__SimShader__unpack_coord(TL.rg) + GpuSim__SimShader__unpack_coord(TR.rg) + GpuSim__SimShader__unpack_coord(BL.rg) + GpuSim__SimShader__unpack_coord(BR.rg);
+    float4 TL = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy), TR = tex2D(fs_param_Units, psin.TexCoords + (float2(1, 0)) * fs_param_Units_dxdy), BL = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 1)) * fs_param_Units_dxdy), BR = tex2D(fs_param_Units, psin.TexCoords + (float2(1, 1)) * fs_param_Units_dxdy);
     float4 output = float4(0, 0, 0, 0);
+    float count = 0;
+    if (GpuSim__SimShader__Something(TL))
+    {
+        count += 1;
+    }
+    if (GpuSim__SimShader__Something(TR))
+    {
+        count += 1;
+    }
+    if (GpuSim__SimShader__Something(BL))
+    {
+        count += 1;
+    }
+    if (GpuSim__SimShader__Something(BR))
+    {
+        count += 1;
+    }
     output.rg = GpuSim__SimShader__pack_coord(count);
+    count = 0;
+    if (GpuSim__SimShader__SomethingSelected(TL))
+    {
+        count += 1;
+    }
+    if (GpuSim__SimShader__SomethingSelected(TR))
+    {
+        count += 1;
+    }
+    if (GpuSim__SimShader__SomethingSelected(BL))
+    {
+        count += 1;
+    }
+    if (GpuSim__SimShader__SomethingSelected(BR))
+    {
+        count += 1;
+    }
+    output.ba = GpuSim__SimShader__pack_coord(count);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

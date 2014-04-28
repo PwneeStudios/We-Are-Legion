@@ -110,7 +110,7 @@ float4 GpuSim__DrawUnit__Sprite(VertexToPixel psin, float4 data, float2 pos, flo
 {
     if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
     {
-        return float4(0, 0, 0, 0);
+        return float4(0.0, 0.0, 0.0, 0.0);
     }
     float selected_offset = GpuSim__SimShader__selected(data) ? 4 : 0;
     pos.x += ((int)(floor(frame)) % 5);
@@ -153,7 +153,7 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 output = float4(0, 0, 0, 0);
+    float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 cur = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 pre = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * fs_param_Previous_dxdy);
     float2 subcell_pos = GpuSim__DrawUnit__get_subcell_pos(psin, fs_param_Current_size);

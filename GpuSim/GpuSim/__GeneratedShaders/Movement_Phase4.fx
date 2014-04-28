@@ -175,7 +175,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         float4 right_path = tex2D(fs_param_Paths_Right, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_Right_dxdy), up_path = tex2D(fs_param_Paths_Up, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_Up_dxdy), left_path = tex2D(fs_param_Paths_Left, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_Left_dxdy), down_path = tex2D(fs_param_Paths_Down, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_Down_dxdy);
         float4 extra1 = tex2D(fs_param_Extra1, psin.TexCoords + (float2(0, 0)) * fs_param_Extra1_dxdy);
         float4 extra2 = tex2D(fs_param_Extra2, psin.TexCoords + (float2(0, 0)) * fs_param_Extra2_dxdy);
-        float2 Destination = GpuSim__SimShader__unpack_vec2((float4)extra1);
+        float2 Destination = GpuSim__SimShader__unpack_vec2(extra1);
         float cur_angle = atan2(psin.TexCoords.y - Destination.y * fs_param_Extra1_dxdy.y, psin.TexCoords.x - Destination.x * fs_param_Extra1_dxdy.x);
         cur_angle = (cur_angle + 3.14159) / (2 * 3.14159);
         float target_angle = extra2.a;

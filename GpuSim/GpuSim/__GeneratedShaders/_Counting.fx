@@ -45,12 +45,27 @@ float GpuSim__SimShader__unpack_coord(float2 packed)
     return coord;
 }
 
+float2 GpuSim__SimShader__unpack_vec2(float4 packed)
+{
+    float2 v = float2(0, 0);
+    v.x = GpuSim__SimShader__unpack_coord(packed.rg);
+    v.y = GpuSim__SimShader__unpack_coord(packed.ba);
+    return v;
+}
+
 float2 GpuSim__SimShader__pack_coord(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 255.0);
     packed.y = x - packed.x * 255.0;
     return packed / 255.0;
+}
+
+float4 GpuSim__SimShader__pack_vec2(float2 v)
+{
+    float2 packed_x = GpuSim__SimShader__pack_coord(v.x);
+    float2 packed_y = GpuSim__SimShader__pack_coord(v.y);
+    return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 
 // Compiled vertex shader
@@ -69,9 +84,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float2 uv = psin.TexCoords;
     float4 TL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy), TR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy), BL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy), BR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy);
-    float count = GpuSim__SimShader__unpack_coord(TL.rg) + GpuSim__SimShader__unpack_coord(TR.rg) + GpuSim__SimShader__unpack_coord(BL.rg) + GpuSim__SimShader__unpack_coord(BR.rg);
+    float2 count = GpuSim__SimShader__unpack_vec2(TL) + GpuSim__SimShader__unpack_vec2(TR) + GpuSim__SimShader__unpack_vec2(BL) + GpuSim__SimShader__unpack_vec2(BR);
     float4 output = float4(0, 0, 0, 0);
-    output.rg = GpuSim__SimShader__pack_coord(count);
+    output = GpuSim__SimShader__pack_vec2(count);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

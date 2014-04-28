@@ -36,11 +36,6 @@ namespace GpuSim
             return new unit(v.x, v.y, v.z, v.w);
         }
 
-        public static explicit operator color(unit v)
-        {
-            return new color(v.x, v.y, v.z, v.w);
-        }
-
         public static explicit operator vec4(unit v)
         {
             return new vec4(v.x, v.y, v.z, v.w);
@@ -78,11 +73,6 @@ namespace GpuSim
         public static explicit operator extra2(vec4 v)
         {
             return new extra2(v.x, v.y, v.z, v.w);
-        }
-
-        public static explicit operator color(extra2 v)
-        {
-            return new color(v.x, v.y, v.z, v.w);
         }
 
         public static explicit operator vec4(extra2 v)
@@ -149,6 +139,11 @@ namespace GpuSim
                 NoChange = _12;
         }
 
+        protected static bool SomethingSelected(unit u)
+        {
+            return Something(u) && selected(u);
+        }
+
         protected static bool Something(unit u)
         {
             return u.direction > 0;
@@ -210,7 +205,7 @@ namespace GpuSim
             return IsValid(direction) ? new RelativeIndex(cos(angle), sin(angle)) : new RelativeIndex(0, 0);
         }
 
-        protected static vec2 pack_coord(float x)
+        public static vec2 pack_coord(float x)
         {
             vec2 packed = vec2.Zero;
 
@@ -220,7 +215,7 @@ namespace GpuSim
             return packed / 255.0f;
         }
 
-        protected static float unpack_coord(vec2 packed)
+        public static float unpack_coord(vec2 packed)
         {
             float coord = 0;
 
@@ -229,14 +224,14 @@ namespace GpuSim
             return coord;
         }
 
-        protected static vec4 pack_vec2(vec2 v)
+        public static vec4 pack_vec2(vec2 v)
         {
             vec2 packed_x = pack_coord(v.x);
             vec2 packed_y = pack_coord(v.y);
             return vec(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
         }
 
-        protected static vec2 unpack_vec2(vec4 packed)
+        public static vec2 unpack_vec2(vec4 packed)
         {
             vec2 v = vec2.Zero;
             v.x = unpack_coord(packed.rg);

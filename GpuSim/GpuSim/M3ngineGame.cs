@@ -9,12 +9,23 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-using System.Diagnostics;
-
 using FragSharpFramework;
 
 namespace GpuSim
 {
+    public static class RenderTargetExtension
+    {
+        public static Color[] GetData(this RenderTarget2D RenderTarget)
+        {
+            int w = RenderTarget.Width, h = RenderTarget.Height;
+            Color[] data = new Color[w * h];
+            
+            RenderTarget.GetData(data);
+            
+            return data;
+        }
+    }
+
 	public static class RndExtension
 	{
 		public static float RndBit(this System.Random rnd)
@@ -108,19 +119,22 @@ namespace GpuSim
             Temp1, Temp2,
             Previous, Current, Extra1, Extra2,
             Paths_Right, Paths_Left, Paths_Up, Paths_Down;
+        List<RenderTarget2D> Multigrid;
 
 		Texture2D
             UnitTexture, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
             GroundTexture,
             SelectCircle, SelectCircle_Data;
 
+        const int w = 1024, h = 1024;
+
 		public M3ngineGame()
 		{
 			graphics = new GraphicsDeviceManager(this);
 
 			Window.Title = "Gpu Sim Test";
-            graphics.PreferredBackBufferWidth  = 1024;
-            graphics.PreferredBackBufferHeight = 1024;
+            graphics.PreferredBackBufferWidth  = w;
+            graphics.PreferredBackBufferHeight = h;
 			//graphics.IsFullScreen = rez.Mode == WindowMode.Fullscreen;
 			graphics.SynchronizeWithVerticalRetrace = !UnlimitedSpeed;
 			IsFixedTimeStep = !UnlimitedSpeed;
@@ -206,8 +220,6 @@ namespace GpuSim
             float GroundRepeat = 100;
             Ground = new RectangleQuad(new vec2(-1, -1), new vec2(1, 1), new vec2(0, 0), new vec2(1, 1) * GroundRepeat);
 
-			const int w = 1024, h = 1024;
-            
             Current  = MakeTarget(w, h);
             Previous = MakeTarget(w, h);
             Extra1 = MakeTarget(w, h);
@@ -222,6 +234,14 @@ namespace GpuSim
             Paths_Left  = MakeTarget(w, h);
             Paths_Up    = MakeTarget(w, h);
             Paths_Down  = MakeTarget(w, h);
+
+            Multigrid = new List<RenderTarget2D>();
+            int n = w;
+            while (n >= 1)
+            {
+                Multigrid.Add(MakeTarget(n, n));
+                n /= 2;
+            }
 
 			base.Initialize();
 		}
@@ -238,13 +258,15 @@ namespace GpuSim
             for (int i = 0; i < w; i++)
             for (int j = 0; j < h; j++)
             {
+                //if (true)
                 if (false)
                 //if (rnd.NextDouble() > 0.85f)
                 //if (i == w / 2 && j == h / 2)
                 //if (Math.Abs(i - w / 2) < 500)
                 //if (j == h / 2)
                 //if (i % 9 == 0)
-                //if (j % 9 == 0 || i % 9 == 0)
+                //if (j % 2 == 0 || i % 2 == 0)
+                //if (j % 2 == 0 && i % 2 == 0)
                 {
                     //int dir = rnd.Next(1, 5);
                     int dir = rnd.Next(1, 5);
@@ -394,8 +416,10 @@ namespace GpuSim
 			GraphicsDevice.BlendState = BlendState.AlphaBlend;
 			GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
 
-            PathUpdate();
 
+            PathUpdate();
+            Count();
+            Bounds();
             SelectionUpdate();
 
 			// Check if we need to do a simulation update
@@ -475,6 +499,57 @@ namespace GpuSim
             return shifted_cam;
         }
 
+        Color[] CountData = new Color[1];
+        int UnitCount = 0, SelectedCount = 0;
+        void Count()
+        {
+            Counting.Apply(Current, Output: Multigrid[1]);
+
+            int n = ((int)Screen.x) / 2;
+            int level = 1;
+            while (n >= 2)
+            {
+                _Counting.Apply(Multigrid[level], Output: Multigrid[level + 1]);
+
+                n /= 2;
+                level++;
+            }
+            GraphicsDevice.SetRenderTarget(null);
+
+            Multigrid.Last().GetData(CountData);
+            color count = (color)CountData[0];
+
+            var unpacked = SimShader.unpack_vec2(count);
+            UnitCount     = (int)Math.Round(unpacked.x);
+            SelectedCount = (int)Math.Round(unpacked.y);
+            Console.WriteLine("Selected {0} / {1}", SelectedCount, UnitCount);
+        }
+
+        vec2 SelectedBound_BL, SelectedBound_TR;
+        void Bounds()
+        {
+            Bounding.Apply(Current, Output: Multigrid[1]);
+
+            int n = ((int)Screen.x) / 2;
+            int level = 1;
+            while (n >= 2)
+            {
+                _Bounding.Apply(Multigrid[level], Output: Multigrid[level + 1]);
+
+                n /= 2;
+                level++;
+            }
+            GraphicsDevice.SetRenderTarget(null);
+
+            Multigrid.Last().GetData(CountData);
+            color bound = (color)CountData[0];
+
+            SelectedBound_TR = bound.rg;
+            SelectedBound_BL = bound.ba;
+
+            Console.WriteLine("Bounds: ({0}), ({1})", SelectedBound_BL, SelectedBound_TR);
+        }
+
         void PathUpdate()
         {
             Pathfinding_Right.Apply(Paths_Right, Current, Output: Temp1);
@@ -528,8 +603,16 @@ namespace GpuSim
             {
                 //var click_pos = InputInfo.MousePos;
                 var pos = ScreenToGridCoordinates(InputInfo.MousePos);
+
+                vec2 Selected_BL   = SelectedBound_BL * Screen;
+                vec2 Selected_Size = (SelectedBound_TR - SelectedBound_BL) * Screen;
                 
-                ActionAttack .Apply(Current, Extra1, pos, Output: Temp1);
+                float SquareWidth     = (float)Math.Sqrt(SelectedCount);
+                vec2 Destination_Size = new vec2(SquareWidth, SquareWidth)    * 1;
+                vec2 Destination_BL   = pos - Destination_Size / 2;
+
+                ActionAttackSquare.Apply(Current, Extra1, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: Temp1);
+                //ActionAttackPoint .Apply(Current, Extra1, pos, Output: Temp1);
                 Swap(ref Extra1, ref Temp1);
 
                 ActionAttack2.Apply(Current, Extra2, pos, Output: Temp1);

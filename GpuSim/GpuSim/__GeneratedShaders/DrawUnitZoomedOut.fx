@@ -104,7 +104,7 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 output = float4(0, 0, 0, 0);
+    float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy), here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     output = 0.5 * 0.25 * (GpuSim__DrawUnitZoomedOut__Presence(right) + GpuSim__DrawUnitZoomedOut__Presence(up) + GpuSim__DrawUnitZoomedOut__Presence(left) + GpuSim__DrawUnitZoomedOut__Presence(down)) + 0.5 * GpuSim__DrawUnitZoomedOut__Presence(here);
     __FinalOutput.Color = output;

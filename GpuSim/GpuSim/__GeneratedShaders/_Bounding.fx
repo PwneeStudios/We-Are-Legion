@@ -38,19 +38,14 @@ sampler fs_param_PreviousLevel : register(s1) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float GpuSim__SimShader__unpack_coord(float2 packed)
+float FragSharpFramework__FragSharpStd__max(float a, float b, float c, float d)
 {
-    float coord = 0;
-    coord = (255 * packed.x + packed.y) * 255;
-    return coord;
+    return max(max(a, b), max(c, d));
 }
 
-float2 GpuSim__SimShader__pack_coord(float x)
+float FragSharpFramework__FragSharpStd__min(float a, float b, float c, float d)
 {
-    float2 packed = float2(0, 0);
-    packed.x = floor(x / 255.0);
-    packed.y = x - packed.x * 255.0;
-    return packed / 255.0;
+    return min(min(a, b), min(c, d));
 }
 
 // Compiled vertex shader
@@ -67,11 +62,12 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float2 uv = psin.TexCoords;
     float4 TL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy), TR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy), BL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy), BR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy);
-    float count = GpuSim__SimShader__unpack_coord(TL.rg) + GpuSim__SimShader__unpack_coord(TR.rg) + GpuSim__SimShader__unpack_coord(BL.rg) + GpuSim__SimShader__unpack_coord(BR.rg);
     float4 output = float4(0, 0, 0, 0);
-    output.rg = GpuSim__SimShader__pack_coord(count);
+    output.r = FragSharpFramework__FragSharpStd__max(TL.r, TR.r, BL.r, BR.r);
+    output.g = FragSharpFramework__FragSharpStd__max(TL.g, TR.g, BL.g, BR.g);
+    output.b = FragSharpFramework__FragSharpStd__min(TL.b, TR.b, BL.b, BR.b);
+    output.a = FragSharpFramework__FragSharpStd__min(TL.a, TR.a, BL.a, BR.a);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

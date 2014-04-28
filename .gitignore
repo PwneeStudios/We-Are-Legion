@@ -5,3 +5,5 @@ bin/
 *.spa
 *.spa.h
 *.userprefs
+*.psess
+*.vsp

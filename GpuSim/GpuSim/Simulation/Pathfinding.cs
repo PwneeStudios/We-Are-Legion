@@ -2,22 +2,6 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
-    // Circle
-    //var r = length(vertex.TexCoords - vec(.5f, .5f));
-    //if (abs(r - .3f) < .00125)
-    //{
-    //    output.b = _1;
-    //    return output;
-    //}
-
-    // Debug paths
-    //unit path = Paths[Here];
-    //output.r = path.direction * 50;
-    //if (path.direction == Dir.Left) output.r = 1;
-    //if (path.direction == Dir.Right) output.g = 1;
-    //if (path.direction == Dir.Up) output.b = 1;
-    //if (path.direction == Dir.Down) output.a = 1;
-
     public partial class Pathfinding_Down : SimShader
     {
         [FragmentShader]
