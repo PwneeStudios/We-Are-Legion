@@ -61,7 +61,7 @@ namespace GpuSim
         }
     }
 
-    public partial class Movement_Phase3 : SimShader
+    public partial class Movement_ConvectExtra : SimShader
     {
         [FragmentShader]
         unit FragmentShader(VertexOut vertex, UnitField PreviousExtra, UnitField CurrentUnit)
@@ -80,7 +80,7 @@ namespace GpuSim
         }
     }
 
-    public partial class Movement_Phase4_DirOnly : SimShader
+    public partial class Movement_UpdateDirection_DirOnly : SimShader
     {
         [FragmentShader]
         unit FragmentShader(VertexOut vertex, UnitField Extra, UnitField Current, UnitField Paths_Right, UnitField Paths_Left, UnitField Paths_Up, UnitField Paths_Down)
@@ -108,7 +108,7 @@ namespace GpuSim
         }
     }
 
-    public partial class Movement_Phase4 : SimShader
+    public partial class Movement_UpdateDirection : SimShader
     {
         [FragmentShader]
         unit FragmentShader(VertexOut vertex, UnitField Extra1, Extra2Field Extra2, UnitField Current, UnitField Paths_Right, UnitField Paths_Left, UnitField Paths_Up, UnitField Paths_Down)
@@ -138,60 +138,6 @@ namespace GpuSim
                 float cur_angle    = atan(vertex.TexCoords.y - Destination.y * Extra1.DxDy.y, vertex.TexCoords.x - Destination.x * Extra1.DxDy.x);
                 cur_angle          = (cur_angle + 3.14159f) / (2 * 3.14159f);
                 float target_angle = extra2.target_angle;
-
-                //vec2 diff = Destination - vertex.TexCoords * Extra1.Size;
-                //if (Destination.x > vertex.TexCoords.x * Extra.Size.x)
-                //{
-                //    path = right_path;
-
-                //    if (!(abs(diff.y) < 10 && abs(diff.x) > 20))
-                //    {
-                //        if (Destination.y < vertex.TexCoords.y * Extra.Size.y)
-                //        {
-                //            if (cur_angle < target_angle || abs(diff.x) < 10 && abs(diff.y) > 20 || right_path.direction == Dir.Right && Something(right))
-                //            {
-                //                path = down_path;
-                //                if (Something(down))
-                //                    path = right_path;
-                //            }
-                //        }
-                //        else
-                //        {
-                //            if (cur_angle > target_angle || abs(diff.x) < 10 && abs(diff.y) > 20 || right_path.direction == Dir.Right && Something(right))
-                //            {
-                //                path = up_path;
-                //                if (Something(up))
-                //                    path = right_path;
-                //            }
-                //        }
-                //    }
-                //}
-                //else
-                //{
-                //    path = left_path;
-
-                //    if (!(abs(diff.y) < 10 && abs(diff.x) > 20))
-                //    {
-                //        if (Destination.y < vertex.TexCoords.y * Extra.Size.y)
-                //        {
-                //            if (cur_angle > target_angle || abs(diff.x) < 10 && abs(diff.y) > 20 || left_path.direction == Dir.Left && Something(left))
-                //            {
-                //                path = down_path;
-                //                if (Something(down))
-                //                    path = left_path;
-                //            }
-                //        }
-                //        else
-                //        {
-                //            if (cur_angle < target_angle || abs(diff.x) < 10 && abs(diff.y) > 20 || left_path.direction == Dir.Left && Something(left))
-                //            {
-                //                path = up_path;
-                //                if (Something(up))
-                //                    path = left_path;
-                //            }
-                //        }
-                //    }
-                //}
 
                 if (Destination.x > vertex.TexCoords.x * Extra1.Size.x)
                 {

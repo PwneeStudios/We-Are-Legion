@@ -36,9 +36,9 @@ namespace FragSharpFramework
             GpuSim.DataDrawMouse.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DataDrawMouse");
             GpuSim.Movement_Phase1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase1");
             GpuSim.Movement_Phase2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase2");
-            GpuSim.Movement_Phase3.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase3");
-            GpuSim.Movement_Phase4_DirOnly.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase4_DirOnly");
-            GpuSim.Movement_Phase4.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase4");
+            GpuSim.Movement_ConvectExtra.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_ConvectExtra");
+            GpuSim.Movement_UpdateDirection_DirOnly.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_UpdateDirection_DirOnly");
+            GpuSim.Movement_UpdateDirection.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_UpdateDirection");
             GpuSim.Pathfinding_Down.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_Down");
             GpuSim.Pathfinding_Up.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_Up");
             GpuSim.Pathfinding_Left.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_Left");
@@ -788,7 +788,7 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class Movement_Phase3
+    public partial class Movement_ConvectExtra
     {
         public static Effect CompiledEffect;
 
@@ -834,7 +834,7 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class Movement_Phase4_DirOnly
+    public partial class Movement_UpdateDirection_DirOnly
     {
         public static Effect CompiledEffect;
 
@@ -892,7 +892,7 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class Movement_Phase4
+    public partial class Movement_UpdateDirection
     {
         public static Effect CompiledEffect;
 

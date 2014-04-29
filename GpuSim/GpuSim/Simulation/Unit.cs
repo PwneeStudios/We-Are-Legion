@@ -58,15 +58,6 @@ namespace GpuSim
     [Copy(typeof(vec4))]
     public partial struct extra2
     {
-        //[Hlsl("r")]
-        //public float selected { get { return r; } set { r = value; } }
-
-        //[Hlsl("g")]
-        //public float change { get { return g; } set { g = value; } }
-
-        //[Hlsl("b")]
-        //public float prior_direction { get { return b; } set { b = value; } }
-
         [Hlsl("a")]
         public float target_angle { get { return a; } set { a = value; } }
 

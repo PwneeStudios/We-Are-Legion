@@ -562,7 +562,7 @@ namespace GpuSim
             Swap(ref Paths_Up, ref Temp1);
 
             Pathfinding_Down.Apply(Paths_Down, Current, Output: Temp1);
-            Swap(ref Paths_Down, ref Temp1);            
+            Swap(ref Paths_Down, ref Temp1);
         }
 
         void SelectionUpdate()
@@ -603,12 +603,16 @@ namespace GpuSim
             {
                 //var click_pos = InputInfo.MousePos;
                 var pos = ScreenToGridCoordinates(InputInfo.MousePos);
+                vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
+                pos -= shift;
 
                 vec2 Selected_BL   = SelectedBound_BL * Screen;
                 vec2 Selected_Size = (SelectedBound_TR - SelectedBound_BL) * Screen;
+                if (Selected_Size.x < 1) Selected_Size.x = 1;
+                if (Selected_Size.y < 1) Selected_Size.y = 1;
                 
                 float SquareWidth     = (float)Math.Sqrt(SelectedCount);
-                vec2 Destination_Size = new vec2(SquareWidth, SquareWidth)    * 1;
+                vec2 Destination_Size = new vec2(SquareWidth, SquareWidth)    * 1.25f;
                 vec2 Destination_BL   = pos - Destination_Size / 2;
 
                 ActionAttackSquare.Apply(Current, Extra1, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: Temp1);
@@ -628,12 +632,12 @@ namespace GpuSim
             Swap(ref Current, ref Previous);
             Swap(ref Temp2, ref Current);
 
-            Movement_Phase3.Apply(Extra1, Current, Output: Temp1);
+            Movement_ConvectExtra.Apply(Extra1, Current, Output: Temp1);
             Swap(ref Extra1, ref Temp1);
-            Movement_Phase3.Apply(Extra2, Current, Output: Temp1);
+            Movement_ConvectExtra.Apply(Extra2, Current, Output: Temp1);
             Swap(ref Extra2, ref Temp1);
 
-            Movement_Phase4.Apply(Extra1, Extra2, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
+            Movement_UpdateDirection.Apply(Extra1, Extra2, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
             Swap(ref Current, ref Temp1);
 		}
 	}
