@@ -44,34 +44,34 @@ namespace GpuSim
         public static readonly unit Nothing = new unit(0, 0, 0, 0);
     }
 
-    public class Extra2Field : PointSampler
+    public class DataField : PointSampler
     {
-        new public extra2 this[RelativeIndex index]
+        new public data this[RelativeIndex index]
         {
             get
             {
-                return extra2.Nothing;
+                return data.Nothing;
             }
         }
     }
 
     [Copy(typeof(vec4))]
-    public partial struct extra2
+    public partial struct data
     {
         [Hlsl("a")]
         public float target_angle { get { return a; } set { a = value; } }
 
-        public static explicit operator extra2(vec4 v)
+        public static explicit operator data(vec4 v)
         {
-            return new extra2(v.x, v.y, v.z, v.w);
+            return new data(v.x, v.y, v.z, v.w);
         }
 
-        public static explicit operator vec4(extra2 v)
+        public static explicit operator vec4(data v)
         {
             return new vec4(v.x, v.y, v.z, v.w);
         }
 
-        public static readonly extra2 Nothing = new extra2(0, 0, 0, 0);
+        public static readonly data Nothing = new data(0, 0, 0, 0);
     }
 
     public class SimShader : GridComputation

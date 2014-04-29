@@ -37,14 +37,14 @@ sampler fs_param_Current : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Extra1, using register location 2
-float2 fs_param_Extra1_size;
-float2 fs_param_Extra1_dxdy;
+// Texture Sampler for fs_param_TargetData, using register location 2
+float2 fs_param_TargetData_size;
+float2 fs_param_TargetData_dxdy;
 
-Texture fs_param_Extra1_Texture;
-sampler fs_param_Extra1 : register(s2) = sampler_state
+Texture fs_param_TargetData_Texture;
+sampler fs_param_TargetData : register(s2) = sampler_state
 {
-    texture   = <fs_param_Extra1_Texture>;
+    texture   = <fs_param_TargetData_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -97,19 +97,19 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    float4 extra1 = float4(0, 0, 0, 0);
+    float4 target = float4(0, 0, 0, 0);
     if (GpuSim__SimShader__selected(here))
     {
         float2 pos = psin.TexCoords * fs_param_Current_size;
         pos = (pos - fs_param_Selection_BL) / fs_param_Selection_Size;
         pos = pos * fs_param_Destination_Size + fs_param_Destination_BL;
-        extra1 = GpuSim__SimShader__pack_vec2(pos);
+        target = GpuSim__SimShader__pack_vec2(pos);
     }
     else
     {
-        extra1 = tex2D(fs_param_Extra1, psin.TexCoords + (float2(0, 0)) * fs_param_Extra1_dxdy);
+        target = tex2D(fs_param_TargetData, psin.TexCoords + (float2(0, 0)) * fs_param_TargetData_dxdy);
     }
-    __FinalOutput.Color = extra1;
+    __FinalOutput.Color = target;
     return __FinalOutput;
 }
 

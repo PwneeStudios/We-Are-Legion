@@ -22,14 +22,14 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_PreviousExtra, using register location 1
-float2 fs_param_PreviousExtra_size;
-float2 fs_param_PreviousExtra_dxdy;
+// Texture Sampler for fs_param_Data, using register location 1
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
 
-Texture fs_param_PreviousExtra_Texture;
-sampler fs_param_PreviousExtra : register(s1) = sampler_state
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s1) = sampler_state
 {
-    texture   = <fs_param_PreviousExtra_Texture>;
+    texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -37,14 +37,14 @@ sampler fs_param_PreviousExtra : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_CurrentUnit, using register location 2
-float2 fs_param_CurrentUnit_size;
-float2 fs_param_CurrentUnit_dxdy;
+// Texture Sampler for fs_param_Current, using register location 2
+float2 fs_param_Current_size;
+float2 fs_param_Current_dxdy;
 
-Texture fs_param_CurrentUnit_Texture;
-sampler fs_param_CurrentUnit : register(s2) = sampler_state
+Texture fs_param_Current_Texture;
+sampler fs_param_Current : register(s2) = sampler_state
 {
-    texture   = <fs_param_CurrentUnit_Texture>;
+    texture   = <fs_param_Current_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -99,16 +99,16 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentUnit_dxdy), output = float4(0, 0, 0, 0);
+    float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy), output = float4(0, 0, 0, 0);
     if (GpuSim__SimShader__Something(here))
     {
         if (abs(here.g - 0.003921569) < .001)
         {
-            output = tex2D(fs_param_PreviousExtra, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousExtra_dxdy);
+            output = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
         }
         else
         {
-            output = tex2D(fs_param_PreviousExtra, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(GpuSim__SimShader__Reverse(GpuSim__SimShader__prior_direction(here)))) * fs_param_PreviousExtra_dxdy);
+            output = tex2D(fs_param_Data, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(GpuSim__SimShader__Reverse(GpuSim__SimShader__prior_direction(here)))) * fs_param_Data_dxdy);
         }
     }
     __FinalOutput.Color = output;

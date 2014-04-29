@@ -22,14 +22,14 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Extra1, using register location 1
-float2 fs_param_Extra1_size;
-float2 fs_param_Extra1_dxdy;
+// Texture Sampler for fs_param_TargetData, using register location 1
+float2 fs_param_TargetData_size;
+float2 fs_param_TargetData_dxdy;
 
-Texture fs_param_Extra1_Texture;
-sampler fs_param_Extra1 : register(s1) = sampler_state
+Texture fs_param_TargetData_Texture;
+sampler fs_param_TargetData : register(s1) = sampler_state
 {
-    texture   = <fs_param_Extra1_Texture>;
+    texture   = <fs_param_TargetData_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -37,14 +37,14 @@ sampler fs_param_Extra1 : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Extra2, using register location 2
-float2 fs_param_Extra2_size;
-float2 fs_param_Extra2_dxdy;
+// Texture Sampler for fs_param_Data, using register location 2
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
 
-Texture fs_param_Extra2_Texture;
-sampler fs_param_Extra2 : register(s2) = sampler_state
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s2) = sampler_state
 {
-    texture   = <fs_param_Extra2_Texture>;
+    texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -173,16 +173,16 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         float4 path = float4(0, 0, 0, 0);
         float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy);
         float4 right_path = tex2D(fs_param_Paths_Right, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_Right_dxdy), up_path = tex2D(fs_param_Paths_Up, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_Up_dxdy), left_path = tex2D(fs_param_Paths_Left, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_Left_dxdy), down_path = tex2D(fs_param_Paths_Down, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_Down_dxdy);
-        float4 extra1 = tex2D(fs_param_Extra1, psin.TexCoords + (float2(0, 0)) * fs_param_Extra1_dxdy);
-        float4 extra2 = tex2D(fs_param_Extra2, psin.TexCoords + (float2(0, 0)) * fs_param_Extra2_dxdy);
-        float2 Destination = GpuSim__SimShader__unpack_vec2(extra1);
-        float cur_angle = atan2(psin.TexCoords.y - Destination.y * fs_param_Extra1_dxdy.y, psin.TexCoords.x - Destination.x * fs_param_Extra1_dxdy.x);
+        float4 target = tex2D(fs_param_TargetData, psin.TexCoords + (float2(0, 0)) * fs_param_TargetData_dxdy);
+        float4 data = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+        float2 Destination = GpuSim__SimShader__unpack_vec2(target);
+        float cur_angle = atan2(psin.TexCoords.y - Destination.y * fs_param_TargetData_dxdy.y, psin.TexCoords.x - Destination.x * fs_param_TargetData_dxdy.x);
         cur_angle = (cur_angle + 3.14159) / (2 * 3.14159);
-        float target_angle = extra2.a;
-        if (Destination.x > psin.TexCoords.x * fs_param_Extra1_size.x)
+        float target_angle = data.a;
+        if (Destination.x > psin.TexCoords.x * fs_param_TargetData_size.x)
         {
             path = right_path;
-            if (Destination.y < psin.TexCoords.y * fs_param_Extra1_size.y)
+            if (Destination.y < psin.TexCoords.y * fs_param_TargetData_size.y)
             {
                 if (cur_angle < target_angle || abs(right_path.r - 0.003921569) < .001 && GpuSim__SimShader__Something(right))
                 {
@@ -208,7 +208,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         else
         {
             path = left_path;
-            if (Destination.y < psin.TexCoords.y * fs_param_Extra1_size.y)
+            if (Destination.y < psin.TexCoords.y * fs_param_TargetData_size.y)
             {
                 if (cur_angle > target_angle || abs(left_path.r - 0.01176471) < .001 && GpuSim__SimShader__Something(left))
                 {

@@ -101,15 +101,12 @@ namespace GpuSim
 
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, UnitField Extra, UnitField Current, UnitField Previous, Sampler Texture, float PercentSimStepComplete)
+        color FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous, Sampler Texture, float PercentSimStepComplete)
         {
             color output = color.TransparentBlack;
 
             unit cur = Current[Here];
 	        unit pre = Previous[Here];
-
-            //unit extra = Extra[Here];
-            //output = .2f * (color)extra;
 
             vec2 subcell_pos = get_subcell_pos(vertex, Current.Size);
 

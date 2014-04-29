@@ -61,57 +61,29 @@ namespace GpuSim
         }
     }
 
-    public partial class Movement_ConvectExtra : SimShader
+    public partial class Movement_Convect : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField PreviousExtra, UnitField CurrentUnit)
+        unit FragmentShader(VertexOut vertex, UnitField Data, UnitField Current)
         {
-            unit here = CurrentUnit[Here], output = unit.Nothing;
+            unit here = Current[Here], output = unit.Nothing;
 
             if (Something(here))
             {
                 if (here.change == Change.Stayed)
-                    output = PreviousExtra[Here];
+                    output = Data[Here];
                 else
-                    output = PreviousExtra[dir_to_vec(Reverse(prior_direction(here)))];
+                    output = Data[dir_to_vec(Reverse(prior_direction(here)))];
             }
 
             return output;
         }
     }
 
-    public partial class Movement_UpdateDirection_DirOnly : SimShader
-    {
-        [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Extra, UnitField Current, UnitField Paths_Right, UnitField Paths_Left, UnitField Paths_Up, UnitField Paths_Down)
-        {
-            unit here = Current[Here];
-
-            if (Something(here))
-            {
-                unit path = unit.Nothing;
-
-                unit extra = Extra[Here];
-
-                if (extra.direction == Dir.Right) path = Paths_Right[Here];
-                if (extra.direction == Dir.Left)  path = Paths_Left [Here];
-                if (extra.direction == Dir.Up)    path = Paths_Up   [Here];
-                if (extra.direction == Dir.Down)  path = Paths_Down [Here];
-
-                if ((path.g > 0 || path.b > 0) && IsValid(path.direction))
-                {
-                    here.direction = path.direction;
-                }
-            }
-
-            return here;
-        }
-    }
-
     public partial class Movement_UpdateDirection : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Extra1, Extra2Field Extra2, UnitField Current, UnitField Paths_Right, UnitField Paths_Left, UnitField Paths_Up, UnitField Paths_Down)
+        unit FragmentShader(VertexOut vertex, UnitField TargetData, DataField Data, UnitField Current, UnitField Paths_Right, UnitField Paths_Left, UnitField Paths_Up, UnitField Paths_Down)
         {
             unit here = Current[Here];
 
@@ -131,19 +103,19 @@ namespace GpuSim
                     left_path  = Paths_Left [Here],
                     down_path  = Paths_Down [Here];
 
-                unit extra1 = Extra1[Here];
-                extra2 extra2 = Extra2[Here];
-                vec2 Destination = unpack_vec2((vec4)extra1);
+                unit target = TargetData[Here];
+                data data   = Data[Here];
+                vec2 Destination = unpack_vec2((vec4)target);
 
-                float cur_angle    = atan(vertex.TexCoords.y - Destination.y * Extra1.DxDy.y, vertex.TexCoords.x - Destination.x * Extra1.DxDy.x);
+                float cur_angle    = atan(vertex.TexCoords.y - Destination.y * TargetData.DxDy.y, vertex.TexCoords.x - Destination.x * TargetData.DxDy.x);
                 cur_angle          = (cur_angle + 3.14159f) / (2 * 3.14159f);
-                float target_angle = extra2.target_angle;
+                float target_angle = data.target_angle;
 
-                if (Destination.x > vertex.TexCoords.x * Extra1.Size.x)
+                if (Destination.x > vertex.TexCoords.x * TargetData.Size.x)
                 {
                     path = right_path;
 
-                    if (Destination.y < vertex.TexCoords.y * Extra1.Size.y)
+                    if (Destination.y < vertex.TexCoords.y * TargetData.Size.y)
                     {
                         if (cur_angle < target_angle || right_path.direction == Dir.Right && Something(right))
                         {
@@ -166,7 +138,7 @@ namespace GpuSim
                 {
                     path = left_path;
 
-                    if (Destination.y < vertex.TexCoords.y * Extra1.Size.y)
+                    if (Destination.y < vertex.TexCoords.y * TargetData.Size.y)
                     {
                         if (cur_angle > target_angle || left_path.direction == Dir.Left && Something(left))
                         {

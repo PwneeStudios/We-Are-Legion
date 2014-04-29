@@ -24,27 +24,12 @@ float4 vs_param_cameraPos;
 float vs_param_cameraAspect;
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Extra, using register location 1
-float2 fs_param_Extra_size;
-float2 fs_param_Extra_dxdy;
-
-Texture fs_param_Extra_Texture;
-sampler fs_param_Extra : register(s1) = sampler_state
-{
-    texture   = <fs_param_Extra_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-// Texture Sampler for fs_param_Current, using register location 2
+// Texture Sampler for fs_param_Current, using register location 1
 float2 fs_param_Current_size;
 float2 fs_param_Current_dxdy;
 
 Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s2) = sampler_state
+sampler fs_param_Current : register(s1) = sampler_state
 {
     texture   = <fs_param_Current_Texture>;
     MipFilter = Point;
@@ -54,12 +39,12 @@ sampler fs_param_Current : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Previous, using register location 3
+// Texture Sampler for fs_param_Previous, using register location 2
 float2 fs_param_Previous_size;
 float2 fs_param_Previous_dxdy;
 
 Texture fs_param_Previous_Texture;
-sampler fs_param_Previous : register(s3) = sampler_state
+sampler fs_param_Previous : register(s2) = sampler_state
 {
     texture   = <fs_param_Previous_Texture>;
     MipFilter = Point;
@@ -69,12 +54,12 @@ sampler fs_param_Previous : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Texture, using register location 4
+// Texture Sampler for fs_param_Texture, using register location 3
 float2 fs_param_Texture_size;
 float2 fs_param_Texture_dxdy;
 
 Texture fs_param_Texture_Texture;
-sampler fs_param_Texture : register(s4) = sampler_state
+sampler fs_param_Texture : register(s3) = sampler_state
 {
     texture   = <fs_param_Texture_Texture>;
     MipFilter = Point;

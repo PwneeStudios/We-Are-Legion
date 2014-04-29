@@ -5,10 +5,10 @@ namespace GpuSim
     public partial class ActionAttackSquare : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, UnitField Current, UnitField Extra1, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size)
+        vec4 FragmentShader(VertexOut vertex, UnitField Current, UnitField TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size)
         {
             unit here = Current[Here];
-            vec4 extra1 = vec4.Zero;
+            vec4 target = vec4.Zero;
 
             if (selected(here))
             {
@@ -17,55 +17,55 @@ namespace GpuSim
                 pos = (pos - Selection_BL) / Selection_Size;
                 pos = pos * Destination_Size + Destination_BL;
 
-                extra1 = pack_vec2(pos);
+                target = pack_vec2(pos);
             }
             else
             {
-                extra1 = (vec4)Extra1[Here];
+                target = (vec4)TargetData[Here];
             }
 
-            return extra1;
+            return target;
         }
     }
 
     public partial class ActionAttackPoint : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, UnitField Current, UnitField Extra1, vec2 Destination)
+        vec4 FragmentShader(VertexOut vertex, UnitField Current, UnitField TargetData, vec2 Destination)
         {
             unit here  = Current[Here];
-            vec4 extra1 = vec4.Zero;
+            vec4 target = vec4.Zero;
 
             if (selected(here))
             {
                 vec2 dest = Destination;
 
-                extra1 = pack_vec2(dest);
+                target = pack_vec2(dest);
             }
             else
             {
-                extra1 = (vec4)Extra1[Here];
+                target = (vec4)TargetData[Here];
             }
             
-            return extra1;
+            return target;
         }
     }
 
     public partial class ActionAttack2 : SimShader
     {
         [FragmentShader]
-        extra2 FragmentShader(VertexOut vertex, UnitField Current, Extra2Field Extra2, vec2 Destination)
+        data FragmentShader(VertexOut vertex, UnitField Current, DataField Data, vec2 Destination)
         {
             unit here = Current[Here];
-            extra2 extra2 = Extra2[Here];
+            data data = Data[Here];
 
             if (selected(here))
             {
                 float angle = atan(vertex.TexCoords.y - Destination.y * Current.DxDy.y, vertex.TexCoords.x - Destination.x * Current.DxDy.x);
-                extra2.a = (angle + 3.14159f) / (2 * 3.14159f);
+                data.a = (angle + 3.14159f) / (2 * 3.14159f);
             }
 
-            return extra2;
+            return data;
         }
     }
 

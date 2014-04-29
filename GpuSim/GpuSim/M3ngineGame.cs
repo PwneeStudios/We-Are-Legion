@@ -117,7 +117,7 @@ namespace GpuSim
 
         RenderTarget2D
             Temp1, Temp2,
-            Previous, Current, Extra1, Extra2,
+            Previous, Current, TargetData, Data,
             Paths_Right, Paths_Left, Paths_Up, Paths_Down;
         List<RenderTarget2D> Multigrid;
 
@@ -222,8 +222,8 @@ namespace GpuSim
 
             Current  = MakeTarget(w, h);
             Previous = MakeTarget(w, h);
-            Extra1 = MakeTarget(w, h);
-            Extra2 = MakeTarget(w, h);
+            TargetData = MakeTarget(w, h);
+            Data = MakeTarget(w, h);
 
             InitialConditions(w, h);
 
@@ -293,8 +293,8 @@ namespace GpuSim
 
             Current.SetData(clr);
             Previous.SetData(clr);
-            Extra1.SetData(xtr1);
-            Extra2.SetData(xtr1);
+            TargetData.SetData(xtr1);
+            Data.SetData(xtr1);
         }
 
         private RenderTarget2D MakeTarget(int w, int h)
@@ -455,7 +455,7 @@ namespace GpuSim
             Ground.Draw(GraphicsDevice);
 
             if (CameraZoom > z / 8)
-                DrawUnit.Using(camvec, CameraAspect, Extra1, Current, Previous, draw_texture, PercentSimStepComplete);
+                DrawUnit.Using(camvec, CameraAspect, Current, Previous, draw_texture, PercentSimStepComplete);
             else
                 DrawUnitZoomedOut.Using(camvec, CameraAspect, Current, Previous, draw_texture, PercentSimStepComplete);
             GridHelper.DrawGrid();
@@ -615,12 +615,12 @@ namespace GpuSim
                 vec2 Destination_Size = new vec2(SquareWidth, SquareWidth)    * 1.25f;
                 vec2 Destination_BL   = pos - Destination_Size / 2;
 
-                ActionAttackSquare.Apply(Current, Extra1, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: Temp1);
-                //ActionAttackPoint .Apply(Current, Extra1, pos, Output: Temp1);
-                Swap(ref Extra1, ref Temp1);
+                ActionAttackSquare.Apply(Current, TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: Temp1);
+                //ActionAttackPoint .Apply(Current, TargetData, pos, Output: Temp1);
+                Swap(ref TargetData, ref Temp1);
 
-                ActionAttack2.Apply(Current, Extra2, pos, Output: Temp1);
-                Swap(ref Extra2, ref Temp1);
+                ActionAttack2.Apply(Current, Data, pos, Output: Temp1);
+                Swap(ref Data, ref Temp1);
             }
         }
 
@@ -632,12 +632,12 @@ namespace GpuSim
             Swap(ref Current, ref Previous);
             Swap(ref Temp2, ref Current);
 
-            Movement_ConvectExtra.Apply(Extra1, Current, Output: Temp1);
-            Swap(ref Extra1, ref Temp1);
-            Movement_ConvectExtra.Apply(Extra2, Current, Output: Temp1);
-            Swap(ref Extra2, ref Temp1);
+            Movement_Convect.Apply(TargetData, Current, Output: Temp1);
+            Swap(ref TargetData, ref Temp1);
+            Movement_Convect.Apply(Data, Current, Output: Temp1);
+            Swap(ref Data, ref Temp1);
 
-            Movement_UpdateDirection.Apply(Extra1, Extra2, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
+            Movement_UpdateDirection.Apply(TargetData, Data, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
             Swap(ref Current, ref Temp1);
 		}
 	}

@@ -157,10 +157,10 @@ namespace GpuSim
 namespace GpuSim
 {
     [Hlsl("float4")]
-    public partial struct extra2
+    public partial struct data
     {
         [Hlsl("float4")]
-        public extra2(float x, float y, float z, float w)
+        public data(float x, float y, float z, float w)
         {
             this.x = x;
             this.y = y;
@@ -211,47 +211,47 @@ namespace GpuSim
         public vec2 ba { get { return zw; } set { zw = value; } }
 
 
-        public static extra2 operator *(float a, extra2 v)
+        public static data operator *(float a, data v)
         {
-            return new extra2(a * v.x, a * v.y, a * v.z, a * v.w);
+            return new data(a * v.x, a * v.y, a * v.z, a * v.w);
         }
 
-        public static extra2 operator *(extra2 v, float a)
+        public static data operator *(data v, float a)
         {
-            return new extra2(a * v.x, a * v.y, a * v.z, a * v.w);
+            return new data(a * v.x, a * v.y, a * v.z, a * v.w);
         }
 
-        public static extra2 operator /(float a, extra2 v)
+        public static data operator /(float a, data v)
         {
-            return new extra2(a / v.x, a / v.y, a / v.z, a / v.w);
+            return new data(a / v.x, a / v.y, a / v.z, a / v.w);
         }
 
-        public static extra2 operator /(extra2 v, float a)
+        public static data operator /(data v, float a)
         {
-            return new extra2(v.x / a, v.y / a, v.z / a, v.w / a);
+            return new data(v.x / a, v.y / a, v.z / a, v.w / a);
         }
 
-        public static extra2 operator +(extra2 v, extra2 w)
+        public static data operator +(data v, data w)
         {
-            return new extra2(v.x + w.x, v.y + w.y, v.z + w.z, v.w + w.w);
+            return new data(v.x + w.x, v.y + w.y, v.z + w.z, v.w + w.w);
         }
 
-        public static extra2 operator -(extra2 v, extra2 w)
+        public static data operator -(data v, data w)
         {
-            return new extra2(v.x - w.x, v.y - w.y, v.z - w.z, v.w - w.w);
+            return new data(v.x - w.x, v.y - w.y, v.z - w.z, v.w - w.w);
         }
 
-        public static extra2 operator *(extra2 v, extra2 w)
+        public static data operator *(data v, data w)
         {
-            return new extra2(v.x * w.x, v.y * w.y, v.z * w.z, v.w * w.w);
+            return new data(v.x * w.x, v.y * w.y, v.z * w.z, v.w * w.w);
         }
 
-        public static extra2 operator /(extra2 v, extra2 w)
+        public static data operator /(data v, data w)
         {
-            return new extra2(v.x / w.x, v.y / w.y, v.z / w.z, v.w / w.w);
+            return new data(v.x / w.x, v.y / w.y, v.z / w.z, v.w / w.w);
         }
 
-        public static bool operator ==(extra2 v, extra2 w)
+        public static bool operator ==(data v, data w)
         {
             return
                 v.x == w.x &&
@@ -260,7 +260,7 @@ namespace GpuSim
                 v.w == w.w;
         }
 
-        public static bool operator !=(extra2 v, extra2 w)
+        public static bool operator !=(data v, data w)
         {
             return
                 v.x != w.x ||
@@ -269,32 +269,32 @@ namespace GpuSim
                 v.w != w.w;
         }
 
-        public static extra2 operator -(extra2 v)
+        public static data operator -(data v)
         {
-            return new extra2(-v.x, -v.y, -v.z, -v.w);
+            return new data(-v.x, -v.y, -v.z, -v.w);
         }
 
-        public static implicit operator Vector4(extra2 v)
+        public static implicit operator Vector4(data v)
         {
             return new Vector4(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator extra2(color v)
+        public static implicit operator data(color v)
         {
-            return new extra2(v.x, v.y, v.z, v.w);
+            return new data(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(extra2 v)
+        public static implicit operator color(data v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
 
-        public static explicit operator extra2(Vector4 v)
+        public static explicit operator data(Vector4 v)
         {
-            return new extra2(v.X, v.Y, v.Z, v.W);
+            return new data(v.X, v.Y, v.Z, v.W);
         }
 
-        public static readonly extra2 Zero = new extra2(0, 0, 0, 0);
+        public static readonly data Zero = new data(0, 0, 0, 0);
     }
 }
 
