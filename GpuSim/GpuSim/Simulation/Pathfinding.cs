@@ -2,6 +2,28 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
+    public partial class Pathfinding_ToPlayerUnits : SimShader
+    {
+        [FragmentShader]
+        unit FragmentShader(VertexOut vertex, UnitField Path, UnitField Current, DataField CurData, float PlayerNumber)
+        {
+            unit output = unit.Nothing;
+
+            unit here = Current[Here];
+            data cur_data = CurData[Here];
+
+            if (Something(here) && cur_data.player == PlayerNumber)
+            {
+                output.b = _1;
+                return output;
+            }
+
+            output = PathHelper.Propagate(Path, Current, output);
+
+            return output;
+        }
+    }
+
     public partial class Pathfinding_Down : SimShader
     {
         [FragmentShader]

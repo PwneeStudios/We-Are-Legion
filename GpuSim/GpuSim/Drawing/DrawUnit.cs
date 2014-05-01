@@ -34,8 +34,6 @@ namespace GpuSim
 
     public partial class DrawUnit : BaseShader
     {
-        readonly vec2 SpriteSize = vec(1.0f / 5.0f, 1.0f / 8.0f);
-
         color Circle(vec2 pos)
         {
             float r = length(pos - vec(.5f, .5f));
@@ -45,12 +43,12 @@ namespace GpuSim
                 return rgba(0, 0, 0, 0);
         }
 
-        protected color Sprite(unit data, vec2 pos, float anim, float frame, Sampler Texture)
+        protected color Sprite(unit u, data d, vec2 pos, float anim, float frame, Sampler Texture)
         {
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            float selected_offset = selected(data) ? 4 : 0;
+            float selected_offset = selected(u) ? 4 : 0;
 
             pos.x += ((int)(floor(frame)) % 5);
             pos.y += (floor(anim * 255 + .5f) - 1 + selected_offset);
@@ -58,24 +56,25 @@ namespace GpuSim
 
             var clr = Texture[pos];
 
-            //if (data.a == _1)
-            //{
-            //    float r = clr.r;
-            //    clr.r = clr.g;
-            //    clr.g = r;
-            //}
-            //else if (data.a == _2)
-            //{
-            //    float b = clr.b;
-            //    clr.b = clr.g;
-            //    clr.g = b;
-            //}
-            //else if (data.a == _3)
-            //{
-            //    float r = clr.r;
-            //    clr.r = clr.b;
-            //    clr.b = r;
-            //}
+            if (d.player == _1)
+            {
+                float r = clr.r;
+                clr.r = clr.g;
+                clr.g = r;
+                clr.rgb *= .5f;
+            }
+            else if (d.player == _2)
+            {
+                float b = clr.b;
+                clr.b = clr.g;
+                clr.g = b;
+            }
+            else if (d.player == _3)
+            {
+                float r = clr.r;
+                clr.r = clr.b;
+                clr.b = r;
+            }
 
             return clr;
 
@@ -84,56 +83,112 @@ namespace GpuSim
             //return tex2D(TextureSampler, pos);
         }
 
-        vec2 get_subcell_pos(VertexOut vertex, vec2 grid_size)
-        {
-            vec2 coords = vertex.TexCoords * grid_size;
-            float i = floor(coords.x);
-            float j = floor(coords.y);
-
-            return coords - vec(i, j);
-        }
-
-        vec2 direction_to_vec(float direction)
-        {
-	        float angle = (direction * 255 - 1) * (3.1415926f / 2.0f);
-	        return IsValid(direction) ? vec(cos(angle), sin(angle)) : vec2.Zero;
-        }
-
-
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous, Sampler Texture, float PercentSimStepComplete)
+        color FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous, DataField CurData, DataField PrevData, Sampler Texture, float s)
         {
             color output = color.TransparentBlack;
 
-            unit cur = Current[Here];
-	        unit pre = Previous[Here];
+            unit
+                cur = Current[Here],
+	            pre = Previous[Here];
+            
+            data
+                cur_data  = CurData[Here],
+                pre_data = PrevData[Here];
 
             vec2 subcell_pos = get_subcell_pos(vertex, Current.Size);
 
             if (Something(cur) && cur.change == Change.Stayed)
 	        {
-		        if (PercentSimStepComplete > .5) pre = cur;
+		        if (s > .5) pre = cur;
 
-                output += Sprite(pre, subcell_pos, pre.direction, 0, Texture);
+                output += Sprite(pre, pre_data, subcell_pos, pre.direction, 0, Texture);
 	        }
             else
             {
                 if (IsValid(cur.direction))
                 {
-                    vec2 vel = direction_to_vec(prior_direction(cur));
+                    var prior_dir = prior_direction(cur);
 
-                    output += Sprite(cur, subcell_pos + (1 - PercentSimStepComplete) * vel, prior_direction(cur), PercentSimStepComplete * 5, Texture);
+                    vec2 offset = (1 - s) * direction_to_vec(prior_dir);
+                    output += Sprite(cur, cur_data, subcell_pos + offset, prior_dir, s * 5, Texture);
                 }
 
-                if (IsValid(pre.direction))
+                if (IsValid(pre.direction) && output.a < .025f)
                 {
-                    vec2 vel = direction_to_vec(pre.direction);
-
-                    output += Sprite(pre, subcell_pos - PercentSimStepComplete * vel, pre.direction, PercentSimStepComplete * 5, Texture);
+                    vec2 offset = -s * direction_to_vec(pre.direction);
+                    output += Sprite(pre, pre_data, subcell_pos + offset, pre.direction, s * 5, Texture);
                 }
             }
 
-            //output.a *= 2; // Increase alpha when zoomed out for better visibility
+            return output;
+        }
+    }
+
+    public partial class DrawUnit_v2 : BaseShader
+    {
+        protected color Sprite(vec2 sprite, vec2 pos, float frame, Sampler Texture)
+        {
+            if (pos.x >= 1 || pos.y >= 1 || pos.x <= 0 || pos.y <= 0)
+                return color.TransparentBlack;
+
+            //return rgb(0xffffff);
+
+            pos.x += ((int)(floor(frame)) % 5);
+            pos.y -= 1;
+            pos = (sprite * 255.0f + pos) * SpriteSize;
+
+            return Texture[pos];
+        }
+
+        [FragmentShader]
+        color FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous, Sampler Texture, float s)
+        {
+            color output = color.TransparentBlack;
+
+            unit
+                right = Current[RightOne],
+                up = Current[UpOne],
+                left = Current[LeftOne],
+                down = Current[DownOne],
+                here = Current[Here];
+
+            vec2 subcell_pos = (get_subcell_pos(vertex, Current.Size) + vec(.5f, .5f)) / 2;
+
+            //vec2 cur_offset = (1 - s) * (here.zw - vec(.5f, .5f)) * 2;
+            vec2 cur_offset = vec2.Zero;
+
+            if (up.y > 0 && output.a < .025f)
+            {
+                output += Sprite(up.xy, subcell_pos + cur_offset + vec(0, -.5f), s * 5, Texture);
+            }
+
+            if (right.y > 0 && output.a < .025f)
+            {
+                output += Sprite(right.xy, subcell_pos + cur_offset + vec(-.5f, 0), s * 5, Texture);
+            }
+
+            if (left.y > 0 && output.a < .025f)
+            {
+                output += Sprite(left.xy, subcell_pos + cur_offset + vec(.5f, 0), s * 5, Texture);
+            }
+
+            if (here.y > 0 && output.a < .025f)
+            {
+                output += Sprite(here.xy, subcell_pos + cur_offset, s * 5, Texture);
+            }
+
+            if (down.y > 0 && output.a < .025f)
+            {
+                output += Sprite(down.xy, subcell_pos + cur_offset + vec(0, .5f), s * 5, Texture);
+            }
+
+            //if (pre.y > 0 && output.a < .025f)
+            //{
+            //    unit pre = Previous[Here];
+            //    vec2 pre_offset = -s * (pre.zw - vec(.5f, .5f)) * 2;
+            //    output += Sprite(pre.xy, subcell_pos + pre_offset, s * 5, Texture);
+            //}
 
             return output;
         }

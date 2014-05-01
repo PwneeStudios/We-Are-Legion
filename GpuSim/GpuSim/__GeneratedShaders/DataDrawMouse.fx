@@ -37,6 +37,8 @@ sampler fs_param_data_texture : register(s1) = sampler_state
     AddressV  = Wrap;
 };
 
+float fs_param_player;
+
 // The following methods are included because they are referenced by the fragment shader.
 
 // Compiled vertex shader
@@ -53,16 +55,15 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    if (tex2D(fs_param_data_texture, psin.TexCoords + (float2(0, 0)) * fs_param_data_texture_dxdy).r > 0)
+    float4 d = float4(0, 0, 0, 0);
+    if (tex2D(fs_param_data_texture, psin.TexCoords + (float2(0, 0)) * fs_param_data_texture_dxdy).a > 0)
     {
-        __FinalOutput.Color = float4(1, 1, 1, 1);
-        return __FinalOutput;
+        d.r = 0.003921569;
+        d.g = fs_param_player;
+        d.a = 1;
     }
-    else
-    {
-        __FinalOutput.Color = float4(0, 0, 0, 0);
-        return __FinalOutput;
-    }
+    __FinalOutput.Color = d;
+    return __FinalOutput;
 }
 
 // Shader compilation

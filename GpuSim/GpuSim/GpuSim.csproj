@@ -110,7 +110,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PerfTimer.cs" />
     <Compile Include="Drawing\BaseShader.cs" />
+    <Compile Include="Drawing\PreDraw.cs" />
     <Compile Include="Drawing\DrawMouse.cs" />
     <Compile Include="Drawing\DrawGrass.cs" />
     <Compile Include="Simulation\Bounding.cs" />

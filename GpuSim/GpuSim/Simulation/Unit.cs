@@ -58,6 +58,15 @@ namespace GpuSim
     [Copy(typeof(vec4))]
     public partial struct data
     {
+        [Hlsl("r")]
+        public float type { get { return r; } set { r = value; } }
+
+        [Hlsl("g")]
+        public float player { get { return g; } set { g = value; } }
+
+        [Hlsl("b")]
+        public float team { get { return b; } set { b = value; } }
+
         [Hlsl("a")]
         public float target_angle { get { return a; } set { a = value; } }
 
@@ -76,6 +85,8 @@ namespace GpuSim
 
     public class SimShader : GridComputation
     {
+        protected readonly vec2 SpriteSize = vec(1.0f / 10.0f, 1.0f / 8.0f);
+
         protected static bool selected(unit u)
         {
             float val = u.prior_direction_and_select;
@@ -96,6 +107,41 @@ namespace GpuSim
         protected static void set_prior_direction(ref unit u, float dir)
         {
             u.prior_direction_and_select = dir + (selected(u) ? Dir.Count : _0);
+        }
+
+        protected vec2 get_subcell_pos(VertexOut vertex, vec2 grid_size)
+        {
+            vec2 coords = vertex.TexCoords * grid_size;
+            float i = floor(coords.x);
+            float j = floor(coords.y);
+
+            return coords - vec(i, j);
+        }
+
+        protected vec2 direction_to_vec(float direction)
+        {
+            float angle = (direction * 255 - 1) * (3.1415926f / 2.0f);
+            return IsValid(direction) ? vec(cos(angle), sin(angle)) : vec2.Zero;
+        }
+
+        protected static class Team
+        {
+            public const float
+                None = _0,
+                One = _1,
+                Two = _2,
+                Three = _4,
+                Four = _8;
+        }
+
+        protected static class Player
+        {
+            public const float
+                None = _0,
+                One = _1,
+                Two = _2,
+                Three = _4,
+                Four = _8;
         }
 
         protected static class Dir

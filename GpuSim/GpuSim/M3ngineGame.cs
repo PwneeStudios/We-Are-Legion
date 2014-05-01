@@ -13,6 +13,16 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
+    public static class ListExtension
+    {
+        public static void Swap<T>(this List<T> List, int Index, ref T NewElement)
+        {
+			T temp = List[Index];
+            List[Index] = NewElement;
+            NewElement = temp;
+        }
+    }
+
     public static class RenderTargetExtension
     {
         public static Color[] GetData(this RenderTarget2D RenderTarget)
@@ -117,9 +127,11 @@ namespace GpuSim
 
         RenderTarget2D
             Temp1, Temp2,
-            Previous, Current, TargetData, Data,
+            Previous, Current, TargetData, CurData, PreData,
+            DrawPrevious, DrawCurrent,
             Paths_Right, Paths_Left, Paths_Up, Paths_Down;
-        List<RenderTarget2D> Multigrid;
+        List<RenderTarget2D>
+            Multigrid, PathToPlayerUnits;
 
 		Texture2D
             UnitTexture, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
@@ -220,10 +232,14 @@ namespace GpuSim
             float GroundRepeat = 100;
             Ground = new RectangleQuad(new vec2(-1, -1), new vec2(1, 1), new vec2(0, 0), new vec2(1, 1) * GroundRepeat);
 
-            Current  = MakeTarget(w, h);
-            Previous = MakeTarget(w, h);
+            Current    = MakeTarget(w, h);
+            Previous   = MakeTarget(w, h);
             TargetData = MakeTarget(w, h);
-            Data = MakeTarget(w, h);
+            CurData    = MakeTarget(w, h);
+            PreData = MakeTarget(w, h);
+
+            DrawPrevious = MakeTarget(w, h);
+            DrawCurrent  = MakeTarget(w, h);
 
             InitialConditions(w, h);
 
@@ -234,6 +250,12 @@ namespace GpuSim
             Paths_Left  = MakeTarget(w, h);
             Paths_Up    = MakeTarget(w, h);
             Paths_Down  = MakeTarget(w, h);
+
+            PathToPlayerUnits = new List<RenderTarget2D>();
+            for (int i = 0; i <= 1; i++)
+            {
+                PathToPlayerUnits.Add(MakeTarget(w, h));
+            }
 
             Multigrid = new List<RenderTarget2D>();
             int n = w;
@@ -259,8 +281,8 @@ namespace GpuSim
             for (int j = 0; j < h; j++)
             {
                 //if (true)
-                if (false)
-                //if (rnd.NextDouble() > 0.85f)
+                //if (false)
+                if (rnd.NextDouble() > 0.95f)
                 //if (i == w / 2 && j == h / 2)
                 //if (Math.Abs(i - w / 2) < 500)
                 //if (j == h / 2)
@@ -276,12 +298,13 @@ namespace GpuSim
                     int g = 0;
                     int b = 0;
 
-                    //int dest = rnd.Next(1, 5);
-                    int dest = 0;
+                    int player = rnd.Next(0, 2);
+                    int team   = player;
+                    int type   = rnd.Next(1, 2);
 
                     clr[i * h + j] = new Color(dir, g, b, action);
-                    xtr1[i * h + j] = new Color(dest, 0, 0, 0);
-                    xtr2[i * h + j] = new Color(0, 0, 0, 0);
+                    xtr1[i * h + j] = new Color(0, 0, 0, 0);
+                    xtr2[i * h + j] = new Color(type, player, team, 0);
                 }
                 else
                 {
@@ -294,7 +317,8 @@ namespace GpuSim
             Current.SetData(clr);
             Previous.SetData(clr);
             TargetData.SetData(xtr1);
-            Data.SetData(xtr1);
+            CurData.SetData(xtr2);
+            PreData.SetData(xtr2);
         }
 
         private RenderTarget2D MakeTarget(int w, int h)
@@ -398,9 +422,11 @@ namespace GpuSim
 		}
 
         const double DelayBetweenUpdates = .3333;
-        //const double DelayBetweenUpdates = .1;
+        //const double DelayBetweenUpdates = 5;
 		double SecondsSinceLastUpdate = DelayBetweenUpdates;
 		public static float PercentSimStepComplete = 0;
+
+        int DrawCount = 0;
 
 		/// <summary>
 		/// This is called when the game should draw itself.
@@ -408,6 +434,8 @@ namespace GpuSim
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
+            DrawCount++;
+
 			//if (CurKeyboard.IsKeyDown(Keys.Enter))
 			SecondsSinceLastUpdate += gameTime.ElapsedGameTime.TotalSeconds;
 
@@ -431,19 +459,23 @@ namespace GpuSim
                 SimulationUpdate();
             }
 
+            //DrawPrecomputation_Pre.Apply(Current, Previous, Output: DrawPrevious);
+            //DrawPrecomputation_Cur.Apply(Current, Previous, Output: DrawCurrent);
+            
+
 			// Choose texture
-			Texture2D draw_texture = null;
+			Texture2D SpriteSheet = null;
             float z = 14;
 			if (CameraZoom > z)
-				draw_texture = UnitTexture;
+				SpriteSheet = UnitTexture;
 			else if (CameraZoom > z/2)
-				draw_texture = UnitTexture_2;
+				SpriteSheet = UnitTexture_2;
 			else if (CameraZoom > z/4)
-				draw_texture = UnitTexture_4;
+				SpriteSheet = UnitTexture_4;
 			else if (CameraZoom > z/8)
-				draw_texture = UnitTexture_8;
+				SpriteSheet = UnitTexture_8;
             else
-                draw_texture = UnitTexture_16;
+                SpriteSheet = UnitTexture_16;
 
 			// Draw texture to screen
 			GraphicsDevice.SetRenderTarget(null);
@@ -454,10 +486,13 @@ namespace GpuSim
             DrawGrass.Using(camvec, CameraAspect, GroundTexture);
             Ground.Draw(GraphicsDevice);
 
+            //DrawUnit_v2.Using(camvec, CameraAspect, DrawCurrent, DrawPrevious, SpriteSheet, PercentSimStepComplete);
+            //GridHelper.DrawGrid();
+
             if (CameraZoom > z / 8)
-                DrawUnit.Using(camvec, CameraAspect, Current, Previous, draw_texture, PercentSimStepComplete);
+                DrawUnit.Using(camvec, CameraAspect, Current, Previous, CurData, PreData, SpriteSheet, PercentSimStepComplete);
             else
-                DrawUnitZoomedOut.Using(camvec, CameraAspect, Current, Previous, draw_texture, PercentSimStepComplete);
+                DrawUnitZoomedOut.Using(camvec, CameraAspect, Current, Previous, SpriteSheet, PercentSimStepComplete);
             GridHelper.DrawGrid();
 
 
@@ -552,6 +587,12 @@ namespace GpuSim
 
         void PathUpdate()
         {
+            for (int i = 0; i <= 1; i++)
+            {
+                Pathfinding_ToPlayerUnits.Apply(PathToPlayerUnits[i], Current, CurData, i / 255f, Output: Temp1);
+                PathToPlayerUnits.Swap(i, ref Temp1);
+            }
+
             Pathfinding_Right.Apply(Paths_Right, Current, Output: Temp1);
             Swap(ref Paths_Right, ref Temp1);
 
@@ -573,7 +614,7 @@ namespace GpuSim
             bool Deselect  = InputInfo.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed();
             bool Selecting = InputInfo.LeftMouseDown;
 
-            DataDrawMouse.Using(SelectCircle_Data, Output: Temp1, Clear: Color.Transparent);
+            DataDrawMouse.Using(SelectCircle_Data, 1f / 255f, Output: Temp1, Clear: Color.Transparent);
             if (Selecting)
             {
                 vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
@@ -587,10 +628,10 @@ namespace GpuSim
             }
 
             var action = InputInfo.RightMousePressed ? SimShader.UnitAction.Attacking : SimShader.UnitAction.NoChange;
-            ActionSelect.Apply(Current, Temp1, Deselect, action, Output: Temp2);
+            ActionSelect.Apply(Current, CurData, Temp1, Deselect, action, Output: Temp2);
             Swap(ref Temp2, ref Current);
 
-            ActionSelect.Apply(Previous, Temp1, Deselect, SimShader.UnitAction.NoChange, Output: Temp2);
+            ActionSelect.Apply(Previous, CurData, Temp1, Deselect, SimShader.UnitAction.NoChange, Output: Temp2);
             Swap(ref Temp2, ref Previous);
 
             if (Keys.F.Pressed())
@@ -619,8 +660,8 @@ namespace GpuSim
                 //ActionAttackPoint .Apply(Current, TargetData, pos, Output: Temp1);
                 Swap(ref TargetData, ref Temp1);
 
-                ActionAttack2.Apply(Current, Data, pos, Output: Temp1);
-                Swap(ref Data, ref Temp1);
+                ActionAttack2.Apply(Current, CurData, pos, Output: Temp1);
+                Swap(ref CurData, ref Temp1);
             }
         }
 
@@ -634,10 +675,11 @@ namespace GpuSim
 
             Movement_Convect.Apply(TargetData, Current, Output: Temp1);
             Swap(ref TargetData, ref Temp1);
-            Movement_Convect.Apply(Data, Current, Output: Temp1);
-            Swap(ref Data, ref Temp1);
+            Movement_Convect.Apply(CurData, Current, Output: Temp1);
+            Swap(ref CurData, ref Temp1);
+            Swap(ref PreData, ref Temp1);
 
-            Movement_UpdateDirection.Apply(TargetData, Data, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
+            Movement_UpdateDirection.Apply(TargetData, CurData, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
             Swap(ref Current, ref Temp1);
 		}
 	}

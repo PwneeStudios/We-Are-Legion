@@ -37,50 +37,26 @@ sampler fs_param_Current : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_CurData, using register location 2
-float2 fs_param_CurData_size;
-float2 fs_param_CurData_dxdy;
+// Texture Sampler for fs_param_Previous, using register location 2
+float2 fs_param_Previous_size;
+float2 fs_param_Previous_dxdy;
 
-Texture fs_param_CurData_Texture;
-sampler fs_param_CurData : register(s2) = sampler_state
+Texture fs_param_Previous_Texture;
+sampler fs_param_Previous : register(s2) = sampler_state
 {
-    texture   = <fs_param_CurData_Texture>;
+    texture   = <fs_param_Previous_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
     AddressU  = Clamp;
     AddressV  = Clamp;
 };
-
-// Texture Sampler for fs_param_Select, using register location 3
-float2 fs_param_Select_size;
-float2 fs_param_Select_dxdy;
-
-Texture fs_param_Select_Texture;
-sampler fs_param_Select : register(s3) = sampler_state
-{
-    texture   = <fs_param_Select_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-bool fs_param_Deselect;
-
-float fs_param_action;
 
 // The following methods are included because they are referenced by the fragment shader.
-float GpuSim__SimShader__prior_direction(float4 u)
+bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val % 0.01960784;
-}
-
-void GpuSim__SimShader__set_selected(inout float4 u, bool selected)
-{
-    u.b = GpuSim__SimShader__prior_direction(u) + (selected ? 0.01960784 : 0.0);
+    return val >= 0.01960784;
 }
 
 bool GpuSim__SimShader__Something(float4 u)
@@ -88,10 +64,21 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0;
 }
 
-bool GpuSim__SimShader__selected(float4 u)
+bool GpuSim__SimShader__IsValid(float direction)
+{
+    return direction > 0;
+}
+
+float GpuSim__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    return val >= 0.01960784;
+    return val % 0.01960784;
+}
+
+float2 GpuSim__SimShader__direction_to_vec(float direction)
+{
+    float angle = (direction * 255 - 1) * (3.141593 / 2.0);
+    return GpuSim__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
 // Compiled vertex shader
@@ -108,25 +95,35 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    float4 data_here = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
-    float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    if (select.r > 0 && abs(data_here.g - select.g) < .001)
+    float4 output = float4(0.0, 0.0, 0.0, 0.0);
+    float4 cur = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
+    float4 pre = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * fs_param_Previous_dxdy);
+    float selected_offset = GpuSim__SimShader__selected(cur) ? 0.01568628 : 0.0;
+    float anim = 0;
+    float2 vel = float2(0, 0);
+    if (GpuSim__SimShader__Something(cur) && abs(cur.g - 0.003921569) < .001)
     {
-        GpuSim__SimShader__set_selected(here, true);
+        anim = cur.r;
     }
     else
     {
-        if (fs_param_Deselect)
+        if (GpuSim__SimShader__IsValid(cur.r))
         {
-            GpuSim__SimShader__set_selected(here, false);
+            anim = GpuSim__SimShader__prior_direction(cur);
+            vel = GpuSim__SimShader__direction_to_vec(GpuSim__SimShader__prior_direction(cur));
+        }
+        else
+        {
+            __FinalOutput.Color = float4(0.0, 0.0, 0.0, 0.0);
+            return __FinalOutput;
         }
     }
-    if (GpuSim__SimShader__Something(here) && GpuSim__SimShader__selected(here) && fs_param_action < 0.04705882)
-    {
-        here.a = fs_param_action;
-    }
-    __FinalOutput.Color = here;
+    float2 uv= (float2)0;
+    uv.x = 0;
+    uv.y = anim + selected_offset;
+    output.xy = uv;
+    output.zw = vel / 2 + float2(0.5, 0.5);
+    __FinalOutput.Color = output;
     return __FinalOutput;
 }
 

@@ -91,12 +91,17 @@ namespace GpuSim
     public partial class ActionSelect : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Current, UnitField Select, bool Deselect, float action)
+        unit FragmentShader(VertexOut vertex, UnitField Current, DataField CurData, DataField Select, bool Deselect, float action)
         {
             unit here = Current[Here];
-            unit select = Select[Here];
+            data data_here = CurData[Here];
+            data select = Select[Here];
 
-            if (Something(select))
+            // If the player unit here matches the 
+            if (select.type > 0 && data_here.player == select.player)
+            //if (select.type > 0 && data_here.player == Player.One)
+            //if (select.type > 0 && data_here.player > _1 * .9  && select.player > _1 * .9
+            //                    && data_here.player < _1 * 1.1 && select.player < _1 * 1.1)
             {
                 set_selected(ref here, true);
             }
@@ -118,12 +123,21 @@ namespace GpuSim
     public partial class DataDrawMouse : SimShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Sampler data_texture)
+        color FragmentShader(VertexOut vertex, Sampler data_texture, float player)
         {
-            if (data_texture[Here].r > 0)
-                return rgba(1, 1, 1, 1);
-            else
-                return rgba(0, 0, 0, 0);
+            data d = data.Nothing;
+
+            if (data_texture[Here].a > 0)
+            {
+                d.type = _1;
+                d.player = player;
+                
+                // Note: Unlike other data and simulation shaders, we do need to set the alpha component for this channel.
+                // The reason is that we will be drawing multiple mouse datas onto the same render target, with potential overlapping.
+                d.a = 1;
+            }
+
+            return d;
         }
     }
 }
