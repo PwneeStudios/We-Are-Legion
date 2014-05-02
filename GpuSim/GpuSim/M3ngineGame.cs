@@ -129,9 +129,10 @@ namespace GpuSim
             Temp1, Temp2,
             Previous, Current, TargetData, CurData, PreData,
             DrawPrevious, DrawCurrent,
-            Paths_Right, Paths_Left, Paths_Up, Paths_Down;
+            Paths_Right, Paths_Left, Paths_Up, Paths_Down,
+            PathToOtherTeams;
         List<RenderTarget2D>
-            Multigrid, PathToPlayerUnits;
+            Multigrid;
 
 		Texture2D
             UnitTexture, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
@@ -251,11 +252,7 @@ namespace GpuSim
             Paths_Up    = MakeTarget(w, h);
             Paths_Down  = MakeTarget(w, h);
 
-            PathToPlayerUnits = new List<RenderTarget2D>();
-            for (int i = 0; i <= 1; i++)
-            {
-                PathToPlayerUnits.Add(MakeTarget(w, h));
-            }
+            PathToOtherTeams = MakeTarget(w, h);
 
             Multigrid = new List<RenderTarget2D>();
             int n = w;
@@ -282,7 +279,7 @@ namespace GpuSim
             {
                 //if (true)
                 //if (false)
-                if (rnd.NextDouble() > 0.95f)
+                if (rnd.NextDouble() > 0.9f)
                 //if (i == w / 2 && j == h / 2)
                 //if (Math.Abs(i - w / 2) < 500)
                 //if (j == h / 2)
@@ -292,13 +289,13 @@ namespace GpuSim
                 {
                     //int dir = rnd.Next(1, 5);
                     int dir = rnd.Next(1, 5);
-                    
-                    int action = 0;
+
+                    int action = (int)(255f * SimShader.UnitAction.Attacking);
 
                     int g = 0;
                     int b = 0;
 
-                    int player = rnd.Next(0, 2);
+                    int player = rnd.Next(1, 3);
                     int team   = player;
                     int type   = rnd.Next(1, 2);
 
@@ -462,7 +459,7 @@ namespace GpuSim
             //DrawPrecomputation_Pre.Apply(Current, Previous, Output: DrawPrevious);
             //DrawPrecomputation_Cur.Apply(Current, Previous, Output: DrawCurrent);
 
-            BenchmarkTests.Run();
+            BenchmarkTests.Run(Current, Previous);
 
 			// Choose texture
 			Texture2D SpriteSheet = null;
@@ -588,23 +585,20 @@ namespace GpuSim
 
         void PathUpdate()
         {
-            for (int i = 0; i <= 1; i++)
-            {
-                Pathfinding_ToPlayerUnits.Apply(PathToPlayerUnits[i], Current, CurData, i / 255f, Output: Temp1);
-                PathToPlayerUnits.Swap(i, ref Temp1);
-            }
+            Pathfinding_ToOtherTeams.Apply(PathToOtherTeams, Current, CurData, Output: Temp1);
+            Swap(ref PathToOtherTeams, ref Temp1);
 
-            Pathfinding_Right.Apply(Paths_Right, Current, Output: Temp1);
-            Swap(ref Paths_Right, ref Temp1);
+            //Pathfinding_Right.Apply(Paths_Right, Current, Output: Temp1);
+            //Swap(ref Paths_Right, ref Temp1);
 
-            Pathfinding_Left.Apply(Paths_Left, Current, Output: Temp1);
-            Swap(ref Paths_Left, ref Temp1);
+            //Pathfinding_Left.Apply(Paths_Left, Current, Output: Temp1);
+            //Swap(ref Paths_Left, ref Temp1);
 
-            Pathfinding_Up.Apply(Paths_Up, Current, Output: Temp1);
-            Swap(ref Paths_Up, ref Temp1);
+            //Pathfinding_Up.Apply(Paths_Up, Current, Output: Temp1);
+            //Swap(ref Paths_Up, ref Temp1);
 
-            Pathfinding_Down.Apply(Paths_Down, Current, Output: Temp1);
-            Swap(ref Paths_Down, ref Temp1);
+            //Pathfinding_Down.Apply(Paths_Down, Current, Output: Temp1);
+            //Swap(ref Paths_Down, ref Temp1);
         }
 
         void SelectionUpdate()
@@ -615,7 +609,7 @@ namespace GpuSim
             bool Deselect  = InputInfo.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed();
             bool Selecting = InputInfo.LeftMouseDown;
 
-            DataDrawMouse.Using(SelectCircle_Data, 1f / 255f, Output: Temp1, Clear: Color.Transparent);
+            DataDrawMouse.Using(SelectCircle_Data, SimShader.Player.One, Output: Temp1, Clear: Color.Transparent);
             if (Selecting)
             {
                 vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
@@ -637,8 +631,10 @@ namespace GpuSim
 
             if (Keys.F.Pressed())
             {
-                ActionSpawn.Apply(Current, Temp1, Output: Temp2);
+                ActionSpawn_Unit.Apply(Current, Temp1, Output: Temp2);
                 Swap(ref Temp2, ref Current);
+                ActionSpawn_Extra.Apply(CurData, Temp1, Output: Temp2);
+                Swap(ref Temp2, ref CurData);
             }
 
             if (InputInfo.RightMousePressed)
@@ -680,7 +676,9 @@ namespace GpuSim
             Swap(ref CurData, ref Temp1);
             Swap(ref PreData, ref Temp1);
 
-            Movement_UpdateDirection.Apply(TargetData, CurData, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
+            PathUpdate();
+            Movement_UpdateDirectionToEnemy.Apply(TargetData, CurData, Current, PathToOtherTeams, Output: Temp1);
+            //Movement_UpdateDirection.Apply(TargetData, CurData, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
             Swap(ref Current, ref Temp1);
 		}
 	}

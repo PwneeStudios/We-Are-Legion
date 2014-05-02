@@ -2,26 +2,35 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
-    public partial class Pathfinding_ToPlayerUnits : SimShader
+    public partial class Pathfinding_ToOtherTeams : SimShader
     {
         /// <summary>
-        /// Propagates the path to enemies of a given team.
+        /// Propagates the path to enemies of each team, story the result for Enemies of Team 1 in .x, of Team 2 in .y, etc.
+        /// Four teams maximum.
         /// </summary>
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Path, UnitField Current, DataField CurData, float TeamNumber)
+        vec4 FragmentShader(VertexOut vertex, VecField Path, UnitField Current, DataField CurData)
         {
-            unit output = unit.Nothing;
-
-            unit here = Current[Here];
+            unit data = Current[Here];
             data cur_data = CurData[Here];
 
-            if (Something(here) && cur_data.player != TeamNumber)
-            {
-                output.b = _1;
-                return output;
-            }
+            vec4
+                right = Path[RightOne],
+                up    = Path[UpOne],
+                left  = Path[LeftOne],
+                down  = Path[DownOne];
 
-            output = PathHelper.Propagate(Path, Current, output);
+            vec4 output = min(right, up, left, down) + vec(_1,_1,_1,_1);
+
+            if (Something(data))
+            {
+                output += 3 * vec(_1, _1, _1, _1);
+
+                if (cur_data.team != Team.One)   output.r = _0;
+                if (cur_data.team != Team.Two)   output.g = _0;
+                if (cur_data.team != Team.Three) output.b = _0;
+                if (cur_data.team != Team.Four)  output.a = _0;
+            }
 
             return output;
         }

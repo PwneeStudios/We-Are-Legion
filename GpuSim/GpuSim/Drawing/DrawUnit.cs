@@ -56,20 +56,23 @@ namespace GpuSim
 
             var clr = Texture[pos];
 
-            if (d.player == _1)
+            if (d.player == Player.One)
+            {
+            }
+            else if (d.player == Player.Two)
             {
                 float r = clr.r;
                 clr.r = clr.g;
                 clr.g = r;
                 clr.rgb *= .5f;
             }
-            else if (d.player == _2)
+            else if (d.player == Player.Three)
             {
                 float b = clr.b;
                 clr.b = clr.g;
                 clr.g = b;
             }
-            else if (d.player == _3)
+            else if (d.player == Player.Four)
             {
                 float r = clr.r;
                 clr.r = clr.b;

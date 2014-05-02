@@ -134,26 +134,32 @@ float4 GpuSim__DrawUnit__Sprite(VertexToPixel psin, float4 u, float4 d, float2 p
     float4 clr = tex2D(Texture, pos);
     if (abs(d.g - 0.003921569) < .001)
     {
-        float r = clr.r;
-        clr.r = clr.g;
-        clr.g = r;
-        clr.rgb *= 0.5;
     }
     else
     {
         if (abs(d.g - 0.007843138) < .001)
         {
-            float b = clr.b;
-            clr.b = clr.g;
-            clr.g = b;
+            float r = clr.r;
+            clr.r = clr.g;
+            clr.g = r;
+            clr.rgb *= 0.5;
         }
         else
         {
             if (abs(d.g - 0.01176471) < .001)
             {
-                float r = clr.r;
-                clr.r = clr.b;
-                clr.b = r;
+                float b = clr.b;
+                clr.b = clr.g;
+                clr.g = b;
+            }
+            else
+            {
+                if (abs(d.g - 0.01568628) < .001)
+                {
+                    float r = clr.r;
+                    clr.r = clr.b;
+                    clr.b = r;
+                }
             }
         }
     }

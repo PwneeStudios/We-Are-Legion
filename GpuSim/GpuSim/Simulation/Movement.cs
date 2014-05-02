@@ -158,10 +158,68 @@ namespace GpuSim
                     }
                 }
 
-                if ((path.g > 0 || path.b > 0) && IsValid(path.direction))
+                if ((path.g > 1 || path.b > 1) && IsValid(path.direction))
                 {
                     here.direction = path.direction;
                 }
+            }
+
+            return here;
+        }
+    }
+
+    public partial class Movement_UpdateDirectionToEnemy : SimShader
+    {
+        [FragmentShader]
+        unit FragmentShader(VertexOut vertex, UnitField TargetData, DataField Data, UnitField Current, VecField PathToOtherTeams)
+        {
+            unit here = Current[Here];
+
+            if (Something(here))
+            {
+                unit path = unit.Nothing;
+
+                data data = Data[Here];
+                //unit target = TargetData[Here];
+                //vec2 Destination = unpack_vec2((vec4)target);
+
+                //float cur_angle = atan(vertex.TexCoords.y - Destination.y * TargetData.DxDy.y, vertex.TexCoords.x - Destination.x * TargetData.DxDy.x);
+                //cur_angle = (cur_angle + 3.14159f) / (2 * 3.14159f);
+                //float target_angle = data.target_angle;
+
+                unit
+                    right = Current[RightOne],
+                    up = Current[UpOne],
+                    left = Current[LeftOne],
+                    down = Current[DownOne];
+
+                vec4
+                    _value_right = PathToOtherTeams[RightOne],
+                    _value_up    = PathToOtherTeams[UpOne],
+                    _value_left  = PathToOtherTeams[LeftOne],
+                    _value_down  = PathToOtherTeams[DownOne];
+
+                float value_right = 1, value_left = 1, value_up = 1, value_down = 1;
+                if (data.team == Team.One)
+                {
+                    value_right = _value_right.x;
+                    value_left  = _value_left.x;
+                    value_up    = _value_up.x;
+                    value_down  = _value_down.x;
+                }
+                else if (data.team == Team.Two)
+                {
+                    value_right = _value_right.y;
+                    value_left  = _value_left.y;
+                    value_up    = _value_up.y;
+                    value_down  = _value_down.y;
+                }
+
+                float min = 100;
+                if (value_right < min) { here.direction = Dir.Right; min = value_right; }
+                if (value_up    < min) { here.direction = Dir.Up;    min = value_up; }
+                if (value_left  < min) { here.direction = Dir.Left;  min = value_left; }
+                if (value_down  < min) { here.direction = Dir.Down;  min = value_down; }
             }
 
             return here;

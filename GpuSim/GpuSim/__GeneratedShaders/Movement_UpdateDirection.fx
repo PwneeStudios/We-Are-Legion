@@ -231,7 +231,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 }
             }
         }
-        if ((path.g > 0 || path.b > 0) && GpuSim__SimShader__IsValid(path.r))
+        if ((path.g > 1 || path.b > 1) && GpuSim__SimShader__IsValid(path.r))
         {
             here.r = path.r;
         }

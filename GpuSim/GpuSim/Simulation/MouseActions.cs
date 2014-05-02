@@ -69,7 +69,7 @@ namespace GpuSim
         }
     }
 
-    public partial class ActionSpawn : SimShader
+    public partial class ActionSpawn_Unit : SimShader
     {
         [FragmentShader]
         unit FragmentShader(VertexOut vertex, UnitField Current, UnitField Select)
@@ -81,10 +81,34 @@ namespace GpuSim
             {
                 if ((int)(vertex.TexCoords.x * Current.Size.x) % 2 == 0 &&
                     (int)(vertex.TexCoords.y * Current.Size.y) % 2 == 0)
+                {
                     here.direction = Dir.Right;
+                }
             }
 
             return here;
+        }
+    }
+
+    public partial class ActionSpawn_Extra : SimShader
+    {
+        [FragmentShader]
+        data FragmentShader(VertexOut vertex, DataField CurData, UnitField Select)
+        {
+            data data = CurData[Here];
+            unit select = Select[Here];
+
+            if (Something(select))
+            {
+                if ((int)(vertex.TexCoords.x * CurData.Size.x) % 2 == 0 &&
+                    (int)(vertex.TexCoords.y * CurData.Size.y) % 2 == 0)
+                {
+                    data.player = Player.One;
+                    data.team = Team.One;
+                }
+            }
+
+            return data;
         }
     }
 

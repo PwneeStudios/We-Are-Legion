@@ -124,27 +124,27 @@ namespace GpuSim
             return IsValid(direction) ? vec(cos(angle), sin(angle)) : vec2.Zero;
         }
 
-        protected static class Team
+        public static class Team
         {
             public const float
                 None = _0,
                 One = _1,
                 Two = _2,
-                Three = _4,
-                Four = _8;
+                Three = _3,
+                Four = _4;
         }
 
-        protected static class Player
+        public static class Player
         {
             public const float
                 None = _0,
                 One = _1,
                 Two = _2,
-                Three = _4,
-                Four = _8;
+                Three = _3,
+                Four = _4;
         }
 
-        protected static class Dir
+        public static class Dir
         {
             public const float
                 None = _0,
