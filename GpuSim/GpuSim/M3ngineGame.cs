@@ -461,7 +461,8 @@ namespace GpuSim
 
             //DrawPrecomputation_Pre.Apply(Current, Previous, Output: DrawPrevious);
             //DrawPrecomputation_Cur.Apply(Current, Previous, Output: DrawCurrent);
-            
+
+            BenchmarkTests.Run();
 
 			// Choose texture
 			Texture2D SpriteSheet = null;

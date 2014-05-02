@@ -110,6 +110,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BenchmarkTesting.cs" />
     <Compile Include="PerfTimer.cs" />
     <Compile Include="Drawing\BaseShader.cs" />
     <Compile Include="Drawing\PreDraw.cs" />

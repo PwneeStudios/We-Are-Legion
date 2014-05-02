@@ -67,7 +67,7 @@ sampler fs_param_CurData : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
-float fs_param_PlayerNumber;
+float fs_param_TeamNumber;
 
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
@@ -132,7 +132,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0, 0, 0, 0);
     float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 cur_data = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
-    if (GpuSim__SimShader__Something(here) && abs(cur_data.g - fs_param_PlayerNumber) < .001)
+    if (GpuSim__SimShader__Something(here) && abs(cur_data.g - fs_param_TeamNumber) > .001)
     {
         output.b = 0.003921569;
         __FinalOutput.Color = output;

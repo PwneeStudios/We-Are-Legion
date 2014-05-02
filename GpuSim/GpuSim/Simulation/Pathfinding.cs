@@ -4,15 +4,18 @@ namespace GpuSim
 {
     public partial class Pathfinding_ToPlayerUnits : SimShader
     {
+        /// <summary>
+        /// Propagates the path to enemies of a given team.
+        /// </summary>
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Path, UnitField Current, DataField CurData, float PlayerNumber)
+        unit FragmentShader(VertexOut vertex, UnitField Path, UnitField Current, DataField CurData, float TeamNumber)
         {
             unit output = unit.Nothing;
 
             unit here = Current[Here];
             data cur_data = CurData[Here];
 
-            if (Something(here) && cur_data.player == PlayerNumber)
+            if (Something(here) && cur_data.player != TeamNumber)
             {
                 output.b = _1;
                 return output;

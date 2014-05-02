@@ -66,19 +66,19 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         return __FinalOutput;
     }
     float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy);
-    if (right.a != 0.0 && abs(right.r - 0.01176471) < .001)
+    if (abs(right.a - 0.0) > .001 && abs(right.r - 0.01176471) < .001)
     {
         output = right;
     }
-    if (up.a != 0.0 && abs(up.r - 0.01568628) < .001)
+    if (abs(up.a - 0.0) > .001 && abs(up.r - 0.01568628) < .001)
     {
         output = up;
     }
-    if (left.a != 0.0 && abs(left.r - 0.003921569) < .001)
+    if (abs(left.a - 0.0) > .001 && abs(left.r - 0.003921569) < .001)
     {
         output = left;
     }
-    if (down.a != 0.0 && abs(down.r - 0.007843138) < .001)
+    if (abs(down.a - 0.0) > .001 && abs(down.r - 0.007843138) < .001)
     {
         output = down;
     }
