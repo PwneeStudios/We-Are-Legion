@@ -75,7 +75,7 @@ float4 FragSharpFramework__FragSharpStd__min(float4 a, float4 b, float4 c, float
 
 bool GpuSim__SimShader__Something(float4 u)
 {
-    return u.r > 0;
+    return u.r > 0 + .001;
 }
 
 // Compiled vertex shader

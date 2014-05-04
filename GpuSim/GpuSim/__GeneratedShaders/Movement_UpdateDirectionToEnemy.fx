@@ -85,7 +85,94 @@ sampler fs_param_PathToOtherTeams : register(s4) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
 {
-    return u.r > 0;
+    return u.r > 0 + .001;
+}
+
+float GpuSim__SimShader__unpack_coord(float2 packed)
+{
+    float coord = 0;
+    coord = (255 * packed.x + packed.y) * 255;
+    return coord;
+}
+
+float2 GpuSim__SimShader__unpack_vec2(float4 packed)
+{
+    float2 v = float2(0, 0);
+    v.x = GpuSim__SimShader__unpack_coord(packed.rg);
+    v.y = GpuSim__SimShader__unpack_coord(packed.ba);
+    return v;
+}
+
+bool GpuSim__SimShader__IsValid(float direction)
+{
+    return direction > 0 + .001;
+}
+
+void GpuSim__Movement_UpdateDirectionToEnemy__NaivePathfind(VertexToPixel psin, VertexToPixel vertex, sampler Current, float2 Current_size, float2 Current_dxdy, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, float4 data, inout float4 here)
+{
+    float dir = 0;
+    float4 target = tex2D(TargetData, psin.TexCoords + (float2(0, 0)) * TargetData_dxdy);
+    float2 Destination = GpuSim__SimShader__unpack_vec2(target);
+    float cur_angle = atan2(vertex.TexCoords.y - Destination.y * TargetData_dxdy.y, vertex.TexCoords.x - Destination.x * TargetData_dxdy.x);
+    cur_angle = (cur_angle + 3.14159) / (2 * 3.14159);
+    float target_angle = data.a;
+    float4 right = tex2D(Current, psin.TexCoords + (float2(1, 0)) * Current_dxdy), up = tex2D(Current, psin.TexCoords + (float2(0, 1)) * Current_dxdy), left = tex2D(Current, psin.TexCoords + (float2(-(1), 0)) * Current_dxdy), down = tex2D(Current, psin.TexCoords + (float2(0, -(1))) * Current_dxdy);
+    if (Destination.x > vertex.TexCoords.x * TargetData_size.x + .001)
+    {
+        dir = 0.003921569;
+        if (Destination.y < vertex.TexCoords.y * TargetData_size.y - .001)
+        {
+            if (cur_angle < target_angle - .001 || GpuSim__SimShader__Something(right))
+            {
+                dir = 0.01568628;
+                if (GpuSim__SimShader__Something(down))
+                {
+                    dir = 0.003921569;
+                }
+            }
+        }
+        else
+        {
+            if (cur_angle > target_angle + .001 || GpuSim__SimShader__Something(right))
+            {
+                dir = 0.007843138;
+                if (GpuSim__SimShader__Something(up))
+                {
+                    dir = 0.003921569;
+                }
+            }
+        }
+    }
+    else
+    {
+        dir = 0.01176471;
+        if (Destination.y < vertex.TexCoords.y * TargetData_size.y - .001)
+        {
+            if (cur_angle > target_angle + .001 || GpuSim__SimShader__Something(left))
+            {
+                dir = 0.01568628;
+                if (GpuSim__SimShader__Something(down))
+                {
+                    dir = 0.01176471;
+                }
+            }
+        }
+        else
+        {
+            if (cur_angle < target_angle - .001 || GpuSim__SimShader__Something(left))
+            {
+                dir = 0.007843138;
+                if (GpuSim__SimShader__Something(up))
+                {
+                    dir = 0.01176471;
+                }
+            }
+        }
+    }
+    if (GpuSim__SimShader__IsValid(dir))
+    {
+        here.r = dir;
+    }
 }
 
 // Compiled vertex shader
@@ -107,7 +194,6 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         float4 path = float4(0, 0, 0, 0);
         float4 data = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-        float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy);
         float4 _value_right = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(1, 0)) * fs_param_PathToOtherTeams_dxdy), _value_up = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, 1)) * fs_param_PathToOtherTeams_dxdy), _value_left = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(-(1), 0)) * fs_param_PathToOtherTeams_dxdy), _value_down = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, -(1))) * fs_param_PathToOtherTeams_dxdy);
         float value_right = 1, value_left = 1, value_up = 1, value_down = 1;
         if (abs(data.b - 0.003921569) < .001)
@@ -127,26 +213,39 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 value_down = _value_down.y;
             }
         }
-        float min = 100;
-        if (value_right < min)
+        float auto_attack_cutoff = 0.01568628;
+        float min = 256;
+        float hold_dir = here.r;
+        if (abs(here.a - 0.007843138) < .001)
         {
-            here.r = 0.003921569;
-            min = value_right;
+            if (value_right < min - .001)
+            {
+                here.r = 0.003921569;
+                min = value_right;
+            }
+            if (value_up < min - .001)
+            {
+                here.r = 0.007843138;
+                min = value_up;
+            }
+            if (value_left < min - .001)
+            {
+                here.r = 0.01176471;
+                min = value_left;
+            }
+            if (value_down < min - .001)
+            {
+                here.r = 0.01568628;
+                min = value_down;
+            }
         }
-        if (value_up < min)
+        if (min > auto_attack_cutoff + .001)
         {
-            here.r = 0.007843138;
-            min = value_up;
+            here.r = hold_dir;
         }
-        if (value_left < min)
+        if (min > auto_attack_cutoff + .001 && abs(here.a - 0.007843138) < .001 || abs(here.a - 0.003921569) < .001)
         {
-            here.r = 0.01176471;
-            min = value_left;
-        }
-        if (value_down < min)
-        {
-            here.r = 0.01568628;
-            min = value_down;
+            GpuSim__Movement_UpdateDirectionToEnemy__NaivePathfind(psin, psin, fs_param_Current, fs_param_Current_size, fs_param_Current_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, data, here);
         }
     }
     __FinalOutput.Color = here;

@@ -179,26 +179,17 @@ namespace GpuSim
             {
                 unit path = unit.Nothing;
 
+                // Get info for this unit
                 data data = Data[Here];
-                //unit target = TargetData[Here];
-                //vec2 Destination = unpack_vec2((vec4)target);
 
-                //float cur_angle = atan(vertex.TexCoords.y - Destination.y * TargetData.DxDy.y, vertex.TexCoords.x - Destination.x * TargetData.DxDy.x);
-                //cur_angle = (cur_angle + 3.14159f) / (2 * 3.14159f);
-                //float target_angle = data.target_angle;
-
-                unit
-                    right = Current[RightOne],
-                    up = Current[UpOne],
-                    left = Current[LeftOne],
-                    down = Current[DownOne];
-
+                // Get nearby paths to other teams
                 vec4
                     _value_right = PathToOtherTeams[RightOne],
                     _value_up    = PathToOtherTeams[UpOne],
                     _value_left  = PathToOtherTeams[LeftOne],
                     _value_down  = PathToOtherTeams[DownOne];
 
+                // Get specific paths to enemies of this particular unit
                 float value_right = 1, value_left = 1, value_up = 1, value_down = 1;
                 if (data.team == Team.One)
                 {
@@ -215,14 +206,102 @@ namespace GpuSim
                     value_down  = _value_down.y;
                 }
 
-                float min = 100;
-                if (value_right < min) { here.direction = Dir.Right; min = value_right; }
-                if (value_up    < min) { here.direction = Dir.Up;    min = value_up; }
-                if (value_left  < min) { here.direction = Dir.Left;  min = value_left; }
-                if (value_down  < min) { here.direction = Dir.Down;  min = value_down; }
+                float auto_attack_cutoff = _4;
+
+                float min = 256;
+                float hold_dir = here.direction;
+                if (here.action == UnitAction.Attacking)
+                {
+                    if (value_right < min) { here.direction = Dir.Right; min = value_right; }
+                    if (value_up    < min) { here.direction = Dir.Up;    min = value_up; }
+                    if (value_left  < min) { here.direction = Dir.Left;  min = value_left; }
+                    if (value_down  < min) { here.direction = Dir.Down;  min = value_down; }
+                }
+
+                if (min > auto_attack_cutoff) here.direction = hold_dir;
+
+                // If we aren't attacking, or if a unit is too far away
+                if (min > auto_attack_cutoff && here.action == UnitAction.Attacking || here.action == UnitAction.Moving)
+                {
+                    NaivePathfind(vertex, Current, TargetData, data, ref here);
+                }
             }
 
             return here;
+        }
+
+        void NaivePathfind(VertexOut vertex, UnitField Current, UnitField TargetData, data data, ref unit here)
+        {
+            float dir = 0;
+
+            unit target = TargetData[Here];
+
+            // Unpack packed info
+            vec2 Destination = unpack_vec2((vec4)target);
+            float cur_angle = atan(vertex.TexCoords.y - Destination.y * TargetData.DxDy.y, vertex.TexCoords.x - Destination.x * TargetData.DxDy.x);
+            cur_angle = (cur_angle + 3.14159f) / (2 * 3.14159f);
+            float target_angle = data.target_angle;
+
+            // Get nearby units
+            unit
+                right = Current[RightOne],
+                up    = Current[UpOne],
+                left  = Current[LeftOne],
+                down  = Current[DownOne];
+
+            if (Destination.x > vertex.TexCoords.x * TargetData.Size.x)
+            {
+                dir = Dir.Right;
+
+                if (Destination.y < vertex.TexCoords.y * TargetData.Size.y)
+                {
+                    if (cur_angle < target_angle || Something(right))
+                    {
+                        dir = Dir.Down;
+
+                        if (Something(down))
+                            dir = Dir.Right;
+                    }
+                }
+                else
+                {
+                    if (cur_angle > target_angle || Something(right))
+                    {
+                        dir = Dir.Up;
+
+                        if (Something(up))
+                            dir = Dir.Right;
+                    }
+                }
+            }
+            else
+            {
+                dir = Dir.Left;
+
+                if (Destination.y < vertex.TexCoords.y * TargetData.Size.y)
+                {
+                    if (cur_angle > target_angle || Something(left))
+                    {
+                        dir = Dir.Down;
+
+                        if (Something(down))
+                            dir = Dir.Left;
+                    }
+                }
+                else
+                {
+                    if (cur_angle < target_angle || Something(left))
+                    {
+                        dir = Dir.Up;
+
+                        if (Something(up))
+                            dir = Dir.Left;
+                    }
+                }
+            }
+
+            if (IsValid(dir))
+                here.direction = dir;
         }
     }
 }

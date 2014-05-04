@@ -56,7 +56,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 d = float4(0, 0, 0, 0);
-    if (tex2D(fs_param_data_texture, psin.TexCoords + (float2(0, 0)) * fs_param_data_texture_dxdy).a > 0)
+    if (tex2D(fs_param_data_texture, psin.TexCoords + (float2(0, 0)) * fs_param_data_texture_dxdy).a > 0 + .001)
     {
         d.r = 0.003921569;
         d.g = fs_param_player;

@@ -264,7 +264,7 @@ namespace GpuSim
 
 			base.Initialize();
 		}
-
+        
         void InitialConditions(int w, int h)
         {
             Color[] clr = new Color[w * h];
@@ -278,8 +278,8 @@ namespace GpuSim
             for (int j = 0; j < h; j++)
             {
                 //if (true)
-                //if (false)
-                if (rnd.NextDouble() > 0.9f)
+                if (false)
+                //if (rnd.NextDouble() > 0.9f)
                 //if (i == w / 2 && j == h / 2)
                 //if (Math.Abs(i - w / 2) < 500)
                 //if (j == h / 2)
@@ -629,11 +629,14 @@ namespace GpuSim
             ActionSelect.Apply(Previous, CurData, Temp1, Deselect, SimShader.UnitAction.NoChange, Output: Temp2);
             Swap(ref Temp2, ref Previous);
 
-            if (Keys.F.Pressed())
+            if (Keys.F.Pressed() || Keys.G.Pressed())
             {
+                float player = Keys.F.Pressed() ? SimShader.Player.One : SimShader.Player.Two;
+                float team   = Keys.F.Pressed() ? SimShader.Team.One   : SimShader.Team.Two;
+
                 ActionSpawn_Unit.Apply(Current, Temp1, Output: Temp2);
                 Swap(ref Temp2, ref Current);
-                ActionSpawn_Extra.Apply(CurData, Temp1, Output: Temp2);
+                ActionSpawn_Extra.Apply(CurData, Temp1, player, team, Output: Temp2);
                 Swap(ref Temp2, ref CurData);
             }
 

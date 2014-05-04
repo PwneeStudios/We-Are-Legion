@@ -56,17 +56,17 @@ sampler fs_param_Previous : register(s2) = sampler_state
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.01960784;
+    return val >= 0.01960784 - .001;
 }
 
 bool GpuSim__SimShader__Something(float4 u)
 {
-    return u.r > 0;
+    return u.r > 0 + .001;
 }
 
 bool GpuSim__SimShader__IsValid(float direction)
 {
-    return direction > 0;
+    return direction > 0 + .001;
 }
 
 float2 GpuSim__SimShader__direction_to_vec(float direction)

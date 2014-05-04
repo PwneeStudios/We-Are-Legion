@@ -130,7 +130,7 @@ sampler fs_param_Paths_Down : register(s7) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
 {
-    return u.r > 0;
+    return u.r > 0 + .001;
 }
 
 float GpuSim__SimShader__unpack_coord(float2 packed)
@@ -150,7 +150,7 @@ float2 GpuSim__SimShader__unpack_vec2(float4 packed)
 
 bool GpuSim__SimShader__IsValid(float direction)
 {
-    return direction > 0;
+    return direction > 0 + .001;
 }
 
 // Compiled vertex shader
@@ -179,12 +179,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         float cur_angle = atan2(psin.TexCoords.y - Destination.y * fs_param_TargetData_dxdy.y, psin.TexCoords.x - Destination.x * fs_param_TargetData_dxdy.x);
         cur_angle = (cur_angle + 3.14159) / (2 * 3.14159);
         float target_angle = data.a;
-        if (Destination.x > psin.TexCoords.x * fs_param_TargetData_size.x)
+        if (Destination.x > psin.TexCoords.x * fs_param_TargetData_size.x + .001)
         {
             path = right_path;
-            if (Destination.y < psin.TexCoords.y * fs_param_TargetData_size.y)
+            if (Destination.y < psin.TexCoords.y * fs_param_TargetData_size.y - .001)
             {
-                if (cur_angle < target_angle || abs(right_path.r - 0.003921569) < .001 && GpuSim__SimShader__Something(right))
+                if (cur_angle < target_angle - .001 || abs(right_path.r - 0.003921569) < .001 && GpuSim__SimShader__Something(right))
                 {
                     path = down_path;
                     if (GpuSim__SimShader__Something(down))
@@ -195,7 +195,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
             else
             {
-                if (cur_angle > target_angle || abs(right_path.r - 0.003921569) < .001 && GpuSim__SimShader__Something(right))
+                if (cur_angle > target_angle + .001 || abs(right_path.r - 0.003921569) < .001 && GpuSim__SimShader__Something(right))
                 {
                     path = up_path;
                     if (GpuSim__SimShader__Something(up))
@@ -208,9 +208,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         else
         {
             path = left_path;
-            if (Destination.y < psin.TexCoords.y * fs_param_TargetData_size.y)
+            if (Destination.y < psin.TexCoords.y * fs_param_TargetData_size.y - .001)
             {
-                if (cur_angle > target_angle || abs(left_path.r - 0.01176471) < .001 && GpuSim__SimShader__Something(left))
+                if (cur_angle > target_angle + .001 || abs(left_path.r - 0.01176471) < .001 && GpuSim__SimShader__Something(left))
                 {
                     path = down_path;
                     if (GpuSim__SimShader__Something(down))
@@ -221,7 +221,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
             else
             {
-                if (cur_angle < target_angle || abs(left_path.r - 0.01176471) < .001 && GpuSim__SimShader__Something(left))
+                if (cur_angle < target_angle - .001 || abs(left_path.r - 0.01176471) < .001 && GpuSim__SimShader__Something(left))
                 {
                     path = up_path;
                     if (GpuSim__SimShader__Something(up))
@@ -231,7 +231,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 }
             }
         }
-        if ((path.g > 1 || path.b > 1) && GpuSim__SimShader__IsValid(path.r))
+        if ((path.g > 1 + .001 || path.b > 1 + .001) && GpuSim__SimShader__IsValid(path.r))
         {
             here.r = path.r;
         }

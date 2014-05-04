@@ -40,13 +40,13 @@ sampler fs_param_Units : register(s1) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
 {
-    return u.r > 0;
+    return u.r > 0 + .001;
 }
 
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.01960784;
+    return val >= 0.01960784 - .001;
 }
 
 bool GpuSim__SimShader__SomethingSelected(float4 u)

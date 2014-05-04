@@ -55,7 +55,7 @@ sampler fs_param_Current : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
 {
-    return u.r > 0;
+    return u.r > 0 + .001;
 }
 
 float4 GpuSim__PathHelper__Propagate(VertexToPixel psin, sampler Path, float2 Path_size, float2 Path_dxdy, sampler Current, float2 Current_size, float2 Current_dxdy, float4 output)
@@ -64,27 +64,27 @@ float4 GpuSim__PathHelper__Propagate(VertexToPixel psin, sampler Path, float2 Pa
     float4 right = tex2D(Path, psin.TexCoords + (float2(1, 0)) * Path_dxdy), up = tex2D(Path, psin.TexCoords + (float2(0, 1)) * Path_dxdy), left = tex2D(Path, psin.TexCoords + (float2(-(1), 0)) * Path_dxdy), down = tex2D(Path, psin.TexCoords + (float2(0, -(1))) * Path_dxdy), here = tex2D(Path, psin.TexCoords + (float2(0, 0)) * Path_dxdy);
     float val_right = 255 * right.g + right.b, val_up = 255 * up.g + up.b, val_left = 255 * left.g + left.b, val_down = 255 * down.g + down.b, val_here = 255 * here.g + here.b;
     float min = 255;
-    if (val_here > 0 && val_here < min)
+    if (val_here > 0 + .001 && val_here < min - .001)
     {
         min = val_here;
         output.r = here.r;
     }
-    if (val_right > 0 && val_right < min && abs(right.a - 0) < .001)
+    if (val_right > 0 + .001 && val_right < min - .001 && abs(right.a - 0) < .001)
     {
         min = val_right;
         output.r = 0.003921569;
     }
-    if (val_up > 0 && val_up < min && abs(up.a - 0) < .001)
+    if (val_up > 0 + .001 && val_up < min - .001 && abs(up.a - 0) < .001)
     {
         min = val_up;
         output.r = 0.007843138;
     }
-    if (val_left > 0 && val_left < min && abs(left.a - 0) < .001)
+    if (val_left > 0 + .001 && val_left < min - .001 && abs(left.a - 0) < .001)
     {
         min = val_left;
         output.r = 0.01176471;
     }
-    if (val_down > 0 && val_down < min && abs(down.a - 0) < .001)
+    if (val_down > 0 + .001 && val_down < min - .001 && abs(down.a - 0) < .001)
     {
         min = val_down;
         output.r = 0.01568628;
@@ -113,7 +113,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0, 0, 0, 0);
-    if (psin.TexCoords.x - 2 * fs_param_Path_dxdy.x < 0)
+    if (psin.TexCoords.x - 2 * fs_param_Path_dxdy.x < 0 - .001)
     {
         output.b = 0.003921569;
         __FinalOutput.Color = output;

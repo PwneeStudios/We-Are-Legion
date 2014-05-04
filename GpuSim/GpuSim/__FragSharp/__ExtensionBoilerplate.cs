@@ -150,7 +150,11 @@ namespace GpuSim
             return new unit(v.X, v.Y, v.Z, v.W);
         }
 
-        public static readonly unit Zero = new unit(0, 0, 0, 0);
+        public static readonly unit Zero    = new unit(0, 0, 0, 0);
+        public static readonly unit Nothing = new unit(0, 0, 0, 0);
+
+        public static explicit operator unit(vec4 v) { return new unit(v.x, v.y, v.z, v.w); }
+        public static explicit operator vec4(unit v) { return new vec4(v.x, v.y, v.z, v.w); }
     }
 }
 
@@ -294,7 +298,11 @@ namespace GpuSim
             return new data(v.X, v.Y, v.Z, v.W);
         }
 
-        public static readonly data Zero = new data(0, 0, 0, 0);
+        public static readonly data Zero    = new data(0, 0, 0, 0);
+        public static readonly data Nothing = new data(0, 0, 0, 0);
+
+        public static explicit operator data(vec4 v) { return new data(v.x, v.y, v.z, v.w); }
+        public static explicit operator vec4(data v) { return new vec4(v.x, v.y, v.z, v.w); }
     }
 }
 

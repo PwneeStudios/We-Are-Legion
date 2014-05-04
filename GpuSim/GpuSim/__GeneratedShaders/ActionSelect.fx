@@ -85,13 +85,13 @@ void GpuSim__SimShader__set_selected(inout float4 u, bool selected)
 
 bool GpuSim__SimShader__Something(float4 u)
 {
-    return u.r > 0;
+    return u.r > 0 + .001;
 }
 
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.01960784;
+    return val >= 0.01960784 - .001;
 }
 
 // Compiled vertex shader
@@ -111,7 +111,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 data_here = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    if (select.r > 0 && abs(data_here.g - select.g) < .001)
+    if (select.r > 0 + .001 && abs(data_here.g - select.g) < .001)
     {
         GpuSim__SimShader__set_selected(here, true);
     }
@@ -122,7 +122,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             GpuSim__SimShader__set_selected(here, false);
         }
     }
-    if (GpuSim__SimShader__Something(here) && GpuSim__SimShader__selected(here) && fs_param_action < 0.04705882)
+    if (GpuSim__SimShader__Something(here) && GpuSim__SimShader__selected(here) && fs_param_action < 0.04705882 - .001)
     {
         here.a = fs_param_action;
     }

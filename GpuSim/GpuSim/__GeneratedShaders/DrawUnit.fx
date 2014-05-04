@@ -112,18 +112,18 @@ float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size
 
 bool GpuSim__SimShader__Something(float4 u)
 {
-    return u.r > 0;
+    return u.r > 0 + .001;
 }
 
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.01960784;
+    return val >= 0.01960784 - .001;
 }
 
 float4 GpuSim__DrawUnit__Sprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float anim, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
-    if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
+    if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
@@ -168,7 +168,7 @@ float4 GpuSim__DrawUnit__Sprite(VertexToPixel psin, float4 u, float4 d, float2 p
 
 bool GpuSim__SimShader__IsValid(float direction)
 {
-    return direction > 0;
+    return direction > 0 + .001;
 }
 
 float GpuSim__SimShader__prior_direction(float4 u)
@@ -205,7 +205,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Current_size);
     if (GpuSim__SimShader__Something(cur) && abs(cur.g - 0.003921569) < .001)
     {
-        if (fs_param_s > 0.5)
+        if (fs_param_s > 0.5 + .001)
         {
             pre = cur;
         }
@@ -219,7 +219,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             float2 offset = (1 - fs_param_s) * GpuSim__SimShader__direction_to_vec(prior_dir);
             output += GpuSim__DrawUnit__Sprite(psin, cur, cur_data, subcell_pos + offset, prior_dir, fs_param_s * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
-        if (GpuSim__SimShader__IsValid(pre.r) && output.a < 0.025)
+        if (GpuSim__SimShader__IsValid(pre.r) && output.a < 0.025 - .001)
         {
             float2 offset = -(fs_param_s) * GpuSim__SimShader__direction_to_vec(pre.r);
             output += GpuSim__DrawUnit__Sprite(psin, pre, pre_data, subcell_pos + offset, pre.r, fs_param_s * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);

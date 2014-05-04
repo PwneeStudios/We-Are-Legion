@@ -22,26 +22,11 @@ namespace GpuSim
         [Hlsl("g")]
         public float change { get { return g; } set { g = value; } }
 
-        //[Hlsl("b")]
-        //public float prior_direction { get { return b; } set { b = value; } }
-
         [Hlsl("b")]
         public float prior_direction_and_select { get { return b; } set { b = value; } }
 
         [Hlsl("a")]
         public float action { get { return a; } set { a = value; } }
-
-        public static explicit operator unit(vec4 v)
-        {
-            return new unit(v.x, v.y, v.z, v.w);
-        }
-
-        public static explicit operator vec4(unit v)
-        {
-            return new vec4(v.x, v.y, v.z, v.w);
-        }
-
-        public static readonly unit Nothing = new unit(0, 0, 0, 0);
     }
 
     public class DataField : PointSampler
@@ -69,18 +54,6 @@ namespace GpuSim
 
         [Hlsl("a")]
         public float target_angle { get { return a; } set { a = value; } }
-
-        public static explicit operator data(vec4 v)
-        {
-            return new data(v.x, v.y, v.z, v.w);
-        }
-
-        public static explicit operator vec4(data v)
-        {
-            return new vec4(v.x, v.y, v.z, v.w);
-        }
-
-        public static readonly data Nothing = new data(0, 0, 0, 0);
     }
 
     public class SimShader : GridComputation

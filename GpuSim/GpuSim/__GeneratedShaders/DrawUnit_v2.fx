@@ -82,7 +82,7 @@ float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size
 
 float4 GpuSim__DrawUnit_v2__Sprite(VertexToPixel psin, float2 sprite, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
-    if (pos.x >= 1 || pos.y >= 1 || pos.x <= 0 || pos.y <= 0)
+    if (pos.x >= 1 - .001 || pos.y >= 1 - .001 || pos.x <= 0 + .001 || pos.y <= 0 + .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
@@ -112,23 +112,23 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy), here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float2 subcell_pos = (GpuSim__SimShader__get_subcell_pos(psin, fs_param_Current_size) + float2(0.5, 0.5)) / 2;
     float2 cur_offset = float2(0, 0);
-    if (up.y > 0 && output.a < 0.025)
+    if (up.y > 0 + .001 && output.a < 0.025 - .001)
     {
         output += GpuSim__DrawUnit_v2__Sprite(psin, up.xy, subcell_pos + cur_offset + float2(0, -(0.5)), fs_param_s * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
-    if (right.y > 0 && output.a < 0.025)
+    if (right.y > 0 + .001 && output.a < 0.025 - .001)
     {
         output += GpuSim__DrawUnit_v2__Sprite(psin, right.xy, subcell_pos + cur_offset + float2(-(0.5), 0), fs_param_s * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
-    if (left.y > 0 && output.a < 0.025)
+    if (left.y > 0 + .001 && output.a < 0.025 - .001)
     {
         output += GpuSim__DrawUnit_v2__Sprite(psin, left.xy, subcell_pos + cur_offset + float2(0.5, 0), fs_param_s * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
-    if (here.y > 0 && output.a < 0.025)
+    if (here.y > 0 + .001 && output.a < 0.025 - .001)
     {
         output += GpuSim__DrawUnit_v2__Sprite(psin, here.xy, subcell_pos + cur_offset, fs_param_s * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
-    if (down.y > 0 && output.a < 0.025)
+    if (down.y > 0 + .001 && output.a < 0.025 - .001)
     {
         output += GpuSim__DrawUnit_v2__Sprite(psin, down.xy, subcell_pos + cur_offset + float2(0, 0.5), fs_param_s * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }

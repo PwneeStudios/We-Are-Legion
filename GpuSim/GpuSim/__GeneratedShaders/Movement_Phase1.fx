@@ -40,7 +40,7 @@ sampler fs_param_Current : register(s1) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
 {
-    return u.r > 0;
+    return u.r > 0 + .001;
 }
 
 // Compiled vertex shader

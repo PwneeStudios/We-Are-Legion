@@ -55,7 +55,7 @@ sampler fs_param_Next : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsValid(float direction)
 {
-    return direction > 0;
+    return direction > 0 + .001;
 }
 
 float2 GpuSim__SimShader__dir_to_vec(float direction)
@@ -67,7 +67,7 @@ float2 GpuSim__SimShader__dir_to_vec(float direction)
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.01960784;
+    return val >= 0.01960784 - .001;
 }
 
 void GpuSim__SimShader__set_prior_direction(inout float4 u, float dir)

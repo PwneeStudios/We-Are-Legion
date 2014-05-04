@@ -52,10 +52,14 @@ sampler fs_param_Select : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
+float fs_param_player;
+
+float fs_param_team;
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
 {
-    return u.r > 0;
+    return u.r > 0 + .001;
 }
 
 // Compiled vertex shader
@@ -78,8 +82,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         if (abs((int)(psin.TexCoords.x * fs_param_CurData_size.x) % 2 - 0) < .001 && abs((int)(psin.TexCoords.y * fs_param_CurData_size.y) % 2 - 0) < .001)
         {
-            data.g = 0.003921569;
-            data.b = 0.003921569;
+            data.g = fs_param_player;
+            data.b = fs_param_team;
         }
     }
     __FinalOutput.Color = data;

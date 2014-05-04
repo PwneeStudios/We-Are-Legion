@@ -57,7 +57,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0, 0, 0, 0);
     if (abs(here.x - 0.003921569) < .001)
     {
-        if (here.x > here.y)
+        if (here.x > here.y + .001)
         {
             output.x = here.z * here.x;
         }
@@ -65,7 +65,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             output.x = here.w * here.w;
         }
-        if (here.z > here.x)
+        if (here.z > here.x + .001)
         {
             output.y = here.x * here.w;
         }
@@ -73,7 +73,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             output.y = here.y * here.x;
         }
-        if (here.z > here.w)
+        if (here.z > here.w + .001)
         {
             output.z = here.x * here.w;
         }
@@ -81,7 +81,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             output.z = here.w * here.y;
         }
-        if (here.w > here.x)
+        if (here.w > here.x + .001)
         {
             output.w = here.z * here.w;
         }
@@ -92,7 +92,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     else
     {
-        if (here.y > here.x)
+        if (here.y > here.x + .001)
         {
             output.x = here.z * here.y;
         }
@@ -100,7 +100,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             output.x = here.w * here.w;
         }
-        if (here.z > here.y)
+        if (here.z > here.y + .001)
         {
             output.y = here.y * here.w;
         }
@@ -108,7 +108,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             output.y = here.y * here.y;
         }
-        if (here.z > here.w)
+        if (here.z > here.w + .001)
         {
             output.z = here.y * here.w;
         }
@@ -116,7 +116,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             output.z = here.w * here.y;
         }
-        if (here.w > here.y)
+        if (here.w > here.y + .001)
         {
             output.w = here.z * here.w;
         }

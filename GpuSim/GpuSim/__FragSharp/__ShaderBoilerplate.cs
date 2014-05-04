@@ -1081,33 +1081,33 @@ namespace GpuSim
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(Texture2D CurData, Texture2D Select, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D CurData, Texture2D Select, float player, float team, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(CurData, Select);
+            Using(CurData, Select, player, team);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D CurData, Texture2D Select, RenderTarget2D Output)
+        public static void Apply(Texture2D CurData, Texture2D Select, float player, float team, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(CurData, Select);
+            Using(CurData, Select, player, team);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D CurData, Texture2D Select, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D CurData, Texture2D Select, float player, float team, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(CurData, Select);
+            Using(CurData, Select, player, team);
         }
-        public static void Using(Texture2D CurData, Texture2D Select, RenderTarget2D Output)
+        public static void Using(Texture2D CurData, Texture2D Select, float player, float team, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(CurData, Select);
+            Using(CurData, Select, player, team);
         }
-        public static void Using(Texture2D CurData, Texture2D Select)
+        public static void Using(Texture2D CurData, Texture2D Select, float player, float team)
         {
             CompiledEffect.Parameters["fs_param_CurData_Texture"].SetValue(FragSharpMarshal.Marshal(CurData));
             CompiledEffect.Parameters["fs_param_CurData_size"].SetValue(FragSharpMarshal.Marshal(vec(CurData.Width, CurData.Height)));
@@ -1115,6 +1115,8 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_Select_Texture"].SetValue(FragSharpMarshal.Marshal(Select));
             CompiledEffect.Parameters["fs_param_Select_size"].SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
             CompiledEffect.Parameters["fs_param_Select_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Select.Width, Select.Height)));
+            CompiledEffect.Parameters["fs_param_player"].SetValue(FragSharpMarshal.Marshal(player));
+            CompiledEffect.Parameters["fs_param_team"].SetValue(FragSharpMarshal.Marshal(team));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
