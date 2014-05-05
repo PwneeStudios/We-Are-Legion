@@ -5,7 +5,7 @@ namespace GpuSim
     public partial class Bounding : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, UnitField Units)
+        vec4 FragmentShader(VertexOut vertex, Field<unit> Units)
         {
             vec2 uv = vertex.TexCoords;
 
@@ -25,7 +25,7 @@ namespace GpuSim
     public partial class _Bounding : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, UnitField PreviousLevel)
+        vec4 FragmentShader(VertexOut vertex, Field<unit> PreviousLevel)
         {
             vec4
                 TL = (vec4)PreviousLevel[Here],

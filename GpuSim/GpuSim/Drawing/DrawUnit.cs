@@ -12,7 +12,7 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous, Sampler Texture, float PercentSimStepComplete)
+        color FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Previous, Sampler Texture, float PercentSimStepComplete)
         {
             color output = color.TransparentBlack;
 
@@ -87,7 +87,7 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous, DataField CurData, DataField PrevData, Sampler Texture, float s)
+        color FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Previous, Field<data> CurData, Field<data> PrevData, Sampler Texture, float s)
         {
             color output = color.TransparentBlack;
 
@@ -145,7 +145,7 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous, Sampler Texture, float s)
+        color FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Previous, Sampler Texture, float s)
         {
             color output = color.TransparentBlack;
 

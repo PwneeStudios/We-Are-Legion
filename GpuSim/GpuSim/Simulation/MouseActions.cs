@@ -5,7 +5,7 @@ namespace GpuSim
     public partial class ActionAttackSquare : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, UnitField Current, UnitField TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size)
+        vec4 FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size)
         {
             unit here = Current[Here];
             vec4 target = vec4.Zero;
@@ -31,7 +31,7 @@ namespace GpuSim
     public partial class ActionAttackPoint : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, UnitField Current, UnitField TargetData, vec2 Destination)
+        vec4 FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> TargetData, vec2 Destination)
         {
             unit here  = Current[Here];
             vec4 target = vec4.Zero;
@@ -54,7 +54,7 @@ namespace GpuSim
     public partial class ActionAttack2 : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, UnitField Current, DataField Data, vec2 Destination)
+        data FragmentShader(VertexOut vertex, Field<unit> Current, Field<data> Data, vec2 Destination)
         {
             unit here = Current[Here];
             data data = Data[Here];
@@ -72,7 +72,7 @@ namespace GpuSim
     public partial class ActionSpawn_Unit : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Current, UnitField Select)
+        unit FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Select)
         {
             unit here = Current[Here];
             unit select = Select[Here];
@@ -93,7 +93,7 @@ namespace GpuSim
     public partial class ActionSpawn_Extra : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, DataField CurData, UnitField Select, float player, float team)
+        data FragmentShader(VertexOut vertex, Field<data> CurData, Field<unit> Select, float player, float team)
         {
             data data = CurData[Here];
             unit select = Select[Here];
@@ -115,7 +115,7 @@ namespace GpuSim
     public partial class ActionSelect : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Current, DataField CurData, DataField Select, bool Deselect, float action)
+        unit FragmentShader(VertexOut vertex, Field<unit> Current, Field<data> CurData, Field<data> Select, bool Deselect, float action)
         {
             unit here = Current[Here];
             data data_here = CurData[Here];

@@ -60,7 +60,7 @@ namespace GpuSim
     public partial class BenchmarkTest_TextureLookupWithConditional : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, VecField s)
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> s)
         {
             var here = s[Here];
 
@@ -118,7 +118,7 @@ namespace GpuSim
     public partial class BenchmarkTest_TextureLookupWithComplexMath : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, VecField s)
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> s)
         {
             var here = s[Here];
 

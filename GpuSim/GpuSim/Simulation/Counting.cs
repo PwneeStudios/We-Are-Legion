@@ -5,7 +5,7 @@ namespace GpuSim
     public partial class Counting : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, UnitField Units)
+        vec4 FragmentShader(VertexOut vertex, Field<unit> Units)
         {
             vec2 uv = vertex.TexCoords;
 
@@ -41,7 +41,7 @@ namespace GpuSim
     public partial class _Counting : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, UnitField PreviousLevel)
+        vec4 FragmentShader(VertexOut vertex, Field<unit> PreviousLevel)
         {
             vec2 uv = vertex.TexCoords;
 

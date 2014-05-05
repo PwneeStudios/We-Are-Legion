@@ -5,7 +5,7 @@ namespace GpuSim
     public partial class DrawPrecomputation_Cur : SimShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous)
+        color FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Previous)
         {
             color output = color.TransparentBlack;
 
@@ -48,7 +48,7 @@ namespace GpuSim
     public partial class DrawPrecomputation_Pre : SimShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, UnitField Current, UnitField Previous)
+        color FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Previous)
         {
             color output = color.TransparentBlack;
 

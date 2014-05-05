@@ -2,17 +2,6 @@
 
 namespace GpuSim
 {
-    public class UnitField : PointSampler
-    {
-        new public unit this[RelativeIndex index]
-        {
-            get
-            {
-                return unit.Nothing;
-            }
-        }
-    }
-
     [Copy(typeof(vec4))]
     public partial struct unit
     {
@@ -27,17 +16,6 @@ namespace GpuSim
 
         [Hlsl("a")]
         public float action { get { return a; } set { a = value; } }
-    }
-
-    public class DataField : PointSampler
-    {
-        new public data this[RelativeIndex index]
-        {
-            get
-            {
-                return data.Nothing;
-            }
-        }
     }
 
     [Copy(typeof(vec4))]

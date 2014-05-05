@@ -5,7 +5,7 @@ namespace GpuSim
     public partial class Movement_Phase1 : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Current)
+        unit FragmentShader(VertexOut vertex, Field<unit> Current)
         {
             unit here = Current[Here], output = unit.Nothing;
 
@@ -46,7 +46,7 @@ namespace GpuSim
     public partial class Movement_Phase2 : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Current, UnitField Next)
+        unit FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Next)
         {
             unit next = Next[Here];
             unit here = Current[Here];
@@ -64,7 +64,7 @@ namespace GpuSim
     public partial class Movement_Convect : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Data, UnitField Current)
+        unit FragmentShader(VertexOut vertex, Field<unit> Data, Field<unit> Current)
         {
             unit here = Current[Here], output = unit.Nothing;
 
@@ -83,7 +83,7 @@ namespace GpuSim
     public partial class Movement_UpdateDirection : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField TargetData, DataField Data, UnitField Current, UnitField Paths_Right, UnitField Paths_Left, UnitField Paths_Up, UnitField Paths_Down)
+        unit FragmentShader(VertexOut vertex, Field<unit> TargetData, Field<data> Data, Field<unit> Current, Field<unit> Paths_Right, Field<unit> Paths_Left, Field<unit> Paths_Up, Field<unit> Paths_Down)
         {
             unit here = Current[Here];
 
@@ -171,7 +171,7 @@ namespace GpuSim
     public partial class Movement_UpdateDirectionToEnemy : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField TargetData, DataField Data, UnitField Current, VecField PathToOtherTeams)
+        unit FragmentShader(VertexOut vertex, Field<unit> TargetData, Field<data> Data, Field<unit> Current, Field<vec4> PathToOtherTeams)
         {
             unit here = Current[Here];
 
@@ -230,7 +230,7 @@ namespace GpuSim
             return here;
         }
 
-        void NaivePathfind(VertexOut vertex, UnitField Current, UnitField TargetData, data data, ref unit here)
+        void NaivePathfind(VertexOut vertex, Field<unit> Current, Field<unit> TargetData, data data, ref unit here)
         {
             float dir = 0;
 

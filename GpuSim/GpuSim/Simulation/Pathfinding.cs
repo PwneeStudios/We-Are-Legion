@@ -9,7 +9,7 @@ namespace GpuSim
         /// Four teams maximum.
         /// </summary>
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, VecField Path, UnitField Current, DataField CurData)
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> Path, Field<unit> Current, Field<data> CurData)
         {
             unit data = Current[Here];
             data cur_data = CurData[Here];
@@ -39,7 +39,7 @@ namespace GpuSim
     public partial class Pathfinding_Down : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Path, UnitField Current)
+        unit FragmentShader(VertexOut vertex, Field<unit> Path, Field<unit> Current)
         {
             unit output = unit.Nothing;
 
@@ -58,7 +58,7 @@ namespace GpuSim
     public partial class Pathfinding_Up : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Path, UnitField Current)
+        unit FragmentShader(VertexOut vertex, Field<unit> Path, Field<unit> Current)
         {
             unit output = unit.Nothing;
 
@@ -77,7 +77,7 @@ namespace GpuSim
     public partial class Pathfinding_Left : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Path, UnitField Current)
+        unit FragmentShader(VertexOut vertex, Field<unit> Path, Field<unit> Current)
         {
             unit output = unit.Nothing;
 
@@ -96,7 +96,7 @@ namespace GpuSim
     public partial class Pathfinding_Right : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, UnitField Path, UnitField Current)
+        unit FragmentShader(VertexOut vertex, Field<unit> Path, Field<unit> Current)
         {
             unit output = unit.Nothing;
             
@@ -114,7 +114,7 @@ namespace GpuSim
 
     public class PathHelper : SimShader
     {
-        public static unit Propagate(UnitField Path, UnitField Current, unit output)
+        public static unit Propagate(Field<unit> Path, Field<unit> Current, unit output)
         {
             unit data = Current[Here];
 
