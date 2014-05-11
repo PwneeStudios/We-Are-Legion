@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
+using FragSharpHelper;
 using FragSharpFramework;
 
 namespace GpuSim
@@ -44,79 +45,14 @@ namespace GpuSim
 		}
 	}
 
-    public static class InputInfo
-    {
-        public static KeyboardState CurKeyboard, PrevKeyboard;
-
-        public static MouseState CurMouse, PrevMouse;
-        public static vec2 MousePos, MousePosPrev;
-
-        public static vec2 DeltaMousPos;
-        public static float DeltaMouseScroll;
-
-        public static void Update()
-        {
-            PrevMouse = CurMouse;
-            MousePosPrev = MousePos;
-
-            CurKeyboard = Keyboard.GetState();
-
-            CurMouse = Mouse.GetState();
-            MousePos = new vec2(CurMouse.X, CurMouse.Y);
-
-            DeltaMousPos = new vec2(CurMouse.X - PrevMouse.X, CurMouse.Y - PrevMouse.Y);
-            DeltaMouseScroll = CurMouse.ScrollWheelValue - PrevMouse.ScrollWheelValue;
-        }
-
-        public static bool LeftMousePressed
-        {
-            get
-            {
-                return CurMouse.LeftButton  == ButtonState.Pressed &&
-                       PrevMouse.LeftButton == ButtonState.Released;
-            }
-        }
-
-        public static bool LeftMouseDown
-        {
-            get
-            {
-                return CurMouse.LeftButton  == ButtonState.Pressed;
-            }
-        }
-
-        public static bool RightMousePressed
-        {
-            get
-            {
-                return CurMouse.RightButton  == ButtonState.Pressed &&
-                       PrevMouse.RightButton == ButtonState.Released;
-            }
-        }
-
-        public static bool RightMouseDown
-        {
-            get
-            {
-                return CurMouse.RightButton == ButtonState.Pressed;
-            }
-        }
-    }
-
-    public static class KeyExtension
-    {
-        public static bool Pressed(this Keys key)
-        {
-            return InputInfo.CurKeyboard.IsKeyDown(key);
-        }
-    }
-
 	/// <summary>
 	/// This is the main type for your game
 	/// </summary>
 	public class M3ngineGame : Game
 	{
 		const bool UnlimitedSpeed = false;
+
+        const bool MouseEnabled = false;
 
 		vec2 CameraPos = vec2.Zero;
 		float CameraZoom = 30;
@@ -278,8 +214,8 @@ namespace GpuSim
             for (int j = 0; j < h; j++)
             {
                 //if (true)
-                if (false)
-                //if (rnd.NextDouble() > 0.9f)
+                //if (false)
+                if (rnd.NextDouble() > 0.5f)
                 //if (i == w / 2 && j == h / 2)
                 //if (Math.Abs(i - w / 2) < 500)
                 //if (j == h / 2)
@@ -295,12 +231,12 @@ namespace GpuSim
                     int g = 0;
                     int b = 0;
 
-                    int player = rnd.Next(1, 3);
+                    int player = rnd.Next(1, 2);
                     int team   = player;
                     int type   = rnd.Next(1, 2);
 
                     clr[i * h + j] = new Color(dir, g, b, action);
-                    xtr1[i * h + j] = new Color(0, 0, 0, 0);
+                    xtr1[i * h + j] = new Color(rnd.Next(0, 4), rnd.Next(0, 256), rnd.Next(0, 4), rnd.Next(0, 256));
                     xtr2[i * h + j] = new Color(type, player, team, 0);
                 }
                 else
@@ -351,7 +287,7 @@ namespace GpuSim
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
 				this.Exit();
 
-            InputInfo.Update();
+            Input.Update();
 
             //const float MaxZoomOut = 5.33333f, MaxZoomIn = 200;
             const float MaxZoomOut = 1, MaxZoomIn = 200;
@@ -361,39 +297,47 @@ namespace GpuSim
                 CameraZoom = MaxZoomOut;
 
             // Zoom in/out, into the location of the cursor
-            var world_mouse_pos = GetWorldCoordinate(InputInfo.MousePos);
+            var world_mouse_pos = GetWorldCoordinate(Input.CurMousePos);
             var hold_camvec = camvec;
-            
-			float ZoomRate = 1.3333f;
-            if      (InputInfo.DeltaMouseScroll < 0) CameraZoom /= ZoomRate;
-            else if (InputInfo.DeltaMouseScroll > 0) CameraZoom *= ZoomRate;
+
+            if (MouseEnabled)
+            {
+                float MouseWheelZoomRate = 1.3333f;
+                if (Input.DeltaMouseScroll < 0) CameraZoom /= MouseWheelZoomRate;
+                else if (Input.DeltaMouseScroll > 0) CameraZoom *= MouseWheelZoomRate;
+            }
 
             float KeyZoomRate = 1.125f;
-            if      (Keys.X.Pressed() || Keys.E.Pressed()) CameraZoom /= KeyZoomRate;
-            else if (Keys.Z.Pressed() || Keys.Q.Pressed()) CameraZoom *= KeyZoomRate;
+            if      (Buttons.X.Down() || Keys.X.Pressed() || Keys.E.Pressed()) CameraZoom /= KeyZoomRate;
+            else if (Buttons.A.Down() || Keys.Z.Pressed() || Keys.Q.Pressed()) CameraZoom *= KeyZoomRate;
 
             if (CameraZoom < MaxZoomOut) CameraZoom = MaxZoomOut;
             if (CameraZoom > MaxZoomIn)  CameraZoom = MaxZoomIn;
 
-            var shifted = GetShiftedCamera(InputInfo.MousePos, camvec, world_mouse_pos);
-            CameraPos = shifted;
-
+            if (MouseEnabled && !(Buttons.A.Pressed() || Buttons.X.Pressed()))
+            {
+                var shifted = GetShiftedCamera(Input.CurMousePos, camvec, world_mouse_pos);
+                CameraPos = shifted;
+            }
 
             // Move the camera via: Click And Drag
             //float MoveRate_ClickAndDrag = .00165f;
-            //if (InputInfo.LeftMouseDown)
-            //    CameraPos += InputInfo.DeltaMousPos / CameraZoom * MoveRate_ClickAndDrag * new vec2(-1, 1);
+            //if (Input.LeftMouseDown)
+            //    CameraPos += Input.DeltaMousPos / CameraZoom * MoveRate_ClickAndDrag * new vec2(-1, 1);
 
             // Move the camera via: Push Edge
-            float MoveRate_PushEdge = .07f;
-            var push_dir = vec2.Zero;
-            float EdgeRatio = .1f;
-            push_dir.x += -Restrict((EdgeRatio * Screen.x -     InputInfo.MousePos.x) / (EdgeRatio * Screen.x), 0, 1);
-            push_dir.x +=  Restrict((InputInfo.MousePos.x - (1-EdgeRatio) * Screen.x) / (EdgeRatio * Screen.x), 0, 1);
-            push_dir.y -= -Restrict((EdgeRatio * Screen.y - InputInfo.MousePos.y) / (EdgeRatio * Screen.y), 0, 1);
-            push_dir.y -=  Restrict((InputInfo.MousePos.y - (1 - EdgeRatio) * Screen.y) / (EdgeRatio * Screen.y), 0, 1);
+            if (MouseEnabled)
+            {
+                float MoveRate_PushEdge = .07f;
+                var push_dir = vec2.Zero;
+                float EdgeRatio = .1f;
+                push_dir.x += -Restrict((EdgeRatio * Screen.x - Input.CurMousePos.x) / (EdgeRatio * Screen.x), 0, 1);
+                push_dir.x += Restrict((Input.CurMousePos.x - (1 - EdgeRatio) * Screen.x) / (EdgeRatio * Screen.x), 0, 1);
+                push_dir.y -= -Restrict((EdgeRatio * Screen.y - Input.CurMousePos.y) / (EdgeRatio * Screen.y), 0, 1);
+                push_dir.y -= Restrict((Input.CurMousePos.y - (1 - EdgeRatio) * Screen.y) / (EdgeRatio * Screen.y), 0, 1);
 
-            CameraPos += push_dir / CameraZoom * MoveRate_PushEdge;
+                CameraPos += push_dir / CameraZoom * MoveRate_PushEdge;
+            }
 
             // Move the camera via: Keyboard
             var dir = vec2.Zero;
@@ -494,10 +438,13 @@ namespace GpuSim
             GridHelper.DrawGrid();
 
 
-            vec2 WorldCord = GetWorldCoordinate(InputInfo.MousePos);
+            if (MouseEnabled)
+            {
+                vec2 WorldCord = GetWorldCoordinate(Input.CurMousePos);
 
-            DrawMouse.Using(camvec, CameraAspect, SelectCircle);
-            RectangleQuad.Draw(GraphicsDevice, WorldCord, vec2.Ones * .2f / CameraZoom);
+                DrawMouse.Using(camvec, CameraAspect, SelectCircle);
+                RectangleQuad.Draw(GraphicsDevice, WorldCord, vec2.Ones * .2f / CameraZoom);
+            }
 
 			base.Draw(gameTime);
 		}
@@ -603,11 +550,11 @@ namespace GpuSim
 
         void SelectionUpdate()
         {
-            vec2 WorldCord     = GetWorldCoordinate(InputInfo.MousePos);
-            vec2 WorldCordPrev = GetWorldCoordinate(InputInfo.MousePosPrev);
+            vec2 WorldCord     = GetWorldCoordinate(Input.CurMousePos);
+            vec2 WorldCordPrev = GetWorldCoordinate(Input.PrevMousePos);
 
-            bool Deselect  = InputInfo.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed();
-            bool Selecting = InputInfo.LeftMouseDown;
+            bool Deselect  = Input.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed();
+            bool Selecting = Input.LeftMouseDown;
 
             DataDrawMouse.Using(SelectCircle_Data, SimShader.Player.One, Output: Temp1, Clear: Color.Transparent);
             if (Selecting)
@@ -622,7 +569,7 @@ namespace GpuSim
                 }
             }
 
-            var action = InputInfo.RightMousePressed ? SimShader.UnitAction.Attacking : SimShader.UnitAction.NoChange;
+            var action = Input.RightMousePressed ? SimShader.UnitAction.Attacking : SimShader.UnitAction.NoChange;
             ActionSelect.Apply(Current, CurData, Temp1, Deselect, action, Output: Temp2);
             Swap(ref Temp2, ref Current);
 
@@ -640,10 +587,10 @@ namespace GpuSim
                 Swap(ref Temp2, ref CurData);
             }
 
-            if (InputInfo.RightMousePressed)
+            if (Input.RightMousePressed)
             {
-                //var click_pos = InputInfo.MousePos;
-                var pos = ScreenToGridCoordinates(InputInfo.MousePos);
+                //var click_pos = Input.CurMousePos;
+                var pos = ScreenToGridCoordinates(Input.CurMousePos);
                 vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
                 pos -= shift;
 

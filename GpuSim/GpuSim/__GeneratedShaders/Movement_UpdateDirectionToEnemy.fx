@@ -88,6 +88,15 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
+void GpuSim__SimShader__TurnLeft(inout float4 u)
+{
+    u.r += 0.003921569;
+    if (u.r > 0.01568628 + .001)
+    {
+        u.r = 0.003921569;
+    }
+}
+
 float GpuSim__SimShader__unpack_coord(float2 packed)
 {
     float coord = 0;
@@ -193,6 +202,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (GpuSim__SimShader__Something(here))
     {
         float4 path = float4(0, 0, 0, 0);
+        if (abs(here.g - 0.003921569) < .001)
+        {
+            GpuSim__SimShader__TurnLeft(here);
+        }
+        __FinalOutput.Color = here;
+        return __FinalOutput;
         float4 data = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
         float4 _value_right = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(1, 0)) * fs_param_PathToOtherTeams_dxdy), _value_up = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, 1)) * fs_param_PathToOtherTeams_dxdy), _value_left = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(-(1), 0)) * fs_param_PathToOtherTeams_dxdy), _value_down = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, -(1))) * fs_param_PathToOtherTeams_dxdy);
         float value_right = 1, value_left = 1, value_up = 1, value_down = 1;

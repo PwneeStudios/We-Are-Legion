@@ -13,8 +13,18 @@ using FragSharpFramework;
 namespace GpuSim
 {
     [Hlsl("float4")]
-    public partial struct unit
+    public partial struct unit : Convertible<vec4, unit>
     {
+        public unit ConvertFrom(vec4 v)
+        {
+            return (unit)v;
+        }
+
+        public vec4 ConvertTo()
+        {
+            return (vec4)this;
+        }
+
         [Hlsl("float4")]
         public unit(float x, float y, float z, float w)
         {
@@ -161,8 +171,18 @@ namespace GpuSim
 namespace GpuSim
 {
     [Hlsl("float4")]
-    public partial struct data
+    public partial struct data : Convertible<vec4, data>
     {
+        public data ConvertFrom(vec4 v)
+        {
+            return (data)v;
+        }
+
+        public vec4 ConvertTo()
+        {
+            return (vec4)this;
+        }
+
         [Hlsl("float4")]
         public data(float x, float y, float z, float w)
         {

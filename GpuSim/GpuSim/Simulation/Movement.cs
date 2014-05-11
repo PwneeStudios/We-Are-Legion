@@ -179,6 +179,12 @@ namespace GpuSim
             {
                 unit path = unit.Nothing;
 
+                if (here.change == Change.Stayed)
+                {
+                    TurnLeft(ref here);
+                }
+                return here;
+
                 // Get info for this unit
                 data data = Data[Here];
 
