@@ -1,3 +1,5 @@
+#define BENCHMARKING_SHADERS
+
 using Microsoft.Xna.Framework.Graphics;
 using FragSharpFramework;
 
@@ -32,6 +34,7 @@ namespace GpuSim
         }
     }
 
+#if BENCHMARKING_SHADERS
     public partial class BenchmarkTest_TextureLookup4x4 : SimShader
     {
         [FragmentShader]
@@ -212,4 +215,5 @@ namespace GpuSim
             return output;
         }
     }
+#endif
 }

@@ -179,12 +179,6 @@ namespace GpuSim
             {
                 unit path = unit.Nothing;
 
-                if (here.change == Change.Stayed)
-                {
-                    TurnLeft(ref here);
-                }
-                return here;
-
                 // Get info for this unit
                 data data = Data[Here];
 
@@ -243,8 +237,10 @@ namespace GpuSim
             unit target = TargetData[Here];
 
             // Unpack packed info
+            vec2 CurPos = vertex.TexCoords * TargetData.Size;
             vec2 Destination = unpack_vec2((vec4)target);
-            float cur_angle = atan(vertex.TexCoords.y - Destination.y * TargetData.DxDy.y, vertex.TexCoords.x - Destination.x * TargetData.DxDy.x);
+
+            float cur_angle = atan(CurPos.y - Destination.y, CurPos.x - Destination.x);
             cur_angle = (cur_angle + 3.14159f) / (2 * 3.14159f);
             float target_angle = data.target_angle;
 
@@ -255,11 +251,29 @@ namespace GpuSim
                 left  = Current[LeftOne],
                 down  = Current[DownOne];
 
-            if (Destination.x > vertex.TexCoords.x * TargetData.Size.x)
+            if (Destination.x > CurPos.x + .75f) dir = Dir.Right;
+            if (Destination.x < CurPos.x - .75f) dir = Dir.Left;
+            if (Destination.y > CurPos.y + .75f) dir = Dir.Up;
+            if (Destination.y < CurPos.y - .75f) dir = Dir.Down;
+
+            // Simple pathing: Go toward the cardinal direction that is furthest away. If something is in your way, go perpendicularly, assuming you also need to go in that direction.
+            vec2 diff = Destination - CurPos;
+            vec2 mag = abs(diff);
+            if ((mag.x > mag.y || diff.y > 0 && Something(up) || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
+            if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up)) dir = Dir.Up;
+            if ((mag.x > mag.y || diff.y > 0 && Something(up) || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left)) dir = Dir.Left;
+            if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down)) dir = Dir.Down;
+
+            // Heading conserving pathing: Tries to maintain the original heading of the unit as it paths toward its destination.
+            /*
+            float grace = 1;
+            if (Destination.x > CurPos.x + 1)
             {
                 dir = Dir.Right;
 
-                if (Destination.y < vertex.TexCoords.y * TargetData.Size.y)
+                if (Something(right) && Destination.x - CurPos.x > 5) grace = -1;
+
+                if (Destination.y < CurPos.y - grace)
                 {
                     if (cur_angle < target_angle || Something(right))
                     {
@@ -269,7 +283,7 @@ namespace GpuSim
                             dir = Dir.Right;
                     }
                 }
-                else
+                else if (Destination.y > CurPos.y + grace)
                 {
                     if (cur_angle > target_angle || Something(right))
                     {
@@ -280,11 +294,13 @@ namespace GpuSim
                     }
                 }
             }
-            else
+            else if (Destination.x < CurPos.x - 1)
             {
                 dir = Dir.Left;
 
-                if (Destination.y < vertex.TexCoords.y * TargetData.Size.y)
+                if (Something(left) && CurPos.x - Destination.x > 5) grace = -1;
+
+                if (Destination.y < CurPos.y - grace)
                 {
                     if (cur_angle > target_angle || Something(left))
                     {
@@ -294,7 +310,7 @@ namespace GpuSim
                             dir = Dir.Left;
                     }
                 }
-                else
+                else if (Destination.y > CurPos.y + grace)
                 {
                     if (cur_angle < target_angle || Something(left))
                     {
@@ -305,9 +321,34 @@ namespace GpuSim
                     }
                 }
             }
+            else
+            {
+                if (Destination.y > CurPos.y + 1)
+                {
+                    dir = Dir.Up;
+                    if (Something(up))
+                    {
+                        if (Destination.x > CurPos.x && !Something(right)) dir = Dir.Right;
+                        if (Destination.x < CurPos.x && !Something(left))  dir = Dir.Left;
+                    }
+                }
+
+                if (Destination.y < CurPos.y - 1)
+                {
+                    dir = Dir.Down;
+                    if (Something(up))
+                    {
+                        if (Destination.x > CurPos.x && !Something(right)) dir = Dir.Right;
+                        if (Destination.x < CurPos.x && !Something(left)) dir = Dir.Left;
+                    }
+                }
+            }
+            */
 
             if (IsValid(dir))
                 here.direction = dir;
+            else
+                here.action = UnitAction.Stopped;
         }
     }
 }

@@ -52,7 +52,7 @@ namespace GpuSim
 	{
 		const bool UnlimitedSpeed = false;
 
-        const bool MouseEnabled = false;
+        const bool MouseEnabled = true;
 
 		vec2 CameraPos = vec2.Zero;
 		float CameraZoom = 30;
@@ -215,13 +215,13 @@ namespace GpuSim
             {
                 //if (true)
                 //if (false)
-                if (rnd.NextDouble() > 0.5f)
+                //if (rnd.NextDouble() > 0.85f)
                 //if (i == w / 2 && j == h / 2)
                 //if (Math.Abs(i - w / 2) < 500)
                 //if (j == h / 2)
                 //if (i % 9 == 0)
                 //if (j % 2 == 0 || i % 2 == 0)
-                //if (j % 2 == 0 && i % 2 == 0)
+                if (j % 20 == 0 && i % 20 == 0)
                 {
                     //int dir = rnd.Next(1, 5);
                     int dir = rnd.Next(1, 5);
@@ -284,7 +284,7 @@ namespace GpuSim
 		protected override void Update(GameTime gameTime)
 		{
 			// Allows the game to exit
-			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            if (Buttons.Back.Down())
 				this.Exit();
 
             Input.Update();
@@ -339,12 +339,8 @@ namespace GpuSim
                 CameraPos += push_dir / CameraZoom * MoveRate_PushEdge;
             }
 
-            // Move the camera via: Keyboard
-            var dir = vec2.Zero;
-            if (Keys.Up   .Pressed() || Keys.W.Pressed()) dir.y =  1;
-            if (Keys.Down .Pressed() || Keys.S.Pressed()) dir.y = -1;
-            if (Keys.Right.Pressed() || Keys.D.Pressed()) dir.x =  1;
-            if (Keys.Left .Pressed() || Keys.A.Pressed()) dir.x = -1;
+            // Move the camera via: Keyboard or Gamepad
+            var dir = Input.Direction();
 
             float MoveRate_Keyboard = .07f;
             CameraPos += dir / CameraZoom * MoveRate_Keyboard;
@@ -600,8 +596,10 @@ namespace GpuSim
                 if (Selected_Size.y < 1) Selected_Size.y = 1;
                 
                 float SquareWidth     = (float)Math.Sqrt(SelectedCount);
-                vec2 Destination_Size = new vec2(SquareWidth, SquareWidth)    * 1.25f;
-                vec2 Destination_BL   = pos - Destination_Size / 2;
+                vec2 Destination_Size = new vec2(SquareWidth, SquareWidth) * 1.25f;
+                vec2 Destination_BL = pos - Destination_Size / 2;
+                //vec2 Destination_Size = vec2.Zero;
+                //vec2 Destination_BL = pos;
 
                 ActionAttackSquare.Apply(Current, TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: Temp1);
                 //ActionAttackPoint .Apply(Current, TargetData, pos, Output: Temp1);

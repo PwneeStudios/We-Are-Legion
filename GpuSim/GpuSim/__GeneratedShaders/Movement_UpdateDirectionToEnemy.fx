@@ -88,15 +88,6 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
-void GpuSim__SimShader__TurnLeft(inout float4 u)
-{
-    u.r += 0.003921569;
-    if (u.r > 0.01568628 + .001)
-    {
-        u.r = 0.003921569;
-    }
-}
-
 float GpuSim__SimShader__unpack_coord(float2 packed)
 {
     float coord = 0;
@@ -121,66 +112,53 @@ void GpuSim__Movement_UpdateDirectionToEnemy__NaivePathfind(VertexToPixel psin, 
 {
     float dir = 0;
     float4 target = tex2D(TargetData, psin.TexCoords + (float2(0, 0)) * TargetData_dxdy);
+    float2 CurPos = vertex.TexCoords * TargetData_size;
     float2 Destination = GpuSim__SimShader__unpack_vec2(target);
-    float cur_angle = atan2(vertex.TexCoords.y - Destination.y * TargetData_dxdy.y, vertex.TexCoords.x - Destination.x * TargetData_dxdy.x);
+    float cur_angle = atan2(CurPos.y - Destination.y, CurPos.x - Destination.x);
     cur_angle = (cur_angle + 3.14159) / (2 * 3.14159);
     float target_angle = data.a;
     float4 right = tex2D(Current, psin.TexCoords + (float2(1, 0)) * Current_dxdy), up = tex2D(Current, psin.TexCoords + (float2(0, 1)) * Current_dxdy), left = tex2D(Current, psin.TexCoords + (float2(-(1), 0)) * Current_dxdy), down = tex2D(Current, psin.TexCoords + (float2(0, -(1))) * Current_dxdy);
-    if (Destination.x > vertex.TexCoords.x * TargetData_size.x + .001)
+    if (Destination.x > CurPos.x + 0.75 + .001)
     {
         dir = 0.003921569;
-        if (Destination.y < vertex.TexCoords.y * TargetData_size.y - .001)
-        {
-            if (cur_angle < target_angle - .001 || GpuSim__SimShader__Something(right))
-            {
-                dir = 0.01568628;
-                if (GpuSim__SimShader__Something(down))
-                {
-                    dir = 0.003921569;
-                }
-            }
-        }
-        else
-        {
-            if (cur_angle > target_angle + .001 || GpuSim__SimShader__Something(right))
-            {
-                dir = 0.007843138;
-                if (GpuSim__SimShader__Something(up))
-                {
-                    dir = 0.003921569;
-                }
-            }
-        }
     }
-    else
+    if (Destination.x < CurPos.x - 0.75 - .001)
     {
         dir = 0.01176471;
-        if (Destination.y < vertex.TexCoords.y * TargetData_size.y - .001)
-        {
-            if (cur_angle > target_angle + .001 || GpuSim__SimShader__Something(left))
-            {
-                dir = 0.01568628;
-                if (GpuSim__SimShader__Something(down))
-                {
-                    dir = 0.01176471;
-                }
-            }
-        }
-        else
-        {
-            if (cur_angle < target_angle - .001 || GpuSim__SimShader__Something(left))
-            {
-                dir = 0.007843138;
-                if (GpuSim__SimShader__Something(up))
-                {
-                    dir = 0.01176471;
-                }
-            }
-        }
+    }
+    if (Destination.y > CurPos.y + 0.75 + .001)
+    {
+        dir = 0.007843138;
+    }
+    if (Destination.y < CurPos.y - 0.75 - .001)
+    {
+        dir = 0.01568628;
+    }
+    float2 diff = Destination - CurPos;
+    float2 mag = abs(diff);
+    if ((mag.x > mag.y + .001 || diff.y > 0 + .001 && GpuSim__SimShader__Something(up) || diff.y < 0 - .001 && GpuSim__SimShader__Something(down)) && Destination.x > CurPos.x + 1 + .001 && !(GpuSim__SimShader__Something(right)))
+    {
+        dir = 0.003921569;
+    }
+    if ((mag.y > mag.x + .001 || diff.x > 0 + .001 && GpuSim__SimShader__Something(right) || diff.x < 0 - .001 && GpuSim__SimShader__Something(left)) && Destination.y > CurPos.y + 1 + .001 && !(GpuSim__SimShader__Something(up)))
+    {
+        dir = 0.007843138;
+    }
+    if ((mag.x > mag.y + .001 || diff.y > 0 + .001 && GpuSim__SimShader__Something(up) || diff.y < 0 - .001 && GpuSim__SimShader__Something(down)) && Destination.x < CurPos.x - 1 - .001 && !(GpuSim__SimShader__Something(left)))
+    {
+        dir = 0.01176471;
+    }
+    if ((mag.y > mag.x + .001 || diff.x > 0 + .001 && GpuSim__SimShader__Something(right) || diff.x < 0 - .001 && GpuSim__SimShader__Something(left)) && Destination.y < CurPos.y - 1 - .001 && !(GpuSim__SimShader__Something(down)))
+    {
+        dir = 0.01568628;
     }
     if (GpuSim__SimShader__IsValid(dir))
     {
         here.r = dir;
+    }
+    else
+    {
+        here.a = 0.0;
     }
 }
 
@@ -202,12 +180,6 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (GpuSim__SimShader__Something(here))
     {
         float4 path = float4(0, 0, 0, 0);
-        if (abs(here.g - 0.003921569) < .001)
-        {
-            GpuSim__SimShader__TurnLeft(here);
-        }
-        __FinalOutput.Color = here;
-        return __FinalOutput;
         float4 data = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
         float4 _value_right = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(1, 0)) * fs_param_PathToOtherTeams_dxdy), _value_up = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, 1)) * fs_param_PathToOtherTeams_dxdy), _value_left = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(-(1), 0)) * fs_param_PathToOtherTeams_dxdy), _value_down = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, -(1))) * fs_param_PathToOtherTeams_dxdy);
         float value_right = 1, value_left = 1, value_up = 1, value_down = 1;
