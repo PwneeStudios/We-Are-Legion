@@ -5,12 +5,12 @@ namespace GpuSim
     public partial class DrawPrecomputation_Cur : SimShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Previous)
+        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous)
         {
             color output = color.TransparentBlack;
 
-            unit cur = Current[Here];
-	        unit pre = Previous[Here];
+            data cur = Current[Here];
+	        data pre = Previous[Here];
 
             float selected_offset = selected(cur) ? _4 : _0;
 
@@ -48,12 +48,12 @@ namespace GpuSim
     public partial class DrawPrecomputation_Pre : SimShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Previous)
+        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous)
         {
             color output = color.TransparentBlack;
 
-            unit cur = Current[Here];
-            unit pre = Previous[Here];
+            data cur = Current[Here];
+            data pre = Previous[Here];
 
             float selected_offset = selected(pre) ? _4 : _0;
 

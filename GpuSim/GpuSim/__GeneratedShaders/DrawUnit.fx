@@ -128,7 +128,7 @@ float4 GpuSim__DrawUnit__Sprite(VertexToPixel psin, float4 u, float4 d, float2 p
         return float4(0.0, 0.0, 0.0, 0.0);
     }
     float selected_offset = GpuSim__SimShader__selected(u) ? 4 : 0;
-    pos.x += ((int)(floor(frame)) % 5);
+    pos.x += floor(frame);
     pos.y += (floor(anim * 255 + 0.5) - 1 + selected_offset);
     pos *= float2(1.0 / 10.0, 1.0 / 8.0);
     float4 clr = tex2D(Texture, pos);
@@ -209,20 +209,22 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             pre = cur;
         }
-        output += GpuSim__DrawUnit__Sprite(psin, pre, pre_data, subcell_pos, pre.r, 0, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+        float frame = cur_data.a > 0 + .001 ? fs_param_s * 5 + 5 : 0;
+        output += GpuSim__DrawUnit__Sprite(psin, pre, pre_data, subcell_pos, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
     else
     {
+        float frame = fs_param_s * 5;
         if (GpuSim__SimShader__IsValid(cur.r))
         {
             float prior_dir = GpuSim__SimShader__prior_direction(cur);
             float2 offset = (1 - fs_param_s) * GpuSim__SimShader__direction_to_vec(prior_dir);
-            output += GpuSim__DrawUnit__Sprite(psin, cur, cur_data, subcell_pos + offset, prior_dir, fs_param_s * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+            output += GpuSim__DrawUnit__Sprite(psin, cur, cur_data, subcell_pos + offset, prior_dir, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
         if (GpuSim__SimShader__IsValid(pre.r) && output.a < 0.025 - .001)
         {
             float2 offset = -(fs_param_s) * GpuSim__SimShader__direction_to_vec(pre.r);
-            output += GpuSim__DrawUnit__Sprite(psin, pre, pre_data, subcell_pos + offset, pre.r, fs_param_s * 5, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+            output += GpuSim__DrawUnit__Sprite(psin, pre, pre_data, subcell_pos + offset, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
     }
     __FinalOutput.Color = output;

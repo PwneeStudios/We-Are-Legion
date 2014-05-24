@@ -5,9 +5,9 @@ namespace GpuSim
     public partial class ActionAttackSquare : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size)
+        vec4 FragmentShader(VertexOut vertex, Field<data> Current, Field<data> TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size)
         {
-            unit here = Current[Here];
+            data here = Current[Here];
             vec4 target = vec4.Zero;
 
             if (selected(here))
@@ -31,9 +31,9 @@ namespace GpuSim
     public partial class ActionAttackPoint : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> TargetData, vec2 Destination)
+        vec4 FragmentShader(VertexOut vertex, Field<data> Current, Field<data> TargetData, vec2 Destination)
         {
-            unit here  = Current[Here];
+            data here  = Current[Here];
             vec4 target = vec4.Zero;
 
             if (selected(here))
@@ -54,28 +54,28 @@ namespace GpuSim
     public partial class ActionAttack2 : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<unit> Current, Field<data> Data, vec2 Destination)
+        extra FragmentShader(VertexOut vertex, Field<data> Data, Field<extra> Extra, vec2 Destination)
         {
-            unit here = Current[Here];
-            data data = Data[Here];
+            data  here       = Data[Here];
+            extra extra_here = Extra[Here];
 
             if (selected(here))
             {
-                float angle = atan(vertex.TexCoords.y - Destination.y * Current.DxDy.y, vertex.TexCoords.x - Destination.x * Current.DxDy.x);
-                data.a = (angle + 3.14159f) / (2 * 3.14159f);
+                float angle = atan(vertex.TexCoords.y - Destination.y * Data.DxDy.y, vertex.TexCoords.x - Destination.x * Data.DxDy.x);
+                extra_here.target_angle = (angle + 3.14159f) / (2 * 3.14159f);
             }
 
-            return data;
+            return extra_here;
         }
     }
 
     public partial class ActionSpawn_Unit : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Select)
+        data FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Select)
         {
-            unit here = Current[Here];
-            unit select = Select[Here];
+            data here = Current[Here];
+            data select = Select[Here];
 
             if (Something(select))
             {
@@ -93,10 +93,10 @@ namespace GpuSim
     public partial class ActionSpawn_Extra : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<data> CurData, Field<unit> Select, float player, float team)
+        unit FragmentShader(VertexOut vertex, Field<unit> CurData, Field<data> Select, float player, float team)
         {
-            data data = CurData[Here];
-            unit select = Select[Here];
+            unit data = CurData[Here];
+            data select = Select[Here];
 
             if (Something(select))
             {
@@ -115,32 +115,30 @@ namespace GpuSim
     public partial class ActionSelect : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> Current, Field<data> CurData, Field<data> Select, bool Deselect, float action)
+        data FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, Field<unit> Select, bool Deselect, float action)
         {
-            unit here = Current[Here];
-            data data_here = CurData[Here];
-            data select = Select[Here];
+            data data_here = Data[Here];
+            unit unit_here = Unit[Here];
+
+            unit select = Select[Here];
 
             // If the player unit here matches the 
-            if (select.type > 0 && data_here.player == select.player)
-            //if (select.type > 0 && data_here.player == Player.One)
-            //if (select.type > 0 && data_here.player > _1 * .9  && select.player > _1 * .9
-            //                    && data_here.player < _1 * 1.1 && select.player < _1 * 1.1)
+            if (select.type > 0 && unit_here.player == select.player)
             {
-                set_selected(ref here, true);
+                set_selected(ref data_here, true);
             }
             else
             {
                 if (Deselect)
-                    set_selected(ref here, false);
+                    set_selected(ref data_here, false);
             }
 
-            if (Something(here) && selected(here) && action < UnitAction.NoChange)
+            if (Something(data_here) && selected(data_here) && action < UnitAction.NoChange)
             {
-                here.action = action;
+                data_here.action = action;
             }
 
-            return here;
+            return data_here;
         }
     }
 
@@ -149,7 +147,7 @@ namespace GpuSim
         [FragmentShader]
         color FragmentShader(VertexOut vertex, Sampler data_texture, float player)
         {
-            data d = data.Nothing;
+            unit d = unit.Nothing;
 
             if (data_texture[Here].a > 0)
             {

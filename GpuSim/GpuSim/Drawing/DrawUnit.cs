@@ -4,7 +4,7 @@ namespace GpuSim
 {
     public partial class DrawUnitZoomedOut : DrawUnit
     {
-        color Presence(unit data)
+        color Presence(data data)
         {
             return Something(data) ?
                 (selected(data) ? rgb(0x54c96b) : rgb(0x917c82)) :
@@ -12,11 +12,11 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Previous, Sampler Texture, float PercentSimStepComplete)
+        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous, Sampler Texture, float PercentSimStepComplete)
         {
             color output = color.TransparentBlack;
 
-            unit
+            data
                 right = Current[RightOne],
                 up    = Current[UpOne],
                 left  = Current[LeftOne],
@@ -43,14 +43,14 @@ namespace GpuSim
                 return rgba(0, 0, 0, 0);
         }
 
-        protected color Sprite(unit u, data d, vec2 pos, float anim, float frame, Sampler Texture)
+        protected color Sprite(data u, unit d, vec2 pos, float anim, float frame, Sampler Texture)
         {
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
             float selected_offset = selected(u) ? 4 : 0;
 
-            pos.x += ((int)(floor(frame)) % 5);
+            pos.x += floor(frame);
             pos.y += (floor(anim * 255 + .5f) - 1 + selected_offset);
             pos *= SpriteSize;
 
@@ -87,15 +87,15 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Previous, Field<data> CurData, Field<data> PrevData, Sampler Texture, float s)
+        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous, Field<unit> CurData, Field<unit> PrevData, Sampler Texture, float s)
         {
             color output = color.TransparentBlack;
 
-            unit
+            data
                 cur = Current[Here],
 	            pre = Previous[Here];
             
-            data
+            unit
                 cur_data  = CurData[Here],
                 pre_data = PrevData[Here];
 
@@ -105,22 +105,25 @@ namespace GpuSim
 	        {
 		        if (s > .5) pre = cur;
 
-                output += Sprite(pre, pre_data, subcell_pos, pre.direction, 0, Texture);
+                float frame = cur_data.anim > 0 ? s * 5 + 5 : 0;
+                output += Sprite(pre, pre_data, subcell_pos, pre.direction, frame, Texture);
 	        }
             else
             {
+                float frame = s * 5;
+
                 if (IsValid(cur.direction))
                 {
                     var prior_dir = prior_direction(cur);
 
                     vec2 offset = (1 - s) * direction_to_vec(prior_dir);
-                    output += Sprite(cur, cur_data, subcell_pos + offset, prior_dir, s * 5, Texture);
+                    output += Sprite(cur, cur_data, subcell_pos + offset, prior_dir, frame, Texture);
                 }
 
                 if (IsValid(pre.direction) && output.a < .025f)
                 {
                     vec2 offset = -s * direction_to_vec(pre.direction);
-                    output += Sprite(pre, pre_data, subcell_pos + offset, pre.direction, s * 5, Texture);
+                    output += Sprite(pre, pre_data, subcell_pos + offset, pre.direction, frame, Texture);
                 }
             }
 
@@ -145,11 +148,11 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Previous, Sampler Texture, float s)
+        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous, Sampler Texture, float s)
         {
             color output = color.TransparentBlack;
 
-            unit
+            data
                 right = Current[RightOne],
                 up = Current[UpOne],
                 left = Current[LeftOne],

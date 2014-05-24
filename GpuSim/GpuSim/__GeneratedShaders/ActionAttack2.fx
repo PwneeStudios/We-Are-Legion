@@ -22,14 +22,14 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Current, using register location 1
-float2 fs_param_Current_size;
-float2 fs_param_Current_dxdy;
+// Texture Sampler for fs_param_Data, using register location 1
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
 
-Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s1) = sampler_state
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s1) = sampler_state
 {
-    texture   = <fs_param_Current_Texture>;
+    texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -37,14 +37,14 @@ sampler fs_param_Current : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Data, using register location 2
-float2 fs_param_Data_size;
-float2 fs_param_Data_dxdy;
+// Texture Sampler for fs_param_Extra, using register location 2
+float2 fs_param_Extra_size;
+float2 fs_param_Extra_dxdy;
 
-Texture fs_param_Data_Texture;
-sampler fs_param_Data : register(s2) = sampler_state
+Texture fs_param_Extra_Texture;
+sampler fs_param_Extra : register(s2) = sampler_state
 {
-    texture   = <fs_param_Data_Texture>;
+    texture   = <fs_param_Extra_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -75,14 +75,14 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    float4 data = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float4 here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float4 extra_here = tex2D(fs_param_Extra, psin.TexCoords + (float2(0, 0)) * fs_param_Extra_dxdy);
     if (GpuSim__SimShader__selected(here))
     {
-        float angle = atan2(psin.TexCoords.y - fs_param_Destination.y * fs_param_Current_dxdy.y, psin.TexCoords.x - fs_param_Destination.x * fs_param_Current_dxdy.x);
-        data.a = (angle + 3.14159) / (2 * 3.14159);
+        float angle = atan2(psin.TexCoords.y - fs_param_Destination.y * fs_param_Data_dxdy.y, psin.TexCoords.x - fs_param_Destination.x * fs_param_Data_dxdy.x);
+        extra_here.a = (angle + 3.14159) / (2 * 3.14159);
     }
-    __FinalOutput.Color = data;
+    __FinalOutput.Color = extra_here;
     return __FinalOutput;
 }
 

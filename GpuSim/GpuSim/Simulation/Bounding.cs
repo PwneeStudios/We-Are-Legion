@@ -5,15 +5,15 @@ namespace GpuSim
     public partial class Bounding : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<unit> Units)
+        vec4 FragmentShader(VertexOut vertex, Field<data> Units)
         {
             vec2 uv = vertex.TexCoords;
 
-            unit
-                TL = (unit)Units[Here],
-                TR = (unit)Units[RightOne],
-                BL = (unit)Units[UpOne],
-                BR = (unit)Units[UpRight];
+            data
+                TL = (data)Units[Here],
+                TR = (data)Units[RightOne],
+                BL = (data)Units[UpOne],
+                BR = (data)Units[UpRight];
 
             if (SomethingSelected(TL) || SomethingSelected(TR) || SomethingSelected(BL) || SomethingSelected(BR))
                 return vec(uv.x, uv.y, uv.x, uv.y);
@@ -25,7 +25,7 @@ namespace GpuSim
     public partial class _Bounding : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<unit> PreviousLevel)
+        vec4 FragmentShader(VertexOut vertex, Field<data> PreviousLevel)
         {
             vec4
                 TL = (vec4)PreviousLevel[Here],

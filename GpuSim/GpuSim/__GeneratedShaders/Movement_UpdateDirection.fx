@@ -52,12 +52,27 @@ sampler fs_param_Data : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Current, using register location 3
+// Texture Sampler for fs_param_Extra, using register location 3
+float2 fs_param_Extra_size;
+float2 fs_param_Extra_dxdy;
+
+Texture fs_param_Extra_Texture;
+sampler fs_param_Extra : register(s3) = sampler_state
+{
+    texture   = <fs_param_Extra_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_Current, using register location 4
 float2 fs_param_Current_size;
 float2 fs_param_Current_dxdy;
 
 Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s3) = sampler_state
+sampler fs_param_Current : register(s4) = sampler_state
 {
     texture   = <fs_param_Current_Texture>;
     MipFilter = Point;
@@ -67,12 +82,12 @@ sampler fs_param_Current : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Paths_Right, using register location 4
+// Texture Sampler for fs_param_Paths_Right, using register location 5
 float2 fs_param_Paths_Right_size;
 float2 fs_param_Paths_Right_dxdy;
 
 Texture fs_param_Paths_Right_Texture;
-sampler fs_param_Paths_Right : register(s4) = sampler_state
+sampler fs_param_Paths_Right : register(s5) = sampler_state
 {
     texture   = <fs_param_Paths_Right_Texture>;
     MipFilter = Point;
@@ -82,12 +97,12 @@ sampler fs_param_Paths_Right : register(s4) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Paths_Left, using register location 5
+// Texture Sampler for fs_param_Paths_Left, using register location 6
 float2 fs_param_Paths_Left_size;
 float2 fs_param_Paths_Left_dxdy;
 
 Texture fs_param_Paths_Left_Texture;
-sampler fs_param_Paths_Left : register(s5) = sampler_state
+sampler fs_param_Paths_Left : register(s6) = sampler_state
 {
     texture   = <fs_param_Paths_Left_Texture>;
     MipFilter = Point;
@@ -97,12 +112,12 @@ sampler fs_param_Paths_Left : register(s5) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Paths_Up, using register location 6
+// Texture Sampler for fs_param_Paths_Up, using register location 7
 float2 fs_param_Paths_Up_size;
 float2 fs_param_Paths_Up_dxdy;
 
 Texture fs_param_Paths_Up_Texture;
-sampler fs_param_Paths_Up : register(s6) = sampler_state
+sampler fs_param_Paths_Up : register(s7) = sampler_state
 {
     texture   = <fs_param_Paths_Up_Texture>;
     MipFilter = Point;
@@ -112,12 +127,12 @@ sampler fs_param_Paths_Up : register(s6) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Paths_Down, using register location 7
+// Texture Sampler for fs_param_Paths_Down, using register location 8
 float2 fs_param_Paths_Down_size;
 float2 fs_param_Paths_Down_dxdy;
 
 Texture fs_param_Paths_Down_Texture;
-sampler fs_param_Paths_Down : register(s7) = sampler_state
+sampler fs_param_Paths_Down : register(s8) = sampler_state
 {
     texture   = <fs_param_Paths_Down_Texture>;
     MipFilter = Point;
@@ -168,17 +183,18 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
+    float4 extra_here = tex2D(fs_param_Extra, psin.TexCoords + (float2(0, 0)) * fs_param_Extra_dxdy);
     if (GpuSim__SimShader__Something(here))
     {
         float4 path = float4(0, 0, 0, 0);
         float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy);
         float4 right_path = tex2D(fs_param_Paths_Right, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_Right_dxdy), up_path = tex2D(fs_param_Paths_Up, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_Up_dxdy), left_path = tex2D(fs_param_Paths_Left, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_Left_dxdy), down_path = tex2D(fs_param_Paths_Down, psin.TexCoords + (float2(0, 0)) * fs_param_Paths_Down_dxdy);
         float4 target = tex2D(fs_param_TargetData, psin.TexCoords + (float2(0, 0)) * fs_param_TargetData_dxdy);
-        float4 data = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+        float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
         float2 Destination = GpuSim__SimShader__unpack_vec2(target);
         float cur_angle = atan2(psin.TexCoords.y - Destination.y * fs_param_TargetData_dxdy.y, psin.TexCoords.x - Destination.x * fs_param_TargetData_dxdy.x);
         cur_angle = (cur_angle + 3.14159) / (2 * 3.14159);
-        float target_angle = data.a;
+        float target_angle = extra_here.a;
         if (Destination.x > psin.TexCoords.x * fs_param_TargetData_size.x + .001)
         {
             path = right_path;

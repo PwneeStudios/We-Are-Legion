@@ -37,12 +37,42 @@ sampler fs_param_TargetData : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Data, using register location 2
+// Texture Sampler for fs_param_Unit, using register location 2
+float2 fs_param_Unit_size;
+float2 fs_param_Unit_dxdy;
+
+Texture fs_param_Unit_Texture;
+sampler fs_param_Unit : register(s2) = sampler_state
+{
+    texture   = <fs_param_Unit_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_Extra, using register location 3
+float2 fs_param_Extra_size;
+float2 fs_param_Extra_dxdy;
+
+Texture fs_param_Extra_Texture;
+sampler fs_param_Extra : register(s3) = sampler_state
+{
+    texture   = <fs_param_Extra_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_Data, using register location 4
 float2 fs_param_Data_size;
 float2 fs_param_Data_dxdy;
 
 Texture fs_param_Data_Texture;
-sampler fs_param_Data : register(s2) = sampler_state
+sampler fs_param_Data : register(s4) = sampler_state
 {
     texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
@@ -52,27 +82,12 @@ sampler fs_param_Data : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Current, using register location 3
-float2 fs_param_Current_size;
-float2 fs_param_Current_dxdy;
-
-Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s3) = sampler_state
-{
-    texture   = <fs_param_Current_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-// Texture Sampler for fs_param_PathToOtherTeams, using register location 4
+// Texture Sampler for fs_param_PathToOtherTeams, using register location 5
 float2 fs_param_PathToOtherTeams_size;
 float2 fs_param_PathToOtherTeams_dxdy;
 
 Texture fs_param_PathToOtherTeams_Texture;
-sampler fs_param_PathToOtherTeams : register(s4) = sampler_state
+sampler fs_param_PathToOtherTeams : register(s5) = sampler_state
 {
     texture   = <fs_param_PathToOtherTeams_Texture>;
     MipFilter = Point;
@@ -108,15 +123,12 @@ bool GpuSim__SimShader__IsValid(float direction)
     return direction > 0 + .001;
 }
 
-void GpuSim__Movement_UpdateDirectionToEnemy__NaivePathfind(VertexToPixel psin, VertexToPixel vertex, sampler Current, float2 Current_size, float2 Current_dxdy, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, float4 data, inout float4 here)
+void GpuSim__Movement_UpdateDirectionToEnemy__NaivePathfind(VertexToPixel psin, VertexToPixel vertex, sampler Current, float2 Current_size, float2 Current_dxdy, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, float4 data, inout float4 here, inout float4 extra_here)
 {
     float dir = 0;
     float4 target = tex2D(TargetData, psin.TexCoords + (float2(0, 0)) * TargetData_dxdy);
     float2 CurPos = vertex.TexCoords * TargetData_size;
     float2 Destination = GpuSim__SimShader__unpack_vec2(target);
-    float cur_angle = atan2(CurPos.y - Destination.y, CurPos.x - Destination.x);
-    cur_angle = (cur_angle + 3.14159) / (2 * 3.14159);
-    float target_angle = data.a;
     float4 right = tex2D(Current, psin.TexCoords + (float2(1, 0)) * Current_dxdy), up = tex2D(Current, psin.TexCoords + (float2(0, 1)) * Current_dxdy), left = tex2D(Current, psin.TexCoords + (float2(-(1), 0)) * Current_dxdy), down = tex2D(Current, psin.TexCoords + (float2(0, -(1))) * Current_dxdy);
     if (Destination.x > CurPos.x + 0.75 + .001)
     {
@@ -176,14 +188,15 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    if (GpuSim__SimShader__Something(here))
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    if (GpuSim__SimShader__Something(data_here))
     {
         float4 path = float4(0, 0, 0, 0);
-        float4 data = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+        float4 here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
+        float4 extra_here = tex2D(fs_param_Extra, psin.TexCoords + (float2(0, 0)) * fs_param_Extra_dxdy);
         float4 _value_right = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(1, 0)) * fs_param_PathToOtherTeams_dxdy), _value_up = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, 1)) * fs_param_PathToOtherTeams_dxdy), _value_left = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(-(1), 0)) * fs_param_PathToOtherTeams_dxdy), _value_down = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, -(1))) * fs_param_PathToOtherTeams_dxdy);
         float value_right = 1, value_left = 1, value_up = 1, value_down = 1;
-        if (abs(data.b - 0.003921569) < .001)
+        if (abs(here.b - 0.003921569) < .001)
         {
             value_right = _value_right.x;
             value_left = _value_left.x;
@@ -192,7 +205,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         else
         {
-            if (abs(data.b - 0.007843138) < .001)
+            if (abs(here.b - 0.007843138) < .001)
             {
                 value_right = _value_right.y;
                 value_left = _value_left.y;
@@ -202,40 +215,40 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         float auto_attack_cutoff = 0.01568628;
         float min = 256;
-        float hold_dir = here.r;
-        if (abs(here.a - 0.007843138) < .001)
+        float hold_dir = data_here.r;
+        if (abs(data_here.a - 0.007843138) < .001)
         {
             if (value_right < min - .001)
             {
-                here.r = 0.003921569;
+                data_here.r = 0.003921569;
                 min = value_right;
             }
             if (value_up < min - .001)
             {
-                here.r = 0.007843138;
+                data_here.r = 0.007843138;
                 min = value_up;
             }
             if (value_left < min - .001)
             {
-                here.r = 0.01176471;
+                data_here.r = 0.01176471;
                 min = value_left;
             }
             if (value_down < min - .001)
             {
-                here.r = 0.01568628;
+                data_here.r = 0.01568628;
                 min = value_down;
             }
         }
         if (min > auto_attack_cutoff + .001)
         {
-            here.r = hold_dir;
+            data_here.r = hold_dir;
         }
-        if (min > auto_attack_cutoff + .001 && abs(here.a - 0.007843138) < .001 || abs(here.a - 0.003921569) < .001)
+        if (min > auto_attack_cutoff + .001 && abs(data_here.a - 0.007843138) < .001 || abs(data_here.a - 0.003921569) < .001)
         {
-            GpuSim__Movement_UpdateDirectionToEnemy__NaivePathfind(psin, psin, fs_param_Current, fs_param_Current_size, fs_param_Current_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, data, here);
+            GpuSim__Movement_UpdateDirectionToEnemy__NaivePathfind(psin, psin, fs_param_Data, fs_param_Data_size, fs_param_Data_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, here, data_here, extra_here);
         }
     }
-    __FinalOutput.Color = here;
+    __FinalOutput.Color = data_here;
     return __FinalOutput;
 }
 

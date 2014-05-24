@@ -6,6 +6,22 @@ namespace GpuSim
     public partial struct unit
     {
         [Hlsl("r")]
+        public float type { get { return r; } set { r = value; } }
+
+        [Hlsl("g")]
+        public float player { get { return g; } set { g = value; } }
+
+        [Hlsl("b")]
+        public float team { get { return b; } set { b = value; } }
+
+        [Hlsl("a")]
+        public float anim { get { return a; } set { a = value; } }
+    }
+
+    [Copy(typeof(vec4))]
+    public partial struct data
+    {
+        [Hlsl("r")]
         public float direction { get { return r; } set { r = value; } }
 
         [Hlsl("g")]
@@ -19,17 +35,8 @@ namespace GpuSim
     }
 
     [Copy(typeof(vec4))]
-    public partial struct data
+    public partial struct extra
     {
-        [Hlsl("r")]
-        public float type { get { return r; } set { r = value; } }
-
-        [Hlsl("g")]
-        public float player { get { return g; } set { g = value; } }
-
-        [Hlsl("b")]
-        public float team { get { return b; } set { b = value; } }
-
         [Hlsl("a")]
         public float target_angle { get { return a; } set { a = value; } }
     }
@@ -38,24 +45,24 @@ namespace GpuSim
     {
         protected readonly vec2 SpriteSize = vec(1.0f / 10.0f, 1.0f / 8.0f);
 
-        protected static bool selected(unit u)
+        protected static bool selected(data u)
         {
             float val = u.prior_direction_and_select;
             return val >= Dir.Count;
         }
 
-        protected static void set_selected(ref unit u, bool selected)
+        protected static void set_selected(ref data u, bool selected)
         {
             u.prior_direction_and_select = prior_direction(u) + (selected ? Dir.Count : _0);
         }
 
-        protected static float prior_direction(unit u)
+        protected static float prior_direction(data u)
         {
             float val = u.prior_direction_and_select;
             return val % Dir.Count;
         }
 
-        protected static void set_prior_direction(ref unit u, float dir)
+        protected static void set_prior_direction(ref data u, float dir)
         {
             u.prior_direction_and_select = dir + (selected(u) ? Dir.Count : _0);
         }
@@ -127,12 +134,12 @@ namespace GpuSim
                 NoChange = _12;
         }
 
-        protected static bool SomethingSelected(unit u)
+        protected static bool SomethingSelected(data u)
         {
             return Something(u) && selected(u);
         }
 
-        protected static bool Something(unit u)
+        protected static bool Something(data u)
         {
             return u.direction > 0;
         }
@@ -142,21 +149,21 @@ namespace GpuSim
             return direction > 0;
         }
 
-        protected static void TurnLeft(ref unit u)
+        protected static void TurnLeft(ref data u)
         {
             u.direction += Dir.TurnLeft;
             if (u.direction > Dir.Down)
                 u.direction = Dir.Right;
         }
 
-        protected static void TurnRight(ref unit u)
+        protected static void TurnRight(ref data u)
         {
             u.direction += Dir.TurnRight;
             if (u.direction < Dir.Right)
                 u.direction = Dir.Down;
         }
 
-        protected static void TurnAround(ref unit u)
+        protected static void TurnAround(ref data u)
         {
             u.direction += 2 * Dir.TurnLeft;
             if (u.direction > Dir.Down)

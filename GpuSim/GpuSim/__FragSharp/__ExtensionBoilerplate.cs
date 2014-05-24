@@ -326,3 +326,161 @@ namespace GpuSim
     }
 }
 
+namespace GpuSim
+{
+    [Hlsl("float4")]
+    public partial struct extra : Convertible<vec4, extra>
+    {
+        public extra ConvertFrom(vec4 v)
+        {
+            return (extra)v;
+        }
+
+        public vec4 ConvertTo()
+        {
+            return (vec4)this;
+        }
+
+        [Hlsl("float4")]
+        public extra(float x, float y, float z, float w)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+        }
+
+        [Hlsl("x")]
+        public float x;
+
+        [Hlsl("y")]
+        public float y;
+
+        [Hlsl("z")]
+        public float z;
+
+        [Hlsl("w")]
+        public float w;
+
+        [Hlsl("xy")]
+        public vec2 xy { get { return new vec2(x, y); } set { x = value.x; y = value.y; } }
+
+        [Hlsl("zw")]
+        public vec2 zw { get { return new vec2(z, w); } set { z = value.x; w = value.y; } }
+
+        [Hlsl("xyz")]
+        public vec3 xyz { get { return new vec3(x, y, z); } set { x = value.x; y = value.y; z = value.z; } }
+
+        [Hlsl("r")]
+        public float r { get { return x; } set { x = value; } }
+
+        [Hlsl("g")]
+        public float g { get { return y; } set { y = value; } }
+
+        [Hlsl("b")]
+        public float b { get { return z; } set { z = value; } }
+
+        [Hlsl("a")]
+        public float a { get { return w; } set { w = value; } }
+
+        [Hlsl("rgb")]
+        public vec3 rgb { get { return xyz; } set { xyz = value; } }
+
+        [Hlsl("rg")]
+        public vec2 rg { get { return xy; } set { xy = value; } }
+
+        [Hlsl("ba")]
+        public vec2 ba { get { return zw; } set { zw = value; } }
+
+
+        public static extra operator *(float a, extra v)
+        {
+            return new extra(a * v.x, a * v.y, a * v.z, a * v.w);
+        }
+
+        public static extra operator *(extra v, float a)
+        {
+            return new extra(a * v.x, a * v.y, a * v.z, a * v.w);
+        }
+
+        public static extra operator /(float a, extra v)
+        {
+            return new extra(a / v.x, a / v.y, a / v.z, a / v.w);
+        }
+
+        public static extra operator /(extra v, float a)
+        {
+            return new extra(v.x / a, v.y / a, v.z / a, v.w / a);
+        }
+
+        public static extra operator +(extra v, extra w)
+        {
+            return new extra(v.x + w.x, v.y + w.y, v.z + w.z, v.w + w.w);
+        }
+
+        public static extra operator -(extra v, extra w)
+        {
+            return new extra(v.x - w.x, v.y - w.y, v.z - w.z, v.w - w.w);
+        }
+
+        public static extra operator *(extra v, extra w)
+        {
+            return new extra(v.x * w.x, v.y * w.y, v.z * w.z, v.w * w.w);
+        }
+
+        public static extra operator /(extra v, extra w)
+        {
+            return new extra(v.x / w.x, v.y / w.y, v.z / w.z, v.w / w.w);
+        }
+
+        public static bool operator ==(extra v, extra w)
+        {
+            return
+                v.x == w.x &&
+                v.y == w.y &&
+                v.z == w.z &&
+                v.w == w.w;
+        }
+
+        public static bool operator !=(extra v, extra w)
+        {
+            return
+                v.x != w.x ||
+                v.y != w.y ||
+                v.z != w.z ||
+                v.w != w.w;
+        }
+
+        public static extra operator -(extra v)
+        {
+            return new extra(-v.x, -v.y, -v.z, -v.w);
+        }
+
+        public static implicit operator Vector4(extra v)
+        {
+            return new Vector4(v.x, v.y, v.z, v.w);
+        }
+
+        public static implicit operator extra(color v)
+        {
+            return new extra(v.x, v.y, v.z, v.w);
+        }
+
+        public static implicit operator color(extra v)
+        {
+            return new color(v.x, v.y, v.z, v.w);
+        }
+
+        public static explicit operator extra(Vector4 v)
+        {
+            return new extra(v.X, v.Y, v.Z, v.W);
+        }
+
+        public static readonly extra Zero    = new extra(0, 0, 0, 0);
+        public static readonly extra Nothing = new extra(0, 0, 0, 0);
+
+        public static explicit operator extra(vec4 v) { return new extra(v.x, v.y, v.z, v.w); }
+        public static explicit operator vec4(extra v) { return new vec4(v.x, v.y, v.z, v.w); }
+    }
+}
+

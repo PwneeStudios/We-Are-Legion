@@ -22,27 +22,12 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Data, using register location 1
-float2 fs_param_Data_size;
-float2 fs_param_Data_dxdy;
-
-Texture fs_param_Data_Texture;
-sampler fs_param_Data : register(s1) = sampler_state
-{
-    texture   = <fs_param_Data_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-// Texture Sampler for fs_param_Unit, using register location 2
+// Texture Sampler for fs_param_Unit, using register location 1
 float2 fs_param_Unit_size;
 float2 fs_param_Unit_dxdy;
 
 Texture fs_param_Unit_Texture;
-sampler fs_param_Unit : register(s2) = sampler_state
+sampler fs_param_Unit : register(s1) = sampler_state
 {
     texture   = <fs_param_Unit_Texture>;
     MipFilter = Point;
@@ -52,14 +37,14 @@ sampler fs_param_Unit : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Select, using register location 3
-float2 fs_param_Select_size;
-float2 fs_param_Select_dxdy;
+// Texture Sampler for fs_param_Data, using register location 2
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
 
-Texture fs_param_Select_Texture;
-sampler fs_param_Select : register(s3) = sampler_state
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s2) = sampler_state
 {
-    texture   = <fs_param_Select_Texture>;
+    texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -67,31 +52,16 @@ sampler fs_param_Select : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
-bool fs_param_Deselect;
-
-float fs_param_action;
-
 // The following methods are included because they are referenced by the fragment shader.
-float GpuSim__SimShader__prior_direction(float4 u)
+bool GpuSim__SimShader__IsValid(float direction)
 {
-    float val = u.b;
-    return val % 0.01960784;
+    return direction > 0 + .001;
 }
 
-void GpuSim__SimShader__set_selected(inout float4 u, bool selected)
+float2 GpuSim__SimShader__dir_to_vec(float direction)
 {
-    u.b = GpuSim__SimShader__prior_direction(u) + (selected ? 0.01960784 : 0.0);
-}
-
-bool GpuSim__SimShader__Something(float4 u)
-{
-    return u.r > 0 + .001;
-}
-
-bool GpuSim__SimShader__selected(float4 u)
-{
-    float val = u.b;
-    return val >= 0.01960784 - .001;
+    float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
+    return GpuSim__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
 // Compiled vertex shader
@@ -108,25 +78,18 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    if (select.r > 0 + .001 && abs(unit_here.g - select.g) < .001)
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    unit_here.a = 0.0;
+    if (abs(data_here.a - 0.007843138) < .001)
     {
-        GpuSim__SimShader__set_selected(data_here, true);
-    }
-    else
-    {
-        if (fs_param_Deselect)
+        float4 facing = tex2D(fs_param_Unit, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(data_here.r)) * fs_param_Unit_dxdy);
+        if (abs(facing.b - unit_here.b) > .001)
         {
-            GpuSim__SimShader__set_selected(data_here, false);
+            unit_here.a = 0.01960784;
         }
     }
-    if (GpuSim__SimShader__Something(data_here) && GpuSim__SimShader__selected(data_here) && fs_param_action < 0.04705882 - .001)
-    {
-        data_here.a = fs_param_action;
-    }
-    __FinalOutput.Color = data_here;
+    __FinalOutput.Color = unit_here;
     return __FinalOutput;
 }
 

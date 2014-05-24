@@ -5,9 +5,9 @@ namespace GpuSim
     public partial class Movement_Phase1 : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> Current)
+        data FragmentShader(VertexOut vertex, Field<data> Current)
         {
-            unit here = Current[Here], output = unit.Nothing;
+            data here = Current[Here], output = data.Nothing;
 
             // If something is here, they have the right to stay.
             if (Something(here))
@@ -18,7 +18,7 @@ namespace GpuSim
             }
 
             // Otherwise, check each direction to see if something is incoming.
-            unit
+            data
                 right = Current[RightOne],
                 up    = Current[UpOne],
                 left  = Current[LeftOne],
@@ -46,14 +46,14 @@ namespace GpuSim
     public partial class Movement_Phase2 : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> Current, Field<unit> Next)
+        data FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Next)
         {
-            unit next = Next[Here];
-            unit here = Current[Here];
+            data next = Next[Here];
+            data here = Current[Here];
 
-            unit ahead = Next[dir_to_vec(here.direction)];
+            data ahead = Next[dir_to_vec(here.direction)];
             if (ahead.change == Change.Moved && ahead.direction == here.direction)
-                next = unit.Nothing;
+                next = data.Nothing;
 
             set_prior_direction(ref next, next.direction);
 
@@ -64,9 +64,9 @@ namespace GpuSim
     public partial class Movement_Convect : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> Data, Field<unit> Current)
+        data FragmentShader(VertexOut vertex, Field<data> Data, Field<data> Current)
         {
-            unit here = Current[Here], output = unit.Nothing;
+            data here = Current[Here], output = data.Nothing;
 
             if (Something(here))
             {
@@ -83,33 +83,34 @@ namespace GpuSim
     public partial class Movement_UpdateDirection : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> TargetData, Field<data> Data, Field<unit> Current, Field<unit> Paths_Right, Field<unit> Paths_Left, Field<unit> Paths_Up, Field<unit> Paths_Down)
+        data FragmentShader(VertexOut vertex, Field<data> TargetData, Field<unit> Data, Field<extra> Extra, Field<data> Current, Field<data> Paths_Right, Field<data> Paths_Left, Field<data> Paths_Up, Field<data> Paths_Down)
         {
-            unit here = Current[Here];
+            data here = Current[Here];
+            extra extra_here = Extra[Here];
 
             if (Something(here))
             {
-                unit path = unit.Nothing;
+                data path = data.Nothing;
 
-                unit
+                data
                     right = Current[RightOne],
                     up    = Current[UpOne],
                     left  = Current[LeftOne],
                     down  = Current[DownOne];
 
-                unit
+                data
                     right_path = Paths_Right[Here],
                     up_path    = Paths_Up   [Here],
                     left_path  = Paths_Left [Here],
                     down_path  = Paths_Down [Here];
 
-                unit target = TargetData[Here];
-                data data   = Data[Here];
+                data target = TargetData[Here];
+                unit data_here   = Data[Here];
                 vec2 Destination = unpack_vec2((vec4)target);
 
                 float cur_angle    = atan(vertex.TexCoords.y - Destination.y * TargetData.DxDy.y, vertex.TexCoords.x - Destination.x * TargetData.DxDy.x);
                 cur_angle          = (cur_angle + 3.14159f) / (2 * 3.14159f);
-                float target_angle = data.target_angle;
+                float target_angle = extra_here.target_angle;
 
                 if (Destination.x > vertex.TexCoords.x * TargetData.Size.x)
                 {
@@ -171,16 +172,17 @@ namespace GpuSim
     public partial class Movement_UpdateDirectionToEnemy : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> TargetData, Field<data> Data, Field<unit> Current, Field<vec4> PathToOtherTeams)
+        data FragmentShader(VertexOut vertex, Field<vec4> TargetData, Field<unit> Unit, Field<extra> Extra, Field<data> Data, Field<vec4> PathToOtherTeams)
         {
-            unit here = Current[Here];
+            data  data_here  = Data[Here];
 
-            if (Something(here))
+            if (Something(data_here))
             {
-                unit path = unit.Nothing;
+                data path = data.Nothing;
 
                 // Get info for this unit
-                data data = Data[Here];
+                unit  here       = Unit[Here];
+                extra extra_here = Extra[Here];
 
                 // Get nearby paths to other teams
                 vec4
@@ -191,14 +193,14 @@ namespace GpuSim
 
                 // Get specific paths to enemies of this particular unit
                 float value_right = 1, value_left = 1, value_up = 1, value_down = 1;
-                if (data.team == Team.One)
+                if (here.team == Team.One)
                 {
                     value_right = _value_right.x;
                     value_left  = _value_left.x;
                     value_up    = _value_up.x;
                     value_down  = _value_down.x;
                 }
-                else if (data.team == Team.Two)
+                else if (here.team == Team.Two)
                 {
                     value_right = _value_right.y;
                     value_left  = _value_left.y;
@@ -209,43 +211,39 @@ namespace GpuSim
                 float auto_attack_cutoff = _4;
 
                 float min = 256;
-                float hold_dir = here.direction;
-                if (here.action == UnitAction.Attacking)
+                float hold_dir = data_here.direction;
+                if (data_here.action == UnitAction.Attacking)
                 {
-                    if (value_right < min) { here.direction = Dir.Right; min = value_right; }
-                    if (value_up    < min) { here.direction = Dir.Up;    min = value_up; }
-                    if (value_left  < min) { here.direction = Dir.Left;  min = value_left; }
-                    if (value_down  < min) { here.direction = Dir.Down;  min = value_down; }
+                    if (value_right < min) { data_here.direction = Dir.Right; min = value_right; }
+                    if (value_up    < min) { data_here.direction = Dir.Up;    min = value_up; }
+                    if (value_left  < min) { data_here.direction = Dir.Left;  min = value_left; }
+                    if (value_down  < min) { data_here.direction = Dir.Down;  min = value_down; }
                 }
 
-                if (min > auto_attack_cutoff) here.direction = hold_dir;
+                if (min > auto_attack_cutoff) data_here.direction = hold_dir;
 
                 // If we aren't attacking, or if a unit is too far away
-                if (min > auto_attack_cutoff && here.action == UnitAction.Attacking || here.action == UnitAction.Moving)
+                if (min > auto_attack_cutoff && data_here.action == UnitAction.Attacking || data_here.action == UnitAction.Moving)
                 {
-                    NaivePathfind(vertex, Current, TargetData, data, ref here);
+                    NaivePathfind(vertex, Data, TargetData, here, ref data_here, ref extra_here);
                 }
             }
 
-            return here;
+            return data_here;
         }
 
-        void NaivePathfind(VertexOut vertex, Field<unit> Current, Field<unit> TargetData, data data, ref unit here)
+        void NaivePathfind(VertexOut vertex, Field<data> Current, Field<vec4> TargetData, unit data, ref data here, ref extra extra_here)
         {
             float dir = 0;
 
-            unit target = TargetData[Here];
+            vec4 target = TargetData[Here];
 
             // Unpack packed info
             vec2 CurPos = vertex.TexCoords * TargetData.Size;
             vec2 Destination = unpack_vec2((vec4)target);
 
-            float cur_angle = atan(CurPos.y - Destination.y, CurPos.x - Destination.x);
-            cur_angle = (cur_angle + 3.14159f) / (2 * 3.14159f);
-            float target_angle = data.target_angle;
-
             // Get nearby units
-            unit
+            data
                 right = Current[RightOne],
                 up    = Current[UpOne],
                 left  = Current[LeftOne],
@@ -259,13 +257,18 @@ namespace GpuSim
             // Simple pathing: Go toward the cardinal direction that is furthest away. If something is in your way, go perpendicularly, assuming you also need to go in that direction.
             vec2 diff = Destination - CurPos;
             vec2 mag = abs(diff);
-            if ((mag.x > mag.y || diff.y > 0 && Something(up) || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
-            if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up)) dir = Dir.Up;
-            if ((mag.x > mag.y || diff.y > 0 && Something(up) || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left)) dir = Dir.Left;
-            if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down)) dir = Dir.Down;
+            if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
+            if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up))    dir = Dir.Up;
+            if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left))  dir = Dir.Left;
+            if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down))  dir = Dir.Down;
 
-            // Heading conserving pathing: Tries to maintain the original heading of the unit as it paths toward its destination.
             /*
+            // Heading conserving pathing: Tries to maintain the original heading of the unit as it paths toward its destination.
+            // Calculate angles
+            float cur_angle = atan(CurPos.y - Destination.y, CurPos.x - Destination.x);
+            cur_angle = (cur_angle + 3.14159f) / (2 * 3.14159f);
+            float target_angle = extra_here.target_angle;
+
             float grace = 1;
             if (Destination.x > CurPos.x + 1)
             {

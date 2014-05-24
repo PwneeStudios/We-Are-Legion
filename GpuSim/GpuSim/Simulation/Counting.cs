@@ -5,15 +5,15 @@ namespace GpuSim
     public partial class Counting : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<unit> Units)
+        vec4 FragmentShader(VertexOut vertex, Field<data> Units)
         {
             vec2 uv = vertex.TexCoords;
 
-            unit
-                TL = (unit)Units[Here],
-                TR = (unit)Units[RightOne],
-                BL = (unit)Units[UpOne],
-                BR = (unit)Units[UpRight];
+            data
+                TL = (data)Units[Here],
+                TR = (data)Units[RightOne],
+                BL = (data)Units[UpOne],
+                BR = (data)Units[UpRight];
 
             // Aggregate 4 cells into the containing supercell
             vec4 output = vec4.Zero;
@@ -41,7 +41,7 @@ namespace GpuSim
     public partial class _Counting : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<unit> PreviousLevel)
+        vec4 FragmentShader(VertexOut vertex, Field<data> PreviousLevel)
         {
             vec2 uv = vertex.TexCoords;
 

@@ -9,10 +9,10 @@ namespace GpuSim
         /// Four teams maximum.
         /// </summary>
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<vec4> Path, Field<unit> Current, Field<data> CurData)
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> Path, Field<data> Current, Field<unit> CurData)
         {
-            unit data = Current[Here];
-            data cur_data = CurData[Here];
+            data data = Current[Here];
+            unit cur_data = CurData[Here];
 
             vec4
                 right = Path[RightOne],
@@ -39,9 +39,9 @@ namespace GpuSim
     public partial class Pathfinding_Down : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> Path, Field<unit> Current)
+        data FragmentShader(VertexOut vertex, Field<data> Path, Field<data> Current)
         {
-            unit output = unit.Nothing;
+            data output = data.Nothing;
 
             if (vertex.TexCoords.y - 2 * Path.DxDy.y < 0)
             {
@@ -58,9 +58,9 @@ namespace GpuSim
     public partial class Pathfinding_Up : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> Path, Field<unit> Current)
+        data FragmentShader(VertexOut vertex, Field<data> Path, Field<data> Current)
         {
-            unit output = unit.Nothing;
+            data output = data.Nothing;
 
             if (vertex.TexCoords.y + 2 * Path.DxDy.y > 1)
             {
@@ -77,9 +77,9 @@ namespace GpuSim
     public partial class Pathfinding_Left : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> Path, Field<unit> Current)
+        data FragmentShader(VertexOut vertex, Field<data> Path, Field<data> Current)
         {
-            unit output = unit.Nothing;
+            data output = data.Nothing;
 
             if (vertex.TexCoords.x - 2 * Path.DxDy.x < 0)
             {
@@ -96,9 +96,9 @@ namespace GpuSim
     public partial class Pathfinding_Right : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> Path, Field<unit> Current)
+        data FragmentShader(VertexOut vertex, Field<data> Path, Field<data> Current)
         {
-            unit output = unit.Nothing;
+            data output = data.Nothing;
             
             if (vertex.TexCoords.x + 2 * Path.DxDy.x > 1)
             {
@@ -114,11 +114,11 @@ namespace GpuSim
 
     public class PathHelper : SimShader
     {
-        public static unit Propagate(Field<unit> Path, Field<unit> Current, unit output)
+        public static data Propagate(Field<data> Path, Field<data> Current, data output)
         {
-            unit data = Current[Here];
+            data data = Current[Here];
 
-            unit
+            data
                 right = Path[RightOne],
                 up    = Path[UpOne],
                 left  = Path[LeftOne],
