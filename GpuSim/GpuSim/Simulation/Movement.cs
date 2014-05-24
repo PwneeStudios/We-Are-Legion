@@ -24,10 +24,10 @@ namespace GpuSim
                 left  = Current[LeftOne],
                 down  = Current[DownOne];
 
-            if (right.action != UnitAction.Stopped && right.direction == Dir.Left)  output = right;
-            if (up   .action != UnitAction.Stopped && up.direction    == Dir.Down)  output = up;
-            if (left .action != UnitAction.Stopped && left.direction  == Dir.Right) output = left;
-            if (down .action != UnitAction.Stopped && down.direction  == Dir.Up)    output = down;
+            if (right.action != UnitAction.Stopped && right.action != UnitAction.Guard && right.direction == Dir.Left)  output = right;
+            if (up   .action != UnitAction.Stopped && up   .action != UnitAction.Guard && up.direction    == Dir.Down)  output = up;
+            if (left .action != UnitAction.Stopped && left .action != UnitAction.Guard && left.direction  == Dir.Right) output = left;
+            if (down .action != UnitAction.Stopped && down .action != UnitAction.Guard && down.direction  == Dir.Up)    output = down;
 
             if (Something(output))
             {
@@ -208,11 +208,11 @@ namespace GpuSim
                     value_down  = _value_down.y;
                 }
 
-                float auto_attack_cutoff = _4;
+                float auto_attack_cutoff = _12;
 
                 float min = 256;
                 float hold_dir = data_here.direction;
-                if (data_here.action == UnitAction.Attacking)
+                if (data_here.action == UnitAction.Attacking || data_here.action == UnitAction.Guard)
                 {
                     if (value_right < min) { data_here.direction = Dir.Right; min = value_right; }
                     if (value_up    < min) { data_here.direction = Dir.Up;    min = value_up; }
@@ -221,6 +221,12 @@ namespace GpuSim
                 }
 
                 if (min > auto_attack_cutoff) data_here.direction = hold_dir;
+
+                // If we are guarding and a unit is close, switch to attacking
+                if (min < auto_attack_cutoff && data_here.action == UnitAction.Guard)
+                {
+                    data_here.action = UnitAction.Attacking;
+                }
 
                 // If we aren't attacking, or if a unit is too far away
                 if (min > auto_attack_cutoff && data_here.action == UnitAction.Attacking || data_here.action == UnitAction.Moving)
@@ -349,9 +355,14 @@ namespace GpuSim
             */
 
             if (IsValid(dir))
+            {
                 here.direction = dir;
+            }
             else
-                here.action = UnitAction.Stopped;
+            {
+                if (here.action == UnitAction.Attacking)
+                    here.action = UnitAction.Guard;
+            }
         }
     }
 }

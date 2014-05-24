@@ -170,7 +170,10 @@ void GpuSim__Movement_UpdateDirectionToEnemy__NaivePathfind(VertexToPixel psin, 
     }
     else
     {
-        here.a = 0.0;
+        if (abs(here.a - 0.007843138) < .001)
+        {
+            here.a = 0.01176471;
+        }
     }
 }
 
@@ -213,10 +216,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 value_down = _value_down.y;
             }
         }
-        float auto_attack_cutoff = 0.01568628;
+        float auto_attack_cutoff = 0.04705882;
         float min = 256;
         float hold_dir = data_here.r;
-        if (abs(data_here.a - 0.007843138) < .001)
+        if (abs(data_here.a - 0.007843138) < .001 || abs(data_here.a - 0.01176471) < .001)
         {
             if (value_right < min - .001)
             {
@@ -242,6 +245,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         if (min > auto_attack_cutoff + .001)
         {
             data_here.r = hold_dir;
+        }
+        if (min < auto_attack_cutoff - .001 && abs(data_here.a - 0.01176471) < .001)
+        {
+            data_here.a = 0.007843138;
         }
         if (min > auto_attack_cutoff + .001 && abs(data_here.a - 0.007843138) < .001 || abs(data_here.a - 0.003921569) < .001)
         {

@@ -218,14 +218,14 @@ namespace GpuSim
             for (int j = 0; j < h; j++)
             {
                 //if (true)
-                //if (false)
+                if (false)
                 //if (rnd.NextDouble() > 0.85f)
                 //if (i == w / 2 && j == h / 2)
                 //if (Math.Abs(i - w / 2) < 500)
                 //if (j == h / 2)
                 //if (i % 9 == 0)
                 //if (j % 2 == 0 || i % 2 == 0)
-                if (j % 20 == 0 && i % 20 == 0)
+                //if (j % 20 == 0 && i % 20 == 0)
                 {
                     //int dir = rnd.Next(1, 5);
                     int dir = rnd.Next(1, 5);
@@ -562,7 +562,8 @@ namespace GpuSim
             bool Deselect  = Input.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed();
             bool Selecting = Input.LeftMouseDown;
 
-            DataDrawMouse.Using(SelectCircle_Data, SimShader.Player.One, Output: Temp1, Clear: Color.Transparent);
+            DataDrawMouse .Using(SelectCircle_Data, SimShader.Player.One, Output: Temp1, Clear: Color.Transparent);
+
             if (Selecting)
             {
                 vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
@@ -587,10 +588,10 @@ namespace GpuSim
                 float player = Keys.F.Pressed() ? SimShader.Player.One : SimShader.Player.Two;
                 float team   = Keys.F.Pressed() ? SimShader.Team.One   : SimShader.Team.Two;
 
-                ActionSpawn_Unit.Apply(CurrentData, Temp1, Output: Temp2);
-                Swap(ref Temp2, ref CurrentData);
-                ActionSpawn_Extra.Apply(Current, Temp1, player, team, Output: Temp2);
+                ActionSpawn_Unit.Apply(Current, Temp1, player, team, Output: Temp2);
                 Swap(ref Temp2, ref Current);
+                ActionSpawn_Data.Apply(CurrentData, Temp1, Output: Temp2);
+                Swap(ref Temp2, ref CurrentData);
             }
 
             if (Input.RightMousePressed)

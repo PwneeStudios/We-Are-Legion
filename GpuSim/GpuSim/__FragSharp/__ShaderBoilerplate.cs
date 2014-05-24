@@ -42,10 +42,11 @@ namespace FragSharpFramework
             GpuSim.ActionAttackSquare.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare");
             GpuSim.ActionAttackPoint.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint");
             GpuSim.ActionAttack2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttack2");
+            GpuSim.ActionSpawn_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Data");
             GpuSim.ActionSpawn_Unit.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Unit");
-            GpuSim.ActionSpawn_Extra.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Extra");
             GpuSim.ActionSelect.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSelect");
             GpuSim.DataDrawMouse.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DataDrawMouse");
+            GpuSim.DataDrawMouse2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DataDrawMouse2");
             GpuSim.Movement_Phase1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase1");
             GpuSim.Movement_Phase2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase2");
             GpuSim.Movement_Convect.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Convect");
@@ -1078,7 +1079,7 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class ActionSpawn_Unit
+    public partial class ActionSpawn_Data
     {
         public static Effect CompiledEffect;
 
@@ -1124,7 +1125,7 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class ActionSpawn_Extra
+    public partial class ActionSpawn_Unit
     {
         public static Effect CompiledEffect;
 
@@ -1224,6 +1225,50 @@ namespace GpuSim
 namespace GpuSim
 {
     public partial class DataDrawMouse
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D data_texture, float player, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(data_texture, player);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D data_texture, float player, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(data_texture, player);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D data_texture, float player, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(data_texture, player);
+        }
+        public static void Using(Texture2D data_texture, float player, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(data_texture, player);
+        }
+        public static void Using(Texture2D data_texture, float player)
+        {
+            CompiledEffect.Parameters["fs_param_data_texture_Texture"].SetValue(FragSharpMarshal.Marshal(data_texture));
+            CompiledEffect.Parameters["fs_param_data_texture_size"].SetValue(FragSharpMarshal.Marshal(vec(data_texture.Width, data_texture.Height)));
+            CompiledEffect.Parameters["fs_param_data_texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(data_texture.Width, data_texture.Height)));
+            CompiledEffect.Parameters["fs_param_player"].SetValue(FragSharpMarshal.Marshal(player));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class DataDrawMouse2
     {
         public static Effect CompiledEffect;
 

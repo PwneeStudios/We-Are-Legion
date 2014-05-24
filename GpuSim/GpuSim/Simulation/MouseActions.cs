@@ -69,7 +69,7 @@ namespace GpuSim
         }
     }
 
-    public partial class ActionSpawn_Unit : SimShader
+    public partial class ActionSpawn_Data : SimShader
     {
         [FragmentShader]
         data FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Select)
@@ -83,6 +83,7 @@ namespace GpuSim
                     (int)(vertex.TexCoords.y * Current.Size.y) % 2 == 0)
                 {
                     here.direction = Dir.Right;
+                    here.action = UnitAction.Guard;
                 }
             }
 
@@ -90,7 +91,7 @@ namespace GpuSim
         }
     }
 
-    public partial class ActionSpawn_Extra : SimShader
+    public partial class ActionSpawn_Unit : SimShader
     {
         [FragmentShader]
         unit FragmentShader(VertexOut vertex, Field<unit> CurData, Field<data> Select, float player, float team)
@@ -153,7 +154,28 @@ namespace GpuSim
             {
                 d.type = _1;
                 d.player = player;
-                
+
+                // Note: Unlike other data and simulation shaders, we do need to set the alpha component for this channel.
+                // The reason is that we will be drawing multiple mouse datas onto the same render target, with potential overlapping.
+                d.a = 1;
+            }
+
+            return d;
+        }
+    }
+
+    public partial class DataDrawMouse2 : SimShader
+    {
+        [FragmentShader]
+        color FragmentShader(VertexOut vertex, Sampler data_texture, float player)
+        {
+            unit d = unit.Nothing;
+
+            if (data_texture[Here].a > 0)
+            {
+                d.type = _1;
+                d.player = player;
+
                 // Note: Unlike other data and simulation shaders, we do need to set the alpha component for this channel.
                 // The reason is that we will be drawing multiple mouse datas onto the same render target, with potential overlapping.
                 d.a = 1;

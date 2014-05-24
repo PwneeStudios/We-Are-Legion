@@ -16,7 +16,7 @@ namespace GpuSim
             {
                 unit facing = Unit[dir_to_vec(data_here.direction)];
 
-                if (facing.team != unit_here.team)
+                if (facing.team != unit_here.team && facing.team != Team.None)
                 {
                     unit_here.anim = _5;
                 }

@@ -43,7 +43,7 @@ namespace GpuSim
 
     public class SimShader : GridComputation
     {
-        protected readonly vec2 SpriteSize = vec(1.0f / 10.0f, 1.0f / 8.0f);
+        protected readonly vec2 SpriteSize = vec(1.0f / 15.0f, 1.0f / 8.0f);
 
         protected static bool selected(data u)
         {
@@ -129,7 +129,8 @@ namespace GpuSim
                 Stopped = _0,
                 Moving = _1,
                 Attacking = _2,
-                Count = _3,
+                Guard = _3,
+                Count = _4,
 
                 NoChange = _12;
         }

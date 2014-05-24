@@ -84,7 +84,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (abs(data_here.a - 0.007843138) < .001)
     {
         float4 facing = tex2D(fs_param_Unit, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(data_here.r)) * fs_param_Unit_dxdy);
-        if (abs(facing.b - unit_here.b) > .001)
+        if (abs(facing.b - unit_here.b) > .001 && abs(facing.b - 0.0) > .001)
         {
             unit_here.a = 0.01960784;
         }

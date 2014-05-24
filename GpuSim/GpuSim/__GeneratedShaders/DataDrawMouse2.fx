@@ -22,45 +22,24 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_CurData, using register location 1
-float2 fs_param_CurData_size;
-float2 fs_param_CurData_dxdy;
+// Texture Sampler for fs_param_data_texture, using register location 1
+float2 fs_param_data_texture_size;
+float2 fs_param_data_texture_dxdy;
 
-Texture fs_param_CurData_Texture;
-sampler fs_param_CurData : register(s1) = sampler_state
+Texture fs_param_data_texture_Texture;
+sampler fs_param_data_texture : register(s1) = sampler_state
 {
-    texture   = <fs_param_CurData_Texture>;
+    texture   = <fs_param_data_texture_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-// Texture Sampler for fs_param_Select, using register location 2
-float2 fs_param_Select_size;
-float2 fs_param_Select_dxdy;
-
-Texture fs_param_Select_Texture;
-sampler fs_param_Select : register(s2) = sampler_state
-{
-    texture   = <fs_param_Select_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
+    AddressU  = Wrap;
+    AddressV  = Wrap;
 };
 
 float fs_param_player;
 
-float fs_param_team;
-
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__Something(float4 u)
-{
-    return u.r > 0 + .001;
-}
 
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
@@ -76,17 +55,14 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
-    float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    if (GpuSim__SimShader__Something(select))
+    float4 d = float4(0, 0, 0, 0);
+    if (tex2D(fs_param_data_texture, psin.TexCoords + (float2(0, 0)) * fs_param_data_texture_dxdy).a > 0 + .001)
     {
-        if (abs((int)(psin.TexCoords.x * fs_param_CurData_size.x) % 2 - 0) < .001 && abs((int)(psin.TexCoords.y * fs_param_CurData_size.y) % 2 - 0) < .001)
-        {
-            data.g = fs_param_player;
-            data.b = fs_param_team;
-        }
+        d.r = 0.003921569;
+        d.g = fs_param_player;
+        d.a = 1;
     }
-    __FinalOutput.Color = data;
+    __FinalOutput.Color = d;
     return __FinalOutput;
 }
 

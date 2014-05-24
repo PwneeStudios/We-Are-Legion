@@ -22,14 +22,14 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_CurData, using register location 1
-float2 fs_param_CurData_size;
-float2 fs_param_CurData_dxdy;
+// Texture Sampler for fs_param_Current, using register location 1
+float2 fs_param_Current_size;
+float2 fs_param_Current_dxdy;
 
-Texture fs_param_CurData_Texture;
-sampler fs_param_CurData : register(s1) = sampler_state
+Texture fs_param_Current_Texture;
+sampler fs_param_Current : register(s1) = sampler_state
 {
-    texture   = <fs_param_CurData_Texture>;
+    texture   = <fs_param_Current_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -52,10 +52,6 @@ sampler fs_param_Select : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-float fs_param_player;
-
-float fs_param_team;
-
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
 {
@@ -76,17 +72,17 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
+    float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     if (GpuSim__SimShader__Something(select))
     {
-        if (abs((int)(psin.TexCoords.x * fs_param_CurData_size.x) % 2 - 0) < .001 && abs((int)(psin.TexCoords.y * fs_param_CurData_size.y) % 2 - 0) < .001)
+        if (abs((int)(psin.TexCoords.x * fs_param_Current_size.x) % 2 - 0) < .001 && abs((int)(psin.TexCoords.y * fs_param_Current_size.y) % 2 - 0) < .001)
         {
-            data.g = fs_param_player;
-            data.b = fs_param_team;
+            here.r = 0.003921569;
+            here.a = 0.01176471;
         }
     }
-    __FinalOutput.Color = data;
+    __FinalOutput.Color = here;
     return __FinalOutput;
 }
 

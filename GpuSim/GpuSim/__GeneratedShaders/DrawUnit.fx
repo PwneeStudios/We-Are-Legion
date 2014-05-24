@@ -130,7 +130,7 @@ float4 GpuSim__DrawUnit__Sprite(VertexToPixel psin, float4 u, float4 d, float2 p
     float selected_offset = GpuSim__SimShader__selected(u) ? 4 : 0;
     pos.x += floor(frame);
     pos.y += (floor(anim * 255 + 0.5) - 1 + selected_offset);
-    pos *= float2(1.0 / 10.0, 1.0 / 8.0);
+    pos *= float2(1.0 / 15.0, 1.0 / 8.0);
     float4 clr = tex2D(Texture, pos);
     if (abs(d.g - 0.003921569) < .001)
     {
