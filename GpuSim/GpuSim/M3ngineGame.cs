@@ -657,6 +657,9 @@ namespace GpuSim
 
             CheckForAttacking.Apply(Current, CurrentData, RandomField, Output: Temp1);
             Swap(ref Current, ref Temp1);
+
+            UpdateRandomField.Apply(RandomField, Output: Temp1);
+            Swap(ref RandomField, ref Temp1);
 		}
 	}
 }

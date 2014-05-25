@@ -118,6 +118,7 @@
     <Compile Include="Drawing\DrawGrass.cs" />
     <Compile Include="Simulation\Bounding.cs" />
     <Compile Include="Simulation\Attacking.cs" />
+    <Compile Include="Simulation\Random.cs" />
     <Compile Include="Simulation\Counting.cs" />
     <Compile Include="Simulation\MouseActions.cs" />
     <Compile Include="Simulation\Pathfinding.cs" />

@@ -57,6 +57,7 @@ namespace FragSharpFramework
             GpuSim.Pathfinding_Up.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_Up");
             GpuSim.Pathfinding_Left.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_Left");
             GpuSim.Pathfinding_Right.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_Right");
+            GpuSim.UpdateRandomField.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UpdateRandomField");
         }
     }
 }
@@ -1794,6 +1795,49 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_Current_Texture"].SetValue(FragSharpMarshal.Marshal(Current));
             CompiledEffect.Parameters["fs_param_Current_size"].SetValue(FragSharpMarshal.Marshal(vec(Current.Width, Current.Height)));
             CompiledEffect.Parameters["fs_param_Current_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Current.Width, Current.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class UpdateRandomField
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D Random, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Random);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Random, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Random);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Random, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Random);
+        }
+        public static void Using(Texture2D Random, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Random);
+        }
+        public static void Using(Texture2D Random)
+        {
+            CompiledEffect.Parameters["fs_param_Random_Texture"].SetValue(FragSharpMarshal.Marshal(Random));
+            CompiledEffect.Parameters["fs_param_Random_size"].SetValue(FragSharpMarshal.Marshal(vec(Random.Width, Random.Height)));
+            CompiledEffect.Parameters["fs_param_Random_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Random.Width, Random.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
