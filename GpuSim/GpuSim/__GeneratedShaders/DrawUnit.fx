@@ -209,7 +209,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             pre = cur;
         }
-        float frame = cur_data.a > 0 + .001 ? fs_param_s * 5 + 5 : 0;
+        float frame = cur_data.a > 0 + .001 ? fs_param_s * 5 + 255 * cur_data.a : 0;
         output += GpuSim__DrawUnit__Sprite(psin, pre, pre_data, subcell_pos, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
     else

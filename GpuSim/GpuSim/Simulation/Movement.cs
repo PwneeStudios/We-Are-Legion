@@ -208,7 +208,7 @@ namespace GpuSim
                     value_down  = _value_down.y;
                 }
 
-                float auto_attack_cutoff = _12;
+                const float auto_attack_cutoff = _12;
 
                 float min = 256;
                 float hold_dir = data_here.direction;

@@ -105,7 +105,7 @@ namespace GpuSim
 	        {
 		        if (s > .5) pre = cur;
 
-                float frame = cur_data.anim > 0 ? s * 5 + 5 : 0;
+                float frame = cur_data.anim > 0 ? s * 5 + 255*cur_data.anim : 0;
                 output += Sprite(pre, pre_data, subcell_pos, pre.direction, frame, Texture);
 	        }
             else

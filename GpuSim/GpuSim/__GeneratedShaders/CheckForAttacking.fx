@@ -64,6 +64,11 @@ float2 GpuSim__SimShader__dir_to_vec(float direction)
     return GpuSim__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
+bool GpuSim__SimShader__Something(float4 u)
+{
+    return u.r > 0 + .001;
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -81,12 +86,21 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     unit_here.a = 0.0;
-    if (abs(data_here.a - 0.007843138) < .001)
+    if (abs(data_here.g - 0.003921569) < .001 && abs(unit_here.b - 0.0) > .001)
     {
-        float4 facing = tex2D(fs_param_Unit, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(data_here.r)) * fs_param_Unit_dxdy);
-        if (abs(facing.b - unit_here.b) > .001 && abs(facing.b - 0.0) > .001)
+        if (abs(data_here.a - 0.007843138) < .001)
         {
-            unit_here.a = 0.01960784;
+            float4 facing = tex2D(fs_param_Unit, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(data_here.r)) * fs_param_Unit_dxdy);
+            if (abs(facing.b - unit_here.b) > .001 && abs(facing.b - 0.0) > .001)
+            {
+                unit_here.a = 0.01960784;
+            }
+        }
+        float4 data_right = tex2D(fs_param_Data, psin.TexCoords + (float2(1, 0)) * fs_param_Data_dxdy), data_up = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 1)) * fs_param_Data_dxdy), data_left = tex2D(fs_param_Data, psin.TexCoords + (float2(-(1), 0)) * fs_param_Data_dxdy), data_down = tex2D(fs_param_Data, psin.TexCoords + (float2(0, -(1))) * fs_param_Data_dxdy);
+        float4 unit_right = tex2D(fs_param_Unit, psin.TexCoords + (float2(1, 0)) * fs_param_Unit_dxdy), unit_up = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 1)) * fs_param_Unit_dxdy), unit_left = tex2D(fs_param_Unit, psin.TexCoords + (float2(-(1), 0)) * fs_param_Unit_dxdy), unit_down = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, -(1))) * fs_param_Unit_dxdy);
+        if (GpuSim__SimShader__Something(data_right) && abs(unit_right.b - unit_here.b) > .001 && abs(unit_right.b - 0.0) > .001 && abs(data_right.r - 0.01176471) < .001 && abs(data_right.a - 0.007843138) < .001 && abs(data_right.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_left) && abs(unit_left.b - unit_here.b) > .001 && abs(unit_left.b - 0.0) > .001 && abs(data_left.r - 0.003921569) < .001 && abs(data_left.a - 0.007843138) < .001 && abs(data_left.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_up) && abs(unit_up.b - unit_here.b) > .001 && abs(unit_up.b - 0.0) > .001 && abs(data_up.r - 0.01568628) < .001 && abs(data_up.a - 0.007843138) < .001 && abs(data_up.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_down) && abs(unit_down.b - unit_here.b) > .001 && abs(unit_down.b - 0.0) > .001 && abs(data_down.r - 0.007843138) < .001 && abs(data_down.a - 0.007843138) < .001 && abs(data_down.g - 0.003921569) < .001)
+        {
+            unit_here.a = 0.03921569;
         }
     }
     __FinalOutput.Color = unit_here;
