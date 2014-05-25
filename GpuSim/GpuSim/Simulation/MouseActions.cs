@@ -146,7 +146,7 @@ namespace GpuSim
     public partial class DataDrawMouse : SimShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Sampler data_texture, float player)
+        color FragmentShader(VertexOut vertex, PointSampler data_texture, float player)
         {
             unit d = unit.Nothing;
 
@@ -167,7 +167,7 @@ namespace GpuSim
     public partial class DataDrawMouse2 : SimShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Sampler data_texture, float player)
+        color FragmentShader(VertexOut vertex, PointSampler data_texture, float player)
         {
             unit d = unit.Nothing;
 

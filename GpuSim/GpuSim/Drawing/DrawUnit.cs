@@ -12,7 +12,7 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous, Sampler Texture, float PercentSimStepComplete)
+        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous, PointSampler Texture, float PercentSimStepComplete)
         {
             color output = color.TransparentBlack;
 
@@ -43,7 +43,7 @@ namespace GpuSim
                 return rgba(0, 0, 0, 0);
         }
 
-        protected color Sprite(data u, unit d, vec2 pos, float anim, float frame, Sampler Texture)
+        protected color Sprite(data u, unit d, vec2 pos, float anim, float frame, PointSampler Texture)
         {
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
@@ -87,7 +87,7 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous, Field<unit> CurData, Field<unit> PrevData, Sampler Texture, float s)
+        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous, Field<unit> CurData, Field<unit> PrevData, PointSampler Texture, float s)
         {
             color output = color.TransparentBlack;
 
@@ -133,7 +133,7 @@ namespace GpuSim
 
     public partial class DrawUnit_v2 : BaseShader
     {
-        protected color Sprite(vec2 sprite, vec2 pos, float frame, Sampler Texture)
+        protected color Sprite(vec2 sprite, vec2 pos, float frame, PointSampler Texture)
         {
             if (pos.x >= 1 || pos.y >= 1 || pos.x <= 0 || pos.y <= 0)
                 return color.TransparentBlack;
@@ -148,7 +148,7 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous, Sampler Texture, float s)
+        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous, PointSampler Texture, float s)
         {
             color output = color.TransparentBlack;
 

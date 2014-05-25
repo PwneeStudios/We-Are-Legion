@@ -33,8 +33,8 @@ sampler fs_param_s1 : register(s1) = sampler_state
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 // Texture Sampler for fs_param_s2, using register location 2
@@ -48,8 +48,8 @@ sampler fs_param_s2 : register(s2) = sampler_state
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 // Texture Sampler for fs_param_s3, using register location 3
@@ -63,8 +63,8 @@ sampler fs_param_s3 : register(s3) = sampler_state
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 // Texture Sampler for fs_param_s4, using register location 4
@@ -78,8 +78,8 @@ sampler fs_param_s4 : register(s4) = sampler_state
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 // The following methods are included because they are referenced by the fragment shader.

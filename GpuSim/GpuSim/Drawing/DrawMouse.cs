@@ -5,7 +5,7 @@ namespace GpuSim
     public partial class DrawMouse : BaseShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Sampler Texture)
+        color FragmentShader(VertexOut vertex, PointSampler Texture)
         {
             color output;
 

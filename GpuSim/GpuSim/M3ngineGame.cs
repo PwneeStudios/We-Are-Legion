@@ -39,10 +39,15 @@ namespace GpuSim
 
 	public static class RndExtension
 	{
-		public static float RndBit(this System.Random rnd)
+		public static float Bit(this System.Random rnd)
 		{
 			return rnd.NextDouble() > .5 ? 1 : 0;
 		}
+
+        public static int IntRange(this System.Random rnd, int min, int max)
+        {
+            return (int)(rnd.NextDouble() * (max - min) + min);
+        }
 	}
 
 	/// <summary>
@@ -64,6 +69,7 @@ namespace GpuSim
         RenderTarget2D
             Temp1, Temp2,
             Previous, Current, PreviousData, CurrentData, Extra, TargetData,
+            RandomField,
             PreviousDraw, CurrentDraw,
             Paths_Right, Paths_Left, Paths_Up, Paths_Down,
             PathToOtherTeams;
@@ -178,6 +184,8 @@ namespace GpuSim
             Extra          = MakeTarget(w, h);
             TargetData     = MakeTarget(w, h);
 
+            RandomField         = MakeTarget(w, h);
+
             CurrentDraw    = MakeTarget(w, h);
             PreviousDraw   = MakeTarget(w, h);
 
@@ -210,6 +218,7 @@ namespace GpuSim
             Color[] _data = new Color[w * h];
             Color[] _extra = new Color[w * h];
             Color[] _target = new Color[w * h];
+            Color[] _random = new Color[w * h];
 
             CurrentData.GetData(_data);
 
@@ -217,6 +226,8 @@ namespace GpuSim
             for (int i = 0; i < w; i++)
             for (int j = 0; j < h; j++)
             {
+                _random[i * h + j] = new Color(rnd.IntRange(0, 256), rnd.IntRange(0, 256), rnd.IntRange(0, 256), rnd.IntRange(0, 256));
+
                 //if (true)
                 if (false)
                 //if (rnd.NextDouble() > 0.85f)
@@ -262,6 +273,8 @@ namespace GpuSim
             Extra.SetData(_extra);
 
             TargetData.SetData(_target);
+
+            RandomField.SetData(_random);
         }
 
         private RenderTarget2D MakeTarget(int w, int h)
@@ -642,7 +655,7 @@ namespace GpuSim
             Swap(ref Current, ref Temp1);
             Swap(ref Previous, ref Temp1);
 
-            CheckForAttacking.Apply(Current, CurrentData, Output: Temp1);
+            CheckForAttacking.Apply(Current, CurrentData, RandomField, Output: Temp1);
             Swap(ref Current, ref Temp1);
 		}
 	}

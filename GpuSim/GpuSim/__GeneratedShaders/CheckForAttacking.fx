@@ -52,6 +52,21 @@ sampler fs_param_Data : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
+// Texture Sampler for fs_param_Random, using register location 3
+float2 fs_param_Random_size;
+float2 fs_param_Random_dxdy;
+
+Texture fs_param_Random_Texture;
+sampler fs_param_Random : register(s3) = sampler_state
+{
+    texture   = <fs_param_Random_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsValid(float direction)
 {
@@ -98,9 +113,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         float4 data_right = tex2D(fs_param_Data, psin.TexCoords + (float2(1, 0)) * fs_param_Data_dxdy), data_up = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 1)) * fs_param_Data_dxdy), data_left = tex2D(fs_param_Data, psin.TexCoords + (float2(-(1), 0)) * fs_param_Data_dxdy), data_down = tex2D(fs_param_Data, psin.TexCoords + (float2(0, -(1))) * fs_param_Data_dxdy);
         float4 unit_right = tex2D(fs_param_Unit, psin.TexCoords + (float2(1, 0)) * fs_param_Unit_dxdy), unit_up = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 1)) * fs_param_Unit_dxdy), unit_left = tex2D(fs_param_Unit, psin.TexCoords + (float2(-(1), 0)) * fs_param_Unit_dxdy), unit_down = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, -(1))) * fs_param_Unit_dxdy);
-        if (GpuSim__SimShader__Something(data_right) && abs(unit_right.b - unit_here.b) > .001 && abs(unit_right.b - 0.0) > .001 && abs(data_right.r - 0.01176471) < .001 && abs(data_right.a - 0.007843138) < .001 && abs(data_right.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_left) && abs(unit_left.b - unit_here.b) > .001 && abs(unit_left.b - 0.0) > .001 && abs(data_left.r - 0.003921569) < .001 && abs(data_left.a - 0.007843138) < .001 && abs(data_left.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_up) && abs(unit_up.b - unit_here.b) > .001 && abs(unit_up.b - 0.0) > .001 && abs(data_up.r - 0.01568628) < .001 && abs(data_up.a - 0.007843138) < .001 && abs(data_up.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_down) && abs(unit_down.b - unit_here.b) > .001 && abs(unit_down.b - 0.0) > .001 && abs(data_down.r - 0.007843138) < .001 && abs(data_down.a - 0.007843138) < .001 && abs(data_down.g - 0.003921569) < .001)
+        float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
+        if (rnd.x > 0.7 + .001)
         {
-            unit_here.a = 0.03921569;
+            if (GpuSim__SimShader__Something(data_right) && abs(unit_right.b - unit_here.b) > .001 && abs(unit_right.b - 0.0) > .001 && abs(data_right.r - 0.01176471) < .001 && abs(data_right.a - 0.007843138) < .001 && abs(data_right.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_left) && abs(unit_left.b - unit_here.b) > .001 && abs(unit_left.b - 0.0) > .001 && abs(data_left.r - 0.003921569) < .001 && abs(data_left.a - 0.007843138) < .001 && abs(data_left.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_up) && abs(unit_up.b - unit_here.b) > .001 && abs(unit_up.b - 0.0) > .001 && abs(data_up.r - 0.01568628) < .001 && abs(data_up.a - 0.007843138) < .001 && abs(data_up.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_down) && abs(unit_down.b - unit_here.b) > .001 && abs(unit_down.b - 0.0) > .001 && abs(data_down.r - 0.007843138) < .001 && abs(data_down.a - 0.007843138) < .001 && abs(data_down.g - 0.003921569) < .001)
+            {
+                unit_here.a = 0.03921569;
+            }
         }
     }
     __FinalOutput.Color = unit_here;

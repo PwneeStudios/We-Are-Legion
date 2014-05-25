@@ -38,7 +38,7 @@ namespace GpuSim
     public partial class BenchmarkTest_TextureLookup4x4 : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Sampler s1, Sampler s2, Sampler s3, Sampler s4)
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> s1, Field<vec4> s2, Field<vec4> s3, Field<vec4> s4)
         {
             return (
                    s1[Here] + s1[RightOne] + s1[LeftOne] + s1[UpOne] + s1[DownOne] +
@@ -52,7 +52,7 @@ namespace GpuSim
     public partial class BenchmarkTest_TextureLookup1x1 : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Sampler s)
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> s)
         {
             return (
                    s[Here]
@@ -148,7 +148,7 @@ namespace GpuSim
     public partial class BenchmarkTest_TextureLookup1x5 : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Sampler s)
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> s)
         {
             return (
                    s[Here] + s[RightOne] + s[LeftOne] + s[UpOne] + s[DownOne]
@@ -169,7 +169,7 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Sampler s)
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> s)
         {
             color output = color.TransparentBlack;
 
@@ -200,7 +200,7 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Sampler s)
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> s)
         {
             color output = color.TransparentBlack;
 

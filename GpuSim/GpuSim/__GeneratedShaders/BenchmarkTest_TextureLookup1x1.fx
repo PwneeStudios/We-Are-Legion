@@ -33,8 +33,8 @@ sampler fs_param_s : register(s1) = sampler_state
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 // The following methods are included because they are referenced by the fragment shader.
