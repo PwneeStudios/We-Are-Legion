@@ -123,7 +123,7 @@ bool GpuSim__SimShader__IsValid(float direction)
     return direction > 0 + .001;
 }
 
-void GpuSim__Movement_UpdateDirectionToEnemy__NaivePathfind(VertexToPixel psin, VertexToPixel vertex, sampler Current, float2 Current_size, float2 Current_dxdy, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, float4 data, inout float4 here, inout float4 extra_here)
+void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel psin, VertexToPixel vertex, sampler Current, float2 Current_size, float2 Current_dxdy, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, float4 data, inout float4 here, inout float4 extra_here)
 {
     float dir = 0;
     float4 target = tex2D(TargetData, psin.TexCoords + (float2(0, 0)) * TargetData_dxdy);
@@ -197,6 +197,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         float4 path = float4(0, 0, 0, 0);
         float4 here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
         float4 extra_here = tex2D(fs_param_Extra, psin.TexCoords + (float2(0, 0)) * fs_param_Extra_dxdy);
+        if (abs(here.a - 0.03921569) < .001)
+        {
+            __FinalOutput.Color = float4(0, 0, 0, 0);
+            return __FinalOutput;
+        }
         float4 _value_right = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(1, 0)) * fs_param_PathToOtherTeams_dxdy), _value_up = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, 1)) * fs_param_PathToOtherTeams_dxdy), _value_left = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(-(1), 0)) * fs_param_PathToOtherTeams_dxdy), _value_down = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, -(1))) * fs_param_PathToOtherTeams_dxdy);
         float value_right = 1, value_left = 1, value_up = 1, value_down = 1;
         if (abs(here.b - 0.003921569) < .001)
@@ -252,7 +257,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         if (min > auto_attack_cutoff + .001 && abs(data_here.a - 0.007843138) < .001 || abs(data_here.a - 0.003921569) < .001)
         {
-            GpuSim__Movement_UpdateDirectionToEnemy__NaivePathfind(psin, psin, fs_param_Data, fs_param_Data_size, fs_param_Data_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, here, data_here, extra_here);
+            GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(psin, psin, fs_param_Data, fs_param_Data_size, fs_param_Data_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, here, data_here, extra_here);
         }
     }
     __FinalOutput.Color = data_here;

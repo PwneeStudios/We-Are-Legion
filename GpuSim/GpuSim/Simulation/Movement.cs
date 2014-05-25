@@ -80,7 +80,7 @@ namespace GpuSim
         }
     }
 
-    public partial class Movement_UpdateDirection : SimShader
+    public partial class Movement_UpdateDirection_WithAaPathfinding : SimShader
     {
         [FragmentShader]
         data FragmentShader(VertexOut vertex, Field<data> TargetData, Field<unit> Data, Field<extra> Extra, Field<data> Current, Field<data> Paths_Right, Field<data> Paths_Left, Field<data> Paths_Up, Field<data> Paths_Down)
@@ -169,7 +169,7 @@ namespace GpuSim
         }
     }
 
-    public partial class Movement_UpdateDirectionToEnemy : SimShader
+    public partial class Movement_UpdateDirection_RemoveDead : SimShader
     {
         [FragmentShader]
         data FragmentShader(VertexOut vertex, Field<vec4> TargetData, Field<unit> Unit, Field<extra> Extra, Field<data> Data, Field<vec4> PathToOtherTeams)
@@ -183,6 +183,12 @@ namespace GpuSim
                 // Get info for this unit
                 unit  here       = Unit[Here];
                 extra extra_here = Extra[Here];
+
+                // Remove if dead
+                if (here.anim == Anim.Dead)
+                {
+                    return data.Nothing;
+                }
 
                 // Get nearby paths to other teams
                 vec4

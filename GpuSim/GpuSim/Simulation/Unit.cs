@@ -112,7 +112,7 @@ namespace GpuSim
             public const float
                 None = _0 * AnimLength,
                 Attack = _1 * AnimLength,
-                Die = _2 * AnimLength;
+                Dead = _2 * AnimLength;
         }
 
         public static class Dir

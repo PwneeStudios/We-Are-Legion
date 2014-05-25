@@ -50,8 +50,8 @@ namespace FragSharpFramework
             GpuSim.Movement_Phase1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase1");
             GpuSim.Movement_Phase2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase2");
             GpuSim.Movement_Convect.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Convect");
-            GpuSim.Movement_UpdateDirection.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_UpdateDirection");
-            GpuSim.Movement_UpdateDirectionToEnemy.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_UpdateDirectionToEnemy");
+            GpuSim.Movement_UpdateDirection_WithAaPathfinding.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_UpdateDirection_WithAaPathfinding");
+            GpuSim.Movement_UpdateDirection_RemoveDead.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_UpdateDirection_RemoveDead");
             GpuSim.Pathfinding_ToOtherTeams.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToOtherTeams");
             GpuSim.Pathfinding_Down.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_Down");
             GpuSim.Pathfinding_Up.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_Up");
@@ -1451,7 +1451,7 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class Movement_UpdateDirection
+    public partial class Movement_UpdateDirection_WithAaPathfinding
     {
         public static Effect CompiledEffect;
 
@@ -1515,7 +1515,7 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class Movement_UpdateDirectionToEnemy
+    public partial class Movement_UpdateDirection_RemoveDead
     {
         public static Effect CompiledEffect;
 

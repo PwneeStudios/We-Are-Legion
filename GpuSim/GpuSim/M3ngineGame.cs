@@ -637,7 +637,7 @@ namespace GpuSim
 		void SimulationUpdate()
 		{
             PathUpdate();
-            Movement_UpdateDirectionToEnemy.Apply(TargetData, Current, Extra, CurrentData, PathToOtherTeams, Output: Temp1);
+            Movement_UpdateDirection_RemoveDead.Apply(TargetData, Current, Extra, CurrentData, PathToOtherTeams, Output: Temp1);
             //Movement_UpdateDirection.Apply(TargetData, CurData, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
             Swap(ref CurrentData, ref Temp1);
 
