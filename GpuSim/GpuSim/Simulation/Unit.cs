@@ -43,7 +43,12 @@ namespace GpuSim
 
     public class SimShader : GridComputation
     {
-        protected readonly vec2 SpriteSize = vec(1.0f / 15.0f, 1.0f / 8.0f);
+        public const int AnimLength = 5;
+        public const int NumAnims = 3;
+        public const int SheetDimX = NumAnims * AnimLength;
+        public const int SheetDimY = 2 * 4;
+        public readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
+        public readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
 
         protected static bool selected(data u)
         {
@@ -100,6 +105,14 @@ namespace GpuSim
                 Two = _2,
                 Three = _3,
                 Four = _4;
+        }
+
+        public static class Anim
+        {
+            public const float
+                None = _0 * AnimLength,
+                Attack = _1 * AnimLength,
+                Die = _2 * AnimLength;
         }
 
         public static class Dir

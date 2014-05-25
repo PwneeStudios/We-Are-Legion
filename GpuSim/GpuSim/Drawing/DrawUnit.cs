@@ -43,7 +43,7 @@ namespace GpuSim
                 return rgba(0, 0, 0, 0);
         }
 
-        protected color Sprite(data u, unit d, vec2 pos, float anim, float frame, PointSampler Texture)
+        protected color Sprite(data u, unit d, vec2 pos, float direction, float frame, PointSampler Texture)
         {
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
@@ -51,7 +51,7 @@ namespace GpuSim
             float selected_offset = selected(u) ? 4 : 0;
 
             pos.x += floor(frame);
-            pos.y += (floor(anim * 255 + .5f) - 1 + selected_offset);
+            pos.y += (floor(direction * 255 + .5f) - 1 + selected_offset);
             pos *= SpriteSize;
 
             var clr = Texture[pos];
@@ -105,12 +105,12 @@ namespace GpuSim
 	        {
 		        if (s > .5) pre = cur;
 
-                float frame = cur_data.anim > 0 ? s * 5 + 255*cur_data.anim : 0;
+                float frame = cur_data.anim > 0 ? s * AnimLength + 255*cur_data.anim : 0;
                 output += Sprite(pre, pre_data, subcell_pos, pre.direction, frame, Texture);
 	        }
             else
             {
-                float frame = s * 5;
+                float frame = s * AnimLength;
 
                 if (IsValid(cur.direction))
                 {

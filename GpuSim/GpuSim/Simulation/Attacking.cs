@@ -20,7 +20,7 @@ namespace GpuSim
 
                     if (facing.team != unit_here.team && facing.team != Team.None)
                     {
-                        unit_here.anim = _5;
+                        unit_here.anim = Anim.Attack;
                     }
                 }
 
@@ -45,7 +45,7 @@ namespace GpuSim
                         Something(data_up)    && unit_up.team    != unit_here.team && unit_up.team    != Team.None && data_up.direction    == Dir.Down  && data_up.action    == UnitAction.Attacking && data_up.change    == Change.Stayed||
                         Something(data_down)  && unit_down.team  != unit_here.team && unit_down.team  != Team.None && data_down.direction  == Dir.Up    && data_down.action  == UnitAction.Attacking && data_down.change  == Change.Stayed)
                     {
-                        unit_here.anim = _10;
+                        unit_here.anim = Anim.Die;
                     }
                 }
             }

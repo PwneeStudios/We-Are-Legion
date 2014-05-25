@@ -88,7 +88,7 @@ float4 GpuSim__DrawUnit_v2__Sprite(VertexToPixel psin, float2 sprite, float2 pos
     }
     pos.x += ((int)(floor(frame)) % 5);
     pos.y -= 1;
-    pos = (sprite * 255.0 + pos) * float2(1.0 / 15.0, 1.0 / 8.0);
+    pos = (sprite * 255.0 + pos) * float2(1.0 / 15, 1.0 / 8);
     return tex2D(Texture, pos);
 }
 
