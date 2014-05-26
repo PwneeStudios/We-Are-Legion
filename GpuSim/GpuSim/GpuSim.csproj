@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BenchmarkTesting.cs" />
+    <Compile Include="Drawing\DrawCorpses.cs" />
     <Compile Include="PerfTimer.cs" />
     <Compile Include="Drawing\BaseShader.cs" />
     <Compile Include="Drawing\PreDraw.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Drawing\DrawGrass.cs" />
     <Compile Include="Simulation\Bounding.cs" />
     <Compile Include="Simulation\Attacking.cs" />
+    <Compile Include="Simulation\Dying.cs" />
     <Compile Include="Simulation\Random.cs" />
     <Compile Include="Simulation\Counting.cs" />
     <Compile Include="Simulation\MouseActions.cs" />

@@ -70,6 +70,7 @@ namespace GpuSim
             Temp1, Temp2,
             Previous, Current, PreviousData, CurrentData, Extra, TargetData,
             RandomField,
+            Corspes,
             PreviousDraw, CurrentDraw,
             Paths_Right, Paths_Left, Paths_Up, Paths_Down,
             PathToOtherTeams;
@@ -184,7 +185,9 @@ namespace GpuSim
             Extra          = MakeTarget(w, h);
             TargetData     = MakeTarget(w, h);
 
-            RandomField         = MakeTarget(w, h);
+            Corspes        = MakeTarget(w, h);
+
+            RandomField    = MakeTarget(w, h);
 
             CurrentDraw    = MakeTarget(w, h);
             PreviousDraw   = MakeTarget(w, h);
@@ -219,6 +222,7 @@ namespace GpuSim
             Color[] _extra = new Color[w * h];
             Color[] _target = new Color[w * h];
             Color[] _random = new Color[w * h];
+            Color[] _corpses = new Color[w * h];
 
             CurrentData.GetData(_data);
 
@@ -227,6 +231,7 @@ namespace GpuSim
             for (int j = 0; j < h; j++)
             {
                 _random[i * h + j] = new Color(rnd.IntRange(0, 256), rnd.IntRange(0, 256), rnd.IntRange(0, 256), rnd.IntRange(0, 256));
+                _corpses[i * h + j] = new Color(0, 0, 0, 0);
 
                 //if (true)
                 if (false)
@@ -275,6 +280,8 @@ namespace GpuSim
             TargetData.SetData(_target);
 
             RandomField.SetData(_random);
+
+            Corspes.SetData(_corpses);
         }
 
         private RenderTarget2D MakeTarget(int w, int h)
@@ -446,6 +453,9 @@ namespace GpuSim
 
             DrawGrass.Using(camvec, CameraAspect, GroundTexture);
             Ground.Draw(GraphicsDevice);
+
+            DrawCorpses.Using(camvec, CameraAspect, Corspes, SpriteSheet);
+            GridHelper.DrawGrid();
 
             //DrawUnit_v2.Using(camvec, CameraAspect, DrawCurrent, DrawPrevious, SpriteSheet, PercentSimStepComplete);
             //GridHelper.DrawGrid();
@@ -637,6 +647,10 @@ namespace GpuSim
 		void SimulationUpdate()
 		{
             PathUpdate();
+
+            AddCorpses.Apply(Current, CurrentData, Corspes, Output: Temp1);
+            Swap(ref Corspes, ref Temp1);
+
             Movement_UpdateDirection_RemoveDead.Apply(TargetData, Current, Extra, CurrentData, PathToOtherTeams, Output: Temp1);
             //Movement_UpdateDirection.Apply(TargetData, CurData, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
             Swap(ref CurrentData, ref Temp1);

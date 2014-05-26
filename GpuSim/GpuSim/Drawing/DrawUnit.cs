@@ -56,30 +56,7 @@ namespace GpuSim
 
             var clr = Texture[pos];
 
-            if (d.player == Player.One)
-            {
-            }
-            else if (d.player == Player.Two)
-            {
-                float r = clr.r;
-                clr.r = clr.g;
-                clr.g = r;
-                clr.rgb *= .5f;
-            }
-            else if (d.player == Player.Three)
-            {
-                float b = clr.b;
-                clr.b = clr.g;
-                clr.g = b;
-            }
-            else if (d.player == Player.Four)
-            {
-                float r = clr.r;
-                clr.r = clr.b;
-                clr.b = r;
-            }
-
-            return clr;
+            return PlayerColorize(clr, d.player);
 
             //return rgba(1,1,1,1);
             //return Circle(pos);
@@ -137,8 +114,6 @@ namespace GpuSim
         {
             if (pos.x >= 1 || pos.y >= 1 || pos.x <= 0 || pos.y <= 0)
                 return color.TransparentBlack;
-
-            //return rgb(0xffffff);
 
             pos.x += ((int)(floor(frame)) % 5);
             pos.y -= 1;

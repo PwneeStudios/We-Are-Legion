@@ -3,6 +3,19 @@
 namespace GpuSim
 {
     [Copy(typeof(vec4))]
+    public partial struct corpse
+    {
+        [Hlsl("r")]
+        public float direction { get { return r; } set { r = value; } }
+
+        [Hlsl("g")]
+        public float type { get { return g; } set { g = value; } }
+
+        [Hlsl("b")]
+        public float player { get { return b; } set { b = value; } }
+    }
+
+    [Copy(typeof(vec4))]
     public partial struct unit
     {
         [Hlsl("r")]
@@ -158,6 +171,11 @@ namespace GpuSim
             return u.direction > 0;
         }
 
+        protected static bool Something(corpse u)
+        {
+            return u.direction > 0;
+        }
+
         protected static bool IsValid(float direction)
         {
             return direction > 0;
@@ -246,6 +264,34 @@ namespace GpuSim
             v.x = unpack_coord(packed.rg);
             v.y = unpack_coord(packed.ba);
             return v;
+        }
+
+        protected color PlayerColorize(color clr, float player)
+        {
+            if (player == Player.One)
+            {
+            }
+            else if (player == Player.Two)
+            {
+                float r = clr.r;
+                clr.r = clr.g;
+                clr.g = r;
+                clr.rgb *= .5f;
+            }
+            else if (player == Player.Three)
+            {
+                float b = clr.b;
+                clr.b = clr.g;
+                clr.g = b;
+            }
+            else if (player == Player.Four)
+            {
+                float r = clr.r;
+                clr.r = clr.b;
+                clr.b = r;
+            }
+
+            return clr;
         }
     }
 }
