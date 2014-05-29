@@ -24,14 +24,14 @@ float4 vs_param_cameraPos;
 float vs_param_cameraAspect;
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Current, using register location 1
-float2 fs_param_Current_size;
-float2 fs_param_Current_dxdy;
+// Texture Sampler for fs_param_CurrentData, using register location 1
+float2 fs_param_CurrentData_size;
+float2 fs_param_CurrentData_dxdy;
 
-Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s1) = sampler_state
+Texture fs_param_CurrentData_Texture;
+sampler fs_param_CurrentData : register(s1) = sampler_state
 {
-    texture   = <fs_param_Current_Texture>;
+    texture   = <fs_param_CurrentData_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -39,14 +39,14 @@ sampler fs_param_Current : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Previous, using register location 2
-float2 fs_param_Previous_size;
-float2 fs_param_Previous_dxdy;
+// Texture Sampler for fs_param_PreviousData, using register location 2
+float2 fs_param_PreviousData_size;
+float2 fs_param_PreviousData_dxdy;
 
-Texture fs_param_Previous_Texture;
-sampler fs_param_Previous : register(s2) = sampler_state
+Texture fs_param_PreviousData_Texture;
+sampler fs_param_PreviousData : register(s2) = sampler_state
 {
-    texture   = <fs_param_Previous_Texture>;
+    texture   = <fs_param_PreviousData_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -83,7 +83,7 @@ bool GpuSim__SimShader__selected(float4 u)
     return val >= 0.03137255 - .001;
 }
 
-float4 GpuSim__DrawUnitZoomedOut__Presence(float4 data)
+float4 GpuSim__DrawUnitsZoomedOut__Presence(float4 data)
 {
     return GpuSim__SimShader__Something(data) ? (GpuSim__SimShader__selected(data) ? float4(0.3294118, 0.7882353, 0.4196078, 1.0) : float4(0.5686275, 0.4862745, 0.509804, 1.0)) : float4(0, 0, 0, 0);
 }
@@ -105,8 +105,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy), here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    output = 0.5 * 0.25 * (GpuSim__DrawUnitZoomedOut__Presence(right) + GpuSim__DrawUnitZoomedOut__Presence(up) + GpuSim__DrawUnitZoomedOut__Presence(left) + GpuSim__DrawUnitZoomedOut__Presence(down)) + 0.5 * GpuSim__DrawUnitZoomedOut__Presence(here);
+    float4 right = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(1, 0)) * fs_param_CurrentData_dxdy), up = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 1)) * fs_param_CurrentData_dxdy), left = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(-(1), 0)) * fs_param_CurrentData_dxdy), down = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, -(1))) * fs_param_CurrentData_dxdy), here = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy);
+    output = 0.5 * 0.25 * (GpuSim__DrawUnitsZoomedOut__Presence(right) + GpuSim__DrawUnitsZoomedOut__Presence(up) + GpuSim__DrawUnitsZoomedOut__Presence(left) + GpuSim__DrawUnitsZoomedOut__Presence(down)) + 0.5 * GpuSim__DrawUnitsZoomedOut__Presence(here);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BenchmarkTesting.cs" />
+    <Compile Include="Drawing\DrawBuildings.cs" />
     <Compile Include="Drawing\DrawCorpses.cs" />
     <Compile Include="PerfTimer.cs" />
     <Compile Include="Drawing\BaseShader.cs" />

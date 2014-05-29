@@ -24,14 +24,14 @@ float4 vs_param_cameraPos;
 float vs_param_cameraAspect;
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Current, using register location 1
-float2 fs_param_Current_size;
-float2 fs_param_Current_dxdy;
+// Texture Sampler for fs_param_CurrentData, using register location 1
+float2 fs_param_CurrentData_size;
+float2 fs_param_CurrentData_dxdy;
 
-Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s1) = sampler_state
+Texture fs_param_CurrentData_Texture;
+sampler fs_param_CurrentData : register(s1) = sampler_state
 {
-    texture   = <fs_param_Current_Texture>;
+    texture   = <fs_param_CurrentData_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -39,14 +39,14 @@ sampler fs_param_Current : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Previous, using register location 2
-float2 fs_param_Previous_size;
-float2 fs_param_Previous_dxdy;
+// Texture Sampler for fs_param_PreviousData, using register location 2
+float2 fs_param_PreviousData_size;
+float2 fs_param_PreviousData_dxdy;
 
-Texture fs_param_Previous_Texture;
-sampler fs_param_Previous : register(s2) = sampler_state
+Texture fs_param_PreviousData_Texture;
+sampler fs_param_PreviousData : register(s2) = sampler_state
 {
-    texture   = <fs_param_Previous_Texture>;
+    texture   = <fs_param_PreviousData_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -54,14 +54,14 @@ sampler fs_param_Previous : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_CurData, using register location 3
-float2 fs_param_CurData_size;
-float2 fs_param_CurData_dxdy;
+// Texture Sampler for fs_param_CurrentUnits, using register location 3
+float2 fs_param_CurrentUnits_size;
+float2 fs_param_CurrentUnits_dxdy;
 
-Texture fs_param_CurData_Texture;
-sampler fs_param_CurData : register(s3) = sampler_state
+Texture fs_param_CurrentUnits_Texture;
+sampler fs_param_CurrentUnits : register(s3) = sampler_state
 {
-    texture   = <fs_param_CurData_Texture>;
+    texture   = <fs_param_CurrentUnits_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -69,14 +69,14 @@ sampler fs_param_CurData : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_PrevData, using register location 4
-float2 fs_param_PrevData_size;
-float2 fs_param_PrevData_dxdy;
+// Texture Sampler for fs_param_PreviousUnits, using register location 4
+float2 fs_param_PreviousUnits_size;
+float2 fs_param_PreviousUnits_dxdy;
 
-Texture fs_param_PrevData_Texture;
-sampler fs_param_PrevData : register(s4) = sampler_state
+Texture fs_param_PreviousUnits_Texture;
+sampler fs_param_PreviousUnits : register(s4) = sampler_state
 {
-    texture   = <fs_param_PrevData_Texture>;
+    texture   = <fs_param_PreviousUnits_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -161,7 +161,7 @@ float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
     return clr;
 }
 
-float4 GpuSim__DrawUnit__Sprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float direction, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 GpuSim__DrawUnits__Sprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float direction, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
@@ -213,17 +213,17 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 cur = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy), pre = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * fs_param_Previous_dxdy);
-    float4 cur_data = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy), pre_data = tex2D(fs_param_PrevData, psin.TexCoords + (float2(0, 0)) * fs_param_PrevData_dxdy);
-    float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Current_size);
+    float4 cur = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy), pre = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousData_dxdy);
+    float4 cur_unit = tex2D(fs_param_CurrentUnits, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentUnits_dxdy), pre_unit = tex2D(fs_param_PreviousUnits, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousUnits_dxdy);
+    float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_CurrentData_size);
     if (GpuSim__SimShader__Something(cur) && abs(cur.g - 0.003921569) < .001)
     {
         if (fs_param_s > 0.5 + .001)
         {
             pre = cur;
         }
-        float frame = cur_data.a > 0 + .001 ? fs_param_s * 5 + 255 * cur_data.a : 0;
-        output += GpuSim__DrawUnit__Sprite(psin, pre, pre_data, subcell_pos, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+        float frame = cur_unit.a > 0 + .001 ? fs_param_s * 5 + 255 * cur_unit.a : 0;
+        output += GpuSim__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
     else
     {
@@ -232,12 +232,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             float prior_dir = GpuSim__SimShader__prior_direction(cur);
             float2 offset = (1 - fs_param_s) * GpuSim__SimShader__direction_to_vec(prior_dir);
-            output += GpuSim__DrawUnit__Sprite(psin, cur, cur_data, subcell_pos + offset, prior_dir, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+            output += GpuSim__DrawUnits__Sprite(psin, cur, cur_unit, subcell_pos + offset, prior_dir, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
         if (GpuSim__SimShader__IsValid(pre.r) && output.a < 0.025 - .001)
         {
             float2 offset = -(fs_param_s) * GpuSim__SimShader__direction_to_vec(pre.r);
-            output += GpuSim__DrawUnit__Sprite(psin, pre, pre_data, subcell_pos + offset, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+            output += GpuSim__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos + offset, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
     }
     __FinalOutput.Color = output;

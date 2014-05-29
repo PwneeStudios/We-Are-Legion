@@ -68,7 +68,7 @@ namespace GpuSim
 
         RenderTarget2D
             Temp1, Temp2,
-            Previous, Current, PreviousData, CurrentData, Extra, TargetData,
+            PreviousUnits, CurrentUnits, PreviousData, CurrentData, Extra, TargetData,
             RandomField,
             Corspes,
             PreviousDraw, CurrentDraw,
@@ -78,7 +78,8 @@ namespace GpuSim
             Multigrid;
 
 		Texture2D
-            UnitTexture, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
+            BuildingTexture_1,
+            UnitTexture_1, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
             GroundTexture,
             SelectCircle, SelectCircle_Data;
 
@@ -162,11 +163,13 @@ namespace GpuSim
 
             GridHelper.Initialize(GraphicsDevice);
 
-			UnitTexture    = Content.Load<Texture2D>("Art\\kid");
-			UnitTexture_2  = Content.Load<Texture2D>("Art\\kid_2");
-			UnitTexture_4  = Content.Load<Texture2D>("Art\\kid_4");
-			UnitTexture_8  = Content.Load<Texture2D>("Art\\kid_8");
-			UnitTexture_16 = Content.Load<Texture2D>("Art\\kid_16");
+            BuildingTexture_1 = Content.Load<Texture2D>("Art\\Buildings_1");
+
+			UnitTexture_1  = Content.Load<Texture2D>("Art\\Units_1");
+			UnitTexture_2  = Content.Load<Texture2D>("Art\\Units_2");
+			UnitTexture_4  = Content.Load<Texture2D>("Art\\Units_4");
+			UnitTexture_8  = Content.Load<Texture2D>("Art\\Units_8");
+			UnitTexture_16 = Content.Load<Texture2D>("Art\\Units_16");
 
 			GroundTexture = Content.Load<Texture2D>("Art\\Grass");
 
@@ -176,8 +179,8 @@ namespace GpuSim
             float GroundRepeat = 100;
             Ground = new RectangleQuad(new vec2(-1, -1), new vec2(1, 1), new vec2(0, 0), new vec2(1, 1) * GroundRepeat);
 
-            Current        = MakeTarget(w, h);
-            Previous       = MakeTarget(w, h);
+            CurrentUnits        = MakeTarget(w, h);
+            PreviousUnits       = MakeTarget(w, h);
             
             CurrentData    = MakeTarget(w, h);
             PreviousData   = MakeTarget(w, h);
@@ -269,8 +272,14 @@ namespace GpuSim
                 }
             }
 
-            Current.SetData(_unit);
-            Previous.SetData(_unit);
+            for (int i = 0; i < w; i += 50)
+            for (int j = 0; j < h; j += 50)
+            {
+
+            }
+
+            CurrentUnits.SetData(_unit);
+            PreviousUnits.SetData(_unit);
 
             CurrentData.SetData(_data);
             PreviousData.SetData(_data);
@@ -431,19 +440,34 @@ namespace GpuSim
 
             BenchmarkTests.Run(CurrentData, PreviousData);
 
-			// Choose texture
-			Texture2D SpriteSheet = null;
+			// Choose units texture
+            Texture2D UnitsSpriteSheet = null, BuildingsSpriteSheet = null;
             float z = 14;
-			if (CameraZoom > z)
-				SpriteSheet = UnitTexture;
-			else if (CameraZoom > z/2)
-				SpriteSheet = UnitTexture_2;
-			else if (CameraZoom > z/4)
-				SpriteSheet = UnitTexture_4;
-			else if (CameraZoom > z/8)
-				SpriteSheet = UnitTexture_8;
+            if (CameraZoom > z)
+            {
+                BuildingsSpriteSheet = BuildingTexture_1;
+                UnitsSpriteSheet = UnitTexture_1;
+            }
+            else if (CameraZoom > z / 2)
+            {
+                BuildingsSpriteSheet = BuildingTexture_1;
+                UnitsSpriteSheet = UnitTexture_2;
+            }
+            else if (CameraZoom > z / 4)
+            {
+                BuildingsSpriteSheet = BuildingTexture_1;
+                UnitsSpriteSheet = UnitTexture_4;
+            }
+            else if (CameraZoom > z / 8)
+            {
+                BuildingsSpriteSheet = BuildingTexture_1;
+                UnitsSpriteSheet = UnitTexture_8;
+            }
             else
-                SpriteSheet = UnitTexture_16;
+            {
+                BuildingsSpriteSheet = BuildingTexture_1;
+                UnitsSpriteSheet = UnitTexture_16;
+            }
 
 			// Draw texture to screen
 			GraphicsDevice.SetRenderTarget(null);
@@ -454,16 +478,15 @@ namespace GpuSim
             DrawGrass.Using(camvec, CameraAspect, GroundTexture);
             Ground.Draw(GraphicsDevice);
 
-            DrawCorpses.Using(camvec, CameraAspect, Corspes, SpriteSheet);
+            DrawCorpses.Using(camvec, CameraAspect, Corspes, UnitsSpriteSheet);
             GridHelper.DrawGrid();
 
-            //DrawUnit_v2.Using(camvec, CameraAspect, DrawCurrent, DrawPrevious, SpriteSheet, PercentSimStepComplete);
-            //GridHelper.DrawGrid();
+            //DrawBuildings.Using(camvec, CameraAspect, CurrentData, CurrentUnits, BuildingsSpriteSheet, PercentSimStepComplete);
 
             if (CameraZoom > z / 8)
-                DrawUnit.Using(camvec, CameraAspect, CurrentData, PreviousData, Current, Previous, SpriteSheet, PercentSimStepComplete);
+                DrawUnits.Using(camvec, CameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete);
             else
-                DrawUnitZoomedOut.Using(camvec, CameraAspect, CurrentData, PreviousData, SpriteSheet, PercentSimStepComplete);
+                DrawUnitsZoomedOut.Using(camvec, CameraAspect, CurrentData, PreviousData, UnitsSpriteSheet, PercentSimStepComplete);
             GridHelper.DrawGrid();
 
 
@@ -561,7 +584,7 @@ namespace GpuSim
 
         void PathUpdate()
         {
-            Pathfinding_ToOtherTeams.Apply(PathToOtherTeams, CurrentData, Current, Output: Temp1);
+            Pathfinding_ToOtherTeams.Apply(PathToOtherTeams, CurrentData, CurrentUnits, Output: Temp1);
             Swap(ref PathToOtherTeams, ref Temp1);
 
             //Pathfinding_Right.Apply(Paths_Right, Current, Output: Temp1);
@@ -600,10 +623,10 @@ namespace GpuSim
             }
 
             var action = Input.RightMousePressed ? SimShader.UnitAction.Attacking : SimShader.UnitAction.NoChange;
-            ActionSelect.Apply(CurrentData, Current, Temp1, Deselect, action, Output: Temp2);
+            ActionSelect.Apply(CurrentData, CurrentUnits, Temp1, Deselect, action, Output: Temp2);
             Swap(ref Temp2, ref CurrentData);
 
-            ActionSelect.Apply(PreviousData, Current, Temp1, Deselect, SimShader.UnitAction.NoChange, Output: Temp2);
+            ActionSelect.Apply(PreviousData, CurrentUnits, Temp1, Deselect, SimShader.UnitAction.NoChange, Output: Temp2);
             Swap(ref Temp2, ref PreviousData);
 
             if (Keys.F.Pressed() || Keys.G.Pressed())
@@ -611,8 +634,8 @@ namespace GpuSim
                 float player = Keys.F.Pressed() ? SimShader.Player.One : SimShader.Player.Two;
                 float team   = Keys.F.Pressed() ? SimShader.Team.One   : SimShader.Team.Two;
 
-                ActionSpawn_Unit.Apply(Current, Temp1, player, team, Output: Temp2);
-                Swap(ref Temp2, ref Current);
+                ActionSpawn_Unit.Apply(CurrentUnits, Temp1, player, team, Output: Temp2);
+                Swap(ref Temp2, ref CurrentUnits);
                 ActionSpawn_Data.Apply(CurrentData, Temp1, Output: Temp2);
                 Swap(ref Temp2, ref CurrentData);
             }
@@ -648,10 +671,10 @@ namespace GpuSim
 		{
             PathUpdate();
 
-            AddCorpses.Apply(Current, CurrentData, Corspes, Output: Temp1);
+            AddCorpses.Apply(CurrentUnits, CurrentData, Corspes, Output: Temp1);
             Swap(ref Corspes, ref Temp1);
 
-            Movement_UpdateDirection_RemoveDead.Apply(TargetData, Current, Extra, CurrentData, PathToOtherTeams, Output: Temp1);
+            Movement_UpdateDirection_RemoveDead.Apply(TargetData, CurrentUnits, Extra, CurrentData, PathToOtherTeams, Output: Temp1);
             //Movement_UpdateDirection.Apply(TargetData, CurData, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
             Swap(ref CurrentData, ref Temp1);
 
@@ -665,12 +688,12 @@ namespace GpuSim
             Swap(ref TargetData, ref Temp1);
             Movement_Convect.Apply(Extra, CurrentData, Output: Temp1);
             Swap(ref Extra, ref Temp1);
-            Movement_Convect.Apply(Current, CurrentData, Output: Temp1);
-            Swap(ref Current, ref Temp1);
-            Swap(ref Previous, ref Temp1);
+            Movement_Convect.Apply(CurrentUnits, CurrentData, Output: Temp1);
+            Swap(ref CurrentUnits, ref Temp1);
+            Swap(ref PreviousUnits, ref Temp1);
 
-            CheckForAttacking.Apply(Current, CurrentData, RandomField, Output: Temp1);
-            Swap(ref Current, ref Temp1);
+            CheckForAttacking.Apply(CurrentUnits, CurrentData, RandomField, Output: Temp1);
+            Swap(ref CurrentUnits, ref Temp1);
 
             UpdateRandomField.Apply(RandomField, Output: Temp1);
             Swap(ref RandomField, ref Temp1);

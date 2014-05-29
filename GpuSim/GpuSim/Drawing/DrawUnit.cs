@@ -2,7 +2,7 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
-    public partial class DrawUnitZoomedOut : DrawUnit
+    public partial class DrawUnitsZoomedOut : DrawUnits
     {
         color Presence(data data)
         {
@@ -12,16 +12,16 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous, PointSampler Texture, float PercentSimStepComplete)
+        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, PointSampler Texture, float PercentSimStepComplete)
         {
             color output = color.TransparentBlack;
 
             data
-                right = Current[RightOne],
-                up    = Current[UpOne],
-                left  = Current[LeftOne],
-                down  = Current[DownOne],
-                here  = Current[Here];
+                right = CurrentData[RightOne],
+                up    = CurrentData[UpOne],
+                left  = CurrentData[LeftOne],
+                down  = CurrentData[DownOne],
+                here  = CurrentData[Here];
 
             output =    .5f *
                             .25f * (Presence(right) + Presence(up) + Presence(left) + Presence(down))
@@ -32,7 +32,7 @@ namespace GpuSim
         }
     }
 
-    public partial class DrawUnit : BaseShader
+    public partial class DrawUnits : BaseShader
     {
         color Circle(vec2 pos)
         {
@@ -64,26 +64,26 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Previous, Field<unit> CurData, Field<unit> PrevData, PointSampler Texture, float s)
+        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnits, Field<unit> PreviousUnits, PointSampler Texture, float s)
         {
             color output = color.TransparentBlack;
 
             data
-                cur = Current[Here],
-	            pre = Previous[Here];
+                cur = CurrentData[Here],
+	            pre = PreviousData[Here];
             
             unit
-                cur_data  = CurData[Here],
-                pre_data = PrevData[Here];
+                cur_unit  = CurrentUnits[Here],
+                pre_unit = PreviousUnits[Here];
 
-            vec2 subcell_pos = get_subcell_pos(vertex, Current.Size);
+            vec2 subcell_pos = get_subcell_pos(vertex, CurrentData.Size);
 
             if (Something(cur) && cur.change == Change.Stayed)
 	        {
 		        if (s > .5) pre = cur;
 
-                float frame = cur_data.anim > 0 ? s * AnimLength + 255*cur_data.anim : 0;
-                output += Sprite(pre, pre_data, subcell_pos, pre.direction, frame, Texture);
+                float frame = cur_unit.anim > 0 ? s * AnimLength + 255*cur_unit.anim : 0;
+                output += Sprite(pre, pre_unit, subcell_pos, pre.direction, frame, Texture);
 	        }
             else
             {
@@ -94,13 +94,13 @@ namespace GpuSim
                     var prior_dir = prior_direction(cur);
 
                     vec2 offset = (1 - s) * direction_to_vec(prior_dir);
-                    output += Sprite(cur, cur_data, subcell_pos + offset, prior_dir, frame, Texture);
+                    output += Sprite(cur, cur_unit, subcell_pos + offset, prior_dir, frame, Texture);
                 }
 
                 if (IsValid(pre.direction) && output.a < .025f)
                 {
                     vec2 offset = -s * direction_to_vec(pre.direction);
-                    output += Sprite(pre, pre_data, subcell_pos + offset, pre.direction, frame, Texture);
+                    output += Sprite(pre, pre_unit, subcell_pos + offset, pre.direction, frame, Texture);
                 }
             }
 

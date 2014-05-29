@@ -48,6 +48,22 @@ namespace GpuSim
     }
 
     [Copy(typeof(vec4))]
+    public partial struct building
+    {
+        [Hlsl("r")]
+        public float direction { get { return r; } set { r = value; } }
+
+        [Hlsl("g")]
+        public float part { get { return g; } set { g = value; } }
+
+        [Hlsl("b")]
+        public float prior_direction_and_select { get { return b; } set { b = value; } }
+
+        [Hlsl("a")]
+        public float action { get { return a; } set { a = value; } }
+    }
+
+    [Copy(typeof(vec4))]
     public partial struct extra
     {
         [Hlsl("a")]
@@ -136,6 +152,21 @@ namespace GpuSim
                 None = _0 * AnimLength,
                 Attack = _1 * AnimLength,
                 Dead = _2 * AnimLength;
+        }
+
+        public static class Part
+        {
+            public const float
+                Center = _0,
+                Right = _1,
+                TR = _2,
+                Up = _3,
+                TL = _4,
+                Left = _5,
+                BL = _6,
+                Down = _7,
+                BR = _8,
+                Count = _9;
         }
 
         public static class Dir
