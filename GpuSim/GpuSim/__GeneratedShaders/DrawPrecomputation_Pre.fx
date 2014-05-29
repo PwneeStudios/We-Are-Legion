@@ -56,7 +56,7 @@ sampler fs_param_Previous : register(s2) = sampler_state
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.01960784 - .001;
+    return val >= 0.02745098 - .001;
 }
 
 bool GpuSim__SimShader__Something(float4 u)

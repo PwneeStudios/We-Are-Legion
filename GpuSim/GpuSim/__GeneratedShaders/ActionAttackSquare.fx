@@ -64,7 +64,7 @@ float2 fs_param_Selection_Size;
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.01960784 - .001;
+    return val >= 0.02745098 - .001;
 }
 
 float2 GpuSim__SimShader__pack_coord(float x)

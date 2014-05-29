@@ -98,6 +98,10 @@ float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
                     clr.r = clr.b;
                     clr.b = r;
                 }
+                else
+                {
+                    clr.rgb *= 0.1;
+                }
             }
         }
     }

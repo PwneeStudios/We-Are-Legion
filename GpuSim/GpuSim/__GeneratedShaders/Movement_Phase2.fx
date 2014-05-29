@@ -67,12 +67,12 @@ float2 GpuSim__SimShader__dir_to_vec(float direction)
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.01960784 - .001;
+    return val >= 0.02745098 - .001;
 }
 
 void GpuSim__SimShader__set_prior_direction(inout float4 u, float dir)
 {
-    u.b = dir + (GpuSim__SimShader__selected(u) ? 0.01960784 : 0.0);
+    u.b = dir + (GpuSim__SimShader__selected(u) ? 0.02745098 : 0.0);
 }
 
 // Compiled vertex shader

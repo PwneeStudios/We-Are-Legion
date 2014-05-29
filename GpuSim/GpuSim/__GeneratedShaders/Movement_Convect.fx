@@ -82,7 +82,11 @@ float GpuSim__SimShader__Reverse(float dir)
 float GpuSim__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    return val % 0.01960784;
+    if (val >= 0.02745098 - .001)
+    {
+        val -= 0.02745098;
+    }
+    return val;
 }
 
 // Compiled vertex shader

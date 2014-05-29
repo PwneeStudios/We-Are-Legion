@@ -118,7 +118,7 @@ bool GpuSim__SimShader__Something(float4 u)
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.01960784 - .001;
+    return val >= 0.02745098 - .001;
 }
 
 float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
@@ -151,6 +151,10 @@ float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
                     clr.r = clr.b;
                     clr.b = r;
                 }
+                else
+                {
+                    clr.rgb *= 0.1;
+                }
             }
         }
     }
@@ -179,7 +183,11 @@ bool GpuSim__SimShader__IsValid(float direction)
 float GpuSim__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    return val % 0.01960784;
+    if (val >= 0.02745098 - .001)
+    {
+        val -= 0.02745098;
+    }
+    return val;
 }
 
 float2 GpuSim__SimShader__direction_to_vec(float direction)

@@ -63,26 +63,28 @@ namespace GpuSim
         public readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
         public readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
 
+        const float select_offset = _8;
         protected static bool selected(data u)
         {
             float val = u.prior_direction_and_select;
-            return val >= Dir.Count;
+            return val >= select_offset;
         }
 
         protected static void set_selected(ref data u, bool selected)
         {
-            u.prior_direction_and_select = prior_direction(u) + (selected ? Dir.Count : _0);
+            u.prior_direction_and_select = prior_direction(u) + (selected ? select_offset : _0);
         }
 
         protected static float prior_direction(data u)
         {
             float val = u.prior_direction_and_select;
-            return val % Dir.Count;
+            if (val >= select_offset) val -= select_offset;
+            return val;
         }
 
         protected static void set_prior_direction(ref data u, float dir)
         {
-            u.prior_direction_and_select = dir + (selected(u) ? Dir.Count : _0);
+            u.prior_direction_and_select = dir + (selected(u) ? select_offset : _0);
         }
 
         protected vec2 get_subcell_pos(VertexOut vertex, vec2 grid_size)
@@ -289,6 +291,10 @@ namespace GpuSim
                 float r = clr.r;
                 clr.r = clr.b;
                 clr.b = r;
+            }
+            else
+            {
+                clr.rgb *= .1f;
             }
 
             return clr;
