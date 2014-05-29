@@ -122,6 +122,14 @@ namespace GpuSim
                 Four = _4;
         }
 
+        public static class UnitType
+        {
+            public const float
+                None = _0,
+                Footman = _1,
+                Barracks = _2;
+        }
+
         public static class Anim
         {
             public const float

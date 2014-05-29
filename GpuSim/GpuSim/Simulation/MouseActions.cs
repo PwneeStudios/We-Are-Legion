@@ -152,28 +152,7 @@ namespace GpuSim
 
             if (data_texture[Here].a > 0)
             {
-                d.type = _1;
-                d.player = player;
-
-                // Note: Unlike other data and simulation shaders, we do need to set the alpha component for this channel.
-                // The reason is that we will be drawing multiple mouse datas onto the same render target, with potential overlapping.
-                d.a = 1;
-            }
-
-            return d;
-        }
-    }
-
-    public partial class DataDrawMouse2 : SimShader
-    {
-        [FragmentShader]
-        color FragmentShader(VertexOut vertex, PointSampler data_texture, float player)
-        {
-            unit d = unit.Nothing;
-
-            if (data_texture[Here].a > 0)
-            {
-                d.type = _1;
+                d.type = UnitType.Footman;
                 d.player = player;
 
                 // Note: Unlike other data and simulation shaders, we do need to set the alpha component for this channel.

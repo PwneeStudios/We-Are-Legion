@@ -118,7 +118,7 @@ bool GpuSim__SimShader__Something(float4 u)
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.02745098 - .001;
+    return val >= 0.03137255 - .001;
 }
 
 float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
@@ -183,9 +183,9 @@ bool GpuSim__SimShader__IsValid(float direction)
 float GpuSim__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    if (val >= 0.02745098 - .001)
+    if (val >= 0.03137255 - .001)
     {
-        val -= 0.02745098;
+        val -= 0.03137255;
     }
     return val;
 }

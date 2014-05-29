@@ -58,7 +58,7 @@ float2 fs_param_Destination;
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.02745098 - .001;
+    return val >= 0.03137255 - .001;
 }
 
 // Compiled vertex shader

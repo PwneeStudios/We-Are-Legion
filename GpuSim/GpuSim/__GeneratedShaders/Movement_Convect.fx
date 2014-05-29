@@ -82,9 +82,9 @@ float GpuSim__SimShader__Reverse(float dir)
 float GpuSim__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    if (val >= 0.02745098 - .001)
+    if (val >= 0.03137255 - .001)
     {
-        val -= 0.02745098;
+        val -= 0.03137255;
     }
     return val;
 }
