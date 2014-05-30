@@ -106,6 +106,7 @@ namespace GpuSim
                 {
                     data.player = player;
                     data.team = team;
+                    data.type = UnitType.Footman;
                 }
             }
 
@@ -134,7 +135,7 @@ namespace GpuSim
                     set_selected(ref data_here, false);
             }
 
-            if (Something(data_here) && selected(data_here) && action < UnitAction.NoChange)
+            if (Something(data_here) && IsUnit(unit_here) && selected(data_here) && action < UnitAction.NoChange)
             {
                 data_here.action = action;
             }

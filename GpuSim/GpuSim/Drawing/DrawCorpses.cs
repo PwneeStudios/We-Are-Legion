@@ -11,7 +11,7 @@ namespace GpuSim
 
             pos.x += floor(255*Anim.Dead);
             pos.y += floor(c.direction * 255 + .5f) - 1;
-            pos *= SpriteSize;
+            pos *= UnitSpriteSheet.SpriteSize;
 
             var clr = Texture[pos];
 

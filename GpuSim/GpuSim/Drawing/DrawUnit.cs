@@ -52,7 +52,7 @@ namespace GpuSim
 
             pos.x += floor(frame);
             pos.y += (floor(direction * 255 + .5f) - 1 + selected_offset);
-            pos *= SpriteSize;
+            pos *= UnitSpriteSheet.SpriteSize;
 
             var clr = Texture[pos];
 
@@ -76,18 +76,20 @@ namespace GpuSim
                 cur_unit  = CurrentUnits[Here],
                 pre_unit = PreviousUnits[Here];
 
+            if (!IsUnit(cur_unit) && !IsUnit(pre_unit)) return output;
+
             vec2 subcell_pos = get_subcell_pos(vertex, CurrentData.Size);
 
             if (Something(cur) && cur.change == Change.Stayed)
 	        {
 		        if (s > .5) pre = cur;
 
-                float frame = cur_unit.anim > 0 ? s * AnimLength + 255*cur_unit.anim : 0;
+                float frame = cur_unit.anim > 0 ? s * UnitSpriteSheet.AnimLength + 255*cur_unit.anim : 0;
                 output += Sprite(pre, pre_unit, subcell_pos, pre.direction, frame, Texture);
 	        }
             else
             {
-                float frame = s * AnimLength;
+                float frame = s * UnitSpriteSheet.AnimLength;
 
                 if (IsValid(cur.direction))
                 {
@@ -117,7 +119,7 @@ namespace GpuSim
 
             pos.x += ((int)(floor(frame)) % 5);
             pos.y -= 1;
-            pos = (sprite * 255.0f + pos) * SpriteSize;
+            pos = (sprite * 255.0f + pos) * UnitSpriteSheet.SpriteSize;
 
             return Texture[pos];
         }

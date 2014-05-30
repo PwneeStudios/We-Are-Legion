@@ -92,6 +92,11 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
+bool GpuSim__SimShader__IsUnit(float4 u)
+{
+    return abs(u.r - 0.003921569) < .001;
+}
+
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
@@ -126,7 +131,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             GpuSim__SimShader__set_selected(data_here, false);
         }
     }
-    if (GpuSim__SimShader__Something(data_here) && GpuSim__SimShader__selected(data_here) && fs_param_action < 0.04705882 - .001)
+    if (GpuSim__SimShader__Something(data_here) && GpuSim__SimShader__IsUnit(unit_here) && GpuSim__SimShader__selected(data_here) && fs_param_action < 0.04705882 - .001)
     {
         data_here.a = fs_param_action;
     }

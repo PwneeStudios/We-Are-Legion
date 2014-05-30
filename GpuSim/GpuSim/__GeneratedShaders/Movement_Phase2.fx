@@ -53,6 +53,11 @@ sampler fs_param_Next : register(s2) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
+bool GpuSim__SimShader__IsStationary(float4 u)
+{
+    return abs(u.r - 0.01960784) < .001;
+}
+
 bool GpuSim__SimShader__IsValid(float direction)
 {
     return direction > 0 + .001;
@@ -91,6 +96,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 next = tex2D(fs_param_Next, psin.TexCoords + (float2(0, 0)) * fs_param_Next_dxdy);
     float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
+    if (GpuSim__SimShader__IsStationary(next))
+    {
+        __FinalOutput.Color = next;
+        return __FinalOutput;
+    }
     float4 ahead = tex2D(fs_param_Next, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(here.r)) * fs_param_Next_dxdy);
     if (abs(ahead.g - 0.0) < .001 && abs(ahead.r - here.r) < .001)
     {

@@ -4,16 +4,17 @@ namespace GpuSim
 {
     public partial class DrawBuildings : BaseShader
     {
-        protected color Sprite(data u, unit d, vec2 pos, float direction, float frame, PointSampler Texture)
+        protected color Sprite(building u, unit d, vec2 pos, float frame, PointSampler Texture)
         {
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            float selected_offset = selected(u) ? 4 : 0;
+            float selected_offset = selected((data)(vec4)u) ? 3 : 0;
 
+            pos += 255 * vec(u.part_x, u.part_y);
             pos.x += floor(frame);
-            pos.y += (floor(direction * 255 + .5f) - 1 + selected_offset);
-            pos *= SpriteSize;
+            pos.y += selected_offset;
+            pos *= BuildingSpriteSheet.SpriteSize;
 
             var clr = Texture[pos];
 
@@ -21,19 +22,21 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> Current, Field<unit> CurData, PointSampler Texture, float s)
+        color FragmentShader(VertexOut vertex, Field<building> Buildings, Field<unit> Units, PointSampler Texture, float s)
         {
             color output = color.TransparentBlack;
 
-            data cur = Current[Here];
-            unit cur_data  = CurData[Here];
+            building building_here = Buildings[Here];
+            unit unit_here = Units[Here];
 
-            vec2 subcell_pos = get_subcell_pos(vertex, Current.Size);
+            if (!IsBuilding(unit_here)) return output;
 
-            if (Something(cur) && cur_data.type == UnitType.Barracks)
+            vec2 subcell_pos = get_subcell_pos(vertex, Buildings.Size);
+
+            if (Something(building_here))
 	        {
-                float frame = cur_data.anim > 0 ? s * AnimLength + 255*cur_data.anim : 0;
-                //output += Sprite(pre, pre_data, subcell_pos, pre.direction, frame, Texture);
+                float frame = 0;
+                output += Sprite(building_here, unit_here, subcell_pos, frame, Texture);
 	        }
 
             return output;

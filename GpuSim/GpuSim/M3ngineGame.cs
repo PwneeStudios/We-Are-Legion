@@ -275,7 +275,12 @@ namespace GpuSim
             for (int i = 0; i < w; i += 50)
             for (int j = 0; j < h; j += 50)
             {
-
+                for (int _i = i; _i < i+3; _i++)
+                for (int _j = j; _j < j+3; _j++)
+                {
+                    _unit[_i * h + _j] = new Color((int)(255f * SimShader.UnitType.Barracks), 1, 1, 0);
+                    _data[_i * h + _j] = new Color((int)(255f * SimShader.Dir.Stationary), _j - j, 0, _i - i);
+                }
             }
 
             CurrentUnits.SetData(_unit);
@@ -481,7 +486,8 @@ namespace GpuSim
             DrawCorpses.Using(camvec, CameraAspect, Corspes, UnitsSpriteSheet);
             GridHelper.DrawGrid();
 
-            //DrawBuildings.Using(camvec, CameraAspect, CurrentData, CurrentUnits, BuildingsSpriteSheet, PercentSimStepComplete);
+            DrawBuildings.Using(camvec, CameraAspect, CurrentData, CurrentUnits, BuildingsSpriteSheet, PercentSimStepComplete);
+            GridHelper.DrawGrid();
 
             if (CameraZoom > z / 8)
                 DrawUnits.Using(camvec, CameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete);
@@ -608,7 +614,7 @@ namespace GpuSim
             bool Deselect  = Input.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed();
             bool Selecting = Input.LeftMouseDown;
 
-            DataDrawMouse .Using(SelectCircle_Data, SimShader.Player.One, Output: Temp1, Clear: Color.Transparent);
+            DataDrawMouse.Using(SelectCircle_Data, SimShader.Player.One, Output: Temp1, Clear: Color.Transparent);
 
             if (Selecting)
             {

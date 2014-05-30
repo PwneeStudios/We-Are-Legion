@@ -102,6 +102,11 @@ sampler fs_param_Texture : register(s5) = sampler_state
 float fs_param_s;
 
 // The following methods are included because they are referenced by the fragment shader.
+bool GpuSim__SimShader__IsUnit(float4 u)
+{
+    return abs(u.r - 0.003921569) < .001;
+}
+
 float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
@@ -215,6 +220,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 cur = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy), pre = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousData_dxdy);
     float4 cur_unit = tex2D(fs_param_CurrentUnits, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentUnits_dxdy), pre_unit = tex2D(fs_param_PreviousUnits, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousUnits_dxdy);
+    if (!(GpuSim__SimShader__IsUnit(cur_unit)) && !(GpuSim__SimShader__IsUnit(pre_unit)))
+    {
+        __FinalOutput.Color = output;
+        return __FinalOutput;
+    }
     float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_CurrentData_size);
     if (GpuSim__SimShader__Something(cur) && abs(cur.g - 0.003921569) < .001)
     {

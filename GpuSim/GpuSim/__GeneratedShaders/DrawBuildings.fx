@@ -24,14 +24,14 @@ float4 vs_param_cameraPos;
 float vs_param_cameraAspect;
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Current, using register location 1
-float2 fs_param_Current_size;
-float2 fs_param_Current_dxdy;
+// Texture Sampler for fs_param_Buildings, using register location 1
+float2 fs_param_Buildings_size;
+float2 fs_param_Buildings_dxdy;
 
-Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s1) = sampler_state
+Texture fs_param_Buildings_Texture;
+sampler fs_param_Buildings : register(s1) = sampler_state
 {
-    texture   = <fs_param_Current_Texture>;
+    texture   = <fs_param_Buildings_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -39,14 +39,14 @@ sampler fs_param_Current : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_CurData, using register location 2
-float2 fs_param_CurData_size;
-float2 fs_param_CurData_dxdy;
+// Texture Sampler for fs_param_Units, using register location 2
+float2 fs_param_Units_size;
+float2 fs_param_Units_dxdy;
 
-Texture fs_param_CurData_Texture;
-sampler fs_param_CurData : register(s2) = sampler_state
+Texture fs_param_Units_Texture;
+sampler fs_param_Units : register(s2) = sampler_state
 {
-    texture   = <fs_param_CurData_Texture>;
+    texture   = <fs_param_Units_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -72,6 +72,11 @@ sampler fs_param_Texture : register(s3) = sampler_state
 float fs_param_s;
 
 // The following methods are included because they are referenced by the fragment shader.
+bool GpuSim__SimShader__IsBuilding(float4 u)
+{
+    return abs(u.r - 0.007843138) < .001;
+}
+
 float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
@@ -83,6 +88,67 @@ float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size
 bool GpuSim__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
+}
+
+bool GpuSim__SimShader__selected(float4 u)
+{
+    float val = u.b;
+    return val >= 0.03137255 - .001;
+}
+
+float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
+{
+    if (abs(player - 0.003921569) < .001)
+    {
+    }
+    else
+    {
+        if (abs(player - 0.007843138) < .001)
+        {
+            float r = clr.r;
+            clr.r = clr.g;
+            clr.g = r;
+            clr.rgb *= 0.5;
+        }
+        else
+        {
+            if (abs(player - 0.01176471) < .001)
+            {
+                float b = clr.b;
+                clr.b = clr.g;
+                clr.g = b;
+            }
+            else
+            {
+                if (abs(player - 0.01568628) < .001)
+                {
+                    float r = clr.r;
+                    clr.r = clr.b;
+                    clr.b = r;
+                }
+                else
+                {
+                    clr.rgb *= 0.1;
+                }
+            }
+        }
+    }
+    return clr;
+}
+
+float4 GpuSim__DrawBuildings__Sprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+{
+    if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
+    {
+        return float4(0.0, 0.0, 0.0, 0.0);
+    }
+    float selected_offset = GpuSim__SimShader__selected(u) ? 3 : 0;
+    pos += 255 * float2(u.g, u.a);
+    pos.x += floor(frame);
+    pos.y += selected_offset;
+    pos *= float2(1.0 / 3, 1.0 / 6);
+    float4 clr = tex2D(Texture, pos);
+    return GpuSim__SimShader__PlayerColorize(clr, d.g);
 }
 
 // Compiled vertex shader
@@ -102,12 +168,18 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 cur = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    float4 cur_data = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
-    float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Current_size);
-    if (GpuSim__SimShader__Something(cur) && abs(cur_data.r - 0.007843138) < .001)
+    float4 building_here = tex2D(fs_param_Buildings, psin.TexCoords + (float2(0, 0)) * fs_param_Buildings_dxdy);
+    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
+    if (!(GpuSim__SimShader__IsBuilding(unit_here)))
     {
-        float frame = cur_data.a > 0 + .001 ? fs_param_s * 5 + 255 * cur_data.a : 0;
+        __FinalOutput.Color = output;
+        return __FinalOutput;
+    }
+    float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Buildings_size);
+    if (GpuSim__SimShader__Something(building_here))
+    {
+        float frame = 0;
+        output += GpuSim__DrawBuildings__Sprite(psin, building_here, unit_here, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
     __FinalOutput.Color = output;
     return __FinalOutput;

@@ -103,6 +103,11 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
+bool GpuSim__SimShader__IsBuilding(float4 u)
+{
+    return abs(u.r - 0.007843138) < .001;
+}
+
 float GpuSim__SimShader__unpack_coord(float2 packed)
 {
     float coord = 0;
@@ -200,6 +205,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         if (abs(here.a - 0.03921569) < .001)
         {
             __FinalOutput.Color = float4(0, 0, 0, 0);
+            return __FinalOutput;
+        }
+        if (GpuSim__SimShader__IsBuilding(here))
+        {
+            __FinalOutput.Color = data_here;
             return __FinalOutput;
         }
         float4 _value_right = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(1, 0)) * fs_param_PathToOtherTeams_dxdy), _value_up = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, 1)) * fs_param_PathToOtherTeams_dxdy), _value_left = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(-(1), 0)) * fs_param_PathToOtherTeams_dxdy), _value_down = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, -(1))) * fs_param_PathToOtherTeams_dxdy);

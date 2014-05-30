@@ -43,6 +43,11 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
+bool GpuSim__SimShader__IsStationary(float4 u)
+{
+    return abs(u.r - 0.01960784) < .001;
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -61,7 +66,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (GpuSim__SimShader__Something(here))
     {
         output = here;
-        output.g = 0.003921569;
+        if (!(GpuSim__SimShader__IsStationary(here)))
+        {
+            output.g = 0.003921569;
+        }
         __FinalOutput.Color = output;
         return __FinalOutput;
     }

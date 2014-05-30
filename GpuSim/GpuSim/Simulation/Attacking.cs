@@ -12,7 +12,7 @@ namespace GpuSim
 
             unit_here.anim = _0;
 
-            if (data_here.change == Change.Stayed && unit_here.team != Team.None) // A unit has to be stationary to attack or be attacked. It must also have a team.
+            if (Stayed(data_here) && unit_here.team != Team.None) // A unit has to be stationary to attack or be attacked. It must also have a team.
             {
                 if (data_here.action == UnitAction.Attacking)
                 {

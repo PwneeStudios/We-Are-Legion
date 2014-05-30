@@ -13,7 +13,8 @@ namespace GpuSim
             if (Something(here))
             {
                 output = here;
-                output.change = Change.Stayed;
+                
+                if (!IsStationary(here)) output.change = Change.Stayed;
                 return output;
             }
 
@@ -51,6 +52,8 @@ namespace GpuSim
             data next = Next[Here];
             data here = Current[Here];
 
+            if (IsStationary(next)) return next;
+
             data ahead = Next[dir_to_vec(here.direction)];
             if (ahead.change == Change.Moved && ahead.direction == here.direction)
                 next = data.Nothing;
@@ -64,13 +67,14 @@ namespace GpuSim
     public partial class Movement_Convect : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<data> Data, Field<data> Current)
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> Data, Field<data> CurrentData)
         {
-            data here = Current[Here], output = data.Nothing;
+            data here = CurrentData[Here];
+            vec4 output = vec4.Zero;
 
             if (Something(here))
             {
-                if (here.change == Change.Stayed)
+                if (Stayed(here))
                     output = Data[Here];
                 else
                     output = Data[dir_to_vec(Reverse(prior_direction(here)))];
@@ -189,6 +193,9 @@ namespace GpuSim
                 {
                     return data.Nothing;
                 }
+
+                // Buildings can't move
+                if (IsBuilding(here)) return data_here;
 
                 // Get nearby paths to other teams
                 vec4

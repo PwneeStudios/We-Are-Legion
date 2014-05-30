@@ -53,14 +53,14 @@ namespace GpuSim
         [Hlsl("r")]
         public float direction { get { return r; } set { r = value; } }
 
-        [Hlsl("g")]
-        public float part { get { return g; } set { g = value; } }
-
         [Hlsl("b")]
         public float prior_direction_and_select { get { return b; } set { b = value; } }
 
+        [Hlsl("g")]
+        public float part_x { get { return g; } set { g = value; } }
+
         [Hlsl("a")]
-        public float action { get { return a; } set { a = value; } }
+        public float part_y { get { return a; } set { a = value; } }
     }
 
     [Copy(typeof(vec4))]
@@ -72,13 +72,6 @@ namespace GpuSim
 
     public class SimShader : GridComputation
     {
-        public const int AnimLength = 5;
-        public const int NumAnims = 3;
-        public const int SheetDimX = NumAnims * AnimLength;
-        public const int SheetDimY = 2 * 4;
-        public readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
-        public readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
-
         const float select_offset = _8;
         protected static bool selected(data u)
         {
@@ -146,12 +139,32 @@ namespace GpuSim
                 Barracks = _2;
         }
 
+        protected static bool IsUnit(unit u)
+        {
+            return u.type == UnitType.Footman;
+        }
+
+        protected static bool IsBuilding(unit u)
+        {
+            return u.type == UnitType.Barracks;
+        }
+
+        protected static bool IsStationary(data u)
+        {
+            return u.direction == Dir.Stationary;
+        }
+
+        protected static bool IsMobile(data u)
+        {
+            return u.direction != Dir.Stationary;
+        }
+
         public static class Anim
         {
             public const float
-                None = _0 * AnimLength,
-                Attack = _1 * AnimLength,
-                Dead = _2 * AnimLength;
+                None = _0 * UnitSpriteSheet.AnimLength,
+                Attack = _1 * UnitSpriteSheet.AnimLength,
+                Dead = _2 * UnitSpriteSheet.AnimLength;
         }
 
         public static class Part
@@ -169,6 +182,30 @@ namespace GpuSim
                 Count = _9;
         }
 
+        public static class UnitSpriteSheet
+        {
+            public const int AnimLength = 5;
+            public const int NumAnims = 3;
+            public const int SheetDimX = NumAnims * AnimLength;
+            public const int SheetDimY = 2 /*Selected,Unselected*/ * 4 /*4 Directions*/;
+            public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
+            public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
+        }
+
+        public static class BuildingSpriteSheet
+        {
+            public const int BuildingDimX = 3;
+            public const int BuildingDimY = 3;
+            public static readonly vec2 BuildingDim = vec(BuildingDimX, BuildingDimY);
+
+            public const int AnimLength = 1;
+            public const int NumAnims = 1;
+            public const int SheetDimX = NumAnims * AnimLength * BuildingDimX;
+            public const int SheetDimY = 2 /*Selected,Unselected*/ * BuildingDimY;
+            public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
+            public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
+        }
+
         public static class Dir
         {
             public const float
@@ -177,7 +214,8 @@ namespace GpuSim
                 Up = _2,
                 Left = _3,
                 Down = _4,
-                Count = _5,
+                Stationary = _5,
+                Count = _6,
 
                 TurnRight = -_1,
                 TurnLeft = _1;
@@ -202,6 +240,16 @@ namespace GpuSim
                 NoChange = _12;
         }
 
+        protected static bool Stayed(data u)
+        {
+            return IsStationary(u) || u.change == Change.Stayed;
+        }
+
+        protected static bool Moved(data u)
+        {
+            return !IsStationary(u) && u.change == Change.Moved;
+        }
+
         protected static bool SomethingSelected(data u)
         {
             return Something(u) && selected(u);
@@ -213,6 +261,11 @@ namespace GpuSim
         }
 
         protected static bool Something(corpse u)
+        {
+            return u.direction > 0;
+        }
+
+        protected static bool Something(building u)
         {
             return u.direction > 0;
         }

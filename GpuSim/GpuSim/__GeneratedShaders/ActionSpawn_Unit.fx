@@ -84,6 +84,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             data.g = fs_param_player;
             data.b = fs_param_team;
+            data.r = 0.003921569;
         }
     }
     __FinalOutput.Color = data;
