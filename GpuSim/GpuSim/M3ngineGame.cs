@@ -71,6 +71,7 @@ namespace GpuSim
             PreviousUnits, CurrentUnits, PreviousData, CurrentData, Extra, TargetData,
             RandomField,
             Corspes,
+            SelectField,
             PreviousDraw, CurrentDraw,
             Paths_Right, Paths_Left, Paths_Up, Paths_Down,
             PathToOtherTeams;
@@ -189,6 +190,8 @@ namespace GpuSim
             TargetData     = MakeTarget(w, h);
 
             Corspes        = MakeTarget(w, h);
+            
+            SelectField    = MakeTarget(w, h);
 
             RandomField    = MakeTarget(w, h);
 
@@ -615,7 +618,7 @@ namespace GpuSim
             bool Deselect  = Input.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed();
             bool Selecting = Input.LeftMouseDown;
 
-            DataDrawMouse.Using(SelectCircle_Data, SimShader.Player.One, Output: Temp1, Clear: Color.Transparent);
+            DataDrawMouse.Using(SelectCircle_Data, SimShader.Player.One, Output: SelectField, Clear: Color.Transparent);
 
             if (Selecting)
             {
@@ -630,48 +633,55 @@ namespace GpuSim
             }
 
             var action = Input.RightMousePressed ? SimShader.UnitAction.Attacking : SimShader.UnitAction.NoChange;
-            ActionSelect.Apply(CurrentData, CurrentUnits, Temp1, Deselect, action, Output: Temp2);
-            Swap(ref Temp2, ref CurrentData);
+            ActionSelect.Apply(CurrentData, CurrentUnits, SelectField, Deselect, action, Output: Temp1);
+            Swap(ref Temp1, ref CurrentData);
 
-            ActionSelect.Apply(PreviousData, CurrentUnits, Temp1, Deselect, SimShader.UnitAction.NoChange, Output: Temp2);
-            Swap(ref Temp2, ref PreviousData);
+            ActionSelect.Apply(PreviousData, CurrentUnits, SelectField, Deselect, SimShader.UnitAction.NoChange, Output: Temp1);
+            Swap(ref Temp1, ref PreviousData);
 
             if (Keys.F.Pressed() || Keys.G.Pressed())
             {
-                float player = Keys.F.Pressed() ? SimShader.Player.One : SimShader.Player.Two;
-                float team   = Keys.F.Pressed() ? SimShader.Team.One   : SimShader.Team.Two;
-
-                ActionSpawn_Unit.Apply(CurrentUnits, Temp1, player, team, Output: Temp2);
-                Swap(ref Temp2, ref CurrentUnits);
-                ActionSpawn_Data.Apply(CurrentData, Temp1, Output: Temp2);
-                Swap(ref Temp2, ref CurrentData);
+                CreateUnits();
             }
 
             if (Input.RightMousePressed)
             {
-                //var click_pos = Input.CurMousePos;
-                var pos = ScreenToGridCoordinates(Input.CurMousePos);
-                vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
-                pos -= shift;
-
-                vec2 Selected_BL   = SelectedBound_BL * Screen;
-                vec2 Selected_Size = (SelectedBound_TR - SelectedBound_BL) * Screen;
-                if (Selected_Size.x < 1) Selected_Size.x = 1;
-                if (Selected_Size.y < 1) Selected_Size.y = 1;
-                
-                float SquareWidth     = (float)Math.Sqrt(SelectedCount);
-                vec2 Destination_Size = new vec2(SquareWidth, SquareWidth) * 1.25f;
-                vec2 Destination_BL = pos - Destination_Size / 2;
-                //vec2 Destination_Size = vec2.Zero;
-                //vec2 Destination_BL = pos;
-
-                ActionAttackSquare.Apply(CurrentData, TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: Temp1);
-                //ActionAttackPoint .Apply(Current, TargetData, pos, Output: Temp1);
-                Swap(ref TargetData, ref Temp1);
-
-                ActionAttack2.Apply(CurrentData, Extra, pos, Output: Temp1);
-                Swap(ref Extra, ref Temp1);
+                AttackMove();
             }
+        }
+
+        private void CreateUnits()
+        {
+            float player = Keys.F.Pressed() ? SimShader.Player.One : SimShader.Player.Two;
+            float team = Keys.F.Pressed() ? SimShader.Team.One : SimShader.Team.Two;
+
+            ActionSpawn_Unit.Apply(CurrentUnits, SelectField, player, team, Output: Temp1);
+            Swap(ref Temp1, ref CurrentUnits);
+            ActionSpawn_Data.Apply(CurrentData, SelectField, Output: Temp1);
+            Swap(ref Temp1, ref CurrentData);
+        }
+
+        private void AttackMove()
+        {
+            var pos = ScreenToGridCoordinates(Input.CurMousePos);
+            vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
+            pos -= shift;
+
+            vec2 Selected_BL = SelectedBound_BL * Screen;
+            vec2 Selected_Size = (SelectedBound_TR - SelectedBound_BL) * Screen;
+            if (Selected_Size.x < 1) Selected_Size.x = 1;
+            if (Selected_Size.y < 1) Selected_Size.y = 1;
+
+            float SquareWidth = (float)Math.Sqrt(SelectedCount);
+            vec2 Destination_Size = new vec2(SquareWidth, SquareWidth) * 1.25f;
+            vec2 Destination_BL = pos - Destination_Size / 2;
+
+            ActionAttackSquare.Apply(CurrentData, TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: Temp1);
+            //ActionAttackPoint .Apply(Current, TargetData, pos, Output: Temp1);
+            Swap(ref TargetData, ref Temp1);
+
+            ActionAttack2.Apply(CurrentData, Extra, pos, Output: Temp1);
+            Swap(ref Extra, ref Temp1);
         }
 
 		void SimulationUpdate()
