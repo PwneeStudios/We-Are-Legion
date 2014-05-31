@@ -37,29 +37,14 @@ sampler fs_param_Unit : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_CurrentData, using register location 2
-float2 fs_param_CurrentData_size;
-float2 fs_param_CurrentData_dxdy;
+// Texture Sampler for fs_param_Data, using register location 2
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
 
-Texture fs_param_CurrentData_Texture;
-sampler fs_param_CurrentData : register(s2) = sampler_state
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s2) = sampler_state
 {
-    texture   = <fs_param_CurrentData_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-// Texture Sampler for fs_param_PreviousData, using register location 3
-float2 fs_param_PreviousData_size;
-float2 fs_param_PreviousData_dxdy;
-
-Texture fs_param_PreviousData_Texture;
-sampler fs_param_PreviousData : register(s3) = sampler_state
-{
-    texture   = <fs_param_PreviousData_Texture>;
+    texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -87,21 +72,13 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 cur_data = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy), prev_data = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousData_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (!(GpuSim__SimShader__Something(cur_data)) && !(GpuSim__SimShader__Something(prev_data)))
+    if (GpuSim__SimShader__Something(data_here) && abs(data_here.a - 0.01568628) < .001)
     {
-        float4 unit_right = tex2D(fs_param_Unit, psin.TexCoords + (float2(1, 0)) * fs_param_Unit_dxdy), unit_up = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 1)) * fs_param_Unit_dxdy), unit_left = tex2D(fs_param_Unit, psin.TexCoords + (float2(-(1), 0)) * fs_param_Unit_dxdy), unit_down = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, -(1))) * fs_param_Unit_dxdy);
-        float4 data_right = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousData_dxdy), data_up = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousData_dxdy), data_left = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(-(1), 0)) * fs_param_PreviousData_dxdy), data_down = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, -(1))) * fs_param_PreviousData_dxdy);
-        if (abs(unit_left.r - 0.007843138) < .001)
-        {
-            unit_here.g = unit_left.g;
-            unit_here.b = unit_left.b;
-            unit_here.r = 0.003921569;
-            unit_here.a = 0.0;
-        }
+        data_here.a = 0.007843138;
     }
-    __FinalOutput.Color = unit_here;
+    __FinalOutput.Color = data_here;
     return __FinalOutput;
 }
 

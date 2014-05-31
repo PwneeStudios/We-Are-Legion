@@ -280,6 +280,7 @@ namespace GpuSim
                 {
                     _unit[_i * h + _j] = new Color((int)(255f * SimShader.UnitType.Barracks), 1, 1, 0);
                     _data[_i * h + _j] = new Color((int)(255f * SimShader.Dir.Stationary), _j - j, 0, _i - i);
+                    _target[_i * h + _j] = new Color(rnd.Next(0, 4), rnd.Next(0, 256), rnd.Next(0, 4), rnd.Next(0, 256));
                 }
             }
 
@@ -701,9 +702,13 @@ namespace GpuSim
             CheckForAttacking.Apply(CurrentUnits, CurrentData, RandomField, Output: Temp1);
             Swap(ref CurrentUnits, ref Temp1);
 
-            SpawnUnits_Unit.Apply(CurrentUnits, CurrentData, PreviousData, Output: Temp1);
+            SpawnUnits.Apply(CurrentUnits, CurrentData, PreviousData, Output: Temp1);
+            Swap(ref CurrentData, ref Temp1);
+            SetSpawn_Unit.Apply(CurrentUnits, CurrentData, Output: Temp1);
             Swap(ref CurrentUnits, ref Temp1);
-            SpawnUnits_Data.Apply(CurrentUnits, CurrentData, PreviousData, Output: Temp1);
+            SetSpawn_Target.Apply(TargetData, CurrentData, Output: Temp1);
+            Swap(ref TargetData, ref Temp1);
+            SetSpawn_Data.Apply(CurrentUnits, CurrentData, Output: Temp1);
             Swap(ref CurrentData, ref Temp1);
 
             UpdateRandomField.Apply(RandomField, Output: Temp1);

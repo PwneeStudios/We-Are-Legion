@@ -121,7 +121,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         if (abs(unit_left.r - 0.007843138) < .001)
         {
             cur_data.r = 0.003921569;
-            cur_data.a = 0.007843138;
+            cur_data.a = 0.01568628;
             cur_data.g = 0.003921569;
             GpuSim__SimShader__set_selected(cur_data, false);
             GpuSim__SimShader__set_prior_direction(cur_data, cur_data.r);

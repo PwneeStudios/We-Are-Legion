@@ -235,7 +235,8 @@ namespace GpuSim
                 Moving = _1,
                 Attacking = _2,
                 Guard = _3,
-                Count = _4,
+                Spawning = _4,
+                Count = _5,
 
                 NoChange = _12;
         }
