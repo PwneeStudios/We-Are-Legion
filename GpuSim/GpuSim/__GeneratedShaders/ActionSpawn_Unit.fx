@@ -76,18 +76,18 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
+    float4 here = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     if (GpuSim__SimShader__Something(select))
     {
         if (abs((int)(psin.TexCoords.x * fs_param_CurData_size.x) % 2 - 0) < .001 && abs((int)(psin.TexCoords.y * fs_param_CurData_size.y) % 2 - 0) < .001)
         {
-            data.g = fs_param_player;
-            data.b = fs_param_team;
-            data.r = 0.003921569;
+            here.g = fs_param_player;
+            here.b = fs_param_team;
+            here.r = 0.003921569;
         }
     }
-    __FinalOutput.Color = data;
+    __FinalOutput.Color = here;
     return __FinalOutput;
 }
 

@@ -96,7 +96,7 @@ namespace GpuSim
         [FragmentShader]
         unit FragmentShader(VertexOut vertex, Field<unit> CurData, Field<data> Select, float player, float team)
         {
-            unit data = CurData[Here];
+            unit here = CurData[Here];
             data select = Select[Here];
 
             if (Something(select))
@@ -104,13 +104,13 @@ namespace GpuSim
                 if ((int)(vertex.TexCoords.x * CurData.Size.x) % 2 == 0 &&
                     (int)(vertex.TexCoords.y * CurData.Size.y) % 2 == 0)
                 {
-                    data.player = player;
-                    data.team = team;
-                    data.type = UnitType.Footman;
+                    here.player = player;
+                    here.team = team;
+                    here.type = UnitType.Footman;
                 }
             }
 
-            return data;
+            return here;
         }
     }
 

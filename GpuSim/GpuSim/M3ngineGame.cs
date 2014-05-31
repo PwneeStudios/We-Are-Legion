@@ -701,6 +701,11 @@ namespace GpuSim
             CheckForAttacking.Apply(CurrentUnits, CurrentData, RandomField, Output: Temp1);
             Swap(ref CurrentUnits, ref Temp1);
 
+            SpawnUnits_Unit.Apply(CurrentUnits, CurrentData, PreviousData, Output: Temp1);
+            Swap(ref CurrentUnits, ref Temp1);
+            SpawnUnits_Data.Apply(CurrentUnits, CurrentData, PreviousData, Output: Temp1);
+            Swap(ref CurrentData, ref Temp1);
+
             UpdateRandomField.Apply(RandomField, Output: Temp1);
             Swap(ref RandomField, ref Temp1);
 		}
