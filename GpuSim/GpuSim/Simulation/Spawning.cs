@@ -25,14 +25,30 @@ namespace GpuSim
                     data_left = PreviousData[LeftOne],
                     data_down = PreviousData[DownOne];
 
-                if (unit_left.type == UnitType.Barracks)
+                float spawn_dir = Dir.None;
+
+                if (unit_left.type == UnitType.Barracks && prior_direction(data_left) == Dir.Right) spawn_dir = Dir.Right;
+                if (unit_right.type == UnitType.Barracks && prior_direction(data_right) == Dir.Left) spawn_dir = Dir.Left;
+                if (unit_up.type == UnitType.Barracks && prior_direction(data_up) == Dir.Down) spawn_dir = Dir.Down;
+                if (unit_down.type == UnitType.Barracks && prior_direction(data_down) == Dir.Up) spawn_dir = Dir.Up;
+
+                if (IsValid(spawn_dir))
                 {
-                    cur_data.direction = Dir.Right;
+                    cur_data.direction = spawn_dir;
                     cur_data.action = UnitAction.Spawning;
                     cur_data.change = Change.Stayed;
                     set_selected(ref cur_data, false);
                     set_prior_direction(ref cur_data, cur_data.direction);
                 }
+
+                //if (unit_left.type == UnitType.Barracks)
+                //{
+                //    cur_data.direction = Dir.Right;
+                //    cur_data.action = UnitAction.Spawning;
+                //    cur_data.change = Change.Stayed;
+                //    set_selected(ref cur_data, false);
+                //    set_prior_direction(ref cur_data, cur_data.direction);
+                //}
             }
 
             return cur_data;
@@ -71,8 +87,6 @@ namespace GpuSim
             if (Something(data_here) && data_here.action == UnitAction.Spawning)
             {
                 target = Target[dir_to_vec(Reverse(data_here.direction))];
-                //target.x = _4;
-                //target.z = _4;
             }
 
             return target;

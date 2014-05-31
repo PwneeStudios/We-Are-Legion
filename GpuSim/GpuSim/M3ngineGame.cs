@@ -678,6 +678,13 @@ namespace GpuSim
 		{
             PathUpdate();
 
+            Building_SelectCenterIfSelected_SetDirecion.Apply(CurrentUnits, CurrentData, Output: Temp1);
+            Swap(ref CurrentData, ref Temp1);
+            BuildingDiffusion_Data.Apply(CurrentUnits, CurrentData, Output: Temp1);
+            Swap(ref CurrentData, ref Temp1);
+            BuildingDiffusion_Target.Apply(CurrentUnits, CurrentData, TargetData, Output: Temp1);
+            Swap(ref TargetData, ref Temp1);
+
             AddCorpses.Apply(CurrentUnits, CurrentData, Corspes, Output: Temp1);
             Swap(ref Corspes, ref Temp1);
 

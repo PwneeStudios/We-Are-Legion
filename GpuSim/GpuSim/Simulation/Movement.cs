@@ -194,8 +194,16 @@ namespace GpuSim
                     return data.Nothing;
                 }
 
-                // Buildings can't move
-                if (IsBuilding(here)) return data_here;
+                // Buildings can't move.
+                if (IsBuilding(here))
+                {
+                    if (IsCenter((building)(vec4)data_here))
+                    {
+                        // Set the building direction toward its "target".
+                        set_prior_direction(ref data_here, BuildingDirection(vertex, TargetData, (building)(vec4)data_here));
+                    }
+                    return data_here;
+                }
 
                 // Get nearby paths to other teams
                 vec4
@@ -376,6 +384,26 @@ namespace GpuSim
                 if (here.action == UnitAction.Attacking)
                     here.action = UnitAction.Guard;
             }
+        }
+
+        float BuildingDirection(VertexOut vertex, Field<vec4> TargetData, building here)
+        {
+            float dir = Dir.Right;
+
+            vec4 target = TargetData[Here];
+
+            // Unpack packed info
+            vec2 CurPos = vertex.TexCoords * TargetData.Size;
+            vec2 Destination = unpack_vec2((vec4)target);
+
+            vec2 diff = Destination - CurPos;
+            vec2 mag = abs(diff);
+            if (mag.x > mag.y && diff.x > 0) dir = Dir.Right;
+            if (mag.x > mag.y && diff.x < 0) dir = Dir.Left;
+            if (mag.y > mag.x && diff.y > 0) dir = Dir.Up;
+            if (mag.y > mag.x && diff.y < 0) dir = Dir.Down;
+
+            return dir;
         }
     }
 }

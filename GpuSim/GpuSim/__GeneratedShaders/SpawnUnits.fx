@@ -83,6 +83,11 @@ float GpuSim__SimShader__prior_direction(float4 u)
     return val;
 }
 
+bool GpuSim__SimShader__IsValid(float direction)
+{
+    return direction > 0 + .001;
+}
+
 void GpuSim__SimShader__set_selected(inout float4 u, bool selected)
 {
     u.b = GpuSim__SimShader__prior_direction(u) + (selected ? 0.03137255 : 0.0);
@@ -118,9 +123,26 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         float4 unit_right = tex2D(fs_param_Unit, psin.TexCoords + (float2(1, 0)) * fs_param_Unit_dxdy), unit_up = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 1)) * fs_param_Unit_dxdy), unit_left = tex2D(fs_param_Unit, psin.TexCoords + (float2(-(1), 0)) * fs_param_Unit_dxdy), unit_down = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, -(1))) * fs_param_Unit_dxdy);
         float4 data_right = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousData_dxdy), data_up = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousData_dxdy), data_left = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(-(1), 0)) * fs_param_PreviousData_dxdy), data_down = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, -(1))) * fs_param_PreviousData_dxdy);
-        if (abs(unit_left.r - 0.007843138) < .001)
+        float spawn_dir = 0.0;
+        if (abs(unit_left.r - 0.007843138) < .001 && abs(GpuSim__SimShader__prior_direction(data_left) - 0.003921569) < .001)
         {
-            cur_data.r = 0.003921569;
+            spawn_dir = 0.003921569;
+        }
+        if (abs(unit_right.r - 0.007843138) < .001 && abs(GpuSim__SimShader__prior_direction(data_right) - 0.01176471) < .001)
+        {
+            spawn_dir = 0.01176471;
+        }
+        if (abs(unit_up.r - 0.007843138) < .001 && abs(GpuSim__SimShader__prior_direction(data_up) - 0.01568628) < .001)
+        {
+            spawn_dir = 0.01568628;
+        }
+        if (abs(unit_down.r - 0.007843138) < .001 && abs(GpuSim__SimShader__prior_direction(data_down) - 0.007843138) < .001)
+        {
+            spawn_dir = 0.007843138;
+        }
+        if (GpuSim__SimShader__IsValid(spawn_dir))
+        {
+            cur_data.r = spawn_dir;
             cur_data.a = 0.01568628;
             cur_data.g = 0.003921569;
             GpuSim__SimShader__set_selected(cur_data, false);

@@ -9,7 +9,7 @@ namespace GpuSim
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            float selected_offset = selected((data)(vec4)u) ? 3 : 0;
+            float selected_offset = selected(u) ? 3 : 0;
 
             pos += 255 * vec(u.part_x, u.part_y);
             pos.x += floor(frame);

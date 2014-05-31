@@ -108,6 +108,22 @@ bool GpuSim__SimShader__IsBuilding(float4 u)
     return abs(u.r - 0.007843138) < .001;
 }
 
+bool GpuSim__SimShader__IsCenter(float4 b)
+{
+    return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
+}
+
+bool GpuSim__SimShader__selected(float4 u)
+{
+    float val = u.b;
+    return val >= 0.03137255 - .001;
+}
+
+void GpuSim__SimShader__set_prior_direction(inout float4 u, float dir)
+{
+    u.b = dir + (GpuSim__SimShader__selected(u) ? 0.03137255 : 0.0);
+}
+
 float GpuSim__SimShader__unpack_coord(float2 packed)
 {
     float coord = 0;
@@ -121,6 +137,33 @@ float2 GpuSim__SimShader__unpack_vec2(float4 packed)
     v.x = GpuSim__SimShader__unpack_coord(packed.rg);
     v.y = GpuSim__SimShader__unpack_coord(packed.ba);
     return v;
+}
+
+float GpuSim__Movement_UpdateDirection_RemoveDead__BuildingDirection(VertexToPixel psin, VertexToPixel vertex, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, float4 here)
+{
+    float dir = 0.003921569;
+    float4 target = tex2D(TargetData, psin.TexCoords + (float2(0, 0)) * TargetData_dxdy);
+    float2 CurPos = vertex.TexCoords * TargetData_size;
+    float2 Destination = GpuSim__SimShader__unpack_vec2(target);
+    float2 diff = Destination - CurPos;
+    float2 mag = abs(diff);
+    if (mag.x > mag.y + .001 && diff.x > 0 + .001)
+    {
+        dir = 0.003921569;
+    }
+    if (mag.x > mag.y + .001 && diff.x < 0 - .001)
+    {
+        dir = 0.01176471;
+    }
+    if (mag.y > mag.x + .001 && diff.y > 0 + .001)
+    {
+        dir = 0.007843138;
+    }
+    if (mag.y > mag.x + .001 && diff.y < 0 - .001)
+    {
+        dir = 0.01568628;
+    }
+    return dir;
 }
 
 bool GpuSim__SimShader__IsValid(float direction)
@@ -209,6 +252,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         if (GpuSim__SimShader__IsBuilding(here))
         {
+            if (GpuSim__SimShader__IsCenter(data_here))
+            {
+                GpuSim__SimShader__set_prior_direction(data_here, GpuSim__Movement_UpdateDirection_RemoveDead__BuildingDirection(psin, psin, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, data_here));
+            }
             __FinalOutput.Color = data_here;
             return __FinalOutput;
         }

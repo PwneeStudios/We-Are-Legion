@@ -96,6 +96,29 @@ namespace GpuSim
             u.prior_direction_and_select = dir + (selected(u) ? select_offset : _0);
         }
 
+        protected static bool selected(building u)
+        {
+            float val = u.prior_direction_and_select;
+            return val >= select_offset;
+        }
+
+        protected static void set_selected(ref building u, bool selected)
+        {
+            u.prior_direction_and_select = prior_direction(u) + (selected ? select_offset : _0);
+        }
+
+        protected static float prior_direction(building u)
+        {
+            float val = u.prior_direction_and_select;
+            if (val >= select_offset) val -= select_offset;
+            return val;
+        }
+
+        protected static void set_prior_direction(ref building u, float dir)
+        {
+            u.prior_direction_and_select = dir + (selected(u) ? select_offset : _0);
+        }
+
         protected vec2 get_subcell_pos(VertexOut vertex, vec2 grid_size)
         {
             vec2 coords = vertex.TexCoords * grid_size;
@@ -147,6 +170,11 @@ namespace GpuSim
         protected static bool IsBuilding(unit u)
         {
             return u.type == UnitType.Barracks;
+        }
+
+        protected static bool IsCenter(building b)
+        {
+            return b.part_x == _1 && b.part_y == _1;
         }
 
         protected static bool IsStationary(data u)
@@ -325,6 +353,14 @@ namespace GpuSim
         {
             float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
             return IsValid(direction) ? new RelativeIndex(cos(angle), sin(angle)) : new RelativeIndex(0, 0);
+        }
+
+        protected static RelativeIndex center_dir(building b)
+        {
+            vec2 part = vec(b.part_x, b.part_y);
+            part = -255 * (part - vec(_1, _1));
+
+            return (RelativeIndex)part;
         }
 
         public static vec2 pack_coord(float x)
