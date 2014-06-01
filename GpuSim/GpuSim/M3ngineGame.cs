@@ -69,6 +69,20 @@ namespace GpuSim
 
             return data;
         }
+
+        public static void SetData(this RenderTarget2D RenderTarget, vec2 coord, vec2 size, Color[] data)
+        {
+            int w = RenderTarget.Width, h = RenderTarget.Height;
+
+            coord = new vec2((int)Math.Floor(coord.x), (int)Math.Floor(coord.y));
+            size = new vec2((int)Math.Floor(size.x), (int)Math.Floor(size.y));
+            if (coord.x < 0 || coord.y < 0 || coord.x >= w || coord.y >= h) return;
+
+            int elements = (int)size.x * (int)size.y;
+            Rectangle rect = new Rectangle((int)coord.x, (int)coord.y, (int)size.x, (int)size.y);
+
+            RenderTarget.SetData(0, rect, data, 0, elements);
+        }
     }
 
 	public static class RndExtension
@@ -130,8 +144,9 @@ namespace GpuSim
             graphics.PreferredBackBufferWidth  = w;
             graphics.PreferredBackBufferHeight = h;
 			//graphics.IsFullScreen = rez.Mode == WindowMode.Fullscreen;
-			graphics.SynchronizeWithVerticalRetrace = !UnlimitedSpeed;
-			IsFixedTimeStep = !UnlimitedSpeed;
+            graphics.SynchronizeWithVerticalRetrace = !UnlimitedSpeed;
+            IsFixedTimeStep = !UnlimitedSpeed;
+            //TargetElapsedTime = new TimeSpan(0, 0, 0, 0, 1000 / 30);
 
 			Content.RootDirectory = "Content";
 		}
@@ -339,6 +354,27 @@ namespace GpuSim
             Corspes.SetData(_corpses);
         }
 
+        void PlaceBarracks(vec2 coord)
+        {
+            Color[]
+                _unit   = new Color[3 * 3],
+                _data   = new Color[3 * 3],
+                _target = new Color[3 * 3];
+
+            for (int _i = 0; _i < 3; _i++)
+            for (int _j = 0; _j < 3; _j++)
+            {
+                _unit[_i * 3 + _j] = new Color((int)(255f * SimShader.UnitType.Barracks), 1, 1, 0);
+                _data[_i * 3 + _j] = new Color((int)(255f * SimShader.Dir.Stationary), _j, 0, _i);
+                _target[_i * 3 + _j] = new Color(0, 0, 0, 0);
+            }
+
+            vec2 size = new vec2(3, 3);
+            CurrentUnits.SetData(coord, size, _unit);
+            CurrentData.SetData(coord, size, _data);
+            TargetData.SetData(coord, size, _target);
+        }
+
         private RenderTarget2D MakeTarget(int w, int h)
         {
             return new RenderTarget2D(graphics.GraphicsDevice, w, h);
@@ -368,6 +404,8 @@ namespace GpuSim
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
+            float FpsRateModifier = 1;
+
 			// Allows the game to exit
             if (Buttons.Back.Down())
 				this.Exit();
@@ -387,12 +425,12 @@ namespace GpuSim
 
             if (MouseEnabled)
             {
-                float MouseWheelZoomRate = 1.3333f;
+                float MouseWheelZoomRate = 1.3333f * FpsRateModifier;
                 if (Input.DeltaMouseScroll < 0) CameraZoom /= MouseWheelZoomRate;
                 else if (Input.DeltaMouseScroll > 0) CameraZoom *= MouseWheelZoomRate;
             }
 
-            float KeyZoomRate = 1.125f;
+            float KeyZoomRate = 1.125f * FpsRateModifier;
             if      (Buttons.X.Down() || Keys.X.Pressed() || Keys.E.Pressed()) CameraZoom /= KeyZoomRate;
             else if (Buttons.A.Down() || Keys.Z.Pressed() || Keys.Q.Pressed()) CameraZoom *= KeyZoomRate;
 
@@ -406,14 +444,14 @@ namespace GpuSim
             }
 
             // Move the camera via: Click And Drag
-            //float MoveRate_ClickAndDrag = .00165f;
+            //float MoveRate_ClickAndDrag = .00165f * FpsRateModifier;
             //if (Input.LeftMouseDown)
             //    CameraPos += Input.DeltaMousPos / CameraZoom * MoveRate_ClickAndDrag * new vec2(-1, 1);
 
             // Move the camera via: Push Edge
             if (MouseEnabled)
             {
-                float MoveRate_PushEdge = .07f;
+                float MoveRate_PushEdge = .07f * FpsRateModifier;
                 var push_dir = vec2.Zero;
                 float EdgeRatio = .1f;
                 push_dir.x += -Restrict((EdgeRatio * Screen.x - Input.CurMousePos.x) / (EdgeRatio * Screen.x), 0, 1);
@@ -427,7 +465,7 @@ namespace GpuSim
             // Move the camera via: Keyboard or Gamepad
             var dir = Input.Direction();
 
-            float MoveRate_Keyboard = .07f;
+            float MoveRate_Keyboard = .07f * FpsRateModifier;
             CameraPos += dir / CameraZoom * MoveRate_Keyboard;
 
 
@@ -440,6 +478,17 @@ namespace GpuSim
             if (BL.y < -1) CameraPos = new vec2(CameraPos.x, CameraPos.y - (BL.y + 1));
 
 
+            // Switch modes
+            if (Keys.B.Pressed())
+            {
+                CurUserMode = UserMode.PlaceBuilding;
+            }
+
+            if (Keys.Escape.Pressed() || Keys.Back.Pressed() || CurUserMode == UserMode.PlaceBuilding && Input.RightMousePressed)
+            {
+                CurUserMode = UserMode.Select;
+            }
+
 			base.Update(gameTime);
 		}
 
@@ -449,6 +498,12 @@ namespace GpuSim
 		public static float PercentSimStepComplete = 0;
 
         int DrawCount = 0;
+
+        public enum UserMode { PlaceBuilding, Select };
+        public UserMode CurUserMode = UserMode.PlaceBuilding;
+
+        bool CanPlaceBuilding = false;
+        bool[] CanPlace = new bool[3 * 3];
 
 		/// <summary>
 		/// This is called when the game should draw itself.
@@ -468,9 +523,18 @@ namespace GpuSim
 
 
             PathUpdate();
-            Count();
-            Bounds();
-            SelectionUpdate();
+            switch (CurUserMode)
+            {
+                case UserMode.PlaceBuilding:
+                    PlaceBuilding();
+                    break;
+
+                case UserMode.Select:
+                    Count();
+                    Bounds();
+                    SelectionUpdate();
+                    break;
+            }
 
 			// Check if we need to do a simulation update
             if (UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates)
@@ -537,51 +601,75 @@ namespace GpuSim
             GridHelper.DrawGrid();
 
 
+            CanPlaceBuilding = false;
             if (MouseEnabled)
             {
-                if (true)
+                if (CurUserMode == UserMode.PlaceBuilding)
                 {
-                    vec2 GridCord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
-
-                    int _w = 3, _h = 3;
-                    var data = CurrentData.GetData(GridCord, new vec2(3, 3));
-
-                    color clr = color.TransparentBlack;
-                    if (data != null)
-                    {
-			            for (int i = 0; i < _w; i++)
-			            for (int j = 0; j < _h; j++)
-                        {
-                            var val = data[i + j * _w];
-                            clr = val.R > 0 ? new color(.7f, .2f, .2f, .8f) : new color(.2f, .7f, .2f, .8f);
-                            DrawSolid.Using(camvec, CameraAspect, clr);
-
-                            vec2 WorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCord.x + i), (float)Math.Floor(GridCord.y + j)));
-                            vec2 size = 1 / GridSize;
-                            RectangleQuad.Draw(GraphicsDevice, WorldCord + new vec2(size.x, -size.y), size);
-                        }
-                    }
+                    DrawAvailabilityGrid();
+                    DrawBarracks();
+                    DrawArrowCursor();
                 }
 
-                if (true)
+                if (CurUserMode == UserMode.Select)
                 {
-                    vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
-                    DrawMouse.Using(camvec, CameraAspect, Cursor);
-
-                    vec2 size = .02f * Cursor.UnitSize() / CameraZoom;
-                    RectangleQuad.Draw(GraphicsDevice, WorldCord + new vec2(size.x, -size.y), size);
-                }
-
-                if (true)
-                {
-                    vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
-                    DrawMouse.Using(camvec, CameraAspect, SelectCircle);
-                    RectangleQuad.Draw(GraphicsDevice, WorldCord, .2f * vec2.Ones / CameraZoom);
+                    DrawCircleCursor();
                 }
             }
 
 			base.Draw(gameTime);
 		}
+
+        private void DrawAvailabilityGrid()
+        {
+            vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
+
+            int _w = 3, _h = 3;
+
+            color clr = color.TransparentBlack;
+
+            CanPlaceBuilding = true;
+            for (int i = 0; i < _w; i++)
+            for (int j = 0; j < _h; j++)
+            {
+                clr = CanPlace[i + j * _h] ? new color(.2f, .7f, .2f, .8f) : new color(.7f, .2f, .2f, .8f);
+                DrawSolid.Using(camvec, CameraAspect, clr);
+
+                vec2 gWorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCoord.x + i), (float)Math.Floor(GridCoord.y + j)));
+                vec2 size = 1 / GridSize;
+                RectangleQuad.Draw(GraphicsDevice, gWorldCord + new vec2(size.x, -size.y), size);
+            }
+        }
+
+        private void DrawBarracks()
+        {
+            vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
+
+            DrawMouse.Using(camvec, CameraAspect, BuildingTexture_1);
+
+            vec2 WorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCoord.x), (float)Math.Floor(GridCoord.y)));
+            vec2 size = 3 * 1 / GridSize;
+
+            var barracks = new RectangleQuad(WorldCord, WorldCord + 2 * new vec2(size.x, -size.y), new vec2(0, 1 / 6f), new vec2(1, 0));
+            barracks.SetColor(new color(1, 1, 1, .7f));
+            barracks.Draw(GraphicsDevice);
+        }
+
+        private void DrawCircleCursor()
+        {
+            vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
+            DrawMouse.Using(camvec, CameraAspect, SelectCircle);
+            RectangleQuad.Draw(GraphicsDevice, WorldCord, .2f * vec2.Ones / CameraZoom);
+        }
+
+        private void DrawArrowCursor()
+        {
+            vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
+            DrawMouse.Using(camvec, CameraAspect, Cursor);
+
+            vec2 size = .02f * Cursor.UnitSize() / CameraZoom;
+            RectangleQuad.Draw(GraphicsDevice, WorldCord + new vec2(size.x, -size.y), size);
+        }
 
         vec2 ScreenToGridCoord(vec2 pos)
         {
@@ -696,21 +784,6 @@ namespace GpuSim
             vec2 WorldCord     = ScreenToWorldCoord(Input.CurMousePos);
             vec2 WorldCordPrev = ScreenToWorldCoord(Input.PrevMousePos);
 
-
-            //vec2 GridCord = ScreenToGridCoord(Input.CurMousePos);
-            //vec2 size = 2 * (1 / GridSize);
-            //vec2 bl = GridCord * size - vec2.Ones;
-            //RectangleQuad q = new RectangleQuad(bl, bl + size, 
-            //WorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCord.x), (float)Math.Floor(GridCord.y)));
-            //DrawSolid.Using(camvec, CameraAspect, new color(.2f, .7f, .2f, .8f));
-
-            //vec2 size = 1 / GridSize;
-            //RectangleQuad.Draw(GraphicsDevice, WorldCord + new vec2(size.x, -size.y), size);
-
-            
-            
-            //return;
-
             bool Deselect  = Input.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed();
             bool Selecting = Input.LeftMouseDown;
 
@@ -743,6 +816,53 @@ namespace GpuSim
             if (Input.RightMousePressed)
             {
                 AttackMove();
+            }
+        }
+
+        void PlaceBuilding()
+        {
+            CanPlaceBuilding = false;
+
+            if (true)
+            {
+                vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
+
+                int _w = 3, _h = 3;
+
+                GraphicsDevice.Textures[0] = null;
+                GraphicsDevice.Textures[1] = null;
+                GraphicsDevice.Textures[2] = null;
+                GraphicsDevice.Textures[3] = null;
+                GraphicsDevice.SetRenderTarget(null);
+
+                var data = CurrentData.GetData(GridCoord, new vec2(_w, _h));
+
+                color clr = color.TransparentBlack;
+                if (data != null)
+                {
+                    CanPlaceBuilding = true;
+			        for (int i = 0; i < _w; i++)
+			        for (int j = 0; j < _h; j++)
+                    {
+                        var val = data[i + j * _w];
+                        bool occupied = val.R > 0;
+
+                        CanPlace[i + j * _w] = !occupied;
+                        if (occupied) CanPlaceBuilding = false;
+                    }
+
+                    if (CanPlaceBuilding && Input.LeftMousePressed)
+                    {
+                        try
+                        {
+                            PlaceBarracks(GridCoord);
+                            CanPlaceBuilding = false;
+                        }
+                        catch
+                        {
+                        }
+                    }
+                }
             }
         }
 
