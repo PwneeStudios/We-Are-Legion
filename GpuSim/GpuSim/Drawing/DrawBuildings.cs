@@ -13,7 +13,7 @@ namespace GpuSim
 
             pos += 255 * vec(u.part_x, u.part_y);
             pos.x += floor(frame);
-            pos.y += selected_offset;
+            pos.y += selected_offset + 0 * BuildingSpriteSheet.SubsheetDimY * 2;
             pos *= BuildingSpriteSheet.SpriteSize;
 
             var clr = Texture[pos];

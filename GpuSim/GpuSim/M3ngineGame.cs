@@ -709,7 +709,7 @@ namespace GpuSim
 
             
             
-            return;
+            //return;
 
             bool Deselect  = Input.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed();
             bool Selecting = Input.LeftMouseDown;

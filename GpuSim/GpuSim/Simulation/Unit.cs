@@ -226,10 +226,13 @@ namespace GpuSim
             public const int BuildingDimY = 3;
             public static readonly vec2 BuildingDim = vec(BuildingDimX, BuildingDimY);
 
+            public const int UnitTypes = 3;
+            public const int SubsheetDimY = 2 /*Selected,Unselected*/ * BuildingDimY;
+
             public const int AnimLength = 1;
             public const int NumAnims = 1;
             public const int SheetDimX = NumAnims * AnimLength * BuildingDimX;
-            public const int SheetDimY = 2 /*Selected,Unselected*/ * BuildingDimY;
+            public const int SheetDimY = UnitTypes * SubsheetDimY;
             public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
             public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
         }

@@ -145,8 +145,8 @@ float4 GpuSim__DrawBuildings__Sprite(VertexToPixel psin, float4 u, float4 d, flo
     float selected_offset = GpuSim__SimShader__selected(u) ? 3 : 0;
     pos += 255 * float2(u.g, u.a);
     pos.x += floor(frame);
-    pos.y += selected_offset;
-    pos *= float2(1.0 / 3, 1.0 / 6);
+    pos.y += selected_offset + 0 * 6 * 2;
+    pos *= float2(1.0 / 3, 1.0 / 18);
     float4 clr = tex2D(Texture, pos);
     return GpuSim__SimShader__PlayerColorize(clr, d.g);
 }
