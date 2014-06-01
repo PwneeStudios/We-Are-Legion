@@ -14,6 +14,19 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
+    public static class Texture2DExtension
+    {
+        public static vec2 UnitSize(this Texture2D Texture)
+        {
+            return new vec2(1, (float)Texture.Height / (float)Texture.Width);
+        }
+
+        public static vec2 Size(this Texture2D Texture)
+        {
+            return new vec2(Texture.Width, Texture.Height);
+        }
+    }
+
     public static class ListExtension
     {
         public static void Swap<T>(this List<T> List, int Index, ref T NewElement)
@@ -33,6 +46,27 @@ namespace GpuSim
             
             RenderTarget.GetData(data);
             
+            return data;
+        }
+
+        public static Color[] GetData(this RenderTarget2D RenderTarget, vec2 coord)
+        {
+            return RenderTarget.GetData(coord, new vec2(1, 1));
+        }
+
+        public static Color[] GetData(this RenderTarget2D RenderTarget, vec2 coord, vec2 size)
+        {
+            int w = RenderTarget.Width, h = RenderTarget.Height;
+            
+            coord = new vec2((int)Math.Floor(coord.x), (int)Math.Floor(coord.y));
+            size = new vec2((int)Math.Floor(size.x), (int)Math.Floor(size.y));
+            if (coord.x < 0 || coord.y < 0 || coord.x >= w || coord.y >= h) return null;
+
+            int elements = (int)size.x * (int)size.y;
+            Color[] data = new Color[elements];
+            Rectangle rect = new Rectangle((int)coord.x, (int)coord.y, (int)size.x, (int)size.y);
+            RenderTarget.GetData(0, rect, data, 0, elements);
+
             return data;
         }
     }
@@ -82,9 +116,11 @@ namespace GpuSim
             BuildingTexture_1,
             UnitTexture_1, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
             GroundTexture,
-            SelectCircle, SelectCircle_Data;
+            
+            Cursor, SelectCircle, SelectCircle_Data;
 
-        const int w = 1024, h = 1024;
+        public const int w = 1024, h = 1024;
+        public static readonly vec2 GridSize = new vec2(w, h);
 
 		public M3ngineGame()
 		{
@@ -174,6 +210,7 @@ namespace GpuSim
 
 			GroundTexture = Content.Load<Texture2D>("Art\\Grass");
 
+            Cursor            = Content.Load<Texture2D>("Art\\Cursor");
             SelectCircle      = Content.Load<Texture2D>("Art\\SelectCircle");
             SelectCircle_Data = Content.Load<Texture2D>("Art\\SelectCircle_Data");
 
@@ -345,7 +382,7 @@ namespace GpuSim
                 CameraZoom = MaxZoomOut;
 
             // Zoom in/out, into the location of the cursor
-            var world_mouse_pos = GetWorldCoordinate(Input.CurMousePos);
+            var world_mouse_pos = ScreenToWorldCoord(Input.CurMousePos);
             var hold_camvec = camvec;
 
             if (MouseEnabled)
@@ -395,10 +432,10 @@ namespace GpuSim
 
 
             // Make sure the camera doesn't go too far offscreen
-            var TR = GetWorldCoordinate(new vec2(Screen.x, 0));
+            var TR = ScreenToWorldCoord(new vec2(Screen.x, 0));
             if (TR.x > 1)  CameraPos = new vec2(CameraPos.x - (TR.x - 1), CameraPos.y);
             if (TR.y > 1)  CameraPos = new vec2(CameraPos.x, CameraPos.y - (TR.y - 1));
-            var BL = GetWorldCoordinate(new vec2(0, Screen.y));
+            var BL = ScreenToWorldCoord(new vec2(0, Screen.y));
             if (BL.x < -1) CameraPos = new vec2(CameraPos.x - (BL.x + 1), CameraPos.y);
             if (BL.y < -1) CameraPos = new vec2(CameraPos.x, CameraPos.y - (BL.y + 1));
 
@@ -502,24 +539,68 @@ namespace GpuSim
 
             if (MouseEnabled)
             {
-                vec2 WorldCord = GetWorldCoordinate(Input.CurMousePos);
+                if (true)
+                {
+                    vec2 GridCord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
 
-                DrawMouse.Using(camvec, CameraAspect, SelectCircle);
-                RectangleQuad.Draw(GraphicsDevice, WorldCord, vec2.Ones * .2f / CameraZoom);
+                    int _w = 3, _h = 3;
+                    var data = CurrentData.GetData(GridCord, new vec2(3, 3));
+
+                    color clr = color.TransparentBlack;
+                    if (data != null)
+                    {
+			            for (int i = 0; i < _w; i++)
+			            for (int j = 0; j < _h; j++)
+                        {
+                            var val = data[i + j * _w];
+                            clr = val.R > 0 ? new color(.7f, .2f, .2f, .8f) : new color(.2f, .7f, .2f, .8f);
+                            DrawSolid.Using(camvec, CameraAspect, clr);
+
+                            vec2 WorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCord.x + i), (float)Math.Floor(GridCord.y + j)));
+                            vec2 size = 1 / GridSize;
+                            RectangleQuad.Draw(GraphicsDevice, WorldCord + new vec2(size.x, -size.y), size);
+                        }
+                    }
+                }
+
+                if (true)
+                {
+                    vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
+                    DrawMouse.Using(camvec, CameraAspect, Cursor);
+
+                    vec2 size = .02f * Cursor.UnitSize() / CameraZoom;
+                    RectangleQuad.Draw(GraphicsDevice, WorldCord + new vec2(size.x, -size.y), size);
+                }
+
+                if (true)
+                {
+                    vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
+                    DrawMouse.Using(camvec, CameraAspect, SelectCircle);
+                    RectangleQuad.Draw(GraphicsDevice, WorldCord, .2f * vec2.Ones / CameraZoom);
+                }
             }
 
 			base.Draw(gameTime);
 		}
 
-        vec2 ScreenToGridCoordinates(vec2 pos)
+        vec2 ScreenToGridCoord(vec2 pos)
         {
-            var world = GetWorldCoordinate(pos);
+            var world = ScreenToWorldCoord(pos);
             world.y = -world.y;
 
-            return Screen * (world + vec2.Ones) / 2;
+            var grid_coord = Screen * (world + vec2.Ones) / 2;
+
+            return grid_coord;
         }
 
-        vec2 GetWorldCoordinate(vec2 pos)
+        vec2 GridToScreenCoord(vec2 pos)
+        {
+            pos = 2 * pos / Screen - vec2.Ones;
+            pos.y = -pos.y;
+            return pos;
+        }
+
+        vec2 ScreenToWorldCoord(vec2 pos)
         {
             var screen = new vec2(Screen.x, Screen.y);
             var ScreenCord = (2 * pos - screen) / screen;
@@ -612,8 +693,23 @@ namespace GpuSim
 
         void SelectionUpdate()
         {
-            vec2 WorldCord     = GetWorldCoordinate(Input.CurMousePos);
-            vec2 WorldCordPrev = GetWorldCoordinate(Input.PrevMousePos);
+            vec2 WorldCord     = ScreenToWorldCoord(Input.CurMousePos);
+            vec2 WorldCordPrev = ScreenToWorldCoord(Input.PrevMousePos);
+
+
+            //vec2 GridCord = ScreenToGridCoord(Input.CurMousePos);
+            //vec2 size = 2 * (1 / GridSize);
+            //vec2 bl = GridCord * size - vec2.Ones;
+            //RectangleQuad q = new RectangleQuad(bl, bl + size, 
+            //WorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCord.x), (float)Math.Floor(GridCord.y)));
+            //DrawSolid.Using(camvec, CameraAspect, new color(.2f, .7f, .2f, .8f));
+
+            //vec2 size = 1 / GridSize;
+            //RectangleQuad.Draw(GraphicsDevice, WorldCord + new vec2(size.x, -size.y), size);
+
+            
+            
+            return;
 
             bool Deselect  = Input.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed();
             bool Selecting = Input.LeftMouseDown;
@@ -663,7 +759,7 @@ namespace GpuSim
 
         private void AttackMove()
         {
-            var pos = ScreenToGridCoordinates(Input.CurMousePos);
+            var pos = ScreenToGridCoord(Input.CurMousePos);
             vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
             pos -= shift;
 
