@@ -171,9 +171,22 @@ namespace GpuSim
         public static class UnitType
         {
             public const float
+                FirstBuildingType = Barracks,
+                FirstUnitType = Footman;
+
+            public static float BuildingIndex(float type)
+            {
+                return type - FirstBuildingType;
+            }
+
+            public const float
                 None = _0,
+
                 Footman = _1,
-                Barracks = _2;
+                
+                Barracks = _2,
+                GoldSource = _3,
+                GoldMine = _4;
         }
 
         protected static bool IsUnit(unit u)
@@ -183,7 +196,7 @@ namespace GpuSim
 
         protected static bool IsBuilding(unit u)
         {
-            return u.type == UnitType.Barracks;
+            return u.type >= UnitType.FirstBuildingType;
         }
 
         protected static bool IsCenter(building b)
@@ -239,9 +252,12 @@ namespace GpuSim
             public const int BuildingDimX = 3;
             public const int BuildingDimY = 3;
             public static readonly vec2 BuildingDim = vec(BuildingDimX, BuildingDimY);
+            public static readonly vec2 BuildingSize = vec(BuildingDimX / (float)SheetDimX, BuildingDimY / (float)SheetDimY);
 
             public const int UnitTypes = 3;
+            public const int SubsheetDimX = 1;
             public const int SubsheetDimY = 2 /*Selected,Unselected*/ * BuildingDimY;
+            public static readonly vec2 SubsheetSize = vec(SubsheetDimX / (float)SheetDimX, SubsheetDimY / (float)SheetDimY);
 
             public const int AnimLength = 1;
             public const int NumAnims = 1;

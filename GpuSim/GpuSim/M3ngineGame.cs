@@ -362,7 +362,7 @@ namespace GpuSim
             Corspes.SetData(_corpses);
         }
 
-        void PlaceBarracks(vec2 coord)
+        void PlaceBuilding(vec2 coord, float building_type)
         {
             Color[]
                 _unit   = new Color[3 * 3],
@@ -372,7 +372,7 @@ namespace GpuSim
             for (int _i = 0; _i < 3; _i++)
             for (int _j = 0; _j < 3; _j++)
             {
-                _unit[_i * 3 + _j] = new Color((int)(255f * SimShader.UnitType.Barracks), 1, 1, 0);
+                _unit[_i * 3 + _j] = new Color((int)(255f * building_type), 1, 1, 0);
                 _data[_i * 3 + _j] = new Color((int)(255f * SimShader.Dir.Stationary), _j, 0, _i);
                 _target[_i * 3 + _j] = new Color(0, 0, 0, 0);
             }
@@ -509,6 +509,7 @@ namespace GpuSim
 
         public enum UserMode { PlaceBuilding, Select };
         public UserMode CurUserMode = UserMode.PlaceBuilding;
+        public float BuildingType = SimShader.UnitType.GoldMine;
 
         bool CanPlaceBuilding = false;
         bool[] CanPlace = new bool[3 * 3];
@@ -621,7 +622,7 @@ namespace GpuSim
                 if (CurUserMode == UserMode.PlaceBuilding)
                 {
                     DrawAvailabilityGrid();
-                    DrawBarracks();
+                    DrawPotentialBuilding();
                     DrawArrowCursor();
                 }
 
@@ -668,7 +669,7 @@ namespace GpuSim
             }
         }
 
-        private void DrawBarracks()
+        private void DrawPotentialBuilding()
         {
             vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
 
@@ -677,9 +678,13 @@ namespace GpuSim
             vec2 WorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCoord.x), (float)Math.Floor(GridCoord.y)));
             vec2 size = 3 * 1 / GridSize;
 
-            var barracks = new RectangleQuad(WorldCord, WorldCord + 2 * new vec2(size.x, -size.y), new vec2(0, 1 / 6f), new vec2(1, 0));
-            barracks.SetColor(new color(1, 1, 1, .7f));
-            barracks.Draw(GraphicsDevice);
+            vec2 uv_size = SimShader.BuildingSpriteSheet.BuildingSize;
+            vec2 uv_sheet_size = SimShader.BuildingSpriteSheet.SubsheetSize;
+            vec2 uv_offset = new vec2(0, uv_sheet_size.y * ((255)*SimShader.UnitType.BuildingIndex(BuildingType)));
+
+            var building = new RectangleQuad(WorldCord, WorldCord + 2 * new vec2(size.x, -size.y), new vec2(0, uv_size.y) + uv_offset, new vec2(uv_size.x, 0) + uv_offset);
+            building.SetColor(new color(1, 1, 1, .7f));
+            building.Draw(GraphicsDevice);
         }
 
         private void DrawCircleCursor()
@@ -885,7 +890,7 @@ namespace GpuSim
                     {
                         try
                         {
-                            PlaceBarracks(GridCoord);
+                            PlaceBuilding(GridCoord, BuildingType);
                             CanPlaceBuilding = false;
                         }
                         catch

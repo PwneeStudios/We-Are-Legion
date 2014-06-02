@@ -74,7 +74,7 @@ float fs_param_s;
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsBuilding(float4 u)
 {
-    return abs(0.007843138 - u.r) < .001;
+    return u.r >= 0.007843138 - .001;
 }
 
 float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
@@ -94,6 +94,11 @@ bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
     return val >= 0.03137255 - .001;
+}
+
+float GpuSim__UnitType__BuildingIndex(float type)
+{
+    return type - 0.007843138;
 }
 
 float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
@@ -145,7 +150,7 @@ float4 GpuSim__DrawBuildings__Sprite(VertexToPixel psin, float4 u, float4 d, flo
     float selected_offset = GpuSim__SimShader__selected(u) ? 3 : 0;
     pos += 255 * float2(u.g, u.a);
     pos.x += floor(frame);
-    pos.y += selected_offset + 0 * 6 * 2;
+    pos.y += selected_offset + 6 * (255 * GpuSim__UnitType__BuildingIndex(d.r));
     pos *= float2(1.0 / 3, 1.0 / 18);
     float4 clr = tex2D(Texture, pos);
     return GpuSim__SimShader__PlayerColorize(clr, d.g);
