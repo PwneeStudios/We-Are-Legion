@@ -80,7 +80,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     if (GpuSim__SimShader__Something(select))
     {
-        if (abs((int)(psin.TexCoords.x * fs_param_CurData_size.x) % 2 - 0) < .001 && abs((int)(psin.TexCoords.y * fs_param_CurData_size.y) % 2 - 0) < .001)
+        if (abs(0 - (int)(psin.TexCoords.x * fs_param_CurData_size.x) % 2) < .001 && abs(0 - (int)(psin.TexCoords.y * fs_param_CurData_size.y) % 2) < .001)
         {
             here.g = fs_param_player;
             here.b = fs_param_team;

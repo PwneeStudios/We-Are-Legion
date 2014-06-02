@@ -45,7 +45,7 @@ bool GpuSim__SimShader__Something(float4 u)
 
 bool GpuSim__SimShader__IsStationary(float4 u)
 {
-    return abs(u.r - 0.01960784) < .001;
+    return abs(0.01960784 - u.r) < .001;
 }
 
 // Compiled vertex shader
@@ -74,19 +74,19 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         return __FinalOutput;
     }
     float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy);
-    if (abs(right.a - 0.0) > .001 && abs(right.a - 0.01176471) > .001 && abs(right.r - 0.01176471) < .001)
+    if (abs(0.0 - right.a) > .001 && abs(0.01176471 - right.a) > .001 && abs(0.01176471 - right.r) < .001)
     {
         output = right;
     }
-    if (abs(up.a - 0.0) > .001 && abs(up.a - 0.01176471) > .001 && abs(up.r - 0.01568628) < .001)
+    if (abs(0.0 - up.a) > .001 && abs(0.01176471 - up.a) > .001 && abs(0.01568628 - up.r) < .001)
     {
         output = up;
     }
-    if (abs(left.a - 0.0) > .001 && abs(left.a - 0.01176471) > .001 && abs(left.r - 0.003921569) < .001)
+    if (abs(0.0 - left.a) > .001 && abs(0.01176471 - left.a) > .001 && abs(0.003921569 - left.r) < .001)
     {
         output = left;
     }
-    if (abs(down.a - 0.0) > .001 && abs(down.a - 0.01176471) > .001 && abs(down.r - 0.007843138) < .001)
+    if (abs(0.0 - down.a) > .001 && abs(0.01176471 - down.a) > .001 && abs(0.007843138 - down.r) < .001)
     {
         output = down;
     }

@@ -1151,37 +1151,42 @@ namespace GpuSim
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(Texture2D Units, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Units);
+            Using(Data, Units, player, only_selected);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Units, RenderTarget2D Output)
+        public static void Apply(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Units);
+            Using(Data, Units, player, only_selected);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Units, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Units);
+            Using(Data, Units, player, only_selected);
         }
-        public static void Using(Texture2D Units, RenderTarget2D Output)
+        public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Units);
+            Using(Data, Units, player, only_selected);
         }
-        public static void Using(Texture2D Units)
+        public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected)
         {
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
             CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
             CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
             CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_player"].SetValue(FragSharpMarshal.Marshal(player));
+            CompiledEffect.Parameters["fs_param_only_selected"].SetValue(FragSharpMarshal.Marshal(only_selected));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

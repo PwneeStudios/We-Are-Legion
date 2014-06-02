@@ -38,34 +38,20 @@ sampler fs_param_PreviousLevel : register(s1) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float GpuSim__SimShader__unpack_coord(float2 packed)
+float GpuSim__SimShader__unpack_coord(float3 packed)
 {
     float coord = 0;
-    coord = (255 * packed.x + packed.y) * 255;
+    coord = (255 * 255 * packed.x + 255 * packed.y + packed.z) * 255;
     return coord;
 }
 
-float2 GpuSim__SimShader__unpack_vec2(float4 packed)
+float3 GpuSim__SimShader__pack_coord_3byte(float x)
 {
-    float2 v = float2(0, 0);
-    v.x = GpuSim__SimShader__unpack_coord(packed.rg);
-    v.y = GpuSim__SimShader__unpack_coord(packed.ba);
-    return v;
-}
-
-float2 GpuSim__SimShader__pack_coord(float x)
-{
-    float2 packed = float2(0, 0);
-    packed.x = floor(x / 255.0);
-    packed.y = x - packed.x * 255.0;
+    float3 packed = float3(0, 0, 0);
+    packed.x = floor(x / (255.0 * 255.0));
+    packed.y = floor((x - packed.x * (255.0 * 255.0)) / 255.0);
+    packed.z = x - packed.x * (255.0 * 255.0) - packed.y * 255.0;
     return packed / 255.0;
-}
-
-float4 GpuSim__SimShader__pack_vec2(float2 v)
-{
-    float2 packed_x = GpuSim__SimShader__pack_coord(v.x);
-    float2 packed_y = GpuSim__SimShader__pack_coord(v.y);
-    return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 
 // Compiled vertex shader
@@ -82,11 +68,10 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float2 uv = psin.TexCoords;
     float4 TL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy), TR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy), BL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy), BR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy);
-    float2 count = GpuSim__SimShader__unpack_vec2(TL) + GpuSim__SimShader__unpack_vec2(TR) + GpuSim__SimShader__unpack_vec2(BL) + GpuSim__SimShader__unpack_vec2(BR);
+    float count = GpuSim__SimShader__unpack_coord(TL.xyz) + GpuSim__SimShader__unpack_coord(TR.xyz) + GpuSim__SimShader__unpack_coord(BL.xyz) + GpuSim__SimShader__unpack_coord(BR.xyz);
     float4 output = float4(0, 0, 0, 0);
-    output = GpuSim__SimShader__pack_vec2(count);
+    output.xyz = GpuSim__SimShader__pack_coord_3byte(count);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

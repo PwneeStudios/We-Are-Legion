@@ -200,7 +200,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             path = right_path;
             if (Destination.y < psin.TexCoords.y * fs_param_TargetData_size.y - .001)
             {
-                if (cur_angle < target_angle - .001 || abs(right_path.r - 0.003921569) < .001 && GpuSim__SimShader__Something(right))
+                if (cur_angle < target_angle - .001 || abs(0.003921569 - right_path.r) < .001 && GpuSim__SimShader__Something(right))
                 {
                     path = down_path;
                     if (GpuSim__SimShader__Something(down))
@@ -211,7 +211,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
             else
             {
-                if (cur_angle > target_angle + .001 || abs(right_path.r - 0.003921569) < .001 && GpuSim__SimShader__Something(right))
+                if (cur_angle > target_angle + .001 || abs(0.003921569 - right_path.r) < .001 && GpuSim__SimShader__Something(right))
                 {
                     path = up_path;
                     if (GpuSim__SimShader__Something(up))
@@ -226,7 +226,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             path = left_path;
             if (Destination.y < psin.TexCoords.y * fs_param_TargetData_size.y - .001)
             {
-                if (cur_angle > target_angle + .001 || abs(left_path.r - 0.01176471) < .001 && GpuSim__SimShader__Something(left))
+                if (cur_angle > target_angle + .001 || abs(0.01176471 - left_path.r) < .001 && GpuSim__SimShader__Something(left))
                 {
                     path = down_path;
                     if (GpuSim__SimShader__Something(down))
@@ -237,7 +237,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
             else
             {
-                if (cur_angle < target_angle - .001 || abs(left_path.r - 0.01176471) < .001 && GpuSim__SimShader__Something(left))
+                if (cur_angle < target_angle - .001 || abs(0.01176471 - left_path.r) < .001 && GpuSim__SimShader__Something(left))
                 {
                     path = up_path;
                     if (GpuSim__SimShader__Something(up))

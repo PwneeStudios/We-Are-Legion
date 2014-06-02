@@ -74,7 +74,7 @@ float fs_param_s;
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsBuilding(float4 u)
 {
-    return abs(u.r - 0.007843138) < .001;
+    return abs(0.007843138 - u.r) < .001;
 }
 
 float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
@@ -98,12 +98,12 @@ bool GpuSim__SimShader__selected(float4 u)
 
 float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
 {
-    if (abs(player - 0.003921569) < .001)
+    if (abs(0.003921569 - player) < .001)
     {
     }
     else
     {
-        if (abs(player - 0.007843138) < .001)
+        if (abs(0.007843138 - player) < .001)
         {
             float r = clr.r;
             clr.r = clr.g;
@@ -112,7 +112,7 @@ float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
         }
         else
         {
-            if (abs(player - 0.01176471) < .001)
+            if (abs(0.01176471 - player) < .001)
             {
                 float b = clr.b;
                 clr.b = clr.g;
@@ -120,7 +120,7 @@ float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
             }
             else
             {
-                if (abs(player - 0.01568628) < .001)
+                if (abs(0.01568628 - player) < .001)
                 {
                     float r = clr.r;
                     clr.r = clr.b;

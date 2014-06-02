@@ -22,12 +22,27 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Units, using register location 1
+// Texture Sampler for fs_param_Data, using register location 1
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
+
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s1) = sampler_state
+{
+    texture   = <fs_param_Data_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_Units, using register location 2
 float2 fs_param_Units_size;
 float2 fs_param_Units_dxdy;
 
 Texture fs_param_Units_Texture;
-sampler fs_param_Units : register(s1) = sampler_state
+sampler fs_param_Units : register(s2) = sampler_state
 {
     texture   = <fs_param_Units_Texture>;
     MipFilter = Point;
@@ -37,18 +52,14 @@ sampler fs_param_Units : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
+float fs_param_player;
+
+bool fs_param_only_selected;
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
-}
-
-float2 GpuSim__SimShader__pack_coord(float x)
-{
-    float2 packed = float2(0, 0);
-    packed.x = floor(x / 255.0);
-    packed.y = x - packed.x * 255.0;
-    return packed / 255.0;
 }
 
 bool GpuSim__SimShader__selected(float4 u)
@@ -57,9 +68,13 @@ bool GpuSim__SimShader__selected(float4 u)
     return val >= 0.03137255 - .001;
 }
 
-bool GpuSim__SimShader__SomethingSelected(float4 u)
+float3 GpuSim__SimShader__pack_coord_3byte(float x)
 {
-    return GpuSim__SimShader__Something(u) && GpuSim__SimShader__selected(u);
+    float3 packed = float3(0, 0, 0);
+    packed.x = floor(x / (255.0 * 255.0));
+    packed.y = floor((x - packed.x * (255.0 * 255.0)) / 255.0);
+    packed.z = x - packed.x * (255.0 * 255.0) - packed.y * 255.0;
+    return packed / 255.0;
 }
 
 // Compiled vertex shader
@@ -76,45 +91,16 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float2 uv = psin.TexCoords;
-    float4 TL = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy), TR = tex2D(fs_param_Units, psin.TexCoords + (float2(1, 0)) * fs_param_Units_dxdy), BL = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 1)) * fs_param_Units_dxdy), BR = tex2D(fs_param_Units, psin.TexCoords + (float2(1, 1)) * fs_param_Units_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 output = float4(0, 0, 0, 0);
-    float count = 0;
-    if (GpuSim__SimShader__Something(TL))
+    if (GpuSim__SimShader__Something(data_here))
     {
-        count += 1;
+        float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
+        if (abs(fs_param_player - unit_here.g) < .001 && (!(fs_param_only_selected) || GpuSim__SimShader__selected(data_here)))
+        {
+            output.xyz = GpuSim__SimShader__pack_coord_3byte(1);
+        }
     }
-    if (GpuSim__SimShader__Something(TR))
-    {
-        count += 1;
-    }
-    if (GpuSim__SimShader__Something(BL))
-    {
-        count += 1;
-    }
-    if (GpuSim__SimShader__Something(BR))
-    {
-        count += 1;
-    }
-    output.rg = GpuSim__SimShader__pack_coord(count);
-    count = 0;
-    if (GpuSim__SimShader__SomethingSelected(TL))
-    {
-        count += 1;
-    }
-    if (GpuSim__SimShader__SomethingSelected(TR))
-    {
-        count += 1;
-    }
-    if (GpuSim__SimShader__SomethingSelected(BL))
-    {
-        count += 1;
-    }
-    if (GpuSim__SimShader__SomethingSelected(BR))
-    {
-        count += 1;
-    }
-    output.ba = GpuSim__SimShader__pack_coord(count);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

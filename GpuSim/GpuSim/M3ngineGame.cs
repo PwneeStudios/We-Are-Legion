@@ -113,6 +113,9 @@ namespace GpuSim
         vec4 camvec { get { return new vec4(CameraPos.x, CameraPos.y, CameraZoom, CameraZoom); } }
 
 		GraphicsDeviceManager graphics;
+        
+        SpriteBatch MySpriteBatch;
+        SpriteFont DefaultFont;
 
         RenderTarget2D
             Temp1, Temp2,
@@ -207,12 +210,17 @@ namespace GpuSim
 
         RectangleQuad Ground;
 
+        Effect test;
 		protected override void Initialize()
 		{
-            //var effect = Content.Load<Effect>("Shaders/__Test");
+            //test = Content.Load<Effect>("Shaders/__Test");
+            //test = Content.Load<Effect>("Shaders/Counting");
+            //return;
+
+            MySpriteBatch = new SpriteBatch(GraphicsDevice);
+            DefaultFont = Content.Load<SpriteFont>("Default");
 
             FragSharp.Initialize(Content, GraphicsDevice);
-
             GridHelper.Initialize(GraphicsDevice);
 
             BuildingTexture_1 = Content.Load<Texture2D>("Art\\Buildings_1");
@@ -530,7 +538,13 @@ namespace GpuSim
                     break;
 
                 case UserMode.Select:
-                    Count();
+                    for (int i = 1; i <= 2; i++)
+                    {
+                        float player = SimShader.Player.Get(i);
+                        UnitCount[i] = Count(player, false);
+                    }
+
+                    SelectedCount = Count(SimShader.Player.One, true);
                     Bounds();
                     SelectionUpdate();
                     break;
@@ -616,6 +630,19 @@ namespace GpuSim
                     DrawCircleCursor();
                 }
             }
+
+            var units_1 = string.Format("Player 1 {0:#,##0}", UnitCount[1]);
+            var units_2 = string.Format("Player 2 {0:#,##0}", UnitCount[2]);
+            var selected = string.Format("[{0:#,##0}]", SelectedCount);
+            MySpriteBatch.Begin();
+            
+            MySpriteBatch.DrawString(DefaultFont, units_1, new Vector2(0, 0), Color.White);
+            MySpriteBatch.DrawString(DefaultFont, units_2, new Vector2(0, 20), Color.White);
+            
+            if (CurUserMode == UserMode.Select)
+                MySpriteBatch.DrawString(DefaultFont, selected, Input.CurMousePos + new vec2(30, -130), Color.White);
+
+            MySpriteBatch.End();
 
 			base.Draw(gameTime);
 		}
@@ -710,14 +737,17 @@ namespace GpuSim
             return shifted_cam;
         }
 
-        Color[] CountData = new Color[1];
-        int UnitCount = 0, SelectedCount = 0;
-        void Count()
-        {
-            Counting.Apply(CurrentData, Output: Multigrid[1]);
 
-            int n = ((int)Screen.x) / 2;
-            int level = 1;
+        int[] UnitCount = new int[] { 0, 0, 0, 0, 0 };
+        int SelectedCount = 0;
+
+        Color[] CountData = new Color[1];
+        private int Count(float player, bool only_selected)
+        {
+            Counting.Apply(CurrentData, CurrentUnits, player, only_selected, Output: Multigrid[0]);
+
+            int n = ((int)Screen.x);
+            int level = 0;
             while (n >= 2)
             {
                 _Counting.Apply(Multigrid[level], Output: Multigrid[level + 1]);
@@ -730,10 +760,8 @@ namespace GpuSim
             Multigrid.Last().GetData(CountData);
             color count = (color)CountData[0];
 
-            var unpacked = SimShader.unpack_vec2(count);
-            UnitCount     = (int)Math.Round(unpacked.x);
-            SelectedCount = (int)Math.Round(unpacked.y);
-            Console.WriteLine("Selected {0} / {1}", SelectedCount, UnitCount);
+            int result = (int)(SimShader.unpack_coord(count.xyz) + .5f);
+            return result;
         }
 
         vec2 SelectedBound_BL, SelectedBound_TR;
@@ -784,7 +812,9 @@ namespace GpuSim
             vec2 WorldCord     = ScreenToWorldCoord(Input.CurMousePos);
             vec2 WorldCordPrev = ScreenToWorldCoord(Input.PrevMousePos);
 
-            bool Deselect  = Input.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed();
+            bool Deselect  = Input.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed()
+                || CurUserMode != UserMode.Select
+                || Keys.Back.Pressed() || Keys.Escape.Pressed();
             bool Selecting = Input.LeftMouseDown;
 
             DataDrawMouse.Using(SelectCircle_Data, SimShader.Player.One, Output: SelectField, Clear: Color.Transparent);

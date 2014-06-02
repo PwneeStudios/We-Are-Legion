@@ -76,7 +76,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     if (GpuSim__SimShader__Something(select))
     {
-        if (abs((int)(psin.TexCoords.x * fs_param_Current_size.x) % 2 - 0) < .001 && abs((int)(psin.TexCoords.y * fs_param_Current_size.y) % 2 - 0) < .001)
+        if (abs(0 - (int)(psin.TexCoords.x * fs_param_Current_size.x) % 2) < .001 && abs(0 - (int)(psin.TexCoords.y * fs_param_Current_size.y) % 2) < .001)
         {
             here.r = 0.003921569;
             here.a = 0.01176471;

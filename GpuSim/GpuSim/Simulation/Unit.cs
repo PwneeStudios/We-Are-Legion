@@ -136,6 +136,13 @@ namespace GpuSim
 
         public static class Team
         {
+            public static readonly float[] Vals = new float[] { None, One, Two, Three, Four };
+
+            public static float Get(int index)
+            {
+                return Vals[index];
+            }
+
             public const float
                 None = _0,
                 One = _1,
@@ -146,6 +153,13 @@ namespace GpuSim
 
         public static class Player
         {
+            public static readonly float[] Vals = new float[] { None, One, Two, Three, Four };
+
+            public static float Get(int index)
+            {
+                return Vals[index];
+            }
+
             public const float
                 None = _0,
                 One = _1,
@@ -366,7 +380,27 @@ namespace GpuSim
             return (RelativeIndex)part;
         }
 
-        public static vec2 pack_coord(float x)
+        public static vec3 pack_coord_3byte(float x)
+        {
+            vec3 packed = vec3.Zero;
+
+            packed.x = floor(x / (255.0f * 255.0f));
+            packed.y = floor((x - packed.x * (255.0f * 255.0f)) / 255.0f);
+            packed.z = x - packed.x * (255.0f * 255.0f) - packed.y * 255.0f;
+
+            return packed / 255.0f;
+        }
+
+        public static float unpack_coord(vec3 packed)
+        {
+            float coord = 0;
+
+            coord = (255 * 255 * packed.x + 255 * packed.y + packed.z) * 255;
+
+            return coord;
+        }
+
+        public static vec2 pack_coord_2byte(float x)
         {
             vec2 packed = vec2.Zero;
 
@@ -387,8 +421,8 @@ namespace GpuSim
 
         public static vec4 pack_vec2(vec2 v)
         {
-            vec2 packed_x = pack_coord(v.x);
-            vec2 packed_y = pack_coord(v.y);
+            vec2 packed_x = pack_coord_2byte(v.x);
+            vec2 packed_y = pack_coord_2byte(v.y);
             return vec(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
         }
 

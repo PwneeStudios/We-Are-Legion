@@ -124,19 +124,19 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         float4 unit_right = tex2D(fs_param_Unit, psin.TexCoords + (float2(1, 0)) * fs_param_Unit_dxdy), unit_up = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 1)) * fs_param_Unit_dxdy), unit_left = tex2D(fs_param_Unit, psin.TexCoords + (float2(-(1), 0)) * fs_param_Unit_dxdy), unit_down = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, -(1))) * fs_param_Unit_dxdy);
         float4 data_right = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousData_dxdy), data_up = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousData_dxdy), data_left = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(-(1), 0)) * fs_param_PreviousData_dxdy), data_down = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, -(1))) * fs_param_PreviousData_dxdy);
         float spawn_dir = 0.0;
-        if (abs(unit_left.r - 0.007843138) < .001 && abs(GpuSim__SimShader__prior_direction(data_left) - 0.003921569) < .001)
+        if (abs(0.007843138 - unit_left.r) < .001 && abs(0.003921569 - GpuSim__SimShader__prior_direction(data_left)) < .001)
         {
             spawn_dir = 0.003921569;
         }
-        if (abs(unit_right.r - 0.007843138) < .001 && abs(GpuSim__SimShader__prior_direction(data_right) - 0.01176471) < .001)
+        if (abs(0.007843138 - unit_right.r) < .001 && abs(0.01176471 - GpuSim__SimShader__prior_direction(data_right)) < .001)
         {
             spawn_dir = 0.01176471;
         }
-        if (abs(unit_up.r - 0.007843138) < .001 && abs(GpuSim__SimShader__prior_direction(data_up) - 0.01568628) < .001)
+        if (abs(0.007843138 - unit_up.r) < .001 && abs(0.01568628 - GpuSim__SimShader__prior_direction(data_up)) < .001)
         {
             spawn_dir = 0.01568628;
         }
-        if (abs(unit_down.r - 0.007843138) < .001 && abs(GpuSim__SimShader__prior_direction(data_down) - 0.007843138) < .001)
+        if (abs(0.007843138 - unit_down.r) < .001 && abs(0.007843138 - GpuSim__SimShader__prior_direction(data_down)) < .001)
         {
             spawn_dir = 0.007843138;
         }

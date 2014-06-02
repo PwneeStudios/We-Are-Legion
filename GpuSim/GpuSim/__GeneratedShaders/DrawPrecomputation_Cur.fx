@@ -105,7 +105,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float selected_offset = GpuSim__SimShader__selected(cur) ? 0.01568628 : 0.0;
     float anim = 0;
     float2 vel = float2(0, 0);
-    if (GpuSim__SimShader__Something(cur) && abs(cur.g - 0.003921569) < .001)
+    if (GpuSim__SimShader__Something(cur) && abs(0.003921569 - cur.g) < .001)
     {
         anim = cur.r;
     }
