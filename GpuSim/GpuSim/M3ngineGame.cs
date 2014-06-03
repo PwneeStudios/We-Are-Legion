@@ -532,6 +532,9 @@ namespace GpuSim
 
 
             PathUpdate();
+            DoGoldMineCount();
+            DoGoldUpdate();
+
             switch (CurUserMode)
             {
                 case UserMode.PlaceBuilding:
@@ -546,7 +549,6 @@ namespace GpuSim
                     }
 
                     SelectedCount = DoUnitCount(SimShader.Player.One, true);
-                    DoGoldMineCount();
                     Bounds();
                     SelectionUpdate();
                     break;
@@ -636,12 +638,14 @@ namespace GpuSim
             var units_1 = string.Format("Player 1 {0:#,##0}", UnitCount[1]);
             var units_2 = string.Format("Player 2 {0:#,##0}", UnitCount[2]);
             var selected = string.Format("[{0:#,##0}]", SelectedCount);
-            var gold = string.Format("Gold {0:#,##0}", GoldMines[1]);
+            var gold = string.Format("Gold {0:#,##0}", Gold[1]);
+            var gold_mines = string.Format("Gold Mines {0:#,##0}", GoldMines[1]);
             MySpriteBatch.Begin();
             
             MySpriteBatch.DrawString(DefaultFont, units_1, new Vector2(0, 0), Color.White);
             MySpriteBatch.DrawString(DefaultFont, units_2, new Vector2(0, 20), Color.White);
             MySpriteBatch.DrawString(DefaultFont, gold, new Vector2(0, 40), Color.White);
+            MySpriteBatch.DrawString(DefaultFont, gold_mines, new Vector2(0, 60), Color.White);
             
             if (CurUserMode == UserMode.Select)
                 MySpriteBatch.DrawString(DefaultFont, selected, Input.CurMousePos + new vec2(30, -130), Color.White);
@@ -745,8 +749,18 @@ namespace GpuSim
             return shifted_cam;
         }
 
+        int[] Gold      = new int[] { 0, 0, 0, 0, 0 };
         int[] GoldMines = new int[] { 0, 0, 0, 0, 0 };
-        private void DoGoldMineCount()
+
+        void DoGoldUpdate()
+        {
+            for (int player = 1; player <= 4; player++)
+            {
+                Gold[player] += GoldMines[player];
+            }
+        }
+
+        void DoGoldMineCount()
         {
             CountGoldMines.Apply(CurrentData, CurrentUnits, Output: Multigrid[0]);
 
@@ -761,7 +775,7 @@ namespace GpuSim
         int[] UnitCount = new int[] { 0, 0, 0, 0, 0 };
         int SelectedCount = 0;
         
-        private int DoUnitCount(float player, bool only_selected)
+        int DoUnitCount(float player, bool only_selected)
         {
             CountUnits.Apply(CurrentData, CurrentUnits, player, only_selected, Output: Multigrid[0]);
 
