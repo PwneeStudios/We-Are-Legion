@@ -43,8 +43,10 @@ namespace FragSharpFramework
             GpuSim.Building_SelectCenterIfSelected_SetDirecion.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Building_SelectCenterIfSelected_SetDirecion");
             GpuSim.BuildingDiffusion_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Data");
             GpuSim.BuildingDiffusion_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Target");
-            GpuSim.Counting.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Counting");
-            GpuSim._Counting.CompiledEffect = Content.Load<Effect>("FragSharpShaders/_Counting");
+            GpuSim.CountGoldMines.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountGoldMines");
+            GpuSim.CountReduce_4x1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_4x1byte");
+            GpuSim.CountUnits.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountUnits");
+            GpuSim.CountReduce_3byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_3byte");
             GpuSim.AddCorpses.CompiledEffect = Content.Load<Effect>("FragSharpShaders/AddCorpses");
             GpuSim.ActionAttackSquare.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare");
             GpuSim.ActionAttackPoint.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint");
@@ -1147,7 +1149,96 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class Counting
+    public partial class CountGoldMines
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D Data, Texture2D Units, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Units);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Data, Texture2D Units, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Units);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Data, Texture2D Units, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Units);
+        }
+        public static void Using(Texture2D Data, Texture2D Units, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Units);
+        }
+        public static void Using(Texture2D Data, Texture2D Units)
+        {
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
+            CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class CountReduce_4x1byte
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D PreviousLevel, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(PreviousLevel);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D PreviousLevel, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(PreviousLevel);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D PreviousLevel, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(PreviousLevel);
+        }
+        public static void Using(Texture2D PreviousLevel, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(PreviousLevel);
+        }
+        public static void Using(Texture2D PreviousLevel)
+        {
+            CompiledEffect.Parameters["fs_param_PreviousLevel_Texture"].SetValue(FragSharpMarshal.Marshal(PreviousLevel));
+            CompiledEffect.Parameters["fs_param_PreviousLevel_size"].SetValue(FragSharpMarshal.Marshal(vec(PreviousLevel.Width, PreviousLevel.Height)));
+            CompiledEffect.Parameters["fs_param_PreviousLevel_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousLevel.Width, PreviousLevel.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class CountUnits
     {
         public static Effect CompiledEffect;
 
@@ -1195,7 +1286,7 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class _Counting
+    public partial class CountReduce_3byte
     {
         public static Effect CompiledEffect;
 

@@ -542,10 +542,11 @@ namespace GpuSim
                     for (int i = 1; i <= 2; i++)
                     {
                         float player = SimShader.Player.Get(i);
-                        UnitCount[i] = Count(player, false);
+                        UnitCount[i] = DoUnitCount(player, false);
                     }
 
-                    SelectedCount = Count(SimShader.Player.One, true);
+                    SelectedCount = DoUnitCount(SimShader.Player.One, true);
+                    DoGoldMineCount();
                     Bounds();
                     SelectionUpdate();
                     break;
@@ -635,10 +636,12 @@ namespace GpuSim
             var units_1 = string.Format("Player 1 {0:#,##0}", UnitCount[1]);
             var units_2 = string.Format("Player 2 {0:#,##0}", UnitCount[2]);
             var selected = string.Format("[{0:#,##0}]", SelectedCount);
+            var gold = string.Format("Gold {0:#,##0}", GoldMines[1]);
             MySpriteBatch.Begin();
             
             MySpriteBatch.DrawString(DefaultFont, units_1, new Vector2(0, 0), Color.White);
             MySpriteBatch.DrawString(DefaultFont, units_2, new Vector2(0, 20), Color.White);
+            MySpriteBatch.DrawString(DefaultFont, gold, new Vector2(0, 40), Color.White);
             
             if (CurUserMode == UserMode.Select)
                 MySpriteBatch.DrawString(DefaultFont, selected, Input.CurMousePos + new vec2(30, -130), Color.White);
@@ -742,20 +745,40 @@ namespace GpuSim
             return shifted_cam;
         }
 
+        int[] GoldMines = new int[] { 0, 0, 0, 0, 0 };
+        private void DoGoldMineCount()
+        {
+            CountGoldMines.Apply(CurrentData, CurrentUnits, Output: Multigrid[0]);
+
+            color count = MultigridReduce(CountReduce_4x1byte.Apply);
+
+            GoldMines[1] = (int)(255 * count.x + .5f);
+            GoldMines[2] = (int)(255 * count.y + .5f);
+            GoldMines[3] = (int)(255 * count.z + .5f);
+            GoldMines[4] = (int)(255 * count.w + .5f);
+        }
 
         int[] UnitCount = new int[] { 0, 0, 0, 0, 0 };
         int SelectedCount = 0;
+        
+        private int DoUnitCount(float player, bool only_selected)
+        {
+            CountUnits.Apply(CurrentData, CurrentUnits, player, only_selected, Output: Multigrid[0]);
+
+            color count = MultigridReduce(CountReduce_3byte.Apply);
+
+            int result = (int)(SimShader.unpack_coord(count.xyz) + .5f);
+            return result;
+        }
 
         Color[] CountData = new Color[1];
-        private int Count(float player, bool only_selected)
+        color MultigridReduce(Action<Texture2D, RenderTarget2D> ReductionShader)
         {
-            Counting.Apply(CurrentData, CurrentUnits, player, only_selected, Output: Multigrid[0]);
-
             int n = ((int)Screen.x);
             int level = 0;
             while (n >= 2)
             {
-                _Counting.Apply(Multigrid[level], Output: Multigrid[level + 1]);
+                ReductionShader(Multigrid[level], Multigrid[level + 1]);
 
                 n /= 2;
                 level++;
@@ -763,10 +786,7 @@ namespace GpuSim
             GraphicsDevice.SetRenderTarget(null);
 
             Multigrid.Last().GetData(CountData);
-            color count = (color)CountData[0];
-
-            int result = (int)(SimShader.unpack_coord(count.xyz) + .5f);
-            return result;
+            return (color)CountData[0];
         }
 
         vec2 SelectedBound_BL, SelectedBound_TR;
