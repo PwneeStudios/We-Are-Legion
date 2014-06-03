@@ -22,7 +22,7 @@ namespace GpuSim
 
             vec4 output = min(right, up, left, down) + vec(_1,_1,_1,_1);
 
-            if (Something(data))
+            if (Something(data) && !IsNeutralBuilding(cur_data))
             {
                 output += 3 * vec(_1, _1, _1, _1);
 

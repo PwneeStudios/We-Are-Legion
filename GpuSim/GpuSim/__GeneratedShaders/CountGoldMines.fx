@@ -82,7 +82,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (GpuSim__SimShader__Something(data_here))
     {
         float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-        if (abs(0.01568628 - unit_here.r) < .001 && GpuSim__SimShader__IsCenter(data_here))
+        if (abs(0.01176471 - unit_here.r) < .001 && GpuSim__SimShader__IsCenter(data_here))
         {
             if (abs(0.003921569 - unit_here.g) < .001)
             {

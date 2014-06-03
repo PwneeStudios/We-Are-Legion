@@ -101,6 +101,11 @@ float GpuSim__UnitType__BuildingIndex(float type)
     return type - 0.007843138;
 }
 
+bool GpuSim__SimShader__IsNeutralBuilding(float4 u)
+{
+    return u.r >= 0.01568628 - .001;
+}
+
 float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
 {
     if (abs(0.003921569 - player) < .001)
@@ -153,7 +158,14 @@ float4 GpuSim__DrawBuildings__Sprite(VertexToPixel psin, float4 u, float4 d, flo
     pos.y += selected_offset + 6 * (255 * GpuSim__UnitType__BuildingIndex(d.r));
     pos *= float2(1.0 / 3, 1.0 / 18);
     float4 clr = tex2D(Texture, pos);
-    return GpuSim__SimShader__PlayerColorize(clr, d.g);
+    if (GpuSim__SimShader__IsNeutralBuilding(d))
+    {
+        return clr;
+    }
+    else
+    {
+        return GpuSim__SimShader__PlayerColorize(clr, d.g);
+    }
 }
 
 // Compiled vertex shader

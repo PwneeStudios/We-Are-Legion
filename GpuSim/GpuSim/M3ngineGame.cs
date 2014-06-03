@@ -341,7 +341,8 @@ namespace GpuSim
                 for (int _i = i; _i < i+3; _i++)
                 for (int _j = j; _j < j+3; _j++)
                 {
-                    _unit[_i * h + _j] = new Color((int)(255f * SimShader.UnitType.Barracks), 1, 1, 0);
+                    //_unit[_i * h + _j] = new Color((int)(255f * SimShader.UnitType.Barracks), 1, 1, 0);
+                    _unit[_i * h + _j] = new Color((int)(255f * SimShader.UnitType.GoldSource), 0, 0, 0);
                     _data[_i * h + _j] = new Color((int)(255f * SimShader.Dir.Stationary), _j - j, 0, _i - i);
                     _target[_i * h + _j] = new Color(rnd.Next(0, 4), rnd.Next(0, 256), rnd.Next(0, 4), rnd.Next(0, 256));
                 }

@@ -171,8 +171,9 @@ namespace GpuSim
         public static class UnitType
         {
             public const float
+                FirstUnitType = Footman,
                 FirstBuildingType = Barracks,
-                FirstUnitType = Footman;
+                FirstNeutralBuildingType = GoldSource;
 
             public static float BuildingIndex(float type)
             {
@@ -183,10 +184,11 @@ namespace GpuSim
                 None = _0,
 
                 Footman = _1,
-                
+
                 Barracks = _2,
-                GoldSource = _3,
-                GoldMine = _4;
+                GoldMine = _3,
+
+                GoldSource = _4;
         }
 
         protected static bool IsUnit(unit u)
@@ -197,6 +199,11 @@ namespace GpuSim
         protected static bool IsBuilding(unit u)
         {
             return u.type >= UnitType.FirstBuildingType;
+        }
+
+        protected static bool IsNeutralBuilding(unit u)
+        {
+            return u.type >= UnitType.FirstNeutralBuildingType;
         }
 
         protected static bool IsCenter(building b)

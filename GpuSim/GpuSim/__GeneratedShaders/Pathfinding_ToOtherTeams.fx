@@ -78,6 +78,11 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
+bool GpuSim__SimShader__IsNeutralBuilding(float4 u)
+{
+    return u.r >= 0.01568628 - .001;
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -96,7 +101,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 cur_data = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
     float4 right = tex2D(fs_param_Path, psin.TexCoords + (float2(1, 0)) * fs_param_Path_dxdy), up = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 1)) * fs_param_Path_dxdy), left = tex2D(fs_param_Path, psin.TexCoords + (float2(-(1), 0)) * fs_param_Path_dxdy), down = tex2D(fs_param_Path, psin.TexCoords + (float2(0, -(1))) * fs_param_Path_dxdy);
     float4 output = FragSharpFramework__FragSharpStd__min(right, up, left, down) + float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
-    if (GpuSim__SimShader__Something(data))
+    if (GpuSim__SimShader__Something(data) && !(GpuSim__SimShader__IsNeutralBuilding(cur_data)))
     {
         output += 3 * float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
         if (abs(0.003921569 - cur_data.b) > .001)
