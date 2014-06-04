@@ -221,6 +221,13 @@ namespace GpuSim
             if (Keys.B.Pressed())
             {
                 CurUserMode = UserMode.PlaceBuilding;
+                BuildingType = SimShader.UnitType.Barracks;
+            }
+
+            if (Keys.G.Pressed())
+            {
+                CurUserMode = UserMode.PlaceBuilding;
+                BuildingType = SimShader.UnitType.GoldMine;
             }
 
             if (Keys.Escape.Pressed() || Keys.Back.Pressed() || CurUserMode == UserMode.PlaceBuilding && Input.RightMousePressed)
@@ -610,7 +617,7 @@ namespace GpuSim
             ActionSelect.Apply(DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.SelectField, Deselect, SimShader.UnitAction.NoChange, Output: DataGroup.Temp1);
             Swap(ref DataGroup.Temp1, ref DataGroup.PreviousData);
 
-            if (Keys.F.Pressed() || Keys.G.Pressed())
+            if (Keys.R.Pressed() || Keys.T.Pressed())
             {
                 CreateUnits();
             }
@@ -637,32 +644,60 @@ namespace GpuSim
                 GraphicsDevice.Textures[3] = null;
                 GraphicsDevice.SetRenderTarget(null);
 
-                var data = DataGroup.CurrentData.GetData(GridCoord, new vec2(_w, _h));
+                CanPlaceBuilding = false;
 
-                color clr = color.TransparentBlack;
-                if (data != null)
+                if (BuildingType == SimShader.UnitType.Barracks)
                 {
-                    CanPlaceBuilding = true;
-			        for (int i = 0; i < _w; i++)
-			        for (int j = 0; j < _h; j++)
-                    {
-                        var val = data[i + j * _w];
-                        bool occupied = val.R > 0;
+                    var _data = DataGroup.CurrentData.GetData(GridCoord, new vec2(_w, _h));
 
-                        CanPlace[i + j * _w] = !occupied;
-                        if (occupied) CanPlaceBuilding = false;
+                    color clr = color.TransparentBlack;
+                    if (_data != null)
+                    {
+                        CanPlaceBuilding = true;
+                        for (int i = 0; i < _w; i++)
+                        for (int j = 0; j < _h; j++)
+                        {
+                            var val = (building)_data[i + j * _w].ToVector4();
+
+                            bool occupied = val.direction > 0;
+
+                            CanPlace[i + j * _w] = !occupied;
+
+                            if (occupied) CanPlaceBuilding = false;
+                        }
                     }
+                }
 
-                    if (CanPlaceBuilding && Input.LeftMousePressed)
+                if (BuildingType == SimShader.UnitType.GoldMine)
+                {
+                    var _data = DataGroup.CurrentUnits.GetData(GridCoord, new vec2(_w, _h));
+
+                    color clr = color.TransparentBlack;
+                    if (_data != null)
                     {
-                        try
+                        CanPlaceBuilding = true;
+                        for (int i = 0; i < _w; i++)
+                        for (int j = 0; j < _h; j++)
                         {
-                            Create.PlaceBuilding(DataGroup, GridCoord, BuildingType);
-                            CanPlaceBuilding = false;
+                            var val = (unit)_data[i + j * _w].ToVector4();
+
+                            bool can_place = val.team == SimShader.Team.None && val.type == SimShader.UnitType.GoldSource;
+                            CanPlace[i + j * _w] = can_place;
+
+                            if (!can_place) CanPlaceBuilding = false;
                         }
-                        catch
-                        {
-                        }
+                    }
+                }
+
+                if (CanPlaceBuilding && Input.LeftMousePressed)
+                {
+                    try
+                    {
+                        Create.PlaceBuilding(DataGroup, GridCoord, BuildingType);
+                        CanPlaceBuilding = false;
+                    }
+                    catch
+                    {
                     }
                 }
             }
@@ -670,8 +705,8 @@ namespace GpuSim
 
         private void CreateUnits()
         {
-            float player = Keys.F.Pressed() ? SimShader.Player.One : SimShader.Player.Two;
-            float team = Keys.F.Pressed() ? SimShader.Team.One : SimShader.Team.Two;
+            float player = Keys.R.Pressed() ? SimShader.Player.One : SimShader.Player.Two;
+            float team = Keys.R.Pressed() ? SimShader.Team.One : SimShader.Team.Two;
 
             ActionSpawn_Unit.Apply(DataGroup.CurrentUnits, DataGroup.SelectField, player, team, Output: DataGroup.Temp1);
             Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
