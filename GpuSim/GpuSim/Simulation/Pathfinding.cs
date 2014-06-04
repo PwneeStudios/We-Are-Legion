@@ -22,14 +22,21 @@ namespace GpuSim
 
             vec4 output = min(right, up, left, down) + vec(_1,_1,_1,_1);
 
-            if (Something(data) && !IsNeutralBuilding(cur_data))
+            if (Something(data))
             {
-                output += 3 * vec(_1, _1, _1, _1);
+                if (IsNeutralBuilding(cur_data))
+                {
+                    output += 100 * vec(_1, _1, _1, _1);
+                }
+                else
+                {
+                    output += 3 * vec(_1, _1, _1, _1);
 
-                if (cur_data.team != Team.One)   output.r = _0;
-                if (cur_data.team != Team.Two)   output.g = _0;
-                if (cur_data.team != Team.Three) output.b = _0;
-                if (cur_data.team != Team.Four)  output.a = _0;
+                    if (cur_data.team != Team.One) output.r = _0;
+                    if (cur_data.team != Team.Two) output.g = _0;
+                    if (cur_data.team != Team.Three) output.b = _0;
+                    if (cur_data.team != Team.Four) output.a = _0;
+                }
             }
 
             return output;
