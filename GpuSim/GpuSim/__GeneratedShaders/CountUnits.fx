@@ -64,7 +64,7 @@ bool GpuSim__SimShader__Something(float4 u)
 
 bool GpuSim__SimShader__IsUnit(float4 u)
 {
-    return abs(0.003921569 - u.r) < .001;
+    return abs(u.r - 0.003921569) < .001;
 }
 
 bool GpuSim__SimShader__selected(float4 u)
@@ -101,7 +101,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (GpuSim__SimShader__Something(data_here))
     {
         float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-        if (GpuSim__SimShader__IsUnit(unit_here) && abs(fs_param_player - unit_here.g) < .001 && (!(fs_param_only_selected) || GpuSim__SimShader__selected(data_here)))
+        if (GpuSim__SimShader__IsUnit(unit_here) && abs(unit_here.g - fs_param_player) < .001 && (!(fs_param_only_selected) || GpuSim__SimShader__selected(data_here)))
         {
             output.xyz = GpuSim__SimShader__pack_coord_3byte(1);
         }

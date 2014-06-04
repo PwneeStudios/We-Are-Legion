@@ -95,7 +95,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (GpuSim__SimShader__Something(data_here) && abs(0.01568628 - data_here.a) < .001)
+    if (GpuSim__SimShader__Something(data_here) && abs(data_here.a - 0.01568628) < .001)
     {
         float4 barracks = tex2D(fs_param_Unit, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(GpuSim__SimShader__Reverse(data_here.r))) * fs_param_Unit_dxdy);
         unit_here.g = barracks.g;

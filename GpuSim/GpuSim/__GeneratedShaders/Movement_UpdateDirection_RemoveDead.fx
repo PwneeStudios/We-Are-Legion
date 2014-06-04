@@ -110,7 +110,7 @@ bool GpuSim__SimShader__IsBuilding(float4 u)
 
 bool GpuSim__SimShader__IsCenter(float4 b)
 {
-    return abs(0.003921569 - b.g) < .001 && abs(0.003921569 - b.a) < .001;
+    return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
 }
 
 bool GpuSim__SimShader__selected(float4 u)
@@ -218,7 +218,7 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
     }
     else
     {
-        if (abs(0.007843138 - here.a) < .001)
+        if (abs(here.a - 0.007843138) < .001)
         {
             here.a = 0.01176471;
         }
@@ -245,7 +245,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         float4 path = float4(0, 0, 0, 0);
         float4 here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
         float4 extra_here = tex2D(fs_param_Extra, psin.TexCoords + (float2(0, 0)) * fs_param_Extra_dxdy);
-        if (abs(0.03921569 - here.a) < .001)
+        if (abs(here.a - 0.03921569) < .001)
         {
             __FinalOutput.Color = float4(0, 0, 0, 0);
             return __FinalOutput;
@@ -261,7 +261,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         float4 _value_right = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(1, 0)) * fs_param_PathToOtherTeams_dxdy), _value_up = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, 1)) * fs_param_PathToOtherTeams_dxdy), _value_left = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(-(1), 0)) * fs_param_PathToOtherTeams_dxdy), _value_down = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, -(1))) * fs_param_PathToOtherTeams_dxdy);
         float value_right = 1, value_left = 1, value_up = 1, value_down = 1;
-        if (abs(0.003921569 - here.b) < .001)
+        if (abs(here.b - 0.003921569) < .001)
         {
             value_right = _value_right.x;
             value_left = _value_left.x;
@@ -270,7 +270,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         else
         {
-            if (abs(0.007843138 - here.b) < .001)
+            if (abs(here.b - 0.007843138) < .001)
             {
                 value_right = _value_right.y;
                 value_left = _value_left.y;
@@ -281,7 +281,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         float auto_attack_cutoff = 0.04705882;
         float min = 256;
         float hold_dir = data_here.r;
-        if (abs(0.007843138 - data_here.a) < .001 || abs(0.01176471 - data_here.a) < .001)
+        if (abs(data_here.a - 0.007843138) < .001 || abs(data_here.a - 0.01176471) < .001)
         {
             if (value_right < min - .001)
             {
@@ -308,11 +308,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             data_here.r = hold_dir;
         }
-        if (min < auto_attack_cutoff - .001 && abs(0.01176471 - data_here.a) < .001)
+        if (min < auto_attack_cutoff - .001 && abs(data_here.a - 0.01176471) < .001)
         {
             data_here.a = 0.007843138;
         }
-        if (min > auto_attack_cutoff + .001 && abs(0.007843138 - data_here.a) < .001 || abs(0.003921569 - data_here.a) < .001)
+        if (min > auto_attack_cutoff + .001 && abs(data_here.a - 0.007843138) < .001 || abs(data_here.a - 0.003921569) < .001)
         {
             GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(psin, psin, fs_param_Data, fs_param_Data_size, fs_param_Data_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, here, data_here, extra_here);
         }

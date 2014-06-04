@@ -70,12 +70,12 @@ bool GpuSim__SimShader__Something(float4 u)
 
 float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
 {
-    if (abs(0.003921569 - player) < .001)
+    if (abs(player - 0.003921569) < .001)
     {
     }
     else
     {
-        if (abs(0.007843138 - player) < .001)
+        if (abs(player - 0.007843138) < .001)
         {
             float r = clr.r;
             clr.r = clr.g;
@@ -84,7 +84,7 @@ float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
         }
         else
         {
-            if (abs(0.01176471 - player) < .001)
+            if (abs(player - 0.01176471) < .001)
             {
                 float b = clr.b;
                 clr.b = clr.g;
@@ -92,7 +92,7 @@ float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
             }
             else
             {
-                if (abs(0.01568628 - player) < .001)
+                if (abs(player - 0.01568628) < .001)
                 {
                     float r = clr.r;
                     clr.r = clr.b;

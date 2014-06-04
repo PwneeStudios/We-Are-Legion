@@ -160,6 +160,11 @@ namespace GpuSim
             return new corpse(v.X, v.Y, v.Z, v.W);
         }
 
+        public static explicit operator Color(corpse v)
+        {
+            return new Color(v.x, v.y, v.z, v.w);
+        }        
+
         public static readonly corpse Zero    = new corpse(0, 0, 0, 0);
         public static readonly corpse Nothing = new corpse(0, 0, 0, 0);
 
@@ -317,6 +322,11 @@ namespace GpuSim
         {
             return new unit(v.X, v.Y, v.Z, v.W);
         }
+
+        public static explicit operator Color(unit v)
+        {
+            return new Color(v.x, v.y, v.z, v.w);
+        }        
 
         public static readonly unit Zero    = new unit(0, 0, 0, 0);
         public static readonly unit Nothing = new unit(0, 0, 0, 0);
@@ -476,6 +486,11 @@ namespace GpuSim
             return new data(v.X, v.Y, v.Z, v.W);
         }
 
+        public static explicit operator Color(data v)
+        {
+            return new Color(v.x, v.y, v.z, v.w);
+        }        
+
         public static readonly data Zero    = new data(0, 0, 0, 0);
         public static readonly data Nothing = new data(0, 0, 0, 0);
 
@@ -634,6 +649,11 @@ namespace GpuSim
             return new building(v.X, v.Y, v.Z, v.W);
         }
 
+        public static explicit operator Color(building v)
+        {
+            return new Color(v.x, v.y, v.z, v.w);
+        }        
+
         public static readonly building Zero    = new building(0, 0, 0, 0);
         public static readonly building Nothing = new building(0, 0, 0, 0);
 
@@ -791,6 +811,11 @@ namespace GpuSim
         {
             return new extra(v.X, v.Y, v.Z, v.W);
         }
+
+        public static explicit operator Color(extra v)
+        {
+            return new Color(v.x, v.y, v.z, v.w);
+        }        
 
         public static readonly extra Zero    = new extra(0, 0, 0, 0);
         public static readonly extra Nothing = new extra(0, 0, 0, 0);

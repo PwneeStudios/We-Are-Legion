@@ -90,7 +90,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 corpse_here = tex2D(fs_param_Corpses, psin.TexCoords + (float2(0, 0)) * fs_param_Corpses_dxdy);
-    if (GpuSim__SimShader__Something(data_here) && abs(0.03921569 - unit_here.a) < .001)
+    if (GpuSim__SimShader__Something(data_here) && abs(unit_here.a - 0.03921569) < .001)
     {
         corpse_here.r = data_here.r;
         corpse_here.g = unit_here.r;

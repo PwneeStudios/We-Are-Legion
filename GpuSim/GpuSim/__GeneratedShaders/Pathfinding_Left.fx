@@ -69,22 +69,22 @@ float4 GpuSim__PathHelper__Propagate(VertexToPixel psin, sampler Path, float2 Pa
         min = val_here;
         output.r = here.r;
     }
-    if (val_right > 0 + .001 && val_right < min - .001 && abs(0 - right.a) < .001)
+    if (val_right > 0 + .001 && val_right < min - .001 && abs(right.a - 0) < .001)
     {
         min = val_right;
         output.r = 0.003921569;
     }
-    if (val_up > 0 + .001 && val_up < min - .001 && abs(0 - up.a) < .001)
+    if (val_up > 0 + .001 && val_up < min - .001 && abs(up.a - 0) < .001)
     {
         min = val_up;
         output.r = 0.007843138;
     }
-    if (val_left > 0 + .001 && val_left < min - .001 && abs(0 - left.a) < .001)
+    if (val_left > 0 + .001 && val_left < min - .001 && abs(left.a - 0) < .001)
     {
         min = val_left;
         output.r = 0.01176471;
     }
-    if (val_down > 0 + .001 && val_down < min - .001 && abs(0 - down.a) < .001)
+    if (val_down > 0 + .001 && val_down < min - .001 && abs(down.a - 0) < .001)
     {
         min = val_down;
         output.r = 0.01568628;

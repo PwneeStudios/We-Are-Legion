@@ -14,95 +14,13 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
-    public static class Texture2DExtension
-    {
-        public static vec2 UnitSize(this Texture2D Texture)
-        {
-            return new vec2(1, (float)Texture.Height / (float)Texture.Width);
-        }
-
-        public static vec2 Size(this Texture2D Texture)
-        {
-            return new vec2(Texture.Width, Texture.Height);
-        }
-    }
-
-    public static class ListExtension
-    {
-        public static void Swap<T>(this List<T> List, int Index, ref T NewElement)
-        {
-			T temp = List[Index];
-            List[Index] = NewElement;
-            NewElement = temp;
-        }
-    }
-
-    public static class RenderTargetExtension
-    {
-        public static Color[] GetData(this RenderTarget2D RenderTarget)
-        {
-            int w = RenderTarget.Width, h = RenderTarget.Height;
-            Color[] data = new Color[w * h];
-            
-            RenderTarget.GetData(data);
-            
-            return data;
-        }
-
-        public static Color[] GetData(this RenderTarget2D RenderTarget, vec2 coord)
-        {
-            return RenderTarget.GetData(coord, new vec2(1, 1));
-        }
-
-        public static Color[] GetData(this RenderTarget2D RenderTarget, vec2 coord, vec2 size)
-        {
-            int w = RenderTarget.Width, h = RenderTarget.Height;
-            
-            coord = new vec2((int)Math.Floor(coord.x), (int)Math.Floor(coord.y));
-            size = new vec2((int)Math.Floor(size.x), (int)Math.Floor(size.y));
-            if (coord.x < 0 || coord.y < 0 || coord.x >= w || coord.y >= h) return null;
-
-            int elements = (int)size.x * (int)size.y;
-            Color[] data = new Color[elements];
-            Rectangle rect = new Rectangle((int)coord.x, (int)coord.y, (int)size.x, (int)size.y);
-            RenderTarget.GetData(0, rect, data, 0, elements);
-
-            return data;
-        }
-
-        public static void SetData(this RenderTarget2D RenderTarget, vec2 coord, vec2 size, Color[] data)
-        {
-            int w = RenderTarget.Width, h = RenderTarget.Height;
-
-            coord = new vec2((int)Math.Floor(coord.x), (int)Math.Floor(coord.y));
-            size = new vec2((int)Math.Floor(size.x), (int)Math.Floor(size.y));
-            if (coord.x < 0 || coord.y < 0 || coord.x >= w || coord.y >= h) return;
-
-            int elements = (int)size.x * (int)size.y;
-            Rectangle rect = new Rectangle((int)coord.x, (int)coord.y, (int)size.x, (int)size.y);
-
-            RenderTarget.SetData(0, rect, data, 0, elements);
-        }
-    }
-
-	public static class RndExtension
-	{
-		public static float Bit(this System.Random rnd)
-		{
-			return rnd.NextDouble() > .5 ? 1 : 0;
-		}
-
-        public static int IntRange(this System.Random rnd, int min, int max)
-        {
-            return (int)(rnd.NextDouble() * (max - min) + min);
-        }
-	}
-
 	/// <summary>
 	/// This is the main type for your game
 	/// </summary>
 	public class M3ngineGame : Game
 	{
+        public static M3ngineGame Game;
+
 		const bool UnlimitedSpeed = false;
 
         const bool MouseEnabled = true;
@@ -117,17 +35,7 @@ namespace GpuSim
         SpriteBatch MySpriteBatch;
         SpriteFont DefaultFont;
 
-        RenderTarget2D
-            Temp1, Temp2,
-            PreviousUnits, CurrentUnits, PreviousData, CurrentData, Extra, TargetData,
-            RandomField,
-            Corspes,
-            SelectField,
-            PreviousDraw, CurrentDraw,
-            Paths_Right, Paths_Left, Paths_Up, Paths_Down,
-            PathToOtherTeams;
-        List<RenderTarget2D>
-            Multigrid;
+        DataGroup DataGroup;
 
 		Texture2D
             BuildingTexture_1,
@@ -136,20 +44,18 @@ namespace GpuSim
             
             Cursor, SelectCircle, SelectCircle_Data;
 
-        public const int w = 1024, h = 1024;
-        public static readonly vec2 GridSize = new vec2(w, h);
-
 		public M3ngineGame()
 		{
+            Game = this;
+
 			graphics = new GraphicsDeviceManager(this);
 
 			Window.Title = "Gpu Sim Test";
-            graphics.PreferredBackBufferWidth  = w;
-            graphics.PreferredBackBufferHeight = h;
+            graphics.PreferredBackBufferWidth  = 1024;
+            graphics.PreferredBackBufferHeight = 1024;
 			//graphics.IsFullScreen = rez.Mode == WindowMode.Fullscreen;
             graphics.SynchronizeWithVerticalRetrace = !UnlimitedSpeed;
             IsFixedTimeStep = !UnlimitedSpeed;
-            //TargetElapsedTime = new TimeSpan(0, 0, 0, 0, 1000 / 30);
 
 			Content.RootDirectory = "Content";
 		}
@@ -174,38 +80,6 @@ namespace GpuSim
 			T temp = a;
 			a = b;
 			b = temp;
-		}
-
-		void UpdateGrid(Color[] clr, int w, int h)
-		{
-			for (int i = 0; i < w; i++) {
-			for (int j = 0; j < h; j++) {
-				int index = i * h + j;
-				Color lookup = clr[index];
-				int dir = (int)lookup.R;
-
-				int index2;
-				switch (dir)
-				{
-					case 1: index2 = (i + 1 + w) % w * h + (j + 0 + h) % h; break;
-					case 2: index2 = (i + 0 + w) % w * h + (j + 1 + h) % h; break;
-					case 3: index2 = (i - 1 + w) % w * h + (j + 0 + h) % h; break;
-					case 4: index2 = (i + 0 + w) % w * h + (j - 1 + h) % h; break;
-					default: continue;
-				}
-
-				if (clr[index2].R == 0)
-				{
-					clr[index2] = lookup;
-					clr[index] = Color.Transparent;
-				}
-				else
-				{
-					dir++;
-					if (dir > 4) dir = 1;
-					clr[index].R = (byte)dir;
-				}
-			}}
 		}
 
         RectangleQuad Ground;
@@ -240,154 +114,10 @@ namespace GpuSim
             float GroundRepeat = 100;
             Ground = new RectangleQuad(new vec2(-1, -1), new vec2(1, 1), new vec2(0, 0), new vec2(1, 1) * GroundRepeat);
 
-            CurrentUnits        = MakeTarget(w, h);
-            PreviousUnits       = MakeTarget(w, h);
-            
-            CurrentData    = MakeTarget(w, h);
-            PreviousData   = MakeTarget(w, h);
-            
-            Extra          = MakeTarget(w, h);
-            TargetData     = MakeTarget(w, h);
-
-            Corspes        = MakeTarget(w, h);
-            
-            SelectField    = MakeTarget(w, h);
-
-            RandomField    = MakeTarget(w, h);
-
-            CurrentDraw    = MakeTarget(w, h);
-            PreviousDraw   = MakeTarget(w, h);
-
-            InitialConditions(w, h);
-
-            Temp1 = MakeTarget(w, h);
-            Temp2 = MakeTarget(w, h);
-            
-            Paths_Right = MakeTarget(w, h);
-            Paths_Left  = MakeTarget(w, h);
-            Paths_Up    = MakeTarget(w, h);
-            Paths_Down  = MakeTarget(w, h);
-
-            PathToOtherTeams = MakeTarget(w, h);
-
-            Multigrid = new List<RenderTarget2D>();
-            int n = w;
-            while (n >= 1)
-            {
-                Multigrid.Add(MakeTarget(n, n));
-                n /= 2;
-            }
+            DataGroup = new DataGroup(1024, 1024);
 
 			base.Initialize();
 		}
-        
-        void InitialConditions(int w, int h)
-        {
-            Color[] _unit = new Color[w * h];
-            Color[] _data = new Color[w * h];
-            Color[] _extra = new Color[w * h];
-            Color[] _target = new Color[w * h];
-            Color[] _random = new Color[w * h];
-            Color[] _corpses = new Color[w * h];
-
-            CurrentData.GetData(_data);
-
-            var rnd = new System.Random();
-            for (int i = 0; i < w; i++)
-            for (int j = 0; j < h; j++)
-            {
-                _random[i * h + j] = new Color(rnd.IntRange(0, 256), rnd.IntRange(0, 256), rnd.IntRange(0, 256), rnd.IntRange(0, 256));
-                _corpses[i * h + j] = new Color(0, 0, 0, 0);
-
-                //if (true)
-                if (false)
-                //if (rnd.NextDouble() > 0.85f)
-                //if (i == w / 2 && j == h / 2)
-                //if (Math.Abs(i - w / 2) < 500)
-                //if (j == h / 2)
-                //if (i % 9 == 0)
-                //if (j % 2 == 0 || i % 2 == 0)
-                //if (j % 20 == 0 && i % 20 == 0)
-                {
-                    //int dir = rnd.Next(1, 5);
-                    int dir = rnd.Next(1, 5);
-
-                    int action = (int)(255f * SimShader.UnitAction.Attacking);
-
-                    int g = 0;
-                    int b = 0;
-
-                    int player = rnd.Next(1, 2);
-                    int team   = player;
-                    int type   = rnd.Next(1, 2);
-
-                    _unit[i * h + j] = new Color(type, player, team, 0);
-                    _data[i * h + j] = new Color(dir, g, b, action);
-                    _extra[i * h + j] = new Color(0, 0, 0, 0);
-                    _target[i * h + j] = new Color(rnd.Next(0, 4), rnd.Next(0, 256), rnd.Next(0, 4), rnd.Next(0, 256));
-                }
-                else
-                {
-                    _unit[i * h + j] = new Color(0, 0, 0, 0);
-                    _data[i * h + j] = new Color(0, 0, 0, 0);
-                    _extra[i * h + j] = new Color(0, 0, 0, 0);
-                    _target[i * h + j] = new Color(0, 0, 0, 0);
-                }
-            }
-
-            for (int i = 0; i < w; i += 50)
-            for (int j = 0; j < h; j += 50)
-            {
-                for (int _i = i; _i < i+3; _i++)
-                for (int _j = j; _j < j+3; _j++)
-                {
-                    //_unit[_i * h + _j] = new Color((int)(255f * SimShader.UnitType.Barracks), 1, 1, 0);
-                    _unit[_i * h + _j] = new Color((int)(255f * SimShader.UnitType.GoldSource), 0, 0, 0);
-                    _data[_i * h + _j] = new Color((int)(255f * SimShader.Dir.Stationary), _j - j, 0, _i - i);
-                    _target[_i * h + _j] = new Color(rnd.Next(0, 4), rnd.Next(0, 256), rnd.Next(0, 4), rnd.Next(0, 256));
-                }
-            }
-
-            CurrentUnits.SetData(_unit);
-            PreviousUnits.SetData(_unit);
-
-            CurrentData.SetData(_data);
-            PreviousData.SetData(_data);
-
-            Extra.SetData(_extra);
-
-            TargetData.SetData(_target);
-
-            RandomField.SetData(_random);
-
-            Corspes.SetData(_corpses);
-        }
-
-        void PlaceBuilding(vec2 coord, float building_type)
-        {
-            Color[]
-                _unit   = new Color[3 * 3],
-                _data   = new Color[3 * 3],
-                _target = new Color[3 * 3];
-
-            for (int _i = 0; _i < 3; _i++)
-            for (int _j = 0; _j < 3; _j++)
-            {
-                _unit[_i * 3 + _j] = new Color((int)(255f * building_type), 1, 1, 0);
-                _data[_i * 3 + _j] = new Color((int)(255f * SimShader.Dir.Stationary), _j, 0, _i);
-                _target[_i * 3 + _j] = new Color(0, 0, 0, 0);
-            }
-
-            vec2 size = new vec2(3, 3);
-            CurrentUnits.SetData(coord, size, _unit);
-            CurrentData.SetData(coord, size, _data);
-            TargetData.SetData(coord, size, _target);
-        }
-
-        private RenderTarget2D MakeTarget(int w, int h)
-        {
-            return new RenderTarget2D(graphics.GraphicsDevice, w, h);
-        }
 
 		/// <summary>
 		/// LoadContent will be called once per game and is the place to load
@@ -567,7 +297,7 @@ namespace GpuSim
             //DrawPrecomputation_Pre.Apply(Current, Previous, Output: DrawPrevious);
             //DrawPrecomputation_Cur.Apply(Current, Previous, Output: DrawCurrent);
 
-            BenchmarkTests.Run(CurrentData, PreviousData);
+            BenchmarkTests.Run(DataGroup.CurrentData, DataGroup.PreviousData);
 
 			// Choose units texture
             Texture2D UnitsSpriteSheet = null, BuildingsSpriteSheet = null;
@@ -607,16 +337,16 @@ namespace GpuSim
             DrawGrass.Using(camvec, CameraAspect, GroundTexture);
             Ground.Draw(GraphicsDevice);
 
-            DrawCorpses.Using(camvec, CameraAspect, Corspes, UnitsSpriteSheet);
+            DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet);
             GridHelper.DrawGrid();
 
-            DrawBuildings.Using(camvec, CameraAspect, CurrentData, CurrentUnits, BuildingsSpriteSheet, PercentSimStepComplete);
+            DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSpriteSheet, PercentSimStepComplete);
             GridHelper.DrawGrid();
 
             if (CameraZoom > z / 8)
-                DrawUnits.Using(camvec, CameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete);
+                DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete);
             else
-                DrawUnitsZoomedOut.Using(camvec, CameraAspect, CurrentData, PreviousData, UnitsSpriteSheet, PercentSimStepComplete);
+                DrawUnitsZoomedOut.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, UnitsSpriteSheet, PercentSimStepComplete);
             GridHelper.DrawGrid();
 
 
@@ -672,7 +402,7 @@ namespace GpuSim
                 DrawSolid.Using(camvec, CameraAspect, clr);
 
                 vec2 gWorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCoord.x + i), (float)Math.Floor(GridCoord.y + j)));
-                vec2 size = 1 / GridSize;
+                vec2 size = 1 / DataGroup.GridSize;
                 RectangleQuad.Draw(GraphicsDevice, gWorldCord + new vec2(size.x, -size.y), size);
             }
         }
@@ -684,7 +414,7 @@ namespace GpuSim
             DrawMouse.Using(camvec, CameraAspect, BuildingTexture_1);
 
             vec2 WorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCoord.x), (float)Math.Floor(GridCoord.y)));
-            vec2 size = 3 * 1 / GridSize;
+            vec2 size = 3 * 1 / DataGroup.GridSize;
 
             vec2 uv_size = SimShader.BuildingSpriteSheet.BuildingSize;
             vec2 uv_sheet_size = SimShader.BuildingSpriteSheet.SubsheetSize;
@@ -763,7 +493,7 @@ namespace GpuSim
 
         void DoGoldMineCount()
         {
-            CountGoldMines.Apply(CurrentData, CurrentUnits, Output: Multigrid[0]);
+            CountGoldMines.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Multigrid[0]);
 
             color count = MultigridReduce(CountReduce_4x1byte.Apply);
 
@@ -778,7 +508,7 @@ namespace GpuSim
         
         int DoUnitCount(float player, bool only_selected)
         {
-            CountUnits.Apply(CurrentData, CurrentUnits, player, only_selected, Output: Multigrid[0]);
+            CountUnits.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, player, only_selected, Output: DataGroup.Multigrid[0]);
 
             color count = MultigridReduce(CountReduce_3byte.Apply);
 
@@ -793,34 +523,34 @@ namespace GpuSim
             int level = 0;
             while (n >= 2)
             {
-                ReductionShader(Multigrid[level], Multigrid[level + 1]);
+                ReductionShader(DataGroup.Multigrid[level], DataGroup.Multigrid[level + 1]);
 
                 n /= 2;
                 level++;
             }
             GraphicsDevice.SetRenderTarget(null);
 
-            Multigrid.Last().GetData(CountData);
+            DataGroup.Multigrid.Last().GetData(CountData);
             return (color)CountData[0];
         }
 
         vec2 SelectedBound_BL, SelectedBound_TR;
         void Bounds()
         {
-            Bounding.Apply(CurrentData, Output: Multigrid[1]);
+            Bounding.Apply(DataGroup.CurrentData, Output: DataGroup.Multigrid[1]);
 
             int n = ((int)Screen.x) / 2;
             int level = 1;
             while (n >= 2)
             {
-                _Bounding.Apply(Multigrid[level], Output: Multigrid[level + 1]);
+                _Bounding.Apply(DataGroup.Multigrid[level], Output: DataGroup.Multigrid[level + 1]);
 
                 n /= 2;
                 level++;
             }
             GraphicsDevice.SetRenderTarget(null);
 
-            Multigrid.Last().GetData(CountData);
+            DataGroup.Multigrid.Last().GetData(CountData);
             color bound = (color)CountData[0];
 
             SelectedBound_TR = bound.rg;
@@ -831,8 +561,8 @@ namespace GpuSim
 
         void PathUpdate()
         {
-            Pathfinding_ToOtherTeams.Apply(PathToOtherTeams, CurrentData, CurrentUnits, Output: Temp1);
-            Swap(ref PathToOtherTeams, ref Temp1);
+            Pathfinding_ToOtherTeams.Apply(DataGroup.PathToOtherTeams, DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.PathToOtherTeams, ref DataGroup.Temp1);
 
             //Pathfinding_Right.Apply(Paths_Right, Current, Output: Temp1);
             //Swap(ref Paths_Right, ref Temp1);
@@ -857,7 +587,7 @@ namespace GpuSim
                 || Keys.Back.Pressed() || Keys.Escape.Pressed();
             bool Selecting = Input.LeftMouseDown;
 
-            DataDrawMouse.Using(SelectCircle_Data, SimShader.Player.One, Output: SelectField, Clear: Color.Transparent);
+            DataDrawMouse.Using(SelectCircle_Data, SimShader.Player.One, Output: DataGroup.SelectField, Clear: Color.Transparent);
 
             if (Selecting)
             {
@@ -872,11 +602,11 @@ namespace GpuSim
             }
 
             var action = Input.RightMousePressed ? SimShader.UnitAction.Attacking : SimShader.UnitAction.NoChange;
-            ActionSelect.Apply(CurrentData, CurrentUnits, SelectField, Deselect, action, Output: Temp1);
-            Swap(ref Temp1, ref CurrentData);
+            ActionSelect.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.SelectField, Deselect, action, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
 
-            ActionSelect.Apply(PreviousData, CurrentUnits, SelectField, Deselect, SimShader.UnitAction.NoChange, Output: Temp1);
-            Swap(ref Temp1, ref PreviousData);
+            ActionSelect.Apply(DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.SelectField, Deselect, SimShader.UnitAction.NoChange, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.Temp1, ref DataGroup.PreviousData);
 
             if (Keys.F.Pressed() || Keys.G.Pressed())
             {
@@ -905,7 +635,7 @@ namespace GpuSim
                 GraphicsDevice.Textures[3] = null;
                 GraphicsDevice.SetRenderTarget(null);
 
-                var data = CurrentData.GetData(GridCoord, new vec2(_w, _h));
+                var data = DataGroup.CurrentData.GetData(GridCoord, new vec2(_w, _h));
 
                 color clr = color.TransparentBlack;
                 if (data != null)
@@ -925,7 +655,7 @@ namespace GpuSim
                     {
                         try
                         {
-                            PlaceBuilding(GridCoord, BuildingType);
+                            Create.PlaceBuilding(DataGroup, GridCoord, BuildingType);
                             CanPlaceBuilding = false;
                         }
                         catch
@@ -941,10 +671,10 @@ namespace GpuSim
             float player = Keys.F.Pressed() ? SimShader.Player.One : SimShader.Player.Two;
             float team = Keys.F.Pressed() ? SimShader.Team.One : SimShader.Team.Two;
 
-            ActionSpawn_Unit.Apply(CurrentUnits, SelectField, player, team, Output: Temp1);
-            Swap(ref Temp1, ref CurrentUnits);
-            ActionSpawn_Data.Apply(CurrentData, SelectField, Output: Temp1);
-            Swap(ref Temp1, ref CurrentData);
+            ActionSpawn_Unit.Apply(DataGroup.CurrentUnits, DataGroup.SelectField, player, team, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
+            ActionSpawn_Data.Apply(DataGroup.CurrentData, DataGroup.SelectField, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
         }
 
         private void AttackMove()
@@ -962,60 +692,60 @@ namespace GpuSim
             vec2 Destination_Size = new vec2(SquareWidth, SquareWidth) * 1.25f;
             vec2 Destination_BL = pos - Destination_Size / 2;
 
-            ActionAttackSquare.Apply(CurrentData, TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: Temp1);
+            ActionAttackSquare.Apply(DataGroup.CurrentData, DataGroup.TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: DataGroup.Temp1);
             //ActionAttackPoint .Apply(Current, TargetData, pos, Output: Temp1);
-            Swap(ref TargetData, ref Temp1);
+            Swap(ref DataGroup.TargetData, ref DataGroup.Temp1);
 
-            ActionAttack2.Apply(CurrentData, Extra, pos, Output: Temp1);
-            Swap(ref Extra, ref Temp1);
+            ActionAttack2.Apply(DataGroup.CurrentData, DataGroup.Extra, pos, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.Extra, ref DataGroup.Temp1);
         }
 
 		void SimulationUpdate()
 		{
             PathUpdate();
 
-            Building_SelectCenterIfSelected_SetDirecion.Apply(CurrentUnits, CurrentData, Output: Temp1);
-            Swap(ref CurrentData, ref Temp1);
-            BuildingDiffusion_Data.Apply(CurrentUnits, CurrentData, Output: Temp1);
-            Swap(ref CurrentData, ref Temp1);
-            BuildingDiffusion_Target.Apply(CurrentUnits, CurrentData, TargetData, Output: Temp1);
-            Swap(ref TargetData, ref Temp1);
+            Building_SelectCenterIfSelected_SetDirecion.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
+            BuildingDiffusion_Data.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
+            BuildingDiffusion_Target.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, DataGroup.TargetData, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.TargetData, ref DataGroup.Temp1);
 
-            AddCorpses.Apply(CurrentUnits, CurrentData, Corspes, Output: Temp1);
-            Swap(ref Corspes, ref Temp1);
+            AddCorpses.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, DataGroup.Corspes, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.Corspes, ref DataGroup.Temp1);
 
-            Movement_UpdateDirection_RemoveDead.Apply(TargetData, CurrentUnits, Extra, CurrentData, PathToOtherTeams, Output: Temp1);
+            Movement_UpdateDirection_RemoveDead.Apply(DataGroup.TargetData, DataGroup.CurrentUnits, DataGroup.Extra, DataGroup.CurrentData, DataGroup.PathToOtherTeams, Output: DataGroup.Temp1);
             //Movement_UpdateDirection.Apply(TargetData, CurData, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
-            Swap(ref CurrentData, ref Temp1);
+            Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
 
-            Movement_Phase1.Apply(CurrentData, Output: Temp1);
-            Movement_Phase2.Apply(CurrentData, Temp1, Output: Temp2);
+            Movement_Phase1.Apply(DataGroup.CurrentData, Output: DataGroup.Temp1);
+            Movement_Phase2.Apply(DataGroup.CurrentData, DataGroup.Temp1, Output: DataGroup.Temp2);
 
-            Swap(ref CurrentData, ref PreviousData);
-            Swap(ref Temp2, ref CurrentData);
+            Swap(ref DataGroup.CurrentData, ref DataGroup.PreviousData);
+            Swap(ref DataGroup.Temp2, ref DataGroup.CurrentData);
 
-            Movement_Convect.Apply(TargetData, CurrentData, Output: Temp1);
-            Swap(ref TargetData, ref Temp1);
-            Movement_Convect.Apply(Extra, CurrentData, Output: Temp1);
-            Swap(ref Extra, ref Temp1);
-            Movement_Convect.Apply(CurrentUnits, CurrentData, Output: Temp1);
-            Swap(ref CurrentUnits, ref Temp1);
-            Swap(ref PreviousUnits, ref Temp1);
+            Movement_Convect.Apply(DataGroup.TargetData, DataGroup.CurrentData, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.TargetData, ref DataGroup.Temp1);
+            Movement_Convect.Apply(DataGroup.Extra, DataGroup.CurrentData, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.Extra, ref DataGroup.Temp1);
+            Movement_Convect.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.CurrentUnits, ref DataGroup.Temp1);
+            Swap(ref DataGroup.PreviousUnits, ref DataGroup.Temp1);
 
-            CheckForAttacking.Apply(CurrentUnits, CurrentData, RandomField, Output: Temp1);
-            Swap(ref CurrentUnits, ref Temp1);
+            CheckForAttacking.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, DataGroup.RandomField, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.CurrentUnits, ref DataGroup.Temp1);
 
-            SpawnUnits.Apply(CurrentUnits, CurrentData, PreviousData, Output: Temp1);
-            Swap(ref CurrentData, ref Temp1);
-            SetSpawn_Unit.Apply(CurrentUnits, CurrentData, Output: Temp1);
-            Swap(ref CurrentUnits, ref Temp1);
-            SetSpawn_Target.Apply(TargetData, CurrentData, Output: Temp1);
-            Swap(ref TargetData, ref Temp1);
-            SetSpawn_Data.Apply(CurrentUnits, CurrentData, Output: Temp1);
-            Swap(ref CurrentData, ref Temp1);
+            SpawnUnits.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, DataGroup.PreviousData, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
+            SetSpawn_Unit.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.CurrentUnits, ref DataGroup.Temp1);
+            SetSpawn_Target.Apply(DataGroup.TargetData, DataGroup.CurrentData, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.TargetData, ref DataGroup.Temp1);
+            SetSpawn_Data.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
 
-            UpdateRandomField.Apply(RandomField, Output: Temp1);
-            Swap(ref RandomField, ref Temp1);
+            UpdateRandomField.Apply(DataGroup.RandomField, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.RandomField, ref DataGroup.Temp1);
 		}
 	}
 }

@@ -60,7 +60,7 @@ bool GpuSim__SimShader__Something(float4 u)
 
 bool GpuSim__SimShader__IsCenter(float4 b)
 {
-    return abs(0.003921569 - b.g) < .001 && abs(0.003921569 - b.a) < .001;
+    return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
 }
 
 // Compiled vertex shader
@@ -82,21 +82,21 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (GpuSim__SimShader__Something(data_here))
     {
         float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-        if (abs(0.01176471 - unit_here.r) < .001 && GpuSim__SimShader__IsCenter(data_here))
+        if (abs(unit_here.r - 0.01176471) < .001 && GpuSim__SimShader__IsCenter(data_here))
         {
-            if (abs(0.003921569 - unit_here.g) < .001)
+            if (abs(unit_here.g - 0.003921569) < .001)
             {
                 output.x = 0.003921569;
             }
-            if (abs(0.007843138 - unit_here.g) < .001)
+            if (abs(unit_here.g - 0.007843138) < .001)
             {
                 output.y = 0.003921569;
             }
-            if (abs(0.01176471 - unit_here.g) < .001)
+            if (abs(unit_here.g - 0.01176471) < .001)
             {
                 output.z = 0.003921569;
             }
-            if (abs(0.01568628 - unit_here.g) < .001)
+            if (abs(unit_here.g - 0.01568628) < .001)
             {
                 output.w = 0.003921569;
             }

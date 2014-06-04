@@ -55,7 +55,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_s, psin.TexCoords + (float2(0, 0)) * fs_param_s_dxdy);
     float4 output = float4(0, 0, 0, 0);
-    if (abs(0.003921569 - here.x) < .001)
+    if (abs(here.x - 0.003921569) < .001)
     {
         if (here.x > here.y + .001)
         {

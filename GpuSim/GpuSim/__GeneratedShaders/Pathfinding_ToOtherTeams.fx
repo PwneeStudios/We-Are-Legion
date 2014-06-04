@@ -104,19 +104,19 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (GpuSim__SimShader__Something(data) && !(GpuSim__SimShader__IsNeutralBuilding(cur_data)))
     {
         output += 3 * float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
-        if (abs(0.003921569 - cur_data.b) > .001)
+        if (abs(cur_data.b - 0.003921569) > .001)
         {
             output.r = 0.0;
         }
-        if (abs(0.007843138 - cur_data.b) > .001)
+        if (abs(cur_data.b - 0.007843138) > .001)
         {
             output.g = 0.0;
         }
-        if (abs(0.01176471 - cur_data.b) > .001)
+        if (abs(cur_data.b - 0.01176471) > .001)
         {
             output.b = 0.0;
         }
-        if (abs(0.01568628 - cur_data.b) > .001)
+        if (abs(cur_data.b - 0.01568628) > .001)
         {
             output.a = 0.0;
         }

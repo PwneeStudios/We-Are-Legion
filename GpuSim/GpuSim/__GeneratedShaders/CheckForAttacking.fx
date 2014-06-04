@@ -70,12 +70,12 @@ sampler fs_param_Random : register(s3) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsStationary(float4 u)
 {
-    return abs(0.01960784 - u.r) < .001;
+    return abs(u.r - 0.01960784) < .001;
 }
 
 bool GpuSim__SimShader__Stayed(float4 u)
 {
-    return GpuSim__SimShader__IsStationary(u) || abs(0.003921569 - u.g) < .001;
+    return GpuSim__SimShader__IsStationary(u) || abs(u.g - 0.003921569) < .001;
 }
 
 bool GpuSim__SimShader__IsValid(float direction)
@@ -111,12 +111,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     unit_here.a = 0.0;
-    if (GpuSim__SimShader__Stayed(data_here) && abs(0.0 - unit_here.b) > .001)
+    if (GpuSim__SimShader__Stayed(data_here) && abs(unit_here.b - 0.0) > .001)
     {
-        if (abs(0.007843138 - data_here.a) < .001)
+        if (abs(data_here.a - 0.007843138) < .001)
         {
             float4 facing = tex2D(fs_param_Unit, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(data_here.r)) * fs_param_Unit_dxdy);
-            if (abs(unit_here.b - facing.b) > .001 && abs(0.0 - facing.b) > .001)
+            if (abs(facing.b - unit_here.b) > .001 && abs(facing.b - 0.0) > .001)
             {
                 unit_here.a = 0.01960784;
             }
@@ -126,7 +126,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
         if (rnd.x > 0.7 + .001)
         {
-            if (GpuSim__SimShader__Something(data_right) && abs(unit_here.b - unit_right.b) > .001 && abs(0.0 - unit_right.b) > .001 && abs(0.01176471 - data_right.r) < .001 && abs(0.007843138 - data_right.a) < .001 && abs(0.003921569 - data_right.g) < .001 || GpuSim__SimShader__Something(data_left) && abs(unit_here.b - unit_left.b) > .001 && abs(0.0 - unit_left.b) > .001 && abs(0.003921569 - data_left.r) < .001 && abs(0.007843138 - data_left.a) < .001 && abs(0.003921569 - data_left.g) < .001 || GpuSim__SimShader__Something(data_up) && abs(unit_here.b - unit_up.b) > .001 && abs(0.0 - unit_up.b) > .001 && abs(0.01568628 - data_up.r) < .001 && abs(0.007843138 - data_up.a) < .001 && abs(0.003921569 - data_up.g) < .001 || GpuSim__SimShader__Something(data_down) && abs(unit_here.b - unit_down.b) > .001 && abs(0.0 - unit_down.b) > .001 && abs(0.007843138 - data_down.r) < .001 && abs(0.007843138 - data_down.a) < .001 && abs(0.003921569 - data_down.g) < .001)
+            if (GpuSim__SimShader__Something(data_right) && abs(unit_right.b - unit_here.b) > .001 && abs(unit_right.b - 0.0) > .001 && abs(data_right.r - 0.01176471) < .001 && abs(data_right.a - 0.007843138) < .001 && abs(data_right.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_left) && abs(unit_left.b - unit_here.b) > .001 && abs(unit_left.b - 0.0) > .001 && abs(data_left.r - 0.003921569) < .001 && abs(data_left.a - 0.007843138) < .001 && abs(data_left.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_up) && abs(unit_up.b - unit_here.b) > .001 && abs(unit_up.b - 0.0) > .001 && abs(data_up.r - 0.01568628) < .001 && abs(data_up.a - 0.007843138) < .001 && abs(data_up.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_down) && abs(unit_down.b - unit_here.b) > .001 && abs(unit_down.b - 0.0) > .001 && abs(data_down.r - 0.007843138) < .001 && abs(data_down.a - 0.007843138) < .001 && abs(data_down.g - 0.003921569) < .001)
             {
                 unit_here.a = 0.03921569;
             }
