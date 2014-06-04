@@ -5,7 +5,7 @@ namespace GpuSim
     public partial class Pathfinding_ToOtherTeams : SimShader
     {
         /// <summary>
-        /// Propagates the path to enemies of each team, story the result for Enemies of Team 1 in .x, of Team 2 in .y, etc.
+        /// Propagates the path to enemies of each team, store the result for Enemies of Team 1 in .x, of Team 2 in .y, etc.
         /// Four teams maximum.
         /// </summary>
         [FragmentShader]

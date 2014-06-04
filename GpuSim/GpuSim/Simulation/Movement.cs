@@ -228,6 +228,20 @@ namespace GpuSim
                     value_up    = _value_up.y;
                     value_down  = _value_down.y;
                 }
+                else if (here.team == Team.Three)
+                {
+                    value_right = _value_right.z;
+                    value_left  = _value_left.z;
+                    value_up    = _value_up.z;
+                    value_down  = _value_down.z;
+                }
+                else if (here.team == Team.Four)
+                {
+                    value_right = _value_right.w;
+                    value_left  = _value_left.w;
+                    value_up    = _value_up.w;
+                    value_down  = _value_down.w;
+                }
 
                 const float auto_attack_cutoff = _12;
 

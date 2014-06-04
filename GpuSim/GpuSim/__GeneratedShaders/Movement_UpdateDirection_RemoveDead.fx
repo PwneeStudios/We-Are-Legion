@@ -277,6 +277,26 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 value_up = _value_up.y;
                 value_down = _value_down.y;
             }
+            else
+            {
+                if (abs(here.b - 0.01176471) < .001)
+                {
+                    value_right = _value_right.z;
+                    value_left = _value_left.z;
+                    value_up = _value_up.z;
+                    value_down = _value_down.z;
+                }
+                else
+                {
+                    if (abs(here.b - 0.01568628) < .001)
+                    {
+                        value_right = _value_right.w;
+                        value_left = _value_left.w;
+                        value_up = _value_up.w;
+                        value_down = _value_down.w;
+                    }
+                }
+            }
         }
         float auto_attack_cutoff = 0.04705882;
         float min = 256;

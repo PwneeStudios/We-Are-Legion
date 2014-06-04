@@ -238,6 +238,8 @@ namespace GpuSim
 
         int DrawCount = 0;
 
+        float PlayerNumber = SimShader.Player.One;
+
         public enum UserMode { PlaceBuilding, Select };
         public UserMode CurUserMode = UserMode.PlaceBuilding;
         public float BuildingType = SimShader.UnitType.GoldMine;
@@ -279,7 +281,7 @@ namespace GpuSim
                         UnitCount[i] = DoUnitCount(player, false);
                     }
 
-                    SelectedCount = DoUnitCount(SimShader.Player.One, true);
+                    SelectedCount = DoUnitCount(PlayerNumber, true);
                     Bounds();
                     SelectionUpdate();
                     break;
@@ -587,7 +589,7 @@ namespace GpuSim
                 || Keys.Back.Pressed() || Keys.Escape.Pressed();
             bool Selecting = Input.LeftMouseDown;
 
-            DataDrawMouse.Using(SelectCircle_Data, SimShader.Player.One, Output: DataGroup.SelectField, Clear: Color.Transparent);
+            DataDrawMouse.Using(SelectCircle_Data, PlayerNumber, Output: DataGroup.SelectField, Clear: Color.Transparent);
 
             if (Selecting)
             {

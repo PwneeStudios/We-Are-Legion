@@ -181,6 +181,7 @@ namespace GpuSim
             for (int j = 0; j < h; j += 50)
             {
                 Create.MakeBuilding(SimShader.UnitType.GoldSource, Player.None, Team.None, i, j, w, h, _unit, _data, _target);
+                //Create.MakeBuilding(SimShader.UnitType.Barracks, Player.Three, Team.None, i, j, w, h, _unit, _data, _target);
             }
 
             CurrentUnits.SetData(_unit);
