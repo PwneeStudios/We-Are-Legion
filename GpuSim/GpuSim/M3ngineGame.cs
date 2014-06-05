@@ -258,12 +258,14 @@ namespace GpuSim
             if (Keys.B.Pressed())
             {
                 CurUserMode = UserMode.PlaceBuilding;
+                UnselectAll = true;
                 BuildingType = SimShader.UnitType.Barracks;
             }
 
             if (Keys.G.Pressed())
             {
                 CurUserMode = UserMode.PlaceBuilding;
+                UnselectAll = true;
                 BuildingType = SimShader.UnitType.GoldMine;
             }
 
@@ -288,6 +290,7 @@ namespace GpuSim
         public enum UserMode { PlaceBuilding, Select };
         public UserMode CurUserMode = UserMode.PlaceBuilding;
         public float BuildingType = SimShader.UnitType.GoldMine;
+        bool UnselectAll = false;
 
         bool CanPlaceBuilding = false;
         bool[] CanPlace = new bool[3 * 3];
@@ -328,6 +331,12 @@ namespace GpuSim
             switch (CurUserMode)
             {
                 case UserMode.PlaceBuilding:
+                    if (UnselectAll)
+                    {
+                        SelectionUpdate();
+                        UnselectAll = false;
+                    }
+
                     PlaceBuilding();
                     break;
 
@@ -396,7 +405,12 @@ namespace GpuSim
             DrawGrass.Using(camvec, CameraAspect, GroundTexture);
             Ground.Draw(GraphicsDevice);
 
-            DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet);
+            if (CurUserMode == UserMode.PlaceBuilding)
+                DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.PathToOtherTeams);
+            else if (CameraZoom <= z / 8)
+                DrawTerritoryColors.Using(camvec, CameraAspect, DataGroup.PathToOtherTeams);
+            else
+                DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet);
             GridHelper.DrawGrid();
 
             DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSpriteSheet, PercentSimStepComplete);
@@ -457,7 +471,7 @@ namespace GpuSim
             for (int i = 0; i < _w; i++)
             for (int j = 0; j < _h; j++)
             {
-                clr = CanPlace[i + j * _h] ? new color(.2f, .7f, .2f, .8f) : new color(.7f, .2f, .2f, .8f);
+                clr = CanPlace[i + j * _h] ? DrawTerritoryPlayer.Available : DrawTerritoryPlayer.Unavailable;
                 DrawSolid.Using(camvec, CameraAspect, clr);
 
                 vec2 gWorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCoord.x + i), (float)Math.Floor(GridCoord.y + j)));
@@ -641,7 +655,7 @@ namespace GpuSim
             bool Deselect  = Input.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed()
                 || CurUserMode != UserMode.Select
                 || Keys.Back.Pressed() || Keys.Escape.Pressed();
-            bool Selecting = Input.LeftMouseDown;
+            bool Selecting = Input.LeftMouseDown && CurUserMode == UserMode.Select;
 
             DataDrawMouse.Using(SelectCircle_Data, PlayerValue, Output: DataGroup.SelectField, Clear: Color.Transparent);
 
@@ -663,6 +677,8 @@ namespace GpuSim
 
             ActionSelect.Apply(DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.SelectField, Deselect, SimShader.UnitAction.NoChange, Output: DataGroup.Temp1);
             Swap(ref DataGroup.Temp1, ref DataGroup.PreviousData);
+
+            if (CurUserMode != UserMode.Select) return;
 
             if (Keys.R.Pressed() || Keys.T.Pressed())
             {
