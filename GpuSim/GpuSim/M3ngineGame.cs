@@ -407,8 +407,11 @@ namespace GpuSim
 
             if (CurUserMode == UserMode.PlaceBuilding)
                 DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.PathToOtherTeams);
-            else if (CameraZoom <= z / 8)
-                DrawTerritoryColors.Using(camvec, CameraAspect, DataGroup.PathToOtherTeams);
+            else if (CameraZoom <= z / 4)
+            {
+                float blend = CoreMath.Lerp(z / 4, 0, z / 8, 1, CameraZoom);
+                DrawTerritoryColors.Using(camvec, CameraAspect, DataGroup.PathToOtherTeams, blend);
+            }
             else
                 DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet);
             GridHelper.DrawGrid();

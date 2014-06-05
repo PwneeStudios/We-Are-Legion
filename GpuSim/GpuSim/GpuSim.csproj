@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BenchmarkTesting.cs" />
+    <Compile Include="MathHelper.cs" />
     <Compile Include="Drawing\DrawTerritory.cs" />
     <Compile Include="ExtensionClasses.cs" />
     <Compile Include="DataGroup.cs" />

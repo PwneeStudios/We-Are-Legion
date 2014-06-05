@@ -39,6 +39,8 @@ sampler fs_param_Path : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
+float fs_param_blend;
+
 // The following methods are included because they are referenced by the fragment shader.
 float FragSharpFramework__FragSharpStd__min(float a, float b, float c, float d)
 {
@@ -67,6 +69,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     bool controlled = total_min < here.x - .001 && total_min < 0.07843138 - .001;
     bool controlled2 = total_min < here.y - .001 && total_min < 0.07843138 - .001;
     float4 clr = controlled ? float4(0.7, 0.3, 0.3, 0.5) : (controlled2 ? float4(0.1, 0.5, 0.1, 0.5) : float4(0.0, 0.0, 0.0, 0.0));
+    clr.a *= fs_param_blend;
     clr.rgb *= clr.a;
     __FinalOutput.Color = clr;
     return __FinalOutput;

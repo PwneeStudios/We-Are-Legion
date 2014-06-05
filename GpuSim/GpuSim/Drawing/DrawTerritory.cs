@@ -43,7 +43,7 @@ namespace GpuSim
             Uncontrolled = new color(.1f, .5f, .1f, .5f);
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<vec4> Path)
+        color FragmentShader(VertexOut vertex, Field<vec4> Path, float blend)
         {
             color output = color.TransparentBlack;
 
@@ -55,6 +55,7 @@ namespace GpuSim
 
             //color clr = controlled ? Controlled : Uncontrolled;
             color clr = controlled ? Controlled : (controlled2 ? Uncontrolled : color.TransparentBlack);
+            clr.a *= blend;
             clr.rgb *= clr.a;
 
             return clr;
