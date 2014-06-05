@@ -14,6 +14,34 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
+    public class GameParameters : SimShader
+    {
+        public int
+            BarracksCost = 2500,
+            GoldMineCost = 5000,
+
+            StartGold = 7500;
+
+        public int BuildingCost(float type)
+        {
+            if (type == UnitType.Barracks) return BarracksCost;
+            if (type == UnitType.GoldMine) return GoldMineCost;
+            return int.MaxValue;
+        }
+    }
+
+    public class PlayerInfo
+    {
+        public int
+            Gold = 0,
+            GoldMines = 0;
+
+        public PlayerInfo(GameParameters Params)
+        {
+            Gold = Params.StartGold;
+        }
+    }
+
 	/// <summary>
 	/// This is the main type for your game
 	/// </summary>
@@ -36,6 +64,8 @@ namespace GpuSim
         SpriteFont DefaultFont;
 
         DataGroup DataGroup;
+        GameParameters Params;
+        PlayerInfo[] PlayerInfo;
 
 		Texture2D
             BuildingTexture_1,
@@ -115,6 +145,13 @@ namespace GpuSim
             Ground = new RectangleQuad(new vec2(-1, -1), new vec2(1, 1), new vec2(0, 0), new vec2(1, 1) * GroundRepeat);
 
             DataGroup = new DataGroup(1024, 1024);
+            
+            Params = new GameParameters();
+            PlayerInfo = new PlayerInfo[5];
+            for (int i = 1; i <= 4; i++)
+            {
+                PlayerInfo[i] = new PlayerInfo(Params);
+            }
 
 			base.Initialize();
 		}
@@ -245,7 +282,8 @@ namespace GpuSim
 
         int DrawCount = 0;
 
-        float PlayerNumber = SimShader.Player.One;
+        float PlayerValue = SimShader.Player.One;
+        int PlayerNumber { get { return SimShader.Int(PlayerValue); } }
 
         public enum UserMode { PlaceBuilding, Select };
         public UserMode CurUserMode = UserMode.PlaceBuilding;
@@ -253,6 +291,18 @@ namespace GpuSim
 
         bool CanPlaceBuilding = false;
         bool[] CanPlace = new bool[3 * 3];
+
+        void SubtractGold(int amount, int player)
+        {
+            PlayerInfo[player].Gold -= amount;
+        }
+
+        bool CanAffordBuilding(float building_type, int player)
+        {
+            var cost = Params.BuildingCost(building_type);
+
+            return cost <= PlayerInfo[player].Gold;
+        }
 
 		/// <summary>
 		/// This is called when the game should draw itself.
@@ -288,7 +338,7 @@ namespace GpuSim
                         UnitCount[i] = DoUnitCount(player, false);
                     }
 
-                    SelectedCount = DoUnitCount(PlayerNumber, true);
+                    SelectedCount = DoUnitCount(PlayerValue, true);
                     Bounds();
                     SelectionUpdate();
                     break;
@@ -378,8 +428,8 @@ namespace GpuSim
             var units_1 = string.Format("Player 1 {0:#,##0}", UnitCount[1]);
             var units_2 = string.Format("Player 2 {0:#,##0}", UnitCount[2]);
             var selected = string.Format("[{0:#,##0}]", SelectedCount);
-            var gold = string.Format("Gold {0:#,##0}", Gold[1]);
-            var gold_mines = string.Format("Gold Mines {0:#,##0}", GoldMines[1]);
+            var gold = string.Format("Gold {0:#,##0}", PlayerInfo[PlayerNumber].Gold);
+            var gold_mines = string.Format("Gold Mines {0:#,##0}", PlayerInfo[PlayerNumber].GoldMines);
             MySpriteBatch.Begin();
             
             MySpriteBatch.DrawString(DefaultFont, units_1, new Vector2(0, 0), Color.White);
@@ -489,14 +539,11 @@ namespace GpuSim
             return shifted_cam;
         }
 
-        int[] Gold      = new int[] { 0, 0, 0, 0, 0 };
-        int[] GoldMines = new int[] { 0, 0, 0, 0, 0 };
-
         void DoGoldUpdate()
         {
             for (int player = 1; player <= 4; player++)
             {
-                Gold[player] += GoldMines[player];
+                PlayerInfo[player].Gold += PlayerInfo[player].GoldMines;
             }
         }
 
@@ -506,10 +553,10 @@ namespace GpuSim
 
             color count = MultigridReduce(CountReduce_4x1byte.Apply);
 
-            GoldMines[1] = (int)(255 * count.x + .5f);
-            GoldMines[2] = (int)(255 * count.y + .5f);
-            GoldMines[3] = (int)(255 * count.z + .5f);
-            GoldMines[4] = (int)(255 * count.w + .5f);
+            PlayerInfo[1].GoldMines = (int)(255 * count.x + .5f);
+            PlayerInfo[2].GoldMines = (int)(255 * count.y + .5f);
+            PlayerInfo[3].GoldMines = (int)(255 * count.z + .5f);
+            PlayerInfo[4].GoldMines = (int)(255 * count.w + .5f);
         }
 
         int[] UnitCount = new int[] { 0, 0, 0, 0, 0 };
@@ -596,7 +643,7 @@ namespace GpuSim
                 || Keys.Back.Pressed() || Keys.Escape.Pressed();
             bool Selecting = Input.LeftMouseDown;
 
-            DataDrawMouse.Using(SelectCircle_Data, PlayerNumber, Output: DataGroup.SelectField, Clear: Color.Transparent);
+            DataDrawMouse.Using(SelectCircle_Data, PlayerValue, Output: DataGroup.SelectField, Clear: Color.Transparent);
 
             if (Selecting)
             {
@@ -689,11 +736,13 @@ namespace GpuSim
                     }
                 }
 
-                if (CanPlaceBuilding && Input.LeftMousePressed)
+                if (CanPlaceBuilding && Input.LeftMousePressed && CanAffordBuilding(BuildingType, PlayerNumber))
                 {
                     try
                     {
                         Create.PlaceBuilding(DataGroup, GridCoord, BuildingType);
+
+                        SubtractGold(Params.BuildingCost(BuildingType), PlayerNumber);
                         CanPlaceBuilding = false;
                     }
                     catch
