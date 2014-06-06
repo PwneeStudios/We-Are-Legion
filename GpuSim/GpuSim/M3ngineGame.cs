@@ -651,21 +651,6 @@ namespace GpuSim
             Swap(ref DataGroup.PathToPlayers, ref DataGroup.Temp1);
         }
 
-        void UpdateGradient_ToEdges()
-        {
-            //Pathfinding_Right.Apply(Paths_Right, Current, Output: Temp1);
-            //Swap(ref Paths_Right, ref Temp1);
-
-            //Pathfinding_Left.Apply(Paths_Left, Current, Output: Temp1);
-            //Swap(ref Paths_Left, ref Temp1);
-
-            //Pathfinding_Up.Apply(Paths_Up, Current, Output: Temp1);
-            //Swap(ref Paths_Up, ref Temp1);
-
-            //Pathfinding_Down.Apply(Paths_Down, Current, Output: Temp1);
-            //Swap(ref Paths_Down, ref Temp1);
-        }
-
         void SelectionUpdate()
         {
             vec2 WorldCord     = ScreenToWorldCoord(Input.CurMousePos);
