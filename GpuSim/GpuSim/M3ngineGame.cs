@@ -715,6 +715,7 @@ namespace GpuSim
 
                 if (BuildingType == SimShader.UnitType.Barracks)
                 {
+                    var __data = DataGroup.CurrentData.GetData<building>(GridCoord, new vec2(_w, _h));
                     var _data = DataGroup.CurrentData.GetData(GridCoord, new vec2(_w, _h));
                     var _dist = DataGroup.PathToPlayers.GetData(GridCoord, new vec2(_w, _h));
 
@@ -725,7 +726,8 @@ namespace GpuSim
                         for (int i = 0; i < _w; i++)
                         for (int j = 0; j < _h; j++)
                         {
-                            var building_here = (building)_data[i + j * _w].ToVector4();
+                            //var building_here = (building)_data[i + j * _w].ToVector4();
+                            var building_here = __data[i + j * _w];
                             var dist = (vec4)_dist[i + j * _w].ToVector4();
 
                             bool occupied = building_here.direction > 0;

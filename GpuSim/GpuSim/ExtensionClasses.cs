@@ -70,6 +70,13 @@ namespace GpuSim
             return data;
         }
 
+        public static T[] GetData<T>(this RenderTarget2D RenderTarget, vec2 coord, vec2 size) where T : Convertible<vec4, T>
+        {
+            Color[] data = GetData(RenderTarget, coord, size);
+
+            return ConvertArray<T>(data, size);
+        }
+
         public static void SetData(this RenderTarget2D RenderTarget, vec2 coord, vec2 size, Color[] data)
         {
             int w = RenderTarget.Width, h = RenderTarget.Height;
@@ -82,6 +89,28 @@ namespace GpuSim
             Rectangle rect = new Rectangle((int)coord.x, (int)coord.y, (int)size.x, (int)size.y);
 
             RenderTarget.SetData(0, rect, data, 0, elements);
+        }
+
+        public static T Convert<T>(Color val) where T : Convertible<vec4, T>
+        {
+            return default(T).ConvertFrom((vec4)(val.ToVector4()));
+        }
+
+        public static T[] ConvertArray<T>(Color[] data, vec2 size) where T : Convertible<vec4, T>
+        {
+            int 
+                n = (int)Math.Floor(size.x),
+                m = (int)Math.Floor(size.y);
+
+            T[] t = new T[n * m];
+
+            for (int i = 0; i < n; i++)
+            for (int j = 0; j < m; j++)
+            {
+                t[i + n * j] = Convert<T>(data[i + n * j]);
+            }
+
+            return t;
         }
     }
 
