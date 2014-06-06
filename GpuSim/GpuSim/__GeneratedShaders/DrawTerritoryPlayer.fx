@@ -40,10 +40,6 @@ sampler fs_param_Path : register(s1) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float FragSharpFramework__FragSharpStd__min(float a, float b, float c, float d)
-{
-    return min(min(a, b), min(c, d));
-}
 
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
@@ -63,9 +59,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 here = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 0)) * fs_param_Path_dxdy);
-    float total_min = FragSharpFramework__FragSharpStd__min(here.x, here.y, here.z, here.w);
-    bool controlled = total_min < here.x - .001 && total_min < 0.07843138 - .001;
-    float4 clr = controlled ? float4(0.2, 0.7, 0.2, 0.125) : float4(0.0, 0.0, 0.0, 0.65);
+    float dist = here.x;
+    bool controlled = dist < 0.0627451 - .001;
+    float4 clr = controlled ? float4(0.0, 0.0, 0.0, 0.0) : float4(0.0, 0.0, 0.0, 0.65);
     clr.rgb *= clr.a;
     __FinalOutput.Color = clr;
     return __FinalOutput;

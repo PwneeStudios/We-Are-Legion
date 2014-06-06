@@ -42,9 +42,9 @@ sampler fs_param_Path : register(s1) = sampler_state
 float fs_param_blend;
 
 // The following methods are included because they are referenced by the fragment shader.
-float FragSharpFramework__FragSharpStd__min(float a, float b, float c, float d)
+float FragSharpFramework__FragSharpStd__min(float a, float b, float c)
 {
-    return min(min(a, b), min(c, d));
+    return min(min(a, b), c);
 }
 
 // Compiled vertex shader
@@ -63,12 +63,25 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 here = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 0)) * fs_param_Path_dxdy);
-    float total_min = FragSharpFramework__FragSharpStd__min(here.x, here.y, here.z, here.w);
-    bool controlled = total_min < here.x - .001 && total_min < 0.07843138 - .001;
-    bool controlled2 = total_min < here.y - .001 && total_min < 0.07843138 - .001;
-    float4 clr = controlled ? float4(0.7, 0.3, 0.3, 0.5) : (controlled2 ? float4(0.1, 0.5, 0.1, 0.5) : float4(0.0, 0.0, 0.0, 0.0));
+    float4 dist = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 0)) * fs_param_Path_dxdy);
+    float4 enemy_dist = float4(FragSharpFramework__FragSharpStd__min(dist.y, dist.z, dist.w), FragSharpFramework__FragSharpStd__min(dist.x, dist.z, dist.w), FragSharpFramework__FragSharpStd__min(dist.x, dist.y, dist.w), FragSharpFramework__FragSharpStd__min(dist.x, dist.y, dist.z));
+    float4 clr = float4(0.0, 0.0, 0.0, 0.0);
+    if (dist.x < 0.07843138 - .001 && dist.x < enemy_dist.x - .001)
+    {
+        clr = float4(0.7, 0.3, 0.3, 0.5);
+    }
+    if (dist.y < 0.07843138 - .001 && dist.y < enemy_dist.y - .001)
+    {
+        clr = float4(0.1, 0.5, 0.1, 0.5);
+    }
+    if (dist.z < 0.07843138 - .001 && dist.z < enemy_dist.z - .001)
+    {
+        clr = float4(0.3, 0.7, 0.55, 0.5);
+    }
+    if (dist.w < 0.07843138 - .001 && dist.w < enemy_dist.w - .001)
+    {
+        clr = float4(0.3, 0.3, 0.7, 0.5);
+    }
     clr.a *= fs_param_blend;
     clr.rgb *= clr.a;
     __FinalOutput.Color = clr;

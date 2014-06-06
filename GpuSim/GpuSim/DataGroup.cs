@@ -78,7 +78,7 @@ namespace GpuSim
             SelectField,
             PreviousDraw, CurrentDraw,
             Paths_Right, Paths_Left, Paths_Up, Paths_Down,
-            PathToOtherTeams;
+            PathToPlayers, PathToOtherTeams;
         public List<RenderTarget2D>
             Multigrid;
 
@@ -110,6 +110,7 @@ namespace GpuSim
             Paths_Up = MakeTarget(w, h);
             Paths_Down = MakeTarget(w, h);
 
+            PathToPlayers = MakeTarget(w, h);
             PathToOtherTeams = MakeTarget(w, h);
 
             Multigrid = new List<RenderTarget2D>();

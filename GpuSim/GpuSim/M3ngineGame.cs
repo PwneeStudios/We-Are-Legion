@@ -180,11 +180,18 @@ namespace GpuSim
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Update(GameTime gameTime)
 		{
+            //Update();
+
+			base.Update(gameTime);
+		}
+
+        void Update()
+        {
             float FpsRateModifier = 1;
 
-			// Allows the game to exit
+            // Allows the game to exit
             if (Buttons.Back.Down())
-				this.Exit();
+                this.Exit();
 
             Input.Update();
 
@@ -207,11 +214,11 @@ namespace GpuSim
             }
 
             float KeyZoomRate = 1.125f * FpsRateModifier;
-            if      (Buttons.X.Down() || Keys.X.Pressed() || Keys.E.Pressed()) CameraZoom /= KeyZoomRate;
+            if (Buttons.X.Down() || Keys.X.Pressed() || Keys.E.Pressed()) CameraZoom /= KeyZoomRate;
             else if (Buttons.A.Down() || Keys.Z.Pressed() || Keys.Q.Pressed()) CameraZoom *= KeyZoomRate;
 
             if (CameraZoom < MaxZoomOut) CameraZoom = MaxZoomOut;
-            if (CameraZoom > MaxZoomIn)  CameraZoom = MaxZoomIn;
+            if (CameraZoom > MaxZoomIn) CameraZoom = MaxZoomIn;
 
             if (MouseEnabled && !(Buttons.A.Pressed() || Buttons.X.Pressed()))
             {
@@ -247,8 +254,8 @@ namespace GpuSim
 
             // Make sure the camera doesn't go too far offscreen
             var TR = ScreenToWorldCoord(new vec2(Screen.x, 0));
-            if (TR.x > 1)  CameraPos = new vec2(CameraPos.x - (TR.x - 1), CameraPos.y);
-            if (TR.y > 1)  CameraPos = new vec2(CameraPos.x, CameraPos.y - (TR.y - 1));
+            if (TR.x > 1) CameraPos = new vec2(CameraPos.x - (TR.x - 1), CameraPos.y);
+            if (TR.y > 1) CameraPos = new vec2(CameraPos.x, CameraPos.y - (TR.y - 1));
             var BL = ScreenToWorldCoord(new vec2(0, Screen.y));
             if (BL.x < -1) CameraPos = new vec2(CameraPos.x - (BL.x + 1), CameraPos.y);
             if (BL.y < -1) CameraPos = new vec2(CameraPos.x, CameraPos.y - (BL.y + 1));
@@ -273,9 +280,7 @@ namespace GpuSim
             {
                 CurUserMode = UserMode.Select;
             }
-
-			base.Update(gameTime);
-		}
+        }
 
         const double DelayBetweenUpdates = .3333;
         //const double DelayBetweenUpdates = 5;
@@ -313,6 +318,8 @@ namespace GpuSim
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
+            Update();
+
             DrawCount++;
 
 			//if (CurKeyboard.IsKeyDown(Keys.Enter))
@@ -324,7 +331,7 @@ namespace GpuSim
 			GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
 
 
-            PathUpdate();
+            UpdateGradient_ToOtherTeams();
             DoGoldMineCount();
             DoGoldUpdate();
 
@@ -406,11 +413,11 @@ namespace GpuSim
             Ground.Draw(GraphicsDevice);
 
             if (CurUserMode == UserMode.PlaceBuilding)
-                DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.PathToOtherTeams);
+                DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.PathToPlayers);
             else if (CameraZoom <= z / 4)
             {
                 float blend = CoreMath.Lerp(z / 4, 0, z / 8, 1, CameraZoom);
-                DrawTerritoryColors.Using(camvec, CameraAspect, DataGroup.PathToOtherTeams, blend);
+                DrawTerritoryColors.Using(camvec, CameraAspect, DataGroup.PathToPlayers, blend);
             }
             else
                 DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet);
@@ -632,11 +639,20 @@ namespace GpuSim
             Console.WriteLine("Bounds: ({0}), ({1})", SelectedBound_BL, SelectedBound_TR);
         }
 
-        void PathUpdate()
+        void UpdateGradient_ToOtherTeams()
         {
             Pathfinding_ToOtherTeams.Apply(DataGroup.PathToOtherTeams, DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
             Swap(ref DataGroup.PathToOtherTeams, ref DataGroup.Temp1);
+        }
 
+        void UpdateGradient_ToPlayers()
+        {
+            Pathfinding_ToPlayers.Apply(DataGroup.PathToPlayers, DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.PathToPlayers, ref DataGroup.Temp1);
+        }
+
+        void UpdateGradient_ToEdges()
+        {
             //Pathfinding_Right.Apply(Paths_Right, Current, Output: Temp1);
             //Swap(ref Paths_Right, ref Temp1);
 
@@ -683,7 +699,7 @@ namespace GpuSim
 
             if (CurUserMode != UserMode.Select) return;
 
-            if (Keys.R.Pressed() || Keys.T.Pressed())
+            if (Keys.R.Pressed() || Keys.T.Pressed() || Keys.Y.Pressed() || Keys.U.Pressed())
             {
                 CreateUnits();
             }
@@ -715,6 +731,7 @@ namespace GpuSim
                 if (BuildingType == SimShader.UnitType.Barracks)
                 {
                     var _data = DataGroup.CurrentData.GetData(GridCoord, new vec2(_w, _h));
+                    var _dist = DataGroup.PathToPlayers.GetData(GridCoord, new vec2(_w, _h));
 
                     color clr = color.TransparentBlack;
                     if (_data != null)
@@ -723,13 +740,16 @@ namespace GpuSim
                         for (int i = 0; i < _w; i++)
                         for (int j = 0; j < _h; j++)
                         {
-                            var val = (building)_data[i + j * _w].ToVector4();
+                            var building_here = (building)_data[i + j * _w].ToVector4();
+                            var dist = (vec4)_dist[i + j * _w].ToVector4();
 
-                            bool occupied = val.direction > 0;
+                            bool occupied = building_here.direction > 0;
+                            bool in_territory = dist.x < DrawTerritoryPlayer.TerritoryCutoff;
 
-                            CanPlace[i + j * _w] = !occupied;
+                            bool can_place = !occupied && in_territory;
+                            CanPlace[i + j * _w] = can_place;
 
-                            if (occupied) CanPlaceBuilding = false;
+                            if (!can_place) CanPlaceBuilding = false;
                         }
                     }
                 }
@@ -737,6 +757,7 @@ namespace GpuSim
                 if (BuildingType == SimShader.UnitType.GoldMine)
                 {
                     var _data = DataGroup.CurrentUnits.GetData(GridCoord, new vec2(_w, _h));
+                    var _dist = DataGroup.PathToPlayers.GetData(GridCoord, new vec2(_w, _h));
 
                     color clr = color.TransparentBlack;
                     if (_data != null)
@@ -745,9 +766,13 @@ namespace GpuSim
                         for (int i = 0; i < _w; i++)
                         for (int j = 0; j < _h; j++)
                         {
-                            var val = (unit)_data[i + j * _w].ToVector4();
+                            var unit_here = (unit)_data[i + j * _w].ToVector4();
+                            var dist = (vec4)_dist[i + j * _w].ToVector4();
 
-                            bool can_place = val.team == SimShader.Team.None && val.type == SimShader.UnitType.GoldSource;
+                            bool is_gold_source = unit_here.team == SimShader.Team.None && unit_here.type == SimShader.UnitType.GoldSource;
+                            bool in_territory = dist.x < DrawTerritoryPlayer.TerritoryCutoff;
+
+                            bool can_place = is_gold_source && in_territory;
                             CanPlace[i + j * _w] = can_place;
 
                             if (!can_place) CanPlaceBuilding = false;
@@ -773,8 +798,12 @@ namespace GpuSim
 
         private void CreateUnits()
         {
-            float player = Keys.R.Pressed() ? SimShader.Player.One : SimShader.Player.Two;
-            float team = Keys.R.Pressed() ? SimShader.Team.One : SimShader.Team.Two;
+            float player = 0, team = 0;
+
+            if (Keys.R.Pressed()) { player = SimShader.Player.One; team = SimShader.Team.One; }
+            if (Keys.T.Pressed()) { player = SimShader.Player.Two; team = SimShader.Team.Two; }
+            if (Keys.Y.Pressed()) { player = SimShader.Player.Three; team = SimShader.Team.Three; }
+            if (Keys.U.Pressed()) { player = SimShader.Player.Four; team = SimShader.Team.Four; }
 
             ActionSpawn_Unit.Apply(DataGroup.CurrentUnits, DataGroup.SelectField, player, team, Output: DataGroup.Temp1);
             Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
@@ -798,7 +827,6 @@ namespace GpuSim
             vec2 Destination_BL = pos - Destination_Size / 2;
 
             ActionAttackSquare.Apply(DataGroup.CurrentData, DataGroup.TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: DataGroup.Temp1);
-            //ActionAttackPoint .Apply(Current, TargetData, pos, Output: Temp1);
             Swap(ref DataGroup.TargetData, ref DataGroup.Temp1);
 
             ActionAttack2.Apply(DataGroup.CurrentData, DataGroup.Extra, pos, Output: DataGroup.Temp1);
@@ -807,7 +835,10 @@ namespace GpuSim
 
 		void SimulationUpdate()
 		{
-            PathUpdate();
+            UpdateGradient_ToOtherTeams();
+            
+            UpdateGradient_ToPlayers();
+            UpdateGradient_ToPlayers();
 
             Building_SelectCenterIfSelected_SetDirecion.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
             Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
@@ -820,7 +851,6 @@ namespace GpuSim
             Swap(ref DataGroup.Corspes, ref DataGroup.Temp1);
 
             Movement_UpdateDirection_RemoveDead.Apply(DataGroup.TargetData, DataGroup.CurrentUnits, DataGroup.Extra, DataGroup.CurrentData, DataGroup.PathToOtherTeams, Output: DataGroup.Temp1);
-            //Movement_UpdateDirection.Apply(TargetData, CurData, Current, Paths_Right, Paths_Left, Paths_Up, Paths_Down, Output: Temp1);
             Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
 
             Movement_Phase1.Apply(DataGroup.CurrentData, Output: DataGroup.Temp1);
