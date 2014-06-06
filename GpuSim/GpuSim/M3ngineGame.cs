@@ -715,9 +715,8 @@ namespace GpuSim
 
                 if (BuildingType == SimShader.UnitType.Barracks)
                 {
-                    var __data = DataGroup.CurrentData.GetData<building>(GridCoord, new vec2(_w, _h));
-                    var _data = DataGroup.CurrentData.GetData(GridCoord, new vec2(_w, _h));
-                    var _dist = DataGroup.PathToPlayers.GetData(GridCoord, new vec2(_w, _h));
+                    var _data = DataGroup.CurrentData.GetData<building>(GridCoord, new vec2(_w, _h));
+                    var _dist = DataGroup.PathToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
 
                     color clr = color.TransparentBlack;
                     if (_data != null)
@@ -726,12 +725,11 @@ namespace GpuSim
                         for (int i = 0; i < _w; i++)
                         for (int j = 0; j < _h; j++)
                         {
-                            //var building_here = (building)_data[i + j * _w].ToVector4();
-                            var building_here = __data[i + j * _w];
-                            var dist = (vec4)_dist[i + j * _w].ToVector4();
+                            var building_here = _data[i + j * _w];
+                            var distance_to = _dist[i + j * _w];
 
                             bool occupied = building_here.direction > 0;
-                            bool in_territory = dist.x < DrawTerritoryPlayer.TerritoryCutoff;
+                            bool in_territory = distance_to.PlayerOne < DrawTerritoryPlayer.TerritoryCutoff;
 
                             bool can_place = !occupied && in_territory;
                             CanPlace[i + j * _w] = can_place;
@@ -743,8 +741,8 @@ namespace GpuSim
 
                 if (BuildingType == SimShader.UnitType.GoldMine)
                 {
-                    var _data = DataGroup.CurrentUnits.GetData(GridCoord, new vec2(_w, _h));
-                    var _dist = DataGroup.PathToPlayers.GetData(GridCoord, new vec2(_w, _h));
+                    var _data = DataGroup.CurrentUnits.GetData<unit>(GridCoord, new vec2(_w, _h));
+                    var _dist = DataGroup.PathToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
 
                     color clr = color.TransparentBlack;
                     if (_data != null)
@@ -753,11 +751,11 @@ namespace GpuSim
                         for (int i = 0; i < _w; i++)
                         for (int j = 0; j < _h; j++)
                         {
-                            var unit_here = (unit)_data[i + j * _w].ToVector4();
-                            var dist = (vec4)_dist[i + j * _w].ToVector4();
+                            var unit_here = _data[i + j * _w];
+                            var distance_to = _dist[i + j * _w];
 
                             bool is_gold_source = unit_here.team == SimShader.Team.None && unit_here.type == SimShader.UnitType.GoldSource;
-                            bool in_territory = dist.x < DrawTerritoryPlayer.TerritoryCutoff;
+                            bool in_territory = distance_to.PlayerOne < DrawTerritoryPlayer.TerritoryCutoff;
 
                             bool can_place = is_gold_source && in_territory;
                             CanPlace[i + j * _w] = can_place;

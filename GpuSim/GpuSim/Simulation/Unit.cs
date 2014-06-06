@@ -70,8 +70,58 @@ namespace GpuSim
         public float target_angle { get { return a; } set { a = value; } }
     }
 
+    /// <summary>
+    /// A 4-tuple storying an 8-bit value for Player One, Player Two, Player Three, and Player Four.
+    /// </summary>
+    [Copy(typeof(vec4), CastStyle.ImplicitCast)]
+    public partial struct PlayerTuple
+    {
+        [Hlsl("r")]
+        public float PlayerOne { get { return r; } set { r = value; } }
+
+        [Hlsl("g")]
+        public float PlayerTwo { get { return g; } set { g = value; } }
+
+        [Hlsl("b")]
+        public float PlayerThree { get { return b; } set { b = value; } }
+
+        [Hlsl("a")]
+        public float PlayerFour { get { return a; } set { a = value; } }
+    }
+
+    /// <summary>
+    /// A 4-tuple storying an 8-bit value for Team One, Team Two, Team Three, and Team Four.
+    /// </summary>
+    [Copy(typeof(vec4), CastStyle.ImplicitCast)]
+    public partial struct TeamTuple
+    {
+        [Hlsl("r")]
+        public float TeamOne { get { return r; } set { r = value; } }
+
+        [Hlsl("g")]
+        public float TeamTwo { get { return g; } set { g = value; } }
+
+        [Hlsl("b")]
+        public float TeamThree { get { return b; } set { b = value; } }
+
+        [Hlsl("a")]
+        public float TeamFour { get { return a; } set { a = value; } }
+    }
+
     public class SimShader : GridComputation
     {
+        [Hlsl("float4")]
+        protected static PlayerTuple PlayerTuple(float x, float y, float z, float w)
+        {
+            return vec(x, y, z, w);
+        }
+
+        [Hlsl("float4")]
+        protected static TeamTuple TeamTuple(float x, float y, float z, float w)
+        {
+            return vec(x, y, z, w);
+        }
+
         const float select_offset = _8;
         protected static bool selected(data u)
         {

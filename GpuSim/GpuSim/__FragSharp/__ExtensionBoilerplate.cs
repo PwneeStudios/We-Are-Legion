@@ -825,3 +825,329 @@ namespace GpuSim
     }
 }
 
+namespace GpuSim
+{
+    [Hlsl("float4")]
+    public partial struct PlayerTuple : Convertible<vec4, PlayerTuple>
+    {
+        public PlayerTuple ConvertFrom(vec4 v)
+        {
+            return (PlayerTuple)v;
+        }
+
+        public vec4 ConvertTo()
+        {
+            return (vec4)this;
+        }
+
+        [Hlsl("float4")]
+        public PlayerTuple(float x, float y, float z, float w)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+        }
+
+        [Hlsl("x")]
+        public float x;
+
+        [Hlsl("y")]
+        public float y;
+
+        [Hlsl("z")]
+        public float z;
+
+        [Hlsl("w")]
+        public float w;
+
+        [Hlsl("xy")]
+        public vec2 xy { get { return new vec2(x, y); } set { x = value.x; y = value.y; } }
+
+        [Hlsl("zw")]
+        public vec2 zw { get { return new vec2(z, w); } set { z = value.x; w = value.y; } }
+
+        [Hlsl("xyz")]
+        public vec3 xyz { get { return new vec3(x, y, z); } set { x = value.x; y = value.y; z = value.z; } }
+
+        [Hlsl("r")]
+        public float r { get { return x; } set { x = value; } }
+
+        [Hlsl("g")]
+        public float g { get { return y; } set { y = value; } }
+
+        [Hlsl("b")]
+        public float b { get { return z; } set { z = value; } }
+
+        [Hlsl("a")]
+        public float a { get { return w; } set { w = value; } }
+
+        [Hlsl("rgb")]
+        public vec3 rgb { get { return xyz; } set { xyz = value; } }
+
+        [Hlsl("rg")]
+        public vec2 rg { get { return xy; } set { xy = value; } }
+
+        [Hlsl("ba")]
+        public vec2 ba { get { return zw; } set { zw = value; } }
+
+
+        public static PlayerTuple operator *(float a, PlayerTuple v)
+        {
+            return new PlayerTuple(a * v.x, a * v.y, a * v.z, a * v.w);
+        }
+
+        public static PlayerTuple operator *(PlayerTuple v, float a)
+        {
+            return new PlayerTuple(a * v.x, a * v.y, a * v.z, a * v.w);
+        }
+
+        public static PlayerTuple operator /(float a, PlayerTuple v)
+        {
+            return new PlayerTuple(a / v.x, a / v.y, a / v.z, a / v.w);
+        }
+
+        public static PlayerTuple operator /(PlayerTuple v, float a)
+        {
+            return new PlayerTuple(v.x / a, v.y / a, v.z / a, v.w / a);
+        }
+
+        public static PlayerTuple operator +(PlayerTuple v, PlayerTuple w)
+        {
+            return new PlayerTuple(v.x + w.x, v.y + w.y, v.z + w.z, v.w + w.w);
+        }
+
+        public static PlayerTuple operator -(PlayerTuple v, PlayerTuple w)
+        {
+            return new PlayerTuple(v.x - w.x, v.y - w.y, v.z - w.z, v.w - w.w);
+        }
+
+        public static PlayerTuple operator *(PlayerTuple v, PlayerTuple w)
+        {
+            return new PlayerTuple(v.x * w.x, v.y * w.y, v.z * w.z, v.w * w.w);
+        }
+
+        public static PlayerTuple operator /(PlayerTuple v, PlayerTuple w)
+        {
+            return new PlayerTuple(v.x / w.x, v.y / w.y, v.z / w.z, v.w / w.w);
+        }
+
+        public static bool operator ==(PlayerTuple v, PlayerTuple w)
+        {
+            return
+                v.x == w.x &&
+                v.y == w.y &&
+                v.z == w.z &&
+                v.w == w.w;
+        }
+
+        public static bool operator !=(PlayerTuple v, PlayerTuple w)
+        {
+            return
+                v.x != w.x ||
+                v.y != w.y ||
+                v.z != w.z ||
+                v.w != w.w;
+        }
+
+        public static PlayerTuple operator -(PlayerTuple v)
+        {
+            return new PlayerTuple(-v.x, -v.y, -v.z, -v.w);
+        }
+
+        public static implicit operator Vector4(PlayerTuple v)
+        {
+            return new Vector4(v.x, v.y, v.z, v.w);
+        }
+
+        public static implicit operator PlayerTuple(color v)
+        {
+            return new PlayerTuple(v.x, v.y, v.z, v.w);
+        }
+
+        public static implicit operator color(PlayerTuple v)
+        {
+            return new color(v.x, v.y, v.z, v.w);
+        }
+
+        public static explicit operator PlayerTuple(Vector4 v)
+        {
+            return new PlayerTuple(v.X, v.Y, v.Z, v.W);
+        }
+
+        public static explicit operator Color(PlayerTuple v)
+        {
+            return new Color(v.x, v.y, v.z, v.w);
+        }        
+
+        public static readonly PlayerTuple Zero    = new PlayerTuple(0, 0, 0, 0);
+        public static readonly PlayerTuple Nothing = new PlayerTuple(0, 0, 0, 0);
+
+        public static implicit operator PlayerTuple(vec4 v) { return new PlayerTuple(v.x, v.y, v.z, v.w); }
+        public static implicit operator vec4(PlayerTuple v) { return new vec4(v.x, v.y, v.z, v.w); }
+    }
+}
+
+namespace GpuSim
+{
+    [Hlsl("float4")]
+    public partial struct TeamTuple : Convertible<vec4, TeamTuple>
+    {
+        public TeamTuple ConvertFrom(vec4 v)
+        {
+            return (TeamTuple)v;
+        }
+
+        public vec4 ConvertTo()
+        {
+            return (vec4)this;
+        }
+
+        [Hlsl("float4")]
+        public TeamTuple(float x, float y, float z, float w)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+        }
+
+        [Hlsl("x")]
+        public float x;
+
+        [Hlsl("y")]
+        public float y;
+
+        [Hlsl("z")]
+        public float z;
+
+        [Hlsl("w")]
+        public float w;
+
+        [Hlsl("xy")]
+        public vec2 xy { get { return new vec2(x, y); } set { x = value.x; y = value.y; } }
+
+        [Hlsl("zw")]
+        public vec2 zw { get { return new vec2(z, w); } set { z = value.x; w = value.y; } }
+
+        [Hlsl("xyz")]
+        public vec3 xyz { get { return new vec3(x, y, z); } set { x = value.x; y = value.y; z = value.z; } }
+
+        [Hlsl("r")]
+        public float r { get { return x; } set { x = value; } }
+
+        [Hlsl("g")]
+        public float g { get { return y; } set { y = value; } }
+
+        [Hlsl("b")]
+        public float b { get { return z; } set { z = value; } }
+
+        [Hlsl("a")]
+        public float a { get { return w; } set { w = value; } }
+
+        [Hlsl("rgb")]
+        public vec3 rgb { get { return xyz; } set { xyz = value; } }
+
+        [Hlsl("rg")]
+        public vec2 rg { get { return xy; } set { xy = value; } }
+
+        [Hlsl("ba")]
+        public vec2 ba { get { return zw; } set { zw = value; } }
+
+
+        public static TeamTuple operator *(float a, TeamTuple v)
+        {
+            return new TeamTuple(a * v.x, a * v.y, a * v.z, a * v.w);
+        }
+
+        public static TeamTuple operator *(TeamTuple v, float a)
+        {
+            return new TeamTuple(a * v.x, a * v.y, a * v.z, a * v.w);
+        }
+
+        public static TeamTuple operator /(float a, TeamTuple v)
+        {
+            return new TeamTuple(a / v.x, a / v.y, a / v.z, a / v.w);
+        }
+
+        public static TeamTuple operator /(TeamTuple v, float a)
+        {
+            return new TeamTuple(v.x / a, v.y / a, v.z / a, v.w / a);
+        }
+
+        public static TeamTuple operator +(TeamTuple v, TeamTuple w)
+        {
+            return new TeamTuple(v.x + w.x, v.y + w.y, v.z + w.z, v.w + w.w);
+        }
+
+        public static TeamTuple operator -(TeamTuple v, TeamTuple w)
+        {
+            return new TeamTuple(v.x - w.x, v.y - w.y, v.z - w.z, v.w - w.w);
+        }
+
+        public static TeamTuple operator *(TeamTuple v, TeamTuple w)
+        {
+            return new TeamTuple(v.x * w.x, v.y * w.y, v.z * w.z, v.w * w.w);
+        }
+
+        public static TeamTuple operator /(TeamTuple v, TeamTuple w)
+        {
+            return new TeamTuple(v.x / w.x, v.y / w.y, v.z / w.z, v.w / w.w);
+        }
+
+        public static bool operator ==(TeamTuple v, TeamTuple w)
+        {
+            return
+                v.x == w.x &&
+                v.y == w.y &&
+                v.z == w.z &&
+                v.w == w.w;
+        }
+
+        public static bool operator !=(TeamTuple v, TeamTuple w)
+        {
+            return
+                v.x != w.x ||
+                v.y != w.y ||
+                v.z != w.z ||
+                v.w != w.w;
+        }
+
+        public static TeamTuple operator -(TeamTuple v)
+        {
+            return new TeamTuple(-v.x, -v.y, -v.z, -v.w);
+        }
+
+        public static implicit operator Vector4(TeamTuple v)
+        {
+            return new Vector4(v.x, v.y, v.z, v.w);
+        }
+
+        public static implicit operator TeamTuple(color v)
+        {
+            return new TeamTuple(v.x, v.y, v.z, v.w);
+        }
+
+        public static implicit operator color(TeamTuple v)
+        {
+            return new color(v.x, v.y, v.z, v.w);
+        }
+
+        public static explicit operator TeamTuple(Vector4 v)
+        {
+            return new TeamTuple(v.X, v.Y, v.Z, v.W);
+        }
+
+        public static explicit operator Color(TeamTuple v)
+        {
+            return new Color(v.x, v.y, v.z, v.w);
+        }        
+
+        public static readonly TeamTuple Zero    = new TeamTuple(0, 0, 0, 0);
+        public static readonly TeamTuple Nothing = new TeamTuple(0, 0, 0, 0);
+
+        public static implicit operator TeamTuple(vec4 v) { return new TeamTuple(v.x, v.y, v.z, v.w); }
+        public static implicit operator vec4(TeamTuple v) { return new vec4(v.x, v.y, v.z, v.w); }
+    }
+}
+

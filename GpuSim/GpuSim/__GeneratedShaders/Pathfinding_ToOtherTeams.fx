@@ -100,35 +100,35 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 data = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 cur_data = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
     float4 right = tex2D(fs_param_Path, psin.TexCoords + (float2(1, 0)) * fs_param_Path_dxdy), up = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 1)) * fs_param_Path_dxdy), left = tex2D(fs_param_Path, psin.TexCoords + (float2(-(1), 0)) * fs_param_Path_dxdy), down = tex2D(fs_param_Path, psin.TexCoords + (float2(0, -(1))) * fs_param_Path_dxdy);
-    float4 output = FragSharpFramework__FragSharpStd__min(right, up, left, down) + float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
+    float4 dist_to_enemy_of = FragSharpFramework__FragSharpStd__min(right, up, left, down) + float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
     if (GpuSim__SimShader__Something(data))
     {
         if (GpuSim__SimShader__IsNeutralBuilding(cur_data))
         {
-            output += 100 * float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
+            dist_to_enemy_of += 100 * float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
         }
         else
         {
-            output += 3 * float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
+            dist_to_enemy_of += 3 * float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
             if (abs(cur_data.b - 0.003921569) > .001)
             {
-                output.r = 0.0;
+                dist_to_enemy_of.r = 0.0;
             }
             if (abs(cur_data.b - 0.007843138) > .001)
             {
-                output.g = 0.0;
+                dist_to_enemy_of.g = 0.0;
             }
             if (abs(cur_data.b - 0.01176471) > .001)
             {
-                output.b = 0.0;
+                dist_to_enemy_of.b = 0.0;
             }
             if (abs(cur_data.b - 0.01568628) > .001)
             {
-                output.a = 0.0;
+                dist_to_enemy_of.a = 0.0;
             }
         }
     }
-    __FinalOutput.Color = output;
+    __FinalOutput.Color = dist_to_enemy_of;
     return __FinalOutput;
 }
 
