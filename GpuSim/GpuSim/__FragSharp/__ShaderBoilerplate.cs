@@ -32,7 +32,10 @@ namespace FragSharpFramework
             GpuSim.DrawGrass.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawGrass");
             GpuSim.DrawSolid.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawSolid");
             GpuSim.DrawMouse.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawMouse");
-            GpuSim.DrawTerritoryPlayer.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer");
+            GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.003921569");
+            GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.007843138");
+            GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.01176471");
+            GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.01568628");
             GpuSim.DrawTerritoryColors.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTerritoryColors");
             GpuSim.DrawUnitsZoomedOut.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawUnitsZoomedOut");
             GpuSim.DrawUnits.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawUnits");
@@ -616,40 +619,55 @@ namespace GpuSim
 }
 
 
+
+
+
 namespace GpuSim
 {
     public partial class DrawTerritoryPlayer
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_player_0p003921569;
+        public static Effect CompiledEffect_player_0p007843138;
+        public static Effect CompiledEffect_player_0p01176471;
+        public static Effect CompiledEffect_player_0p01568628;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Path, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Path);
+            Using(cameraPos, cameraAspect, Path, player);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Path, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Path);
+            Using(cameraPos, cameraAspect, Path, player);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Path);
+            Using(cameraPos, cameraAspect, Path, player);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Path);
+            Using(cameraPos, cameraAspect, Path, player);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path, float player)
         {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
+            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
+            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
+            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
             CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
             CompiledEffect.Parameters["fs_param_Path_Texture"].SetValue(FragSharpMarshal.Marshal(Path));

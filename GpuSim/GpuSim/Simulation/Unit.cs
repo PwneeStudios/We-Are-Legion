@@ -1,4 +1,5 @@
-﻿using FragSharpFramework;
+﻿using System;
+using FragSharpFramework;
 
 namespace GpuSim
 {
@@ -108,8 +109,40 @@ namespace GpuSim
         public float TeamFour { get { return a; } set { a = value; } }
     }
 
+    public class BadPlayerNumberException : Exception
+    {
+        float player;
+        public BadPlayerNumberException(float player) 
+            : base(string.Format("Incorrect player number {0}", player))
+        {
+            this.player = player;
+        }
+    }
+
     public class SimShader : GridComputation
     {
+        public static float Get(PlayerTuple tuple, float player)
+        {
+            if (player == Player.One) return tuple.PlayerOne;
+            if (player == Player.Two) return tuple.PlayerTwo;
+            if (player == Player.Three) return tuple.PlayerThree;
+            if (player == Player.Four) return tuple.PlayerFour;
+
+            throw new BadPlayerNumberException(player);
+            return 0;
+        }
+
+        public static float Get(PlayerTuple tuple, int player)
+        {
+            if (player == 1) return tuple.PlayerOne;
+            if (player == 2) return tuple.PlayerTwo;
+            if (player == 3) return tuple.PlayerThree;
+            if (player == 4) return tuple.PlayerFour;
+
+            throw new BadPlayerNumberException(player);
+            return 0;
+        }
+
         [Hlsl("float4")]
         protected static PlayerTuple PlayerTuple(float x, float y, float z, float w)
         {
@@ -203,6 +236,9 @@ namespace GpuSim
 
         public static class Player
         {
+            [FragSharpFramework.Vals(Player.One, Player.Two, Player.Three, Player.Four)]
+                public class ValsAttribute : Attribute { }
+
             public static readonly float[] Vals = new float[] { None, One, Two, Three, Four };
 
             public static float Get(int index)

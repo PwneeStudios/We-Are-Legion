@@ -13,20 +13,18 @@ namespace GpuSim
         public static readonly color
             Controlled = new color(0f, 0f, 0f, 0f),
             Uncontrolled = new color(0f, 0f, 0f, .65f);
-            
+
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<vec4> Path)
+        color FragmentShader(VertexOut vertex, Field<vec4> Path, [Player.Vals] float player)
         {
             color output = color.TransparentBlack;
 
             vec4 here = Path[Here];
 
-            float dist = here.x;
+            float dist = Get(here, player);
             bool controlled = dist < TerritoryCutoff;
 
             color clr = controlled ? Controlled : Uncontrolled;
-
-            //if (dist >= _10) clr.a = CoreMath.Lerp(Controlled.a, Uncontrolled.a, (dist - _10) / _24);
 
             clr.rgb *= clr.a;
 

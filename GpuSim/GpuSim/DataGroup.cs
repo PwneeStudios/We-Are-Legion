@@ -31,9 +31,9 @@ namespace GpuSim
             }
         }
 
-        public static void PlaceBuilding(DataGroup d, vec2 coord, float building_type)
+        public static void PlaceBuilding(DataGroup d, vec2 coord, float building_type, float player, float team)
         {
-            MakeBuilding(building_type, Player.One, Team.One, 0, 0, 3, 3, _unit, _data, _target);
+            MakeBuilding(building_type, player, team, 0, 0, 3, 3, _unit, _data, _target);
 
             vec2 size = new vec2(3, 3);
             d.CurrentUnits.SetData(coord, size, _unit);

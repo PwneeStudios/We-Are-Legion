@@ -289,8 +289,11 @@ namespace GpuSim
 
         int DrawCount = 0;
 
-        float PlayerValue = SimShader.Player.One;
+        float PlayerValue = SimShader.Player.Four;
         int PlayerNumber { get { return SimShader.Int(PlayerValue); } }
+
+        float TeamValue = SimShader.Team.Four;
+        int TeamNumber { get { return SimShader.Int(TeamValue); } }
 
         public enum UserMode { PlaceBuilding, Select };
         public UserMode CurUserMode = UserMode.PlaceBuilding;
@@ -413,7 +416,7 @@ namespace GpuSim
             Ground.Draw(GraphicsDevice);
 
             if (CurUserMode == UserMode.PlaceBuilding)
-                DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.PathToPlayers);
+                DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.PathToPlayers, PlayerValue);
             else if (CameraZoom <= z / 4)
             {
                 float blend = CoreMath.Lerp(z / 4, 0, z / 8, 1, CameraZoom);
@@ -728,8 +731,10 @@ namespace GpuSim
                             var building_here = _data[i + j * _w];
                             var distance_to = _dist[i + j * _w];
 
+                            var distance = SimShader.Get(distance_to, PlayerNumber);
+
                             bool occupied = building_here.direction > 0;
-                            bool in_territory = distance_to.PlayerOne < DrawTerritoryPlayer.TerritoryCutoff;
+                            bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
 
                             bool can_place = !occupied && in_territory;
                             CanPlace[i + j * _w] = can_place;
@@ -754,8 +759,10 @@ namespace GpuSim
                             var unit_here = _data[i + j * _w];
                             var distance_to = _dist[i + j * _w];
 
+                            var distance = SimShader.Get(distance_to, PlayerNumber);
+
                             bool is_gold_source = unit_here.team == SimShader.Team.None && unit_here.type == SimShader.UnitType.GoldSource;
-                            bool in_territory = distance_to.PlayerOne < DrawTerritoryPlayer.TerritoryCutoff;
+                            bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
 
                             bool can_place = is_gold_source && in_territory;
                             CanPlace[i + j * _w] = can_place;
@@ -769,7 +776,7 @@ namespace GpuSim
                 {
                     try
                     {
-                        Create.PlaceBuilding(DataGroup, GridCoord, BuildingType);
+                        Create.PlaceBuilding(DataGroup, GridCoord, BuildingType, PlayerValue, TeamValue);
 
                         SubtractGold(Params.BuildingCost(BuildingType), PlayerNumber);
                         CanPlaceBuilding = false;
