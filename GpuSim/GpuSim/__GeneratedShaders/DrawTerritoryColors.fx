@@ -66,22 +66,24 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 dist = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 0)) * fs_param_Path_dxdy);
     float4 enemy_dist = float4(FragSharpFramework__FragSharpStd__min(dist.y, dist.z, dist.w), FragSharpFramework__FragSharpStd__min(dist.x, dist.z, dist.w), FragSharpFramework__FragSharpStd__min(dist.x, dist.y, dist.w), FragSharpFramework__FragSharpStd__min(dist.x, dist.y, dist.z));
     float4 clr = float4(0.0, 0.0, 0.0, 0.0);
-    if (dist.x < 0.07843138 - .001 && dist.x < enemy_dist.x - .001)
+    float _blend = 1;
+    if (dist.x < 0.02745098 - .001 && dist.x < enemy_dist.x - .001)
     {
         clr = float4(0.7, 0.3, 0.3, 0.5);
     }
-    if (dist.y < 0.07843138 - .001 && dist.y < enemy_dist.y - .001)
+    if (dist.y < 0.02745098 - .001 && dist.y < enemy_dist.y - .001)
     {
         clr = float4(0.1, 0.5, 0.1, 0.5);
     }
-    if (dist.z < 0.07843138 - .001 && dist.z < enemy_dist.z - .001)
+    if (dist.z < 0.02745098 - .001 && dist.z < enemy_dist.z - .001)
     {
         clr = float4(0.3, 0.7, 0.55, 0.5);
     }
-    if (dist.w < 0.07843138 - .001 && dist.w < enemy_dist.w - .001)
+    if (dist.w < 0.02745098 - .001 && dist.w < enemy_dist.w - .001)
     {
         clr = float4(0.3, 0.3, 0.7, 0.5);
     }
+    clr *= _blend;
     clr.a *= fs_param_blend;
     clr.rgb *= clr.a;
     __FinalOutput.Color = clr;

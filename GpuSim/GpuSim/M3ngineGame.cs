@@ -81,9 +81,17 @@ namespace GpuSim
 			graphics = new GraphicsDeviceManager(this);
 
 			Window.Title = "Gpu Sim Test";
+
+            graphics.IsFullScreen = false;
             graphics.PreferredBackBufferWidth  = 1024;
             graphics.PreferredBackBufferHeight = 1024;
-			//graphics.IsFullScreen = rez.Mode == WindowMode.Fullscreen;
+            
+            //graphics.IsFullScreen = true;
+            //graphics.PreferredBackBufferWidth = 1280;
+            //graphics.PreferredBackBufferHeight = 720;
+
+            CameraAspect = (float)graphics.PreferredBackBufferWidth / (float)graphics.PreferredBackBufferHeight;
+            
             graphics.SynchronizeWithVerticalRetrace = !UnlimitedSpeed;
             IsFixedTimeStep = !UnlimitedSpeed;
 
@@ -334,10 +342,6 @@ namespace GpuSim
 			GraphicsDevice.DepthStencilState = DepthStencilState.DepthRead;
 
 
-            UpdateGradient_ToOtherTeams();
-            DoGoldMineCount();
-            DoGoldUpdate();
-
             switch (CurUserMode)
             {
                 case UserMode.PlaceBuilding:
@@ -358,7 +362,6 @@ namespace GpuSim
                     }
 
                     SelectedCount = DoUnitCount(PlayerValue, true);
-                    Bounds();
                     SelectionUpdate();
                     break;
             }
@@ -638,8 +641,6 @@ namespace GpuSim
 
             SelectedBound_TR = bound.rg;
             SelectedBound_BL = bound.ba;
-
-            Console.WriteLine("Bounds: ({0}), ({1})", SelectedBound_BL, SelectedBound_TR);
         }
 
         void UpdateGradient_ToOtherTeams()
@@ -656,6 +657,8 @@ namespace GpuSim
 
         void SelectionUpdate()
         {
+            //Bounds();
+
             vec2 WorldCord     = ScreenToWorldCoord(Input.CurMousePos);
             vec2 WorldCordPrev = ScreenToWorldCoord(Input.PrevMousePos);
 
@@ -805,6 +808,8 @@ namespace GpuSim
 
         private void AttackMove()
         {
+            Bounds();
+
             var pos = ScreenToGridCoord(Input.CurMousePos);
             vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
             pos -= shift;
@@ -827,6 +832,10 @@ namespace GpuSim
 
 		void SimulationUpdate()
 		{
+            DoGoldMineCount();
+            DoGoldUpdate();
+
+            UpdateGradient_ToOtherTeams();
             UpdateGradient_ToOtherTeams();
             
             UpdateGradient_ToPlayers();

@@ -40,6 +40,8 @@ namespace GpuSim
             Team3 = new color(.3f, .7f, .55f, .5f),
             Team4 = new color(.3f, .3f, .7f, .5f);
 
+        public const float TerritoryCutoff = _7;
+
         [FragmentShader]
         color FragmentShader(VertexOut vertex, Field<vec4> Path, float blend)
         {
@@ -52,11 +54,18 @@ namespace GpuSim
                 min(dist.x, dist.y, dist.z));
 
             color clr = color.TransparentBlack;
-            if (dist.x < _20 && dist.x < enemy_dist.x) clr = Team1;
-            if (dist.y < _20 && dist.y < enemy_dist.y) clr = Team2;
-            if (dist.z < _20 && dist.z < enemy_dist.z) clr = Team3;
-            if (dist.w < _20 && dist.w < enemy_dist.w) clr = Team4;
+            float _blend = 1;
 
+            //if (dist.x < TerritoryCutoff && dist.x < enemy_dist.x) { clr = Team1; _blend = max(.3f, min(1, (TerritoryCutoff - dist.x) / _3)); }
+            //if (dist.y < TerritoryCutoff && dist.y < enemy_dist.y) { clr = Team2; _blend = max(.3f, min(1, (TerritoryCutoff - dist.y) / _3)); }
+            //if (dist.z < TerritoryCutoff && dist.z < enemy_dist.z) { clr = Team3; _blend = max(.3f, min(1, (TerritoryCutoff - dist.z) / _3)); }
+            //if (dist.w < TerritoryCutoff && dist.w < enemy_dist.w) { clr = Team4; _blend = max(.3f, min(1, (TerritoryCutoff - dist.w) / _3)); }
+            if (dist.x < TerritoryCutoff && dist.x < enemy_dist.x) clr = Team1;
+            if (dist.y < TerritoryCutoff && dist.y < enemy_dist.y) clr = Team2;
+            if (dist.z < TerritoryCutoff && dist.z < enemy_dist.z) clr = Team3;
+            if (dist.w < TerritoryCutoff && dist.w < enemy_dist.w) clr = Team4;
+
+            clr *= _blend;
             clr.a *= blend;
             clr.rgb *= clr.a;
 
