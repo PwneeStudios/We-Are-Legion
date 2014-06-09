@@ -188,10 +188,32 @@ namespace GpuSim
                 unit  here       = Unit[Here];
                 extra extra_here = Extra[Here];
 
-                // Remove if dead
-                if (here.anim == Anim.Dead)
+                // Remove if dead units
+                if (here.anim == Anim.Dead && IsUnit(here))
                 {
                     return data.Nothing;
+                }
+
+                building b = (building)(vec4)data_here;
+                if (IsBuilding(here))
+                {
+                    // If this building is alive
+                    if (data_here.direction == Dir.Stationary)
+                    {
+                        // If this is a building that has been hit enough times to explode
+                        if (here.hit_count >= _5)
+                        {
+                            data_here.direction = Dir.StationaryDying;
+                        }
+                    }
+                    else
+                    {
+                        // Otherwise remove it if the explosion animation is done
+                        float frame = ExplosionSpriteSheet.ExplosionFrame(0, b);
+
+                        if (frame >= ExplosionSpriteSheet.AnimLength)
+                            return data.Nothing;
+                    }
                 }
 
                 // Buildings can't move.

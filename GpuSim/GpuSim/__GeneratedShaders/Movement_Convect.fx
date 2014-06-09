@@ -60,7 +60,7 @@ bool GpuSim__SimShader__Something(float4 u)
 
 bool GpuSim__SimShader__IsStationary(float4 u)
 {
-    return abs(u.r - 0.01960784) < .001;
+    return u.r >= 0.01960784 - .001;
 }
 
 bool GpuSim__SimShader__Stayed(float4 u)

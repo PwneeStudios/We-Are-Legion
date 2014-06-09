@@ -55,7 +55,7 @@ sampler fs_param_Next : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsStationary(float4 u)
 {
-    return abs(u.r - 0.01960784) < .001;
+    return u.r >= 0.01960784 - .001;
 }
 
 bool GpuSim__SimShader__IsValid(float direction)

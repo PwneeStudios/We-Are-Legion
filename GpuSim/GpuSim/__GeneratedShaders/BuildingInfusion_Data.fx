@@ -105,10 +105,24 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 0)) * fs_param_Building_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (GpuSim__SimShader__Something(building_here) && GpuSim__SimShader__IsBuilding(unit_here) && GpuSim__SimShader__IsCenter(building_here) && !(GpuSim__SimShader__selected(building_here)))
+    if (GpuSim__SimShader__Something(building_here) && GpuSim__SimShader__IsBuilding(unit_here) && GpuSim__SimShader__IsCenter(building_here))
     {
-        bool is_selected = GpuSim__SimShader__selected(tex2D(fs_param_Building, psin.TexCoords + (float2(1, 0)) * fs_param_Building_dxdy)) || GpuSim__SimShader__selected(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 0)) * fs_param_Building_dxdy)) || GpuSim__SimShader__selected(tex2D(fs_param_Building, psin.TexCoords + (float2(0, 1)) * fs_param_Building_dxdy)) || GpuSim__SimShader__selected(tex2D(fs_param_Building, psin.TexCoords + (float2(0, -(1))) * fs_param_Building_dxdy)) || GpuSim__SimShader__selected(tex2D(fs_param_Building, psin.TexCoords + (float2(1, 1)) * fs_param_Building_dxdy)) || GpuSim__SimShader__selected(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 1)) * fs_param_Building_dxdy)) || GpuSim__SimShader__selected(tex2D(fs_param_Building, psin.TexCoords + (float2(1, -(1))) * fs_param_Building_dxdy)) || GpuSim__SimShader__selected(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Building_dxdy));
-        GpuSim__SimShader__set_selected(building_here, is_selected);
+        if (building_here.r >= 0.02745098 - .001)
+        {
+            building_here.r += 0.003921569;
+            __FinalOutput.Color = building_here;
+            return __FinalOutput;
+        }
+        float4 right = tex2D(fs_param_Building, psin.TexCoords + (float2(1, 0)) * fs_param_Building_dxdy), up = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 1)) * fs_param_Building_dxdy), left = tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 0)) * fs_param_Building_dxdy), down = tex2D(fs_param_Building, psin.TexCoords + (float2(0, -(1))) * fs_param_Building_dxdy), up_right = tex2D(fs_param_Building, psin.TexCoords + (float2(1, 1)) * fs_param_Building_dxdy), up_left = tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 1)) * fs_param_Building_dxdy), down_right = tex2D(fs_param_Building, psin.TexCoords + (float2(1, -(1))) * fs_param_Building_dxdy), down_left = tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Building_dxdy);
+        if (abs(right.r - 0.02352941) < .001 || abs(up.r - 0.02352941) < .001 || abs(left.r - 0.02352941) < .001 || abs(down.r - 0.02352941) < .001 || abs(up_right.r - 0.02352941) < .001 || abs(up_left.r - 0.02352941) < .001 || abs(down_right.r - 0.02352941) < .001 || abs(down_left.r - 0.02352941) < .001)
+        {
+            building_here.r = 0.02745098;
+        }
+        if (!(GpuSim__SimShader__selected(building_here)))
+        {
+            bool is_selected = GpuSim__SimShader__selected(right) || GpuSim__SimShader__selected(up) || GpuSim__SimShader__selected(left) || GpuSim__SimShader__selected(down) || GpuSim__SimShader__selected(up_right) || GpuSim__SimShader__selected(up_left) || GpuSim__SimShader__selected(down_right) || GpuSim__SimShader__selected(down_left);
+            GpuSim__SimShader__set_selected(building_here, is_selected);
+        }
     }
     __FinalOutput.Color = building_here;
     return __FinalOutput;

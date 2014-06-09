@@ -69,6 +69,7 @@ namespace GpuSim
 
 		Texture2D
             BuildingTexture_1,
+            ExplosionTexture_1,
             UnitTexture_1, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
             GroundTexture,
             
@@ -136,6 +137,7 @@ namespace GpuSim
             GridHelper.Initialize(GraphicsDevice);
 
             BuildingTexture_1 = Content.Load<Texture2D>("Art\\Buildings_1");
+            ExplosionTexture_1 = Content.Load<Texture2D>("Art\\BuildingExplosion_1");
 
 			UnitTexture_1  = Content.Load<Texture2D>("Art\\Units_1");
 			UnitTexture_2  = Content.Load<Texture2D>("Art\\Units_2");
@@ -381,31 +383,36 @@ namespace GpuSim
             BenchmarkTests.Run(DataGroup.CurrentData, DataGroup.PreviousData);
 
 			// Choose units texture
-            Texture2D UnitsSpriteSheet = null, BuildingsSpriteSheet = null;
+            Texture2D UnitsSpriteSheet = null, BuildingsSpriteSheet = null, ExplosionSpriteSheet = null;
             float z = 14;
             if (CameraZoom > z)
             {
                 BuildingsSpriteSheet = BuildingTexture_1;
+                ExplosionSpriteSheet = ExplosionTexture_1;
                 UnitsSpriteSheet = UnitTexture_1;
             }
             else if (CameraZoom > z / 2)
             {
                 BuildingsSpriteSheet = BuildingTexture_1;
+                ExplosionSpriteSheet = ExplosionTexture_1;
                 UnitsSpriteSheet = UnitTexture_2;
             }
             else if (CameraZoom > z / 4)
             {
                 BuildingsSpriteSheet = BuildingTexture_1;
+                ExplosionSpriteSheet = ExplosionTexture_1;
                 UnitsSpriteSheet = UnitTexture_4;
             }
             else if (CameraZoom > z / 8)
             {
                 BuildingsSpriteSheet = BuildingTexture_1;
+                ExplosionSpriteSheet = ExplosionTexture_1;
                 UnitsSpriteSheet = UnitTexture_8;
             }
             else
             {
                 BuildingsSpriteSheet = BuildingTexture_1;
+                ExplosionSpriteSheet = ExplosionTexture_1;
                 UnitsSpriteSheet = UnitTexture_16;
             }
 
@@ -429,7 +436,7 @@ namespace GpuSim
                 DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet);
             GridHelper.DrawGrid();
 
-            DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSpriteSheet, PercentSimStepComplete);
+            DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSpriteSheet, ExplosionSpriteSheet, PercentSimStepComplete);
             GridHelper.DrawGrid();
 
             if (CameraZoom > z / 8)
@@ -841,7 +848,7 @@ namespace GpuSim
             UpdateGradient_ToPlayers();
             UpdateGradient_ToPlayers();
 
-            Building_SelectCenterIfSelected_SetDirecion.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
+            BuildingInfusion_Data.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
             Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
             BuildingDiffusion_Data.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
             Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);

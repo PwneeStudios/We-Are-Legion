@@ -69,6 +69,21 @@ sampler fs_param_Texture : register(s3) = sampler_state
     AddressV  = Wrap;
 };
 
+// Texture Sampler for fs_param_Explosion, using register location 4
+float2 fs_param_Explosion_size;
+float2 fs_param_Explosion_dxdy;
+
+Texture fs_param_Explosion_Texture;
+sampler fs_param_Explosion : register(s4) = sampler_state
+{
+    texture   = <fs_param_Explosion_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Wrap;
+    AddressV  = Wrap;
+};
+
 float fs_param_s;
 
 // The following methods are included because they are referenced by the fragment shader.
@@ -88,6 +103,23 @@ float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size
 bool GpuSim__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
+}
+
+float GpuSim__ExplosionSpriteSheet__ExplosionFrame(float s, float4 building_here)
+{
+    return (s + 255 * (building_here.r - 0.02745098)) * 6;
+}
+
+float4 GpuSim__DrawBuildings__ExplosionSprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+{
+    if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
+    {
+        return float4(0.0, 0.0, 0.0, 0.0);
+    }
+    pos += 255 * float2(u.g, u.a);
+    pos.x += floor(frame) * 3;
+    pos *= float2(1.0 / 48, 1.0 / 3);
+    return tex2D(Texture, pos);
 }
 
 bool GpuSim__SimShader__selected(float4 u)
@@ -154,7 +186,7 @@ float4 GpuSim__DrawBuildings__Sprite(VertexToPixel psin, float4 u, float4 d, flo
     }
     float selected_offset = GpuSim__SimShader__selected(u) ? 3 : 0;
     pos += 255 * float2(u.g, u.a);
-    pos.x += floor(frame);
+    pos.x += floor(frame) * 3;
     pos.y += selected_offset + 6 * (255 * GpuSim__UnitType__BuildingIndex(d.r));
     pos *= float2(1.0 / 3, 1.0 / 18);
     float4 clr = tex2D(Texture, pos);
@@ -195,8 +227,19 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Buildings_size);
     if (GpuSim__SimShader__Something(building_here))
     {
-        float frame = 0;
-        output += GpuSim__DrawBuildings__Sprite(psin, building_here, unit_here, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+        if (building_here.r >= 0.02745098 - .001)
+        {
+            float frame = GpuSim__ExplosionSpriteSheet__ExplosionFrame(fs_param_s, building_here);
+            if (frame < 16 - .001)
+            {
+                output += GpuSim__DrawBuildings__ExplosionSprite(psin, building_here, unit_here, subcell_pos, frame, fs_param_Explosion, fs_param_Explosion_size, fs_param_Explosion_dxdy);
+            }
+        }
+        else
+        {
+            float frame = 0;
+            output += GpuSim__DrawBuildings__Sprite(psin, building_here, unit_here, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+        }
     }
     __FinalOutput.Color = output;
     return __FinalOutput;

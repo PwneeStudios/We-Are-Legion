@@ -45,7 +45,14 @@ namespace GpuSim
                         Something(data_up)    && unit_up.team    != unit_here.team && unit_up.team    != Team.None && data_up.direction    == Dir.Down  && data_up.action    == UnitAction.Attacking && data_up.change    == Change.Stayed||
                         Something(data_down)  && unit_down.team  != unit_here.team && unit_down.team  != Team.None && data_down.direction  == Dir.Up    && data_down.action  == UnitAction.Attacking && data_down.change  == Change.Stayed)
                     {
-                        unit_here.anim = Anim.Dead;
+                        if (IsBuilding(unit_here))
+                        {
+                            unit_here.hit_count += _1;
+                        }
+                        else
+                        {
+                            unit_here.anim = Anim.Dead;
+                        }
                     }
                 }
             }

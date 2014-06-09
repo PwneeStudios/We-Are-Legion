@@ -45,7 +45,7 @@ namespace FragSharpFramework
             GpuSim.CheckForAttacking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CheckForAttacking");
             GpuSim.Bounding.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Bounding");
             GpuSim._Bounding.CompiledEffect = Content.Load<Effect>("FragSharpShaders/_Bounding");
-            GpuSim.Building_SelectCenterIfSelected_SetDirecion.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Building_SelectCenterIfSelected_SetDirecion");
+            GpuSim.BuildingInfusion_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingInfusion_Data");
             GpuSim.BuildingDiffusion_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Data");
             GpuSim.BuildingDiffusion_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Target");
             GpuSim.CountGoldMines.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountGoldMines");
@@ -392,33 +392,33 @@ namespace GpuSim
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, float s, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float s, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Buildings, Units, Texture, s);
+            Using(cameraPos, cameraAspect, Buildings, Units, Texture, Explosion, s);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, float s, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float s, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Buildings, Units, Texture, s);
+            Using(cameraPos, cameraAspect, Buildings, Units, Texture, Explosion, s);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, float s, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float s, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Buildings, Units, Texture, s);
+            Using(cameraPos, cameraAspect, Buildings, Units, Texture, Explosion, s);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, float s, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float s, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Buildings, Units, Texture, s);
+            Using(cameraPos, cameraAspect, Buildings, Units, Texture, Explosion, s);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, float s)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float s)
         {
             CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
             CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -431,6 +431,9 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_Texture_Texture"].SetValue(FragSharpMarshal.Marshal(Texture));
             CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
             CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
+            CompiledEffect.Parameters["fs_param_Explosion_Texture"].SetValue(FragSharpMarshal.Marshal(Explosion));
+            CompiledEffect.Parameters["fs_param_Explosion_size"].SetValue(FragSharpMarshal.Marshal(vec(Explosion.Width, Explosion.Height)));
+            CompiledEffect.Parameters["fs_param_Explosion_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Explosion.Width, Explosion.Height)));
             CompiledEffect.Parameters["fs_param_s"].SetValue(FragSharpMarshal.Marshal(s));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
@@ -1116,7 +1119,7 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class Building_SelectCenterIfSelected_SetDirecion
+    public partial class BuildingInfusion_Data
     {
         public static Effect CompiledEffect;
 

@@ -103,9 +103,19 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
+bool GpuSim__SimShader__IsUnit(float4 u)
+{
+    return abs(u.r - 0.003921569) < .001;
+}
+
 bool GpuSim__SimShader__IsBuilding(float4 u)
 {
     return u.r >= 0.007843138 - .001;
+}
+
+float GpuSim__ExplosionSpriteSheet__ExplosionFrame(float s, float4 building_here)
+{
+    return (s + 255 * (building_here.r - 0.02745098)) * 6;
 }
 
 bool GpuSim__SimShader__IsCenter(float4 b)
@@ -245,10 +255,30 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         float4 path = float4(0, 0, 0, 0);
         float4 here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
         float4 extra_here = tex2D(fs_param_Extra, psin.TexCoords + (float2(0, 0)) * fs_param_Extra_dxdy);
-        if (abs(here.a - 0.03921569) < .001)
+        if (abs(here.a - 0.03921569) < .001 && GpuSim__SimShader__IsUnit(here))
         {
             __FinalOutput.Color = float4(0, 0, 0, 0);
             return __FinalOutput;
+        }
+        float4 b = data_here;
+        if (GpuSim__SimShader__IsBuilding(here))
+        {
+            if (abs(data_here.r - 0.01960784) < .001)
+            {
+                if (here.a >= 0.01960784 - .001)
+                {
+                    data_here.r = 0.02352941;
+                }
+            }
+            else
+            {
+                float frame = GpuSim__ExplosionSpriteSheet__ExplosionFrame(0, b);
+                if (frame >= 16 - .001)
+                {
+                    __FinalOutput.Color = float4(0, 0, 0, 0);
+                    return __FinalOutput;
+                }
+            }
         }
         if (GpuSim__SimShader__IsBuilding(here))
         {

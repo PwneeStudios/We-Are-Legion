@@ -30,6 +30,9 @@ namespace GpuSim
 
         [Hlsl("a")]
         public float anim { get { return a; } set { a = value; } }
+
+        [Hlsl("a")]
+        public float hit_count { get { return a; } set { a = value; } }
     }
 
     [Copy(typeof(vec4))]
@@ -299,12 +302,12 @@ namespace GpuSim
 
         protected static bool IsStationary(data u)
         {
-            return u.direction == Dir.Stationary;
+            return u.direction >= Dir.Stationary;
         }
 
         protected static bool IsMobile(data u)
         {
-            return u.direction != Dir.Stationary;
+            return u.direction < Dir.Stationary;
         }
 
         public static class Anim
@@ -360,6 +363,25 @@ namespace GpuSim
             public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
         }
 
+        public static class ExplosionSpriteSheet
+        {
+            public static float ExplosionFrame(float s, building building_here)
+            {
+                return (s + 255 * (building_here.direction - Dir.StationaryDead)) * 6;
+            }
+
+            public const int DimX = 3;
+            public const int DimY = 3;
+            public static readonly vec2 Dim = vec(DimX, DimY);
+            public static readonly vec2 Size = vec(DimX / (float)SheetDimX, DimY / (float)SheetDimY);
+
+            public const int AnimLength = 16;
+            public const int SheetDimX = AnimLength * DimX;
+            public const int SheetDimY = DimY;
+            public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
+            public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
+        }
+
         public static class Dir
         {
             public const float
@@ -368,8 +390,13 @@ namespace GpuSim
                 Up = _2,
                 Left = _3,
                 Down = _4,
+                
                 Stationary = _5,
-                Count = _6,
+                
+                StationaryDying = _6,
+                StationaryDead = _7,
+                
+                Count = _8,
 
                 TurnRight = -_1,
                 TurnLeft = _1;

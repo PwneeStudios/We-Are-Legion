@@ -70,7 +70,7 @@ sampler fs_param_Random : register(s3) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsStationary(float4 u)
 {
-    return abs(u.r - 0.01960784) < .001;
+    return u.r >= 0.01960784 - .001;
 }
 
 bool GpuSim__SimShader__Stayed(float4 u)
@@ -92,6 +92,11 @@ float2 GpuSim__SimShader__dir_to_vec(float direction)
 bool GpuSim__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
+}
+
+bool GpuSim__SimShader__IsBuilding(float4 u)
+{
+    return u.r >= 0.007843138 - .001;
 }
 
 // Compiled vertex shader
@@ -128,7 +133,14 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             if (GpuSim__SimShader__Something(data_right) && abs(unit_right.b - unit_here.b) > .001 && abs(unit_right.b - 0.0) > .001 && abs(data_right.r - 0.01176471) < .001 && abs(data_right.a - 0.007843138) < .001 && abs(data_right.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_left) && abs(unit_left.b - unit_here.b) > .001 && abs(unit_left.b - 0.0) > .001 && abs(data_left.r - 0.003921569) < .001 && abs(data_left.a - 0.007843138) < .001 && abs(data_left.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_up) && abs(unit_up.b - unit_here.b) > .001 && abs(unit_up.b - 0.0) > .001 && abs(data_up.r - 0.01568628) < .001 && abs(data_up.a - 0.007843138) < .001 && abs(data_up.g - 0.003921569) < .001 || GpuSim__SimShader__Something(data_down) && abs(unit_down.b - unit_here.b) > .001 && abs(unit_down.b - 0.0) > .001 && abs(data_down.r - 0.007843138) < .001 && abs(data_down.a - 0.007843138) < .001 && abs(data_down.g - 0.003921569) < .001)
             {
-                unit_here.a = 0.03921569;
+                if (GpuSim__SimShader__IsBuilding(unit_here))
+                {
+                    unit_here.a += 0.003921569;
+                }
+                else
+                {
+                    unit_here.a = 0.03921569;
+                }
             }
         }
     }

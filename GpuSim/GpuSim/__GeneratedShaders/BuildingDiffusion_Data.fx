@@ -89,6 +89,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (GpuSim__SimShader__Something(building_here) && GpuSim__SimShader__IsBuilding(unit_here))
     {
         float4 center = tex2D(fs_param_Building, psin.TexCoords + (GpuSim__SimShader__center_dir(building_here)) * fs_param_Building_dxdy);
+        if (!(GpuSim__SimShader__Something(center)))
+        {
+            __FinalOutput.Color = float4(0, 0, 0, 0);
+            return __FinalOutput;
+        }
         building_here.b = center.b;
         building_here.r = center.r;
     }
