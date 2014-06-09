@@ -151,7 +151,8 @@ bool GpuSim__SimShader__Something(float4 u)
 float GpuSim__SimShader__unpack_coord(float2 packed)
 {
     float coord = 0;
-    coord = (255 * packed.x + packed.y) * 255;
+    packed = floor(255.0 * packed + float2(0.5, 0.5));
+    coord = 256 * packed.x + packed.y;
     return coord;
 }
 

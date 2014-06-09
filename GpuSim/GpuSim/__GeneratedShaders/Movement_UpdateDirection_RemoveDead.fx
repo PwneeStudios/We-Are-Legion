@@ -137,7 +137,8 @@ void GpuSim__SimShader__set_prior_direction(inout float4 u, float dir)
 float GpuSim__SimShader__unpack_coord(float2 packed)
 {
     float coord = 0;
-    coord = (255 * packed.x + packed.y) * 255;
+    packed = floor(255.0 * packed + float2(0.5, 0.5));
+    coord = 256 * packed.x + packed.y;
     return coord;
 }
 
@@ -185,8 +186,8 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
 {
     float dir = 0;
     float4 target = tex2D(TargetData, psin.TexCoords + (float2(0, 0)) * TargetData_dxdy);
-    float2 CurPos = vertex.TexCoords * TargetData_size;
-    float2 Destination = GpuSim__SimShader__unpack_vec2(target);
+    float2 CurPos = floor((vertex.TexCoords * TargetData_size + float2(0.5, 0.5)));
+    float2 Destination = floor(GpuSim__SimShader__unpack_vec2(target));
     float4 right = tex2D(Current, psin.TexCoords + (float2(1, 0)) * Current_dxdy), up = tex2D(Current, psin.TexCoords + (float2(0, 1)) * Current_dxdy), left = tex2D(Current, psin.TexCoords + (float2(-(1), 0)) * Current_dxdy), down = tex2D(Current, psin.TexCoords + (float2(0, -(1))) * Current_dxdy);
     if (Destination.x > CurPos.x + 0.75 + .001)
     {

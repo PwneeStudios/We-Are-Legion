@@ -540,8 +540,8 @@ namespace GpuSim
         {
             vec2 packed = vec2.Zero;
 
-            packed.x = floor(x / 255.0f);
-            packed.y = x - packed.x * 255.0f;
+            packed.x = floor(x / 256.0f);
+            packed.y = x - packed.x * 256.0f;
 
             return packed / 255.0f;
         }
@@ -550,7 +550,8 @@ namespace GpuSim
         {
             float coord = 0;
 
-            coord = (255 * packed.x + packed.y) * 255;
+            packed = floor(255.0f * packed + vec(.5f, .5f));
+            coord = 256 * packed.x + packed.y;
 
             return coord;
         }

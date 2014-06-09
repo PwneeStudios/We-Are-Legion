@@ -299,10 +299,10 @@ namespace GpuSim
 
         int DrawCount = 0;
 
-        float PlayerValue = SimShader.Player.Four;
+        float PlayerValue = SimShader.Player.Two;
         int PlayerNumber { get { return SimShader.Int(PlayerValue); } }
 
-        float TeamValue = SimShader.Team.Four;
+        float TeamValue = SimShader.Team.Two;
         int TeamNumber { get { return SimShader.Int(TeamValue); } }
 
         public enum UserMode { PlaceBuilding, Select };
@@ -458,7 +458,9 @@ namespace GpuSim
 
                 if (CurUserMode == UserMode.Select)
                 {
+                    DrawGridCell();
                     DrawCircleCursor();
+                    DrawArrowCursor();
                 }
             }
 
@@ -482,7 +484,18 @@ namespace GpuSim
 			base.Draw(gameTime);
 		}
 
-        private void DrawAvailabilityGrid()
+        void DrawGridCell()
+        {
+            vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);
+
+            DrawSolid.Using(camvec, CameraAspect, DrawTerritoryPlayer.Unavailable);
+
+            vec2 gWorldCord = GridToScreenCoord(SimShader.floor(GridCoord));
+            vec2 size = 1 / DataGroup.GridSize;
+            RectangleQuad.Draw(GraphicsDevice, gWorldCord + new vec2(size.x, -size.y), size);
+        }
+
+        void DrawAvailabilityGrid()
         {
             vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
 
@@ -503,7 +516,7 @@ namespace GpuSim
             }
         }
 
-        private void DrawPotentialBuilding()
+        void DrawPotentialBuilding()
         {
             vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
 
@@ -521,14 +534,14 @@ namespace GpuSim
             building.Draw(GraphicsDevice);
         }
 
-        private void DrawCircleCursor()
+        void DrawCircleCursor()
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
             DrawMouse.Using(camvec, CameraAspect, SelectCircle);
             RectangleQuad.Draw(GraphicsDevice, WorldCord, .2f * vec2.Ones / CameraZoom);
         }
 
-        private void DrawArrowCursor()
+        void DrawArrowCursor()
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
             DrawMouse.Using(camvec, CameraAspect, Cursor);
@@ -628,26 +641,16 @@ namespace GpuSim
         }
 
         vec2 SelectedBound_BL, SelectedBound_TR;
-        void Bounds()
+        void SelectedUnitsBounds()
         {
-            Bounding.Apply(DataGroup.CurrentData, Output: DataGroup.Multigrid[1]);
+            BoundingTr.Apply(DataGroup.CurrentData, Output: DataGroup.Multigrid[0]);
+            color bound_tr = MultigridReduce(_BoundingTr.Apply);
 
-            int n = ((int)Screen.x) / 2;
-            int level = 1;
-            while (n >= 2)
-            {
-                _Bounding.Apply(DataGroup.Multigrid[level], Output: DataGroup.Multigrid[level + 1]);
+            BoundingBl.Apply(DataGroup.CurrentData, Output: DataGroup.Multigrid[0]);
+            color bound_bl = MultigridReduce(_BoundingBl.Apply);
 
-                n /= 2;
-                level++;
-            }
-            GraphicsDevice.SetRenderTarget(null);
-
-            DataGroup.Multigrid.Last().GetData(CountData);
-            color bound = (color)CountData[0];
-
-            SelectedBound_TR = bound.rg;
-            SelectedBound_BL = bound.ba;
+            SelectedBound_TR = SimShader.unpack_vec2( bound_tr );
+            SelectedBound_BL = SimShader.unpack_vec2( bound_bl );
         }
 
         void UpdateGradient_ToOtherTeams()
@@ -798,7 +801,7 @@ namespace GpuSim
             }
         }
 
-        private void CreateUnits()
+        void CreateUnits()
         {
             float player = 0, team = 0;
 
@@ -813,22 +816,40 @@ namespace GpuSim
             Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
         }
 
-        private void AttackMove()
+        void AttackMove()
         {
-            Bounds();
+            SelectedUnitsBounds();
 
             var pos = ScreenToGridCoord(Input.CurMousePos);
-            vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
-            pos -= shift;
+            //vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
+            //pos -= shift;
 
-            vec2 Selected_BL = SelectedBound_BL * Screen;
-            vec2 Selected_Size = (SelectedBound_TR - SelectedBound_BL) * Screen;
+            vec2 Selected_BL = SelectedBound_BL;
+            vec2 Selected_Size = SelectedBound_TR - SelectedBound_BL;
             if (Selected_Size.x < 1) Selected_Size.x = 1;
             if (Selected_Size.y < 1) Selected_Size.y = 1;
 
             float SquareWidth = (float)Math.Sqrt(SelectedCount);
+            if (SquareWidth < 2) SquareWidth = 0;
+            pos = SimShader.floor(pos);
+
             vec2 Destination_Size = new vec2(SquareWidth, SquareWidth) * 1.25f;
             vec2 Destination_BL = pos - Destination_Size / 2;
+            
+            Destination_Size = SimShader.floor(Destination_Size);
+            Destination_BL   = SimShader.floor(Destination_BL);
+
+            Console.WriteLine("Selected");
+            Console.WriteLine("BL : {0}", Selected_BL);
+            Console.WriteLine("TR : {0}", Selected_BL + Selected_Size);
+
+            Console.WriteLine("Destination");
+            Console.WriteLine("BL : {0}", Destination_BL);
+            Console.WriteLine("TR : {0}", Destination_BL + Destination_Size);
+            Console.WriteLine("pos: {0}", pos);
+            
+            Console.WriteLine();
+            Console.WriteLine();
 
             ActionAttackSquare.Apply(DataGroup.CurrentData, DataGroup.TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: DataGroup.Temp1);
             Swap(ref DataGroup.TargetData, ref DataGroup.Temp1);

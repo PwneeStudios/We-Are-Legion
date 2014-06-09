@@ -22,43 +22,36 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Current, using register location 1
-float2 fs_param_Current_size;
-float2 fs_param_Current_dxdy;
+// Texture Sampler for fs_param_PreviousLevel, using register location 1
+float2 fs_param_PreviousLevel_size;
+float2 fs_param_PreviousLevel_dxdy;
 
-Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s1) = sampler_state
+Texture fs_param_PreviousLevel_Texture;
+sampler fs_param_PreviousLevel : register(s1) = sampler_state
 {
-    texture   = <fs_param_Current_Texture>;
+    texture   = <fs_param_PreviousLevel_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
     AddressU  = Clamp;
     AddressV  = Clamp;
 };
-
-// Texture Sampler for fs_param_TargetData, using register location 2
-float2 fs_param_TargetData_size;
-float2 fs_param_TargetData_dxdy;
-
-Texture fs_param_TargetData_Texture;
-sampler fs_param_TargetData : register(s2) = sampler_state
-{
-    texture   = <fs_param_TargetData_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-float2 fs_param_Destination;
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__selected(float4 u)
+float GpuSim__SimShader__unpack_coord(float2 packed)
 {
-    float val = u.b;
-    return val >= 0.03137255 - .001;
+    float coord = 0;
+    packed = floor(255.0 * packed + float2(0.5, 0.5));
+    coord = 256 * packed.x + packed.y;
+    return coord;
+}
+
+float2 GpuSim__SimShader__unpack_vec2(float4 packed)
+{
+    float2 v = float2(0, 0);
+    v.x = GpuSim__SimShader__unpack_coord(packed.rg);
+    v.y = GpuSim__SimShader__unpack_coord(packed.ba);
+    return v;
 }
 
 float2 GpuSim__SimShader__pack_coord_2byte(float x)
@@ -76,6 +69,11 @@ float4 GpuSim__SimShader__pack_vec2(float2 v)
     return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 
+float2 FragSharpFramework__FragSharpStd__min(float2 a, float2 b, float2 c, float2 d)
+{
+    return min(min(a, b), min(c, d));
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -90,18 +88,8 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    float4 target = float4(0, 0, 0, 0);
-    if (GpuSim__SimShader__selected(here))
-    {
-        float2 dest = fs_param_Destination;
-        target = GpuSim__SimShader__pack_vec2(dest);
-    }
-    else
-    {
-        target = tex2D(fs_param_TargetData, psin.TexCoords + (float2(0, 0)) * fs_param_TargetData_dxdy);
-    }
-    __FinalOutput.Color = target;
+    float2 TL = GpuSim__SimShader__unpack_vec2(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy)), TR = GpuSim__SimShader__unpack_vec2(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy)), BL = GpuSim__SimShader__unpack_vec2(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy)), BR = GpuSim__SimShader__unpack_vec2(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy));
+    __FinalOutput.Color = GpuSim__SimShader__pack_vec2(FragSharpFramework__FragSharpStd__min(TL, TR, BL, BR));
     return __FinalOutput;
 }
 

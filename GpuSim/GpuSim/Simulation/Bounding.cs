@@ -2,47 +2,55 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
-    public partial class Bounding : SimShader
+    public partial class BoundingTr : SimShader
     {
         [FragmentShader]
         vec4 FragmentShader(VertexOut vertex, Field<data> Units)
         {
-            vec2 uv = vertex.TexCoords;
+            vec2 uv = vertex.TexCoords * Units.Size;
 
-            data
-                TL = Units[Here],
-                TR = Units[RightOne],
-                BL = Units[UpOne],
-                BR = Units[UpRight];
-
-            if (SomethingSelected(TL) || SomethingSelected(TR) || SomethingSelected(BL) || SomethingSelected(BR))
-                return vec(uv.x, uv.y, uv.x, uv.y);
-            else
-                return vec(0, 0, 1, 1);
+            return SomethingSelected(Units[Here]) ? pack_vec2(uv) : vec(0, 0, 0, 0);
         }
     }
 
-    public partial class _Bounding : SimShader
+    public partial class BoundingBl : SimShader
+    {
+        [FragmentShader]
+        vec4 FragmentShader(VertexOut vertex, Field<data> Units)
+        {
+            vec2 uv = vertex.TexCoords * Units.Size;
+
+            return SomethingSelected(Units[Here]) ? pack_vec2(uv) : vec(1, 1, 1, 1);
+        }
+    }
+
+    public partial class _BoundingTr : SimShader
     {
         [FragmentShader]
         vec4 FragmentShader(VertexOut vertex, Field<vec4> PreviousLevel)
         {
-            vec4
-                TL = PreviousLevel[Here],
-                TR = PreviousLevel[RightOne],
-                BL = PreviousLevel[UpOne],
-                BR = PreviousLevel[UpRight];
+            vec2
+                TL = unpack_vec2(PreviousLevel[Here]),
+                TR = unpack_vec2(PreviousLevel[RightOne]),
+                BL = unpack_vec2(PreviousLevel[UpOne]),
+                BR = unpack_vec2(PreviousLevel[UpRight]);
 
-            vec4 output = vec4.Zero;
-
-            output.r = max(TL.r, TR.r, BL.r, BR.r);
-            output.g = max(TL.g, TR.g, BL.g, BR.g);
-
-            output.b = min(TL.b, TR.b, BL.b, BR.b);
-            output.a = min(TL.a, TR.a, BL.a, BR.a);
-
-            return output;
+            return pack_vec2( max(TL, TR, BL, BR) );
         }
     }
 
+    public partial class _BoundingBl : SimShader
+    {
+        [FragmentShader]
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> PreviousLevel)
+        {
+            vec2
+                TL = unpack_vec2(PreviousLevel[Here]),
+                TR = unpack_vec2(PreviousLevel[RightOne]),
+                BL = unpack_vec2(PreviousLevel[UpOne]),
+                BR = unpack_vec2(PreviousLevel[UpRight]);
+
+            return pack_vec2(min(TL, TR, BL, BR));
+        }
+    }
 }

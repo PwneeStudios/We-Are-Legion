@@ -43,8 +43,10 @@ namespace FragSharpFramework
             GpuSim.DrawPrecomputation_Cur.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPrecomputation_Cur");
             GpuSim.DrawPrecomputation_Pre.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPrecomputation_Pre");
             GpuSim.CheckForAttacking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CheckForAttacking");
-            GpuSim.Bounding.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Bounding");
-            GpuSim._Bounding.CompiledEffect = Content.Load<Effect>("FragSharpShaders/_Bounding");
+            GpuSim.BoundingTr.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BoundingTr");
+            GpuSim.BoundingBl.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BoundingBl");
+            GpuSim._BoundingTr.CompiledEffect = Content.Load<Effect>("FragSharpShaders/_BoundingTr");
+            GpuSim._BoundingBl.CompiledEffect = Content.Load<Effect>("FragSharpShaders/_BoundingBl");
             GpuSim.BuildingInfusion_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingInfusion_Data");
             GpuSim.BuildingDiffusion_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Data");
             GpuSim.BuildingDiffusion_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Target");
@@ -1033,7 +1035,7 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class Bounding
+    public partial class BoundingTr
     {
         public static Effect CompiledEffect;
 
@@ -1076,7 +1078,93 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class _Bounding
+    public partial class BoundingBl
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D Units, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Units);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Units, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Units);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Units, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Units);
+        }
+        public static void Using(Texture2D Units, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Units);
+        }
+        public static void Using(Texture2D Units)
+        {
+            CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
+            CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class _BoundingTr
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D PreviousLevel, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(PreviousLevel);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D PreviousLevel, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(PreviousLevel);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D PreviousLevel, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(PreviousLevel);
+        }
+        public static void Using(Texture2D PreviousLevel, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(PreviousLevel);
+        }
+        public static void Using(Texture2D PreviousLevel)
+        {
+            CompiledEffect.Parameters["fs_param_PreviousLevel_Texture"].SetValue(FragSharpMarshal.Marshal(PreviousLevel));
+            CompiledEffect.Parameters["fs_param_PreviousLevel_size"].SetValue(FragSharpMarshal.Marshal(vec(PreviousLevel.Width, PreviousLevel.Height)));
+            CompiledEffect.Parameters["fs_param_PreviousLevel_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousLevel.Width, PreviousLevel.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class _BoundingBl
     {
         public static Effect CompiledEffect;
 

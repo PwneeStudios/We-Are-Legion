@@ -70,8 +70,8 @@ bool GpuSim__SimShader__selected(float4 u)
 float2 GpuSim__SimShader__pack_coord_2byte(float x)
 {
     float2 packed = float2(0, 0);
-    packed.x = floor(x / 255.0);
-    packed.y = x - packed.x * 255.0;
+    packed.x = floor(x / 256.0);
+    packed.y = x - packed.x * 256.0;
     return packed / 255.0;
 }
 

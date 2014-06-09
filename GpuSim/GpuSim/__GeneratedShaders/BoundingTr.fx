@@ -54,6 +54,21 @@ bool GpuSim__SimShader__SomethingSelected(float4 u)
     return GpuSim__SimShader__Something(u) && GpuSim__SimShader__selected(u);
 }
 
+float2 GpuSim__SimShader__pack_coord_2byte(float x)
+{
+    float2 packed = float2(0, 0);
+    packed.x = floor(x / 256.0);
+    packed.y = x - packed.x * 256.0;
+    return packed / 255.0;
+}
+
+float4 GpuSim__SimShader__pack_vec2(float2 v)
+{
+    float2 packed_x = GpuSim__SimShader__pack_coord_2byte(v.x);
+    float2 packed_y = GpuSim__SimShader__pack_coord_2byte(v.y);
+    return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -68,18 +83,9 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float2 uv = psin.TexCoords;
-    float4 TL = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy), TR = tex2D(fs_param_Units, psin.TexCoords + (float2(1, 0)) * fs_param_Units_dxdy), BL = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 1)) * fs_param_Units_dxdy), BR = tex2D(fs_param_Units, psin.TexCoords + (float2(1, 1)) * fs_param_Units_dxdy);
-    if (GpuSim__SimShader__SomethingSelected(TL) || GpuSim__SimShader__SomethingSelected(TR) || GpuSim__SimShader__SomethingSelected(BL) || GpuSim__SimShader__SomethingSelected(BR))
-    {
-        __FinalOutput.Color = float4(uv.x, uv.y, uv.x, uv.y);
-        return __FinalOutput;
-    }
-    else
-    {
-        __FinalOutput.Color = float4(0, 0, 1, 1);
-        return __FinalOutput;
-    }
+    float2 uv = psin.TexCoords * fs_param_Units_size;
+    __FinalOutput.Color = GpuSim__SimShader__SomethingSelected(tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy)) ? GpuSim__SimShader__pack_vec2(uv) : float4(0, 0, 0, 0);
+    return __FinalOutput;
 }
 
 // Shader compilation

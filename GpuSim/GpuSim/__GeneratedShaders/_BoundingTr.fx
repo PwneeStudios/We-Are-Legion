@@ -38,14 +38,40 @@ sampler fs_param_PreviousLevel : register(s1) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float FragSharpFramework__FragSharpStd__max(float a, float b, float c, float d)
+float GpuSim__SimShader__unpack_coord(float2 packed)
 {
-    return max(max(a, b), max(c, d));
+    float coord = 0;
+    packed = floor(255.0 * packed + float2(0.5, 0.5));
+    coord = 256 * packed.x + packed.y;
+    return coord;
 }
 
-float FragSharpFramework__FragSharpStd__min(float a, float b, float c, float d)
+float2 GpuSim__SimShader__unpack_vec2(float4 packed)
 {
-    return min(min(a, b), min(c, d));
+    float2 v = float2(0, 0);
+    v.x = GpuSim__SimShader__unpack_coord(packed.rg);
+    v.y = GpuSim__SimShader__unpack_coord(packed.ba);
+    return v;
+}
+
+float2 GpuSim__SimShader__pack_coord_2byte(float x)
+{
+    float2 packed = float2(0, 0);
+    packed.x = floor(x / 256.0);
+    packed.y = x - packed.x * 256.0;
+    return packed / 255.0;
+}
+
+float4 GpuSim__SimShader__pack_vec2(float2 v)
+{
+    float2 packed_x = GpuSim__SimShader__pack_coord_2byte(v.x);
+    float2 packed_y = GpuSim__SimShader__pack_coord_2byte(v.y);
+    return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
+}
+
+float2 FragSharpFramework__FragSharpStd__max(float2 a, float2 b, float2 c, float2 d)
+{
+    return max(max(a, b), max(c, d));
 }
 
 // Compiled vertex shader
@@ -62,13 +88,8 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 TL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy), TR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy), BL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy), BR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy);
-    float4 output = float4(0, 0, 0, 0);
-    output.r = FragSharpFramework__FragSharpStd__max(TL.r, TR.r, BL.r, BR.r);
-    output.g = FragSharpFramework__FragSharpStd__max(TL.g, TR.g, BL.g, BR.g);
-    output.b = FragSharpFramework__FragSharpStd__min(TL.b, TR.b, BL.b, BR.b);
-    output.a = FragSharpFramework__FragSharpStd__min(TL.a, TR.a, BL.a, BR.a);
-    __FinalOutput.Color = output;
+    float2 TL = GpuSim__SimShader__unpack_vec2(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy)), TR = GpuSim__SimShader__unpack_vec2(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy)), BL = GpuSim__SimShader__unpack_vec2(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy)), BR = GpuSim__SimShader__unpack_vec2(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy));
+    __FinalOutput.Color = GpuSim__SimShader__pack_vec2(FragSharpFramework__FragSharpStd__max(TL, TR, BL, BR));
     return __FinalOutput;
 }
 

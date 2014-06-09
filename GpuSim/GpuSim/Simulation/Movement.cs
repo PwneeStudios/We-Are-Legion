@@ -302,8 +302,8 @@ namespace GpuSim
             vec4 target = TargetData[Here];
 
             // Unpack packed info
-            vec2 CurPos = vertex.TexCoords * TargetData.Size;
-            vec2 Destination = unpack_vec2((vec4)target);
+            vec2 CurPos = floor((vertex.TexCoords * TargetData.Size + vec(.5f, .5f)));
+            vec2 Destination = floor(unpack_vec2((vec4)target));
 
             // Get nearby units
             data
@@ -320,10 +320,10 @@ namespace GpuSim
             // Simple pathing: Go toward the cardinal direction that is furthest away. If something is in your way, go perpendicularly, assuming you also need to go in that direction.
             vec2 diff = Destination - CurPos;
             vec2 mag = abs(diff);
-            if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
-            if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up))    dir = Dir.Up;
-            if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left))  dir = Dir.Left;
-            if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down))  dir = Dir.Down;
+            if ((mag.x > mag.y || diff.y > 0 && Something(up) || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
+            if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up)) dir = Dir.Up;
+            if ((mag.x > mag.y || diff.y > 0 && Something(up) || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left)) dir = Dir.Left;
+            if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down)) dir = Dir.Down;
 
             /*
             // Heading conserving pathing: Tries to maintain the original heading of the unit as it paths toward its destination.
