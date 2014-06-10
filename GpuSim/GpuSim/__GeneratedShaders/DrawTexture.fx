@@ -60,6 +60,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output= (float4)0;
     output = tex2D(fs_param_Texture, psin.TexCoords);
     output *= psin.Color;
+    output.rgb *= psin.Color.a;
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

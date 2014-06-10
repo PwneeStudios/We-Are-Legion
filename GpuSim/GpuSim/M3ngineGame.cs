@@ -42,21 +42,73 @@ namespace GpuSim
         }
     }
 
+    public class MarkerList
+    {
+        List<Marker> Markers = new List<Marker>();
+
+        public void Add(Marker marker)
+        {
+            Markers.Add(marker);
+        }
+
+        public void Draw()
+        {
+            foreach (var marker in Markers) marker.Draw();
+        }
+
+        public void Update()
+        {
+            foreach (var marker in Markers) marker.Update();
+            Markers.RemoveAll(marker => marker.alpha <= 0);
+        }
+    }
+
+    public class Marker
+    {
+        public float alpha;
+        float alpha_fade;
+
+        RectangleQuad quad;
+        Texture2D texture;
+
+        public Marker(vec2 pos, vec2 size, Texture2D texture, float alpha_fade)
+        {
+            alpha = 1;
+            this.alpha_fade = alpha_fade;
+
+            quad = new RectangleQuad(pos - size / 2, pos + size / 2, vec2.Zero, vec2.Ones);
+            this.texture = texture;
+        }
+
+        public void Draw()
+        {
+            DrawTexture.Using(M3ngineGame.Game.camvec, M3ngineGame.Game.CameraAspect, texture);
+            quad.SetColor(new color(1, 1, 1, alpha));
+            quad.Draw(M3ngineGame.Game.GraphicsDevice);
+        }
+
+        public void Update()
+        {
+            alpha += (float)M3ngineGame.Time.ElapsedGameTime.TotalSeconds * alpha_fade;
+        }
+    }
+
 	/// <summary>
 	/// This is the main type for your game
 	/// </summary>
 	public class M3ngineGame : Game
 	{
         public static M3ngineGame Game;
+        public static GameTime Time;
 
 		const bool UnlimitedSpeed = false;
 
         const bool MouseEnabled = true;
 
-		vec2 CameraPos = vec2.Zero;
-		float CameraZoom = 30;
-        float CameraAspect = 1;
-        vec4 camvec { get { return new vec4(CameraPos.x, CameraPos.y, CameraZoom, CameraZoom); } }
+		public vec2 CameraPos = vec2.Zero;
+		public float CameraZoom = 30;
+        public float CameraAspect = 1;
+        public vec4 camvec { get { return new vec4(CameraPos.x, CameraPos.y, CameraZoom, CameraZoom); } }
 
 		GraphicsDeviceManager graphics;
         
@@ -67,13 +119,15 @@ namespace GpuSim
         GameParameters Params;
         PlayerInfo[] PlayerInfo;
 
+        MarkerList Markers;
+
 		Texture2D
             BuildingTexture_1,
             ExplosionTexture_1,
             UnitTexture_1, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
             GroundTexture,
-            
-            Cursor, SelectCircle, SelectCircle_Data;
+
+            Cursor, SelectCircle, SelectCircle_Data, AttackMarker;
 
 		public M3ngineGame()
 		{
@@ -150,6 +204,7 @@ namespace GpuSim
             Cursor            = Content.Load<Texture2D>("Art\\Cursor");
             SelectCircle      = Content.Load<Texture2D>("Art\\SelectCircle");
             SelectCircle_Data = Content.Load<Texture2D>("Art\\SelectCircle_Data");
+            AttackMarker      = Content.Load<Texture2D>("Art\\AttackMarker");
 
             float GroundRepeat = 100;
             Ground = new RectangleQuad(new vec2(-1, -1), new vec2(1, 1), new vec2(0, 0), new vec2(1, 1) * GroundRepeat);
@@ -162,6 +217,8 @@ namespace GpuSim
             {
                 PlayerInfo[i] = new PlayerInfo(Params);
             }
+
+            Markers = new MarkerList();
 
 			base.Initialize();
 		}
@@ -331,6 +388,8 @@ namespace GpuSim
 		/// <param name="gameTime">Provides a snapshot of timing values.</param>
 		protected override void Draw(GameTime gameTime)
 		{
+            M3ngineGame.Time = gameTime;
+
             Update();
 
             DrawCount++;
@@ -439,6 +498,9 @@ namespace GpuSim
             DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSpriteSheet, ExplosionSpriteSheet, PercentSimStepComplete);
             GridHelper.DrawGrid();
 
+            Markers.Update();
+            Markers.Draw();
+
             if (CameraZoom > z / 8)
                 DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete);
             else
@@ -458,7 +520,7 @@ namespace GpuSim
 
                 if (CurUserMode == UserMode.Select)
                 {
-                    DrawGridCell();
+                    //DrawGridCell();
                     DrawCircleCursor();
                     DrawArrowCursor();
                 }
@@ -520,7 +582,7 @@ namespace GpuSim
         {
             vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
 
-            DrawMouse.Using(camvec, CameraAspect, BuildingTexture_1);
+            DrawTexture.Using(camvec, CameraAspect, BuildingTexture_1);
 
             vec2 WorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCoord.x), (float)Math.Floor(GridCoord.y)));
             vec2 size = 3 * 1 / DataGroup.GridSize;
@@ -537,14 +599,14 @@ namespace GpuSim
         void DrawCircleCursor()
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
-            DrawMouse.Using(camvec, CameraAspect, SelectCircle);
+            DrawTexture.Using(camvec, CameraAspect, SelectCircle);
             RectangleQuad.Draw(GraphicsDevice, WorldCord, .2f * vec2.Ones / CameraZoom);
         }
 
         void DrawArrowCursor()
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
-            DrawMouse.Using(camvec, CameraAspect, Cursor);
+            DrawTexture.Using(camvec, CameraAspect, Cursor);
 
             vec2 size = .02f * Cursor.UnitSize() / CameraZoom;
             RectangleQuad.Draw(GraphicsDevice, WorldCord + new vec2(size.x, -size.y), size);
@@ -821,9 +883,7 @@ namespace GpuSim
             SelectedUnitsBounds();
 
             var pos = ScreenToGridCoord(Input.CurMousePos);
-            //vec2 shift = new vec2(1 / Screen.x, -1 / Screen.y);
-            //pos -= shift;
-
+            
             vec2 Selected_BL = SelectedBound_BL;
             vec2 Selected_Size = SelectedBound_TR - SelectedBound_BL;
             if (Selected_Size.x < 1) Selected_Size.x = 1;
@@ -856,6 +916,24 @@ namespace GpuSim
 
             ActionAttack2.Apply(DataGroup.CurrentData, DataGroup.Extra, pos, Output: DataGroup.Temp1);
             Swap(ref DataGroup.Extra, ref DataGroup.Temp1);
+
+            AddAttackMarker();
+        }
+
+        void AddAttackMarker()
+        {
+            //vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);
+            //vec2 gWorldCoord = GridToScreenCoord(SimShader.floor(GridCoord));
+            //Markers.Add(new Marker(gWorldCoord, 1 / DataGroup.GridSize, AttackMarker, -1f));
+
+            vec2 pos = ScreenToWorldCoord(Input.CurMousePos);
+            vec2 cell_size = (1 / DataGroup.GridSize);
+            
+            float bigger = 2 / (CameraZoom / 30);
+            if (bigger < 1) bigger = 1;
+            vec2 size = cell_size * bigger;
+
+            Markers.Add(new Marker(pos, size, AttackMarker, -1f));
         }
 
 		void SimulationUpdate()

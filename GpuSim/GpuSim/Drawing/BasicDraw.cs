@@ -11,7 +11,7 @@ namespace GpuSim
         }
     }
 
-    public partial class DrawMouse : BaseShader
+    public partial class DrawTexture : BaseShader
     {
         [FragmentShader]
         color FragmentShader(VertexOut vertex, PointSampler Texture)
@@ -20,6 +20,7 @@ namespace GpuSim
 
             output = Texture[vertex.TexCoords];
             output *= vertex.Color;
+            output.rgb *= vertex.Color.a;
 
             return output;
         }
