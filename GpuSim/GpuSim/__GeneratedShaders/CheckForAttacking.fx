@@ -68,6 +68,11 @@ sampler fs_param_Random : register(s3) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
+bool GpuSim__SimShader__IsUnit(float4 u)
+{
+    return abs(u.r - 0.003921569) < .001;
+}
+
 bool GpuSim__SimShader__IsStationary(float4 u)
 {
     return u.r >= 0.01960784 - .001;
@@ -115,10 +120,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    unit_here.a = 0.0;
+    if (GpuSim__SimShader__IsUnit(unit_here))
+    {
+        unit_here.a = 0.0;
+    }
     if (GpuSim__SimShader__Stayed(data_here) && abs(unit_here.b - 0.0) > .001)
     {
-        if (abs(data_here.a - 0.007843138) < .001)
+        if (GpuSim__SimShader__IsUnit(unit_here) && abs(data_here.a - 0.007843138) < .001)
         {
             float4 facing = tex2D(fs_param_Unit, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(data_here.r)) * fs_param_Unit_dxdy);
             if (abs(facing.b - unit_here.b) > .001 && abs(facing.b - 0.0) > .001)

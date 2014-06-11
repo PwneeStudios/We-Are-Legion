@@ -10,11 +10,12 @@ namespace GpuSim
             unit unit_here = Unit[Here];
             data data_here = Data[Here];
 
-            unit_here.anim = _0;
+            // Reset unit animation to stand/walk
+            if (IsUnit(unit_here)) unit_here.anim = _0;
 
             if (Stayed(data_here) && unit_here.team != Team.None) // A unit has to be stationary to attack or be attacked. It must also have a team.
             {
-                if (data_here.action == UnitAction.Attacking)
+                if (IsUnit(unit_here) && data_here.action == UnitAction.Attacking)
                 {
                     unit facing = Unit[dir_to_vec(data_here.direction)];
 
@@ -41,8 +42,8 @@ namespace GpuSim
                 if (rnd.x > .7f)
                 {
                     if (Something(data_right) && unit_right.team != unit_here.team && unit_right.team != Team.None && data_right.direction == Dir.Left  && data_right.action == UnitAction.Attacking && data_right.change == Change.Stayed ||
-                        Something(data_left)  && unit_left.team  != unit_here.team && unit_left.team  != Team.None && data_left.direction  == Dir.Right && data_left.action  == UnitAction.Attacking && data_left.change  == Change.Stayed||
-                        Something(data_up)    && unit_up.team    != unit_here.team && unit_up.team    != Team.None && data_up.direction    == Dir.Down  && data_up.action    == UnitAction.Attacking && data_up.change    == Change.Stayed||
+                        Something(data_left)  && unit_left.team  != unit_here.team && unit_left.team  != Team.None && data_left.direction  == Dir.Right && data_left.action  == UnitAction.Attacking && data_left.change  == Change.Stayed ||
+                        Something(data_up)    && unit_up.team    != unit_here.team && unit_up.team    != Team.None && data_up.direction    == Dir.Down  && data_up.action    == UnitAction.Attacking && data_up.change    == Change.Stayed ||
                         Something(data_down)  && unit_down.team  != unit_here.team && unit_down.team  != Team.None && data_down.direction  == Dir.Up    && data_down.action  == UnitAction.Attacking && data_down.change  == Change.Stayed)
                     {
                         if (IsBuilding(unit_here))
