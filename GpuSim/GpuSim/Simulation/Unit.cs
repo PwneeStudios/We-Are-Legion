@@ -74,6 +74,28 @@ namespace GpuSim
         public float target_angle { get { return a; } set { a = value; } }
     }
 
+    [Copy(typeof(vec4))]
+    public partial struct BuildingDist
+    {
+        [Hlsl("rg")]
+        public vec2 diff { get { return rg; } set { rg = value; } }
+
+        [Hlsl("r")]
+        public float diff_x { get { return r; } set { r = value; } }
+
+        [Hlsl("g")]
+        public float diff_y { get { return g; } set { g = value; } }
+
+        [Hlsl("b")]
+        public float player { get { return b; } set { b = value; } }
+
+        [Hlsl("a")]
+        public float dist { get { return a; } set { a = value; } }
+
+        //[Hlsl("a")]
+        //public float type { get { return a; } set { a = value; } }
+    }
+
     /// <summary>
     /// A 4-tuple storying an 8-bit value for Player One, Player Two, Player Three, and Player Four.
     /// </summary>
@@ -601,6 +623,47 @@ namespace GpuSim
             }
 
             return clr;
+        }
+
+        public class TerritoryColors
+        {
+            public static readonly color
+                Player1 = new color(.7f, .3f, .3f, .5f),
+                Player2 = new color(.1f, .5f, .1f, .5f),
+                Player3 = new color(.3f, .7f, .55f, .5f),
+                Player4 = new color(.3f, .3f, .7f, .5f);
+
+            public static color Get(float player)
+            {
+                if (player == Player.One) return Player1;
+                if (player == Player.Two) return Player2;
+                if (player == Player.Three) return Player3;
+                if (player == Player.Four) return Player4;
+
+                throw new BadPlayerNumberException(player);
+                return color.TransparentBlack;
+            }
+        }
+
+        public class BuildingMarkerColors
+        {
+            public static readonly color
+                Neutral = new color(248/255.0f, 230/255.0f, 33/255.0f, 1f),
+                Player1 = new color(.6f, .2f, .2f, 1f),
+                Player2 = new color(.0f, .4f, .0f, 1f),
+                Player3 = new color(.2f, .6f, .45f, 1f),
+                Player4 = new color(.2f, .2f, .7f, 1f);
+
+            public static color Get(float player)
+            {
+                if (player == Player.One) return Player1;
+                if (player == Player.Two) return Player2;
+                if (player == Player.Three) return Player3;
+                if (player == Player.Four) return Player4;
+
+                throw new BadPlayerNumberException(player);
+                return Neutral;
+            }
         }
     }
 }

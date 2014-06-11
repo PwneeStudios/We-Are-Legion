@@ -485,16 +485,26 @@ namespace GpuSim
             Ground.Draw(GraphicsDevice);
 
             if (CurUserMode == UserMode.PlaceBuilding)
-                DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.PathToPlayers, PlayerValue);
+            {
+                DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.DistanceToPlayers, PlayerValue);
+            }
             else if (CameraZoom <= z / 4)
             {
                 float blend = CoreMath.Lerp(z / 4, 0, z / 8, 1, CameraZoom);
-                DrawTerritoryColors.Using(camvec, CameraAspect, DataGroup.PathToPlayers, blend);
+                DrawTerritoryColors.Using(camvec, CameraAspect, DataGroup.DistanceToPlayers, blend);
             }
             else
+            {
                 DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet);
+            }
             GridHelper.DrawGrid();
 
+            if (CameraZoom <= z / 4)
+            {
+                float blend = CoreMath.LerpRestrict(z / 4, 0, z / 8, 1, CameraZoom);
+                DrawBuildingsIcons.Using(camvec, CameraAspect, DataGroup.DistanceToBuildings, blend);
+                GridHelper.DrawGrid();
+            }
             DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSpriteSheet, ExplosionSpriteSheet, PercentSimStepComplete);
             GridHelper.DrawGrid();
 
@@ -717,14 +727,20 @@ namespace GpuSim
 
         void UpdateGradient_ToOtherTeams()
         {
-            Pathfinding_ToOtherTeams.Apply(DataGroup.PathToOtherTeams, DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
-            Swap(ref DataGroup.PathToOtherTeams, ref DataGroup.Temp1);
+            Pathfinding_ToOtherTeams.Apply(DataGroup.DistanceToOtherTeams, DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.DistanceToOtherTeams, ref DataGroup.Temp1);
         }
 
         void UpdateGradient_ToPlayers()
         {
-            Pathfinding_ToPlayers.Apply(DataGroup.PathToPlayers, DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
-            Swap(ref DataGroup.PathToPlayers, ref DataGroup.Temp1);
+            Pathfinding_ToPlayers.Apply(DataGroup.DistanceToPlayers, DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.DistanceToPlayers, ref DataGroup.Temp1);
+        }
+
+        void UpdateGradient_ToBuildings()
+        {
+            Pathfinding_ToBuildings.Apply(DataGroup.DistanceToBuildings, DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            Swap(ref DataGroup.DistanceToBuildings, ref DataGroup.Temp1);
         }
 
         void SelectionUpdate()
@@ -794,7 +810,7 @@ namespace GpuSim
                 if (BuildingType == SimShader.UnitType.Barracks)
                 {
                     var _data = DataGroup.CurrentData.GetData<building>(GridCoord, new vec2(_w, _h));
-                    var _dist = DataGroup.PathToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
+                    var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
 
                     color clr = color.TransparentBlack;
                     if (_data != null)
@@ -822,7 +838,7 @@ namespace GpuSim
                 if (BuildingType == SimShader.UnitType.GoldMine)
                 {
                     var _data = DataGroup.CurrentUnits.GetData<unit>(GridCoord, new vec2(_w, _h));
-                    var _dist = DataGroup.PathToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
+                    var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
 
                     color clr = color.TransparentBlack;
                     if (_data != null)
@@ -922,14 +938,10 @@ namespace GpuSim
 
         void AddAttackMarker()
         {
-            //vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);
-            //vec2 gWorldCoord = GridToScreenCoord(SimShader.floor(GridCoord));
-            //Markers.Add(new Marker(gWorldCoord, 1 / DataGroup.GridSize, AttackMarker, -1f));
-
             vec2 pos = ScreenToWorldCoord(Input.CurMousePos);
-            vec2 cell_size = (1 / DataGroup.GridSize);
+            vec2 cell_size = 2 * (1 / DataGroup.GridSize);
             
-            float bigger = 2 / (CameraZoom / 30);
+            float bigger = 1 / (CameraZoom / 30);
             if (bigger < 1) bigger = 1;
             vec2 size = cell_size * bigger;
 
@@ -941,11 +953,15 @@ namespace GpuSim
             DoGoldMineCount();
             DoGoldUpdate();
 
+            
             UpdateGradient_ToOtherTeams();
             UpdateGradient_ToOtherTeams();
             
             UpdateGradient_ToPlayers();
             UpdateGradient_ToPlayers();
+
+            UpdateGradient_ToBuildings();
+
 
             BuildingInfusion_Data.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
             Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
@@ -954,10 +970,12 @@ namespace GpuSim
             BuildingDiffusion_Target.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, DataGroup.TargetData, Output: DataGroup.Temp1);
             Swap(ref DataGroup.TargetData, ref DataGroup.Temp1);
 
+
             AddCorpses.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, DataGroup.Corspes, Output: DataGroup.Temp1);
             Swap(ref DataGroup.Corspes, ref DataGroup.Temp1);
 
-            Movement_UpdateDirection_RemoveDead.Apply(DataGroup.TargetData, DataGroup.CurrentUnits, DataGroup.Extra, DataGroup.CurrentData, DataGroup.PathToOtherTeams, Output: DataGroup.Temp1);
+
+            Movement_UpdateDirection_RemoveDead.Apply(DataGroup.TargetData, DataGroup.CurrentUnits, DataGroup.Extra, DataGroup.CurrentData, DataGroup.DistanceToOtherTeams, Output: DataGroup.Temp1);
             Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
 
             Movement_Phase1.Apply(DataGroup.CurrentData, Output: DataGroup.Temp1);
@@ -974,8 +992,10 @@ namespace GpuSim
             Swap(ref DataGroup.CurrentUnits, ref DataGroup.Temp1);
             Swap(ref DataGroup.PreviousUnits, ref DataGroup.Temp1);
 
+
             CheckForAttacking.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, DataGroup.RandomField, Output: DataGroup.Temp1);
             Swap(ref DataGroup.CurrentUnits, ref DataGroup.Temp1);
+
 
             SpawnUnits.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, DataGroup.PreviousData, Output: DataGroup.Temp1);
             Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
@@ -985,6 +1005,7 @@ namespace GpuSim
             Swap(ref DataGroup.TargetData, ref DataGroup.Temp1);
             SetSpawn_Data.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
             Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
+
 
             UpdateRandomField.Apply(DataGroup.RandomField, Output: DataGroup.Temp1);
             Swap(ref DataGroup.RandomField, ref DataGroup.Temp1);

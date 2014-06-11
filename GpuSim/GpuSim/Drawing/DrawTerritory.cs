@@ -34,12 +34,6 @@ namespace GpuSim
 
     public partial class DrawTerritoryColors : BaseShader
     {
-        public static readonly color
-            Team1 = new color(.7f, .3f, .3f, .5f),
-            Team2 = new color(.1f, .5f, .1f, .5f),
-            Team3 = new color(.3f, .7f, .55f, .5f),
-            Team4 = new color(.3f, .3f, .7f, .5f);
-
         public const float TerritoryCutoff = _7;
 
         [FragmentShader]
@@ -60,10 +54,10 @@ namespace GpuSim
             //if (dist.y < TerritoryCutoff && dist.y < enemy_dist.y) { clr = Team2; _blend = max(.3f, min(1, (TerritoryCutoff - dist.y) / _3)); }
             //if (dist.z < TerritoryCutoff && dist.z < enemy_dist.z) { clr = Team3; _blend = max(.3f, min(1, (TerritoryCutoff - dist.z) / _3)); }
             //if (dist.w < TerritoryCutoff && dist.w < enemy_dist.w) { clr = Team4; _blend = max(.3f, min(1, (TerritoryCutoff - dist.w) / _3)); }
-            if (dist.x < TerritoryCutoff && dist.x < enemy_dist.x) clr = Team1;
-            if (dist.y < TerritoryCutoff && dist.y < enemy_dist.y) clr = Team2;
-            if (dist.z < TerritoryCutoff && dist.z < enemy_dist.z) clr = Team3;
-            if (dist.w < TerritoryCutoff && dist.w < enemy_dist.w) clr = Team4;
+            if (dist.x < TerritoryCutoff && dist.x < enemy_dist.x) clr = TerritoryColors.Player1;
+            if (dist.y < TerritoryCutoff && dist.y < enemy_dist.y) clr = TerritoryColors.Player2;
+            if (dist.z < TerritoryCutoff && dist.z < enemy_dist.z) clr = TerritoryColors.Player3;
+            if (dist.w < TerritoryCutoff && dist.w < enemy_dist.w) clr = TerritoryColors.Player4;
 
             clr *= _blend;
             clr.a *= blend;

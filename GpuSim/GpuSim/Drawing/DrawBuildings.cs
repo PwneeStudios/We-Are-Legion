@@ -2,6 +2,30 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
+    public partial class DrawBuildingsIcons : BaseShader
+    {
+        [FragmentShader]
+        color FragmentShader(VertexOut vertex, Field<BuildingDist> BuildingDistancess, float blend)
+        {
+            BuildingDist info = BuildingDistancess[Here];
+
+            if (info.dist > _15) return color.TransparentBlack;
+            //return rgba(1, 1, 1, 1);
+
+            vec2 subcell_pos = get_subcell_pos(vertex, BuildingDistancess.Size);
+
+            var v = 255 * (info.diff - Pathfinding_ToBuildings.CenterOffset) - (subcell_pos - vec(.5f, .5f));
+            if (length(v) < 5.5f)
+            {
+                color clr = BuildingMarkerColors.Get(info.player);
+
+                return clr * blend;
+            }
+
+            return color.TransparentBlack;
+        }
+    }
+
     public partial class DrawBuildings : BaseShader
     {
         protected color Sprite(building u, unit d, vec2 pos, float frame, PointSampler Texture)

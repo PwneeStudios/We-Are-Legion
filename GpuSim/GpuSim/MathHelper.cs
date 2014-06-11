@@ -322,6 +322,10 @@ namespace GpuSim
 
             return y2 * s + y1 * (1 - s);
         }
+        public static float LerpRestrict(float x1, float y1, float x2, float y2, float t)
+        {
+            return Restrict(Math.Min(y1, y2), Math.Max(y1, y2), Lerp(x1, y1, x2, y2, t));
+        }
 
         public static float SmoothLerp(float v1, float v2, float t)
         {
