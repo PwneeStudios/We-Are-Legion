@@ -72,15 +72,15 @@ namespace GpuSim
     public partial class ActionSpawn_Data : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<data> Current, Field<data> Select)
+        data FragmentShader(VertexOut vertex, Field<data> Data, Field<data> Select)
         {
-            data here = Current[Here];
+            data here = Data[Here];
             data select = Select[Here];
 
-            if (Something(select))
+            if (Something(select) && !Something(here))
             {
-                if ((int)(vertex.TexCoords.x * Current.Size.x) % 2 == 0 &&
-                    (int)(vertex.TexCoords.y * Current.Size.y) % 2 == 0)
+                if ((int)(vertex.TexCoords.x * Data.Size.x) % 2 == 0 &&
+                    (int)(vertex.TexCoords.y * Data.Size.y) % 2 == 0)
                 {
                     here.direction = Dir.Right;
                     here.action = UnitAction.Guard;
@@ -94,23 +94,25 @@ namespace GpuSim
     public partial class ActionSpawn_Unit : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> CurData, Field<data> Select, float player, float team)
+        unit FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Units, Field<data> Select, float player, float team)
         {
-            unit here = CurData[Here];
+            data data_here = Data[Here];
+            unit unit_here = Units[Here];
+
             data select = Select[Here];
 
-            if (Something(select))
+            if (Something(select) && !Something(data_here))
             {
-                if ((int)(vertex.TexCoords.x * CurData.Size.x) % 2 == 0 &&
-                    (int)(vertex.TexCoords.y * CurData.Size.y) % 2 == 0)
+                if ((int)(vertex.TexCoords.x * Units.Size.x) % 2 == 0 &&
+                    (int)(vertex.TexCoords.y * Units.Size.y) % 2 == 0)
                 {
-                    here.player = player;
-                    here.team = team;
-                    here.type = UnitType.Footman;
+                    unit_here.player = player;
+                    unit_here.team = team;
+                    unit_here.type = UnitType.Footman;
                 }
             }
 
-            return here;
+            return unit_here;
         }
     }
 

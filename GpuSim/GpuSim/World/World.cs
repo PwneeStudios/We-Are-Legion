@@ -141,14 +141,14 @@ namespace GpuSim
 
         int DrawCount = 0;
 
-        float PlayerValue = Player.Two;
+        float PlayerValue = Player.One;
         int PlayerNumber { get { return Int(PlayerValue); } }
 
-        float TeamValue = Team.Two;
+        float TeamValue = Team.One;
         int TeamNumber { get { return Int(TeamValue); } }
 
         public enum UserMode { PlaceBuilding, Select };
-        public UserMode CurUserMode = UserMode.PlaceBuilding;
+        public UserMode CurUserMode = UserMode.Select;
         public float BuildingType = UnitType.GoldMine;
         bool UnselectAll = false;
 
@@ -226,13 +226,13 @@ namespace GpuSim
             {
                 BuildingsSpriteSheet = Assets.BuildingTexture_1;
                 ExplosionSpriteSheet = Assets.ExplosionTexture_1;
-                UnitsSpriteSheet = Assets.UnitTexture_2;
+                UnitsSpriteSheet = Assets.UnitTexture_1;
             }
             else if (CameraZoom > z / 4)
             {
                 BuildingsSpriteSheet = Assets.BuildingTexture_1;
                 ExplosionSpriteSheet = Assets.ExplosionTexture_1;
-                UnitsSpriteSheet = Assets.UnitTexture_4;
+                UnitsSpriteSheet = Assets.UnitTexture_1;
             }
             else if (CameraZoom > z / 8)
             {
@@ -535,7 +535,7 @@ namespace GpuSim
             if (Keys.Y.Pressed()) { player = Player.Three; team = Team.Three; }
             if (Keys.U.Pressed()) { player = Player.Four; team = Team.Four; }
 
-            ActionSpawn_Unit.Apply(DataGroup.CurrentUnits, DataGroup.SelectField, player, team, Output: DataGroup.Temp1);
+            ActionSpawn_Unit.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.SelectField, player, team, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
             ActionSpawn_Data.Apply(DataGroup.CurrentData, DataGroup.SelectField, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
