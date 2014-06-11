@@ -54,6 +54,8 @@ sampler fs_param_Texture : register(s2) = sampler_state
     AddressV  = Wrap;
 };
 
+float fs_param_blend;
+
 // The following methods are included because they are referenced by the fragment shader.
 float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
 {
@@ -143,6 +145,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (GpuSim__SimShader__Something(here))
     {
         output += GpuSim__DrawCorpses__Sprite(psin, here, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+        output *= fs_param_blend;
     }
     __FinalOutput.Color = output;
     return __FinalOutput;

@@ -226,13 +226,13 @@ namespace GpuSim
             {
                 BuildingsSpriteSheet = Assets.BuildingTexture_1;
                 ExplosionSpriteSheet = Assets.ExplosionTexture_1;
-                UnitsSpriteSheet = Assets.UnitTexture_1;
+                UnitsSpriteSheet = Assets.UnitTexture_2;
             }
             else if (CameraZoom > z / 4)
             {
                 BuildingsSpriteSheet = Assets.BuildingTexture_1;
                 ExplosionSpriteSheet = Assets.ExplosionTexture_1;
-                UnitsSpriteSheet = Assets.UnitTexture_1;
+                UnitsSpriteSheet = Assets.UnitTexture_4;
             }
             else if (CameraZoom > z / 8)
             {
@@ -256,39 +256,52 @@ namespace GpuSim
             DrawGrass.Using(camvec, CameraAspect, Assets.GroundTexture);
             Ground.Draw(GameClass.Graphics);
 
+            // Territory and corpses
             if (CurUserMode == UserMode.PlaceBuilding)
             {
                 DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.DistanceToPlayers, PlayerValue);
-            }
-            else if (CameraZoom <= z / 4)
-            {
-                float blend = CoreMath.Lerp(z / 4, 0, z / 8, 1, CameraZoom);
-                DrawTerritoryColors.Using(camvec, CameraAspect, DataGroup.DistanceToPlayers, blend);
-            }
-            else
-            {
-                DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet);
-            }
-            GridHelper.DrawGrid();
-
-            if (CameraZoom <= z / 4)
-            {
-                float blend = CoreMath.LerpRestrict(z / 4, 0, z / 8, 1, CameraZoom);
-                DrawBuildingsIcons.Using(camvec, CameraAspect, DataGroup.DistanceToBuildings, blend);
                 GridHelper.DrawGrid();
             }
+            else 
+            {
+                if (CameraZoom <= z / 4)
+                {
+                    float territory_blend = CoreMath.LerpRestrict(z / 4, 0, z / 8, 1, CameraZoom);
+                    DrawTerritoryColors.Using(camvec, CameraAspect, DataGroup.DistanceToPlayers, territory_blend);
+                    GridHelper.DrawGrid();
+                }
+
+                if (CameraZoom >= z / 8)
+                {
+                    float corpse_blend = 1f * CoreMath.LerpRestrict(z / 2, 1, z / 16, 0, CameraZoom);
+
+                    DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet, corpse_blend);
+                    GridHelper.DrawGrid();
+                }
+            }
+
+            // Buildings
             DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSpriteSheet, ExplosionSpriteSheet, PercentSimStepComplete);
             GridHelper.DrawGrid();
 
+            // Markers
             Markers.Update();
             Markers.Draw();
 
+            // Units
             if (CameraZoom > z / 8)
                 DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete);
             else
                 DrawUnitsZoomedOut.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, UnitsSpriteSheet, PercentSimStepComplete);
             GridHelper.DrawGrid();
 
+            // Building icons
+            if (CameraZoom <= z / 4)
+            {
+                float blend = CoreMath.LerpRestrict(z / 4, 0, z / 8, 1, CameraZoom);
+                DrawBuildingsIcons.Using(camvec, CameraAspect, DataGroup.DistanceToBuildings, blend);
+                GridHelper.DrawGrid();
+            }
 
             CanPlaceBuilding = false;
             if (GameClass.MouseEnabled)

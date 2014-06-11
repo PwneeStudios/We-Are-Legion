@@ -19,7 +19,7 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<corpse> Corpses, PointSampler Texture)
+        color FragmentShader(VertexOut vertex, Field<corpse> Corpses, PointSampler Texture, float blend)
         {
             color output = color.TransparentBlack;
 
@@ -30,6 +30,7 @@ namespace GpuSim
             if (Something(here))
 	        {
                 output += Sprite(here, subcell_pos, Texture);
+                output *= blend;
 	        }
 
             return output;
