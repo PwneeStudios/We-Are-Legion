@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
+    <Compile Include="Render.cs" />
     <Compile Include="World\DataGroup\Gradients.cs" />
     <Compile Include="World\DataGroup\SimulationUpdate.cs" />
     <Compile Include="World\DataGroup\Selection.cs" />
@@ -144,6 +145,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="World\World.cs" />
+    <Compile Include="World\Marker.cs" />
+    <Compile Include="World\PlayerInfo.cs" />
+    <Compile Include="World\GameParameters.cs" />
     <Compile Include="__FragSharp\__ExtensionBoilerplate.cs" />
     <Compile Include="__FragSharp\__ShaderBoilerplate.cs" />
   </ItemGroup>
