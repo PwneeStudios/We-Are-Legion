@@ -898,6 +898,8 @@ namespace GpuSim
         {
             SelectedUnitsBounds();
 
+            if (SelectedCount == 0) return;
+
             var pos = ScreenToGridCoord(Input.CurMousePos);
             
             vec2 Selected_BL = SelectedBound_BL;
@@ -915,17 +917,17 @@ namespace GpuSim
             Destination_Size = SimShader.floor(Destination_Size);
             Destination_BL   = SimShader.floor(Destination_BL);
 
-            Console.WriteLine("Selected");
-            Console.WriteLine("BL : {0}", Selected_BL);
-            Console.WriteLine("TR : {0}", Selected_BL + Selected_Size);
+            //Console.WriteLine("Selected");
+            //Console.WriteLine("BL : {0}", Selected_BL);
+            //Console.WriteLine("TR : {0}", Selected_BL + Selected_Size);
 
-            Console.WriteLine("Destination");
-            Console.WriteLine("BL : {0}", Destination_BL);
-            Console.WriteLine("TR : {0}", Destination_BL + Destination_Size);
-            Console.WriteLine("pos: {0}", pos);
+            //Console.WriteLine("Destination");
+            //Console.WriteLine("BL : {0}", Destination_BL);
+            //Console.WriteLine("TR : {0}", Destination_BL + Destination_Size);
+            //Console.WriteLine("pos: {0}", pos);
             
-            Console.WriteLine();
-            Console.WriteLine();
+            //Console.WriteLine();
+            //Console.WriteLine();
 
             ActionAttackSquare.Apply(DataGroup.CurrentData, DataGroup.TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: DataGroup.Temp1);
             Swap(ref DataGroup.TargetData, ref DataGroup.Temp1);
