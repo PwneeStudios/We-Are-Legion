@@ -20,13 +20,6 @@ namespace FragSharpFramework
         {
             FragSharp.Content = Content;
             FragSharp.GraphicsDevice = GraphicsDevice;
-            GpuSim.BenchmarkTest_TextureLookup4x4.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup4x4");
-            GpuSim.BenchmarkTest_TextureLookup1x1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup1x1");
-            GpuSim.BenchmarkTest_TextureLookupWithConditional.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookupWithConditional");
-            GpuSim.BenchmarkTest_TextureLookupWithComplexMath.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookupWithComplexMath");
-            GpuSim.BenchmarkTest_TextureLookup1x5.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup1x5");
-            GpuSim.BenchmarkTest_MathPacking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_MathPacking");
-            GpuSim.BenchmarkTest_MathPackingVec.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_MathPackingVec");
             GpuSim.DrawSolid.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawSolid");
             GpuSim.DrawTexture.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTexture");
             GpuSim.DrawBuildingsIcons.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawBuildingsIcons");
@@ -40,7 +33,6 @@ namespace FragSharpFramework
             GpuSim.DrawTerritoryColors.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTerritoryColors");
             GpuSim.DrawUnitsZoomedOut.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawUnitsZoomedOut");
             GpuSim.DrawUnits.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawUnits");
-            GpuSim.DrawUnit_v2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawUnit_v2");
             GpuSim.DrawPrecomputation_Cur.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPrecomputation_Cur");
             GpuSim.DrawPrecomputation_Pre.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPrecomputation_Pre");
             GpuSim.CheckForAttacking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CheckForAttacking");
@@ -76,319 +68,16 @@ namespace FragSharpFramework
             GpuSim.SetSpawn_Unit.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SetSpawn_Unit");
             GpuSim.SetSpawn_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SetSpawn_Target");
             GpuSim.SetSpawn_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SetSpawn_Data");
+            GpuSim.BenchmarkTest_TextureLookup4x4.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup4x4");
+            GpuSim.BenchmarkTest_TextureLookup1x1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup1x1");
+            GpuSim.BenchmarkTest_TextureLookupWithConditional.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookupWithConditional");
+            GpuSim.BenchmarkTest_TextureLookupWithComplexMath.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookupWithComplexMath");
+            GpuSim.BenchmarkTest_TextureLookup1x5.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup1x5");
+            GpuSim.BenchmarkTest_MathPacking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_MathPacking");
+            GpuSim.BenchmarkTest_MathPackingVec.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_MathPackingVec");
         }
     }
 }
-
-namespace GpuSim
-{
-    public partial class BenchmarkTest_TextureLookup4x4
-    {
-        public static Effect CompiledEffect;
-
-        public static void Apply(Texture2D s1, Texture2D s2, Texture2D s3, Texture2D s4, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s1, s2, s3, s4);
-            GridHelper.DrawGrid();
-        }
-        public static void Apply(Texture2D s1, Texture2D s2, Texture2D s3, Texture2D s4, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s1, s2, s3, s4);
-            GridHelper.DrawGrid();
-        }
-        public static void Using(Texture2D s1, Texture2D s2, Texture2D s3, Texture2D s4, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s1, s2, s3, s4);
-        }
-        public static void Using(Texture2D s1, Texture2D s2, Texture2D s3, Texture2D s4, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s1, s2, s3, s4);
-        }
-        public static void Using(Texture2D s1, Texture2D s2, Texture2D s3, Texture2D s4)
-        {
-            CompiledEffect.Parameters["fs_param_s1_Texture"].SetValue(FragSharpMarshal.Marshal(s1));
-            CompiledEffect.Parameters["fs_param_s1_size"].SetValue(FragSharpMarshal.Marshal(vec(s1.Width, s1.Height)));
-            CompiledEffect.Parameters["fs_param_s1_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s1.Width, s1.Height)));
-            CompiledEffect.Parameters["fs_param_s2_Texture"].SetValue(FragSharpMarshal.Marshal(s2));
-            CompiledEffect.Parameters["fs_param_s2_size"].SetValue(FragSharpMarshal.Marshal(vec(s2.Width, s2.Height)));
-            CompiledEffect.Parameters["fs_param_s2_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s2.Width, s2.Height)));
-            CompiledEffect.Parameters["fs_param_s3_Texture"].SetValue(FragSharpMarshal.Marshal(s3));
-            CompiledEffect.Parameters["fs_param_s3_size"].SetValue(FragSharpMarshal.Marshal(vec(s3.Width, s3.Height)));
-            CompiledEffect.Parameters["fs_param_s3_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s3.Width, s3.Height)));
-            CompiledEffect.Parameters["fs_param_s4_Texture"].SetValue(FragSharpMarshal.Marshal(s4));
-            CompiledEffect.Parameters["fs_param_s4_size"].SetValue(FragSharpMarshal.Marshal(vec(s4.Width, s4.Height)));
-            CompiledEffect.Parameters["fs_param_s4_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s4.Width, s4.Height)));
-            CompiledEffect.CurrentTechnique.Passes[0].Apply();
-        }
-    }
-}
-
-
-namespace GpuSim
-{
-    public partial class BenchmarkTest_TextureLookup1x1
-    {
-        public static Effect CompiledEffect;
-
-        public static void Apply(Texture2D s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s);
-            GridHelper.DrawGrid();
-        }
-        public static void Apply(Texture2D s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s);
-            GridHelper.DrawGrid();
-        }
-        public static void Using(Texture2D s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s);
-        }
-        public static void Using(Texture2D s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s);
-        }
-        public static void Using(Texture2D s)
-        {
-            CompiledEffect.Parameters["fs_param_s_Texture"].SetValue(FragSharpMarshal.Marshal(s));
-            CompiledEffect.Parameters["fs_param_s_size"].SetValue(FragSharpMarshal.Marshal(vec(s.Width, s.Height)));
-            CompiledEffect.Parameters["fs_param_s_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s.Width, s.Height)));
-            CompiledEffect.CurrentTechnique.Passes[0].Apply();
-        }
-    }
-}
-
-
-namespace GpuSim
-{
-    public partial class BenchmarkTest_TextureLookupWithConditional
-    {
-        public static Effect CompiledEffect;
-
-        public static void Apply(Texture2D s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s);
-            GridHelper.DrawGrid();
-        }
-        public static void Apply(Texture2D s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s);
-            GridHelper.DrawGrid();
-        }
-        public static void Using(Texture2D s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s);
-        }
-        public static void Using(Texture2D s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s);
-        }
-        public static void Using(Texture2D s)
-        {
-            CompiledEffect.Parameters["fs_param_s_Texture"].SetValue(FragSharpMarshal.Marshal(s));
-            CompiledEffect.Parameters["fs_param_s_size"].SetValue(FragSharpMarshal.Marshal(vec(s.Width, s.Height)));
-            CompiledEffect.Parameters["fs_param_s_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s.Width, s.Height)));
-            CompiledEffect.CurrentTechnique.Passes[0].Apply();
-        }
-    }
-}
-
-
-namespace GpuSim
-{
-    public partial class BenchmarkTest_TextureLookupWithComplexMath
-    {
-        public static Effect CompiledEffect;
-
-        public static void Apply(Texture2D s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s);
-            GridHelper.DrawGrid();
-        }
-        public static void Apply(Texture2D s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s);
-            GridHelper.DrawGrid();
-        }
-        public static void Using(Texture2D s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s);
-        }
-        public static void Using(Texture2D s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s);
-        }
-        public static void Using(Texture2D s)
-        {
-            CompiledEffect.Parameters["fs_param_s_Texture"].SetValue(FragSharpMarshal.Marshal(s));
-            CompiledEffect.Parameters["fs_param_s_size"].SetValue(FragSharpMarshal.Marshal(vec(s.Width, s.Height)));
-            CompiledEffect.Parameters["fs_param_s_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s.Width, s.Height)));
-            CompiledEffect.CurrentTechnique.Passes[0].Apply();
-        }
-    }
-}
-
-
-namespace GpuSim
-{
-    public partial class BenchmarkTest_TextureLookup1x5
-    {
-        public static Effect CompiledEffect;
-
-        public static void Apply(Texture2D s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s);
-            GridHelper.DrawGrid();
-        }
-        public static void Apply(Texture2D s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s);
-            GridHelper.DrawGrid();
-        }
-        public static void Using(Texture2D s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s);
-        }
-        public static void Using(Texture2D s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s);
-        }
-        public static void Using(Texture2D s)
-        {
-            CompiledEffect.Parameters["fs_param_s_Texture"].SetValue(FragSharpMarshal.Marshal(s));
-            CompiledEffect.Parameters["fs_param_s_size"].SetValue(FragSharpMarshal.Marshal(vec(s.Width, s.Height)));
-            CompiledEffect.Parameters["fs_param_s_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s.Width, s.Height)));
-            CompiledEffect.CurrentTechnique.Passes[0].Apply();
-        }
-    }
-}
-
-
-namespace GpuSim
-{
-    public partial class BenchmarkTest_MathPacking
-    {
-        public static Effect CompiledEffect;
-
-        public static void Apply(Texture2D s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s);
-            GridHelper.DrawGrid();
-        }
-        public static void Apply(Texture2D s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s);
-            GridHelper.DrawGrid();
-        }
-        public static void Using(Texture2D s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s);
-        }
-        public static void Using(Texture2D s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s);
-        }
-        public static void Using(Texture2D s)
-        {
-            CompiledEffect.Parameters["fs_param_s_Texture"].SetValue(FragSharpMarshal.Marshal(s));
-            CompiledEffect.Parameters["fs_param_s_size"].SetValue(FragSharpMarshal.Marshal(vec(s.Width, s.Height)));
-            CompiledEffect.Parameters["fs_param_s_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s.Width, s.Height)));
-            CompiledEffect.CurrentTechnique.Passes[0].Apply();
-        }
-    }
-}
-
-
-namespace GpuSim
-{
-    public partial class BenchmarkTest_MathPackingVec
-    {
-        public static Effect CompiledEffect;
-
-        public static void Apply(Texture2D s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s);
-            GridHelper.DrawGrid();
-        }
-        public static void Apply(Texture2D s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s);
-            GridHelper.DrawGrid();
-        }
-        public static void Using(Texture2D s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(s);
-        }
-        public static void Using(Texture2D s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(s);
-        }
-        public static void Using(Texture2D s)
-        {
-            CompiledEffect.Parameters["fs_param_s_Texture"].SetValue(FragSharpMarshal.Marshal(s));
-            CompiledEffect.Parameters["fs_param_s_size"].SetValue(FragSharpMarshal.Marshal(vec(s.Width, s.Height)));
-            CompiledEffect.Parameters["fs_param_s_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s.Width, s.Height)));
-            CompiledEffect.CurrentTechnique.Passes[0].Apply();
-        }
-    }
-}
-
 
 namespace GpuSim
 {
@@ -878,58 +567,6 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_PreviousUnits_Texture"].SetValue(FragSharpMarshal.Marshal(PreviousUnits));
             CompiledEffect.Parameters["fs_param_PreviousUnits_size"].SetValue(FragSharpMarshal.Marshal(vec(PreviousUnits.Width, PreviousUnits.Height)));
             CompiledEffect.Parameters["fs_param_PreviousUnits_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousUnits.Width, PreviousUnits.Height)));
-            CompiledEffect.Parameters["fs_param_Texture_Texture"].SetValue(FragSharpMarshal.Marshal(Texture));
-            CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
-            CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
-            CompiledEffect.Parameters["fs_param_s"].SetValue(FragSharpMarshal.Marshal(s));
-            CompiledEffect.CurrentTechnique.Passes[0].Apply();
-        }
-    }
-}
-
-
-namespace GpuSim
-{
-    public partial class DrawUnit_v2
-    {
-        public static Effect CompiledEffect;
-
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Current, Texture2D Previous, Texture2D Texture, float s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Current, Previous, Texture, s);
-            GridHelper.DrawGrid();
-        }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Current, Texture2D Previous, Texture2D Texture, float s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Current, Previous, Texture, s);
-            GridHelper.DrawGrid();
-        }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Current, Texture2D Previous, Texture2D Texture, float s, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Current, Previous, Texture, s);
-        }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Current, Texture2D Previous, Texture2D Texture, float s, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Current, Previous, Texture, s);
-        }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Current, Texture2D Previous, Texture2D Texture, float s)
-        {
-            CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
-            CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
-            CompiledEffect.Parameters["fs_param_Current_Texture"].SetValue(FragSharpMarshal.Marshal(Current));
-            CompiledEffect.Parameters["fs_param_Current_size"].SetValue(FragSharpMarshal.Marshal(vec(Current.Width, Current.Height)));
-            CompiledEffect.Parameters["fs_param_Current_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Current.Width, Current.Height)));
-            CompiledEffect.Parameters["fs_param_Previous_Texture"].SetValue(FragSharpMarshal.Marshal(Previous));
-            CompiledEffect.Parameters["fs_param_Previous_size"].SetValue(FragSharpMarshal.Marshal(vec(Previous.Width, Previous.Height)));
-            CompiledEffect.Parameters["fs_param_Previous_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Previous.Width, Previous.Height)));
             CompiledEffect.Parameters["fs_param_Texture_Texture"].SetValue(FragSharpMarshal.Marshal(Texture));
             CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
             CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
@@ -2581,6 +2218,316 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
             CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
             CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class BenchmarkTest_TextureLookup4x4
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D s1, Texture2D s2, Texture2D s3, Texture2D s4, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s1, s2, s3, s4);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D s1, Texture2D s2, Texture2D s3, Texture2D s4, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s1, s2, s3, s4);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D s1, Texture2D s2, Texture2D s3, Texture2D s4, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s1, s2, s3, s4);
+        }
+        public static void Using(Texture2D s1, Texture2D s2, Texture2D s3, Texture2D s4, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s1, s2, s3, s4);
+        }
+        public static void Using(Texture2D s1, Texture2D s2, Texture2D s3, Texture2D s4)
+        {
+            CompiledEffect.Parameters["fs_param_s1_Texture"].SetValue(FragSharpMarshal.Marshal(s1));
+            CompiledEffect.Parameters["fs_param_s1_size"].SetValue(FragSharpMarshal.Marshal(vec(s1.Width, s1.Height)));
+            CompiledEffect.Parameters["fs_param_s1_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s1.Width, s1.Height)));
+            CompiledEffect.Parameters["fs_param_s2_Texture"].SetValue(FragSharpMarshal.Marshal(s2));
+            CompiledEffect.Parameters["fs_param_s2_size"].SetValue(FragSharpMarshal.Marshal(vec(s2.Width, s2.Height)));
+            CompiledEffect.Parameters["fs_param_s2_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s2.Width, s2.Height)));
+            CompiledEffect.Parameters["fs_param_s3_Texture"].SetValue(FragSharpMarshal.Marshal(s3));
+            CompiledEffect.Parameters["fs_param_s3_size"].SetValue(FragSharpMarshal.Marshal(vec(s3.Width, s3.Height)));
+            CompiledEffect.Parameters["fs_param_s3_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s3.Width, s3.Height)));
+            CompiledEffect.Parameters["fs_param_s4_Texture"].SetValue(FragSharpMarshal.Marshal(s4));
+            CompiledEffect.Parameters["fs_param_s4_size"].SetValue(FragSharpMarshal.Marshal(vec(s4.Width, s4.Height)));
+            CompiledEffect.Parameters["fs_param_s4_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s4.Width, s4.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class BenchmarkTest_TextureLookup1x1
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D s, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D s, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D s, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s);
+        }
+        public static void Using(Texture2D s, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s);
+        }
+        public static void Using(Texture2D s)
+        {
+            CompiledEffect.Parameters["fs_param_s_Texture"].SetValue(FragSharpMarshal.Marshal(s));
+            CompiledEffect.Parameters["fs_param_s_size"].SetValue(FragSharpMarshal.Marshal(vec(s.Width, s.Height)));
+            CompiledEffect.Parameters["fs_param_s_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s.Width, s.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class BenchmarkTest_TextureLookupWithConditional
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D s, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D s, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D s, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s);
+        }
+        public static void Using(Texture2D s, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s);
+        }
+        public static void Using(Texture2D s)
+        {
+            CompiledEffect.Parameters["fs_param_s_Texture"].SetValue(FragSharpMarshal.Marshal(s));
+            CompiledEffect.Parameters["fs_param_s_size"].SetValue(FragSharpMarshal.Marshal(vec(s.Width, s.Height)));
+            CompiledEffect.Parameters["fs_param_s_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s.Width, s.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class BenchmarkTest_TextureLookupWithComplexMath
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D s, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D s, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D s, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s);
+        }
+        public static void Using(Texture2D s, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s);
+        }
+        public static void Using(Texture2D s)
+        {
+            CompiledEffect.Parameters["fs_param_s_Texture"].SetValue(FragSharpMarshal.Marshal(s));
+            CompiledEffect.Parameters["fs_param_s_size"].SetValue(FragSharpMarshal.Marshal(vec(s.Width, s.Height)));
+            CompiledEffect.Parameters["fs_param_s_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s.Width, s.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class BenchmarkTest_TextureLookup1x5
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D s, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D s, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D s, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s);
+        }
+        public static void Using(Texture2D s, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s);
+        }
+        public static void Using(Texture2D s)
+        {
+            CompiledEffect.Parameters["fs_param_s_Texture"].SetValue(FragSharpMarshal.Marshal(s));
+            CompiledEffect.Parameters["fs_param_s_size"].SetValue(FragSharpMarshal.Marshal(vec(s.Width, s.Height)));
+            CompiledEffect.Parameters["fs_param_s_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s.Width, s.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class BenchmarkTest_MathPacking
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D s, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D s, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D s, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s);
+        }
+        public static void Using(Texture2D s, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s);
+        }
+        public static void Using(Texture2D s)
+        {
+            CompiledEffect.Parameters["fs_param_s_Texture"].SetValue(FragSharpMarshal.Marshal(s));
+            CompiledEffect.Parameters["fs_param_s_size"].SetValue(FragSharpMarshal.Marshal(vec(s.Width, s.Height)));
+            CompiledEffect.Parameters["fs_param_s_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s.Width, s.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class BenchmarkTest_MathPackingVec
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D s, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D s, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D s, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(s);
+        }
+        public static void Using(Texture2D s, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(s);
+        }
+        public static void Using(Texture2D s)
+        {
+            CompiledEffect.Parameters["fs_param_s_Texture"].SetValue(FragSharpMarshal.Marshal(s));
+            CompiledEffect.Parameters["fs_param_s_size"].SetValue(FragSharpMarshal.Marshal(vec(s.Width, s.Height)));
+            CompiledEffect.Parameters["fs_param_s_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(s.Width, s.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

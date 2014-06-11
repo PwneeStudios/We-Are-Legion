@@ -8,7 +8,7 @@ namespace GpuSim
         /// </summary>
         static void Main(string[] args)
         {
-            using (M3ngineGame game = new M3ngineGame())
+            using (GameClass game = new GameClass())
             {
                 game.Run();
             }

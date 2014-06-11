@@ -10,6 +10,13 @@ namespace GpuSim
 {
     public static class CoreMath
     {
+        public static void Swap<T>(ref T a, ref T b)
+        {
+            T temp = a;
+            a = b;
+            b = temp;
+        }
+
         public static int Modulo(int n, int p)
         {
             int M = n % p;
