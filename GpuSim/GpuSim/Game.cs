@@ -106,6 +106,16 @@ namespace GpuSim
             if (Buttons.Back.Down())
                 this.Exit();
 
+            if (Keys.S.Pressed())
+            {
+                World.Save();
+            }
+
+            if (Keys.L.Pressed())
+            {
+                World.Load();
+            }
+
             World.Update();
             World.Draw();
 

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -37,9 +38,9 @@ namespace GpuSim
         }
     }
 
-    public static class RenderTargetExtension
+    public static class Texture2dExtension
     {
-        public static Color[] GetData(this RenderTarget2D RenderTarget)
+        public static Color[] GetData(this Texture2D RenderTarget)
         {
             int w = RenderTarget.Width, h = RenderTarget.Height;
             Color[] data = new Color[w * h];
@@ -49,12 +50,12 @@ namespace GpuSim
             return data;
         }
 
-        public static Color[] GetData(this RenderTarget2D RenderTarget, vec2 coord)
+        public static Color[] GetData(this Texture2D RenderTarget, vec2 coord)
         {
             return RenderTarget.GetData(coord, new vec2(1, 1));
         }
 
-        public static Color[] GetData(this RenderTarget2D RenderTarget, vec2 coord, vec2 size)
+        public static Color[] GetData(this Texture2D RenderTarget, vec2 coord, vec2 size)
         {
             int w = RenderTarget.Width, h = RenderTarget.Height;
             
@@ -70,14 +71,14 @@ namespace GpuSim
             return data;
         }
 
-        public static T[] GetData<T>(this RenderTarget2D RenderTarget, vec2 coord, vec2 size) where T : Convertible<vec4, T>
+        public static T[] GetData<T>(this Texture2D RenderTarget, vec2 coord, vec2 size) where T : Convertible<vec4, T>
         {
             Color[] data = GetData(RenderTarget, coord, size);
 
             return ConvertArray<T>(data, size);
         }
 
-        public static void SetData(this RenderTarget2D RenderTarget, vec2 coord, vec2 size, Color[] data)
+        public static void SetData(this Texture2D RenderTarget, vec2 coord, vec2 size, Color[] data)
         {
             int w = RenderTarget.Width, h = RenderTarget.Height;
 

@@ -8,7 +8,7 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
-	public class World : SimShader
+	public partial class World : SimShader
 	{
 		public vec2 CameraPos = vec2.Zero;
 		public float CameraZoom = 30;

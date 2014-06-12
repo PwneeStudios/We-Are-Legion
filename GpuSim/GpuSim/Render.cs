@@ -32,6 +32,8 @@ namespace GpuSim
             GameClass.Graphics.Textures[1] = null;
             GameClass.Graphics.Textures[2] = null;
             GameClass.Graphics.Textures[3] = null;
+            GameClass.Graphics.Textures[4] = null;
+            GameClass.Graphics.Textures[5] = null;
             GameClass.Graphics.SetRenderTarget(null);
         }
 
