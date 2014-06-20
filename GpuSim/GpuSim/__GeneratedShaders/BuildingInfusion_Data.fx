@@ -71,22 +71,22 @@ bool GpuSim__SimShader__IsCenter(float4 b)
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.03137255 - .001;
+    return val >= 0.5019608 - .001;
 }
 
 float GpuSim__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    if (val >= 0.03137255 - .001)
+    if (val >= 0.5019608 - .001)
     {
-        val -= 0.03137255;
+        val -= 0.5019608;
     }
     return val;
 }
 
 void GpuSim__SimShader__set_selected(inout float4 u, bool selected)
 {
-    u.b = GpuSim__SimShader__prior_direction(u) + (selected ? 0.03137255 : 0.0);
+    u.b = GpuSim__SimShader__prior_direction(u) + (selected ? 0.5019608 : 0.0);
 }
 
 // Compiled vertex shader

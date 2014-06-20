@@ -180,7 +180,7 @@ namespace GpuSim
             return vec(x, y, z, w);
         }
 
-        const float select_offset = _8;
+        const float select_offset = _128;
         protected static bool selected(data u)
         {
             float val = u.prior_direction_and_select;
@@ -196,6 +196,12 @@ namespace GpuSim
         {
             float val = u.prior_direction_and_select;
             if (val >= select_offset) val -= select_offset;
+
+            // Subtracting select_offset leads to some inaccuracies in the resulting fint value.
+            // We fix this problem by rounding to the nearest fint.
+            // An alternative solution may be to raise our epsilon tolerance in equality tests.
+            val = fint_round(val);
+
             return val;
         }
 

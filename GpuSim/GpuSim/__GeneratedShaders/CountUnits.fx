@@ -70,7 +70,7 @@ bool GpuSim__SimShader__IsUnit(float4 u)
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.03137255 - .001;
+    return val >= 0.5019608 - .001;
 }
 
 float3 GpuSim__SimShader__pack_coord_3byte(float x)

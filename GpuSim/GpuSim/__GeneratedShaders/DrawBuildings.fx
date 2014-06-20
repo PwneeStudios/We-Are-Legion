@@ -125,7 +125,7 @@ float4 GpuSim__DrawBuildings__ExplosionSprite(VertexToPixel psin, float4 u, floa
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.03137255 - .001;
+    return val >= 0.5019608 - .001;
 }
 
 float GpuSim__UnitType__BuildingIndex(float type)

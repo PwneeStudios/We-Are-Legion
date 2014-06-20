@@ -73,13 +73,19 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
+float FragSharpFramework__FragSharpStd__fint_round(float v)
+{
+    return floor(255 * v + 0.5) * 0.003921569;
+}
+
 float GpuSim__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    if (val >= 0.03137255 - .001)
+    if (val >= 0.5019608 - .001)
     {
-        val -= 0.03137255;
+        val -= 0.5019608;
     }
+    val = FragSharpFramework__FragSharpStd__fint_round(val);
     return val;
 }
 
@@ -90,18 +96,18 @@ bool GpuSim__SimShader__IsValid(float direction)
 
 void GpuSim__SimShader__set_selected(inout float4 u, bool selected)
 {
-    u.b = GpuSim__SimShader__prior_direction(u) + (selected ? 0.03137255 : 0.0);
+    u.b = GpuSim__SimShader__prior_direction(u) + (selected ? 0.5019608 : 0.0);
 }
 
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.03137255 - .001;
+    return val >= 0.5019608 - .001;
 }
 
 void GpuSim__SimShader__set_prior_direction(inout float4 u, float dir)
 {
-    u.b = dir + (GpuSim__SimShader__selected(u) ? 0.03137255 : 0.0);
+    u.b = dir + (GpuSim__SimShader__selected(u) ? 0.5019608 : 0.0);
 }
 
 // Compiled vertex shader

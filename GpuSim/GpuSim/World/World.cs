@@ -8,10 +8,10 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
-	public partial class World : SimShader
-	{
-		public vec2 CameraPos = vec2.Zero;
-		public float CameraZoom = 30;
+    public partial class World : SimShader
+    {
+        public vec2 CameraPos = vec2.Zero;
+        public float CameraZoom = 30;
         public float CameraAspect = 1;
         public vec4 camvec { get { return new vec4(CameraPos.x, CameraPos.y, CameraZoom, CameraZoom); } }
 
@@ -24,8 +24,8 @@ namespace GpuSim
 
         RectangleQuad Ground;
 
-		public World()
-		{
+        public World()
+        {
             CameraAspect = GameClass.ScreenAspect;            
 
             float GroundRepeat = 100;
@@ -41,7 +41,7 @@ namespace GpuSim
             }
 
             Markers = new MarkerList();
-		}
+        }
 
         public void Update()
         {
@@ -136,8 +136,8 @@ namespace GpuSim
 
         const double DelayBetweenUpdates = .3333;
         //const double DelayBetweenUpdates = 5;
-		double SecondsSinceLastUpdate = DelayBetweenUpdates;
-		public static float PercentSimStepComplete = 0;
+        double SecondsSinceLastUpdate = DelayBetweenUpdates;
+        public static float PercentSimStepComplete = 0;
 
         int DrawCount = 0;
 
@@ -167,13 +167,13 @@ namespace GpuSim
             return cost <= PlayerInfo[player].Gold;
         }
 
-		public void Draw()
-		{
+        public void Draw()
+        {
             DrawCount++;
             Render.StandardRenderSetup();
 
-			//if (CurKeyboard.IsKeyDown(Keys.Enter))
-			SecondsSinceLastUpdate += GameClass.ElapsedSeconds;
+            //if (CurKeyboard.IsKeyDown(Keys.Enter))
+            SecondsSinceLastUpdate += GameClass.ElapsedSeconds;
 
             switch (CurUserMode)
             {
@@ -199,7 +199,7 @@ namespace GpuSim
                     break;
             }
 
-			// Check if we need to do a simulation update
+            // Check if we need to do a simulation update
             if (GameClass.UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates)
             //if (SecondsSinceLastUpdate > DelayBetweenUpdates)
             {
@@ -213,7 +213,7 @@ namespace GpuSim
 
             BenchmarkTests.Run(DataGroup.CurrentData, DataGroup.PreviousData);
 
-			// Choose units texture
+            // Choose units texture
             Texture2D UnitsSpriteSheet = null, BuildingsSpriteSheet = null, ExplosionSpriteSheet = null;
             float z = 14;
             if (CameraZoom > z)
@@ -247,11 +247,11 @@ namespace GpuSim
                 UnitsSpriteSheet = Assets.UnitTexture_16;
             }
 
-			// Draw texture to screen
-			GameClass.Graphics.SetRenderTarget(null);
-			GameClass.Graphics.Clear(Color.Black);
+            // Draw texture to screen
+            GameClass.Graphics.SetRenderTarget(null);
+            GameClass.Graphics.Clear(Color.Black);
 
-			PercentSimStepComplete = (float)(SecondsSinceLastUpdate / DelayBetweenUpdates);
+            PercentSimStepComplete = (float)(SecondsSinceLastUpdate / DelayBetweenUpdates);
 
             DrawGrass.Using(camvec, CameraAspect, Assets.GroundTexture);
             Ground.Draw(GameClass.Graphics);
@@ -338,7 +338,7 @@ namespace GpuSim
                 Render.DrawText(selected, Input.CurMousePos + new vec2(30, -130));
 
             Render.EndText();
-		}
+        }
 
         void DrawGridCell()
         {
@@ -614,10 +614,11 @@ namespace GpuSim
 
             Destination_Size = floor(Destination_Size);
             Destination_BL = floor(Destination_BL);
+            Destination_BL = max(Destination_BL, vec2.Zero);
 
             DataGroup.AttackMoveApply(pos, Selected_BL, Selected_Size, Destination_Size, Destination_BL);
 
             AddAttackMarker();
         }
-	}
+    }
 }

@@ -56,7 +56,7 @@ sampler fs_param_Previous : register(s2) = sampler_state
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.03137255 - .001;
+    return val >= 0.5019608 - .001;
 }
 
 bool GpuSim__SimShader__Something(float4 u)
@@ -69,13 +69,19 @@ bool GpuSim__SimShader__IsValid(float direction)
     return direction > 0 + .001;
 }
 
+float FragSharpFramework__FragSharpStd__fint_round(float v)
+{
+    return floor(255 * v + 0.5) * 0.003921569;
+}
+
 float GpuSim__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    if (val >= 0.03137255 - .001)
+    if (val >= 0.5019608 - .001)
     {
-        val -= 0.03137255;
+        val -= 0.5019608;
     }
+    val = FragSharpFramework__FragSharpStd__fint_round(val);
     return val;
 }
 

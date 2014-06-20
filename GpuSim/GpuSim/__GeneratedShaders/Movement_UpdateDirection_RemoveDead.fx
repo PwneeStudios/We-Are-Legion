@@ -126,12 +126,12 @@ bool GpuSim__SimShader__IsCenter(float4 b)
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.03137255 - .001;
+    return val >= 0.5019608 - .001;
 }
 
 void GpuSim__SimShader__set_prior_direction(inout float4 u, float dir)
 {
-    u.b = dir + (GpuSim__SimShader__selected(u) ? 0.03137255 : 0.0);
+    u.b = dir + (GpuSim__SimShader__selected(u) ? 0.5019608 : 0.0);
 }
 
 float GpuSim__SimShader__unpack_coord(float2 packed)
