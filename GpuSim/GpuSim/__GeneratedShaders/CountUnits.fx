@@ -82,6 +82,11 @@ float3 GpuSim__SimShader__pack_coord_3byte(float x)
     return packed / 255.0;
 }
 
+bool GpuSim__SimShader__IsCenter(float4 b)
+{
+    return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -104,6 +109,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         if (GpuSim__SimShader__IsUnit(unit_here) && abs(unit_here.g - fs_param_player) < .001 && (!(fs_param_only_selected) || GpuSim__SimShader__selected(data_here)))
         {
             output.xyz = GpuSim__SimShader__pack_coord_3byte(1);
+        }
+        if (abs(unit_here.r - 0.007843138) < .001 && GpuSim__SimShader__IsCenter(data_here) && abs(unit_here.g - fs_param_player) < .001 && (!(fs_param_only_selected) || GpuSim__SimShader__selected(data_here)))
+        {
+            output.w = 0.003921569;
         }
     }
     __FinalOutput.Color = output;

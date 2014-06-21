@@ -57,13 +57,16 @@ namespace GpuSim
                 
                 if (IsUnit(unit_here) && unit_here.player == player && (!only_selected || selected(data_here)))
                     output.xyz = pack_coord_3byte(1);
+
+                if (unit_here.type == UnitType.Barracks && IsCenter((building)(vec4)data_here) && unit_here.player == player && (!only_selected || selected(data_here)))
+                    output.w = _1;
             }
 
             return output;
         }
     }
 
-    public partial class CountReduce_3byte : SimShader
+    public partial class CountReduce_3byte1byte : SimShader
     {
         [FragmentShader]
         vec4 FragmentShader(VertexOut vertex, Field<vec4> PreviousLevel)
@@ -75,10 +78,12 @@ namespace GpuSim
                 BR = PreviousLevel[UpRight];
 
             // Aggregate 4 cells into the containing supercell
-            float count = unpack_coord(TL.xyz) + unpack_coord(TR.xyz) + unpack_coord(BL.xyz) + unpack_coord(BR.xyz);
+            float count_3byte = unpack_coord(TL.xyz) + unpack_coord(TR.xyz) + unpack_coord(BL.xyz) + unpack_coord(BR.xyz);
+            float count_1byte = TL.w + TR.w + BL.w + BR.w;
 
             vec4 output = vec4.Zero;
-            output.xyz = pack_coord_3byte(count);
+            output.xyz = pack_coord_3byte(count_3byte);
+            output.w = count_1byte;
 
             return output;
         }

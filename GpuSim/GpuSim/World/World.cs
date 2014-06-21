@@ -193,10 +193,15 @@ namespace GpuSim
                     for (int i = 1; i <= 2; i++)
                     {
                         float player = Player.Get(i);
-                        DataGroup.UnitCount[i] = DataGroup.DoUnitCount(player, false);
+                        var count = DataGroup.DoUnitCount(player, false);
+                        DataGroup.UnitCount[i]     = count.Item1;
+                        DataGroup.BarracksCount[i] = count.Item2;
                     }
 
-                    DataGroup.SelectedCount = DataGroup.DoUnitCount(PlayerValue, true);
+                    var selected = DataGroup.DoUnitCount(PlayerValue, true);
+                    DataGroup.SelectedUnits    = selected.Item1;
+                    DataGroup.SelectedBarracks = selected.Item2;
+
                     SelectionUpdate();
                     break;
             }
@@ -323,11 +328,21 @@ namespace GpuSim
                 }
             }
 
-            var units_1 = string.Format("Player 1 {0:#,##0}", DataGroup.UnitCount[1]);
-            var units_2 = string.Format("Player 2 {0:#,##0}", DataGroup.UnitCount[2]);
-            var selected = string.Format("[{0:#,##0}]", DataGroup.SelectedCount);
+            var units_1 = string.Format("Player 1 {0:#,##0}", DataGroup.BarracksCount[1]);
+            var units_2 = string.Format("Player 2 {0:#,##0}", DataGroup.BarracksCount[2]);
+
             var gold = string.Format("Gold {0:#,##0}", PlayerInfo[PlayerNumber].Gold);
             var gold_mines = string.Format("Gold Mines {0:#,##0}", PlayerInfo[PlayerNumber].GoldMines);
+            
+            string selected_count = string.Empty;
+            if (DataGroup.SelectedUnits > 0 && DataGroup.SelectedBarracks > 0)
+                selected_count = string.Format("[{0:#,##0} : {1:#,##0}]", DataGroup.SelectedUnits, DataGroup.SelectedBarracks);
+            else if (DataGroup.SelectedUnits > 0)
+                selected_count = string.Format("[{0:#,##0}]", DataGroup.SelectedUnits);
+            else if (DataGroup.SelectedBarracks > 0)
+                selected_count = string.Format("[{0:#,##0}]", DataGroup.SelectedBarracks);
+            else
+                selected_count = "[0]";
 
             Render.StartText();
 
@@ -337,7 +352,7 @@ namespace GpuSim
             Render.DrawText(gold_mines, vec(0, 60));
             
             if (CurUserMode == UserMode.Select)
-                Render.DrawText(selected, Input.CurMousePos + new vec2(30, -130));
+                Render.DrawText(selected_count, Input.CurMousePos + new vec2(30, -130));
 
             // User Messages
             UserMessages.Update();
@@ -615,7 +630,7 @@ namespace GpuSim
         {
             DataGroup.SelectedUnitsBounds();
 
-            if (DataGroup.SelectedCount == 0) return;
+            if (DataGroup.SelectedUnits == 0 && DataGroup.SelectedBarracks == 0) return;
 
             vec2 pos = ScreenToGridCoord(Input.CurMousePos);
 
@@ -624,7 +639,7 @@ namespace GpuSim
             if (Selected_Size.x < 1) Selected_Size.x = 1;
             if (Selected_Size.y < 1) Selected_Size.y = 1;
 
-            float SquareWidth = (float)Math.Sqrt(DataGroup.SelectedCount);
+            float SquareWidth = (float)Math.Sqrt(DataGroup.SelectedUnits);
             if (SquareWidth < 2) SquareWidth = 0;
             pos = floor(pos);
 

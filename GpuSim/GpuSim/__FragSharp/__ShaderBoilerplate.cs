@@ -46,7 +46,7 @@ namespace FragSharpFramework
             GpuSim.CountGoldMines.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountGoldMines");
             GpuSim.CountReduce_4x1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_4x1byte");
             GpuSim.CountUnits.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountUnits");
-            GpuSim.CountReduce_3byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_3byte");
+            GpuSim.CountReduce_3byte1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_3byte1byte");
             GpuSim.AddCorpses.CompiledEffect = Content.Load<Effect>("FragSharpShaders/AddCorpses");
             GpuSim.ActionAttackSquare.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare");
             GpuSim.ActionAttackPoint.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint");
@@ -1171,7 +1171,7 @@ namespace GpuSim
 
 namespace GpuSim
 {
-    public partial class CountReduce_3byte
+    public partial class CountReduce_3byte1byte
     {
         public static Effect CompiledEffect;
 

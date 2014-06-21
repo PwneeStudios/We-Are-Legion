@@ -69,9 +69,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 TL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy), TR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy), BL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy), BR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy);
-    float count = GpuSim__SimShader__unpack_coord(TL.xyz) + GpuSim__SimShader__unpack_coord(TR.xyz) + GpuSim__SimShader__unpack_coord(BL.xyz) + GpuSim__SimShader__unpack_coord(BR.xyz);
+    float count_3byte = GpuSim__SimShader__unpack_coord(TL.xyz) + GpuSim__SimShader__unpack_coord(TR.xyz) + GpuSim__SimShader__unpack_coord(BL.xyz) + GpuSim__SimShader__unpack_coord(BR.xyz);
+    float count_1byte = TL.w + TR.w + BL.w + BR.w;
     float4 output = float4(0, 0, 0, 0);
-    output.xyz = GpuSim__SimShader__pack_coord_3byte(count);
+    output.xyz = GpuSim__SimShader__pack_coord_3byte(count_3byte);
+    output.w = count_1byte;
     __FinalOutput.Color = output;
     return __FinalOutput;
 }
