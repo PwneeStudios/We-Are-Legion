@@ -208,7 +208,6 @@ namespace GpuSim
 
             // Check if we need to do a simulation update
             if (GameClass.UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates)
-            //if (SecondsSinceLastUpdate > DelayBetweenUpdates)
             {
                 SecondsSinceLastUpdate -= DelayBetweenUpdates;
 
@@ -478,6 +477,8 @@ namespace GpuSim
         {
             CanPlaceBuilding = false;
 
+            if (!GameClass.HasFocus) return;
+
             if (true)
             {
                 vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
@@ -487,6 +488,11 @@ namespace GpuSim
                 Render.UnsetDevice();
 
                 CanPlaceBuilding = false;
+                for (int i = 0; i < _w; i++)
+                for (int j = 0; j < _h; j++)
+                {
+                    CanPlace[i + j * _w] = false;
+                }
 
                 if (BuildingType == UnitType.Barracks)
                 {
@@ -602,6 +608,8 @@ namespace GpuSim
 
         void SelectionUpdate()
         {
+            if (!GameClass.HasFocus) return;
+
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
             vec2 WorldCordPrev = ScreenToWorldCoord(Input.PrevMousePos);
 

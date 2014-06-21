@@ -1,16 +1,8 @@
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
-using FragSharpHelper;
 using FragSharpFramework;
 
 namespace GpuSim
@@ -32,7 +24,7 @@ namespace GpuSim
     {
         public static void Swap<T>(this List<T> List, int Index, ref T NewElement)
         {
-			T temp = List[Index];
+            T temp = List[Index];
             List[Index] = NewElement;
             NewElement = temp;
         }
@@ -40,6 +32,11 @@ namespace GpuSim
 
     public static class Texture2dExtension
     {
+        static bool BoundsCheck(Rectangle rect, int w, int h)
+        {
+            return rect.Right <= w && rect.Bottom <= h && rect.Left >= 0 && rect.Top >= 0;
+        }
+
         public static Color[] GetData(this Texture2D RenderTarget)
         {
             int w = RenderTarget.Width, h = RenderTarget.Height;
@@ -66,6 +63,9 @@ namespace GpuSim
             int elements = (int)size.x * (int)size.y;
             Color[] data = new Color[elements];
             Rectangle rect = new Rectangle((int)coord.x, (int)coord.y, (int)size.x, (int)size.y);
+            
+            if (!BoundsCheck(rect, w, h)) return null;
+            
             RenderTarget.GetData(0, rect, data, 0, elements);
 
             return data;
@@ -99,6 +99,8 @@ namespace GpuSim
 
         public static T[] ConvertArray<T>(Color[] data, vec2 size) where T : Convertible<vec4, T>
         {
+            if (data == null) return null;
+
             int 
                 n = (int)Math.Floor(size.x),
                 m = (int)Math.Floor(size.y);
@@ -115,16 +117,16 @@ namespace GpuSim
         }
     }
 
-	public static class RndExtension
-	{
-		public static float Bit(this System.Random rnd)
-		{
-			return rnd.NextDouble() > .5 ? 1 : 0;
-		}
+    public static class RndExtension
+    {
+        public static float Bit(this System.Random rnd)
+        {
+            return rnd.NextDouble() > .5 ? 1 : 0;
+        }
 
         public static int IntRange(this System.Random rnd, int min, int max)
         {
             return (int)(rnd.NextDouble() * (max - min) + min);
         }
-	}
+    }
 }

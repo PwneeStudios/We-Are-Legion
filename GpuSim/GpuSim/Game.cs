@@ -23,6 +23,7 @@ namespace GpuSim
         public static ContentManager ContentManager { get { return Game.Content; } }
         public static vec2 Screen { get { return new vec2(GraphicsManager.PreferredBackBufferWidth, GraphicsManager.PreferredBackBufferHeight); } }
         public static float ScreenAspect { get { return Screen.x / Screen.y; } }
+        public static bool HasFocus { get { return Game.IsActive; } }
 
         GraphicsDeviceManager graphics;
 
