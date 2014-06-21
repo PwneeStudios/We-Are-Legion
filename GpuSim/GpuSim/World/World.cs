@@ -21,6 +21,7 @@ namespace GpuSim
         PlayerInfo[] PlayerInfo;
 
         MarkerList Markers;
+        UserMessageList UserMessages;
 
         RectangleQuad Ground;
 
@@ -41,6 +42,7 @@ namespace GpuSim
             }
 
             Markers = new MarkerList();
+            UserMessages = new UserMessageList();
         }
 
         public void Update()
@@ -337,6 +339,10 @@ namespace GpuSim
             if (CurUserMode == UserMode.Select)
                 Render.DrawText(selected, Input.CurMousePos + new vec2(30, -130));
 
+            // User Messages
+            UserMessages.Update();
+            UserMessages.Draw();
+
             Render.EndText();
         }
 
@@ -523,9 +529,17 @@ namespace GpuSim
                     }
                 }
 
-                if (CanPlaceBuilding && Input.LeftMousePressed && CanAffordBuilding(BuildingType, PlayerNumber))
+                if (Input.LeftMousePressed)
                 {
-                    try
+                    if (!CanPlaceBuilding)
+                    {
+                        Message_CanNotPlaceHere();
+                    }
+                    else if (!CanAffordBuilding(BuildingType, PlayerNumber))
+                    {
+                        Message_InsufficientGold();
+                    }
+                    else try
                     {
                         Create.PlaceBuilding(DataGroup, GridCoord, BuildingType, PlayerValue, TeamValue);
 
@@ -564,6 +578,11 @@ namespace GpuSim
             vec2 size = cell_size * bigger;
 
             Markers.Add(new Marker(this, pos, size, Assets.AttackMarker, -1f));
+        }
+
+        void AddUserMessage(string Message)
+        {
+            UserMessages.Add(new UserMessage(this, Message));
         }
 
         void SelectionUpdate()

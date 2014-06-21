@@ -8,8 +8,19 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
-	public static class Render
-	{
+    [Flags]
+    public enum Alignment
+    {
+        Center  = 0,
+        Default = Left | Top, 
+        Left    = 1 << 0,
+        Right   = 1 << 1,
+        Top     = 1 << 2,
+        Bottom  = 1 << 3
+    }
+
+    public static class Render
+    {
         static SpriteBatch MySpriteBatch;
         static SpriteFont DefaultFont;
 
@@ -37,24 +48,51 @@ namespace GpuSim
             GameClass.Graphics.SetRenderTarget(null);
         }
 
+        static bool TextStarted = false;
         public static void StartText()
         {
+            if (TextStarted) return;
+
+            TextStarted = true;
             MySpriteBatch.Begin();
         }
 
         public static void EndText()
         {
+            if (!TextStarted) return;
+
+            TextStarted = false;
             MySpriteBatch.End();
         }
 
-        public static void DrawText(string text, vec2 pos)
+        public static void DrawText(string text, vec2 pos, Alignment align = Alignment.Default)
         {
-            MySpriteBatch.DrawString(DefaultFont, text, pos, Color.White);
+            DrawText(DefaultFont, text, pos, align, new color(1f, 1f, 1f, 1f));
         }
 
-        public static void DrawText(string text, vec2 pos, color clr)
+        public static void DrawText(string text, vec2 pos, color clr, Alignment align = Alignment.Default)
         {
-            MySpriteBatch.DrawString(DefaultFont, text, pos, (Color)clr);
+            DrawText(DefaultFont, text, pos, align, clr);
         }
-	}
+
+        public static void DrawText(SpriteFont font, string text, vec2 pos, Alignment align, color clr)
+        {
+            vec2 size = (vec2)font.MeasureString(text);
+            vec2 origin = size * 0.5f;
+
+            if (align.HasFlag(Alignment.Left))
+                origin.x -= size.x / 2;
+
+            if (align.HasFlag(Alignment.Right))
+                origin.x += size.x / 2;
+
+            if (align.HasFlag(Alignment.Top))
+                origin.y -= size.y / 2;
+
+            if (align.HasFlag(Alignment.Bottom))
+                origin.y += size.y / 2;
+
+            MySpriteBatch.DrawString(font, text, pos, (Color)clr.Premultiplied, 0, origin, 1, SpriteEffects.None, 0);
+        }
+    }
 }

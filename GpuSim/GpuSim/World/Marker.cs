@@ -22,13 +22,13 @@ namespace GpuSim
         public void Update()
         {
             foreach (var marker in Markers) marker.Update();
-            Markers.RemoveAll(marker => marker.alpha <= 0);
+            Markers.RemoveAll(marker => marker.Dead);
         }
     }
 
     public class Marker
     {
-        public float alpha;
+        float alpha;
         float alpha_fade;
 
         RectangleQuad quad;
@@ -46,6 +46,8 @@ namespace GpuSim
             quad = new RectangleQuad(pos - size / 2, pos + size / 2, vec2.Zero, vec2.Ones);
             this.texture = texture;
         }
+
+        public bool Dead { get { return alpha <= 0; } }
 
         public void Draw()
         {
