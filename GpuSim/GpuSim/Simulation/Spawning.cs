@@ -40,15 +40,6 @@ namespace GpuSim
                     set_selected(ref cur_data, false);
                     set_prior_direction(ref cur_data, cur_data.direction);
                 }
-
-                //if (unit_left.type == UnitType.Barracks)
-                //{
-                //    cur_data.direction = Dir.Right;
-                //    cur_data.action = UnitAction.Spawning;
-                //    cur_data.change = Change.Stayed;
-                //    set_selected(ref cur_data, false);
-                //    set_prior_direction(ref cur_data, cur_data.direction);
-                //}
             }
 
             return cur_data;

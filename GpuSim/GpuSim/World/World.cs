@@ -585,6 +585,8 @@ namespace GpuSim
 
             ActionSpawn_Unit.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.SelectField, player, team, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
+            ActionSpawn_Target.Apply(DataGroup.CurrentData, DataGroup.TargetData, DataGroup.SelectField, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TargetData);
             ActionSpawn_Data.Apply(DataGroup.CurrentData, DataGroup.SelectField, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
         }

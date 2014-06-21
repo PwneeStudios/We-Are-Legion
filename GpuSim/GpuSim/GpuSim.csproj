@@ -112,6 +112,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
+    <Compile Include="MouseActions\Select.cs" />
+    <Compile Include="MouseActions\SpawnUnits.cs" />
     <Compile Include="Render.cs" />
     <Compile Include="World\UserMessages.cs" />
     <Compile Include="World\SaveLoad.cs" />
@@ -140,7 +142,7 @@
     <Compile Include="Simulation\Dying.cs" />
     <Compile Include="Simulation\Random.cs" />
     <Compile Include="Simulation\Counting.cs" />
-    <Compile Include="Simulation\MouseActions.cs" />
+    <Compile Include="MouseActions\Attack.cs" />
     <Compile Include="Simulation\Pathfinding.cs" />
     <Compile Include="Simulation\Movement.cs" />
     <Compile Include="Drawing\DrawUnit.cs" />

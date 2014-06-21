@@ -108,7 +108,7 @@ namespace GpuSim
                     left_path  = Paths_Left [Here],
                     down_path  = Paths_Down [Here];
 
-                data target = TargetData[Here];
+                data target      = TargetData[Here];
                 unit data_here   = Data[Here];
                 vec2 Destination = unpack_vec2((vec4)target);
 
