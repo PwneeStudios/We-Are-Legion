@@ -327,37 +327,80 @@ namespace GpuSim
                 }
             }
 
-            var units_1 = string.Format("Player 1 {0:#,##0}", DataGroup.BarracksCount[1]);
-            var units_2 = string.Format("Player 2 {0:#,##0}", DataGroup.BarracksCount[2]);
 
-            var gold = string.Format("Gold {0:#,##0}", PlayerInfo[PlayerNumber].Gold);
-            var gold_mines = string.Format("Gold Mines {0:#,##0}", PlayerInfo[PlayerNumber].GoldMines);
+            //var units_1 = string.Format("Player 1 {0:#,##0}", DataGroup.BarracksCount[1]);
+            //var units_2 = string.Format("Player 2 {0:#,##0}", DataGroup.BarracksCount[2]);
+            //var gold = string.Format("Gold {0:#,##0}", PlayerInfo[PlayerNumber].Gold);
+            //var gold_mines = string.Format("Gold Mines {0:#,##0}", PlayerInfo[PlayerNumber].GoldMines);
             
-            string selected_count = string.Empty;
-            if (DataGroup.SelectedUnits > 0 && DataGroup.SelectedBarracks > 0)
-                selected_count = string.Format("[{0:#,##0} : {1:#,##0}]", DataGroup.SelectedUnits, DataGroup.SelectedBarracks);
-            else if (DataGroup.SelectedUnits > 0)
-                selected_count = string.Format("[{0:#,##0}]", DataGroup.SelectedUnits);
-            else if (DataGroup.SelectedBarracks > 0)
-                selected_count = string.Format("[{0:#,##0}]", DataGroup.SelectedBarracks);
-            else
-                selected_count = "[0]";
-
             Render.StartText();
 
-            Render.DrawText(units_1, vec(0, 0));
-            Render.DrawText(units_2, vec(0, 20));
-            Render.DrawText(gold, vec(0, 40));
-            Render.DrawText(gold_mines, vec(0, 60));
-            
-            if (CurUserMode == UserMode.Select)
-                Render.DrawText(selected_count, Input.CurMousePos + new vec2(30, -130));
+            // Ui Text
+            DrawUi_TopInfo();
+            DrawUi_PlayerGrid();
+            DrawUi_CursorText();
 
             // User Messages
             UserMessages.Update();
             UserMessages.Draw();
 
             Render.EndText();
+        }
+
+        void DrawUi_TopInfo()
+        {
+            var top_ui_gold = string.Format("Gold {0:#,##0}", PlayerInfo[PlayerNumber].Gold);
+            var top_ui_units = string.Format("Units {0:#,##0}", DataGroup.UnitCount[PlayerNumber]);
+
+            Render.DrawText(top_ui_gold, vec(0, 0));
+            Render.DrawText(top_ui_units, vec(200, 0));
+        }
+
+        void DrawUi_PlayerGrid()
+        {
+            float y = 0;
+            float spacing = 20;
+
+            float row4 = 1024, row3 = 924, row2 = 824, row1 = 724, row0 = 624;
+
+            Render.DrawText("Raxes", vec(row1, y), align: Alignment.RightJusitfy);
+            Render.DrawText("Units", vec(row2, y), align: Alignment.RightJusitfy);
+            Render.DrawText("Mines", vec(row3, y), align: Alignment.RightJusitfy);
+            Render.DrawText("Gold", vec(row4, y), align: Alignment.RightJusitfy);
+            
+            for (int player = 1; player <= 4; player++)
+            {
+                y += spacing;
+
+                var gold = string.Format("{0:#,##0}", PlayerInfo[player].Gold);
+                var units = string.Format("{0:#,##0}", DataGroup.UnitCount[player]);
+                var mines = string.Format("{0:#,##0}", PlayerInfo[player].GoldMines);
+                var raxes = string.Format("{0:#,##0}", DataGroup.BarracksCount[player]);
+
+                Render.DrawText("Player " + player.ToString(), vec(row0, y), align: Alignment.RightJusitfy);
+                Render.DrawText(raxes, vec(row1, y), align: Alignment.RightJusitfy);
+                Render.DrawText(units, vec(row2, y), align: Alignment.RightJusitfy);
+                Render.DrawText(mines, vec(row3, y), align: Alignment.RightJusitfy);
+                Render.DrawText(gold, vec(row4, y), align : Alignment.RightJusitfy);
+            }
+        }
+
+        void DrawUi_CursorText()
+        {
+            if (CurUserMode == UserMode.Select)
+            {
+                string selected_count = string.Empty;
+                if (DataGroup.SelectedUnits > 0 && DataGroup.SelectedBarracks > 0)
+                    selected_count = string.Format("[{0:#,##0} : {1:#,##0}]", DataGroup.SelectedUnits, DataGroup.SelectedBarracks);
+                else if (DataGroup.SelectedUnits > 0)
+                    selected_count = string.Format("[{0:#,##0}]", DataGroup.SelectedUnits);
+                else if (DataGroup.SelectedBarracks > 0)
+                    selected_count = string.Format("[{0:#,##0}]", DataGroup.SelectedBarracks);
+                else
+                    selected_count = "[0]";
+
+                Render.DrawText(selected_count, Input.CurMousePos + new vec2(30, -130));
+            }
         }
 
         void DrawGridCell()

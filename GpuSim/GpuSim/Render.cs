@@ -12,7 +12,10 @@ namespace GpuSim
     public enum Alignment
     {
         Center  = 0,
-        Default = Left | Top, 
+        
+        LeftJusitfy = Left | Top,
+        RightJusitfy = Right | Top, 
+
         Left    = 1 << 0,
         Right   = 1 << 1,
         Top     = 1 << 2,
@@ -65,12 +68,12 @@ namespace GpuSim
             MySpriteBatch.End();
         }
 
-        public static void DrawText(string text, vec2 pos, Alignment align = Alignment.Default)
+        public static void DrawText(string text, vec2 pos, Alignment align = Alignment.LeftJusitfy)
         {
             DrawText(DefaultFont, text, pos, align, new color(1f, 1f, 1f, 1f));
         }
 
-        public static void DrawText(string text, vec2 pos, color clr, Alignment align = Alignment.Default)
+        public static void DrawText(string text, vec2 pos, color clr, Alignment align = Alignment.LeftJusitfy)
         {
             DrawText(DefaultFont, text, pos, align, clr);
         }
