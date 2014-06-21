@@ -115,8 +115,14 @@
     <Compile Include="MouseActions\Select.cs" />
     <Compile Include="MouseActions\SpawnUnits.cs" />
     <Compile Include="Render.cs" />
+    <Compile Include="World\World_Util.cs" />
+    <Compile Include="World\World_Update.cs" />
+    <Compile Include="World\World_Draw.cs" />
+    <Compile Include="World\World_Actions.cs" />
+    <Compile Include="World\World_Coordinates.cs" />
+    <Compile Include="World\World_Ui.cs" />
     <Compile Include="World\UserMessages.cs" />
-    <Compile Include="World\SaveLoad.cs" />
+    <Compile Include="World\World_SaveLoad.cs" />
     <Compile Include="World\DataGroup\Gradients.cs" />
     <Compile Include="World\DataGroup\SimulationUpdate.cs" />
     <Compile Include="World\DataGroup\Selection.cs" />

@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -78,8 +77,8 @@ namespace GpuSim
         }
     }
 
-	public partial class World
-	{
+    public partial class World
+    {
         public void Save()
         {
             var stream = new FileStream("TestSave.m3n", FileMode.Create);
@@ -117,5 +116,5 @@ namespace GpuSim
             reader.Close();
             stream.Close();
         }
-	}
+    }
 }
