@@ -112,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
+    <Compile Include="MouseActions\DeleteUnits.cs" />
     <Compile Include="MouseActions\Select.cs" />
     <Compile Include="MouseActions\SpawnUnits.cs" />
     <Compile Include="Render.cs" />

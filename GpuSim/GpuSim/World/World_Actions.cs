@@ -107,6 +107,12 @@ namespace GpuSim
             }
         }
 
+        void DeleteUnits()
+        {
+            ActionDelete_Data.Apply(DataGroup.CurrentData, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
+        }
+
         void CreateUnits()
         {
             float player = 0, team = 0;
@@ -146,6 +152,11 @@ namespace GpuSim
                 if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())
                 {
                     CreateUnits();
+                }
+
+                if (Keys.Delete.Down() || Keys.Back.Down())
+                {
+                    DeleteUnits();
                 }
             }
             
