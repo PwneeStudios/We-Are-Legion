@@ -13,12 +13,7 @@ namespace GpuSim
             UpdateGradient_ToBuildings();
 
 
-            BuildingInfusion_Data.Apply(CurrentUnits, CurrentData, Output: Temp1);
-            Swap(ref CurrentData, ref Temp1);
-            BuildingDiffusion_Data.Apply(CurrentUnits, CurrentData, Output: Temp1);
-            Swap(ref CurrentData, ref Temp1);
-            BuildingDiffusion_Target.Apply(CurrentUnits, CurrentData, TargetData, Output: Temp1);
-            Swap(ref TargetData, ref Temp1);
+            Building_InfusionDiffusion();
 
 
             AddCorpses.Apply(CurrentUnits, CurrentData, Corspes, Output: Temp1);

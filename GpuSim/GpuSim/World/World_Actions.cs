@@ -111,6 +111,14 @@ namespace GpuSim
         {
             ActionDelete_Data.Apply(DataGroup.CurrentData, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
+
+            ActionDelete_Data.Apply(DataGroup.PreviousData, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousData);
+
+            BuildingInfusion_Delete.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
+
+            DataGroup.Building_InfusionDiffusion();
         }
 
         void CreateUnits()
@@ -146,6 +154,11 @@ namespace GpuSim
             DataGroup.SelectAlongLine(WorldCord, WorldCordPrev, size, Deselect, Selecting, PlayerOrNeutral);
 
             if (CurUserMode != UserMode.Select) return;
+
+            if (Input.LeftMouseDown)
+            {
+                DataGroup.Building_SelectionSpread();
+            }
 
             if (MapEditor)
             {

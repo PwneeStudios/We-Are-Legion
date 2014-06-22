@@ -116,6 +116,7 @@
     <Compile Include="MouseActions\Select.cs" />
     <Compile Include="MouseActions\SpawnUnits.cs" />
     <Compile Include="Render.cs" />
+    <Compile Include="World\DataGroup\BuildingUpdate.cs" />
     <Compile Include="World\World_Util.cs" />
     <Compile Include="World\World_Update.cs" />
     <Compile Include="World\World_Draw.cs" />

@@ -2,6 +2,95 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
+    public partial class BuildingInfusion_Delete : SimShader
+    {
+        [FragmentShader]
+        building FragmentShader(VertexOut vertex, Field<unit> Unit, Field<building> Building)
+        {
+            building building_here = Building[Here];
+            unit unit_here = Unit[Here];
+
+            if (Something(building_here) && IsBuilding(unit_here) && IsCenter(building_here))
+            {
+                if (!Something(Building[RightOne])  ||
+                    !Something(Building[UpOne])     ||
+                    !Something(Building[LeftOne])   ||
+                    !Something(Building[DownOne])   ||
+                    !Something(Building[UpRight])   ||
+                    !Something(Building[UpLeft])    ||
+                    !Something(Building[DownRight]) ||
+                    !Something(Building[DownLeft]))
+                {
+                    return building.Nothing;
+                }
+            }
+
+            return building_here;
+        }
+    }
+
+    public partial class BuildingInfusion_Selection : SimShader
+    {
+        [FragmentShader]
+        building FragmentShader(VertexOut vertex, Field<unit> Unit, Field<building> Building)
+        {
+            building building_here = Building[Here];
+            unit unit_here = Unit[Here];
+
+            if (Something(building_here) && IsBuilding(unit_here) && IsCenter(building_here))
+            {
+                building
+                    right = Building[RightOne],
+                    up = Building[UpOne],
+                    left = Building[LeftOne],
+                    down = Building[DownOne],
+                    up_right = Building[UpRight],
+                    up_left = Building[UpLeft],
+                    down_right = Building[DownRight],
+                    down_left = Building[DownLeft];
+
+                // Select this center if any part of the building is selected
+                if (!selected(building_here))
+                {
+                    bool is_selected =
+                        selected(right) ||
+                        selected(up) ||
+                        selected(left) ||
+                        selected(down) ||
+                        selected(up_right) ||
+                        selected(up_left) ||
+                        selected(down_right) ||
+                        selected(down_left);
+
+                    set_selected(ref building_here, is_selected);
+                }
+            }
+
+            return building_here;
+        }
+    }
+
+    public partial class BuildingDiffusion_Selection : SimShader
+    {
+        [FragmentShader]
+        building FragmentShader(VertexOut vertex, Field<unit> Unit, Field<building> Building)
+        {
+            building building_here = Building[Here];
+            unit unit_here = Unit[Here];
+
+            if (Something(building_here) && IsBuilding(unit_here))
+            {
+                building center = Building[center_dir(building_here)];
+
+                if (!Something(center)) return building.Nothing;
+
+                set_selected(ref building_here, selected(center));
+            }
+
+            return building_here;
+        }
+    }
+
     public partial class BuildingInfusion_Data : SimShader
     {
         [FragmentShader]
