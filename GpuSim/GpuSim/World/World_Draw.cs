@@ -36,7 +36,7 @@ namespace GpuSim
                         DataGroup.BarracksCount[i] = count.Item2;
                     }
 
-                    var selected = DataGroup.DoUnitCount(PlayerValue, true);
+                    var selected = DataGroup.DoUnitCount(PlayerOrNeutral, true);
                     DataGroup.SelectedUnits    = selected.Item1;
                     DataGroup.SelectedBarracks = selected.Item2;
 

@@ -37,14 +37,14 @@ sampler fs_param_Data : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Unit, using register location 2
-float2 fs_param_Unit_size;
-float2 fs_param_Unit_dxdy;
+// Texture Sampler for fs_param_Units, using register location 2
+float2 fs_param_Units_size;
+float2 fs_param_Units_dxdy;
 
-Texture fs_param_Unit_Texture;
-sampler fs_param_Unit : register(s2) = sampler_state
+Texture fs_param_Units_Texture;
+sampler fs_param_Units : register(s2) = sampler_state
 {
-    texture   = <fs_param_Unit_Texture>;
+    texture   = <fs_param_Units_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -52,47 +52,9 @@ sampler fs_param_Unit : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Select, using register location 3
-float2 fs_param_Select_size;
-float2 fs_param_Select_dxdy;
-
-Texture fs_param_Select_Texture;
-sampler fs_param_Select : register(s3) = sampler_state
-{
-    texture   = <fs_param_Select_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-bool fs_param_Deselect;
-
-float fs_param_action;
+bool fs_param_only_selected;
 
 // The following methods are included because they are referenced by the fragment shader.
-float FragSharpFramework__FragSharpStd__fint_round(float v)
-{
-    return floor(255 * v + 0.5) * 0.003921569;
-}
-
-float GpuSim__SimShader__prior_direction(float4 u)
-{
-    float val = u.b;
-    if (val >= 0.5019608 - .001)
-    {
-        val -= 0.5019608;
-    }
-    val = FragSharpFramework__FragSharpStd__fint_round(val);
-    return val;
-}
-
-void GpuSim__SimShader__set_selected(inout float4 u, bool selected)
-{
-    u.b = GpuSim__SimShader__prior_direction(u) + (selected ? 0.5019608 : 0.0);
-}
-
 bool GpuSim__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
@@ -107,6 +69,20 @@ bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
     return val >= 0.5019608 - .001;
+}
+
+float3 GpuSim__SimShader__pack_coord_3byte(float x)
+{
+    float3 packed = float3(0, 0, 0);
+    packed.x = floor(x / (255.0 * 255.0));
+    packed.y = floor((x - packed.x * (255.0 * 255.0)) / 255.0);
+    packed.z = x - packed.x * (255.0 * 255.0) - packed.y * 255.0;
+    return packed / 255.0;
+}
+
+bool GpuSim__SimShader__IsCenter(float4 b)
+{
+    return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
 }
 
 // Compiled vertex shader
@@ -124,24 +100,20 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    if (select.r > 0 + .001 && (abs(select.g - 0.0) < .001 || abs(unit_here.g - select.g) < .001))
+    float4 output = float4(0, 0, 0, 0);
+    if (GpuSim__SimShader__Something(data_here))
     {
-        GpuSim__SimShader__set_selected(data_here, true);
-    }
-    else
-    {
-        if (fs_param_Deselect)
+        float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
+        if (GpuSim__SimShader__IsUnit(unit_here) && (abs(0.01568628 - 0.0) < .001 || abs(unit_here.g - 0.01568628) < .001) && (!(fs_param_only_selected) || GpuSim__SimShader__selected(data_here)))
         {
-            GpuSim__SimShader__set_selected(data_here, false);
+            output.xyz = GpuSim__SimShader__pack_coord_3byte(1);
+        }
+        if (abs(unit_here.r - 0.007843138) < .001 && GpuSim__SimShader__IsCenter(data_here) && abs(unit_here.g - 0.01568628) < .001 && (!(fs_param_only_selected) || GpuSim__SimShader__selected(data_here)))
+        {
+            output.w = 0.003921569;
         }
     }
-    if (GpuSim__SimShader__Something(data_here) && GpuSim__SimShader__IsUnit(unit_here) && GpuSim__SimShader__selected(data_here) && fs_param_action < 0.04705882 - .001)
-    {
-        data_here.a = fs_param_action;
-    }
-    __FinalOutput.Color = data_here;
+    __FinalOutput.Color = output;
     return __FinalOutput;
 }
 

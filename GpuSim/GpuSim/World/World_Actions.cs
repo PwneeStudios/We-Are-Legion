@@ -106,7 +106,7 @@ namespace GpuSim
                 }
             }
         }
-
+        
         void DeleteUnits()
         {
             ActionDelete_Data.Apply(DataGroup.CurrentData, Output: DataGroup.Temp1);
@@ -143,7 +143,7 @@ namespace GpuSim
             bool Selecting = Input.LeftMouseDown && CurUserMode == UserMode.Select;
 
             vec2 size = vec2.Ones * .2f / CameraZoom;
-            DataGroup.SelectAlongLine(WorldCord, WorldCordPrev, size, Deselect, Selecting, PlayerValue);
+            DataGroup.SelectAlongLine(WorldCord, WorldCordPrev, size, Deselect, Selecting, PlayerOrNeutral);
 
             if (CurUserMode != UserMode.Select) return;
 
@@ -186,7 +186,8 @@ namespace GpuSim
             if (SquareWidth < 2) SquareWidth = 0;
             pos = floor(pos);
 
-            vec2 Destination_Size = new vec2(SquareWidth, SquareWidth) * 1.25f;
+            //vec2 Destination_Size = new vec2(SquareWidth, SquareWidth) * 1.25f;
+            vec2 Destination_Size = new vec2(SquareWidth, SquareWidth) * .8f;
             vec2 Destination_BL = pos - Destination_Size / 2;
 
             Destination_Size = floor(Destination_Size);

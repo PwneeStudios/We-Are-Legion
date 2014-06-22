@@ -46,7 +46,7 @@ namespace GpuSim
     public partial class CountUnits : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Units, float player, bool only_selected)
+        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Units, [Player.Vals] float player, bool only_selected)
         {
             data data_here = Data[Here];
             
@@ -55,7 +55,7 @@ namespace GpuSim
             {
                 unit unit_here = Units[Here];
                 
-                if (IsUnit(unit_here) && unit_here.player == player && (!only_selected || selected(data_here)))
+                if (IsUnit(unit_here) && (player == Player.None || unit_here.player == player) && (!only_selected || selected(data_here)))
                     output.xyz = pack_coord_3byte(1);
 
                 if (unit_here.type == UnitType.Barracks && IsCenter((building)(vec4)data_here) && unit_here.player == player && (!only_selected || selected(data_here)))

@@ -52,8 +52,6 @@ sampler fs_param_Units : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-float fs_param_player;
-
 bool fs_param_only_selected;
 
 // The following methods are included because they are referenced by the fragment shader.
@@ -106,11 +104,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (GpuSim__SimShader__Something(data_here))
     {
         float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-        if (GpuSim__SimShader__IsUnit(unit_here) && abs(unit_here.g - fs_param_player) < .001 && (!(fs_param_only_selected) || GpuSim__SimShader__selected(data_here)))
+        if (GpuSim__SimShader__IsUnit(unit_here) && (abs(0.003921569 - 0.0) < .001 || abs(unit_here.g - 0.003921569) < .001) && (!(fs_param_only_selected) || GpuSim__SimShader__selected(data_here)))
         {
             output.xyz = GpuSim__SimShader__pack_coord_3byte(1);
         }
-        if (abs(unit_here.r - 0.007843138) < .001 && GpuSim__SimShader__IsCenter(data_here) && abs(unit_here.g - fs_param_player) < .001 && (!(fs_param_only_selected) || GpuSim__SimShader__selected(data_here)))
+        if (abs(unit_here.r - 0.007843138) < .001 && GpuSim__SimShader__IsCenter(data_here) && abs(unit_here.g - 0.003921569) < .001 && (!(fs_param_only_selected) || GpuSim__SimShader__selected(data_here)))
         {
             output.w = 0.003921569;
         }

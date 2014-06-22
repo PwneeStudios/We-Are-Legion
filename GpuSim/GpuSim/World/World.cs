@@ -30,6 +30,12 @@ namespace GpuSim
         public bool SimulationPaused = false;
         public bool WorldPaused = false;
 
+        /// <summary>
+        /// If this is a map editor then the current player is "None", so anything can be selected.
+        /// Otherwise this returns the player value of this client.
+        /// </summary>
+        public float PlayerOrNeutral { get { return MapEditor ? Player.None : PlayerValue; } }
+
         vec2 CameraPos = vec2.Zero;
         float CameraZoom = 30;
         public float CameraAspect = 1;

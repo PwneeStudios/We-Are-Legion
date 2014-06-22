@@ -267,7 +267,7 @@ namespace GpuSim
 
         public static class Player
         {
-            [FragSharpFramework.Vals(Player.One, Player.Two, Player.Three, Player.Four)]
+            [FragSharpFramework.Vals(Player.None, Player.One, Player.Two, Player.Three, Player.Four)]
                 public class ValsAttribute : Attribute { }
 
             public static readonly float[] Vals = new float[] { None, One, Two, Three, Four };

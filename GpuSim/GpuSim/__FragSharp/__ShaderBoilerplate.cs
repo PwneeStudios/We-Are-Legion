@@ -26,6 +26,7 @@ namespace FragSharpFramework
             GpuSim.DrawBuildings.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawBuildings");
             GpuSim.DrawCorpses.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawCorpses");
             GpuSim.DrawGrass.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawGrass");
+            GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0");
             GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.003921569");
             GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.007843138");
             GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.01176471");
@@ -54,7 +55,11 @@ namespace FragSharpFramework
             GpuSim.BuildingDiffusion_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Target");
             GpuSim.CountGoldMines.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountGoldMines");
             GpuSim.CountReduce_4x1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_4x1byte");
-            GpuSim.CountUnits.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountUnits");
+            GpuSim.CountUnits.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0");
+            GpuSim.CountUnits.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.003921569");
+            GpuSim.CountUnits.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.007843138");
+            GpuSim.CountUnits.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.01176471");
+            GpuSim.CountUnits.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.01568628");
             GpuSim.CountReduce_3byte1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_3byte1byte");
             GpuSim.AddCorpses.CompiledEffect = Content.Load<Effect>("FragSharpShaders/AddCorpses");
             GpuSim.Movement_Phase1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase1");
@@ -367,10 +372,12 @@ namespace GpuSim
 
 
 
+
 namespace GpuSim
 {
     public partial class DrawTerritoryPlayer
     {
+        public static Effect CompiledEffect_player_0;
         public static Effect CompiledEffect_player_0p003921569;
         public static Effect CompiledEffect_player_0p007843138;
         public static Effect CompiledEffect_player_0p01176471;
@@ -406,7 +413,8 @@ namespace GpuSim
         {
             Effect CompiledEffect = null;
 
-            if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
+            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
+            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
             else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
             else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
             else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
@@ -1551,11 +1559,19 @@ namespace GpuSim
 }
 
 
+
+
+
+
 namespace GpuSim
 {
     public partial class CountUnits
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_player_0;
+        public static Effect CompiledEffect_player_0p003921569;
+        public static Effect CompiledEffect_player_0p007843138;
+        public static Effect CompiledEffect_player_0p01176471;
+        public static Effect CompiledEffect_player_0p01568628;
 
         public static void Apply(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output, Color Clear)
         {
@@ -1585,13 +1601,22 @@ namespace GpuSim
         }
         public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected)
         {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
+            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
+            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
+            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
+            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
             CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
             CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
             CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
             CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
             CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
-            CompiledEffect.Parameters["fs_param_player"].SetValue(FragSharpMarshal.Marshal(player));
             CompiledEffect.Parameters["fs_param_only_selected"].SetValue(FragSharpMarshal.Marshal(only_selected));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }

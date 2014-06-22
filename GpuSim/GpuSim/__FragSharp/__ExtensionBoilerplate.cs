@@ -135,6 +135,21 @@ namespace GpuSim
                 v.w != w.w;
         }
 
+        public override bool Equals(object o)
+        {
+            return o is corpse ? this == (corpse)o : false;
+        }
+
+        public bool Equals(corpse v)
+        {
+            return this == v;
+        }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode() ^ w.GetHashCode();
+        }
+
         public static corpse operator -(corpse v)
         {
             return new corpse(-v.x, -v.y, -v.z, -v.w);
@@ -296,6 +311,21 @@ namespace GpuSim
                 v.y != w.y ||
                 v.z != w.z ||
                 v.w != w.w;
+        }
+
+        public override bool Equals(object o)
+        {
+            return o is unit ? this == (unit)o : false;
+        }
+
+        public bool Equals(unit v)
+        {
+            return this == v;
+        }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode() ^ w.GetHashCode();
         }
 
         public static unit operator -(unit v)
@@ -461,6 +491,21 @@ namespace GpuSim
                 v.w != w.w;
         }
 
+        public override bool Equals(object o)
+        {
+            return o is data ? this == (data)o : false;
+        }
+
+        public bool Equals(data v)
+        {
+            return this == v;
+        }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode() ^ w.GetHashCode();
+        }
+
         public static data operator -(data v)
         {
             return new data(-v.x, -v.y, -v.z, -v.w);
@@ -622,6 +667,21 @@ namespace GpuSim
                 v.y != w.y ||
                 v.z != w.z ||
                 v.w != w.w;
+        }
+
+        public override bool Equals(object o)
+        {
+            return o is building ? this == (building)o : false;
+        }
+
+        public bool Equals(building v)
+        {
+            return this == v;
+        }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode() ^ w.GetHashCode();
         }
 
         public static building operator -(building v)
@@ -787,6 +847,21 @@ namespace GpuSim
                 v.w != w.w;
         }
 
+        public override bool Equals(object o)
+        {
+            return o is extra ? this == (extra)o : false;
+        }
+
+        public bool Equals(extra v)
+        {
+            return this == v;
+        }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode() ^ w.GetHashCode();
+        }
+
         public static extra operator -(extra v)
         {
             return new extra(-v.x, -v.y, -v.z, -v.w);
@@ -948,6 +1023,21 @@ namespace GpuSim
                 v.y != w.y ||
                 v.z != w.z ||
                 v.w != w.w;
+        }
+
+        public override bool Equals(object o)
+        {
+            return o is BuildingDist ? this == (BuildingDist)o : false;
+        }
+
+        public bool Equals(BuildingDist v)
+        {
+            return this == v;
+        }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode() ^ w.GetHashCode();
         }
 
         public static BuildingDist operator -(BuildingDist v)
@@ -1113,6 +1203,21 @@ namespace GpuSim
                 v.w != w.w;
         }
 
+        public override bool Equals(object o)
+        {
+            return o is PlayerTuple ? this == (PlayerTuple)o : false;
+        }
+
+        public bool Equals(PlayerTuple v)
+        {
+            return this == v;
+        }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode() ^ w.GetHashCode();
+        }
+
         public static PlayerTuple operator -(PlayerTuple v)
         {
             return new PlayerTuple(-v.x, -v.y, -v.z, -v.w);
@@ -1274,6 +1379,21 @@ namespace GpuSim
                 v.y != w.y ||
                 v.z != w.z ||
                 v.w != w.w;
+        }
+
+        public override bool Equals(object o)
+        {
+            return o is TeamTuple ? this == (TeamTuple)o : false;
+        }
+
+        public bool Equals(TeamTuple v)
+        {
+            return this == v;
+        }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode() ^ w.GetHashCode();
         }
 
         public static TeamTuple operator -(TeamTuple v)
