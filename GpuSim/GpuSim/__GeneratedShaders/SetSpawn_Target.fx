@@ -52,6 +52,21 @@ sampler fs_param_Data : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
+// Texture Sampler for fs_param_Random, using register location 3
+float2 fs_param_Random_size;
+float2 fs_param_Random_dxdy;
+
+Texture fs_param_Random_Texture;
+sampler fs_param_Random : register(s3) = sampler_state
+{
+    texture   = <fs_param_Random_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
 {

@@ -5,13 +5,15 @@ namespace GpuSim
     public partial class SpawnUnits : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<unit> Unit, Field<data> CurrentData, Field<data> PreviousData)
+        data FragmentShader(VertexOut vertex, Field<unit> Unit, Field<data> CurrentData, Field<data> PreviousData, Field<vec4> Random)
         {
             data
                 cur_data = CurrentData[Here],
                 prev_data = PreviousData[Here];
 
-            if (!Something(cur_data) && !Something(prev_data))
+            vec4 rnd = Random[Here];
+
+            if (rnd.x > .93 && !Something(cur_data) && !Something(prev_data))
             {
                 unit
                     unit_right = Unit[RightOne],
@@ -27,10 +29,18 @@ namespace GpuSim
 
                 float spawn_dir = Dir.None;
 
-                if (unit_left.type == UnitType.Barracks && prior_direction(data_left) == Dir.Right) spawn_dir = Dir.Right;
-                if (unit_right.type == UnitType.Barracks && prior_direction(data_right) == Dir.Left) spawn_dir = Dir.Left;
-                if (unit_up.type == UnitType.Barracks && prior_direction(data_up) == Dir.Down) spawn_dir = Dir.Down;
-                if (unit_down.type == UnitType.Barracks && prior_direction(data_down) == Dir.Up) spawn_dir = Dir.Up;
+                // Spawn units on the side of the barracks facing the target they are headed toward
+                //if (unit_left.type == UnitType.Barracks && prior_direction(data_left) == Dir.Right) spawn_dir = Dir.Right;
+                //if (unit_right.type == UnitType.Barracks && prior_direction(data_right) == Dir.Left) spawn_dir = Dir.Left;
+                //if (unit_up.type == UnitType.Barracks && prior_direction(data_up) == Dir.Down) spawn_dir = Dir.Down;
+                //if (unit_down.type == UnitType.Barracks && prior_direction(data_down) == Dir.Up) spawn_dir = Dir.Up;
+
+                // Spawn units anywhere adjacent to the barracks
+                if (unit_left.type == UnitType.Barracks) spawn_dir = Dir.Right;
+                if (unit_right.type == UnitType.Barracks) spawn_dir = Dir.Left;
+                if (unit_up.type == UnitType.Barracks) spawn_dir = Dir.Down;
+                if (unit_down.type == UnitType.Barracks) spawn_dir = Dir.Up;
+                
 
                 if (IsValid(spawn_dir))
                 {
@@ -70,7 +80,7 @@ namespace GpuSim
     public partial class SetSpawn_Target : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<vec4> Target, Field<data> Data)
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> Target, Field<data> Data, Field<vec4> Random)
         {
             data data_here = Data[Here];
             vec4 target = Target[Here];
@@ -78,6 +88,10 @@ namespace GpuSim
             if (Something(data_here) && data_here.action == UnitAction.Spawning)
             {
                 target = Target[dir_to_vec(Reverse(data_here.direction))];
+
+                //vec4 rnd = Random[Here];
+                //target.y += rnd.x * _50 - _25;
+                //target.w += rnd.y * _50 - _25;
             }
 
             return target;

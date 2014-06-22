@@ -47,11 +47,11 @@ namespace GpuSim
             Swap(ref CurrentUnits, ref Temp1);
 
 
-            SpawnUnits.Apply(CurrentUnits, CurrentData, PreviousData, Output: Temp1);
+            SpawnUnits.Apply(CurrentUnits, CurrentData, PreviousData, RandomField, Output: Temp1);
             Swap(ref CurrentData, ref Temp1);
             SetSpawn_Unit.Apply(CurrentUnits, CurrentData, Output: Temp1);
             Swap(ref CurrentUnits, ref Temp1);
-            SetSpawn_Target.Apply(TargetData, CurrentData, Output: Temp1);
+            SetSpawn_Target.Apply(TargetData, CurrentData, RandomField, Output: Temp1);
             Swap(ref TargetData, ref Temp1);
             SetSpawn_Data.Apply(CurrentUnits, CurrentData, Output: Temp1);
             Swap(ref CurrentData, ref Temp1);
