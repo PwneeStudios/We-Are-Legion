@@ -11,10 +11,22 @@ namespace GpuSim
         {
             if (!MapEditor) return;
 
-            if (Keys.P.Pressed())
-            {
-                SimulationPaused = !SimulationPaused;
-            }
+            if (Keys.P.Pressed()) Editor_Pause();
+            if (Keys.D1.Pressed()) Editor_SwitchPlayer(1);
+            if (Keys.D2.Pressed()) Editor_SwitchPlayer(2);
+            if (Keys.D3.Pressed()) Editor_SwitchPlayer(3);
+            if (Keys.D4.Pressed()) Editor_SwitchPlayer(4);
+        }
+
+        void Editor_SwitchPlayer(int player)
+        {
+            PlayerValue = Fint(player);
+            TeamValue = Fint(player);
+        }
+
+        void Editor_Pause()
+        {
+            SimulationPaused = !SimulationPaused;
         }
 
         public void Update()

@@ -11,7 +11,11 @@ namespace GpuSim
         {
             if (MapEditor)
             {
-                Render.DrawText("Map editor" + (SimulationPaused ? ", Paused" : ""), vec(10, 0));
+                string header = "Map editor"
+                    + (", Player " + PlayerNumber.ToString())
+                    + (SimulationPaused ? ", Paused" : "");
+                
+                Render.DrawText(header, vec(10, 0));
             }
             else
             {

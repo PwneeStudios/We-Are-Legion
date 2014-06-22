@@ -15,97 +15,94 @@ namespace GpuSim
 
             if (!GameClass.HasFocus) return;
 
-            if (true)
+            vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
+
+            int _w = 3, _h = 3;
+
+            Render.UnsetDevice();
+
+            CanPlaceBuilding = false;
+            for (int i = 0; i < _w; i++)
+            for (int j = 0; j < _h; j++)
             {
-                vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
+                CanPlace[i + j * _w] = false;
+            }
 
-                int _w = 3, _h = 3;
+            if (BuildingType == UnitType.Barracks)
+            {
+                var _data = DataGroup.CurrentData.GetData<building>(GridCoord, new vec2(_w, _h));
+                var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
 
-                Render.UnsetDevice();
-
-                CanPlaceBuilding = false;
-                for (int i = 0; i < _w; i++)
+                color clr = color.TransparentBlack;
+                if (_data != null)
+                {
+                    CanPlaceBuilding = true;
+                    for (int i = 0; i < _w; i++)
                     for (int j = 0; j < _h; j++)
                     {
-                        CanPlace[i + j * _w] = false;
-                    }
+                        var building_here = _data[i + j * _w];
+                        var distance_to = _dist[i + j * _w];
 
-                if (BuildingType == UnitType.Barracks)
-                {
-                    var _data = DataGroup.CurrentData.GetData<building>(GridCoord, new vec2(_w, _h));
-                    var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
+                        var distance = Get(distance_to, PlayerNumber);
 
-                    color clr = color.TransparentBlack;
-                    if (_data != null)
-                    {
-                        CanPlaceBuilding = true;
-                        for (int i = 0; i < _w; i++)
-                            for (int j = 0; j < _h; j++)
-                            {
-                                var building_here = _data[i + j * _w];
-                                var distance_to = _dist[i + j * _w];
+                        bool occupied = building_here.direction > 0;
+                        bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
 
-                                var distance = Get(distance_to, PlayerNumber);
+                        bool can_place = !occupied && (in_territory || MapEditor);
+                        CanPlace[i + j * _w] = can_place;
 
-                                bool occupied = building_here.direction > 0;
-                                bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
-
-                                bool can_place = !occupied && in_territory;
-                                CanPlace[i + j * _w] = can_place;
-
-                                if (!can_place) CanPlaceBuilding = false;
-                            }
+                        if (!can_place) CanPlaceBuilding = false;
                     }
                 }
+            }
 
-                if (BuildingType == UnitType.GoldMine)
+            if (BuildingType == UnitType.GoldMine)
+            {
+                var _data = DataGroup.CurrentUnits.GetData<unit>(GridCoord, new vec2(_w, _h));
+                var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
+
+                color clr = color.TransparentBlack;
+                if (_data != null)
                 {
-                    var _data = DataGroup.CurrentUnits.GetData<unit>(GridCoord, new vec2(_w, _h));
-                    var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
-
-                    color clr = color.TransparentBlack;
-                    if (_data != null)
+                    CanPlaceBuilding = true;
+                    for (int i = 0; i < _w; i++)
+                    for (int j = 0; j < _h; j++)
                     {
-                        CanPlaceBuilding = true;
-                        for (int i = 0; i < _w; i++)
-                            for (int j = 0; j < _h; j++)
-                            {
-                                var unit_here = _data[i + j * _w];
-                                var distance_to = _dist[i + j * _w];
+                        var unit_here = _data[i + j * _w];
+                        var distance_to = _dist[i + j * _w];
 
-                                var distance = Get(distance_to, PlayerNumber);
+                        var distance = Get(distance_to, PlayerNumber);
 
-                                bool is_gold_source = unit_here.team == Team.None && unit_here.type == UnitType.GoldSource;
-                                bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
+                        bool is_gold_source = unit_here.team == Team.None && unit_here.type == UnitType.GoldSource;
+                        bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
 
-                                bool can_place = is_gold_source && in_territory;
-                                CanPlace[i + j * _w] = can_place;
+                        bool can_place = is_gold_source && (in_territory || MapEditor);
+                        CanPlace[i + j * _w] = can_place;
 
-                                if (!can_place) CanPlaceBuilding = false;
-                            }
+                        if (!can_place) CanPlaceBuilding = false;
                     }
                 }
+            }
 
-                if (Input.LeftMousePressed)
+            if (Input.LeftMousePressed)
+            {
+                if (!CanPlaceBuilding)
                 {
-                    if (!CanPlaceBuilding)
-                    {
-                        Message_CanNotPlaceHere();
-                    }
-                    else if (!CanAffordBuilding(BuildingType, PlayerNumber))
-                    {
-                        Message_InsufficientGold();
-                    }
-                    else try
-                        {
-                            Create.PlaceBuilding(DataGroup, GridCoord, BuildingType, PlayerValue, TeamValue);
+                    Message_CanNotPlaceHere();
+                }
+                else if (!CanAffordBuilding(BuildingType, PlayerNumber))
+                {
+                    Message_InsufficientGold();
+                }
+                else try
+                {
+                    Create.PlaceBuilding(DataGroup, GridCoord, BuildingType, PlayerValue, TeamValue);
 
-                            SubtractGold(Params.BuildingCost(BuildingType), PlayerNumber);
-                            CanPlaceBuilding = false;
-                        }
-                        catch
-                        {
-                        }
+                    SubtractGold(Params.BuildingCost(BuildingType), PlayerNumber);
+                    CanPlaceBuilding = false;
+                }
+                catch
+                {
                 }
             }
         }
@@ -144,14 +141,20 @@ namespace GpuSim
 
             if (CurUserMode != UserMode.Select) return;
 
-            if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())
+            if (MapEditor)
             {
-                CreateUnits();
+                if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())
+                {
+                    CreateUnits();
+                }
             }
-
-            if (Input.RightMousePressed)
+            
+            if (!SimulationPaused)
             {
-                AttackMove();
+                if (Input.RightMousePressed)
+                {
+                    AttackMove();
+                }
             }
         }
 

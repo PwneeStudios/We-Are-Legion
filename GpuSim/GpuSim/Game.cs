@@ -35,7 +35,7 @@ namespace GpuSim
 
             graphics = new GraphicsDeviceManager(this);
 
-            Window.Title = "Gpu Sim Test";
+            Window.Title = "Project Pinnacle, Game 2";
 
             graphics.IsFullScreen = false;
             graphics.PreferredBackBufferWidth  = 1024;

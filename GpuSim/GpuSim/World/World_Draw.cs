@@ -98,7 +98,7 @@ namespace GpuSim
             Ground.Draw(GameClass.Graphics);
 
             // Territory and corpses
-            if (CurUserMode == UserMode.PlaceBuilding)
+            if (CurUserMode == UserMode.PlaceBuilding && !MapEditor)
             {
                 DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.DistanceToPlayers, PlayerValue);
                 GridHelper.DrawGrid();
@@ -161,12 +161,6 @@ namespace GpuSim
                     DrawArrowCursor();
                 }
             }
-
-
-            //var units_1 = string.Format("Player 1 {0:#,##0}", DataGroup.BarracksCount[1]);
-            //var units_2 = string.Format("Player 2 {0:#,##0}", DataGroup.BarracksCount[2]);
-            //var gold = string.Format("Gold {0:#,##0}", PlayerInfo[PlayerNumber].Gold);
-            //var gold_mines = string.Format("Gold Mines {0:#,##0}", PlayerInfo[PlayerNumber].GoldMines);
             
             Render.StartText();
 
