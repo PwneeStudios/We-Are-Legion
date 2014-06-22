@@ -9,11 +9,18 @@ namespace GpuSim
     {
         void DrawUi_TopInfo()
         {
-            var top_ui_gold = string.Format("Gold {0:#,##0}", PlayerInfo[PlayerNumber].Gold);
-            var top_ui_units = string.Format("Units {0:#,##0}", DataGroup.UnitCount[PlayerNumber]);
+            if (MapEditor)
+            {
+                Render.DrawText("Map editor" + (SimulationPaused ? ", Paused" : ""), vec(10, 0));
+            }
+            else
+            {
+                var top_ui_gold = string.Format("Gold {0:#,##0}", PlayerInfo[PlayerNumber].Gold);
+                var top_ui_units = string.Format("Units {0:#,##0}", DataGroup.UnitCount[PlayerNumber]);
 
-            Render.DrawText(top_ui_gold, vec(10, 0));
-            Render.DrawText(top_ui_units, vec(170, 0));
+                Render.DrawText(top_ui_gold, vec(10, 0));
+                Render.DrawText(top_ui_units, vec(170, 0));
+            }
         }
 
         void DrawUi_PlayerGrid()
@@ -47,20 +54,19 @@ namespace GpuSim
 
         void DrawUi_CursorText()
         {
-            if (CurUserMode == UserMode.Select)
-            {
-                string selected_count = string.Empty;
-                if (DataGroup.SelectedUnits > 0 && DataGroup.SelectedBarracks > 0)
-                    selected_count = string.Format("[{0:#,##0} : {1:#,##0}]", DataGroup.SelectedUnits, DataGroup.SelectedBarracks);
-                else if (DataGroup.SelectedUnits > 0)
-                    selected_count = string.Format("[{0:#,##0}]", DataGroup.SelectedUnits);
-                else if (DataGroup.SelectedBarracks > 0)
-                    selected_count = string.Format("[{0:#,##0}]", DataGroup.SelectedBarracks);
-                else
-                    selected_count = "[0]";
+            if (CurUserMode != UserMode.Select) return;
 
-                Render.DrawText(selected_count, Input.CurMousePos + new vec2(30, -130));
-            }
+            string selected_count = string.Empty;
+            if (DataGroup.SelectedUnits > 0 && DataGroup.SelectedBarracks > 0)
+                selected_count = string.Format("[{0:#,##0} : {1:#,##0}]", DataGroup.SelectedUnits, DataGroup.SelectedBarracks);
+            else if (DataGroup.SelectedUnits > 0)
+                selected_count = string.Format("[{0:#,##0}]", DataGroup.SelectedUnits);
+            else if (DataGroup.SelectedBarracks > 0)
+                selected_count = string.Format("[{0:#,##0}]", DataGroup.SelectedBarracks);
+            else
+                selected_count = "[0]";
+
+            Render.DrawText(selected_count, Input.CurMousePos + new vec2(30, -130));
         }
 
         void DrawGridCell()
@@ -84,15 +90,15 @@ namespace GpuSim
 
             CanPlaceBuilding = true;
             for (int i = 0; i < _w; i++)
-                for (int j = 0; j < _h; j++)
-                {
-                    clr = CanPlace[i + j * _h] ? DrawTerritoryPlayer.Available : DrawTerritoryPlayer.Unavailable;
-                    DrawSolid.Using(camvec, CameraAspect, clr);
+            for (int j = 0; j < _h; j++)
+            {
+                clr = CanPlace[i + j * _h] ? DrawTerritoryPlayer.Available : DrawTerritoryPlayer.Unavailable;
+                DrawSolid.Using(camvec, CameraAspect, clr);
 
-                    vec2 gWorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCoord.x + i), (float)Math.Floor(GridCoord.y + j)));
-                    vec2 size = 1 / DataGroup.GridSize;
-                    RectangleQuad.Draw(GameClass.Graphics, gWorldCord + new vec2(size.x, -size.y), size);
-                }
+                vec2 gWorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCoord.x + i), (float)Math.Floor(GridCoord.y + j)));
+                vec2 size = 1 / DataGroup.GridSize;
+                RectangleQuad.Draw(GameClass.Graphics, gWorldCord + new vec2(size.x, -size.y), size);
+            }
         }
 
         void DrawPotentialBuilding()

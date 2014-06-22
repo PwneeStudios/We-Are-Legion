@@ -26,6 +26,10 @@ namespace GpuSim
 
         const double DelayBetweenUpdates = .3333;
 
+        public bool MapEditor = true;
+        public bool SimulationPaused = false;
+        public bool WorldPaused = false;
+
         vec2 CameraPos = vec2.Zero;
         float CameraZoom = 30;
         public float CameraAspect = 1;

@@ -114,10 +114,10 @@ namespace GpuSim
         {
             float player = 0, team = 0;
 
-            if (Keys.R.Pressed()) { player = Player.One; team = Team.One; }
-            if (Keys.T.Pressed()) { player = Player.Two; team = Team.Two; }
-            if (Keys.Y.Pressed()) { player = Player.Three; team = Team.Three; }
-            if (Keys.U.Pressed()) { player = Player.Four; team = Team.Four; }
+            if (Keys.R.Down()) { player = Player.One; team = Team.One; }
+            if (Keys.T.Down()) { player = Player.Two; team = Team.Two; }
+            if (Keys.Y.Down()) { player = Player.Three; team = Team.Three; }
+            if (Keys.U.Down()) { player = Player.Four; team = Team.Four; }
 
             ActionSpawn_Unit.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.SelectField, player, team, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
@@ -134,9 +134,9 @@ namespace GpuSim
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
             vec2 WorldCordPrev = ScreenToWorldCoord(Input.PrevMousePos);
 
-            bool Deselect = Input.LeftMousePressed && !Keys.LeftShift.Pressed() && !Keys.RightShift.Pressed()
+            bool Deselect = Input.LeftMousePressed && !Keys.LeftShift.Down() && !Keys.RightShift.Down()
                 || CurUserMode != UserMode.Select
-                || Keys.Back.Pressed() || Keys.Escape.Pressed();
+                || Keys.Back.Down() || Keys.Escape.Down();
             bool Selecting = Input.LeftMouseDown && CurUserMode == UserMode.Select;
 
             vec2 size = vec2.Ones * .2f / CameraZoom;
@@ -144,7 +144,7 @@ namespace GpuSim
 
             if (CurUserMode != UserMode.Select) return;
 
-            if (Keys.R.Pressed() || Keys.T.Pressed() || Keys.Y.Pressed() || Keys.U.Pressed())
+            if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())
             {
                 CreateUnits();
             }

@@ -1,6 +1,3 @@
-using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using FragSharpHelper;
@@ -10,15 +7,27 @@ namespace GpuSim
 {
     public partial class World : SimShader
     {
+        public void EditorUpdate()
+        {
+            if (!MapEditor) return;
+
+            if (Keys.P.Pressed())
+            {
+                SimulationPaused = !SimulationPaused;
+            }
+        }
+
         public void Update()
         {
+            EditorUpdate();
+
             float FpsRateModifier = 1;
 
             //const float MaxZoomOut = 5.33333f, MaxZoomIn = 200;
             const float MaxZoomOut = 1, MaxZoomIn = 200;
 
             // Zoom all the way out
-            if (Keys.Space.Pressed())
+            if (Keys.Space.Down())
                 CameraZoom = MaxZoomOut;
 
             // Zoom in/out, into the location of the cursor
@@ -33,8 +42,8 @@ namespace GpuSim
             }
 
             float KeyZoomRate = 1.125f * FpsRateModifier;
-            if (Buttons.X.Down() || Keys.X.Pressed() || Keys.E.Pressed()) CameraZoom /= KeyZoomRate;
-            else if (Buttons.A.Down() || Keys.Z.Pressed() || Keys.Q.Pressed()) CameraZoom *= KeyZoomRate;
+            if (Buttons.X.Down() || Keys.X.Down() || Keys.E.Down()) CameraZoom /= KeyZoomRate;
+            else if (Buttons.A.Down() || Keys.Z.Down() || Keys.Q.Down()) CameraZoom *= KeyZoomRate;
 
             if (CameraZoom < MaxZoomOut) CameraZoom = MaxZoomOut;
             if (CameraZoom > MaxZoomIn) CameraZoom = MaxZoomIn;
@@ -81,21 +90,21 @@ namespace GpuSim
 
 
             // Switch modes
-            if (Keys.B.Pressed())
+            if (Keys.B.Down())
             {
                 CurUserMode = UserMode.PlaceBuilding;
-                UnselectAll = true;
+                UnselectAll = true; 
                 BuildingType = UnitType.Barracks;
             }
 
-            if (Keys.G.Pressed())
+            if (Keys.G.Down())
             {
                 CurUserMode = UserMode.PlaceBuilding;
                 UnselectAll = true;
                 BuildingType = UnitType.GoldMine;
             }
 
-            if (Keys.Escape.Pressed() || Keys.Back.Pressed() || CurUserMode == UserMode.PlaceBuilding && Input.RightMousePressed)
+            if (Keys.Escape.Down() || Keys.Back.Down() || CurUserMode == UserMode.PlaceBuilding && Input.RightMousePressed)
             {
                 CurUserMode = UserMode.Select;
             }
