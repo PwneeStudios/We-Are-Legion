@@ -73,6 +73,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, 0)) * fs_param_Tiles_dxdy), up = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 1)) * fs_param_Tiles_dxdy), left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), 0)) * fs_param_Tiles_dxdy), down = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, -(1))) * fs_param_Tiles_dxdy), up_right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, 1)) * fs_param_Tiles_dxdy), up_left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), 1)) * fs_param_Tiles_dxdy), down_right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, -(1))) * fs_param_Tiles_dxdy), down_left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Tiles_dxdy);
     if (abs(here.r - 0.007843138) < .001)
     {
+        bool grass_on_left = abs(left.r - 0.003921569) < .001 || abs(up_left.r - 0.003921569) < .001 || abs(down_left.r - 0.003921569) < .001;
+        bool grass_on_right = abs(right.r - 0.003921569) < .001 || abs(up_right.r - 0.003921569) < .001 || abs(down_right.r - 0.003921569) < .001;
+        bool grass_on_top = abs(up_left.r - 0.003921569) < .001 || abs(up.r - 0.003921569) < .001 || abs(up_right.r - 0.003921569) < .001;
+        bool grass_on_bottom = abs(down_left.r - 0.003921569) < .001 || abs(down.r - 0.003921569) < .001 || abs(down_right.r - 0.003921569) < .001;
         if (abs(left.r - 0.003921569) < .001 && abs(right.r - 0.003921569) < .001 || abs(up.r - 0.003921569) < .001 && abs(down.r - 0.003921569) < .001)
         {
             here.r = 0.003921569;
@@ -113,67 +117,76 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                         }
                         else
                         {
-                            if (abs(right.r - 0.003921569) < .001)
+                            if (grass_on_left && abs(right.r - 0.003921569) < .001 || grass_on_right && abs(left.r - 0.003921569) < .001 || grass_on_top && abs(down.r - 0.003921569) < .001 || grass_on_bottom && abs(up.r - 0.003921569) < .001)
                             {
-                                here.r = 0.007843138;
+                                here.r = 0.003921569;
                                 here.g = 0.0;
-                                here.b = 0.1098039;
+                                here.b = 0.1215686;
                             }
                             else
                             {
-                                if (abs(up.r - 0.003921569) < .001)
+                                if (abs(right.r - 0.003921569) < .001)
                                 {
                                     here.r = 0.007843138;
-                                    here.g = 0.01176471;
+                                    here.g = 0.0;
                                     here.b = 0.1098039;
                                 }
                                 else
                                 {
-                                    if (abs(left.r - 0.003921569) < .001)
+                                    if (abs(up.r - 0.003921569) < .001)
                                     {
                                         here.r = 0.007843138;
-                                        here.g = 0.02352941;
+                                        here.g = 0.01176471;
                                         here.b = 0.1098039;
                                     }
                                     else
                                     {
-                                        if (abs(down.r - 0.003921569) < .001)
+                                        if (abs(left.r - 0.003921569) < .001)
                                         {
                                             here.r = 0.007843138;
-                                            here.g = 0.03529412;
+                                            here.g = 0.02352941;
                                             here.b = 0.1098039;
                                         }
                                         else
                                         {
-                                            if (abs(down_left.r - 0.003921569) < .001)
+                                            if (abs(down.r - 0.003921569) < .001)
                                             {
                                                 here.r = 0.007843138;
-                                                here.g = 0.0;
-                                                here.b = 0.1058824;
+                                                here.g = 0.03529412;
+                                                here.b = 0.1098039;
                                             }
                                             else
                                             {
-                                                if (abs(down_right.r - 0.003921569) < .001)
+                                                if (abs(down_left.r - 0.003921569) < .001)
                                                 {
                                                     here.r = 0.007843138;
-                                                    here.g = 0.007843138;
+                                                    here.g = 0.0;
                                                     here.b = 0.1058824;
                                                 }
                                                 else
                                                 {
-                                                    if (abs(up_left.r - 0.003921569) < .001)
+                                                    if (abs(down_right.r - 0.003921569) < .001)
                                                     {
                                                         here.r = 0.007843138;
-                                                        here.g = 0.01568628;
+                                                        here.g = 0.007843138;
                                                         here.b = 0.1058824;
                                                     }
                                                     else
                                                     {
-                                                        if (abs(up_right.r - 0.003921569) < .001)
+                                                        if (abs(up_left.r - 0.003921569) < .001)
                                                         {
                                                             here.r = 0.007843138;
-                                                            here.g = 0.02352941;
+                                                            here.g = 0.01568628;
                                                             here.b = 0.1058824;
+                                                        }
+                                                        else
+                                                        {
+                                                            if (abs(up_right.r - 0.003921569) < .001)
+                                                            {
+                                                                here.r = 0.007843138;
+                                                                here.g = 0.02352941;
+                                                                here.b = 0.1058824;
+                                                            }
                                                         }
                                                     }
                                                 }

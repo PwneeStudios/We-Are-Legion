@@ -23,6 +23,11 @@ namespace GpuSim
 
     public partial class UpdateTiles : SimShader
     {
+        bool xor(bool a, bool b)
+        {
+            return a != b;
+        }
+
         [FragmentShader]
         tile FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<data> Select)
         {
@@ -41,9 +46,18 @@ namespace GpuSim
 
             if (here.type == TileType.Dirt)
             {
+                bool grass_on_left = left.type == TileType.Grass || up_left.type == TileType.Grass || down_left.type == TileType.Grass;
+                bool grass_on_right = right.type == TileType.Grass || up_right.type == TileType.Grass || down_right.type == TileType.Grass;
+                bool grass_on_top = up_left.type == TileType.Grass || up.type == TileType.Grass || up_right.type == TileType.Grass;
+                bool grass_on_bottom = down_left.type == TileType.Grass || down.type == TileType.Grass || down_right.type == TileType.Grass;
+
                 // If we're straddled on two opposite sides by grass, then just turn into grass
                 if (left.type == TileType.Grass && right.type == TileType.Grass ||
-                    up.type   == TileType.Grass && down.type  == TileType.Grass)
+                    up.type == TileType.Grass && down.type == TileType.Grass)
+                    //left.type == TileType.Grass && xor(up_right.type == TileType.Grass, down_right.type == TileType.Grass) ||
+                    //right.type == TileType.Grass && xor(up_left.type == TileType.Grass, down_left.type == TileType.Grass) ||
+                    //up.type == TileType.Grass && xor(down_right.type == TileType.Grass, down_left.type == TileType.Grass) ||
+                    //down.type == TileType.Grass && xor(up_right.type == TileType.Grass, up_left.type == TileType.Grass))
                 {
                     here.type = TileType.Grass;
                     here.i = _0;
@@ -77,6 +91,16 @@ namespace GpuSim
                     here.type = TileType.Dirt;
                     here.i = _6;
                     here.j = _26;
+                }
+
+                else if (grass_on_left && right.type == TileType.Grass ||
+                    grass_on_right && left.type == TileType.Grass ||
+                    grass_on_top && down.type == TileType.Grass ||
+                    grass_on_bottom && up.type == TileType.Grass)
+                {
+                    here.type = TileType.Grass;
+                    here.i = _0;
+                    here.j = _31;
                 }
 
                 // If a single side is grass, then use a 1-grass side piece
