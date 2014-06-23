@@ -55,10 +55,12 @@ namespace GpuSim
             {
                 unit unit_here = Units[Here];
                 
-                if (IsUnit(unit_here) && (player == Player.None || unit_here.player == player) && (!only_selected || selected(data_here)))
+                bool valid = (player == Player.None || unit_here.player == player) && (!only_selected || selected(data_here));
+
+                if (IsUnit(unit_here) && valid)
                     output.xyz = pack_coord_3byte(1);
 
-                if (unit_here.type == UnitType.Barracks && IsCenter((building)(vec4)data_here) && unit_here.player == player && (!only_selected || selected(data_here)))
+                if (unit_here.type == UnitType.Barracks && IsCenter((building)(vec4)data_here) && valid)
                     output.w = _1;
             }
 

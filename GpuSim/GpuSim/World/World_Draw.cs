@@ -94,8 +94,11 @@ namespace GpuSim
 
             PercentSimStepComplete = (float)(SecondsSinceLastUpdate / DelayBetweenUpdates);
 
-            DrawGrass.Using(camvec, CameraAspect, Assets.GroundTexture);
-            Ground.Draw(GameClass.Graphics);
+            DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, Assets.TileSpriteSheet);
+            GridHelper.DrawGrid();
+
+            //DrawGrass.Using(camvec, CameraAspect, Assets.GroundTexture);
+            //Ground.Draw(GameClass.Graphics);
 
             // Territory and corpses
             if (CurUserMode == UserMode.PlaceBuilding && !MapEditor)

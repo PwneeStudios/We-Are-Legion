@@ -11,6 +11,7 @@ namespace GpuSim
             Color[] _extra = new Color[w * h];
             Color[] _target = new Color[w * h];
             Color[] _random = new Color[w * h];
+            Color[] _tiles = new Color[w * h];
             Color[] _corpses = new Color[w * h];
 
             CurrentData.GetData(_data);
@@ -21,6 +22,7 @@ namespace GpuSim
             {
                 _random[i * h + j] = new Color(rnd.IntRange(0, 256), rnd.IntRange(0, 256), rnd.IntRange(0, 256), rnd.IntRange(0, 256));
                 _corpses[i * h + j] = new Color(0, 0, 0, 0);
+                _tiles[i * h + j] = new Color(1, rnd.Next(14, 18), 17, 0);
 
                 if (false)
                 //if (rnd.NextDouble() > 0.85f)
@@ -69,6 +71,7 @@ namespace GpuSim
 
             RandomField.SetData(_random);
 
+            Tiles.SetData(_tiles);
             Corspes.SetData(_corpses);
         }
     }

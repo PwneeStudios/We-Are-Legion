@@ -20,7 +20,8 @@ namespace GpuSim
             BuildingTexture_1,
             ExplosionTexture_1,
             UnitTexture_1, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
-            GroundTexture,
+            
+            GroundTexture, TileSpriteSheet,
 
             Cursor, SelectCircle, SelectCircle_Data, AttackMarker;
 
@@ -38,6 +39,7 @@ namespace GpuSim
             UnitTexture_16 = Content.Load<Texture2D>("Art\\Units_16");
 
             GroundTexture = Content.Load<Texture2D>("Art\\Grass");
+            TileSpriteSheet = Content.Load<Texture2D>("Art\\TileSet");
 
             Cursor = Content.Load<Texture2D>("Art\\Cursor");
             SelectCircle = Content.Load<Texture2D>("Art\\SelectCircle");

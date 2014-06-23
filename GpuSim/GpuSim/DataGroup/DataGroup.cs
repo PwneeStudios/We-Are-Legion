@@ -1,15 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
 
-using FragSharpHelper;
 using FragSharpFramework;
 
 namespace GpuSim
@@ -76,7 +69,7 @@ namespace GpuSim
             Temp1, Temp2,
             PreviousUnits, CurrentUnits, PreviousData, CurrentData, Extra, TargetData,
             RandomField,
-            Corspes,
+            Tiles, Corspes,
             SelectField,
             PreviousDraw, CurrentDraw,
             Paths_Right, Paths_Left, Paths_Up, Paths_Down,
@@ -96,6 +89,7 @@ namespace GpuSim
             Extra = MakeTarget(w, h);
             TargetData = MakeTarget(w, h);
 
+            Tiles = MakeTarget(w, h);
             Corspes = MakeTarget(w, h);
 
             SelectField = MakeTarget(w, h);

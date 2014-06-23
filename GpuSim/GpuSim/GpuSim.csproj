@@ -112,11 +112,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
+    <Compile Include="Drawing\DrawTiles.cs" />
     <Compile Include="MouseActions\DeleteUnits.cs" />
     <Compile Include="MouseActions\Select.cs" />
     <Compile Include="MouseActions\SpawnUnits.cs" />
     <Compile Include="Render.cs" />
-    <Compile Include="World\DataGroup\BuildingUpdate.cs" />
+    <Compile Include="DataGroup\BuildingUpdate.cs" />
     <Compile Include="World\World_Util.cs" />
     <Compile Include="World\World_Update.cs" />
     <Compile Include="World\World_Draw.cs" />
@@ -125,17 +126,17 @@
     <Compile Include="World\World_Ui.cs" />
     <Compile Include="World\UserMessages.cs" />
     <Compile Include="World\World_SaveLoad.cs" />
-    <Compile Include="World\DataGroup\Gradients.cs" />
-    <Compile Include="World\DataGroup\SimulationUpdate.cs" />
-    <Compile Include="World\DataGroup\Selection.cs" />
-    <Compile Include="World\DataGroup\Counting.cs" />
-    <Compile Include="World\DataGroup\Util.cs" />
-    <Compile Include="World\DataGroup\InitialConditions.cs" />
+    <Compile Include="DataGroup\Gradients.cs" />
+    <Compile Include="DataGroup\SimulationUpdate.cs" />
+    <Compile Include="DataGroup\Selection.cs" />
+    <Compile Include="DataGroup\Counting.cs" />
+    <Compile Include="DataGroup\Util.cs" />
+    <Compile Include="DataGroup\InitialConditions.cs" />
     <Compile Include="Util\BenchmarkTesting.cs" />
     <Compile Include="Util\MathHelper.cs" />
     <Compile Include="Drawing\DrawTerritory.cs" />
     <Compile Include="Util\ExtensionClasses.cs" />
-    <Compile Include="World\DataGroup\DataGroup.cs" />
+    <Compile Include="DataGroup\DataGroup.cs" />
     <Compile Include="Drawing\DrawBuildings.cs" />
     <Compile Include="Drawing\DrawCorpses.cs" />
     <Compile Include="Util\PerfTimer.cs" />

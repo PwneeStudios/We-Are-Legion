@@ -17,6 +17,19 @@ namespace GpuSim
     }
 
     [Copy(typeof(vec4))]
+    public partial struct tile
+    {
+        [Hlsl("r")]
+        public float type { get { return r; } set { r = value; } }
+
+        [Hlsl("g")]
+        public float i { get { return g; } set { g = value; } }
+
+        [Hlsl("b")]
+        public float j { get { return b; } set { b = value; } }
+    }
+
+    [Copy(typeof(vec4))]
     public partial struct unit
     {
         [Hlsl("r")]
@@ -91,9 +104,6 @@ namespace GpuSim
 
         [Hlsl("a")]
         public float dist { get { return a; } set { a = value; } }
-
-        //[Hlsl("a")]
-        //public float type { get { return a; } set { a = value; } }
     }
 
     /// <summary>
@@ -248,6 +258,17 @@ namespace GpuSim
             return IsValid(direction) ? vec(cos(angle), sin(angle)) : vec2.Zero;
         }
 
+        public static class TileType
+        {
+            public const float
+                None = _0,
+                Grass = _1,
+                Dirt = _2,
+                Water = _3,
+                Rocks = _4,
+                Trees = _5;
+        }
+
         public static class Team
         {
             public static readonly float[] Vals = new float[] { None, One, Two, Three, Four };
@@ -359,6 +380,14 @@ namespace GpuSim
                 Down = _7,
                 BR = _8,
                 Count = _9;
+        }
+
+        public static class TileSpriteSheet
+        {
+            public const int SheetDimX = 19;
+            public const int SheetDimY = 19;
+            public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
+            public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
         }
 
         public static class UnitSpriteSheet
