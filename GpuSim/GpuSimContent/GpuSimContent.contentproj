@@ -129,7 +129,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Art\TileSet.png">
+    <Compile Include="Art\TileSet\TileSet.png">
       <Name>TileSet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

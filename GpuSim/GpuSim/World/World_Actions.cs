@@ -121,6 +121,19 @@ namespace GpuSim
             DataGroup.Building_InfusionDiffusion();
         }
 
+        void PaintTiles()
+        {
+            float tile = TileType.None;
+
+            if (Keys.C.Down()) { tile = TileType.Dirt; }
+            if (Keys.V.Down()) { tile = TileType.Grass; }
+
+            Action_PaintTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, tile, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
+            UpdateTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
+        }
+
         void CreateUnits()
         {
             float player = 0, team = 0;
@@ -162,6 +175,11 @@ namespace GpuSim
 
             if (MapEditor)
             {
+                if (Keys.C.Down() || Keys.V.Down())
+                {
+                    PaintTiles();
+                }
+
                 if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())
                 {
                     CreateUnits();

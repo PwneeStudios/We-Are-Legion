@@ -113,6 +113,7 @@
   <ItemGroup>
     <Compile Include="Assets.cs" />
     <Compile Include="Drawing\DrawTiles.cs" />
+    <Compile Include="MouseActions\TileSet.cs" />
     <Compile Include="MouseActions\DeleteUnits.cs" />
     <Compile Include="MouseActions\Select.cs" />
     <Compile Include="MouseActions\SpawnUnits.cs" />

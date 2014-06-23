@@ -22,7 +22,7 @@ namespace GpuSim
             {
                 _random[i * h + j] = new Color(rnd.IntRange(0, 256), rnd.IntRange(0, 256), rnd.IntRange(0, 256), rnd.IntRange(0, 256));
                 _corpses[i * h + j] = new Color(0, 0, 0, 0);
-                _tiles[i * h + j] = new Color(1, rnd.Next(14, 18), 17, 0);
+                _tiles[i * h + j] = new Color(2, rnd.Next(0, 11), 30, 0);
 
                 if (false)
                 //if (rnd.NextDouble() > 0.85f)

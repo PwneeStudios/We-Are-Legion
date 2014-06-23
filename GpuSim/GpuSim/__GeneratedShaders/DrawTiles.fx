@@ -77,7 +77,7 @@ float4 GpuSim__DrawTiles__Sprite(VertexToPixel psin, float4 c, float2 pos, sampl
     pos = pos * 0.98 + float2(0.01, 0.01);
     pos.x += FragSharpFramework__FragSharpStd__Float(c.g);
     pos.y += FragSharpFramework__FragSharpStd__Float(c.b);
-    pos *= float2(1.0 / 19, 1.0 / 19);
+    pos *= float2(1.0 / 32, 1.0 / 32);
     return tex2D(Texture, pos);
 }
 

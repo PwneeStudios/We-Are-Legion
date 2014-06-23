@@ -39,7 +39,7 @@ namespace GpuSim
             UnitTexture_16 = Content.Load<Texture2D>("Art\\Units_16");
 
             GroundTexture = Content.Load<Texture2D>("Art\\Grass");
-            TileSpriteSheet = Content.Load<Texture2D>("Art\\TileSet");
+            TileSpriteSheet = Content.Load<Texture2D>("Art\\TileSet\\TileSet");
 
             Cursor = Content.Load<Texture2D>("Art\\Cursor");
             SelectCircle = Content.Load<Texture2D>("Art\\SelectCircle");

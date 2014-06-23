@@ -384,8 +384,8 @@ namespace GpuSim
 
         public static class TileSpriteSheet
         {
-            public const int SheetDimX = 19;
-            public const int SheetDimY = 19;
+            public const int SheetDimX = 32;
+            public const int SheetDimY = 32;
             public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
             public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
         }
