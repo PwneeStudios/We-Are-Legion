@@ -172,8 +172,8 @@ namespace GpuSim
                     DeleteUnits();
                 }
             }
-            
-            if (!SimulationPaused)
+
+            if (NotPaused_UnitOrders)
             {
                 if (Input.RightMousePressed)
                 {

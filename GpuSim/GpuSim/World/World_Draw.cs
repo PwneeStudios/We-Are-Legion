@@ -12,7 +12,7 @@ namespace GpuSim
             DrawCount++;
             Render.StandardRenderSetup();
 
-            if (!SimulationPaused)
+            if (NotPaused_SimulationUpdate)
                 SecondsSinceLastUpdate += GameClass.ElapsedSeconds;
 
             switch (CurUserMode)

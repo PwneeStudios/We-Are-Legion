@@ -27,8 +27,12 @@ namespace GpuSim
         const double DelayBetweenUpdates = .3333;
 
         public bool MapEditor = true;
+        
         public bool SimulationPaused = false;
         public bool WorldPaused = false;
+
+        bool NotPaused_SimulationUpdate { get { return !SimulationPaused; } } // Allow unit orders even if simulation is paused, as long as we're in the map editor and the world isn't paused
+        bool NotPaused_UnitOrders { get { return !SimulationPaused || MapEditor && !WorldPaused; } } // Allow unit orders even if simulation is paused, as long as we're in the map editor and the world isn't paused
 
         /// <summary>
         /// If this is a map editor then the current player is "None", so anything can be selected.
