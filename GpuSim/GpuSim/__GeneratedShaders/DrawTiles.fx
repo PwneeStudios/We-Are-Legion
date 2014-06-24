@@ -70,15 +70,21 @@ float FragSharpFramework__FragSharpStd__Float(float v)
 
 float4 GpuSim__DrawTiles__Sprite(VertexToPixel psin, float4 c, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
+    float4 clr = float4(0.0, 0.0, 0.0, 0.0);
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
-        return float4(0.0, 0.0, 0.0, 0.0);
+        return clr;
+    }
+    if (pos.x < 0.025 - .001 || pos.x > 0.975 + .001 || pos.y < 0.025 - .001 || pos.y > 0.975 + .001)
+    {
+        clr += float4(1, 1, 1, 1) * 0.2;
     }
     pos = pos * 0.98 + float2(0.01, 0.01);
     pos.x += FragSharpFramework__FragSharpStd__Float(c.g);
     pos.y += FragSharpFramework__FragSharpStd__Float(c.b);
     pos *= float2(1.0 / 32, 1.0 / 32);
-    return tex2D(Texture, pos);
+    clr += tex2D(Texture, pos);
+    return clr;
 }
 
 // Compiled vertex shader
