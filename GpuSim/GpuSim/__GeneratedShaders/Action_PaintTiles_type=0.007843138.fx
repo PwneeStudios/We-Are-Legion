@@ -52,7 +52,6 @@ sampler fs_param_Select : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-float fs_param_type;
 
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
@@ -78,9 +77,20 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     if (GpuSim__SimShader__Something(select))
     {
-        here.r = fs_param_type;
-        here.g = 0.0;
-        here.b = 0.1215686;
+        here.r = 0.007843138;
+        if (abs(0.007843138 - 0.003921569) < .001)
+        {
+            here.g = 0.0;
+            here.b = 0.1215686;
+        }
+        else
+        {
+            if (abs(0.007843138 - 0.007843138) < .001)
+            {
+                here.g = 0.0;
+                here.b = 0.1176471;
+            }
+        }
     }
     __FinalOutput.Color = here;
     return __FinalOutput;

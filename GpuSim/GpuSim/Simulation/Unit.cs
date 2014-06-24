@@ -260,6 +260,9 @@ namespace GpuSim
 
         public static class TileType
         {
+            [FragSharpFramework.Vals(Grass, Dirt)]
+                public class ValsAttribute : Attribute { }
+
             public const float
                 None = _0,
                 Grass = _1,
@@ -288,7 +291,7 @@ namespace GpuSim
 
         public static class Player
         {
-            [FragSharpFramework.Vals(Player.None, Player.One, Player.Two, Player.Three, Player.Four)]
+            [FragSharpFramework.Vals(None, One, Two, Three, Four)]
                 public class ValsAttribute : Attribute { }
 
             public static readonly float[] Vals = new float[] { None, One, Two, Three, Four };

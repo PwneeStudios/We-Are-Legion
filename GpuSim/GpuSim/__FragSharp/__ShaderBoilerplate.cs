@@ -46,7 +46,8 @@ namespace FragSharpFramework
             GpuSim.ActionSpawn_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Data");
             GpuSim.ActionSpawn_Unit.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Unit");
             GpuSim.ActionSpawn_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Target");
-            GpuSim.Action_PaintTiles.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Action_PaintTiles");
+            GpuSim.Action_PaintTiles.CompiledEffect_type_0p003921569 = Content.Load<Effect>("FragSharpShaders/Action_PaintTiles_type=0.003921569");
+            GpuSim.Action_PaintTiles.CompiledEffect_type_0p007843138 = Content.Load<Effect>("FragSharpShaders/Action_PaintTiles_type=0.007843138");
             GpuSim.UpdateTiles.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UpdateTiles");
             GpuSim.CheckForAttacking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CheckForAttacking");
             GpuSim.BoundingTr.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BoundingTr");
@@ -1162,11 +1163,13 @@ namespace GpuSim
 }
 
 
+
 namespace GpuSim
 {
     public partial class Action_PaintTiles
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_type_0p003921569;
+        public static Effect CompiledEffect_type_0p007843138;
 
         public static void Apply(Texture2D Tiles, Texture2D Select, float type, RenderTarget2D Output, Color Clear)
         {
@@ -1196,13 +1199,19 @@ namespace GpuSim
         }
         public static void Using(Texture2D Tiles, Texture2D Select, float type)
         {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(type - 0.003921569)) < .001) CompiledEffect = CompiledEffect_type_0p003921569;
+            else if (abs((float)(type - 0.007843138)) < .001) CompiledEffect = CompiledEffect_type_0p007843138;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["fs_param_Tiles_Texture"].SetValue(FragSharpMarshal.Marshal(Tiles));
             CompiledEffect.Parameters["fs_param_Tiles_size"].SetValue(FragSharpMarshal.Marshal(vec(Tiles.Width, Tiles.Height)));
             CompiledEffect.Parameters["fs_param_Tiles_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Tiles.Width, Tiles.Height)));
             CompiledEffect.Parameters["fs_param_Select_Texture"].SetValue(FragSharpMarshal.Marshal(Select));
             CompiledEffect.Parameters["fs_param_Select_size"].SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
             CompiledEffect.Parameters["fs_param_Select_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Select.Width, Select.Height)));
-            CompiledEffect.Parameters["fs_param_type"].SetValue(FragSharpMarshal.Marshal(type));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
