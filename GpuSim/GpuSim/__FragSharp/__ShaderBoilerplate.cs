@@ -48,6 +48,7 @@ namespace FragSharpFramework
             GpuSim.ActionSpawn_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Target");
             GpuSim.Action_PaintTiles.CompiledEffect_type_0p003921569 = Content.Load<Effect>("FragSharpShaders/Action_PaintTiles_type=0.003921569");
             GpuSim.Action_PaintTiles.CompiledEffect_type_0p007843138 = Content.Load<Effect>("FragSharpShaders/Action_PaintTiles_type=0.007843138");
+            GpuSim.Action_PaintTiles.CompiledEffect_type_0p01960784 = Content.Load<Effect>("FragSharpShaders/Action_PaintTiles_type=0.01960784");
             GpuSim.UpdateTiles.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UpdateTiles");
             GpuSim.CheckForAttacking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CheckForAttacking");
             GpuSim.BoundingTr.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BoundingTr");
@@ -1164,12 +1165,14 @@ namespace GpuSim
 
 
 
+
 namespace GpuSim
 {
     public partial class Action_PaintTiles
     {
         public static Effect CompiledEffect_type_0p003921569;
         public static Effect CompiledEffect_type_0p007843138;
+        public static Effect CompiledEffect_type_0p01960784;
 
         public static void Apply(Texture2D Tiles, Texture2D Select, float type, RenderTarget2D Output, Color Clear)
         {
@@ -1203,6 +1206,7 @@ namespace GpuSim
 
             if (abs((float)(type - 0.003921569)) < .001) CompiledEffect = CompiledEffect_type_0p003921569;
             else if (abs((float)(type - 0.007843138)) < .001) CompiledEffect = CompiledEffect_type_0p007843138;
+            else if (abs((float)(type - 0.01960784)) < .001) CompiledEffect = CompiledEffect_type_0p01960784;
 
             if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
 

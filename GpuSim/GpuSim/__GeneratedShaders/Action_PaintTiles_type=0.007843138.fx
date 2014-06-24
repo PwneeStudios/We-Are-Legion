@@ -90,6 +90,14 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 here.g = 0.0;
                 here.b = 0.1176471;
             }
+            else
+            {
+                if (abs(0.007843138 - 0.01960784) < .001)
+                {
+                    here.g = 0.0;
+                    here.b = 0.09803922;
+                }
+            }
         }
     }
     __FinalOutput.Color = here;

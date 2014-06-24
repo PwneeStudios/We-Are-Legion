@@ -260,7 +260,7 @@ namespace GpuSim
 
         public static class TileType
         {
-            [FragSharpFramework.Vals(Grass, Dirt)]
+            [FragSharpFramework.Vals(Grass, Dirt, Trees)]
                 public class ValsAttribute : Attribute { }
 
             public const float

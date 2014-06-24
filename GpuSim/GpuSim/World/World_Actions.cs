@@ -127,6 +127,7 @@ namespace GpuSim
 
             if (Keys.C.Down()) { tile = TileType.Dirt; }
             if (Keys.V.Down()) { tile = TileType.Grass; }
+            if (Keys.N.Down()) { tile = TileType.Trees; }
 
             Action_PaintTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, tile, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
@@ -175,7 +176,7 @@ namespace GpuSim
 
             if (MapEditor)
             {
-                if (Keys.C.Down() || Keys.V.Down())
+                if (Keys.C.Down() || Keys.V.Down() || Keys.N.Down())
                 {
                     PaintTiles();
                 }
