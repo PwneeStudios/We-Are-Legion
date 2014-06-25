@@ -59,7 +59,7 @@ void GpuSim__UpdateTiles__DirtGrassInterface(inout float4 here, inout float4 rig
     bool grass_on_right = abs(right.r - 0.003921569) < .001 || abs(up_right.r - 0.003921569) < .001 || abs(down_right.r - 0.003921569) < .001;
     bool grass_on_top = abs(up_left.r - 0.003921569) < .001 || abs(up.r - 0.003921569) < .001 || abs(up_right.r - 0.003921569) < .001;
     bool grass_on_bottom = abs(down_left.r - 0.003921569) < .001 || abs(down.r - 0.003921569) < .001 || abs(down_right.r - 0.003921569) < .001;
-    if (abs(left.r - 0.003921569) < .001 && abs(right.r - 0.003921569) < .001 || abs(up.r - 0.003921569) < .001 && abs(down.r - 0.003921569) < .001)
+    if (abs(left.r - 0.003921569) < .001 && abs(right.r - 0.003921569) < .001 || abs(up.r - 0.003921569) < .001 && abs(down.r - 0.003921569) < .001 || abs(up.r - 0.01960784) < .001 || abs(right.r - 0.01960784) < .001 || abs(down.r - 0.01960784) < .001 || abs(left.r - 0.01960784) < .001)
     {
         here.r = 0.003921569;
         here.g = 0.0;

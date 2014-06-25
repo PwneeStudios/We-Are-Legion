@@ -60,9 +60,10 @@ namespace GpuSim
             bool grass_on_top = up_left.type == TileType.Grass || up.type == TileType.Grass || up_right.type == TileType.Grass;
             bool grass_on_bottom = down_left.type == TileType.Grass || down.type == TileType.Grass || down_right.type == TileType.Grass;
 
-            // If we're straddled on two opposite sides by grass, then just turn into grass
+            // If we're straddled on two opposite sides by grass, or if any tile adjacent to us is trees, then just turn into grass
             if (left.type == TileType.Grass && right.type == TileType.Grass ||
-                up.type == TileType.Grass && down.type == TileType.Grass)
+                up.type == TileType.Grass && down.type == TileType.Grass ||
+                up.type == TileType.Trees || right.type == TileType.Trees || down.type == TileType.Trees || left.type == TileType.Trees)
             {
                 here.type = TileType.Grass;
                 here.i = _0;
