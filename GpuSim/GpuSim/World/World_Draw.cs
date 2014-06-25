@@ -94,7 +94,7 @@ namespace GpuSim
 
             PercentSimStepComplete = (float)(SecondsSinceLastUpdate / DelayBetweenUpdates);
 
-            DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, Assets.TileSpriteSheet);
+            DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, Assets.TileSpriteSheet, MapEditor && DrawGridLines);
             GridHelper.DrawGrid();
 
             //DrawGrass.Using(camvec, CameraAspect, Assets.GroundTexture);

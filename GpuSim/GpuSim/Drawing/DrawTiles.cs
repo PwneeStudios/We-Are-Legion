@@ -4,15 +4,12 @@ namespace GpuSim
 {
     public partial class DrawTiles : BaseShader
     {
-        protected color Sprite(tile c, vec2 pos, PointSampler Texture)
+        color Sprite(tile c, vec2 pos, PointSampler Texture)
         {
             color clr = color.TransparentBlack;
 
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return clr;
-
-            if (pos.x < .025 || pos.x > .975 || pos.y < .025 || pos.y > .975)
-                clr += rgba(1, 1, 1, 1) * .2f;
 
             pos = pos * .98f + vec(.01f, .01f);
 
@@ -25,8 +22,19 @@ namespace GpuSim
             return clr;
         }
 
+        color GridLines(vec2 pos)
+        {
+            if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
+                return color.TransparentBlack;
+
+            if (pos.x < .025 || pos.x > .975 || pos.y < .025 || pos.y > .975)
+                return rgba(1, 1, 1, 1) * .2f;
+
+            return color.TransparentBlack;
+        }
+
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<tile> tiles, PointSampler Texture)
+        color FragmentShader(VertexOut vertex, Field<tile> tiles, PointSampler Texture, bool draw_grid)
         {
             color output = color.TransparentBlack;
 
@@ -37,6 +45,8 @@ namespace GpuSim
             if (here.type > _0)
             {
                 output += Sprite(here, subcell_pos, Texture);
+
+                if (draw_grid) output += GridLines(subcell_pos);
             }
 
             return output;
