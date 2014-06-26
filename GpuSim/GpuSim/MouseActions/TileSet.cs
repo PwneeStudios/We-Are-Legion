@@ -5,17 +5,20 @@ namespace GpuSim
     public partial class Action_PaintTiles : SimShader
     {
         [FragmentShader]
-        tile FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<data> Select, [TileType.Vals] float type)
+        tile FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<data> Select, Field<vec4> Random, [TileType.Vals] float type)
         {
             tile here = Tiles[Here];
             data select = Select[Here];
+            vec4 rndv = Random[Here];
+
+            float rnd = rndv.x * rndv.x * rndv.x * rndv.x;
 
             if (Something(select))
             {
                 here.type = type;
 
-                if (type == TileType.Grass) { here.i = _0; here.j = _31; }
-                else if (type == TileType.Dirt) { here.i = _0; here.j = _30; }
+                if (type == TileType.Grass) { here.i = RndFint(rnd, _0, _6); here.j = _31; }
+                else if (type == TileType.Dirt) { here.i = RndFint(rnd, _0, _9); here.j = _30; }
                 else if (type == TileType.Trees) { here.i = _0; here.j = _25; }
             }
 

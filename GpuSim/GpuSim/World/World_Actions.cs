@@ -129,7 +129,7 @@ namespace GpuSim
             if (Keys.V.Down()) { tile = TileType.Grass; }
             if (Keys.N.Down()) { tile = TileType.Trees; }
 
-            Action_PaintTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, tile, Output: DataGroup.Temp1);
+            Action_PaintTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, DataGroup.RandomField, tile, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
 
             PaintTiles_UpdateData.Apply(DataGroup.Tiles, DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);

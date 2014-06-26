@@ -379,6 +379,12 @@ namespace GpuSim
             return d.direction < Dir.Stationary;
         }
 
+        protected static float RndFint(float rnd, float f1, float f2)
+        {
+            float val = rnd * (f2 - f1) + f1;
+            return fint_round(val);
+        }
+
         public static class Anim
         {
             public const float

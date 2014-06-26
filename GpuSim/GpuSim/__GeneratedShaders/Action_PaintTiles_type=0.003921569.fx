@@ -52,11 +52,37 @@ sampler fs_param_Select : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
+// Texture Sampler for fs_param_Random, using register location 3
+float2 fs_param_Random_size;
+float2 fs_param_Random_dxdy;
+
+Texture fs_param_Random_Texture;
+sampler fs_param_Random : register(s3) = sampler_state
+{
+    texture   = <fs_param_Random_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
+}
+
+float FragSharpFramework__FragSharpStd__fint_round(float v)
+{
+    return floor(255 * v + 0.5) * 0.003921569;
+}
+
+float GpuSim__SimShader__RndFint(float rnd, float f1, float f2)
+{
+    float val = rnd * (f2 - f1) + f1;
+    return FragSharpFramework__FragSharpStd__fint_round(val);
 }
 
 // Compiled vertex shader
@@ -75,19 +101,21 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 0)) * fs_param_Tiles_dxdy);
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
+    float4 rndv = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
+    float rnd = rndv.x * rndv.x * rndv.x * rndv.x;
     if (GpuSim__SimShader__Something(select))
     {
         here.r = 0.003921569;
         if (abs(0.003921569 - 0.003921569) < .001)
         {
-            here.g = 0.0;
+            here.g = GpuSim__SimShader__RndFint(rnd, 0.0, 0.02352941);
             here.b = 0.1215686;
         }
         else
         {
             if (abs(0.003921569 - 0.007843138) < .001)
             {
-                here.g = 0.0;
+                here.g = GpuSim__SimShader__RndFint(rnd, 0.0, 0.03529412);
                 here.b = 0.1176471;
             }
             else

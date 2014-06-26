@@ -1177,33 +1177,33 @@ namespace GpuSim
         public static Effect CompiledEffect_type_0p007843138;
         public static Effect CompiledEffect_type_0p01960784;
 
-        public static void Apply(Texture2D Tiles, Texture2D Select, float type, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Tiles, Texture2D Select, Texture2D Random, float type, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Tiles, Select, type);
+            Using(Tiles, Select, Random, type);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Tiles, Texture2D Select, float type, RenderTarget2D Output)
+        public static void Apply(Texture2D Tiles, Texture2D Select, Texture2D Random, float type, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Tiles, Select, type);
+            Using(Tiles, Select, Random, type);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Tiles, Texture2D Select, float type, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Tiles, Texture2D Select, Texture2D Random, float type, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Tiles, Select, type);
+            Using(Tiles, Select, Random, type);
         }
-        public static void Using(Texture2D Tiles, Texture2D Select, float type, RenderTarget2D Output)
+        public static void Using(Texture2D Tiles, Texture2D Select, Texture2D Random, float type, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Tiles, Select, type);
+            Using(Tiles, Select, Random, type);
         }
-        public static void Using(Texture2D Tiles, Texture2D Select, float type)
+        public static void Using(Texture2D Tiles, Texture2D Select, Texture2D Random, float type)
         {
             Effect CompiledEffect = null;
 
@@ -1219,6 +1219,9 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_Select_Texture"].SetValue(FragSharpMarshal.Marshal(Select));
             CompiledEffect.Parameters["fs_param_Select_size"].SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
             CompiledEffect.Parameters["fs_param_Select_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Select.Width, Select.Height)));
+            CompiledEffect.Parameters["fs_param_Random_Texture"].SetValue(FragSharpMarshal.Marshal(Random));
+            CompiledEffect.Parameters["fs_param_Random_size"].SetValue(FragSharpMarshal.Marshal(vec(Random.Width, Random.Height)));
+            CompiledEffect.Parameters["fs_param_Random_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Random.Width, Random.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
