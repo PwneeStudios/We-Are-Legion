@@ -15,6 +15,8 @@ namespace GpuSim
             if (NotPaused_SimulationUpdate)
                 SecondsSinceLastUpdate += GameClass.ElapsedSeconds;
 
+            UpdateAllPlayerUnitCounts();
+
             switch (CurUserMode)
             {
                 case UserMode.PlaceBuilding:
@@ -28,16 +30,9 @@ namespace GpuSim
                     break;
 
                 case UserMode.Select:
-                    for (int i = 1; i <= 2; i++)
-                    {
-                        float player = Player.Get(i);
-                        var count = DataGroup.DoUnitCount(player, false);
-                        DataGroup.UnitCount[i]     = count.Item1;
-                        DataGroup.BarracksCount[i] = count.Item2;
-                    }
-
+                    // Count the selected units for the player. Must be done at least before every attack command.
                     var selected = DataGroup.DoUnitCount(PlayerOrNeutral, true);
-                    DataGroup.SelectedUnits    = selected.Item1;
+                    DataGroup.SelectedUnits = selected.Item1;
                     DataGroup.SelectedBarracks = selected.Item2;
 
                     SelectionUpdate();
@@ -177,6 +172,16 @@ namespace GpuSim
             UserMessages.Draw();
 
             Render.EndText();
+        }
+
+        private void UpdateAllPlayerUnitCounts()
+        {
+            // Alternate between counting units for each player, to spread out the computational load
+            int i = DrawCount % 4 + 1;
+            float player = Player.Get(i);
+            var count = DataGroup.DoUnitCount(player, false);
+            DataGroup.UnitCount[i] = count.Item1;
+            DataGroup.BarracksCount[i] = count.Item2;
         }
     }
 }
