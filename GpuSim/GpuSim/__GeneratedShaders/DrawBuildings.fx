@@ -89,7 +89,7 @@ float fs_param_s;
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsBuilding(float4 u)
 {
-    return u.r >= 0.007843138 - .001;
+    return u.r >= 0.007843138 - .001 && u.r < 0.01960784 - .001;
 }
 
 float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
@@ -135,7 +135,7 @@ float GpuSim__UnitType__BuildingIndex(float type)
 
 bool GpuSim__SimShader__IsNeutralBuilding(float4 u)
 {
-    return u.r >= 0.01568628 - .001;
+    return u.r >= 0.01568628 - .001 && u.r < 0.01960784 - .001;
 }
 
 float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)

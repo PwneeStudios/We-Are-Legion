@@ -53,7 +53,7 @@ sampler fs_param_Select : register(s2) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-void GpuSim__UpdateTiles__DirtGrassInterface(inout float4 here, inout float4 right, inout float4 up, inout float4 left, inout float4 down, inout float4 up_right, inout float4 up_left, inout float4 down_right, inout float4 down_left)
+void GpuSim__PaintTiles_UpdateTiles__DirtGrassInterface(inout float4 here, inout float4 right, inout float4 up, inout float4 left, inout float4 down, inout float4 up_right, inout float4 up_left, inout float4 down_right, inout float4 down_left)
 {
     bool grass_on_left = abs(left.r - 0.003921569) < .001 || abs(up_left.r - 0.003921569) < .001 || abs(down_left.r - 0.003921569) < .001;
     bool grass_on_right = abs(right.r - 0.003921569) < .001 || abs(up_right.r - 0.003921569) < .001 || abs(down_right.r - 0.003921569) < .001;
@@ -192,7 +192,7 @@ void GpuSim__UpdateTiles__DirtGrassInterface(inout float4 here, inout float4 rig
     }
 }
 
-void GpuSim__UpdateTiles__GrassTreeInterface(inout float4 here, inout float4 right, inout float4 up, inout float4 left, inout float4 down, inout float4 up_right, inout float4 up_left, inout float4 down_right, inout float4 down_left)
+void GpuSim__PaintTiles_UpdateTiles__GrassTreeInterface(inout float4 here, inout float4 right, inout float4 up, inout float4 left, inout float4 down, inout float4 up_right, inout float4 up_left, inout float4 down_right, inout float4 down_left)
 {
     if (abs(here.r - 0.01960784) < .001)
     {
@@ -361,13 +361,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, 0)) * fs_param_Tiles_dxdy), up = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 1)) * fs_param_Tiles_dxdy), left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), 0)) * fs_param_Tiles_dxdy), down = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, -(1))) * fs_param_Tiles_dxdy), up_right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, 1)) * fs_param_Tiles_dxdy), up_left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), 1)) * fs_param_Tiles_dxdy), down_right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, -(1))) * fs_param_Tiles_dxdy), down_left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Tiles_dxdy);
     if (abs(here.r - 0.007843138) < .001)
     {
-        GpuSim__UpdateTiles__DirtGrassInterface(here, right, up, left, down, up_right, up_left, down_right, down_left);
+        GpuSim__PaintTiles_UpdateTiles__DirtGrassInterface(here, right, up, left, down, up_right, up_left, down_right, down_left);
     }
     else
     {
         if (abs(here.r - 0.003921569) < .001 || abs(here.r - 0.01960784) < .001)
         {
-            GpuSim__UpdateTiles__GrassTreeInterface(here, right, up, left, down, up_right, up_left, down_right, down_left);
+            GpuSim__PaintTiles_UpdateTiles__GrassTreeInterface(here, right, up, left, down, up_right, up_left, down_right, down_left);
         }
     }
     __FinalOutput.Color = here;

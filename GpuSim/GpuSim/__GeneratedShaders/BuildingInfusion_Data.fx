@@ -60,7 +60,7 @@ bool GpuSim__SimShader__Something(float4 u)
 
 bool GpuSim__SimShader__IsBuilding(float4 u)
 {
-    return u.r >= 0.007843138 - .001;
+    return u.r >= 0.007843138 - .001 && u.r < 0.01960784 - .001;
 }
 
 bool GpuSim__SimShader__IsCenter(float4 b)

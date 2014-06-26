@@ -110,7 +110,7 @@ bool GpuSim__SimShader__IsUnit(float4 u)
 
 bool GpuSim__SimShader__IsBuilding(float4 u)
 {
-    return u.r >= 0.007843138 - .001;
+    return u.r >= 0.007843138 - .001 && u.r < 0.01960784 - .001;
 }
 
 float GpuSim__ExplosionSpriteSheet__ExplosionFrame(float s, float4 building_here)

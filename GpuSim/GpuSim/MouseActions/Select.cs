@@ -13,7 +13,7 @@ namespace GpuSim
             unit select = Select[Here];
 
             // If the player unit here matches the 
-            if (select.type > 0 && (select.player == Player.None || unit_here.player == select.player))
+            if (select.type > 0 && (select.player == Player.None || unit_here.player == select.player) && !BlockingTileHere(unit_here))
             {
                 set_selected(ref data_here, true);
             }

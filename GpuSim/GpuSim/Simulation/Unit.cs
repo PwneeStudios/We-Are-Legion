@@ -264,6 +264,9 @@ namespace GpuSim
                 public class ValsAttribute : Attribute { }
 
             public const float
+                FirstBlockingTileType = Water;
+
+            public const float
                 None = _0,
                 Grass = _1,
                 Dirt = _2,
@@ -314,7 +317,8 @@ namespace GpuSim
             public const float
                 FirstUnitType = Footman,
                 FirstBuildingType = Barracks,
-                FirstNeutralBuildingType = GoldSource;
+                FirstNeutralBuildingType = GoldSource,
+                FirstBlockingTileType = BlockingTile;
 
             public static float BuildingIndex(float type)
             {
@@ -329,7 +333,9 @@ namespace GpuSim
                 Barracks = _2,
                 GoldMine = _3,
 
-                GoldSource = _4;
+                GoldSource = _4,
+
+                BlockingTile = _5;
         }
 
         protected static bool IsUnit(unit u)
@@ -339,12 +345,23 @@ namespace GpuSim
 
         protected static bool IsBuilding(unit u)
         {
-            return u.type >= UnitType.FirstBuildingType;
+            return u.type >= UnitType.FirstBuildingType && u.type < UnitType.FirstBlockingTileType;
         }
 
         protected static bool IsNeutralBuilding(unit u)
         {
-            return u.type >= UnitType.FirstNeutralBuildingType;
+            return u.type >= UnitType.FirstNeutralBuildingType && u.type < UnitType.FirstBlockingTileType;
+        }
+
+        protected static bool BlockingTileHere(unit u)
+        {
+            return u.type >= UnitType.FirstBlockingTileType;
+        }
+
+        protected static bool IsBlockingTile(tile t)
+        {
+            return t.type >= TileType.FirstBlockingTileType ||
+                t.type == TileType.Grass && t.j != _31;
         }
 
         protected static bool IsCenter(building b)
@@ -352,14 +369,14 @@ namespace GpuSim
             return b.part_x == _1 && b.part_y == _1;
         }
 
-        protected static bool IsStationary(data u)
+        protected static bool IsStationary(data d)
         {
-            return u.direction >= Dir.Stationary;
+            return d.direction >= Dir.Stationary;
         }
 
-        protected static bool IsMobile(data u)
+        protected static bool IsMobile(data d)
         {
-            return u.direction < Dir.Stationary;
+            return d.direction < Dir.Stationary;
         }
 
         public static class Anim

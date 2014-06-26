@@ -37,14 +37,14 @@ sampler fs_param_Path : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Current, using register location 2
-float2 fs_param_Current_size;
-float2 fs_param_Current_dxdy;
+// Texture Sampler for fs_param_Data, using register location 2
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
 
-Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s2) = sampler_state
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s2) = sampler_state
 {
-    texture   = <fs_param_Current_Texture>;
+    texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -52,14 +52,14 @@ sampler fs_param_Current : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_CurData, using register location 3
-float2 fs_param_CurData_size;
-float2 fs_param_CurData_dxdy;
+// Texture Sampler for fs_param_Units, using register location 3
+float2 fs_param_Units_size;
+float2 fs_param_Units_dxdy;
 
-Texture fs_param_CurData_Texture;
-sampler fs_param_CurData : register(s3) = sampler_state
+Texture fs_param_Units_Texture;
+sampler fs_param_Units : register(s3) = sampler_state
 {
-    texture   = <fs_param_CurData_Texture>;
+    texture   = <fs_param_Units_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -80,7 +80,12 @@ bool GpuSim__SimShader__Something(float4 u)
 
 bool GpuSim__SimShader__IsNeutralBuilding(float4 u)
 {
-    return u.r >= 0.01568628 - .001;
+    return u.r >= 0.01568628 - .001 && u.r < 0.01960784 - .001;
+}
+
+bool GpuSim__SimShader__BlockingTileHere(float4 u)
+{
+    return u.r >= 0.01960784 - .001;
 }
 
 // Compiled vertex shader
@@ -97,32 +102,32 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    float4 cur_data = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
     float4 right = tex2D(fs_param_Path, psin.TexCoords + (float2(1, 0)) * fs_param_Path_dxdy), up = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 1)) * fs_param_Path_dxdy), left = tex2D(fs_param_Path, psin.TexCoords + (float2(-(1), 0)) * fs_param_Path_dxdy), down = tex2D(fs_param_Path, psin.TexCoords + (float2(0, -(1))) * fs_param_Path_dxdy);
     float4 dist_to_enemy_of = FragSharpFramework__FragSharpStd__min(right, up, left, down) + float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
-    if (GpuSim__SimShader__Something(data))
+    if (GpuSim__SimShader__Something(data_here))
     {
-        if (GpuSim__SimShader__IsNeutralBuilding(cur_data))
+        if (GpuSim__SimShader__IsNeutralBuilding(unit_here) || GpuSim__SimShader__BlockingTileHere(unit_here))
         {
             dist_to_enemy_of += 100 * float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
         }
         else
         {
             dist_to_enemy_of += 3 * float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
-            if (abs(cur_data.b - 0.003921569) > .001)
+            if (abs(unit_here.b - 0.003921569) > .001)
             {
                 dist_to_enemy_of.r = 0.0;
             }
-            if (abs(cur_data.b - 0.007843138) > .001)
+            if (abs(unit_here.b - 0.007843138) > .001)
             {
                 dist_to_enemy_of.g = 0.0;
             }
-            if (abs(cur_data.b - 0.01176471) > .001)
+            if (abs(unit_here.b - 0.01176471) > .001)
             {
                 dist_to_enemy_of.b = 0.0;
             }
-            if (abs(cur_data.b - 0.01568628) > .001)
+            if (abs(unit_here.b - 0.01568628) > .001)
             {
                 dist_to_enemy_of.a = 0.0;
             }

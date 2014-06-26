@@ -77,6 +77,11 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
+bool GpuSim__SimShader__IsStationary(float4 d)
+{
+    return d.r >= 0.01960784 - .001;
+}
+
 bool GpuSim__SimShader__selected(float4 u)
 {
     float val = u.b;
@@ -85,7 +90,7 @@ bool GpuSim__SimShader__selected(float4 u)
 
 float4 GpuSim__DrawUnitsZoomedOut__Presence(float4 data)
 {
-    return GpuSim__SimShader__Something(data) ? (GpuSim__SimShader__selected(data) ? float4(0.3294118, 0.7882353, 0.4196078, 1.0) : float4(0.5686275, 0.4862745, 0.509804, 1.0)) : float4(0, 0, 0, 0);
+    return (GpuSim__SimShader__Something(data) && !(GpuSim__SimShader__IsStationary(data))) ? (GpuSim__SimShader__selected(data) ? float4(0.3294118, 0.7882353, 0.4196078, 1.0) : float4(0.5686275, 0.4862745, 0.509804, 1.0)) : float4(0, 0, 0, 0);
 }
 
 // Compiled vertex shader

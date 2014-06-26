@@ -119,10 +119,10 @@ namespace GpuSim
     public partial class Pathfinding_ToOtherTeams : SimShader
     {
         [FragmentShader]
-        TeamTuple FragmentShader(VertexOut vertex, Field<TeamTuple> Path, Field<data> Current, Field<unit> CurData)
+        TeamTuple FragmentShader(VertexOut vertex, Field<TeamTuple> Path, Field<data> Data, Field<unit> Units)
         {
-            data data = Current[Here];
-            unit cur_data = CurData[Here];
+            data data_here = Data[Here];
+            unit unit_here = Units[Here];
 
             TeamTuple
                 right = Path[RightOne],
@@ -132,9 +132,9 @@ namespace GpuSim
 
             TeamTuple dist_to_enemy_of = min(right, up, left, down) + vec(_1,_1,_1,_1);
 
-            if (Something(data))
+            if (Something(data_here))
             {
-                if (IsNeutralBuilding(cur_data))
+                if (IsNeutralBuilding(unit_here) || BlockingTileHere(unit_here))
                 {
                     dist_to_enemy_of += 100 * TeamTuple(_1, _1, _1, _1);
                 }
@@ -142,10 +142,10 @@ namespace GpuSim
                 {
                     dist_to_enemy_of += 3 * TeamTuple(_1, _1, _1, _1);
 
-                    if (cur_data.team != Team.One)   dist_to_enemy_of.TeamOne   = _0;
-                    if (cur_data.team != Team.Two)   dist_to_enemy_of.TeamTwo   = _0;
-                    if (cur_data.team != Team.Three) dist_to_enemy_of.TeamThree = _0;
-                    if (cur_data.team != Team.Four)  dist_to_enemy_of.TeamFour  = _0;
+                    if (unit_here.team != Team.One)   dist_to_enemy_of.TeamOne   = _0;
+                    if (unit_here.team != Team.Two)   dist_to_enemy_of.TeamTwo   = _0;
+                    if (unit_here.team != Team.Three) dist_to_enemy_of.TeamThree = _0;
+                    if (unit_here.team != Team.Four)  dist_to_enemy_of.TeamFour  = _0;
                 }
             }
 

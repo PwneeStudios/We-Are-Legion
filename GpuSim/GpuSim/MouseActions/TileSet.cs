@@ -23,7 +23,61 @@ namespace GpuSim
         }
     }
 
-    public partial class UpdateTiles : SimShader
+    public partial class PaintTiles_UpdateData : SimShader
+    {
+        [FragmentShader]
+        data FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<unit> Units, Field<data> Data)
+        {
+            tile tile_here = Tiles[Here];
+            unit unit_here = Units[Here];
+            data data_here = Data[Here];
+
+            if (IsBlockingTile(tile_here))
+            {
+                data_here = data.Nothing;
+                data_here.direction = Dir.Stationary;
+            }
+            else
+            {
+                if (BlockingTileHere(unit_here))
+                {
+                    data_here = data.Nothing;
+                }
+            }
+
+            return data_here;
+        }
+    }
+
+    public partial class PaintTiles_UpdateUnits : SimShader
+    {
+        [FragmentShader]
+        unit FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<unit> Units)
+        {
+            tile tile_here = Tiles[Here];
+            unit unit_here = Units[Here];
+
+            if (IsBlockingTile(tile_here))
+            {
+                unit_here.type = UnitType.BlockingTile;
+                unit_here.player = Player.None;
+                unit_here.team = Team.None;
+            }
+            else
+            {
+                if (BlockingTileHere(unit_here))
+                {
+                    unit_here.type = UnitType.None;
+                    unit_here.player = Player.None;
+                    unit_here.team = Team.None;
+                }
+            }
+
+            return unit_here;
+        }
+    }
+
+    public partial class PaintTiles_UpdateTiles : SimShader
     {
         [FragmentShader]
         tile FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<data> Select)

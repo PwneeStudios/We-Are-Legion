@@ -6,7 +6,7 @@ namespace GpuSim
     {
         color Presence(data data)
         {
-            return Something(data) ?
+            return (Something(data) && !IsStationary(data)) ?
                 (selected(data) ? rgb(0x54c96b) : rgb(0x917c82)) :
                 rgba(0,0,0,0);
         }
@@ -70,7 +70,7 @@ namespace GpuSim
 
             data
                 cur = CurrentData[Here],
-	            pre = PreviousData[Here];
+                pre = PreviousData[Here];
             
             unit
                 cur_unit  = CurrentUnits[Here],
@@ -81,12 +81,12 @@ namespace GpuSim
             vec2 subcell_pos = get_subcell_pos(vertex, CurrentData.Size);
 
             if (Something(cur) && cur.change == Change.Stayed)
-	        {
-		        if (s > .5) pre = cur;
+            {
+                if (s > .5) pre = cur;
 
                 float frame = cur_unit.anim > 0 ? s * UnitSpriteSheet.AnimLength + 255*cur_unit.anim : 0;
                 output += Sprite(pre, pre_unit, subcell_pos, pre.direction, frame, Texture);
-	        }
+            }
             else
             {
                 float frame = s * UnitSpriteSheet.AnimLength;

@@ -43,9 +43,9 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
-bool GpuSim__SimShader__IsStationary(float4 u)
+bool GpuSim__SimShader__IsStationary(float4 d)
 {
-    return u.r >= 0.01960784 - .001;
+    return d.r >= 0.01960784 - .001;
 }
 
 // Compiled vertex shader

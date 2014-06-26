@@ -131,7 +131,14 @@ namespace GpuSim
 
             Action_PaintTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, tile, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
-            UpdateTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, Output: DataGroup.Temp1);
+
+            PaintTiles_UpdateData.Apply(DataGroup.Tiles, DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
+
+            PaintTiles_UpdateUnits.Apply(DataGroup.Tiles, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
+
+            PaintTiles_UpdateTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
         }
 
