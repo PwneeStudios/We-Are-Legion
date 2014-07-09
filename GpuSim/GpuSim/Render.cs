@@ -94,7 +94,7 @@ namespace GpuSim
 
             if (align.HasFlag(Alignment.Bottom))
                 origin.y += size.y / 2;
-
+            
             MySpriteBatch.DrawString(font, text, pos, (Color)clr.Premultiplied, 0, origin, 1, SpriteEffects.None, 0);
         }
     }
