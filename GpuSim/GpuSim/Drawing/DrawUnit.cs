@@ -51,7 +51,7 @@ namespace GpuSim
             float selected_offset = selected(u) ? 4 : 0;
 
             pos.x += floor(frame);
-            pos.y += (floor(direction * 255 + .5f) - 1 + selected_offset);
+            pos.y += (Float(direction) - 1 + selected_offset);
             pos *= UnitSpriteSheet.SpriteSize;
 
             var clr = Texture[pos];

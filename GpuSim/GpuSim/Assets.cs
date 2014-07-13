@@ -1,22 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Media;
-
-using FragSharpHelper;
-using FragSharpFramework;
 
 namespace GpuSim
 {
     public static class Assets
     {
         public static Texture2D
+            DebugInfoTexture,
+
             BuildingTexture_1,
             ExplosionTexture_1,
             UnitTexture_1, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
@@ -29,6 +20,8 @@ namespace GpuSim
 
         public static void Initialize()
         {
+            DebugInfoTexture = Content.Load<Texture2D>("Art\\DebugInfo");
+
             BuildingTexture_1 = Content.Load<Texture2D>("Art\\Buildings_1");
             ExplosionTexture_1 = Content.Load<Texture2D>("Art\\BuildingExplosion_1");
 

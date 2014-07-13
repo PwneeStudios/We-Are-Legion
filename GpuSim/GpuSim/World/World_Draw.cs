@@ -92,6 +92,9 @@ namespace GpuSim
             DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, Assets.TileSpriteSheet, MapEditor && DrawGridLines);
             GridHelper.DrawGrid();
 
+            DrawDebugInfo.Using(camvec, CameraAspect, DataGroup.Geo, Assets.DebugInfoTexture);
+            GridHelper.DrawGrid();
+
             //DrawGrass.Using(camvec, CameraAspect, Assets.GroundTexture);
             //Ground.Draw(GameClass.Graphics);
 

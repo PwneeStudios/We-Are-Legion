@@ -126,6 +126,11 @@ bool GpuSim__SimShader__selected(float4 u)
     return val >= 0.5019608 - .001;
 }
 
+float FragSharpFramework__FragSharpStd__Float(float v)
+{
+    return floor(255 * v + 0.5);
+}
+
 float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
 {
     if (abs(player - 0.003921569) < .001)
@@ -174,7 +179,7 @@ float4 GpuSim__DrawUnits__Sprite(VertexToPixel psin, float4 u, float4 d, float2 
     }
     float selected_offset = GpuSim__SimShader__selected(u) ? 4 : 0;
     pos.x += floor(frame);
-    pos.y += (floor(direction * 255 + 0.5) - 1 + selected_offset);
+    pos.y += (FragSharpFramework__FragSharpStd__Float(direction) - 1 + selected_offset);
     pos *= float2(1.0 / 15, 1.0 / 8);
     float4 clr = tex2D(Texture, pos);
     return GpuSim__SimShader__PlayerColorize(clr, d.g);

@@ -24,14 +24,14 @@ float4 vs_param_cameraPos;
 float vs_param_cameraAspect;
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Tiles, using register location 1
-float2 fs_param_Tiles_size;
-float2 fs_param_Tiles_dxdy;
+// Texture Sampler for fs_param_Geo, using register location 1
+float2 fs_param_Geo_size;
+float2 fs_param_Geo_dxdy;
 
-Texture fs_param_Tiles_Texture;
-sampler fs_param_Tiles : register(s1) = sampler_state
+Texture fs_param_Geo_Texture;
+sampler fs_param_Geo : register(s1) = sampler_state
 {
-    texture   = <fs_param_Tiles_Texture>;
+    texture   = <fs_param_Geo_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -54,8 +54,6 @@ sampler fs_param_Texture : register(s2) = sampler_state
     AddressV  = Wrap;
 };
 
-bool fs_param_draw_grid;
-
 // The following methods are included because they are referenced by the fragment shader.
 float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
 {
@@ -70,7 +68,7 @@ float FragSharpFramework__FragSharpStd__Float(float v)
     return floor(255 * v + 0.5);
 }
 
-float4 GpuSim__DrawTiles__Sprite(VertexToPixel psin, float4 c, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 GpuSim__DrawDebugInfo__DrawDebugInfoTile(VertexToPixel psin, float dir, float val, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     float4 clr = float4(0.0, 0.0, 0.0, 0.0);
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
@@ -78,24 +76,11 @@ float4 GpuSim__DrawTiles__Sprite(VertexToPixel psin, float4 c, float2 pos, sampl
         return clr;
     }
     pos = pos * 0.98 + float2(0.01, 0.01);
-    pos.x += FragSharpFramework__FragSharpStd__Float(c.g);
-    pos.y += FragSharpFramework__FragSharpStd__Float(c.b);
-    pos *= float2(1.0 / 32, 1.0 / 32);
+    pos.x += FragSharpFramework__FragSharpStd__Float(val);
+    pos.y += FragSharpFramework__FragSharpStd__Float(dir - 0.003921569);
+    pos *= float2(1.0 / 32, 1.0 / 4);
     clr += tex2D(Texture, pos);
     return clr;
-}
-
-float4 GpuSim__DrawTiles__GridLines(float2 pos)
-{
-    if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
-    {
-        return float4(0.0, 0.0, 0.0, 0.0);
-    }
-    if (pos.x < 0.025 - .001 || pos.x > 0.975 + .001 || pos.y < 0.025 - .001 || pos.y > 0.975 + .001)
-    {
-        return float4(1, 1, 1, 1) * 0.2;
-    }
-    return float4(0.0, 0.0, 0.0, 0.0);
 }
 
 // Compiled vertex shader
@@ -115,14 +100,14 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 here = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 0)) * fs_param_Tiles_dxdy);
-    float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Tiles_size);
+    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy);
+    float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Geo_size);
     if (here.r > 0.0 + .001)
     {
-        output += GpuSim__DrawTiles__Sprite(psin, here, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
-        if (fs_param_draw_grid)
+        output += GpuSim__DrawDebugInfo__DrawDebugInfoTile(psin, here.r, 0, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+        if (abs(here.a - 0.003921569) < .001)
         {
-            output += GpuSim__DrawTiles__GridLines(subcell_pos);
+            output.r = 1;
         }
     }
     __FinalOutput.Color = output;

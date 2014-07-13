@@ -30,6 +30,16 @@ namespace GpuSim
     }
 
     [Copy(typeof(vec4))]
+    public partial struct geo
+    {
+        [Hlsl("r")]
+        public float dir { get { return r; } set { r = value; } }
+
+        [Hlsl("a")]
+        public float bad { get { return a; } set { a = value; } }
+    }
+
+    [Copy(typeof(vec4))]
     public partial struct unit
     {
         [Hlsl("r")]
@@ -156,6 +166,8 @@ namespace GpuSim
 
     public class SimShader : GridComputation
     {
+        public const float _true = _1, _false = _0;
+
         public static float Get(PlayerTuple tuple, float player)
         {
             if (player == Player.One) return tuple.PlayerOne;
@@ -406,6 +418,14 @@ namespace GpuSim
                 Down = _7,
                 BR = _8,
                 Count = _9;
+        }
+
+        public static class DebugInfoSpriteSheet
+        {
+            public const int SheetDimX = 32;
+            public const int SheetDimY = 4;
+            public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
+            public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
         }
 
         public static class TileSpriteSheet

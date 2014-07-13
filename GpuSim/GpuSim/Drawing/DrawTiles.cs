@@ -34,13 +34,13 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<tile> tiles, PointSampler Texture, bool draw_grid)
+        color FragmentShader(VertexOut vertex, Field<tile> Tiles, PointSampler Texture, bool draw_grid)
         {
             color output = color.TransparentBlack;
 
-            tile here = tiles[Here];
+            tile here = Tiles[Here];
             
-            vec2 subcell_pos = get_subcell_pos(vertex, tiles.Size);
+            vec2 subcell_pos = get_subcell_pos(vertex, Tiles.Size);
 
             if (here.type > _0)
             {

@@ -140,6 +140,20 @@ namespace GpuSim
 
             PaintTiles_UpdateTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
+
+            UpdateGeo();
+        }
+
+        void UpdateGeo()
+        {
+            Geodesic_Outline.Apply(DataGroup.Tiles, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+
+            for (int i = 0; i < 5; i++)
+            {
+                Geodesic_OutlineCleanup.Apply(DataGroup.Tiles, DataGroup.Geo, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+            }
         }
 
         void CreateUnits()
