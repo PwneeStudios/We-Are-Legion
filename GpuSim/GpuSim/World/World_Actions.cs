@@ -154,6 +154,15 @@ namespace GpuSim
                 Geodesic_OutlineCleanup.Apply(DataGroup.Tiles, DataGroup.Geo, Output: DataGroup.Temp1);
                 CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
             }
+
+            for (int i = 0; i < 5; i++)
+            {
+                foreach (var dir in Dir.Vals)
+                {
+                    Geodesic_DirwardExtend.Apply(DataGroup.Tiles, DataGroup.Geo, DataGroup.Dirward[dir], dir, Output: DataGroup.Temp1);
+                    DataGroup.Dirward[dir] = CoreMath.SwapReturn(ref DataGroup.Temp1, DataGroup.Dirward[dir]);
+                }
+            }
         }
 
         void CreateUnits()

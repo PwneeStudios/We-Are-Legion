@@ -176,7 +176,8 @@ namespace GpuSim
     public partial class Movement_UpdateDirection_RemoveDead : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<vec4> TargetData, Field<unit> Unit, Field<extra> Extra, Field<data> Data, Field<vec4> PathToOtherTeams)
+        data FragmentShader(VertexOut vertex, Field<vec4> TargetData, Field<unit> Unit, Field<extra> Extra, Field<data> Data, Field<vec4> PathToOtherTeams,
+                            Field<geo> Geo, Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown)
         {
             data  data_here  = Data[Here];
 
@@ -188,7 +189,7 @@ namespace GpuSim
                 unit  here       = Unit[Here];
                 extra extra_here = Extra[Here];
 
-                // Remove if dead units
+                // Remove if dead unit
                 if (here.anim == Anim.Dead && IsUnit(here))
                 {
                     return data.Nothing;
@@ -288,14 +289,18 @@ namespace GpuSim
                 // If we aren't attacking, or if a unit is too far away
                 if (min > auto_attack_cutoff && data_here.action == UnitAction.Attacking || data_here.action == UnitAction.Moving)
                 {
-                    NaivePathfind(vertex, Data, TargetData, here, ref data_here, ref extra_here);
+                    NaivePathfind(vertex, Data, TargetData,
+                                  Geo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown,
+                                  here, ref data_here, ref extra_here);
                 }
             }
 
             return data_here;
         }
 
-        void NaivePathfind(VertexOut vertex, Field<data> Current, Field<vec4> TargetData, unit data, ref data here, ref extra extra_here)
+        void NaivePathfind(VertexOut vertex, Field<data> Current, Field<vec4> TargetData,
+                           Field<geo> Geo, Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown,
+                           unit data, ref data here, ref extra extra_here)
         {
             float dir = 0;
 
@@ -320,96 +325,55 @@ namespace GpuSim
             // Simple pathing: Go toward the cardinal direction that is furthest away. If something is in your way, go perpendicularly, assuming you also need to go in that direction.
             vec2 diff = Destination - CurPos;
             vec2 mag = abs(diff);
-            if ((mag.x > mag.y || diff.y > 0 && Something(up) || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
-            if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up)) dir = Dir.Up;
-            if ((mag.x > mag.y || diff.y > 0 && Something(up) || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left)) dir = Dir.Left;
-            if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down)) dir = Dir.Down;
+            //if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
+            //if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up))    dir = Dir.Up;
+            //if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left))  dir = Dir.Left;
+            //if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down))  dir = Dir.Down;
+            float dir2 = Dir.None;
+            if (mag.x > mag.y && Destination.x > CurPos.x + 1) dir = Dir.Right; 
+            if (mag.y > mag.x && Destination.y > CurPos.y + 1) dir = Dir.Up;
+            if (mag.x > mag.y && Destination.x < CurPos.x - 1) dir = Dir.Left;
+            if (mag.y > mag.x && Destination.y < CurPos.y - 1) dir = Dir.Down;
 
-            /*
-            // Heading conserving pathing: Tries to maintain the original heading of the unit as it paths toward its destination.
-            // Calculate angles
-            float cur_angle = atan(CurPos.y - Destination.y, CurPos.x - Destination.x);
-            cur_angle = (cur_angle + 3.14159f) / (2 * 3.14159f);
-            float target_angle = extra_here.target_angle;
-
-            float grace = 1;
-            if (Destination.x > CurPos.x + 1)
+            //if (mag.x > mag.y && Destination.y > CurPos.y + .5) dir2 = Dir.Up;
+            //if (mag.x > mag.y && Destination.y < CurPos.y - .5) dir2 = Dir.Down;
+            //if (mag.x <= mag.y && Destination.x > CurPos.x + 0) dir2 = Dir.Right;
+            //if (mag.x <= mag.y && Destination.x < CurPos.x - 0) dir2 = Dir.Left;
+            if (dir == Dir.Right || dir == Dir.Left)
             {
-                dir = Dir.Right;
-
-                if (Something(right) && Destination.x - CurPos.x > 5) grace = -1;
-
-                if (Destination.y < CurPos.y - grace)
-                {
-                    if (cur_angle < target_angle || Something(right))
-                    {
-                        dir = Dir.Down;
-
-                        if (Something(down))
-                            dir = Dir.Right;
-                    }
-                }
-                else if (Destination.y > CurPos.y + grace)
-                {
-                    if (cur_angle > target_angle || Something(right))
-                    {
-                        dir = Dir.Up;
-
-                        if (Something(up))
-                            dir = Dir.Right;
-                    }
-                }
+                if      (Destination.y > CurPos.y + 0) dir2 = Dir.Up;
+                else if (Destination.y < CurPos.y - 0) dir2 = Dir.Down;
             }
-            else if (Destination.x < CurPos.x - 1)
+            if (dir == Dir.Up || dir == Dir.Down)
             {
-                dir = Dir.Left;
-
-                if (Something(left) && CurPos.x - Destination.x > 5) grace = -1;
-
-                if (Destination.y < CurPos.y - grace)
-                {
-                    if (cur_angle > target_angle || Something(left))
-                    {
-                        dir = Dir.Down;
-
-                        if (Something(down))
-                            dir = Dir.Left;
-                    }
-                }
-                else if (Destination.y > CurPos.y + grace)
-                {
-                    if (cur_angle < target_angle || Something(left))
-                    {
-                        dir = Dir.Up;
-
-                        if (Something(up))
-                            dir = Dir.Left;
-                    }
-                }
+                if      (Destination.x > CurPos.x + 0) dir2 = Dir.Right;
+                else if (Destination.x < CurPos.x - 0) dir2 = Dir.Left;
             }
-            else
-            {
-                if (Destination.y > CurPos.y + 1)
-                {
-                    dir = Dir.Up;
-                    if (Something(up))
-                    {
-                        if (Destination.x > CurPos.x && !Something(right)) dir = Dir.Right;
-                        if (Destination.x < CurPos.x && !Something(left))  dir = Dir.Left;
-                    }
-                }
+            //dir2 = Dir.Right;
 
-                if (Destination.y < CurPos.y - 1)
-                {
-                    dir = Dir.Down;
-                    if (Something(up))
-                    {
-                        if (Destination.x > CurPos.x && !Something(right)) dir = Dir.Right;
-                        if (Destination.x < CurPos.x && !Something(left)) dir = Dir.Left;
-                    }
-                }
-            }
-            */
+            // Check geodesics
+            geo geo_here = Geo[Here];
+            
+            dirward dirward_here = dirward.Nothing;
+            bool other_side = false;
+            if      (dir == Dir.Right) { dirward_here = DirwardRight[Here]; other_side = Destination.x > pos(dirward_here); }
+            else if (dir == Dir.Left)  { dirward_here = DirwardLeft[Here];  other_side = Destination.x < pos(dirward_here); }
+            else if (dir == Dir.Up)    { dirward_here = DirwardUp[Here];    other_side = Destination.y > pos(dirward_here); }
+            else if (dir == Dir.Down)  { dirward_here = DirwardDown[Here];  other_side = Destination.y < pos(dirward_here); }
+
+            dirward dirward_here2 = dirward.Nothing;
+            bool other_side2 = false;
+            if      (dir2 == Dir.Right) { dirward_here2 = DirwardRight[Here]; other_side2 = Destination.x > pos(dirward_here2); }
+            else if (dir2 == Dir.Left)  { dirward_here2 = DirwardLeft[Here];  other_side2 = Destination.x < pos(dirward_here2); }
+            else if (dir2 == Dir.Up)    { dirward_here2 = DirwardUp[Here];    other_side2 = Destination.y > pos(dirward_here2); }
+            else if (dir2 == Dir.Down)  { dirward_here2 = DirwardDown[Here];  other_side2 = Destination.y < pos(dirward_here2); }
+
+            float wall_pos = pos(dirward_here);
+            if (geo_here.dir > 0 && (dirward_here.dir > 0 && other_side || dirward_here2.dir > 0 && other_side2))
+                dir = geo_here.dir;
+            //if (dist == 1 || desired direction is blocked) && desired dirward projection says we're gonna hit a wall
+            //    then: follow geo, no matter what level you're on, otherwise move inward normal to the geo
+
 
             if (IsValid(dir))
             {

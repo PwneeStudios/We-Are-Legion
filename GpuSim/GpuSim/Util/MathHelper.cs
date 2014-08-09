@@ -16,6 +16,13 @@ namespace GpuSim
             a = b;
             b = temp;
         }
+        public static T SwapReturn<T>(ref T a, T b)
+        {
+            T temp = a;
+            a = b;
+            return temp;
+        }
+
 
         public static int Modulo(int n, int p)
         {

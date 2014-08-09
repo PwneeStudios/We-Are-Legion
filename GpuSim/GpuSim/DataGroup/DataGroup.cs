@@ -74,8 +74,10 @@ namespace GpuSim
             PreviousDraw, CurrentDraw,
             Paths_Right, Paths_Left, Paths_Up, Paths_Down,
             DistanceToPlayers, DistanceToOtherTeams, DistanceToBuildings,
-            
+
             Geo;
+
+        public Dictionary<float, RenderTarget2D> Dirward = new Dictionary<float, RenderTarget2D>();
         
         public List<RenderTarget2D>
             Multigrid;
@@ -114,6 +116,10 @@ namespace GpuSim
             DistanceToBuildings = MakeTarget(w, h);
 
             Geo = MakeTarget(w, h);
+            Dirward.Add(Dir.Right, MakeTarget(w, h));
+            Dirward.Add(Dir.Up,    MakeTarget(w, h));
+            Dirward.Add(Dir.Left,  MakeTarget(w, h));
+            Dirward.Add(Dir.Down,  MakeTarget(w, h));
 
             Multigrid = new List<RenderTarget2D>();
             int n = w;

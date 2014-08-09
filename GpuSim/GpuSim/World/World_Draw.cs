@@ -93,6 +93,7 @@ namespace GpuSim
             GridHelper.DrawGrid();
 
             DrawDebugInfo.Using(camvec, CameraAspect, DataGroup.Geo, Assets.DebugInfoTexture);
+            //DrawDebugInfo.Using(camvec, CameraAspect, DataGroup.Dirward[Dir.Right], Assets.DebugInfoTexture);
             GridHelper.DrawGrid();
 
             //DrawGrass.Using(camvec, CameraAspect, Assets.GroundTexture);

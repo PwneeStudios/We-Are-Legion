@@ -151,4 +151,97 @@ namespace GpuSim
             return output;
         }
     }
+
+    public partial class Geodesic_DirwardExtend : SimShader
+    {
+        [FragmentShader]
+        dirward FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<geo> Geo, Field<dirward> Dirward, [Dir.Vals] float dir)
+        {
+            tile
+                here = Tiles[Here];
+
+            geo
+                geo_here = Geo[Here],
+                geo_right = Geo[RightOne],
+                geo_up = Geo[UpOne],
+                geo_left = Geo[LeftOne],
+                geo_down = Geo[DownOne],
+                geo_up_right = Geo[UpRight],
+                geo_up_left = Geo[UpLeft],
+                geo_down_right = Geo[DownRight],
+                geo_down_left = Geo[DownLeft];
+
+            dirward
+                dirward_here = Dirward[Here],
+                dirward_right = Dirward[RightOne],
+                dirward_up = Dirward[UpOne],
+                dirward_left = Dirward[LeftOne],
+                dirward_down = Dirward[DownOne],
+                dirward_up_right = Dirward[UpRight],
+                dirward_up_left = Dirward[UpLeft],
+                dirward_down_right = Dirward[DownRight],
+                dirward_down_left = Dirward[DownLeft];
+
+            if (IsBlockingTile(here)) return dirward.Nothing;
+
+            dirward output = dirward.Nothing;
+
+            dirward forward = dirward.Nothing, forward_right = dirward.Nothing, forward_left = dirward.Nothing, right = dirward.Nothing, left = dirward.Nothing;
+
+            // Get the surrounding dirward info and store it relative to the direction we consider forward
+            if (dir == Dir.Up)
+            {
+                forward       = dirward_up;
+                forward_right = dirward_up_right;
+                forward_left  = dirward_up_left;
+                right         = dirward_right;
+                left          = dirward_left;
+            }
+            else if (dir == Dir.Right)
+            {
+                forward       = dirward_right;
+                forward_right = dirward_down_right;
+                forward_left  = dirward_up_right;
+                right         = dirward_down;
+                left          = dirward_up;
+            }
+            else if (dir == Dir.Down)
+            {
+                forward       = dirward_down;
+                forward_right = dirward_down_left;
+                forward_left  = dirward_down_right;
+                right         = dirward_left;
+                left          = dirward_right;
+            }
+            else if (dir == Dir.Left)
+            {
+                forward       = dirward_left;
+                forward_right = dirward_up_left;
+                forward_left  = dirward_down_left;
+                right         = dirward_up;
+                left          = dirward_down;
+            }
+
+            if (geo_here.dir > 0 && IsBlockingTile(Tiles[dir_to_vec(dir)]))
+            {
+                output.dir = geo_here.dir;
+                output.dist = _0;
+
+                vec2 pos = vertex.TexCoords * Tiles.Size;
+                
+                if (dir == Dir.Right || dir == Dir.Left) set_pos(ref output, pos.x);
+                if (dir == Dir.Up    || dir == Dir.Down) set_pos(ref output, pos.y);
+            }
+
+            else if (forward.dir       > 0) output = forward;
+            else if (forward_right.dir > 0) output = forward_right;
+            else if (forward_left.dir  > 0) output = forward_left;
+            else if (right.dir         > 0) output = right;
+            else if (left.dir          > 0) output = left;
+
+            output.dist += _1;
+
+            return output;
+        }
+    }
 }

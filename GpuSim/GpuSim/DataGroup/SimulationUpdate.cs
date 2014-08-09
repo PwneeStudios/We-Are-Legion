@@ -20,7 +20,9 @@ namespace GpuSim
             Swap(ref Corspes, ref Temp1);
 
 
-            Movement_UpdateDirection_RemoveDead.Apply(TargetData, CurrentUnits, Extra, CurrentData, DistanceToOtherTeams, Output: Temp1);
+            Movement_UpdateDirection_RemoveDead.Apply(TargetData, CurrentUnits, Extra, CurrentData, DistanceToOtherTeams,
+                                                      Geo, Dirward[Dir.Right], Dirward[Dir.Left], Dirward[Dir.Up], Dirward[Dir.Down],
+                                                      Output: Temp1);
             Swap(ref CurrentData, ref Temp1);
 
             Movement_Phase1.Apply(CurrentData, Output: Temp1);

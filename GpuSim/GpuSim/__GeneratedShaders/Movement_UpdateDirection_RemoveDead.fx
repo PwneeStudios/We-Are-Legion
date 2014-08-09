@@ -97,6 +97,81 @@ sampler fs_param_PathToOtherTeams : register(s5) = sampler_state
     AddressV  = Clamp;
 };
 
+// Texture Sampler for fs_param_Geo, using register location 6
+float2 fs_param_Geo_size;
+float2 fs_param_Geo_dxdy;
+
+Texture fs_param_Geo_Texture;
+sampler fs_param_Geo : register(s6) = sampler_state
+{
+    texture   = <fs_param_Geo_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_DirwardRight, using register location 7
+float2 fs_param_DirwardRight_size;
+float2 fs_param_DirwardRight_dxdy;
+
+Texture fs_param_DirwardRight_Texture;
+sampler fs_param_DirwardRight : register(s7) = sampler_state
+{
+    texture   = <fs_param_DirwardRight_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_DirwardLeft, using register location 8
+float2 fs_param_DirwardLeft_size;
+float2 fs_param_DirwardLeft_dxdy;
+
+Texture fs_param_DirwardLeft_Texture;
+sampler fs_param_DirwardLeft : register(s8) = sampler_state
+{
+    texture   = <fs_param_DirwardLeft_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_DirwardUp, using register location 9
+float2 fs_param_DirwardUp_size;
+float2 fs_param_DirwardUp_dxdy;
+
+Texture fs_param_DirwardUp_Texture;
+sampler fs_param_DirwardUp : register(s9) = sampler_state
+{
+    texture   = <fs_param_DirwardUp_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_DirwardDown, using register location 10
+float2 fs_param_DirwardDown_size;
+float2 fs_param_DirwardDown_dxdy;
+
+Texture fs_param_DirwardDown_Texture;
+sampler fs_param_DirwardDown : register(s10) = sampler_state
+{
+    texture   = <fs_param_DirwardDown_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
 {
@@ -177,12 +252,17 @@ float GpuSim__Movement_UpdateDirection_RemoveDead__BuildingDirection(VertexToPix
     return dir;
 }
 
+float GpuSim__SimShader__pos(float4 d)
+{
+    return GpuSim__SimShader__unpack_coord(d.ba);
+}
+
 bool GpuSim__SimShader__IsValid(float direction)
 {
     return direction > 0 + .001;
 }
 
-void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel psin, VertexToPixel vertex, sampler Current, float2 Current_size, float2 Current_dxdy, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, float4 data, inout float4 here, inout float4 extra_here)
+void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel psin, VertexToPixel vertex, sampler Current, float2 Current_size, float2 Current_dxdy, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, sampler Geo, float2 Geo_size, float2 Geo_dxdy, sampler DirwardRight, float2 DirwardRight_size, float2 DirwardRight_dxdy, sampler DirwardLeft, float2 DirwardLeft_size, float2 DirwardLeft_dxdy, sampler DirwardUp, float2 DirwardUp_size, float2 DirwardUp_dxdy, sampler DirwardDown, float2 DirwardDown_size, float2 DirwardDown_dxdy, float4 data, inout float4 here, inout float4 extra_here)
 {
     float dir = 0;
     float4 target = tex2D(TargetData, psin.TexCoords + (float2(0, 0)) * TargetData_dxdy);
@@ -207,21 +287,118 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
     }
     float2 diff = Destination - CurPos;
     float2 mag = abs(diff);
-    if ((mag.x > mag.y + .001 || diff.y > 0 + .001 && GpuSim__SimShader__Something(up) || diff.y < 0 - .001 && GpuSim__SimShader__Something(down)) && Destination.x > CurPos.x + 1 + .001 && !(GpuSim__SimShader__Something(right)))
+    float dir2 = 0.0;
+    if (mag.x > mag.y + .001 && Destination.x > CurPos.x + 1 + .001)
     {
         dir = 0.003921569;
     }
-    if ((mag.y > mag.x + .001 || diff.x > 0 + .001 && GpuSim__SimShader__Something(right) || diff.x < 0 - .001 && GpuSim__SimShader__Something(left)) && Destination.y > CurPos.y + 1 + .001 && !(GpuSim__SimShader__Something(up)))
+    if (mag.y > mag.x + .001 && Destination.y > CurPos.y + 1 + .001)
     {
         dir = 0.007843138;
     }
-    if ((mag.x > mag.y + .001 || diff.y > 0 + .001 && GpuSim__SimShader__Something(up) || diff.y < 0 - .001 && GpuSim__SimShader__Something(down)) && Destination.x < CurPos.x - 1 - .001 && !(GpuSim__SimShader__Something(left)))
+    if (mag.x > mag.y + .001 && Destination.x < CurPos.x - 1 - .001)
     {
         dir = 0.01176471;
     }
-    if ((mag.y > mag.x + .001 || diff.x > 0 + .001 && GpuSim__SimShader__Something(right) || diff.x < 0 - .001 && GpuSim__SimShader__Something(left)) && Destination.y < CurPos.y - 1 - .001 && !(GpuSim__SimShader__Something(down)))
+    if (mag.y > mag.x + .001 && Destination.y < CurPos.y - 1 - .001)
     {
         dir = 0.01568628;
+    }
+    if (abs(dir - 0.003921569) < .001 || abs(dir - 0.01176471) < .001)
+    {
+        if (Destination.y > CurPos.y + 0 + .001)
+        {
+            dir2 = 0.007843138;
+        }
+        else
+        {
+            if (Destination.y < CurPos.y - 0 - .001)
+            {
+                dir2 = 0.01568628;
+            }
+        }
+    }
+    if (abs(dir - 0.007843138) < .001 || abs(dir - 0.01568628) < .001)
+    {
+        if (Destination.x > CurPos.x + 0 + .001)
+        {
+            dir2 = 0.003921569;
+        }
+        else
+        {
+            if (Destination.x < CurPos.x - 0 - .001)
+            {
+                dir2 = 0.01176471;
+            }
+        }
+    }
+    float4 geo_here = tex2D(Geo, psin.TexCoords + (float2(0, 0)) * Geo_dxdy);
+    float4 dirward_here = float4(0, 0, 0, 0);
+    bool other_side = false;
+    if (abs(dir - 0.003921569) < .001)
+    {
+        dirward_here = tex2D(DirwardRight, psin.TexCoords + (float2(0, 0)) * DirwardRight_dxdy);
+        other_side = Destination.x > GpuSim__SimShader__pos(dirward_here) + .001;
+    }
+    else
+    {
+        if (abs(dir - 0.01176471) < .001)
+        {
+            dirward_here = tex2D(DirwardLeft, psin.TexCoords + (float2(0, 0)) * DirwardLeft_dxdy);
+            other_side = Destination.x < GpuSim__SimShader__pos(dirward_here) - .001;
+        }
+        else
+        {
+            if (abs(dir - 0.007843138) < .001)
+            {
+                dirward_here = tex2D(DirwardUp, psin.TexCoords + (float2(0, 0)) * DirwardUp_dxdy);
+                other_side = Destination.y > GpuSim__SimShader__pos(dirward_here) + .001;
+            }
+            else
+            {
+                if (abs(dir - 0.01568628) < .001)
+                {
+                    dirward_here = tex2D(DirwardDown, psin.TexCoords + (float2(0, 0)) * DirwardDown_dxdy);
+                    other_side = Destination.y < GpuSim__SimShader__pos(dirward_here) - .001;
+                }
+            }
+        }
+    }
+    float4 dirward_here2 = float4(0, 0, 0, 0);
+    bool other_side2 = false;
+    if (abs(dir2 - 0.003921569) < .001)
+    {
+        dirward_here2 = tex2D(DirwardRight, psin.TexCoords + (float2(0, 0)) * DirwardRight_dxdy);
+        other_side2 = Destination.x > GpuSim__SimShader__pos(dirward_here2) + .001;
+    }
+    else
+    {
+        if (abs(dir2 - 0.01176471) < .001)
+        {
+            dirward_here2 = tex2D(DirwardLeft, psin.TexCoords + (float2(0, 0)) * DirwardLeft_dxdy);
+            other_side2 = Destination.x < GpuSim__SimShader__pos(dirward_here2) - .001;
+        }
+        else
+        {
+            if (abs(dir2 - 0.007843138) < .001)
+            {
+                dirward_here2 = tex2D(DirwardUp, psin.TexCoords + (float2(0, 0)) * DirwardUp_dxdy);
+                other_side2 = Destination.y > GpuSim__SimShader__pos(dirward_here2) + .001;
+            }
+            else
+            {
+                if (abs(dir2 - 0.01568628) < .001)
+                {
+                    dirward_here2 = tex2D(DirwardDown, psin.TexCoords + (float2(0, 0)) * DirwardDown_dxdy);
+                    other_side2 = Destination.y < GpuSim__SimShader__pos(dirward_here2) - .001;
+                }
+            }
+        }
+    }
+    float wall_pos = GpuSim__SimShader__pos(dirward_here);
+    if (geo_here.r > 0 + .001 && (dirward_here.r > 0 + .001 && other_side || dirward_here2.r > 0 + .001 && other_side2))
+    {
+        dir = geo_here.r;
     }
     if (GpuSim__SimShader__IsValid(dir))
     {
@@ -365,7 +542,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         if (min > auto_attack_cutoff + .001 && abs(data_here.a - 0.007843138) < .001 || abs(data_here.a - 0.003921569) < .001)
         {
-            GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(psin, psin, fs_param_Data, fs_param_Data_size, fs_param_Data_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, here, data_here, extra_here);
+            GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(psin, psin, fs_param_Data, fs_param_Data_size, fs_param_Data_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, fs_param_Geo, fs_param_Geo_size, fs_param_Geo_dxdy, fs_param_DirwardRight, fs_param_DirwardRight_size, fs_param_DirwardRight_dxdy, fs_param_DirwardLeft, fs_param_DirwardLeft_size, fs_param_DirwardLeft_dxdy, fs_param_DirwardUp, fs_param_DirwardUp_size, fs_param_DirwardUp_dxdy, fs_param_DirwardDown, fs_param_DirwardDown_size, fs_param_DirwardDown_dxdy, here, data_here, extra_here);
         }
     }
     __FinalOutput.Color = data_here;

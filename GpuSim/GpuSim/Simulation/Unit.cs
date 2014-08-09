@@ -40,6 +40,16 @@ namespace GpuSim
     }
 
     [Copy(typeof(vec4))]
+    public partial struct dirward
+    {
+        [Hlsl("r")]
+        public float dir { get { return r; } set { r = value; } }
+
+        [Hlsl("g")]
+        public float dist { get { return g; } set { g = value; } }
+    }
+
+    [Copy(typeof(vec4))]
     public partial struct unit
     {
         [Hlsl("r")]
@@ -253,6 +263,16 @@ namespace GpuSim
         protected static void set_prior_direction(ref building u, float dir)
         {
             u.prior_direction_and_select = dir + (selected(u) ? select_offset : _0);
+        }
+
+        protected static float pos(dirward d)
+        {
+            return unpack_coord(d.ba);
+        }
+
+        protected static void set_pos(ref dirward d, float pos)
+        {
+            d.ba = pack_coord_2byte(pos);
         }
 
         protected vec2 get_subcell_pos(VertexOut vertex, vec2 grid_size)
@@ -487,6 +507,11 @@ namespace GpuSim
 
         public static class Dir
         {
+            [FragSharpFramework.Vals(Right, Up, Left, Down)]
+                public class ValsAttribute : Attribute { }
+
+            public static readonly float[] Vals = new float[] { Right, Up, Left, Down };
+
             public const float
                 None = _0,
                 Right = _1,

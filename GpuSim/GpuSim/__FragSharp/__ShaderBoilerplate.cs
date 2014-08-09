@@ -40,6 +40,10 @@ namespace FragSharpFramework
             GpuSim.DrawPrecomputation_Pre.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPrecomputation_Pre");
             GpuSim.Geodesic_Outline.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_Outline");
             GpuSim.Geodesic_OutlineCleanup.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_OutlineCleanup");
+            GpuSim.Geodesic_DirwardExtend.CompiledEffect_dir_0p003921569 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.003921569");
+            GpuSim.Geodesic_DirwardExtend.CompiledEffect_dir_0p007843138 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.007843138");
+            GpuSim.Geodesic_DirwardExtend.CompiledEffect_dir_0p01176471 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.01176471");
+            GpuSim.Geodesic_DirwardExtend.CompiledEffect_dir_0p01568628 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.01568628");
             GpuSim.ActionAttackSquare.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare");
             GpuSim.ActionAttackPoint.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint");
             GpuSim.ActionAttack2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttack2");
@@ -873,6 +877,70 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_Geo_Texture"].SetValue(FragSharpMarshal.Marshal(Geo));
             CompiledEffect.Parameters["fs_param_Geo_size"].SetValue(FragSharpMarshal.Marshal(vec(Geo.Width, Geo.Height)));
             CompiledEffect.Parameters["fs_param_Geo_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Geo.Width, Geo.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+
+
+
+namespace GpuSim
+{
+    public partial class Geodesic_DirwardExtend
+    {
+        public static Effect CompiledEffect_dir_0p003921569;
+        public static Effect CompiledEffect_dir_0p007843138;
+        public static Effect CompiledEffect_dir_0p01176471;
+        public static Effect CompiledEffect_dir_0p01568628;
+
+        public static void Apply(Texture2D Tiles, Texture2D Geo, Texture2D Dirward, float dir, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Tiles, Geo, Dirward, dir);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Tiles, Texture2D Geo, Texture2D Dirward, float dir, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Tiles, Geo, Dirward, dir);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Tiles, Texture2D Geo, Texture2D Dirward, float dir, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Tiles, Geo, Dirward, dir);
+        }
+        public static void Using(Texture2D Tiles, Texture2D Geo, Texture2D Dirward, float dir, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Tiles, Geo, Dirward, dir);
+        }
+        public static void Using(Texture2D Tiles, Texture2D Geo, Texture2D Dirward, float dir)
+        {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(dir - 0.003921569)) < .001) CompiledEffect = CompiledEffect_dir_0p003921569;
+            else if (abs((float)(dir - 0.007843138)) < .001) CompiledEffect = CompiledEffect_dir_0p007843138;
+            else if (abs((float)(dir - 0.01176471)) < .001) CompiledEffect = CompiledEffect_dir_0p01176471;
+            else if (abs((float)(dir - 0.01568628)) < .001) CompiledEffect = CompiledEffect_dir_0p01568628;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
+            CompiledEffect.Parameters["fs_param_Tiles_Texture"].SetValue(FragSharpMarshal.Marshal(Tiles));
+            CompiledEffect.Parameters["fs_param_Tiles_size"].SetValue(FragSharpMarshal.Marshal(vec(Tiles.Width, Tiles.Height)));
+            CompiledEffect.Parameters["fs_param_Tiles_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Tiles.Width, Tiles.Height)));
+            CompiledEffect.Parameters["fs_param_Geo_Texture"].SetValue(FragSharpMarshal.Marshal(Geo));
+            CompiledEffect.Parameters["fs_param_Geo_size"].SetValue(FragSharpMarshal.Marshal(vec(Geo.Width, Geo.Height)));
+            CompiledEffect.Parameters["fs_param_Geo_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Geo.Width, Geo.Height)));
+            CompiledEffect.Parameters["fs_param_Dirward_Texture"].SetValue(FragSharpMarshal.Marshal(Dirward));
+            CompiledEffect.Parameters["fs_param_Dirward_size"].SetValue(FragSharpMarshal.Marshal(vec(Dirward.Width, Dirward.Height)));
+            CompiledEffect.Parameters["fs_param_Dirward_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Dirward.Width, Dirward.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
@@ -2460,33 +2528,33 @@ namespace GpuSim
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PathToOtherTeams, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PathToOtherTeams, Texture2D Geo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(TargetData, Unit, Extra, Data, PathToOtherTeams);
+            Using(TargetData, Unit, Extra, Data, PathToOtherTeams, Geo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PathToOtherTeams, RenderTarget2D Output)
+        public static void Apply(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PathToOtherTeams, Texture2D Geo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(TargetData, Unit, Extra, Data, PathToOtherTeams);
+            Using(TargetData, Unit, Extra, Data, PathToOtherTeams, Geo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PathToOtherTeams, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PathToOtherTeams, Texture2D Geo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(TargetData, Unit, Extra, Data, PathToOtherTeams);
+            Using(TargetData, Unit, Extra, Data, PathToOtherTeams, Geo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
         }
-        public static void Using(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PathToOtherTeams, RenderTarget2D Output)
+        public static void Using(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PathToOtherTeams, Texture2D Geo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(TargetData, Unit, Extra, Data, PathToOtherTeams);
+            Using(TargetData, Unit, Extra, Data, PathToOtherTeams, Geo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
         }
-        public static void Using(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PathToOtherTeams)
+        public static void Using(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PathToOtherTeams, Texture2D Geo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown)
         {
             CompiledEffect.Parameters["fs_param_TargetData_Texture"].SetValue(FragSharpMarshal.Marshal(TargetData));
             CompiledEffect.Parameters["fs_param_TargetData_size"].SetValue(FragSharpMarshal.Marshal(vec(TargetData.Width, TargetData.Height)));
@@ -2503,6 +2571,21 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_PathToOtherTeams_Texture"].SetValue(FragSharpMarshal.Marshal(PathToOtherTeams));
             CompiledEffect.Parameters["fs_param_PathToOtherTeams_size"].SetValue(FragSharpMarshal.Marshal(vec(PathToOtherTeams.Width, PathToOtherTeams.Height)));
             CompiledEffect.Parameters["fs_param_PathToOtherTeams_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(PathToOtherTeams.Width, PathToOtherTeams.Height)));
+            CompiledEffect.Parameters["fs_param_Geo_Texture"].SetValue(FragSharpMarshal.Marshal(Geo));
+            CompiledEffect.Parameters["fs_param_Geo_size"].SetValue(FragSharpMarshal.Marshal(vec(Geo.Width, Geo.Height)));
+            CompiledEffect.Parameters["fs_param_Geo_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Geo.Width, Geo.Height)));
+            CompiledEffect.Parameters["fs_param_DirwardRight_Texture"].SetValue(FragSharpMarshal.Marshal(DirwardRight));
+            CompiledEffect.Parameters["fs_param_DirwardRight_size"].SetValue(FragSharpMarshal.Marshal(vec(DirwardRight.Width, DirwardRight.Height)));
+            CompiledEffect.Parameters["fs_param_DirwardRight_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(DirwardRight.Width, DirwardRight.Height)));
+            CompiledEffect.Parameters["fs_param_DirwardLeft_Texture"].SetValue(FragSharpMarshal.Marshal(DirwardLeft));
+            CompiledEffect.Parameters["fs_param_DirwardLeft_size"].SetValue(FragSharpMarshal.Marshal(vec(DirwardLeft.Width, DirwardLeft.Height)));
+            CompiledEffect.Parameters["fs_param_DirwardLeft_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(DirwardLeft.Width, DirwardLeft.Height)));
+            CompiledEffect.Parameters["fs_param_DirwardUp_Texture"].SetValue(FragSharpMarshal.Marshal(DirwardUp));
+            CompiledEffect.Parameters["fs_param_DirwardUp_size"].SetValue(FragSharpMarshal.Marshal(vec(DirwardUp.Width, DirwardUp.Height)));
+            CompiledEffect.Parameters["fs_param_DirwardUp_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(DirwardUp.Width, DirwardUp.Height)));
+            CompiledEffect.Parameters["fs_param_DirwardDown_Texture"].SetValue(FragSharpMarshal.Marshal(DirwardDown));
+            CompiledEffect.Parameters["fs_param_DirwardDown_size"].SetValue(FragSharpMarshal.Marshal(vec(DirwardDown.Width, DirwardDown.Height)));
+            CompiledEffect.Parameters["fs_param_DirwardDown_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(DirwardDown.Width, DirwardDown.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
