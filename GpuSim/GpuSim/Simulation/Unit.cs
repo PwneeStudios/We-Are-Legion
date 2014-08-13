@@ -37,6 +37,9 @@ namespace GpuSim
 
         [Hlsl("a")]
         public float bad { get { return a; } set { a = value; } }
+
+        [Hlsl("gba")]
+        public vec3 pos_storage { get { return gba; } set { gba = value; } }
     }
 
     [Copy(typeof(vec4))]
@@ -210,6 +213,16 @@ namespace GpuSim
         protected static TeamTuple TeamTuple(float x, float y, float z, float w)
         {
             return vec(x, y, z, w);
+        }
+
+        protected static vec2 pos(geo g)
+        {
+            return unpack_vec2_3byte(g.pos_storage);
+        }
+
+        protected static void set_pos(ref geo g, vec2 pos)
+        {
+            g.pos_storage = pack_vec2_3byte(pos);
         }
 
         const float select_offset = _128;

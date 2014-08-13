@@ -33,10 +33,18 @@ namespace GpuSim
 
             if (here.dir > _0)
             {
-                output += DrawDebugInfoTile(here.dir, 0, subcell_pos, Texture);
+                //output += DrawDebugInfoTile(here.dir, 0, subcell_pos, Texture);
 
-                if (here.bad == _true)
-                    output.r = 1;
+                //if (here.bad == _true)
+                //    output.r = 1;
+
+                vec2 v = pos(here);
+                int hash = (int)(v.x + 4096 * v.y) % 4;
+
+                if (hash == 0) output += rgb(0x330000);
+                if (hash == 1) output += rgb(0x003300);
+                if (hash == 2) output += rgb(0x000033);
+                if (hash == 3) output += rgb(0x330033);
             }            
 
             return output;

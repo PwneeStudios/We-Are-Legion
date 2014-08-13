@@ -63,24 +63,34 @@ float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size
     return coords - float2(i, j);
 }
 
-float FragSharpFramework__FragSharpStd__Float(float v)
+float FragSharpFramework__FragSharpStd__fint_floor(float v)
 {
-    return floor(255 * v + 0.5);
+    v += 0.0005;
+    return floor(255 * v) * 0.003921569;
 }
 
-float4 GpuSim__DrawDebugInfo__DrawDebugInfoTile(VertexToPixel psin, float dir, float val, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float GpuSim__SimShader__unpack_val(float2 packed)
 {
-    float4 clr = float4(0.0, 0.0, 0.0, 0.0);
-    if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
-    {
-        return clr;
-    }
-    pos = pos * 0.98 + float2(0.01, 0.01);
-    pos.x += FragSharpFramework__FragSharpStd__Float(val);
-    pos.y += FragSharpFramework__FragSharpStd__Float(dir - 0.003921569);
-    pos *= float2(1.0 / 32, 1.0 / 4);
-    clr += tex2D(Texture, pos);
-    return clr;
+    float coord = 0;
+    packed = floor(255.0 * packed + float2(0.5, 0.5));
+    coord = 256 * packed.x + packed.y;
+    return coord;
+}
+
+float2 GpuSim__SimShader__unpack_vec2_3byte(float3 packed)
+{
+    float extra_bits = packed.z;
+    float extra_y = FragSharpFramework__FragSharpStd__fint_floor(extra_bits / 16);
+    float extra_x = FragSharpFramework__FragSharpStd__fint_floor(extra_bits - 16 * extra_y);
+    float2 v = float2(0, 0);
+    v.x = GpuSim__SimShader__unpack_val(float2(extra_x, packed.x));
+    v.y = GpuSim__SimShader__unpack_val(float2(extra_y, packed.y));
+    return v;
+}
+
+float2 GpuSim__SimShader__pos(float4 g)
+{
+    return GpuSim__SimShader__unpack_vec2_3byte(g.gba);
 }
 
 // Compiled vertex shader
@@ -104,10 +114,23 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Geo_size);
     if (here.r > 0.0 + .001)
     {
-        output += GpuSim__DrawDebugInfo__DrawDebugInfoTile(psin, here.r, 0, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
-        if (abs(here.a - 0.003921569) < .001)
+        float2 v = GpuSim__SimShader__pos(here);
+        int hash = (int)(v.x + 4096 * v.y) % 4;
+        if (abs(hash - 0) < .001)
         {
-            output.r = 1;
+            output += float4(0.2, 0, 0, 1.0);
+        }
+        if (abs(hash - 1) < .001)
+        {
+            output += float4(0, 0.2, 0, 1.0);
+        }
+        if (abs(hash - 2) < .001)
+        {
+            output += float4(0, 0, 0.2, 1.0);
+        }
+        if (abs(hash - 3) < .001)
+        {
+            output += float4(0.2, 0, 0.2, 1.0);
         }
     }
     __FinalOutput.Color = output;

@@ -141,10 +141,10 @@ namespace GpuSim
             PaintTiles_UpdateTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
 
-            UpdateGeo();
+            UpdateGeo(Input.LeftMouseDown);
         }
 
-        void UpdateGeo()
+        void UpdateGeo(bool Clean)
         {
             Geodesic_Outline.Apply(DataGroup.Tiles, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
@@ -152,6 +152,18 @@ namespace GpuSim
             for (int i = 0; i < 5; i++)
             {
                 Geodesic_OutlineCleanup.Apply(DataGroup.Tiles, DataGroup.Geo, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+            }
+
+            if (Clean)
+            {
+                Geodesic_StorePos.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+            }
+            if (DrawCount % 211 == 0)
+            for (int i = 0; i < 5; i++)
+            {
+                Geodesic_ExtremityPropagation.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
                 CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
             }
 

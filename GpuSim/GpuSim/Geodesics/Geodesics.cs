@@ -152,6 +152,80 @@ namespace GpuSim
         }
     }
 
+    public partial class Geodesic_StorePos : SimShader
+    {
+        [FragmentShader]
+        geo FragmentShader(VertexOut vertex, Field<geo> Geo)
+        {
+            geo here = Geo[Here];
+
+            if (here.dir == _0) return here;
+
+            vec2 pos = vertex.TexCoords * Geo.Size;
+            set_pos(ref here, pos);
+
+            return here;
+        }
+    }
+
+    public partial class Geodesic_ExtremityPropagation : SimShader
+    {
+        float flatten(vec2 pos)
+        {
+            return pos.x + 4096 * pos.y;
+        }
+
+        [FragmentShader]
+        geo FragmentShader(VertexOut vertex, Field<geo> Geo)
+        {
+            geo
+                here       = Geo[Here],
+                right      = Geo[RightOne],
+                up         = Geo[UpOne],
+                left       = Geo[LeftOne],
+                down       = Geo[DownOne],
+                up_right   = Geo[UpRight],
+                up_left    = Geo[UpLeft],
+                down_right = Geo[DownRight],
+                down_left  = Geo[DownLeft];
+
+            if (here.dir == _0) return here;
+
+            vec2
+                extr_here = pos(here),
+                extr_right = pos(right),
+                extr_up = pos(up),
+                extr_left = pos(left),
+                extr_down = pos(down),
+                extr_up_right = pos(up_right),
+                extr_up_left = pos(up_left),
+                extr_down_right = pos(down_right),
+                extr_down_left = pos(down_left);
+
+            float
+                val_here = flatten(extr_here),
+                val_right = flatten(extr_right),
+                val_up = flatten(extr_up),
+                val_left = flatten(extr_left),
+                val_down = flatten(extr_down),
+                val_up_right = flatten(extr_up_right),
+                val_up_left = flatten(extr_up_left),
+                val_down_right = flatten(extr_down_right),
+                val_down_left = flatten(extr_down_left);
+
+            if (val_here < val_right)      { here.pos_storage = right     .pos_storage; val_here = val_right; }
+            if (val_here < val_up)         { here.pos_storage = up        .pos_storage; val_here = val_up; }
+            if (val_here < val_left)       { here.pos_storage = left      .pos_storage; val_here = val_left; }
+            if (val_here < val_down)       { here.pos_storage = down      .pos_storage; val_here = val_down; }
+            if (val_here < val_up_right)   { here.pos_storage = up_right  .pos_storage; val_here = val_up_right; }
+            if (val_here < val_up_left)    { here.pos_storage = up_left   .pos_storage; val_here = val_up_left; }
+            if (val_here < val_down_right) { here.pos_storage = down_right.pos_storage; val_here = val_down_right; }
+            if (val_here < val_down_left)  { here.pos_storage = down_left .pos_storage; val_here = val_down_left; }
+
+            return here;
+        }
+    }
+
     public partial class Geodesic_DirwardExtend : SimShader
     {
         [FragmentShader]
