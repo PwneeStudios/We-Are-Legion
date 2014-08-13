@@ -28,7 +28,7 @@ namespace GpuSim
 
             color count = MultigridReduce(CountReduce_3byte1byte.Apply);
 
-            int unit_count = (int)(SimShader.unpack_coord(count.xyz) + .5f);
+            int unit_count = (int)(SimShader.unpack_val(count.xyz) + .5f);
             int barracks_count = Int(count.w);
             
             return new Tuple<int,int>(unit_count, barracks_count);

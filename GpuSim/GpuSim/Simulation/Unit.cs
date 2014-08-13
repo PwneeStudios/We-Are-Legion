@@ -267,12 +267,12 @@ namespace GpuSim
 
         protected static float pos(dirward d)
         {
-            return unpack_coord(d.ba);
+            return unpack_val(d.ba);
         }
 
         protected static void set_pos(ref dirward d, float pos)
         {
-            d.ba = pack_coord_2byte(pos);
+            d.ba = pack_val_2byte(pos);
         }
 
         protected vec2 get_subcell_pos(VertexOut vertex, vec2 grid_size)
@@ -655,7 +655,18 @@ namespace GpuSim
             return packed / 255.0f;
         }
 
-        public static float unpack_coord(vec3 packed)
+        public static vec3 pack_val_3byte(float x)
+        {
+            vec3 packed = vec3.Zero;
+
+            packed.x = floor(x / (255.0f * 255.0f));
+            packed.y = floor((x - packed.x * (255.0f * 255.0f)) / 255.0f);
+            packed.z = x - packed.x * (255.0f * 255.0f) - packed.y * 255.0f;
+
+            return packed / 255.0f;
+        }
+
+        public static float unpack_val(vec3 packed)
         {
             float coord = 0;
 
@@ -664,7 +675,7 @@ namespace GpuSim
             return coord;
         }
 
-        public static vec2 pack_coord_2byte(float x)
+        public static vec2 pack_val_2byte(float x)
         {
             vec2 packed = vec2.Zero;
 
@@ -674,7 +685,7 @@ namespace GpuSim
             return packed / 255.0f;
         }
 
-        public static float unpack_coord(vec2 packed)
+        public static float unpack_val(vec2 packed)
         {
             float coord = 0;
 
@@ -686,16 +697,43 @@ namespace GpuSim
 
         public static vec4 pack_vec2(vec2 v)
         {
-            vec2 packed_x = pack_coord_2byte(v.x);
-            vec2 packed_y = pack_coord_2byte(v.y);
+            vec2 packed_x = pack_val_2byte(v.x);
+            vec2 packed_y = pack_val_2byte(v.y);
             return vec(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
         }
 
         public static vec2 unpack_vec2(vec4 packed)
         {
             vec2 v = vec2.Zero;
-            v.x = unpack_coord(packed.rg);
-            v.y = unpack_coord(packed.ba);
+            v.x = unpack_val(packed.rg);
+            v.y = unpack_val(packed.ba);
+            return v;
+        }
+
+
+        /// <summary>
+        /// Packs a vec2 into a 3-byte vec3.
+        /// </summary>
+        /// <param name="x">The value to pack. Each component of the vector should be between 0 and 2^12 - 1.</param>
+        /// <returns></returns>
+        public static vec3 pack_vec2_3byte(vec2 v)
+        {
+            vec2 packed_x = pack_val_2byte(v.x);
+            vec2 packed_y = pack_val_2byte(v.y);
+            return vec(packed_x.y, packed_y.y, packed_x.x + 16 * packed_y.x);
+        }
+
+        public static vec2 unpack_vec2_3byte(vec3 packed)
+        {
+            float extra_bits = packed.z;
+            //float extra_y = (extra_bits / 16);
+            //float extra_x = fint_round(extra_bits - _16 * floor(extra_y / _1));
+            float extra_y = fint_floor(extra_bits / 16);
+            float extra_x = fint_floor(extra_bits - 16 * extra_y);
+
+            vec2 v = vec2.Zero;
+            v.x = unpack_val(vec(extra_x, packed.x));
+            v.y = unpack_val(vec(extra_y, packed.y));
             return v;
         }
 

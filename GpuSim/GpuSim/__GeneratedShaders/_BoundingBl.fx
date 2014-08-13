@@ -38,7 +38,7 @@ sampler fs_param_PreviousLevel : register(s1) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float GpuSim__SimShader__unpack_coord(float2 packed)
+float GpuSim__SimShader__unpack_val(float2 packed)
 {
     float coord = 0;
     packed = floor(255.0 * packed + float2(0.5, 0.5));
@@ -49,12 +49,12 @@ float GpuSim__SimShader__unpack_coord(float2 packed)
 float2 GpuSim__SimShader__unpack_vec2(float4 packed)
 {
     float2 v = float2(0, 0);
-    v.x = GpuSim__SimShader__unpack_coord(packed.rg);
-    v.y = GpuSim__SimShader__unpack_coord(packed.ba);
+    v.x = GpuSim__SimShader__unpack_val(packed.rg);
+    v.y = GpuSim__SimShader__unpack_val(packed.ba);
     return v;
 }
 
-float2 GpuSim__SimShader__pack_coord_2byte(float x)
+float2 GpuSim__SimShader__pack_val_2byte(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -64,8 +64,8 @@ float2 GpuSim__SimShader__pack_coord_2byte(float x)
 
 float4 GpuSim__SimShader__pack_vec2(float2 v)
 {
-    float2 packed_x = GpuSim__SimShader__pack_coord_2byte(v.x);
-    float2 packed_y = GpuSim__SimShader__pack_coord_2byte(v.y);
+    float2 packed_x = GpuSim__SimShader__pack_val_2byte(v.x);
+    float2 packed_y = GpuSim__SimShader__pack_val_2byte(v.y);
     return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 

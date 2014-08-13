@@ -80,7 +80,7 @@ namespace GpuSim
                 BR = PreviousLevel[UpRight];
 
             // Aggregate 4 cells into the containing supercell
-            float count_3byte = unpack_coord(TL.xyz) + unpack_coord(TR.xyz) + unpack_coord(BL.xyz) + unpack_coord(BR.xyz);
+            float count_3byte = unpack_val(TL.xyz) + unpack_val(TR.xyz) + unpack_val(BL.xyz) + unpack_val(BR.xyz);
             float count_1byte = TL.w + TR.w + BL.w + BR.w;
 
             vec4 output = vec4.Zero;

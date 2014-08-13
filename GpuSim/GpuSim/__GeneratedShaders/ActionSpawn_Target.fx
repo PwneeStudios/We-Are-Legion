@@ -73,7 +73,7 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
-float2 GpuSim__SimShader__pack_coord_2byte(float x)
+float2 GpuSim__SimShader__pack_val_2byte(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -83,8 +83,8 @@ float2 GpuSim__SimShader__pack_coord_2byte(float x)
 
 float4 GpuSim__SimShader__pack_vec2(float2 v)
 {
-    float2 packed_x = GpuSim__SimShader__pack_coord_2byte(v.x);
-    float2 packed_y = GpuSim__SimShader__pack_coord_2byte(v.y);
+    float2 packed_x = GpuSim__SimShader__pack_val_2byte(v.x);
+    float2 packed_y = GpuSim__SimShader__pack_val_2byte(v.y);
     return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 

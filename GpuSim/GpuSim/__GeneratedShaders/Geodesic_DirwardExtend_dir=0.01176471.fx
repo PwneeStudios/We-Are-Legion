@@ -85,7 +85,7 @@ float2 GpuSim__SimShader__dir_to_vec(float direction)
     return GpuSim__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
-float2 GpuSim__SimShader__pack_coord_2byte(float x)
+float2 GpuSim__SimShader__pack_val_2byte(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -95,7 +95,7 @@ float2 GpuSim__SimShader__pack_coord_2byte(float x)
 
 void GpuSim__SimShader__set_pos(inout float4 d, float pos)
 {
-    d.ba = GpuSim__SimShader__pack_coord_2byte(pos);
+    d.ba = GpuSim__SimShader__pack_val_2byte(pos);
 }
 
 // Compiled vertex shader

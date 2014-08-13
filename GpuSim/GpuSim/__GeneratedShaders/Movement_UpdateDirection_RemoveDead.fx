@@ -209,7 +209,7 @@ void GpuSim__SimShader__set_prior_direction(inout float4 u, float dir)
     u.b = dir + (GpuSim__SimShader__selected(u) ? 0.5019608 : 0.0);
 }
 
-float GpuSim__SimShader__unpack_coord(float2 packed)
+float GpuSim__SimShader__unpack_val(float2 packed)
 {
     float coord = 0;
     packed = floor(255.0 * packed + float2(0.5, 0.5));
@@ -220,8 +220,8 @@ float GpuSim__SimShader__unpack_coord(float2 packed)
 float2 GpuSim__SimShader__unpack_vec2(float4 packed)
 {
     float2 v = float2(0, 0);
-    v.x = GpuSim__SimShader__unpack_coord(packed.rg);
-    v.y = GpuSim__SimShader__unpack_coord(packed.ba);
+    v.x = GpuSim__SimShader__unpack_val(packed.rg);
+    v.y = GpuSim__SimShader__unpack_val(packed.ba);
     return v;
 }
 
@@ -254,7 +254,7 @@ float GpuSim__Movement_UpdateDirection_RemoveDead__BuildingDirection(VertexToPix
 
 float GpuSim__SimShader__pos(float4 d)
 {
-    return GpuSim__SimShader__unpack_coord(d.ba);
+    return GpuSim__SimShader__unpack_val(d.ba);
 }
 
 bool GpuSim__SimShader__IsValid(float direction)
