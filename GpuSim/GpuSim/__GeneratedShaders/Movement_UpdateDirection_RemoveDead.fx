@@ -257,6 +257,38 @@ float GpuSim__SimShader__pos(float4 d)
     return GpuSim__SimShader__unpack_val(d.ba);
 }
 
+float2 GpuSim__SimShader__ReducedGeoId(float2 p)
+{
+    return float2(((int)(round(p.x)) % 256) / 256.0, ((int)(round(p.y)) % 256) / 256.0);
+}
+
+float FragSharpFramework__FragSharpStd__fint_floor(float v)
+{
+    v += 0.0005;
+    return floor(255 * v) * 0.003921569;
+}
+
+float2 GpuSim__SimShader__unpack_vec2_3byte(float3 packed)
+{
+    float extra_bits = packed.z;
+    float extra_y = FragSharpFramework__FragSharpStd__fint_floor(extra_bits / 16);
+    float extra_x = FragSharpFramework__FragSharpStd__fint_floor(extra_bits - 16 * extra_y);
+    float2 v = float2(0, 0);
+    v.x = GpuSim__SimShader__unpack_val(float2(extra_x, packed.x));
+    v.y = GpuSim__SimShader__unpack_val(float2(extra_y, packed.y));
+    return v;
+}
+
+float2 GpuSim__SimShader__geo_pos_id(float4 g)
+{
+    return GpuSim__SimShader__unpack_vec2_3byte(g.gba);
+}
+
+bool GpuSim__SimShader__ValidDirward(float4 d)
+{
+    return abs(d.r - 0) > .001 || abs(d.g - 0) > .001 || abs(d.ba.x - 0) > .001 || abs(d.ba.y - 0) > .001;
+}
+
 bool GpuSim__SimShader__IsValid(float direction)
 {
     return direction > 0 + .001;
@@ -396,7 +428,8 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
         }
     }
     float wall_pos = GpuSim__SimShader__pos(dirward_here);
-    if (geo_here.r > 0 + .001 && (dirward_here.r > 0 + .001 && other_side || dirward_here2.r > 0 + .001 && other_side2))
+    float2 geo_id = GpuSim__SimShader__ReducedGeoId(GpuSim__SimShader__geo_pos_id(geo_here));
+    if (geo_here.r > 0 + .001 && (GpuSim__SimShader__ValidDirward(dirward_here) && other_side && all(abs(dirward_here.rg - geo_id) < .001) || GpuSim__SimShader__ValidDirward(dirward_here2) && other_side2 && all(abs(dirward_here2.rg - geo_id) < .001)))
     {
         dir = geo_here.r;
     }

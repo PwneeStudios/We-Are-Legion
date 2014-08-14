@@ -63,7 +63,7 @@ float2 GpuSim__SimShader__unpack_vec2_3byte(float3 packed)
     return v;
 }
 
-float2 GpuSim__SimShader__pos(float4 g)
+float2 GpuSim__SimShader__geo_pos_id(float4 g)
 {
     return GpuSim__SimShader__unpack_vec2_3byte(g.gba);
 }
@@ -93,7 +93,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         __FinalOutput.Color = here;
         return __FinalOutput;
     }
-    float2 extr_here = GpuSim__SimShader__pos(here), extr_right = GpuSim__SimShader__pos(right), extr_up = GpuSim__SimShader__pos(up), extr_left = GpuSim__SimShader__pos(left), extr_down = GpuSim__SimShader__pos(down), extr_up_right = GpuSim__SimShader__pos(up_right), extr_up_left = GpuSim__SimShader__pos(up_left), extr_down_right = GpuSim__SimShader__pos(down_right), extr_down_left = GpuSim__SimShader__pos(down_left);
+    float2 extr_here = GpuSim__SimShader__geo_pos_id(here), extr_right = GpuSim__SimShader__geo_pos_id(right), extr_up = GpuSim__SimShader__geo_pos_id(up), extr_left = GpuSim__SimShader__geo_pos_id(left), extr_down = GpuSim__SimShader__geo_pos_id(down), extr_up_right = GpuSim__SimShader__geo_pos_id(up_right), extr_up_left = GpuSim__SimShader__geo_pos_id(up_left), extr_down_right = GpuSim__SimShader__geo_pos_id(down_right), extr_down_left = GpuSim__SimShader__geo_pos_id(down_left);
     float val_here = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_here), val_right = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_right), val_up = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_up), val_left = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_left), val_down = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_down), val_up_right = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_up_right), val_up_left = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_up_left), val_down_right = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_down_right), val_down_left = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_down_left);
     if (val_here < val_right - .001)
     {

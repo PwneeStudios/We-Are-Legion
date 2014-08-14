@@ -85,6 +85,41 @@ float2 GpuSim__SimShader__dir_to_vec(float direction)
     return GpuSim__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
+float2 GpuSim__SimShader__ReducedGeoId(float2 p)
+{
+    return float2(((int)(round(p.x)) % 256) / 256.0, ((int)(round(p.y)) % 256) / 256.0);
+}
+
+float FragSharpFramework__FragSharpStd__fint_floor(float v)
+{
+    v += 0.0005;
+    return floor(255 * v) * 0.003921569;
+}
+
+float GpuSim__SimShader__unpack_val(float2 packed)
+{
+    float coord = 0;
+    packed = floor(255.0 * packed + float2(0.5, 0.5));
+    coord = 256 * packed.x + packed.y;
+    return coord;
+}
+
+float2 GpuSim__SimShader__unpack_vec2_3byte(float3 packed)
+{
+    float extra_bits = packed.z;
+    float extra_y = FragSharpFramework__FragSharpStd__fint_floor(extra_bits / 16);
+    float extra_x = FragSharpFramework__FragSharpStd__fint_floor(extra_bits - 16 * extra_y);
+    float2 v = float2(0, 0);
+    v.x = GpuSim__SimShader__unpack_val(float2(extra_x, packed.x));
+    v.y = GpuSim__SimShader__unpack_val(float2(extra_y, packed.y));
+    return v;
+}
+
+float2 GpuSim__SimShader__geo_pos_id(float4 g)
+{
+    return GpuSim__SimShader__unpack_vec2_3byte(g.gba);
+}
+
 float2 GpuSim__SimShader__pack_val_2byte(float x)
 {
     float2 packed = float2(0, 0);
@@ -96,6 +131,11 @@ float2 GpuSim__SimShader__pack_val_2byte(float x)
 void GpuSim__SimShader__set_pos(inout float4 d, float pos)
 {
     d.ba = GpuSim__SimShader__pack_val_2byte(pos);
+}
+
+bool GpuSim__SimShader__ValidDirward(float4 d)
+{
+    return abs(d.r - 0) > .001 || abs(d.g - 0) > .001 || abs(d.ba.x - 0) > .001 || abs(d.ba.y - 0) > .001;
 }
 
 // Compiled vertex shader
@@ -165,45 +205,44 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     if (geo_here.r > 0 + .001 && GpuSim__SimShader__IsBlockingTile(tex2D(fs_param_Tiles, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(0.007843138)) * fs_param_Tiles_dxdy)))
     {
-        output.r = geo_here.r;
-        output.g = 0.0;
-        float2 pos = psin.TexCoords * fs_param_Tiles_size;
+        output.rg = GpuSim__SimShader__ReducedGeoId(GpuSim__SimShader__geo_pos_id(geo_here));
+        float2 pos_here = psin.TexCoords * fs_param_Tiles_size;
         if (abs(0.007843138 - 0.003921569) < .001 || abs(0.007843138 - 0.01176471) < .001)
         {
-            GpuSim__SimShader__set_pos(output, pos.x);
+            GpuSim__SimShader__set_pos(output, pos_here.x);
         }
         if (abs(0.007843138 - 0.007843138) < .001 || abs(0.007843138 - 0.01568628) < .001)
         {
-            GpuSim__SimShader__set_pos(output, pos.y);
+            GpuSim__SimShader__set_pos(output, pos_here.y);
         }
     }
     else
     {
-        if (forward.r > 0 + .001)
+        if (GpuSim__SimShader__ValidDirward(forward))
         {
             output = forward;
         }
         else
         {
-            if (forward_right.r > 0 + .001)
+            if (GpuSim__SimShader__ValidDirward(forward_right))
             {
                 output = forward_right;
             }
             else
             {
-                if (forward_left.r > 0 + .001)
+                if (GpuSim__SimShader__ValidDirward(forward_left))
                 {
                     output = forward_left;
                 }
                 else
                 {
-                    if (right.r > 0 + .001)
+                    if (GpuSim__SimShader__ValidDirward(right))
                     {
                         output = right;
                     }
                     else
                     {
-                        if (left.r > 0 + .001)
+                        if (GpuSim__SimShader__ValidDirward(left))
                         {
                             output = left;
                         }
@@ -212,7 +251,6 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
         }
     }
-    output.g += 0.003921569;
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

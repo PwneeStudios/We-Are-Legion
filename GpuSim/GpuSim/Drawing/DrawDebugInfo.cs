@@ -38,7 +38,7 @@ namespace GpuSim
                 //if (here.bad == _true)
                 //    output.r = 1;
 
-                vec2 v = pos(here);
+                vec2 v = geo_pos_id(here);
                 int hash = (int)(v.x + 4096 * v.y) % 4;
 
                 if (hash == 0) output += rgb(0x330000);

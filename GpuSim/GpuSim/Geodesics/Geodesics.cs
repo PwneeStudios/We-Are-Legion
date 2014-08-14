@@ -162,7 +162,7 @@ namespace GpuSim
             if (here.dir == _0) return here;
 
             vec2 pos = vertex.TexCoords * Geo.Size;
-            set_pos(ref here, pos);
+            set_geo_pos_id(ref here, pos);
 
             return here;
         }
@@ -192,15 +192,15 @@ namespace GpuSim
             if (here.dir == _0) return here;
 
             vec2
-                extr_here = pos(here),
-                extr_right = pos(right),
-                extr_up = pos(up),
-                extr_left = pos(left),
-                extr_down = pos(down),
-                extr_up_right = pos(up_right),
-                extr_up_left = pos(up_left),
-                extr_down_right = pos(down_right),
-                extr_down_left = pos(down_left);
+                extr_here = geo_pos_id(here),
+                extr_right = geo_pos_id(right),
+                extr_up = geo_pos_id(up),
+                extr_left = geo_pos_id(left),
+                extr_down = geo_pos_id(down),
+                extr_up_right = geo_pos_id(up_right),
+                extr_up_left = geo_pos_id(up_left),
+                extr_down_right = geo_pos_id(down_right),
+                extr_down_left = geo_pos_id(down_left);
 
             float
                 val_here = flatten(extr_here),
@@ -298,22 +298,19 @@ namespace GpuSim
 
             if (geo_here.dir > 0 && IsBlockingTile(Tiles[dir_to_vec(dir)]))
             {
-                output.dir = geo_here.dir;
-                output.dist = _0;
+                output.geo_id = ReducedGeoId(geo_pos_id(geo_here));
 
-                vec2 pos = vertex.TexCoords * Tiles.Size;
-                
-                if (dir == Dir.Right || dir == Dir.Left) set_pos(ref output, pos.x);
-                if (dir == Dir.Up    || dir == Dir.Down) set_pos(ref output, pos.y);
+                vec2 pos_here = vertex.TexCoords * Tiles.Size;
+
+                if (dir == Dir.Right || dir == Dir.Left) set_pos(ref output, pos_here.x);
+                if (dir == Dir.Up    || dir == Dir.Down) set_pos(ref output, pos_here.y);
             }
 
-            else if (forward.dir       > 0) output = forward;
-            else if (forward_right.dir > 0) output = forward_right;
-            else if (forward_left.dir  > 0) output = forward_left;
-            else if (right.dir         > 0) output = right;
-            else if (left.dir          > 0) output = left;
-
-            output.dist += _1;
+            else if (ValidDirward(forward)      ) output = forward;
+            else if (ValidDirward(forward_right)) output = forward_right;
+            else if (ValidDirward(forward_left) ) output = forward_left;
+            else if (ValidDirward(right)        ) output = right;
+            else if (ValidDirward(left)         ) output = left;
 
             return output;
         }

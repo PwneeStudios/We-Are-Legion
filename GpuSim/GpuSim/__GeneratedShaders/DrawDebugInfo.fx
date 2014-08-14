@@ -88,7 +88,7 @@ float2 GpuSim__SimShader__unpack_vec2_3byte(float3 packed)
     return v;
 }
 
-float2 GpuSim__SimShader__pos(float4 g)
+float2 GpuSim__SimShader__geo_pos_id(float4 g)
 {
     return GpuSim__SimShader__unpack_vec2_3byte(g.gba);
 }
@@ -114,7 +114,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Geo_size);
     if (here.r > 0.0 + .001)
     {
-        float2 v = GpuSim__SimShader__pos(here);
+        float2 v = GpuSim__SimShader__geo_pos_id(here);
         int hash = (int)(v.x + 4096 * v.y) % 4;
         if (abs(hash - 0) < .001)
         {

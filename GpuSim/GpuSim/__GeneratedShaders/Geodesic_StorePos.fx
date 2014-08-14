@@ -53,7 +53,7 @@ float3 GpuSim__SimShader__pack_vec2_3byte(float2 v)
     return float3(packed_x.y, packed_y.y, packed_x.x + 16 * packed_y.x);
 }
 
-void GpuSim__SimShader__set_pos(inout float4 g, float2 pos)
+void GpuSim__SimShader__set_geo_pos_id(inout float4 g, float2 pos)
 {
     g.gba = GpuSim__SimShader__pack_vec2_3byte(pos);
 }
@@ -79,7 +79,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         return __FinalOutput;
     }
     float2 pos = psin.TexCoords * fs_param_Geo_size;
-    GpuSim__SimShader__set_pos(here, pos);
+    GpuSim__SimShader__set_geo_pos_id(here, pos);
     __FinalOutput.Color = here;
     return __FinalOutput;
 }

@@ -369,7 +369,12 @@ namespace GpuSim
             else if (dir2 == Dir.Down)  { dirward_here2 = DirwardDown[Here];  other_side2 = Destination.y < pos(dirward_here2); }
 
             float wall_pos = pos(dirward_here);
-            if (geo_here.dir > 0 && (dirward_here.dir > 0 && other_side || dirward_here2.dir > 0 && other_side2))
+            vec2 geo_id = ReducedGeoId(geo_pos_id(geo_here));
+            if (geo_here.dir > 0 &&
+               (
+                    ValidDirward(dirward_here)  && other_side  && dirward_here .geo_id == geo_id ||
+                    ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id
+               ))
                 dir = geo_here.dir;
             //if (dist == 1 || desired direction is blocked) && desired dirward projection says we're gonna hit a wall
             //    then: follow geo, no matter what level you're on, otherwise move inward normal to the geo
