@@ -7,6 +7,15 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
+    public static class RenderTarget2DExtension
+    {
+        public static void Clear(this RenderTarget2D RenderTarget)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(RenderTarget);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+        }
+    }
+
     public static class Texture2DExtension
     {
         public static vec2 UnitSize(this Texture2D Texture)

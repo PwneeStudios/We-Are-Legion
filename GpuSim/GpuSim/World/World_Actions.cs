@@ -141,11 +141,14 @@ namespace GpuSim
             PaintTiles_UpdateTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
 
-            UpdateGeo(Input.LeftMouseDown);
+            UpdateGeo();
         }
 
-        void UpdateGeo(bool Clean)
+        void UpdateGeo()
         {
+            DataGroup.Geo.Clear();
+            foreach (var dir in Dir.Vals) DataGroup.Dirward[dir].Clear();
+
             Geodesic_Outline.Apply(DataGroup.Tiles, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
 
@@ -155,19 +158,19 @@ namespace GpuSim
                 CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
             }
 
-            if (Clean)
-            {
-                Geodesic_StorePos.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
-                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
-            }
-            if (DrawCount % 211 == 0)
-            for (int i = 0; i < 5; i++)
+            Geodesic_StorePos.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+        }
+
+        void Propagate()
+        {
+            for (int i = 0; i < 200; i++)
             {
                 Geodesic_ExtremityPropagation.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
                 CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
             }
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i <= 50; i++)
             {
                 foreach (var dir in Dir.Vals)
                 {
@@ -221,6 +224,11 @@ namespace GpuSim
                 if (Keys.C.Down() || Keys.V.Down() || Keys.N.Down())
                 {
                     PaintTiles();
+                }
+
+                if (Keys.D5.Pressed())
+                {
+                    Propagate();
                 }
 
                 if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())
