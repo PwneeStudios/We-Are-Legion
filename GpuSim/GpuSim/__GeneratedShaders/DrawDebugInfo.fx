@@ -63,6 +63,16 @@ float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size
     return coords - float2(i, j);
 }
 
+float2 FragSharpFramework__FragSharpStd__fmod(float2 dividend, float divider)
+{
+    return float2(fmod(dividend.x, divider), fmod(dividend.y, divider));
+}
+
+float2 GpuSim__SimShader__ReducedGeoId(float2 p)
+{
+    return float2(((int)(round(p.x)) % 256) / 256.0, ((int)(round(p.y)) % 256) / 256.0);
+}
+
 float FragSharpFramework__FragSharpStd__fint_floor(float v)
 {
     v += 0.0005;
@@ -114,24 +124,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Geo_size);
     if (here.r > 0.0 + .001)
     {
-        float2 v = GpuSim__SimShader__geo_pos_id(here);
-        int hash = (int)(v.x + 4096 * v.y) % 4;
-        if (abs(hash - 0) < .001)
-        {
-            output += float4(0.2, 0, 0, 1.0);
-        }
-        if (abs(hash - 1) < .001)
-        {
-            output += float4(0, 0.2, 0, 1.0);
-        }
-        if (abs(hash - 2) < .001)
-        {
-            output += float4(0, 0, 0.2, 1.0);
-        }
-        if (abs(hash - 3) < .001)
-        {
-            output += float4(0.2, 0, 0.2, 1.0);
-        }
+        float2 guid = FragSharpFramework__FragSharpStd__fmod(GpuSim__SimShader__ReducedGeoId(GpuSim__SimShader__geo_pos_id(here)) * 1293.418, 1.0);
+        output.r += guid.x;
+        output.g += guid.y;
+        output.a = 1.0;
+        output.rgb *= output.a;
     }
     __FinalOutput.Color = output;
     return __FinalOutput;

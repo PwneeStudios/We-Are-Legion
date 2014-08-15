@@ -33,18 +33,18 @@ namespace GpuSim
 
             if (here.dir > _0)
             {
+                // Draw arrow
                 //output += DrawDebugInfoTile(here.dir, 0, subcell_pos, Texture);
 
-                //if (here.bad == _true)
-                //    output.r = 1;
+                // Draw bad cell info
+                //if (here.bad == _true) output.r = 1;
 
-                vec2 v = geo_pos_id(here);
-                int hash = (int)(v.x + 4096 * v.y) % 4;
-
-                if (hash == 0) output += rgb(0x330000);
-                if (hash == 1) output += rgb(0x003300);
-                if (hash == 2) output += rgb(0x000033);
-                if (hash == 3) output += rgb(0x330033);
+                // Draw guid coloring
+                vec2 guid = fmod(ReducedGeoId(geo_pos_id(here)) * 1293.4184145f, 1.0f);
+                output.r += guid.x;
+                output.g += guid.y;
+                output.a = 1f;
+                output.rgb *= output.a;
             }            
 
             return output;
