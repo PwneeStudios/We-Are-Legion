@@ -42,12 +42,17 @@ namespace GpuSim
 
         public static void UnsetDevice()
         {
-            GameClass.Graphics.Textures[0] = null;
-            GameClass.Graphics.Textures[1] = null;
-            GameClass.Graphics.Textures[2] = null;
-            GameClass.Graphics.Textures[3] = null;
-            GameClass.Graphics.Textures[4] = null;
-            GameClass.Graphics.Textures[5] = null;
+            for (int i = 0; i < 16; i++)
+            {
+                try
+                {
+                    GameClass.Graphics.Textures[i] = null;
+                }
+                catch
+                { 
+                    
+                }
+            }
             GameClass.Graphics.SetRenderTarget(null);
         }
 
