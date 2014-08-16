@@ -403,10 +403,15 @@ namespace GpuSim
             else if (dir2 == Dir.Down)  { dirward_here2 = DirwardDown[Here];  other_side2 = Destination.y < wall_pos(dirward_here2); }
 
             vec2 geo_id = geo_here.geo_id;
-            if (geo_here.dir > 0 && (geo_here.dist == _0 || blocked && other_side || blocked2 && other_side2) &&
+            //if (geo_here.dir > 0 && (geo_here.dist == _0 || blocked && other_side) &&// || blocked2 && other_side2) &&
+            //   (
+            //        ValidDirward(dirward_here)  && other_side  && dirward_here .geo_id == geo_id ||
+            //        ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id
+            //   ))
+            if (geo_here.dir > 0 &&
                (
-                    ValidDirward(dirward_here)  && other_side  && dirward_here .geo_id == geo_id ||
-                    ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id
+                    ValidDirward(dirward_here)  && other_side  && dirward_here.geo_id  == geo_id && (geo_here.dist == _0 || blocked  && other_side) ||
+                    ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id && (geo_here.dist == _0 || blocked2 && other_side2) 
                ))
                 dir = geo_here.dir;
             else

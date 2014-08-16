@@ -427,7 +427,7 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
         }
     }
     float2 geo_id = geo_here.ba;
-    if (geo_here.r > 0 + .001 && (abs(geo_here.g - 0.0) < .001 || blocked && other_side || blocked2 && other_side2) && (GpuSim__SimShader__ValidDirward(dirward_here) && other_side && all(abs(dirward_here.rg - geo_id) < .001) || GpuSim__SimShader__ValidDirward(dirward_here2) && other_side2 && all(abs(dirward_here2.rg - geo_id) < .001)))
+    if (geo_here.r > 0 + .001 && (GpuSim__SimShader__ValidDirward(dirward_here) && other_side && all(abs(dirward_here.rg - geo_id) < .001) && (abs(geo_here.g - 0.0) < .001 || blocked && other_side) || GpuSim__SimShader__ValidDirward(dirward_here2) && other_side2 && all(abs(dirward_here2.rg - geo_id) < .001) && (abs(geo_here.g - 0.0) < .001 || blocked2 && other_side2)))
     {
         dir = geo_here.r;
     }

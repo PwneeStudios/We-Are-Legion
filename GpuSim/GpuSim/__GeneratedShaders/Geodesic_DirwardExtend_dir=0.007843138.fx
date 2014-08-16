@@ -199,20 +199,6 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 {
                     output = forward_left;
                 }
-                else
-                {
-                    if (GpuSim__SimShader__ValidDirward(right))
-                    {
-                        output = right;
-                    }
-                    else
-                    {
-                        if (GpuSim__SimShader__ValidDirward(left))
-                        {
-                            output = left;
-                        }
-                    }
-                }
             }
         }
     }

@@ -4,7 +4,7 @@ namespace GpuSim
 {
     public partial class DrawDebugInfo : BaseShader
     {
-        color DrawDebugInfoTile(float dir, float val, vec2 pos, PointSampler Texture)
+        protected color DrawDebugInfoTile(float dir, float val, vec2 pos, PointSampler Texture)
         {
             color clr = color.TransparentBlack;
 
@@ -21,7 +21,10 @@ namespace GpuSim
 
             return clr;
         }
+    }
 
+    public partial class DrawGeoInfo : DrawDebugInfo
+    {
         [FragmentShader]
         color FragmentShader(VertexOut vertex, Field<geo> Geo, PointSampler Texture)
         {
@@ -49,6 +52,31 @@ namespace GpuSim
                 // Draw arrow over
                 output *= DrawDebugInfoTile(here.dir, 0, subcell_pos, Texture);
             }            
+
+            return output;
+        }
+    }
+
+    public partial class DrawDirwardInfo : DrawDebugInfo
+    {
+        [FragmentShader]
+        color FragmentShader(VertexOut vertex, Field<dirward> Dirward, PointSampler Texture)
+        {
+            color output = color.TransparentBlack;
+
+            dirward here = Dirward[Here];
+
+            vec2 subcell_pos = get_subcell_pos(vertex, Dirward.Size);
+
+            if (ValidDirward(here))
+            {
+                // Draw guid coloring
+                vec2 guid = fmod(here.geo_id * 1293.4184145f, 1.0f);
+                output.r += guid.x;
+                output.g += guid.y;
+                output.a = 1f;
+                output.rgb *= output.a;
+            }
 
             return output;
         }

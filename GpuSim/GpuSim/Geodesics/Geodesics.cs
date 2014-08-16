@@ -323,8 +323,8 @@ namespace GpuSim
             else if (ValidDirward(forward)      ) output = forward;
             else if (ValidDirward(forward_right)) output = forward_right;
             else if (ValidDirward(forward_left) ) output = forward_left;
-            else if (ValidDirward(right)        ) output = right;
-            else if (ValidDirward(left)         ) output = left;
+            //else if (ValidDirward(right)        ) output = right;
+            //else if (ValidDirward(left)         ) output = left;
 
             return output;
         }

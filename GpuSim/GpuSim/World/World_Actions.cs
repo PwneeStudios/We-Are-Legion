@@ -164,7 +164,7 @@ namespace GpuSim
 
         void Propagate()
         {
-            for (int i = 0; i < 200; i++)
+            for (int i = 0; i < 400; i++)
             {
                 Geodesic_ExtremityPropagation.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
                 CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
@@ -173,7 +173,7 @@ namespace GpuSim
             Geodesic_SetGeoId.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
 
-            for (int i = 0; i <= 50; i++)
+            for (int i = 0; i <= 100; i++)
             {
                 foreach (var dir in Dir.Vals)
                 {
