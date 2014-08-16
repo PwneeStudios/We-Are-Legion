@@ -356,20 +356,19 @@ namespace GpuSim
             
             dirward dirward_here = dirward.Nothing;
             bool other_side = false;
-            if      (dir == Dir.Right) { dirward_here = DirwardRight[Here]; other_side = Destination.x > pos(dirward_here); }
-            else if (dir == Dir.Left)  { dirward_here = DirwardLeft[Here];  other_side = Destination.x < pos(dirward_here); }
-            else if (dir == Dir.Up)    { dirward_here = DirwardUp[Here];    other_side = Destination.y > pos(dirward_here); }
-            else if (dir == Dir.Down)  { dirward_here = DirwardDown[Here];  other_side = Destination.y < pos(dirward_here); }
+            if      (dir == Dir.Right) { dirward_here = DirwardRight[Here]; other_side = Destination.x > wall_pos(dirward_here); }
+            else if (dir == Dir.Left)  { dirward_here = DirwardLeft[Here];  other_side = Destination.x < wall_pos(dirward_here); }
+            else if (dir == Dir.Up)    { dirward_here = DirwardUp[Here];    other_side = Destination.y > wall_pos(dirward_here); }
+            else if (dir == Dir.Down)  { dirward_here = DirwardDown[Here];  other_side = Destination.y < wall_pos(dirward_here); }
 
             dirward dirward_here2 = dirward.Nothing;
             bool other_side2 = false;
-            if      (dir2 == Dir.Right) { dirward_here2 = DirwardRight[Here]; other_side2 = Destination.x > pos(dirward_here2); }
-            else if (dir2 == Dir.Left)  { dirward_here2 = DirwardLeft[Here];  other_side2 = Destination.x < pos(dirward_here2); }
-            else if (dir2 == Dir.Up)    { dirward_here2 = DirwardUp[Here];    other_side2 = Destination.y > pos(dirward_here2); }
-            else if (dir2 == Dir.Down)  { dirward_here2 = DirwardDown[Here];  other_side2 = Destination.y < pos(dirward_here2); }
+            if      (dir2 == Dir.Right) { dirward_here2 = DirwardRight[Here]; other_side2 = Destination.x > wall_pos(dirward_here2); }
+            else if (dir2 == Dir.Left)  { dirward_here2 = DirwardLeft[Here];  other_side2 = Destination.x < wall_pos(dirward_here2); }
+            else if (dir2 == Dir.Up)    { dirward_here2 = DirwardUp[Here];    other_side2 = Destination.y > wall_pos(dirward_here2); }
+            else if (dir2 == Dir.Down)  { dirward_here2 = DirwardDown[Here];  other_side2 = Destination.y < wall_pos(dirward_here2); }
 
-            float wall_pos = pos(dirward_here);
-            vec2 geo_id = ReducedGeoId(geo_pos_id(geo_here));
+            vec2 geo_id = geo_here.geo_id;
             if (geo_here.dir > 0 &&
                (
                     ValidDirward(dirward_here)  && other_side  && dirward_here .geo_id == geo_id ||

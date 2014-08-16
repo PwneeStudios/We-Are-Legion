@@ -40,11 +40,14 @@ namespace GpuSim
                 //if (here.bad == _true) output.r = 1;
 
                 // Draw guid coloring
-                vec2 guid = fmod(ReducedGeoId(geo_pos_id(here)) * 1293.4184145f, 1.0f);
+                vec2 guid = fmod(here.geo_id * 1293.4184145f, 1.0f);
                 output.r += guid.x;
                 output.g += guid.y;
                 output.a = 1f;
                 output.rgb *= output.a;
+
+                // Draw arrow over
+                output *= DrawDebugInfoTile(here.dir, 0, subcell_pos, Texture);
             }            
 
             return output;

@@ -170,6 +170,9 @@ namespace GpuSim
                 CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
             }
 
+            Geodesic_SetGeoId.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+
             for (int i = 0; i <= 50; i++)
             {
                 foreach (var dir in Dir.Vals)

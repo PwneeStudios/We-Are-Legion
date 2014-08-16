@@ -40,22 +40,22 @@ namespace GpuSim
 
         [Hlsl("gba")]
         public vec3 pos_storage { get { return gba; } set { gba = value; } }
+
+        [Hlsl("ba")]
+        public vec2 geo_id { get { return ba; } set { ba = value; } }
+
+        [Hlsl("g")]
+        public float dist { get { return g; } set { g = value; } }
     }
 
     [Copy(typeof(vec4))]
     public partial struct dirward
     {
-        [Hlsl("r")]
-        public float geo_id_x { get { return r; } set { r = value; } }
-
-        [Hlsl("g")]
-        public float geo_id_y { get { return g; } set { g = value; } }
-
         [Hlsl("rg")]
         public vec2 geo_id { get { return rg; } set { rg = value; } }
 
         [Hlsl("ba")]
-        public vec2 pos_storage { get { return ba; } set { ba = value; } }
+        public vec2 wall_pos_storage { get { return ba; } set { ba = value; } }
     }
 
     [Copy(typeof(vec4))]
@@ -286,7 +286,9 @@ namespace GpuSim
 
         protected static bool ValidDirward(dirward d)
         {
-            return d.geo_id_x != 0 || d.geo_id_y != 0 || d.pos_storage.x != 0 || d.pos_storage.y != 0;
+            return true;
+            //return d.wall_pos_storage.x != 0 || d.wall_pos_storage.y != 0;
+            return d != dirward.Nothing;
         }
 
         protected static vec2 ReducedGeoId(vec2 p)
@@ -297,14 +299,14 @@ namespace GpuSim
             );
         }
 
-        protected static float pos(dirward d)
+        protected static float wall_pos(dirward d)
         {
-            return unpack_val(d.pos_storage);
+            return unpack_val(d.wall_pos_storage);
         }
 
-        protected static void set_pos(ref dirward d, float pos)
+        protected static void set_wall_pos(ref dirward d, float pos)
         {
-            d.pos_storage = pack_val_2byte(pos);
+            d.wall_pos_storage = pack_val_2byte(pos);
         }
 
         protected vec2 get_subcell_pos(VertexOut vertex, vec2 grid_size)

@@ -252,41 +252,15 @@ float GpuSim__Movement_UpdateDirection_RemoveDead__BuildingDirection(VertexToPix
     return dir;
 }
 
-float GpuSim__SimShader__pos(float4 d)
+float GpuSim__SimShader__wall_pos(float4 d)
 {
     return GpuSim__SimShader__unpack_val(d.ba);
 }
 
-float2 GpuSim__SimShader__ReducedGeoId(float2 p)
-{
-    return float2(((int)(round(p.x)) % 256) / 256.0, ((int)(round(p.y)) % 256) / 256.0);
-}
-
-float FragSharpFramework__FragSharpStd__fint_floor(float v)
-{
-    v += 0.0005;
-    return floor(255 * v) * 0.003921569;
-}
-
-float2 GpuSim__SimShader__unpack_vec2_3byte(float3 packed)
-{
-    float extra_bits = packed.z;
-    float extra_y = FragSharpFramework__FragSharpStd__fint_floor(extra_bits / 16);
-    float extra_x = FragSharpFramework__FragSharpStd__fint_floor(extra_bits - 16 * extra_y);
-    float2 v = float2(0, 0);
-    v.x = GpuSim__SimShader__unpack_val(float2(extra_x, packed.x));
-    v.y = GpuSim__SimShader__unpack_val(float2(extra_y, packed.y));
-    return v;
-}
-
-float2 GpuSim__SimShader__geo_pos_id(float4 g)
-{
-    return GpuSim__SimShader__unpack_vec2_3byte(g.gba);
-}
-
 bool GpuSim__SimShader__ValidDirward(float4 d)
 {
-    return abs(d.r - 0) > .001 || abs(d.g - 0) > .001 || abs(d.ba.x - 0) > .001 || abs(d.ba.y - 0) > .001;
+    return true;
+    return any(abs(d - float4(0, 0, 0, 0)) > .001);
 }
 
 bool GpuSim__SimShader__IsValid(float direction)
@@ -370,28 +344,28 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
     if (abs(dir - 0.003921569) < .001)
     {
         dirward_here = tex2D(DirwardRight, psin.TexCoords + (float2(0, 0)) * DirwardRight_dxdy);
-        other_side = Destination.x > GpuSim__SimShader__pos(dirward_here) + .001;
+        other_side = Destination.x > GpuSim__SimShader__wall_pos(dirward_here) + .001;
     }
     else
     {
         if (abs(dir - 0.01176471) < .001)
         {
             dirward_here = tex2D(DirwardLeft, psin.TexCoords + (float2(0, 0)) * DirwardLeft_dxdy);
-            other_side = Destination.x < GpuSim__SimShader__pos(dirward_here) - .001;
+            other_side = Destination.x < GpuSim__SimShader__wall_pos(dirward_here) - .001;
         }
         else
         {
             if (abs(dir - 0.007843138) < .001)
             {
                 dirward_here = tex2D(DirwardUp, psin.TexCoords + (float2(0, 0)) * DirwardUp_dxdy);
-                other_side = Destination.y > GpuSim__SimShader__pos(dirward_here) + .001;
+                other_side = Destination.y > GpuSim__SimShader__wall_pos(dirward_here) + .001;
             }
             else
             {
                 if (abs(dir - 0.01568628) < .001)
                 {
                     dirward_here = tex2D(DirwardDown, psin.TexCoords + (float2(0, 0)) * DirwardDown_dxdy);
-                    other_side = Destination.y < GpuSim__SimShader__pos(dirward_here) - .001;
+                    other_side = Destination.y < GpuSim__SimShader__wall_pos(dirward_here) - .001;
                 }
             }
         }
@@ -401,34 +375,33 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
     if (abs(dir2 - 0.003921569) < .001)
     {
         dirward_here2 = tex2D(DirwardRight, psin.TexCoords + (float2(0, 0)) * DirwardRight_dxdy);
-        other_side2 = Destination.x > GpuSim__SimShader__pos(dirward_here2) + .001;
+        other_side2 = Destination.x > GpuSim__SimShader__wall_pos(dirward_here2) + .001;
     }
     else
     {
         if (abs(dir2 - 0.01176471) < .001)
         {
             dirward_here2 = tex2D(DirwardLeft, psin.TexCoords + (float2(0, 0)) * DirwardLeft_dxdy);
-            other_side2 = Destination.x < GpuSim__SimShader__pos(dirward_here2) - .001;
+            other_side2 = Destination.x < GpuSim__SimShader__wall_pos(dirward_here2) - .001;
         }
         else
         {
             if (abs(dir2 - 0.007843138) < .001)
             {
                 dirward_here2 = tex2D(DirwardUp, psin.TexCoords + (float2(0, 0)) * DirwardUp_dxdy);
-                other_side2 = Destination.y > GpuSim__SimShader__pos(dirward_here2) + .001;
+                other_side2 = Destination.y > GpuSim__SimShader__wall_pos(dirward_here2) + .001;
             }
             else
             {
                 if (abs(dir2 - 0.01568628) < .001)
                 {
                     dirward_here2 = tex2D(DirwardDown, psin.TexCoords + (float2(0, 0)) * DirwardDown_dxdy);
-                    other_side2 = Destination.y < GpuSim__SimShader__pos(dirward_here2) - .001;
+                    other_side2 = Destination.y < GpuSim__SimShader__wall_pos(dirward_here2) - .001;
                 }
             }
         }
     }
-    float wall_pos = GpuSim__SimShader__pos(dirward_here);
-    float2 geo_id = GpuSim__SimShader__ReducedGeoId(GpuSim__SimShader__geo_pos_id(geo_here));
+    float2 geo_id = geo_here.ba;
     if (geo_here.r > 0 + .001 && (GpuSim__SimShader__ValidDirward(dirward_here) && other_side && all(abs(dirward_here.rg - geo_id) < .001) || GpuSim__SimShader__ValidDirward(dirward_here2) && other_side2 && all(abs(dirward_here2.rg - geo_id) < .001)))
     {
         dir = geo_here.r;

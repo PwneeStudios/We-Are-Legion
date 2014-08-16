@@ -68,39 +68,24 @@ float2 FragSharpFramework__FragSharpStd__fmod(float2 dividend, float divider)
     return float2(fmod(dividend.x, divider), fmod(dividend.y, divider));
 }
 
-float2 GpuSim__SimShader__ReducedGeoId(float2 p)
+float FragSharpFramework__FragSharpStd__Float(float v)
 {
-    return float2(((int)(round(p.x)) % 256) / 256.0, ((int)(round(p.y)) % 256) / 256.0);
+    return floor(255 * v + 0.5);
 }
 
-float FragSharpFramework__FragSharpStd__fint_floor(float v)
+float4 GpuSim__DrawDebugInfo__DrawDebugInfoTile(VertexToPixel psin, float dir, float val, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
-    v += 0.0005;
-    return floor(255 * v) * 0.003921569;
-}
-
-float GpuSim__SimShader__unpack_val(float2 packed)
-{
-    float coord = 0;
-    packed = floor(255.0 * packed + float2(0.5, 0.5));
-    coord = 256 * packed.x + packed.y;
-    return coord;
-}
-
-float2 GpuSim__SimShader__unpack_vec2_3byte(float3 packed)
-{
-    float extra_bits = packed.z;
-    float extra_y = FragSharpFramework__FragSharpStd__fint_floor(extra_bits / 16);
-    float extra_x = FragSharpFramework__FragSharpStd__fint_floor(extra_bits - 16 * extra_y);
-    float2 v = float2(0, 0);
-    v.x = GpuSim__SimShader__unpack_val(float2(extra_x, packed.x));
-    v.y = GpuSim__SimShader__unpack_val(float2(extra_y, packed.y));
-    return v;
-}
-
-float2 GpuSim__SimShader__geo_pos_id(float4 g)
-{
-    return GpuSim__SimShader__unpack_vec2_3byte(g.gba);
+    float4 clr = float4(0.0, 0.0, 0.0, 0.0);
+    if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
+    {
+        return clr;
+    }
+    pos = pos * 0.98 + float2(0.01, 0.01);
+    pos.x += FragSharpFramework__FragSharpStd__Float(val);
+    pos.y += FragSharpFramework__FragSharpStd__Float(dir - 0.003921569);
+    pos *= float2(1.0 / 32, 1.0 / 4);
+    clr += tex2D(Texture, pos);
+    return clr;
 }
 
 // Compiled vertex shader
@@ -124,11 +109,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Geo_size);
     if (here.r > 0.0 + .001)
     {
-        float2 guid = FragSharpFramework__FragSharpStd__fmod(GpuSim__SimShader__ReducedGeoId(GpuSim__SimShader__geo_pos_id(here)) * 1293.418, 1.0);
+        float2 guid = FragSharpFramework__FragSharpStd__fmod(here.ba * 1293.418, 1.0);
         output.r += guid.x;
         output.g += guid.y;
         output.a = 1.0;
         output.rgb *= output.a;
+        output *= GpuSim__DrawDebugInfo__DrawDebugInfoTile(psin, here.r, 0, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
     __FinalOutput.Color = output;
     return __FinalOutput;

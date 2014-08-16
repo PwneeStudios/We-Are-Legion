@@ -226,6 +226,20 @@ namespace GpuSim
         }
     }
 
+    public partial class Geodesic_SetGeoId : SimShader
+    {
+        [FragmentShader]
+        geo FragmentShader(VertexOut vertex, Field<geo> Geo)
+        {
+            geo geo_here = Geo[Here];
+
+            geo_here.geo_id = ReducedGeoId(geo_pos_id(geo_here));
+            geo_here.dist = _0;
+
+            return geo_here;
+        }
+    }
+
     public partial class Geodesic_DirwardExtend : SimShader
     {
         [FragmentShader]
@@ -298,12 +312,12 @@ namespace GpuSim
 
             if (geo_here.dir > 0 && IsBlockingTile(Tiles[dir_to_vec(dir)]))
             {
-                output.geo_id = ReducedGeoId(geo_pos_id(geo_here));
+                output.geo_id = geo_here.geo_id;
 
                 vec2 pos_here = vertex.TexCoords * Tiles.Size;
 
-                if (dir == Dir.Right || dir == Dir.Left) set_pos(ref output, pos_here.x);
-                if (dir == Dir.Up    || dir == Dir.Down) set_pos(ref output, pos_here.y);
+                if (dir == Dir.Right || dir == Dir.Left) set_wall_pos(ref output, pos_here.x);
+                if (dir == Dir.Up    || dir == Dir.Down) set_wall_pos(ref output, pos_here.y);
             }
 
             else if (ValidDirward(forward)      ) output = forward;
