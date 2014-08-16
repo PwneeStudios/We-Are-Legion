@@ -286,8 +286,6 @@ namespace GpuSim
 
         protected static bool ValidDirward(dirward d)
         {
-            return true;
-            //return d.wall_pos_storage.x != 0 || d.wall_pos_storage.y != 0;
             return d != dirward.Nothing;
         }
 

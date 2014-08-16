@@ -100,7 +100,6 @@ void GpuSim__SimShader__set_wall_pos(inout float4 d, float pos)
 
 bool GpuSim__SimShader__ValidDirward(float4 d)
 {
-    return true;
     return any(abs(d - float4(0, 0, 0, 0)) > .001);
 }
 

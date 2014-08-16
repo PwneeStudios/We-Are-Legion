@@ -183,6 +183,30 @@ namespace GpuSim
             }
         }
 
+        void GrowGeo()
+        {
+            for (int i = 0; i < 50; i++)
+                _GrowGeo();
+        }
+
+        void _GrowGeo()
+        {
+            Geodesic_ConvertToBlocking.Apply(DataGroup.Tiles, DataGroup.Geo, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.MockTiles);
+
+            Geodesic_Outline.Apply(DataGroup.MockTiles, DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.OuterGeo);
+
+            for (int i = 0; i < 5; i++)
+            {
+                Geodesic_OutlineCleanup.Apply(DataGroup.MockTiles, DataGroup.OuterGeo, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.OuterGeo);
+            }
+
+            Geodesic_Flatten.Apply(DataGroup.Geo, DataGroup.OuterGeo, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+        }
+
         void CreateUnits()
         {
             float player = 0, team = 0;
@@ -232,6 +256,8 @@ namespace GpuSim
                 if (Keys.D5.Pressed())
                 {
                     Propagate();
+                    GrowGeo();
+                    GrowGeo();
                 }
 
                 if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())

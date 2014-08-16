@@ -5,7 +5,7 @@ namespace GpuSim
     public partial class Movement_Phase1 : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<data> Current)
+        data FragmentShader(VertexOut vertex, Field<data> Current, Field<vec4> Random)
         {
             data here = Current[Here], output = data.Nothing;
 
@@ -25,10 +25,36 @@ namespace GpuSim
                 left  = Current[LeftOne],
                 down  = Current[DownOne];
 
-            if (right.action != UnitAction.Stopped && right.action != UnitAction.Guard && right.direction == Dir.Left)  output = right;
-            if (up   .action != UnitAction.Stopped && up   .action != UnitAction.Guard && up.direction    == Dir.Down)  output = up;
-            if (left .action != UnitAction.Stopped && left .action != UnitAction.Guard && left.direction  == Dir.Right) output = left;
-            if (down .action != UnitAction.Stopped && down .action != UnitAction.Guard && down.direction  == Dir.Up)    output = down;
+            float rnd = RndFint(Random[Here].x, _0, _3);
+            if (rnd == _0)
+            {
+                if (right.action != UnitAction.Stopped && right.action != UnitAction.Guard && right.direction == Dir.Left) output = right;
+                if (up.action != UnitAction.Stopped && up.action != UnitAction.Guard && up.direction == Dir.Down) output = up;
+                if (left.action != UnitAction.Stopped && left.action != UnitAction.Guard && left.direction == Dir.Right) output = left;
+                if (down.action != UnitAction.Stopped && down.action != UnitAction.Guard && down.direction == Dir.Up) output = down;
+            }
+            else if (rnd == _1)
+            {
+                if (down.action != UnitAction.Stopped && down.action != UnitAction.Guard && down.direction == Dir.Up) output = down;
+                if (right.action != UnitAction.Stopped && right.action != UnitAction.Guard && right.direction == Dir.Left) output = right;
+                if (up.action != UnitAction.Stopped && up.action != UnitAction.Guard && up.direction == Dir.Down) output = up;
+                if (left.action != UnitAction.Stopped && left.action != UnitAction.Guard && left.direction == Dir.Right) output = left;
+            }
+            else if (rnd == _2)
+            {
+                if (left.action != UnitAction.Stopped && left.action != UnitAction.Guard && left.direction == Dir.Right) output = left;
+                if (down.action != UnitAction.Stopped && down.action != UnitAction.Guard && down.direction == Dir.Up) output = down;
+                if (right.action != UnitAction.Stopped && right.action != UnitAction.Guard && right.direction == Dir.Left) output = right;
+                if (up.action != UnitAction.Stopped && up.action != UnitAction.Guard && up.direction == Dir.Down) output = up;
+            }
+            else if (rnd == _3)
+            {
+                if (up.action != UnitAction.Stopped && up.action != UnitAction.Guard && up.direction == Dir.Down) output = up;
+                if (left.action != UnitAction.Stopped && left.action != UnitAction.Guard && left.direction == Dir.Right) output = left;
+                if (down.action != UnitAction.Stopped && down.action != UnitAction.Guard && down.direction == Dir.Up) output = down;
+                if (right.action != UnitAction.Stopped && right.action != UnitAction.Guard && right.direction == Dir.Left) output = right;
+            }
+
 
             if (Something(output))
             {
@@ -176,7 +202,7 @@ namespace GpuSim
     public partial class Movement_UpdateDirection_RemoveDead : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<vec4> TargetData, Field<unit> Unit, Field<extra> Extra, Field<data> Data, Field<vec4> PathToOtherTeams,
+        data FragmentShader(VertexOut vertex, Field<vec4> TargetData, Field<unit> Unit, Field<extra> Extra, Field<data> Data, Field<data> PrevData, Field<vec4> PathToOtherTeams,
                             Field<geo> Geo, Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown)
         {
             data  data_here  = Data[Here];
@@ -289,7 +315,7 @@ namespace GpuSim
                 // If we aren't attacking, or if a unit is too far away
                 if (min > auto_attack_cutoff && data_here.action == UnitAction.Attacking || data_here.action == UnitAction.Moving)
                 {
-                    NaivePathfind(vertex, Data, TargetData,
+                    NaivePathfind(vertex, Data, PrevData, TargetData,
                                   Geo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown,
                                   here, ref data_here, ref extra_here);
                 }
@@ -298,7 +324,7 @@ namespace GpuSim
             return data_here;
         }
 
-        void NaivePathfind(VertexOut vertex, Field<data> Current, Field<vec4> TargetData,
+        void NaivePathfind(VertexOut vertex, Field<data> Current, Field<data> Previous, Field<vec4> TargetData,
                            Field<geo> Geo, Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown,
                            unit data, ref data here, ref extra extra_here)
         {
@@ -317,6 +343,12 @@ namespace GpuSim
                 left  = Current[LeftOne],
                 down  = Current[DownOne];
 
+            data
+                prev_right = Previous[RightOne],
+                prev_up    = Previous[UpOne],
+                prev_left  = Previous[LeftOne],
+                prev_down  = Previous[DownOne];
+
             if (Destination.x > CurPos.x + .75f) dir = Dir.Right;
             if (Destination.x < CurPos.x - .75f) dir = Dir.Left;
             if (Destination.y > CurPos.y + .75f) dir = Dir.Up;
@@ -330,24 +362,26 @@ namespace GpuSim
             //if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left))  dir = Dir.Left;
             //if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down))  dir = Dir.Down;
             float dir2 = Dir.None;
-            if (mag.x > mag.y && Destination.x > CurPos.x + 1) dir = Dir.Right; 
-            if (mag.y > mag.x && Destination.y > CurPos.y + 1) dir = Dir.Up;
-            if (mag.x > mag.y && Destination.x < CurPos.x - 1) dir = Dir.Left;
-            if (mag.y > mag.x && Destination.y < CurPos.y - 1) dir = Dir.Down;
+            bool blocked = false;
+            if (mag.x > mag.y && Destination.x > CurPos.x + 1) { dir = Dir.Right; blocked = Something(right) || Something(prev_right); }
+            if (mag.y > mag.x && Destination.y > CurPos.y + 1) { dir = Dir.Up;    blocked = Something(up)    || Something(prev_up); }
+            if (mag.x > mag.y && Destination.x < CurPos.x - 1) { dir = Dir.Left;  blocked = Something(left)  || Something(prev_left); }
+            if (mag.y > mag.x && Destination.y < CurPos.y - 1) { dir = Dir.Down;  blocked = Something(down)  || Something(prev_down); }
 
             //if (mag.x > mag.y && Destination.y > CurPos.y + .5) dir2 = Dir.Up;
             //if (mag.x > mag.y && Destination.y < CurPos.y - .5) dir2 = Dir.Down;
             //if (mag.x <= mag.y && Destination.x > CurPos.x + 0) dir2 = Dir.Right;
             //if (mag.x <= mag.y && Destination.x < CurPos.x - 0) dir2 = Dir.Left;
+            bool blocked2 = false;
             if (dir == Dir.Right || dir == Dir.Left)
             {
-                if      (Destination.y > CurPos.y + 0) dir2 = Dir.Up;
-                else if (Destination.y < CurPos.y - 0) dir2 = Dir.Down;
+                if      (Destination.y > CurPos.y + 0) { dir2 = Dir.Up;    blocked2 = Something(up)    || Something(prev_up); }
+                else if (Destination.y < CurPos.y - 0) { dir2 = Dir.Down;  blocked2 = Something(down)  || Something(prev_down); }
             }
             if (dir == Dir.Up || dir == Dir.Down)
             {
-                if      (Destination.x > CurPos.x + 0) dir2 = Dir.Right;
-                else if (Destination.x < CurPos.x - 0) dir2 = Dir.Left;
+                if      (Destination.x > CurPos.x + 0) { dir2 = Dir.Right; blocked2 = Something(right) || Something(prev_right); }
+                else if (Destination.x < CurPos.x - 0) { dir2 = Dir.Left;  blocked2 = Something(left)  || Something(prev_left); }
             }
             //dir2 = Dir.Right;
 
@@ -369,15 +403,20 @@ namespace GpuSim
             else if (dir2 == Dir.Down)  { dirward_here2 = DirwardDown[Here];  other_side2 = Destination.y < wall_pos(dirward_here2); }
 
             vec2 geo_id = geo_here.geo_id;
-            if (geo_here.dir > 0 &&
+            if (geo_here.dir > 0 && (geo_here.dist == _0 || blocked && other_side || blocked2 && other_side2) &&
                (
                     ValidDirward(dirward_here)  && other_side  && dirward_here .geo_id == geo_id ||
                     ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id
                ))
                 dir = geo_here.dir;
-            //if (dist == 1 || desired direction is blocked) && desired dirward projection says we're gonna hit a wall
-            //    then: follow geo, no matter what level you're on, otherwise move inward normal to the geo
-
+            else
+            {
+                if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
+                if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up))    dir = Dir.Up;
+                if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left))  dir = Dir.Left;
+                if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down))  dir = Dir.Down;
+            }
+            //if (Something(Current[dir_to_vec(dir)])) dir = dir2;
 
             if (IsValid(dir))
             {

@@ -8,24 +8,24 @@ namespace GpuSim
         geo FragmentShader(VertexOut vertex, Field<tile> Tiles)
         {
             tile
-                here = Tiles[Here],
-                right = Tiles[RightOne],
-                up = Tiles[UpOne],
-                left = Tiles[LeftOne],
-                down = Tiles[DownOne],
-                up_right = Tiles[UpRight],
-                up_left = Tiles[UpLeft],
+                here       = Tiles[Here],
+                right      = Tiles[RightOne],
+                up         = Tiles[UpOne],
+                left       = Tiles[LeftOne],
+                down       = Tiles[DownOne],
+                up_right   = Tiles[UpRight],
+                up_left    = Tiles[UpLeft],
                 down_right = Tiles[DownRight],
-                down_left = Tiles[DownLeft];
+                down_left  = Tiles[DownLeft];
 
             if (IsBlockingTile(here)) return geo.Nothing;
 
             float dir = 0;
 
-            if (IsBlockingTile(up_left)) dir = Dir.Up;
-            if (IsBlockingTile(up_right)) dir = Dir.Right;
+            if (IsBlockingTile(up_left))    dir = Dir.Up;
+            if (IsBlockingTile(up_right))   dir = Dir.Right;
             if (IsBlockingTile(down_right)) dir = Dir.Down;
-            if (IsBlockingTile(down_left)) dir = Dir.Left;
+            if (IsBlockingTile(down_left))  dir = Dir.Left;
 
             if (IsBlockingTile(right))
             {
@@ -95,26 +95,26 @@ namespace GpuSim
         geo FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<geo> Geo)
         {
             tile
-                here = Tiles[Here],
-                right = Tiles[RightOne],
-                up = Tiles[UpOne],
-                left = Tiles[LeftOne],
-                down = Tiles[DownOne],
-                up_right = Tiles[UpRight],
-                up_left = Tiles[UpLeft],
+                here       = Tiles[Here],
+                right      = Tiles[RightOne],
+                up         = Tiles[UpOne],
+                left       = Tiles[LeftOne],
+                down       = Tiles[DownOne],
+                up_right   = Tiles[UpRight],
+                up_left    = Tiles[UpLeft],
                 down_right = Tiles[DownRight],
-                down_left = Tiles[DownLeft];
+                down_left  = Tiles[DownLeft];
 
             geo
-                geo_here = Geo[Here],
-                geo_right = Geo[RightOne],
-                geo_up = Geo[UpOne],
-                geo_left = Geo[LeftOne],
-                geo_down = Geo[DownOne],
-                geo_up_right = Geo[UpRight],
-                geo_up_left = Geo[UpLeft],
+                geo_here       = Geo[Here],
+                geo_right      = Geo[RightOne],
+                geo_up         = Geo[UpOne],
+                geo_left       = Geo[LeftOne],
+                geo_down       = Geo[DownOne],
+                geo_up_right   = Geo[UpRight],
+                geo_up_left    = Geo[UpLeft],
                 geo_down_right = Geo[DownRight],
-                geo_down_left = Geo[DownLeft];
+                geo_down_left  = Geo[DownLeft];
 
             if (IsBlockingTile(here)) return geo.Nothing;
 
@@ -136,9 +136,9 @@ namespace GpuSim
                 output.dir = Reverse(output.dir);
 
             int surround_count =
-                (IsBlockingTile(up) ? 1 : 0) +
-                (IsBlockingTile(left) ? 1 : 0) +
-                (IsBlockingTile(down) ? 1 : 0) +
+                (IsBlockingTile(up)    ? 1 : 0) +
+                (IsBlockingTile(left)  ? 1 : 0) +
+                (IsBlockingTile(down)  ? 1 : 0) +
                 (IsBlockingTile(right) ? 1 : 0);
 
             float bad_count = geo_up.bad + geo_left.bad + geo_down.bad + geo_right.bad;
@@ -192,26 +192,26 @@ namespace GpuSim
             if (here.dir == _0) return here;
 
             vec2
-                extr_here = geo_pos_id(here),
-                extr_right = geo_pos_id(right),
-                extr_up = geo_pos_id(up),
-                extr_left = geo_pos_id(left),
-                extr_down = geo_pos_id(down),
-                extr_up_right = geo_pos_id(up_right),
-                extr_up_left = geo_pos_id(up_left),
+                extr_here       = geo_pos_id(here),
+                extr_right      = geo_pos_id(right),
+                extr_up         = geo_pos_id(up),
+                extr_left       = geo_pos_id(left),
+                extr_down       = geo_pos_id(down),
+                extr_up_right   = geo_pos_id(up_right),
+                extr_up_left    = geo_pos_id(up_left),
                 extr_down_right = geo_pos_id(down_right),
-                extr_down_left = geo_pos_id(down_left);
+                extr_down_left  = geo_pos_id(down_left);
 
             float
-                val_here = flatten(extr_here),
-                val_right = flatten(extr_right),
-                val_up = flatten(extr_up),
-                val_left = flatten(extr_left),
-                val_down = flatten(extr_down),
-                val_up_right = flatten(extr_up_right),
-                val_up_left = flatten(extr_up_left),
+                val_here       = flatten(extr_here),
+                val_right      = flatten(extr_right),
+                val_up         = flatten(extr_up),
+                val_left       = flatten(extr_left),
+                val_down       = flatten(extr_down),
+                val_up_right   = flatten(extr_up_right),
+                val_up_left    = flatten(extr_up_left),
                 val_down_right = flatten(extr_down_right),
-                val_down_left = flatten(extr_down_left);
+                val_down_left  = flatten(extr_down_left);
 
             if (val_here < val_right)      { here.pos_storage = right     .pos_storage; val_here = val_right; }
             if (val_here < val_up)         { here.pos_storage = up        .pos_storage; val_here = val_up; }
@@ -249,26 +249,26 @@ namespace GpuSim
                 here = Tiles[Here];
 
             geo
-                geo_here = Geo[Here],
-                geo_right = Geo[RightOne],
-                geo_up = Geo[UpOne],
-                geo_left = Geo[LeftOne],
-                geo_down = Geo[DownOne],
-                geo_up_right = Geo[UpRight],
-                geo_up_left = Geo[UpLeft],
+                geo_here       = Geo[Here],
+                geo_right      = Geo[RightOne],
+                geo_up         = Geo[UpOne],
+                geo_left       = Geo[LeftOne],
+                geo_down       = Geo[DownOne],
+                geo_up_right   = Geo[UpRight],
+                geo_up_left    = Geo[UpLeft],
                 geo_down_right = Geo[DownRight],
-                geo_down_left = Geo[DownLeft];
+                geo_down_left  = Geo[DownLeft];
 
             dirward
-                dirward_here = Dirward[Here],
-                dirward_right = Dirward[RightOne],
-                dirward_up = Dirward[UpOne],
-                dirward_left = Dirward[LeftOne],
-                dirward_down = Dirward[DownOne],
-                dirward_up_right = Dirward[UpRight],
-                dirward_up_left = Dirward[UpLeft],
+                dirward_here       = Dirward[Here],
+                dirward_right      = Dirward[RightOne],
+                dirward_up         = Dirward[UpOne],
+                dirward_left       = Dirward[LeftOne],
+                dirward_down       = Dirward[DownOne],
+                dirward_up_right   = Dirward[UpRight],
+                dirward_up_left    = Dirward[UpLeft],
                 dirward_down_right = Dirward[DownRight],
-                dirward_down_left = Dirward[DownLeft];
+                dirward_down_left  = Dirward[DownLeft];
 
             if (IsBlockingTile(here)) return dirward.Nothing;
 
@@ -329,4 +329,60 @@ namespace GpuSim
             return output;
         }
     }
+
+    public partial class Geodesic_ConvertToBlocking : SimShader
+    {
+        [FragmentShader]
+        tile FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<geo> Geo)
+        {
+            tile tile_here = Tiles[Here];
+            geo  geo_here  = Geo[Here];
+
+            if (IsValid(geo_here.dir))
+                tile_here.type = TileType.Trees;
+
+            return tile_here;
+        }
+    }
+
+    public partial class Geodesic_Flatten : SimShader
+    {
+        void InheritsFrom(ref geo outer_geo, geo inner_geo)
+        {
+            outer_geo.dist   = inner_geo.dist + _1;
+            outer_geo.geo_id = inner_geo.geo_id;            
+        }
+
+        [FragmentShader]
+        geo FragmentShader(VertexOut vertex, Field<geo> Geo, Field<geo> OuterGeo)
+        {
+            geo
+                geo_here       = Geo[Here],
+                geo_right      = Geo[RightOne],
+                geo_up         = Geo[UpOne],
+                geo_left       = Geo[LeftOne],
+                geo_down       = Geo[DownOne],
+                geo_up_right   = Geo[UpRight],
+                geo_up_left    = Geo[UpLeft],
+                geo_down_right = Geo[DownRight],
+                geo_down_left  = Geo[DownLeft];
+
+            geo
+                outer_geo_here = OuterGeo[Here];
+
+            if (IsValid(geo_here.dir)) return geo_here;
+
+            outer_geo_here.dist = _255; // Start off as maximum possible 1-byte distance, since we will be taking the min of surrounding distances (and adding _1)
+            if      (outer_geo_here.dist > geo_right.dist      && IsValid(geo_right.dir)     ) InheritsFrom(ref outer_geo_here, geo_right);
+            else if (outer_geo_here.dist > geo_up.dist         && IsValid(geo_up.dir)        ) InheritsFrom(ref outer_geo_here, geo_up);
+            else if (outer_geo_here.dist > geo_left.dist       && IsValid(geo_left.dir)      ) InheritsFrom(ref outer_geo_here, geo_left);
+            else if (outer_geo_here.dist > geo_down.dist       && IsValid(geo_down.dir)      ) InheritsFrom(ref outer_geo_here, geo_down);
+            else if (outer_geo_here.dist > geo_up_right.dist   && IsValid(geo_up_right.dir)  ) InheritsFrom(ref outer_geo_here, geo_up_right);
+            else if (outer_geo_here.dist > geo_up_left.dist    && IsValid(geo_up_left.dir)   ) InheritsFrom(ref outer_geo_here, geo_up_left);
+            else if (outer_geo_here.dist > geo_down_right.dist && IsValid(geo_down_right.dir)) InheritsFrom(ref outer_geo_here, geo_down_right);
+            else if (outer_geo_here.dist > geo_down_left.dist  && IsValid(geo_down_left.dir) ) InheritsFrom(ref outer_geo_here, geo_down_left);
+
+            return outer_geo_here;
+        }
+    }    
 }

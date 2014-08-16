@@ -37,6 +37,21 @@ sampler fs_param_Current : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
+// Texture Sampler for fs_param_Random, using register location 2
+float2 fs_param_Random_size;
+float2 fs_param_Random_dxdy;
+
+Texture fs_param_Random_Texture;
+sampler fs_param_Random : register(s2) = sampler_state
+{
+    texture   = <fs_param_Random_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__Something(float4 u)
 {
@@ -46,6 +61,17 @@ bool GpuSim__SimShader__Something(float4 u)
 bool GpuSim__SimShader__IsStationary(float4 d)
 {
     return d.r >= 0.01960784 - .001;
+}
+
+float FragSharpFramework__FragSharpStd__fint_round(float v)
+{
+    return floor(255 * v + 0.5) * 0.003921569;
+}
+
+float GpuSim__SimShader__RndFint(float rnd, float f1, float f2)
+{
+    float val = rnd * (f2 - f1) + f1;
+    return FragSharpFramework__FragSharpStd__fint_round(val);
 }
 
 // Compiled vertex shader
@@ -74,21 +100,91 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         return __FinalOutput;
     }
     float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy);
-    if (abs(right.a - 0.0) > .001 && abs(right.a - 0.01176471) > .001 && abs(right.r - 0.01176471) < .001)
+    float rnd = GpuSim__SimShader__RndFint(tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy).x, 0.0, 0.01176471);
+    if (abs(rnd - 0.0) < .001)
     {
-        output = right;
+        if (abs(right.a - 0.0) > .001 && abs(right.a - 0.01176471) > .001 && abs(right.r - 0.01176471) < .001)
+        {
+            output = right;
+        }
+        if (abs(up.a - 0.0) > .001 && abs(up.a - 0.01176471) > .001 && abs(up.r - 0.01568628) < .001)
+        {
+            output = up;
+        }
+        if (abs(left.a - 0.0) > .001 && abs(left.a - 0.01176471) > .001 && abs(left.r - 0.003921569) < .001)
+        {
+            output = left;
+        }
+        if (abs(down.a - 0.0) > .001 && abs(down.a - 0.01176471) > .001 && abs(down.r - 0.007843138) < .001)
+        {
+            output = down;
+        }
     }
-    if (abs(up.a - 0.0) > .001 && abs(up.a - 0.01176471) > .001 && abs(up.r - 0.01568628) < .001)
+    else
     {
-        output = up;
-    }
-    if (abs(left.a - 0.0) > .001 && abs(left.a - 0.01176471) > .001 && abs(left.r - 0.003921569) < .001)
-    {
-        output = left;
-    }
-    if (abs(down.a - 0.0) > .001 && abs(down.a - 0.01176471) > .001 && abs(down.r - 0.007843138) < .001)
-    {
-        output = down;
+        if (abs(rnd - 0.003921569) < .001)
+        {
+            if (abs(down.a - 0.0) > .001 && abs(down.a - 0.01176471) > .001 && abs(down.r - 0.007843138) < .001)
+            {
+                output = down;
+            }
+            if (abs(right.a - 0.0) > .001 && abs(right.a - 0.01176471) > .001 && abs(right.r - 0.01176471) < .001)
+            {
+                output = right;
+            }
+            if (abs(up.a - 0.0) > .001 && abs(up.a - 0.01176471) > .001 && abs(up.r - 0.01568628) < .001)
+            {
+                output = up;
+            }
+            if (abs(left.a - 0.0) > .001 && abs(left.a - 0.01176471) > .001 && abs(left.r - 0.003921569) < .001)
+            {
+                output = left;
+            }
+        }
+        else
+        {
+            if (abs(rnd - 0.007843138) < .001)
+            {
+                if (abs(left.a - 0.0) > .001 && abs(left.a - 0.01176471) > .001 && abs(left.r - 0.003921569) < .001)
+                {
+                    output = left;
+                }
+                if (abs(down.a - 0.0) > .001 && abs(down.a - 0.01176471) > .001 && abs(down.r - 0.007843138) < .001)
+                {
+                    output = down;
+                }
+                if (abs(right.a - 0.0) > .001 && abs(right.a - 0.01176471) > .001 && abs(right.r - 0.01176471) < .001)
+                {
+                    output = right;
+                }
+                if (abs(up.a - 0.0) > .001 && abs(up.a - 0.01176471) > .001 && abs(up.r - 0.01568628) < .001)
+                {
+                    output = up;
+                }
+            }
+            else
+            {
+                if (abs(rnd - 0.01176471) < .001)
+                {
+                    if (abs(up.a - 0.0) > .001 && abs(up.a - 0.01176471) > .001 && abs(up.r - 0.01568628) < .001)
+                    {
+                        output = up;
+                    }
+                    if (abs(left.a - 0.0) > .001 && abs(left.a - 0.01176471) > .001 && abs(left.r - 0.003921569) < .001)
+                    {
+                        output = left;
+                    }
+                    if (abs(down.a - 0.0) > .001 && abs(down.a - 0.01176471) > .001 && abs(down.r - 0.007843138) < .001)
+                    {
+                        output = down;
+                    }
+                    if (abs(right.a - 0.0) > .001 && abs(right.a - 0.01176471) > .001 && abs(right.r - 0.01176471) < .001)
+                    {
+                        output = right;
+                    }
+                }
+            }
+        }
     }
     if (GpuSim__SimShader__Something(output))
     {
