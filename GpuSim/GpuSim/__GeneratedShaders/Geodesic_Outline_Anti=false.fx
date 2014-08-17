@@ -67,65 +67,119 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float dir = 0;
     if (GpuSim__SimShader__IsBlockingTile(up_left))
     {
-        dir = 0.007843138;
+        dir = false ? 0.01176471 : 0.007843138;
     }
     if (GpuSim__SimShader__IsBlockingTile(up_right))
     {
-        dir = 0.003921569;
+        dir = false ? 0.007843138 : 0.003921569;
     }
     if (GpuSim__SimShader__IsBlockingTile(down_right))
     {
-        dir = 0.01568628;
+        dir = false ? 0.003921569 : 0.01568628;
     }
     if (GpuSim__SimShader__IsBlockingTile(down_left))
     {
-        dir = 0.01176471;
+        dir = false ? 0.01568628 : 0.01176471;
     }
-    if (GpuSim__SimShader__IsBlockingTile(right))
+    if (false)
     {
-        dir = false ? 0.007843138 : 0.01568628;
-        if (GpuSim__SimShader__IsBlockingTile(down))
-        {
-            dir = false ? 0.003921569 : 0.01176471;
-            if (GpuSim__SimShader__IsBlockingTile(left))
-            {
-                dir = false ? 0.01568628 : 0.007843138;
-            }
-        }
-    }
-    if (GpuSim__SimShader__IsBlockingTile(up))
-    {
-        dir = false ? 0.01176471 : 0.003921569;
         if (GpuSim__SimShader__IsBlockingTile(right))
         {
-            dir = false ? 0.007843138 : 0.01568628;
-            if (GpuSim__SimShader__IsBlockingTile(down))
-            {
-                dir = false ? 0.003921569 : 0.01176471;
-            }
-        }
-    }
-    if (GpuSim__SimShader__IsBlockingTile(left))
-    {
-        dir = false ? 0.01568628 : 0.007843138;
-        if (GpuSim__SimShader__IsBlockingTile(up))
-        {
-            dir = false ? 0.01176471 : 0.003921569;
-            if (GpuSim__SimShader__IsBlockingTile(right))
-            {
-                dir = false ? 0.007843138 : 0.01568628;
-            }
-        }
-    }
-    if (GpuSim__SimShader__IsBlockingTile(down))
-    {
-        dir = false ? 0.003921569 : 0.01176471;
-        if (GpuSim__SimShader__IsBlockingTile(left))
-        {
-            dir = false ? 0.01568628 : 0.007843138;
+            dir = 0.007843138;
             if (GpuSim__SimShader__IsBlockingTile(up))
             {
-                dir = false ? 0.01176471 : 0.003921569;
+                dir = 0.01176471;
+                if (GpuSim__SimShader__IsBlockingTile(left))
+                {
+                    dir = 0.01568628;
+                }
+            }
+        }
+        if (GpuSim__SimShader__IsBlockingTile(up))
+        {
+            dir = 0.01176471;
+            if (GpuSim__SimShader__IsBlockingTile(left))
+            {
+                dir = 0.01568628;
+                if (GpuSim__SimShader__IsBlockingTile(down))
+                {
+                    dir = 0.003921569;
+                }
+            }
+        }
+        if (GpuSim__SimShader__IsBlockingTile(left))
+        {
+            dir = 0.01568628;
+            if (GpuSim__SimShader__IsBlockingTile(down))
+            {
+                dir = 0.003921569;
+                if (GpuSim__SimShader__IsBlockingTile(right))
+                {
+                    dir = 0.007843138;
+                }
+            }
+        }
+        if (GpuSim__SimShader__IsBlockingTile(down))
+        {
+            dir = 0.003921569;
+            if (GpuSim__SimShader__IsBlockingTile(right))
+            {
+                dir = 0.007843138;
+                if (GpuSim__SimShader__IsBlockingTile(up))
+                {
+                    dir = 0.01176471;
+                }
+            }
+        }
+    }
+    else
+    {
+        if (GpuSim__SimShader__IsBlockingTile(right))
+        {
+            dir = 0.01568628;
+            if (GpuSim__SimShader__IsBlockingTile(down))
+            {
+                dir = 0.01176471;
+                if (GpuSim__SimShader__IsBlockingTile(left))
+                {
+                    dir = 0.007843138;
+                }
+            }
+        }
+        if (GpuSim__SimShader__IsBlockingTile(up))
+        {
+            dir = 0.003921569;
+            if (GpuSim__SimShader__IsBlockingTile(right))
+            {
+                dir = 0.01568628;
+                if (GpuSim__SimShader__IsBlockingTile(down))
+                {
+                    dir = 0.01176471;
+                }
+            }
+        }
+        if (GpuSim__SimShader__IsBlockingTile(left))
+        {
+            dir = 0.007843138;
+            if (GpuSim__SimShader__IsBlockingTile(up))
+            {
+                dir = 0.003921569;
+                if (GpuSim__SimShader__IsBlockingTile(right))
+                {
+                    dir = 0.01568628;
+                }
+            }
+        }
+        if (GpuSim__SimShader__IsBlockingTile(down))
+        {
+            dir = 0.01176471;
+            if (GpuSim__SimShader__IsBlockingTile(left))
+            {
+                dir = 0.007843138;
+                if (GpuSim__SimShader__IsBlockingTile(up))
+                {
+                    dir = 0.003921569;
+                }
             }
         }
     }

@@ -22,52 +22,101 @@ namespace GpuSim
 
             float dir = 0;
 
-            if (IsBlockingTile(up_left))    dir = Dir.Up;
-            if (IsBlockingTile(up_right))   dir = Dir.Right;
-            if (IsBlockingTile(down_right)) dir = Dir.Down;
-            if (IsBlockingTile(down_left))  dir = Dir.Left;
+            if (IsBlockingTile(up_left))    dir = Anti ? Dir.Left  : Dir.Up;
+            if (IsBlockingTile(up_right))   dir = Anti ? Dir.Up    : Dir.Right;
+            if (IsBlockingTile(down_right)) dir = Anti ? Dir.Right : Dir.Down;
+            if (IsBlockingTile(down_left))  dir = Anti ? Dir.Down  : Dir.Left;
 
-            if (IsBlockingTile(right))
+            if (Anti)
             {
-                dir = Anti ? Dir.Up : Dir.Down;
-                if (IsBlockingTile(down))
-                {
-                    dir = Anti ? Dir.Right : Dir.Left;
-                    if (IsBlockingTile(left))
-                        dir = Anti ? Dir.Down : Dir.Up;
-                }
-            }
-
-            if (IsBlockingTile(up))
-            {
-                dir = Anti ? Dir.Left : Dir.Right;
                 if (IsBlockingTile(right))
                 {
-                    dir = Anti ? Dir.Up : Dir.Down;
-                    if (IsBlockingTile(down))
-                        dir = Anti ? Dir.Right : Dir.Left;
+                    dir = Dir.Up;
+                    if (IsBlockingTile(up))
+                    {
+                        dir = Dir.Left;
+                        if (IsBlockingTile(left))
+                            dir = Dir.Down;
+                    }
                 }
-            }
 
-            if (IsBlockingTile(left))
-            {
-                dir = Anti ? Dir.Down : Dir.Up;
                 if (IsBlockingTile(up))
                 {
-                    dir = Anti ? Dir.Left : Dir.Right;
-                    if (IsBlockingTile(right))
-                        dir = Anti ? Dir.Up : Dir.Down;
+                    dir = Dir.Left;
+                    if (IsBlockingTile(left))
+                    {
+                        dir = Dir.Down;
+                        if (IsBlockingTile(down))
+                            dir = Dir.Right;
+                    }
                 }
-            }
 
-            if (IsBlockingTile(down))
-            {
-                dir = Anti ? Dir.Right : Dir.Left;
                 if (IsBlockingTile(left))
                 {
-                    dir = Anti ? Dir.Down : Dir.Up;
+                    dir = Dir.Down;
+                    if (IsBlockingTile(down))
+                    {
+                        dir = Dir.Right;
+                        if (IsBlockingTile(right))
+                            dir = Dir.Up;
+                    }
+                }
+
+                if (IsBlockingTile(down))
+                {
+                    dir = Dir.Right;
+                    if (IsBlockingTile(right))
+                    {
+                        dir = Dir.Up;
+                        if (IsBlockingTile(up))
+                            dir = Dir.Left;
+                    }
+                }
+            }
+            else
+            {
+                if (IsBlockingTile(right))
+                {
+                    dir = Dir.Down;
+                    if (IsBlockingTile(down))
+                    {
+                        dir = Dir.Left;
+                        if (IsBlockingTile(left))
+                            dir = Dir.Up;
+                    }
+                }
+
+                if (IsBlockingTile(up))
+                {
+                    dir = Dir.Right;
+                    if (IsBlockingTile(right))
+                    {
+                        dir = Dir.Down;
+                        if (IsBlockingTile(down))
+                            dir = Dir.Left;
+                    }
+                }
+
+                if (IsBlockingTile(left))
+                {
+                    dir = Dir.Up;
                     if (IsBlockingTile(up))
-                        dir = Anti ? Dir.Left : Dir.Right;
+                    {
+                        dir = Dir.Right;
+                        if (IsBlockingTile(right))
+                            dir = Dir.Down;
+                    }
+                }
+
+                if (IsBlockingTile(down))
+                {
+                    dir = Dir.Left;
+                    if (IsBlockingTile(left))
+                    {
+                        dir = Dir.Up;
+                        if (IsBlockingTile(up))
+                            dir = Dir.Right;
+                    }
                 }
             }
 

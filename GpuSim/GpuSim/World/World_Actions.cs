@@ -142,6 +142,7 @@ namespace GpuSim
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
 
             UpdateGeo(false);
+            UpdateGeo(true);
         }
 
         void SwapTempGeo(bool Anti)
