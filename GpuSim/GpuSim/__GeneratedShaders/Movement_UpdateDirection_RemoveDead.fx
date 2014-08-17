@@ -378,7 +378,7 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
             }
         }
     }
-    float4 geo_here = tex2D(Geo, psin.TexCoords + (float2(0, 0)) * Geo_dxdy);
+    float4 geo_here = tex2D(AntiGeo, psin.TexCoords + (float2(0, 0)) * AntiGeo_dxdy);
     float4 dirward_here = float4(0, 0, 0, 0);
     bool other_side = false;
     if (abs(dir - 0.003921569) < .001)

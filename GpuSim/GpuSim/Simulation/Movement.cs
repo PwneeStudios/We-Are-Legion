@@ -389,7 +389,8 @@ namespace GpuSim
             //dir2 = Dir.Right;
 
             // Check geodesics
-            geo geo_here = Geo[Here];
+            //geo geo_here = Geo[Here];
+            geo geo_here = AntiGeo[Here];
             
             dirward dirward_here = dirward.Nothing;
             bool other_side = false;

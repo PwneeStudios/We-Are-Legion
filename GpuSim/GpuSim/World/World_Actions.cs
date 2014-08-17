@@ -280,8 +280,12 @@ namespace GpuSim
 
                 if (Keys.D5.Pressed())
                 {
-                    PropagateGeoId(false);
-                    GrowGeo(false);
+                    foreach (bool polarity in Vals.Bool)
+                    {
+                        PropagateGeoId(polarity);
+                        GrowGeo(polarity);
+                        //DirwardExtend(polarity);
+                    }
                     DirwardExtend(false);
                 }
 

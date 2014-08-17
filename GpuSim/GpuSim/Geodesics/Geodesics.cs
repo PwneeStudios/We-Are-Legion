@@ -5,7 +5,7 @@ namespace GpuSim
     public partial class Geodesic_Outline : SimShader
     {
         [FragmentShader]
-        geo FragmentShader(VertexOut vertex, Field<tile> Tiles, [Vals(true, false)] bool Anti)
+        geo FragmentShader(VertexOut vertex, Field<tile> Tiles, [Vals.Bool] bool Anti)
         {
             tile
                 here       = Tiles[Here],
@@ -141,7 +141,7 @@ namespace GpuSim
     public partial class Geodesic_OutlineCleanup : SimShader
     {
         [FragmentShader]
-        geo FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<geo> Geo, [Vals(true, false)] bool Anti)
+        geo FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<geo> Geo, [Vals.Bool] bool Anti)
         {
             tile
                 here       = Tiles[Here],
