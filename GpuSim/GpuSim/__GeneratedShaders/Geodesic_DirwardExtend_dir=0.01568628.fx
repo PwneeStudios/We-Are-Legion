@@ -126,14 +126,20 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         return __FinalOutput;
     }
     float4 output = float4(0, 0, 0, 0);
-    float4 forward = float4(0, 0, 0, 0), forward_right = float4(0, 0, 0, 0), forward_left = float4(0, 0, 0, 0), right = float4(0, 0, 0, 0), left = float4(0, 0, 0, 0);
+    float4 forward = float4(0, 0, 0, 0), forward_right = float4(0, 0, 0, 0), forward_left = float4(0, 0, 0, 0), rightward = float4(0, 0, 0, 0), leftward = float4(0, 0, 0, 0);
+    float4 geo_forward = float4(0, 0, 0, 0), geo_forward_right = float4(0, 0, 0, 0), geo_forward_left = float4(0, 0, 0, 0), geo_rightward = float4(0, 0, 0, 0), geo_leftward = float4(0, 0, 0, 0);
     if (abs(0.01568628 - 0.007843138) < .001)
     {
         forward = dirward_up;
         forward_right = dirward_up_right;
         forward_left = dirward_up_left;
-        right = dirward_right;
-        left = dirward_left;
+        rightward = dirward_right;
+        leftward = dirward_left;
+        geo_forward = geo_up;
+        geo_forward_right = geo_up_right;
+        geo_forward_left = geo_up_left;
+        geo_rightward = geo_right;
+        geo_leftward = geo_left;
     }
     else
     {
@@ -142,8 +148,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             forward = dirward_right;
             forward_right = dirward_down_right;
             forward_left = dirward_up_right;
-            right = dirward_down;
-            left = dirward_up;
+            rightward = dirward_down;
+            leftward = dirward_up;
+            geo_forward = geo_right;
+            geo_forward_right = geo_down_right;
+            geo_forward_left = geo_up_right;
+            geo_rightward = geo_down;
+            geo_leftward = geo_up;
         }
         else
         {
@@ -152,8 +163,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 forward = dirward_down;
                 forward_right = dirward_down_left;
                 forward_left = dirward_down_right;
-                right = dirward_left;
-                left = dirward_right;
+                rightward = dirward_left;
+                leftward = dirward_right;
+                geo_forward = geo_down;
+                geo_forward_right = geo_down_left;
+                geo_forward_left = geo_down_right;
+                geo_rightward = geo_left;
+                geo_leftward = geo_right;
             }
             else
             {
@@ -162,8 +178,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                     forward = dirward_left;
                     forward_right = dirward_up_left;
                     forward_left = dirward_down_left;
-                    right = dirward_up;
-                    left = dirward_down;
+                    rightward = dirward_up;
+                    leftward = dirward_down;
+                    geo_forward = geo_left;
+                    geo_forward_right = geo_up_left;
+                    geo_forward_left = geo_down_left;
+                    geo_rightward = geo_up;
+                    geo_leftward = geo_down;
                 }
             }
         }
@@ -183,21 +204,35 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     else
     {
-        if (GpuSim__SimShader__ValidDirward(forward))
+        if (GpuSim__SimShader__ValidDirward(forward) && all(abs(forward.rg - geo_forward.ba) < .001))
         {
             output = forward;
         }
         else
         {
-            if (GpuSim__SimShader__ValidDirward(forward_right))
+            if (GpuSim__SimShader__ValidDirward(forward_right) && all(abs(forward_right.rg - geo_forward_right.ba) < .001))
             {
                 output = forward_right;
             }
             else
             {
-                if (GpuSim__SimShader__ValidDirward(forward_left))
+                if (GpuSim__SimShader__ValidDirward(forward_left) && all(abs(forward_left.rg - geo_forward_left.ba) < .001))
                 {
                     output = forward_left;
+                }
+                else
+                {
+                    if (GpuSim__SimShader__ValidDirward(rightward) && all(abs(rightward.rg - geo_rightward.ba) < .001))
+                    {
+                        output = rightward;
+                    }
+                    else
+                    {
+                        if (GpuSim__SimShader__ValidDirward(leftward) && all(abs(leftward.rg - geo_leftward.ba) < .001))
+                        {
+                            output = leftward;
+                        }
+                    }
                 }
             }
         }

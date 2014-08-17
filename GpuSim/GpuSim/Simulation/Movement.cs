@@ -413,7 +413,14 @@ namespace GpuSim
                     ValidDirward(dirward_here)  && other_side  && dirward_here.geo_id  == geo_id && (geo_here.dist == _0 || blocked  && other_side) ||
                     ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id && (geo_here.dist == _0 || blocked2 && other_side2) 
                ))
+            {
                 dir = geo_here.dir;
+                //float avoid = Reverse(prior_direction(here));
+                //if (IsValid(geo_here.dir) && geo_here.dir != avoid)
+                //    dir = geo_here.dir;
+                //else
+                //    dir = dir2;
+            }
             else
             {
                 if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;

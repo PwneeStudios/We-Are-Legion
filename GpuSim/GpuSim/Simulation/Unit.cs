@@ -445,8 +445,12 @@ namespace GpuSim
 
         protected static float RndFint(float rnd, float f1, float f2)
         {
+            f2 -= .0006f;
             float val = rnd * (f2 - f1) + f1;
-            return fint_round(val);
+            return fint_floor(val);
+            
+            //float val = rnd * (f2 - f1) + f1;
+            //return fint_round(val);
         }
 
         public static class Anim

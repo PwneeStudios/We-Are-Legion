@@ -274,7 +274,8 @@ namespace GpuSim
 
             dirward output = dirward.Nothing;
 
-            dirward forward = dirward.Nothing, forward_right = dirward.Nothing, forward_left = dirward.Nothing, right = dirward.Nothing, left = dirward.Nothing;
+            dirward forward = dirward.Nothing, forward_right = dirward.Nothing, forward_left = dirward.Nothing, rightward = dirward.Nothing, leftward = dirward.Nothing;
+            geo geo_forward = geo.Nothing, geo_forward_right = geo.Nothing, geo_forward_left = geo.Nothing, geo_rightward = geo.Nothing, geo_leftward = geo.Nothing;
 
             // Get the surrounding dirward info and store it relative to the direction we consider forward
             if (dir == Dir.Up)
@@ -282,32 +283,56 @@ namespace GpuSim
                 forward       = dirward_up;
                 forward_right = dirward_up_right;
                 forward_left  = dirward_up_left;
-                right         = dirward_right;
-                left          = dirward_left;
+                rightward     = dirward_right;
+                leftward      = dirward_left;
+
+                geo_forward       = geo_up;
+                geo_forward_right = geo_up_right;
+                geo_forward_left  = geo_up_left;
+                geo_rightward     = geo_right;
+                geo_leftward      = geo_left;
             }
             else if (dir == Dir.Right)
             {
                 forward       = dirward_right;
                 forward_right = dirward_down_right;
                 forward_left  = dirward_up_right;
-                right         = dirward_down;
-                left          = dirward_up;
+                rightward     = dirward_down;
+                leftward      = dirward_up;
+
+                geo_forward       = geo_right;
+                geo_forward_right = geo_down_right;
+                geo_forward_left  = geo_up_right;
+                geo_rightward     = geo_down;
+                geo_leftward      = geo_up;
             }
             else if (dir == Dir.Down)
             {
                 forward       = dirward_down;
                 forward_right = dirward_down_left;
                 forward_left  = dirward_down_right;
-                right         = dirward_left;
-                left          = dirward_right;
+                rightward     = dirward_left;
+                leftward      = dirward_right;
+
+                geo_forward       = geo_down;
+                geo_forward_right = geo_down_left;
+                geo_forward_left  = geo_down_right;
+                geo_rightward     = geo_left;
+                geo_leftward      = geo_right;
             }
             else if (dir == Dir.Left)
             {
                 forward       = dirward_left;
                 forward_right = dirward_up_left;
                 forward_left  = dirward_down_left;
-                right         = dirward_up;
-                left          = dirward_down;
+                rightward     = dirward_up;
+                leftward      = dirward_down;
+
+                geo_forward       = geo_left;
+                geo_forward_right = geo_up_left;
+                geo_forward_left  = geo_down_left;
+                geo_rightward     = geo_up;
+                geo_leftward      = geo_down;
             }
 
             if (geo_here.dir > 0 && IsBlockingTile(Tiles[dir_to_vec(dir)]))
@@ -320,11 +345,11 @@ namespace GpuSim
                 if (dir == Dir.Up    || dir == Dir.Down) set_wall_pos(ref output, pos_here.y);
             }
 
-            else if (ValidDirward(forward)      ) output = forward;
-            else if (ValidDirward(forward_right)) output = forward_right;
-            else if (ValidDirward(forward_left) ) output = forward_left;
-            //else if (ValidDirward(right)        ) output = right;
-            //else if (ValidDirward(left)         ) output = left;
+            else if (ValidDirward(forward)       && forward      .geo_id == geo_forward      .geo_id) output = forward;
+            else if (ValidDirward(forward_right) && forward_right.geo_id == geo_forward_right.geo_id) output = forward_right;
+            else if (ValidDirward(forward_left)  && forward_left .geo_id == geo_forward_left .geo_id) output = forward_left;
+            else if (ValidDirward(rightward)     && rightward    .geo_id == geo_rightward    .geo_id) output = rightward;
+            else if (ValidDirward(leftward)      && leftward     .geo_id == geo_leftward     .geo_id) output = leftward;
 
             return output;
         }

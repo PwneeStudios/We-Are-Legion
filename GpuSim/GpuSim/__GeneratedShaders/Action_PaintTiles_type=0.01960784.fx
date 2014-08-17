@@ -74,15 +74,17 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_round(float v)
+float FragSharpFramework__FragSharpStd__fint_floor(float v)
 {
-    return floor(255 * v + 0.5) * 0.003921569;
+    v += 0.0005;
+    return floor(255 * v) * 0.003921569;
 }
 
 float GpuSim__SimShader__RndFint(float rnd, float f1, float f2)
 {
+    f2 -= 0.0006;
     float val = rnd * (f2 - f1) + f1;
-    return FragSharpFramework__FragSharpStd__fint_round(val);
+    return FragSharpFramework__FragSharpStd__fint_floor(val);
 }
 
 // Compiled vertex shader

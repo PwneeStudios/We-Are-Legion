@@ -162,7 +162,7 @@ namespace GpuSim
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
         }
 
-        void Propagate()
+        void PropagateGeoId()
         {
             for (int i = 0; i < 400; i++)
             {
@@ -172,7 +172,10 @@ namespace GpuSim
 
             Geodesic_SetGeoId.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+        }
 
+        void DirwardExtend()
+        {
             for (int i = 0; i <= 100; i++)
             {
                 foreach (var dir in Dir.Vals)
@@ -255,9 +258,10 @@ namespace GpuSim
 
                 if (Keys.D5.Pressed())
                 {
-                    Propagate();
+                    PropagateGeoId();
+                    //DirwardExtend();
                     GrowGeo();
-                    GrowGeo();
+                    DirwardExtend();
                 }
 
                 if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())
