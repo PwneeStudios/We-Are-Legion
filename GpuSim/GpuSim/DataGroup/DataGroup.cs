@@ -116,12 +116,10 @@ namespace GpuSim
             DistanceToBuildings = MakeTarget(w, h);
 
             Geo = MakeTarget(w, h);
-            Dirward.Add(Dir.Right, MakeTarget(w, h));
-            Dirward.Add(Dir.Up,    MakeTarget(w, h));
-            Dirward.Add(Dir.Left,  MakeTarget(w, h));
-            Dirward.Add(Dir.Down,  MakeTarget(w, h));
             OuterGeo = MakeTarget(w, h);
             MockTiles = MakeTarget(w, h);
+            foreach (float dir in Dir.Vals)
+                Dirward.Add(dir, MakeTarget(w, h));
 
             Multigrid = new List<RenderTarget2D>();
             int n = w;
