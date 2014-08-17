@@ -141,73 +141,94 @@ namespace GpuSim
             PaintTiles_UpdateTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
 
-            UpdateGeo();
+            UpdateGeo(false);
         }
 
-        void UpdateGeo()
+        void SwapTempGeo(bool Anti)
         {
-            DataGroup.Geo.Clear();
-            foreach (var dir in Dir.Vals) DataGroup.Dirward[dir].Clear();
+            if (Anti)
+                CoreMath.Swap(ref DataGroup.AntiGeo, ref DataGroup.TempGeo);
+            else
+                CoreMath.Swap(ref DataGroup.Geo, ref DataGroup.TempGeo);
+        }
 
-            Geodesic_Outline.Apply(DataGroup.Tiles, Output: DataGroup.Temp1);
-            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+        void UpdateGeo(bool Anti)
+        {
+            Geodesic_Outline.Apply(DataGroup.Tiles, Anti, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TempGeo);
 
             for (int i = 0; i < 5; i++)
             {
-                Geodesic_OutlineCleanup.Apply(DataGroup.Tiles, DataGroup.Geo, Output: DataGroup.Temp1);
-                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+                Geodesic_OutlineCleanup.Apply(DataGroup.Tiles, DataGroup.TempGeo, Anti, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TempGeo);
             }
 
-            Geodesic_StorePos.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
-            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+            Geodesic_StorePos.Apply(DataGroup.TempGeo, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TempGeo);
+
+            SwapTempGeo(Anti);
         }
 
-        void PropagateGeoId()
+        void PropagateGeoId(bool Anti)
         {
+            SwapTempGeo(Anti);
+
             for (int i = 0; i < 400; i++)
             {
-                Geodesic_ExtremityPropagation.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
-                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+                Geodesic_ExtremityPropagation.Apply(DataGroup.TempGeo, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TempGeo);
             }
 
-            Geodesic_SetGeoId.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
-            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+            Geodesic_SetGeoId.Apply(DataGroup.TempGeo, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TempGeo);
+
+            SwapTempGeo(Anti);
         }
 
-        void DirwardExtend()
+        void DirwardExtend(bool Anti)
         {
+            SwapTempGeo(Anti);
+
+            foreach (var dir in Dir.Vals) DataGroup.Dirward[dir].Clear();
+
             for (int i = 0; i <= 100; i++)
             {
                 foreach (var dir in Dir.Vals)
                 {
-                    Geodesic_DirwardExtend.Apply(DataGroup.Tiles, DataGroup.Geo, DataGroup.Dirward[dir], dir, Output: DataGroup.Temp1);
+                    Geodesic_DirwardExtend.Apply(DataGroup.Tiles, DataGroup.TempGeo, DataGroup.Dirward[dir], dir, Output: DataGroup.Temp1);
                     DataGroup.Dirward[dir] = CoreMath.SwapReturn(ref DataGroup.Temp1, DataGroup.Dirward[dir]);
                 }
             }
+
+            SwapTempGeo(Anti);
         }
 
-        void GrowGeo()
+        void GrowGeo(bool Anti)
         {
             for (int i = 0; i < 50; i++)
-                _GrowGeo();
+                _GrowGeo(Anti);
         }
 
-        void _GrowGeo()
+        void _GrowGeo(bool Anti)
         {
-            Geodesic_ConvertToBlocking.Apply(DataGroup.Tiles, DataGroup.Geo, Output: DataGroup.Temp1);
+            SwapTempGeo(Anti);
+
+            Geodesic_ConvertToBlocking.Apply(DataGroup.Tiles, DataGroup.TempGeo, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.MockTiles);
 
-            Geodesic_Outline.Apply(DataGroup.MockTiles, DataGroup.Temp1);
+            Geodesic_Outline.Apply(DataGroup.MockTiles, Anti, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.OuterGeo);
 
             for (int i = 0; i < 5; i++)
             {
-                Geodesic_OutlineCleanup.Apply(DataGroup.MockTiles, DataGroup.OuterGeo, Output: DataGroup.Temp1);
+                Geodesic_OutlineCleanup.Apply(DataGroup.MockTiles, DataGroup.OuterGeo, Anti, Output: DataGroup.Temp1);
                 CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.OuterGeo);
             }
 
-            Geodesic_Flatten.Apply(DataGroup.Geo, DataGroup.OuterGeo, Output: DataGroup.Temp1);
-            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Geo);
+            Geodesic_Flatten.Apply(DataGroup.TempGeo, DataGroup.OuterGeo, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TempGeo);
+
+            SwapTempGeo(Anti);
         }
 
         void CreateUnits()
@@ -258,10 +279,9 @@ namespace GpuSim
 
                 if (Keys.D5.Pressed())
                 {
-                    PropagateGeoId();
-                    //DirwardExtend();
-                    GrowGeo();
-                    DirwardExtend();
+                    PropagateGeoId(false);
+                    GrowGeo(false);
+                    DirwardExtend(false);
                 }
 
                 if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())

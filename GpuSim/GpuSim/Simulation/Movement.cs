@@ -203,7 +203,8 @@ namespace GpuSim
     {
         [FragmentShader]
         data FragmentShader(VertexOut vertex, Field<vec4> TargetData, Field<unit> Unit, Field<extra> Extra, Field<data> Data, Field<data> PrevData, Field<vec4> PathToOtherTeams,
-                            Field<geo> Geo, Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown)
+                            Field<geo> Geo, Field<geo> AntiGeo,
+                            Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown)
         {
             data  data_here  = Data[Here];
 
@@ -316,7 +317,8 @@ namespace GpuSim
                 if (min > auto_attack_cutoff && data_here.action == UnitAction.Attacking || data_here.action == UnitAction.Moving)
                 {
                     NaivePathfind(vertex, Data, PrevData, TargetData,
-                                  Geo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown,
+                                  Geo, AntiGeo,
+                                  DirwardRight, DirwardLeft, DirwardUp, DirwardDown,
                                   here, ref data_here, ref extra_here);
                 }
             }
@@ -325,7 +327,8 @@ namespace GpuSim
         }
 
         void NaivePathfind(VertexOut vertex, Field<data> Current, Field<data> Previous, Field<vec4> TargetData,
-                           Field<geo> Geo, Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown,
+                           Field<geo> Geo, Field<geo> AntiGeo,
+                           Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown,
                            unit data, ref data here, ref extra extra_here)
         {
             float dir = 0;

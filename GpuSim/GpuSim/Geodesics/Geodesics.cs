@@ -5,7 +5,7 @@ namespace GpuSim
     public partial class Geodesic_Outline : SimShader
     {
         [FragmentShader]
-        geo FragmentShader(VertexOut vertex, Field<tile> Tiles)
+        geo FragmentShader(VertexOut vertex, Field<tile> Tiles, [Vals(true, false)] bool Anti)
         {
             tile
                 here       = Tiles[Here],
@@ -29,45 +29,45 @@ namespace GpuSim
 
             if (IsBlockingTile(right))
             {
-                dir = Dir.Down;
+                dir = Anti ? Dir.Up : Dir.Down;
                 if (IsBlockingTile(down))
                 {
-                    dir = Dir.Left;
+                    dir = Anti ? Dir.Right : Dir.Left;
                     if (IsBlockingTile(left))
-                        dir = Dir.Up;
+                        dir = Anti ? Dir.Down : Dir.Up;
                 }
             }
 
             if (IsBlockingTile(up))
             {
-                dir = Dir.Right;
+                dir = Anti ? Dir.Left : Dir.Right;
                 if (IsBlockingTile(right))
                 {
-                    dir = Dir.Down;
+                    dir = Anti ? Dir.Up : Dir.Down;
                     if (IsBlockingTile(down))
-                        dir = Dir.Left;
+                        dir = Anti ? Dir.Right : Dir.Left;
                 }
             }
 
             if (IsBlockingTile(left))
             {
-                dir = Dir.Up;
+                dir = Anti ? Dir.Down : Dir.Up;
                 if (IsBlockingTile(up))
                 {
-                    dir = Dir.Right;
+                    dir = Anti ? Dir.Left : Dir.Right;
                     if (IsBlockingTile(right))
-                        dir = Dir.Down;
+                        dir = Anti ? Dir.Up : Dir.Down;
                 }
             }
 
             if (IsBlockingTile(down))
             {
-                dir = Dir.Left;
+                dir = Anti ? Dir.Right : Dir.Left;
                 if (IsBlockingTile(left))
                 {
-                    dir = Dir.Up;
+                    dir = Anti ? Dir.Down : Dir.Up;
                     if (IsBlockingTile(up))
-                        dir = Dir.Right;
+                        dir = Anti ? Dir.Left : Dir.Right;
                 }
             }
 
@@ -92,7 +92,7 @@ namespace GpuSim
     public partial class Geodesic_OutlineCleanup : SimShader
     {
         [FragmentShader]
-        geo FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<geo> Geo)
+        geo FragmentShader(VertexOut vertex, Field<tile> Tiles, Field<geo> Geo, [Vals(true, false)] bool Anti)
         {
             tile
                 here       = Tiles[Here],

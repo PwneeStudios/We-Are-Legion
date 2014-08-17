@@ -37,6 +37,7 @@ sampler fs_param_Tiles : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsBlockingTile(float4 t)
 {
@@ -82,49 +83,49 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     if (GpuSim__SimShader__IsBlockingTile(right))
     {
-        dir = 0.01568628;
+        dir = true ? 0.007843138 : 0.01568628;
         if (GpuSim__SimShader__IsBlockingTile(down))
         {
-            dir = 0.01176471;
+            dir = true ? 0.003921569 : 0.01176471;
             if (GpuSim__SimShader__IsBlockingTile(left))
             {
-                dir = 0.007843138;
+                dir = true ? 0.01568628 : 0.007843138;
             }
         }
     }
     if (GpuSim__SimShader__IsBlockingTile(up))
     {
-        dir = 0.003921569;
+        dir = true ? 0.01176471 : 0.003921569;
         if (GpuSim__SimShader__IsBlockingTile(right))
         {
-            dir = 0.01568628;
+            dir = true ? 0.007843138 : 0.01568628;
             if (GpuSim__SimShader__IsBlockingTile(down))
             {
-                dir = 0.01176471;
+                dir = true ? 0.003921569 : 0.01176471;
             }
         }
     }
     if (GpuSim__SimShader__IsBlockingTile(left))
     {
-        dir = 0.007843138;
+        dir = true ? 0.01568628 : 0.007843138;
         if (GpuSim__SimShader__IsBlockingTile(up))
         {
-            dir = 0.003921569;
+            dir = true ? 0.01176471 : 0.003921569;
             if (GpuSim__SimShader__IsBlockingTile(right))
             {
-                dir = 0.01568628;
+                dir = true ? 0.007843138 : 0.01568628;
             }
         }
     }
     if (GpuSim__SimShader__IsBlockingTile(down))
     {
-        dir = 0.01176471;
+        dir = true ? 0.003921569 : 0.01176471;
         if (GpuSim__SimShader__IsBlockingTile(left))
         {
-            dir = 0.007843138;
+            dir = true ? 0.01568628 : 0.007843138;
             if (GpuSim__SimShader__IsBlockingTile(up))
             {
-                dir = 0.003921569;
+                dir = true ? 0.01176471 : 0.003921569;
             }
         }
     }

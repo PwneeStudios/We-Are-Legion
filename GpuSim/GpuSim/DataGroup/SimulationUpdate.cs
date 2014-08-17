@@ -21,7 +21,7 @@ namespace GpuSim
 
 
             Movement_UpdateDirection_RemoveDead.Apply(TargetData, CurrentUnits, Extra, CurrentData, PreviousData, DistanceToOtherTeams,
-                                                      Geo, Dirward[Dir.Right], Dirward[Dir.Left], Dirward[Dir.Up], Dirward[Dir.Down],
+                                                      Geo, AntiGeo, Dirward[Dir.Right], Dirward[Dir.Left], Dirward[Dir.Up], Dirward[Dir.Down],
                                                       Output: Temp1);
             Swap(ref CurrentData, ref Temp1);
 
