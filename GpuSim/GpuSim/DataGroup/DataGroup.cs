@@ -75,7 +75,7 @@ namespace GpuSim
             Paths_Right, Paths_Left, Paths_Up, Paths_Down,
             DistanceToPlayers, DistanceToOtherTeams, DistanceToBuildings,
 
-            Geo, AntiGeo, OuterGeo, TempGeo,
+            Geo, AntiGeo, OuterGeo, TempGeo, PolarDistance,
             MockTiles;
 
         public Dictionary<float, RenderTarget2D> Dirward = new Dictionary<float, RenderTarget2D>();
@@ -120,6 +120,7 @@ namespace GpuSim
             OuterGeo = MakeTarget(w, h);
             AntiGeo = MakeTarget(w, h);
             TempGeo = MakeTarget(w, h);
+            PolarDistance = MakeTarget(w, h);
             MockTiles = MakeTarget(w, h);
             foreach (float dir in Dir.Vals)
                 Dirward.Add(dir, MakeTarget(w, h));

@@ -81,4 +81,26 @@ namespace GpuSim
             return output;
         }
     }
+
+    public partial class DrawPolarInfo : DrawDebugInfo
+    {
+        [FragmentShader]
+        color FragmentShader(VertexOut vertex, Field<geo> Geo, Field<vec4> PolarDistance, PointSampler Texture)
+        {
+            color output = color.TransparentBlack;
+
+            geo here = Geo[Here];
+            float dist = unpack_val(PolarDistance[Here].xy);
+
+            vec2 subcell_pos = get_subcell_pos(vertex, Geo.Size);
+
+            if (here.dir > _0)
+            {
+                dist = dist / 1024.0f;
+                output = vec(dist, dist, dist, 1.0f);
+            }
+
+            return output;
+        }
+    }
 }

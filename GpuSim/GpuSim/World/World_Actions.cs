@@ -141,6 +141,13 @@ namespace GpuSim
             PaintTiles_UpdateTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
 
+            Render.UnsetDevice();
+            DataGroup.Geo.Clear();
+            DataGroup.AntiGeo.Clear();
+            DataGroup.MockTiles.Clear();
+            DataGroup.OuterGeo.Clear();
+            DataGroup.TempGeo.Clear();
+            DataGroup.PolarDistance.Clear();
             UpdateGeo(false);
             UpdateGeo(true);
         }
@@ -170,18 +177,38 @@ namespace GpuSim
             SwapTempGeo(Anti);
         }
 
-        void PropagateGeoId(bool Anti)
+        void PropagateFullGeoId(bool Anti)
         {
             SwapTempGeo(Anti);
 
-            for (int i = 0; i < 400; i++)
+            for (int i = 0; i < 1024; i++)
             {
                 Geodesic_ExtremityPropagation.Apply(DataGroup.TempGeo, Output: DataGroup.Temp1);
                 CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TempGeo);
             }
 
+            SwapTempGeo(Anti);
+        }
+
+        void SetReducedGeoId(bool Anti)
+        {
+            SwapTempGeo(Anti);
+
             Geodesic_SetGeoId.Apply(DataGroup.TempGeo, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TempGeo);
+
+            SwapTempGeo(Anti);
+        }
+
+        void CalculatePolarDistance(bool Anti)
+        {
+            SwapTempGeo(Anti);
+
+            for (int i = 0; i < 1024; i++)
+            {
+                Geodesic_PolarDistance.Apply(DataGroup.TempGeo, DataGroup.PolarDistance, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PolarDistance);
+            }
 
             SwapTempGeo(Anti);
         }
@@ -282,10 +309,20 @@ namespace GpuSim
                 {
                     foreach (bool polarity in Vals.Bool)
                     {
-                        PropagateGeoId(polarity);
-                        GrowGeo(polarity);
-                        //DirwardExtend(polarity);
+                        PropagateFullGeoId(polarity);
+                        //SetReducedGeoId(polarity);
+                        //CalculatePolarDistance(polarity);
+                        //GrowGeo(polarity);
                     }
+
+                    CalculatePolarDistance(false);
+
+                    foreach (bool polarity in Vals.Bool)
+                    {
+                        SetReducedGeoId(polarity);
+                        GrowGeo(polarity);
+                    }
+
                     DirwardExtend(false);
                 }
 

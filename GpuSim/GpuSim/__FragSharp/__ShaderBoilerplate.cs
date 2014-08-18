@@ -27,6 +27,7 @@ namespace FragSharpFramework
             GpuSim.DrawCorpses.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawCorpses");
             GpuSim.DrawGeoInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawGeoInfo");
             GpuSim.DrawDirwardInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawDirwardInfo");
+            GpuSim.DrawPolarInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPolarInfo");
             GpuSim.DrawGrass.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawGrass");
             GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0");
             GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.003921569");
@@ -46,6 +47,7 @@ namespace FragSharpFramework
             GpuSim.Geodesic_StorePos.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_StorePos");
             GpuSim.Geodesic_ExtremityPropagation.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_ExtremityPropagation");
             GpuSim.Geodesic_SetGeoId.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_SetGeoId");
+            GpuSim.Geodesic_PolarDistance.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_PolarDistance");
             GpuSim.Geodesic_DirwardExtend.CompiledEffect_dir_0p003921569 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.003921569");
             GpuSim.Geodesic_DirwardExtend.CompiledEffect_dir_0p007843138 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.007843138");
             GpuSim.Geodesic_DirwardExtend.CompiledEffect_dir_0p01176471 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.01176471");
@@ -436,6 +438,57 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_Dirward_Texture"].SetValue(FragSharpMarshal.Marshal(Dirward));
             CompiledEffect.Parameters["fs_param_Dirward_size"].SetValue(FragSharpMarshal.Marshal(vec(Dirward.Width, Dirward.Height)));
             CompiledEffect.Parameters["fs_param_Dirward_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Dirward.Width, Dirward.Height)));
+            CompiledEffect.Parameters["fs_param_Texture_Texture"].SetValue(FragSharpMarshal.Marshal(Texture));
+            CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
+            CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class DrawPolarInfo
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Geo, Texture2D PolarDistance, Texture2D Texture, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(cameraPos, cameraAspect, Geo, PolarDistance, Texture);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Geo, Texture2D PolarDistance, Texture2D Texture, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(cameraPos, cameraAspect, Geo, PolarDistance, Texture);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Geo, Texture2D PolarDistance, Texture2D Texture, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(cameraPos, cameraAspect, Geo, PolarDistance, Texture);
+        }
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Geo, Texture2D PolarDistance, Texture2D Texture, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(cameraPos, cameraAspect, Geo, PolarDistance, Texture);
+        }
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Geo, Texture2D PolarDistance, Texture2D Texture)
+        {
+            CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
+            CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
+            CompiledEffect.Parameters["fs_param_Geo_Texture"].SetValue(FragSharpMarshal.Marshal(Geo));
+            CompiledEffect.Parameters["fs_param_Geo_size"].SetValue(FragSharpMarshal.Marshal(vec(Geo.Width, Geo.Height)));
+            CompiledEffect.Parameters["fs_param_Geo_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Geo.Width, Geo.Height)));
+            CompiledEffect.Parameters["fs_param_PolarDistance_Texture"].SetValue(FragSharpMarshal.Marshal(PolarDistance));
+            CompiledEffect.Parameters["fs_param_PolarDistance_size"].SetValue(FragSharpMarshal.Marshal(vec(PolarDistance.Width, PolarDistance.Height)));
+            CompiledEffect.Parameters["fs_param_PolarDistance_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(PolarDistance.Width, PolarDistance.Height)));
             CompiledEffect.Parameters["fs_param_Texture_Texture"].SetValue(FragSharpMarshal.Marshal(Texture));
             CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
             CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
@@ -1080,6 +1133,52 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_Geo_Texture"].SetValue(FragSharpMarshal.Marshal(Geo));
             CompiledEffect.Parameters["fs_param_Geo_size"].SetValue(FragSharpMarshal.Marshal(vec(Geo.Width, Geo.Height)));
             CompiledEffect.Parameters["fs_param_Geo_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Geo.Width, Geo.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class Geodesic_PolarDistance
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D Geo, Texture2D Distance, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Geo, Distance);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Geo, Texture2D Distance, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Geo, Distance);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Geo, Texture2D Distance, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Geo, Distance);
+        }
+        public static void Using(Texture2D Geo, Texture2D Distance, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Geo, Distance);
+        }
+        public static void Using(Texture2D Geo, Texture2D Distance)
+        {
+            CompiledEffect.Parameters["fs_param_Geo_Texture"].SetValue(FragSharpMarshal.Marshal(Geo));
+            CompiledEffect.Parameters["fs_param_Geo_size"].SetValue(FragSharpMarshal.Marshal(vec(Geo.Width, Geo.Height)));
+            CompiledEffect.Parameters["fs_param_Geo_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Geo.Width, Geo.Height)));
+            CompiledEffect.Parameters["fs_param_Distance_Texture"].SetValue(FragSharpMarshal.Marshal(Distance));
+            CompiledEffect.Parameters["fs_param_Distance_size"].SetValue(FragSharpMarshal.Marshal(vec(Distance.Width, Distance.Height)));
+            CompiledEffect.Parameters["fs_param_Distance_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Distance.Width, Distance.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

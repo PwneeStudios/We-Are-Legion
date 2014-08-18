@@ -289,6 +289,62 @@ namespace GpuSim
         }
     }
 
+    public partial class Geodesic_PolarDistance : SimShader
+    {
+        [FragmentShader]
+        vec4 FragmentShader(VertexOut vertex, Field<geo> Geo, Field<vec4> Distance)
+        {
+            geo
+                here       = Geo[Here],
+                right      = Geo[RightOne],
+                up         = Geo[UpOne],
+                left       = Geo[LeftOne],
+                down       = Geo[DownOne];
+
+            float
+                dist_right      = unpack_val(Distance[RightOne].xy),
+                dist_up         = unpack_val(Distance[UpOne].xy),
+                dist_left       = unpack_val(Distance[LeftOne].xy),
+                dist_down       = unpack_val(Distance[DownOne].xy);
+
+            if (here.dir == _0) return vec4.Zero;
+
+            float dist = 0;
+
+            // Calculate the geo_id of this cell
+            geo temp_geo = geo.Nothing;
+            vec2 pos = vertex.TexCoords * Geo.Size;
+            set_geo_pos_id(ref temp_geo, pos);
+            //temp_geo.geo_id = ReducedGeoId(geo_pos_id(temp_geo));
+
+            // ... if that geo_id matches the id of the geo info here, then this is the "master" or "12 o' clock" cell of the geodesic line going through this cell.
+            //if (here.geo_id == temp_geo.geo_id)
+            if (here.pos_storage == temp_geo.pos_storage)
+            {
+                // That means its polar distance is 0 by definition.
+                dist = 0;
+            }
+            else
+            {
+                // Otherwise its polar distance is 1 plus the polar distance of whatever cell comes "before" it (by following the geo backwards "counterclockwise").
+                if (right.dir == Dir.Left  && dist_right >= dist) dist = dist_right + 1;
+                if (left.dir  == Dir.Right && dist_left  >= dist) dist = dist_left  + 1;
+                if (up.dir    == Dir.Down  && dist_up    >= dist) dist = dist_up    + 1;
+                if (down.dir  == Dir.Up    && dist_down  >= dist) dist = dist_down  + 1;
+                //if (right.dir == Dir.Left ) dist = dist_right + 1;
+                //if (left.dir  == Dir.Right) dist = dist_left  + 1;
+                //if (up.dir    == Dir.Down ) dist = dist_up    + 1;
+                //if (down.dir  == Dir.Up   ) dist = dist_down  + 1;
+            }
+
+            // Pack the polar distance into 2-bytes and return it in
+            vec4 output = vec4.Zero;
+            output.xy = pack_val_2byte(dist);
+            
+            return output;
+        }
+    }
+
     public partial class Geodesic_DirwardExtend : SimShader
     {
         [FragmentShader]
