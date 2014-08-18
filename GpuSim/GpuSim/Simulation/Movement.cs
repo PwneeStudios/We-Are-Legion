@@ -357,7 +357,7 @@ namespace GpuSim
             if (Destination.y > CurPos.y + .75f) dir = Dir.Up;
             if (Destination.y < CurPos.y - .75f) dir = Dir.Down;
 
-            // Simple pathing: Go toward the cardinal direction that is furthest away. If something is in your way, go perpendicularly, assuming you also need to go in that direction.
+            
             vec2 diff = Destination - CurPos;
             vec2 mag = abs(diff);
             //if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
@@ -406,6 +406,8 @@ namespace GpuSim
             else if (dir2 == Dir.Up)    { dirward_here2 = DirwardUp[Here];    other_side2 = Destination.y > wall_pos(dirward_here2); }
             else if (dir2 == Dir.Down)  { dirward_here2 = DirwardDown[Here];  other_side2 = Destination.y < wall_pos(dirward_here2); }
 
+            
+            // Check if we should follow the geodesic we are on
             vec2 geo_id = geo_here.geo_id;
             if (geo_here.dir > 0 &&
                (
@@ -414,6 +416,8 @@ namespace GpuSim
                ))
             {
                 dir = geo_here.dir;
+
+                // Prevent immediate direction reversals
                 //float avoid = Reverse(prior_direction(here));
                 //if (IsValid(geo_here.dir) && geo_here.dir != avoid)
                 //    dir = geo_here.dir;
@@ -422,11 +426,15 @@ namespace GpuSim
             }
             else
             {
+                // If not, then use Simple Pathing:
+                // Go toward the cardinal direction that is furthest away. If something is in your way, go perpendicularly, assuming you also need to go in that direction.
                 if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
                 if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up))    dir = Dir.Up;
                 if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left))  dir = Dir.Left;
                 if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down))  dir = Dir.Down;
             }
+
+            // Last check: is there something in the way of where we want to go? If so, use the alternative orthogonal route (which may be the same direction, but hey, at least we tried).
             //if (Something(Current[dir_to_vec(dir)])) dir = dir2;
 
             if (IsValid(dir))
