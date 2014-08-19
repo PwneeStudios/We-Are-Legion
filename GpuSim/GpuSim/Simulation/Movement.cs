@@ -386,7 +386,6 @@ namespace GpuSim
                 if      (Destination.x > CurPos.x + 0) { dir2 = Dir.Right; blocked2 = Something(right) || Something(prev_right); }
                 else if (Destination.x < CurPos.x - 0) { dir2 = Dir.Left;  blocked2 = Something(left)  || Something(prev_left); }
             }
-            //dir2 = Dir.Right;
 
             // Check geodesics
             //geo geo_here = Geo[Here];
@@ -402,10 +401,10 @@ namespace GpuSim
 
             dirward dirward_here2 = dirward.Nothing;
             bool other_side2 = false;
-            if      (dir2 == Dir.Right) { dirward_here2 = DirwardRight[Here]; other_side2 = Destination.x > pos_here.x + Float(dirward_here.dist_to_wall); }
-            else if (dir2 == Dir.Left)  { dirward_here2 = DirwardLeft[Here];  other_side2 = Destination.x < pos_here.x - Float(dirward_here.dist_to_wall); }
-            else if (dir2 == Dir.Up)    { dirward_here2 = DirwardUp[Here];    other_side2 = Destination.y > pos_here.y + Float(dirward_here.dist_to_wall); }
-            else if (dir2 == Dir.Down)  { dirward_here2 = DirwardDown[Here];  other_side2 = Destination.y < pos_here.y - Float(dirward_here.dist_to_wall); }
+            if      (dir2 == Dir.Right) { dirward_here2 = DirwardRight[Here]; other_side2 = Destination.x > pos_here.x + Float(dirward_here2.dist_to_wall); }
+            else if (dir2 == Dir.Left)  { dirward_here2 = DirwardLeft[Here];  other_side2 = Destination.x < pos_here.x - Float(dirward_here2.dist_to_wall); }
+            else if (dir2 == Dir.Up)    { dirward_here2 = DirwardUp[Here];    other_side2 = Destination.y > pos_here.y + Float(dirward_here2.dist_to_wall); }
+            else if (dir2 == Dir.Down)  { dirward_here2 = DirwardDown[Here];  other_side2 = Destination.y < pos_here.y - Float(dirward_here2.dist_to_wall); }
 
             
             // Check if we should follow the geodesic we are on
