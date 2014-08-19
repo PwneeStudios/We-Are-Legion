@@ -54,8 +54,14 @@ namespace GpuSim
         [Hlsl("rg")]
         public vec2 geo_id { get { return rg; } set { rg = value; } }
 
-        [Hlsl("ba")]
-        public vec2 wall_pos_storage { get { return ba; } set { ba = value; } }
+        [Hlsl("b")]
+        public float dist_to_wall { get { return b; } set { b = value; } }
+
+        [Hlsl("a")]
+        public float polarity { get { return a; } set { a = value; } }
+
+        //[Hlsl("ba")]
+        //public vec2 wall_pos_storage { get { return ba; } set { ba = value; } }
     }
 
     [Copy(typeof(vec4))]
@@ -295,16 +301,6 @@ namespace GpuSim
                 ((int)(round(p.x)) % 256) / 256.0f,
                 ((int)(round(p.y)) % 256) / 256.0f
             );
-        }
-
-        protected static float wall_pos(dirward d)
-        {
-            return unpack_val(d.wall_pos_storage);
-        }
-
-        protected static void set_wall_pos(ref dirward d, float pos)
-        {
-            d.wall_pos_storage = pack_val_2byte(pos);
         }
 
         protected vec2 get_subcell_pos(VertexOut vertex, vec2 grid_size)

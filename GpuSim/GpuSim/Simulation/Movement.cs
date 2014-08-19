@@ -393,18 +393,19 @@ namespace GpuSim
             geo geo_here = AntiGeo[Here];
             
             dirward dirward_here = dirward.Nothing;
+            vec2 pos_here = vertex.TexCoords * Geo.Size;
             bool other_side = false;
-            if      (dir == Dir.Right) { dirward_here = DirwardRight[Here]; other_side = Destination.x > wall_pos(dirward_here); }
-            else if (dir == Dir.Left)  { dirward_here = DirwardLeft[Here];  other_side = Destination.x < wall_pos(dirward_here); }
-            else if (dir == Dir.Up)    { dirward_here = DirwardUp[Here];    other_side = Destination.y > wall_pos(dirward_here); }
-            else if (dir == Dir.Down)  { dirward_here = DirwardDown[Here];  other_side = Destination.y < wall_pos(dirward_here); }
+            if      (dir == Dir.Right) { dirward_here = DirwardRight[Here]; other_side = Destination.x > pos_here.x + Float(dirward_here.dist_to_wall); }
+            else if (dir == Dir.Left)  { dirward_here = DirwardLeft[Here];  other_side = Destination.x < pos_here.x - Float(dirward_here.dist_to_wall); }
+            else if (dir == Dir.Up)    { dirward_here = DirwardUp[Here];    other_side = Destination.y > pos_here.y + Float(dirward_here.dist_to_wall); }
+            else if (dir == Dir.Down)  { dirward_here = DirwardDown[Here];  other_side = Destination.y < pos_here.y - Float(dirward_here.dist_to_wall); }
 
             dirward dirward_here2 = dirward.Nothing;
             bool other_side2 = false;
-            if      (dir2 == Dir.Right) { dirward_here2 = DirwardRight[Here]; other_side2 = Destination.x > wall_pos(dirward_here2); }
-            else if (dir2 == Dir.Left)  { dirward_here2 = DirwardLeft[Here];  other_side2 = Destination.x < wall_pos(dirward_here2); }
-            else if (dir2 == Dir.Up)    { dirward_here2 = DirwardUp[Here];    other_side2 = Destination.y > wall_pos(dirward_here2); }
-            else if (dir2 == Dir.Down)  { dirward_here2 = DirwardDown[Here];  other_side2 = Destination.y < wall_pos(dirward_here2); }
+            if      (dir2 == Dir.Right) { dirward_here2 = DirwardRight[Here]; other_side2 = Destination.x > pos_here.x + Float(dirward_here.dist_to_wall); }
+            else if (dir2 == Dir.Left)  { dirward_here2 = DirwardLeft[Here];  other_side2 = Destination.x < pos_here.x - Float(dirward_here.dist_to_wall); }
+            else if (dir2 == Dir.Up)    { dirward_here2 = DirwardUp[Here];    other_side2 = Destination.y > pos_here.y + Float(dirward_here.dist_to_wall); }
+            else if (dir2 == Dir.Down)  { dirward_here2 = DirwardDown[Here];  other_side2 = Destination.y < pos_here.y - Float(dirward_here.dist_to_wall); }
 
             
             // Check if we should follow the geodesic we are on

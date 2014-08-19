@@ -282,9 +282,9 @@ float GpuSim__Movement_UpdateDirection_RemoveDead__BuildingDirection(VertexToPix
     return dir;
 }
 
-float GpuSim__SimShader__wall_pos(float4 d)
+float FragSharpFramework__FragSharpStd__Float(float v)
 {
-    return GpuSim__SimShader__unpack_val(d.ba);
+    return floor(255 * v + 0.5);
 }
 
 bool GpuSim__SimShader__ValidDirward(float4 d)
@@ -380,32 +380,33 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
     }
     float4 geo_here = tex2D(AntiGeo, psin.TexCoords + (float2(0, 0)) * AntiGeo_dxdy);
     float4 dirward_here = float4(0, 0, 0, 0);
+    float2 pos_here = vertex.TexCoords * Geo_size;
     bool other_side = false;
     if (abs(dir - 0.003921569) < .001)
     {
         dirward_here = tex2D(DirwardRight, psin.TexCoords + (float2(0, 0)) * DirwardRight_dxdy);
-        other_side = Destination.x > GpuSim__SimShader__wall_pos(dirward_here) + .001;
+        other_side = Destination.x > pos_here.x + FragSharpFramework__FragSharpStd__Float(dirward_here.b) + .001;
     }
     else
     {
         if (abs(dir - 0.01176471) < .001)
         {
             dirward_here = tex2D(DirwardLeft, psin.TexCoords + (float2(0, 0)) * DirwardLeft_dxdy);
-            other_side = Destination.x < GpuSim__SimShader__wall_pos(dirward_here) - .001;
+            other_side = Destination.x < pos_here.x - FragSharpFramework__FragSharpStd__Float(dirward_here.b) - .001;
         }
         else
         {
             if (abs(dir - 0.007843138) < .001)
             {
                 dirward_here = tex2D(DirwardUp, psin.TexCoords + (float2(0, 0)) * DirwardUp_dxdy);
-                other_side = Destination.y > GpuSim__SimShader__wall_pos(dirward_here) + .001;
+                other_side = Destination.y > pos_here.y + FragSharpFramework__FragSharpStd__Float(dirward_here.b) + .001;
             }
             else
             {
                 if (abs(dir - 0.01568628) < .001)
                 {
                     dirward_here = tex2D(DirwardDown, psin.TexCoords + (float2(0, 0)) * DirwardDown_dxdy);
-                    other_side = Destination.y < GpuSim__SimShader__wall_pos(dirward_here) - .001;
+                    other_side = Destination.y < pos_here.y - FragSharpFramework__FragSharpStd__Float(dirward_here.b) - .001;
                 }
             }
         }
@@ -415,28 +416,28 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
     if (abs(dir2 - 0.003921569) < .001)
     {
         dirward_here2 = tex2D(DirwardRight, psin.TexCoords + (float2(0, 0)) * DirwardRight_dxdy);
-        other_side2 = Destination.x > GpuSim__SimShader__wall_pos(dirward_here2) + .001;
+        other_side2 = Destination.x > pos_here.x + FragSharpFramework__FragSharpStd__Float(dirward_here.b) + .001;
     }
     else
     {
         if (abs(dir2 - 0.01176471) < .001)
         {
             dirward_here2 = tex2D(DirwardLeft, psin.TexCoords + (float2(0, 0)) * DirwardLeft_dxdy);
-            other_side2 = Destination.x < GpuSim__SimShader__wall_pos(dirward_here2) - .001;
+            other_side2 = Destination.x < pos_here.x - FragSharpFramework__FragSharpStd__Float(dirward_here.b) - .001;
         }
         else
         {
             if (abs(dir2 - 0.007843138) < .001)
             {
                 dirward_here2 = tex2D(DirwardUp, psin.TexCoords + (float2(0, 0)) * DirwardUp_dxdy);
-                other_side2 = Destination.y > GpuSim__SimShader__wall_pos(dirward_here2) + .001;
+                other_side2 = Destination.y > pos_here.y + FragSharpFramework__FragSharpStd__Float(dirward_here.b) + .001;
             }
             else
             {
                 if (abs(dir2 - 0.01568628) < .001)
                 {
                     dirward_here2 = tex2D(DirwardDown, psin.TexCoords + (float2(0, 0)) * DirwardDown_dxdy);
-                    other_side2 = Destination.y < GpuSim__SimShader__wall_pos(dirward_here2) - .001;
+                    other_side2 = Destination.y < pos_here.y - FragSharpFramework__FragSharpStd__Float(dirward_here.b) - .001;
                 }
             }
         }

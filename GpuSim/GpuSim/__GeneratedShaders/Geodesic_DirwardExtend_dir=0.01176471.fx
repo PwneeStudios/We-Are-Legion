@@ -85,19 +85,6 @@ float2 GpuSim__SimShader__dir_to_vec(float direction)
     return GpuSim__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
-float2 GpuSim__SimShader__pack_val_2byte(float x)
-{
-    float2 packed = float2(0, 0);
-    packed.x = floor(x / 256.0);
-    packed.y = x - packed.x * 256.0;
-    return packed / 255.0;
-}
-
-void GpuSim__SimShader__set_wall_pos(inout float4 d, float pos)
-{
-    d.ba = GpuSim__SimShader__pack_val_2byte(pos);
-}
-
 bool GpuSim__SimShader__ValidDirward(float4 d)
 {
     return any(abs(d - float4(0, 0, 0, 0)) > .001);
@@ -192,45 +179,42 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (geo_here.r > 0 + .001 && GpuSim__SimShader__IsBlockingTile(tex2D(fs_param_Tiles, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(0.01176471)) * fs_param_Tiles_dxdy)))
     {
         output.rg = geo_here.ba;
-        float2 pos_here = psin.TexCoords * fs_param_Tiles_size;
-        if (abs(0.01176471 - 0.003921569) < .001 || abs(0.01176471 - 0.01176471) < .001)
-        {
-            GpuSim__SimShader__set_wall_pos(output, pos_here.x);
-        }
-        if (abs(0.01176471 - 0.007843138) < .001 || abs(0.01176471 - 0.01568628) < .001)
-        {
-            GpuSim__SimShader__set_wall_pos(output, pos_here.y);
-        }
+        output.b = 0.0;
     }
     else
     {
         if (GpuSim__SimShader__ValidDirward(forward) && all(abs(forward.rg - geo_forward.ba) < .001))
         {
             output = forward;
+            output.b += 0.003921569;
         }
         else
         {
             if (GpuSim__SimShader__ValidDirward(forward_right) && all(abs(forward_right.rg - geo_forward_right.ba) < .001))
             {
                 output = forward_right;
+                output.b += 0.003921569;
             }
             else
             {
                 if (GpuSim__SimShader__ValidDirward(forward_left) && all(abs(forward_left.rg - geo_forward_left.ba) < .001))
                 {
                     output = forward_left;
+                    output.b += 0.003921569;
                 }
                 else
                 {
                     if (GpuSim__SimShader__ValidDirward(rightward) && all(abs(rightward.rg - geo_rightward.ba) < .001))
                     {
                         output = rightward;
+                        output.b += 0.0;
                     }
                     else
                     {
                         if (GpuSim__SimShader__ValidDirward(leftward) && all(abs(leftward.rg - geo_leftward.ba) < .001))
                         {
                             output = leftward;
+                            output.b += 0.0;
                         }
                     }
                 }

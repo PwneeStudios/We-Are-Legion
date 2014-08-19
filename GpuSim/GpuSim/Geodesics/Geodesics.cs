@@ -437,18 +437,14 @@ namespace GpuSim
             if (geo_here.dir > 0 && IsBlockingTile(Tiles[dir_to_vec(dir)]))
             {
                 output.geo_id = geo_here.geo_id;
-
-                vec2 pos_here = vertex.TexCoords * Tiles.Size;
-
-                if (dir == Dir.Right || dir == Dir.Left) set_wall_pos(ref output, pos_here.x);
-                if (dir == Dir.Up    || dir == Dir.Down) set_wall_pos(ref output, pos_here.y);
+                output.dist_to_wall = _0;
             }
 
-            else if (ValidDirward(forward)       && forward      .geo_id == geo_forward      .geo_id) output = forward;
-            else if (ValidDirward(forward_right) && forward_right.geo_id == geo_forward_right.geo_id) output = forward_right;
-            else if (ValidDirward(forward_left)  && forward_left .geo_id == geo_forward_left .geo_id) output = forward_left;
-            else if (ValidDirward(rightward)     && rightward    .geo_id == geo_rightward    .geo_id) output = rightward;
-            else if (ValidDirward(leftward)      && leftward     .geo_id == geo_leftward     .geo_id) output = leftward;
+            else if (ValidDirward(forward)       && forward.geo_id       == geo_forward.geo_id)       { output = forward;       output.dist_to_wall += _1; }
+            else if (ValidDirward(forward_right) && forward_right.geo_id == geo_forward_right.geo_id) { output = forward_right; output.dist_to_wall += _1; }
+            else if (ValidDirward(forward_left)  && forward_left.geo_id  == geo_forward_left.geo_id)  { output = forward_left;  output.dist_to_wall += _1; }
+            else if (ValidDirward(rightward)     && rightward.geo_id     == geo_rightward.geo_id)     { output = rightward;     output.dist_to_wall += _0; }
+            else if (ValidDirward(leftward)      && leftward.geo_id      == geo_leftward.geo_id)      { output = leftward;      output.dist_to_wall += _0; }
 
             return output;
         }
