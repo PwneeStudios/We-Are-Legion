@@ -441,7 +441,8 @@ namespace GpuSim
 
         protected static float RndFint(float rnd, float f1, float f2)
         {
-            f2 -= .0006f;
+            f2 += _1;     // Add _1 to make the range inclusive.
+            f2 -= .0006f; // Fudge downard slightly so that the fint_round doesn't decide to round up (due to epsilon equality)
             float val = rnd * (f2 - f1) + f1;
             return fint_floor(val);
             

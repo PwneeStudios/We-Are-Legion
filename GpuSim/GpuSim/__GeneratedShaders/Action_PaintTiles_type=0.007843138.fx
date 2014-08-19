@@ -82,6 +82,7 @@ float FragSharpFramework__FragSharpStd__fint_floor(float v)
 
 float GpuSim__SimShader__RndFint(float rnd, float f1, float f2)
 {
+    f2 += 0.003921569;
     f2 -= 0.0006;
     float val = rnd * (f2 - f1) + f1;
     return FragSharpFramework__FragSharpStd__fint_floor(val);

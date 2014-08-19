@@ -202,7 +202,7 @@ namespace GpuSim
     public partial class Movement_UpdateDirection_RemoveDead : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<vec4> TargetData, Field<unit> Unit, Field<extra> Extra, Field<data> Data, Field<data> PrevData, Field<vec4> PathToOtherTeams,
+        data FragmentShader(VertexOut vertex, Field<vec4> TargetData, Field<unit> Unit, Field<extra> Extra, Field<data> Data, Field<data> PrevData, Field<vec4> PathToOtherTeams, Field<vec4> RandomField,
                             Field<geo> Geo, Field<geo> AntiGeo,
                             Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown)
         {
@@ -316,7 +316,7 @@ namespace GpuSim
                 // If we aren't attacking, or if a unit is too far away
                 if (min > auto_attack_cutoff && data_here.action == UnitAction.Attacking || data_here.action == UnitAction.Moving)
                 {
-                    NaivePathfind(vertex, Data, PrevData, TargetData,
+                    NaivePathfind(vertex, Data, PrevData, TargetData, RandomField,
                                   Geo, AntiGeo,
                                   DirwardRight, DirwardLeft, DirwardUp, DirwardDown,
                                   here, ref data_here, ref extra_here);
@@ -326,7 +326,7 @@ namespace GpuSim
             return data_here;
         }
 
-        void NaivePathfind(VertexOut vertex, Field<data> Current, Field<data> Previous, Field<vec4> TargetData,
+        void NaivePathfind(VertexOut vertex, Field<data> Current, Field<data> Previous, Field<vec4> TargetData, Field<vec4> RandomField,
                            Field<geo> Geo, Field<geo> AntiGeo,
                            Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown,
                            unit data, ref data here, ref extra extra_here)
@@ -409,6 +409,7 @@ namespace GpuSim
             
             // Check if we should follow the geodesic we are on
             vec2 geo_id = geo_here.geo_id;
+            bool use_simple_pathing = false;
             if (geo_here.dir > 0 &&
                (
                     ValidDirward(dirward_here)  && other_side  && dirward_here.geo_id  == geo_id && (geo_here.dist == _0 || blocked  && other_side) ||
@@ -426,12 +427,26 @@ namespace GpuSim
             }
             else
             {
-                // If not, then use Simple Pathing:
+                // If not, then use Simple Pathing
+                use_simple_pathing = true;
+            }
+
+            if (Something(Current[dir_to_vec(dir)]))
+                use_simple_pathing = true;
+
+            if (use_simple_pathing)
+            {
                 // Go toward the cardinal direction that is furthest away. If something is in your way, go perpendicularly, assuming you also need to go in that direction.
                 if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
                 if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up))    dir = Dir.Up;
                 if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left))  dir = Dir.Left;
                 if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down))  dir = Dir.Down;
+            }
+
+            vec4 rnd = RandomField[Here];
+            if (IsValid(dir) && rnd.x < .1f && Something(Current[dir_to_vec(dir)]))
+            {
+                dir = RndFint(rnd.y, Dir.Right, Dir.Down);
             }
 
             // Last check: is there something in the way of where we want to go? If so, use the alternative orthogonal route (which may be the same direction, but hey, at least we tried).

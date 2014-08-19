@@ -112,12 +112,27 @@ sampler fs_param_PathToOtherTeams : register(s6) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Geo, using register location 7
+// Texture Sampler for fs_param_RandomField, using register location 7
+float2 fs_param_RandomField_size;
+float2 fs_param_RandomField_dxdy;
+
+Texture fs_param_RandomField_Texture;
+sampler fs_param_RandomField : register(s7) = sampler_state
+{
+    texture   = <fs_param_RandomField_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_Geo, using register location 8
 float2 fs_param_Geo_size;
 float2 fs_param_Geo_dxdy;
 
 Texture fs_param_Geo_Texture;
-sampler fs_param_Geo : register(s7) = sampler_state
+sampler fs_param_Geo : register(s8) = sampler_state
 {
     texture   = <fs_param_Geo_Texture>;
     MipFilter = Point;
@@ -127,12 +142,12 @@ sampler fs_param_Geo : register(s7) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_AntiGeo, using register location 8
+// Texture Sampler for fs_param_AntiGeo, using register location 9
 float2 fs_param_AntiGeo_size;
 float2 fs_param_AntiGeo_dxdy;
 
 Texture fs_param_AntiGeo_Texture;
-sampler fs_param_AntiGeo : register(s8) = sampler_state
+sampler fs_param_AntiGeo : register(s9) = sampler_state
 {
     texture   = <fs_param_AntiGeo_Texture>;
     MipFilter = Point;
@@ -142,12 +157,12 @@ sampler fs_param_AntiGeo : register(s8) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_DirwardRight, using register location 9
+// Texture Sampler for fs_param_DirwardRight, using register location 10
 float2 fs_param_DirwardRight_size;
 float2 fs_param_DirwardRight_dxdy;
 
 Texture fs_param_DirwardRight_Texture;
-sampler fs_param_DirwardRight : register(s9) = sampler_state
+sampler fs_param_DirwardRight : register(s10) = sampler_state
 {
     texture   = <fs_param_DirwardRight_Texture>;
     MipFilter = Point;
@@ -157,12 +172,12 @@ sampler fs_param_DirwardRight : register(s9) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_DirwardLeft, using register location 10
+// Texture Sampler for fs_param_DirwardLeft, using register location 11
 float2 fs_param_DirwardLeft_size;
 float2 fs_param_DirwardLeft_dxdy;
 
 Texture fs_param_DirwardLeft_Texture;
-sampler fs_param_DirwardLeft : register(s10) = sampler_state
+sampler fs_param_DirwardLeft : register(s11) = sampler_state
 {
     texture   = <fs_param_DirwardLeft_Texture>;
     MipFilter = Point;
@@ -172,12 +187,12 @@ sampler fs_param_DirwardLeft : register(s10) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_DirwardUp, using register location 11
+// Texture Sampler for fs_param_DirwardUp, using register location 12
 float2 fs_param_DirwardUp_size;
 float2 fs_param_DirwardUp_dxdy;
 
 Texture fs_param_DirwardUp_Texture;
-sampler fs_param_DirwardUp : register(s11) = sampler_state
+sampler fs_param_DirwardUp : register(s12) = sampler_state
 {
     texture   = <fs_param_DirwardUp_Texture>;
     MipFilter = Point;
@@ -187,12 +202,12 @@ sampler fs_param_DirwardUp : register(s11) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_DirwardDown, using register location 12
+// Texture Sampler for fs_param_DirwardDown, using register location 13
 float2 fs_param_DirwardDown_size;
 float2 fs_param_DirwardDown_dxdy;
 
 Texture fs_param_DirwardDown_Texture;
-sampler fs_param_DirwardDown : register(s12) = sampler_state
+sampler fs_param_DirwardDown : register(s13) = sampler_state
 {
     texture   = <fs_param_DirwardDown_Texture>;
     MipFilter = Point;
@@ -297,7 +312,27 @@ bool GpuSim__SimShader__IsValid(float direction)
     return direction > 0 + .001;
 }
 
-void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel psin, VertexToPixel vertex, sampler Current, float2 Current_size, float2 Current_dxdy, sampler Previous, float2 Previous_size, float2 Previous_dxdy, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, sampler Geo, float2 Geo_size, float2 Geo_dxdy, sampler AntiGeo, float2 AntiGeo_size, float2 AntiGeo_dxdy, sampler DirwardRight, float2 DirwardRight_size, float2 DirwardRight_dxdy, sampler DirwardLeft, float2 DirwardLeft_size, float2 DirwardLeft_dxdy, sampler DirwardUp, float2 DirwardUp_size, float2 DirwardUp_dxdy, sampler DirwardDown, float2 DirwardDown_size, float2 DirwardDown_dxdy, float4 data, inout float4 here, inout float4 extra_here)
+float2 GpuSim__SimShader__dir_to_vec(float direction)
+{
+    float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
+    return GpuSim__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+}
+
+float FragSharpFramework__FragSharpStd__fint_floor(float v)
+{
+    v += 0.0005;
+    return floor(255 * v) * 0.003921569;
+}
+
+float GpuSim__SimShader__RndFint(float rnd, float f1, float f2)
+{
+    f2 += 0.003921569;
+    f2 -= 0.0006;
+    float val = rnd * (f2 - f1) + f1;
+    return FragSharpFramework__FragSharpStd__fint_floor(val);
+}
+
+void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel psin, VertexToPixel vertex, sampler Current, float2 Current_size, float2 Current_dxdy, sampler Previous, float2 Previous_size, float2 Previous_dxdy, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, sampler RandomField, float2 RandomField_size, float2 RandomField_dxdy, sampler Geo, float2 Geo_size, float2 Geo_dxdy, sampler AntiGeo, float2 AntiGeo_size, float2 AntiGeo_dxdy, sampler DirwardRight, float2 DirwardRight_size, float2 DirwardRight_dxdy, sampler DirwardLeft, float2 DirwardLeft_size, float2 DirwardLeft_dxdy, sampler DirwardUp, float2 DirwardUp_size, float2 DirwardUp_dxdy, sampler DirwardDown, float2 DirwardDown_size, float2 DirwardDown_dxdy, float4 data, inout float4 here, inout float4 extra_here)
 {
     float dir = 0;
     float4 target = tex2D(TargetData, psin.TexCoords + (float2(0, 0)) * TargetData_dxdy);
@@ -443,11 +478,20 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
         }
     }
     float2 geo_id = geo_here.ba;
+    bool use_simple_pathing = false;
     if (geo_here.r > 0 + .001 && (GpuSim__SimShader__ValidDirward(dirward_here) && other_side && all(abs(dirward_here.rg - geo_id) < .001) && (abs(geo_here.g - 0.0) < .001 || blocked && other_side) || GpuSim__SimShader__ValidDirward(dirward_here2) && other_side2 && all(abs(dirward_here2.rg - geo_id) < .001) && (abs(geo_here.g - 0.0) < .001 || blocked2 && other_side2)))
     {
         dir = geo_here.r;
     }
     else
+    {
+        use_simple_pathing = true;
+    }
+    if (GpuSim__SimShader__Something(tex2D(Current, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(dir)) * Current_dxdy)))
+    {
+        use_simple_pathing = true;
+    }
+    if (use_simple_pathing)
     {
         if ((mag.x > mag.y + .001 || diff.y > 0 + .001 && GpuSim__SimShader__Something(up) || diff.y < 0 - .001 && GpuSim__SimShader__Something(down)) && Destination.x > CurPos.x + 1 + .001 && !(GpuSim__SimShader__Something(right)))
         {
@@ -465,6 +509,11 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
         {
             dir = 0.01568628;
         }
+    }
+    float4 rnd = tex2D(RandomField, psin.TexCoords + (float2(0, 0)) * RandomField_dxdy);
+    if (GpuSim__SimShader__IsValid(dir) && rnd.x < 0.1 - .001 && GpuSim__SimShader__Something(tex2D(Current, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(dir)) * Current_dxdy)))
+    {
+        dir = GpuSim__SimShader__RndFint(rnd.y, 0.003921569, 0.01568628);
     }
     if (GpuSim__SimShader__IsValid(dir))
     {
@@ -608,7 +657,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         if (min > auto_attack_cutoff + .001 && abs(data_here.a - 0.007843138) < .001 || abs(data_here.a - 0.003921569) < .001)
         {
-            GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(psin, psin, fs_param_Data, fs_param_Data_size, fs_param_Data_dxdy, fs_param_PrevData, fs_param_PrevData_size, fs_param_PrevData_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, fs_param_Geo, fs_param_Geo_size, fs_param_Geo_dxdy, fs_param_AntiGeo, fs_param_AntiGeo_size, fs_param_AntiGeo_dxdy, fs_param_DirwardRight, fs_param_DirwardRight_size, fs_param_DirwardRight_dxdy, fs_param_DirwardLeft, fs_param_DirwardLeft_size, fs_param_DirwardLeft_dxdy, fs_param_DirwardUp, fs_param_DirwardUp_size, fs_param_DirwardUp_dxdy, fs_param_DirwardDown, fs_param_DirwardDown_size, fs_param_DirwardDown_dxdy, here, data_here, extra_here);
+            GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(psin, psin, fs_param_Data, fs_param_Data_size, fs_param_Data_dxdy, fs_param_PrevData, fs_param_PrevData_size, fs_param_PrevData_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, fs_param_RandomField, fs_param_RandomField_size, fs_param_RandomField_dxdy, fs_param_Geo, fs_param_Geo_size, fs_param_Geo_dxdy, fs_param_AntiGeo, fs_param_AntiGeo_size, fs_param_AntiGeo_dxdy, fs_param_DirwardRight, fs_param_DirwardRight_size, fs_param_DirwardRight_dxdy, fs_param_DirwardLeft, fs_param_DirwardLeft_size, fs_param_DirwardLeft_dxdy, fs_param_DirwardUp, fs_param_DirwardUp_size, fs_param_DirwardUp_dxdy, fs_param_DirwardDown, fs_param_DirwardDown_size, fs_param_DirwardDown_dxdy, here, data_here, extra_here);
         }
     }
     __FinalOutput.Color = data_here;
