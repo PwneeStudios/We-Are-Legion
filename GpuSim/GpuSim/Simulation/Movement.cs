@@ -360,10 +360,7 @@ namespace GpuSim
             
             vec2 diff = Destination - CurPos;
             vec2 mag = abs(diff);
-            //if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
-            //if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up))    dir = Dir.Up;
-            //if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left))  dir = Dir.Left;
-            //if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down))  dir = Dir.Down;
+
             float dir2 = Dir.None;
             bool blocked = false;
             if (mag.x > mag.y && Destination.x > CurPos.x + 1) { dir = Dir.Right; blocked = Something(right) || Something(prev_right); }
@@ -371,10 +368,6 @@ namespace GpuSim
             if (mag.x > mag.y && Destination.x < CurPos.x - 1) { dir = Dir.Left;  blocked = Something(left)  || Something(prev_left); }
             if (mag.y > mag.x && Destination.y < CurPos.y - 1) { dir = Dir.Down;  blocked = Something(down)  || Something(prev_down); }
 
-            //if (mag.x > mag.y && Destination.y > CurPos.y + .5) dir2 = Dir.Up;
-            //if (mag.x > mag.y && Destination.y < CurPos.y - .5) dir2 = Dir.Down;
-            //if (mag.x <= mag.y && Destination.x > CurPos.x + 0) dir2 = Dir.Right;
-            //if (mag.x <= mag.y && Destination.x < CurPos.x - 0) dir2 = Dir.Left;
             bool blocked2 = false;
             if (dir == Dir.Right || dir == Dir.Left)
             {
@@ -390,22 +383,13 @@ namespace GpuSim
             // Check geodesics
             //geo geo_here = Geo[Here];
             geo geo_here = AntiGeo[Here];
-            
-            dirward dirward_here = dirward.Nothing;
             vec2 pos_here = vertex.TexCoords * Geo.Size;
-            bool other_side = false;
-            if      (dir == Dir.Right) { dirward_here = DirwardRight[Here]; other_side = Destination.x > pos_here.x + Float(dirward_here.dist_to_wall); }
-            else if (dir == Dir.Left)  { dirward_here = DirwardLeft[Here];  other_side = Destination.x < pos_here.x - Float(dirward_here.dist_to_wall); }
-            else if (dir == Dir.Up)    { dirward_here = DirwardUp[Here];    other_side = Destination.y > pos_here.y + Float(dirward_here.dist_to_wall); }
-            else if (dir == Dir.Down)  { dirward_here = DirwardDown[Here];  other_side = Destination.y < pos_here.y - Float(dirward_here.dist_to_wall); }
 
+            dirward dirward_here = dirward.Nothing;
             dirward dirward_here2 = dirward.Nothing;
-            bool other_side2 = false;
-            if      (dir2 == Dir.Right) { dirward_here2 = DirwardRight[Here]; other_side2 = Destination.x > pos_here.x + Float(dirward_here2.dist_to_wall); }
-            else if (dir2 == Dir.Left)  { dirward_here2 = DirwardLeft[Here];  other_side2 = Destination.x < pos_here.x - Float(dirward_here2.dist_to_wall); }
-            else if (dir2 == Dir.Up)    { dirward_here2 = DirwardUp[Here];    other_side2 = Destination.y > pos_here.y + Float(dirward_here2.dist_to_wall); }
-            else if (dir2 == Dir.Down)  { dirward_here2 = DirwardDown[Here];  other_side2 = Destination.y < pos_here.y - Float(dirward_here2.dist_to_wall); }
-
+            
+            bool other_side = GetDirward(ref dirward_here, dir, ref Destination, ref pos_here, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
+            bool other_side2 = GetDirward(ref dirward_here2, dir2, ref Destination, ref pos_here, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
             
             // Check if we should follow the geodesic we are on
             vec2 geo_id = geo_here.geo_id;
@@ -461,6 +445,16 @@ namespace GpuSim
                 if (here.action == UnitAction.Attacking)
                     here.action = UnitAction.Guard;
             }
+        }
+
+        bool GetDirward(ref dirward dirward_here, float dir, ref vec2 Destination, ref vec2 pos_here, Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown)
+        {
+            if      (dir == Dir.Right) { dirward_here = DirwardRight[Here]; return Destination.x > pos_here.x + Float(dirward_here.dist_to_wall); }
+            else if (dir == Dir.Left)  { dirward_here = DirwardLeft[Here];  return Destination.x < pos_here.x - Float(dirward_here.dist_to_wall); }
+            else if (dir == Dir.Up)    { dirward_here = DirwardUp[Here];    return Destination.y > pos_here.y + Float(dirward_here.dist_to_wall); }
+            else if (dir == Dir.Down)  { dirward_here = DirwardDown[Here];  return Destination.y < pos_here.y - Float(dirward_here.dist_to_wall); }
+            
+            return false;
         }
 
         float BuildingDirection(VertexOut vertex, Field<vec4> TargetData, building here)

@@ -95,6 +95,7 @@ namespace GpuSim
             writer.Write(DataGroup.DistanceToOtherTeams);
 
             writer.Write(DataGroup.Geo);
+            writer.Write(DataGroup.AntiGeo);
             foreach (var dir in Dir.Vals) writer.Write(DataGroup.Dirward[dir]);
 
             writer.Close();
@@ -119,6 +120,7 @@ namespace GpuSim
             DataGroup.DistanceToOtherTeams.SetData(reader.ReadTexture2D().GetData());
 
             DataGroup.Geo.SetData(reader.ReadTexture2D().GetData());
+            DataGroup.AntiGeo.SetData(reader.ReadTexture2D().GetData());
             foreach (var dir in Dir.Vals) DataGroup.Dirward[dir].SetData(reader.ReadTexture2D().GetData());
 
             reader.Close();

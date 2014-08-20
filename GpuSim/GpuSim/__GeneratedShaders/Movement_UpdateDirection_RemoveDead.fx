@@ -302,6 +302,40 @@ float FragSharpFramework__FragSharpStd__Float(float v)
     return floor(255 * v + 0.5);
 }
 
+bool GpuSim__Movement_UpdateDirection_RemoveDead__GetDirward(VertexToPixel psin, inout float4 dirward_here, float dir, inout float2 Destination, inout float2 pos_here, sampler DirwardRight, float2 DirwardRight_size, float2 DirwardRight_dxdy, sampler DirwardLeft, float2 DirwardLeft_size, float2 DirwardLeft_dxdy, sampler DirwardUp, float2 DirwardUp_size, float2 DirwardUp_dxdy, sampler DirwardDown, float2 DirwardDown_size, float2 DirwardDown_dxdy)
+{
+    if (abs(dir - 0.003921569) < .001)
+    {
+        dirward_here = tex2D(DirwardRight, psin.TexCoords + (float2(0, 0)) * DirwardRight_dxdy);
+        return Destination.x > pos_here.x + FragSharpFramework__FragSharpStd__Float(dirward_here.b) + .001;
+    }
+    else
+    {
+        if (abs(dir - 0.01176471) < .001)
+        {
+            dirward_here = tex2D(DirwardLeft, psin.TexCoords + (float2(0, 0)) * DirwardLeft_dxdy);
+            return Destination.x < pos_here.x - FragSharpFramework__FragSharpStd__Float(dirward_here.b) - .001;
+        }
+        else
+        {
+            if (abs(dir - 0.007843138) < .001)
+            {
+                dirward_here = tex2D(DirwardUp, psin.TexCoords + (float2(0, 0)) * DirwardUp_dxdy);
+                return Destination.y > pos_here.y + FragSharpFramework__FragSharpStd__Float(dirward_here.b) + .001;
+            }
+            else
+            {
+                if (abs(dir - 0.01568628) < .001)
+                {
+                    dirward_here = tex2D(DirwardDown, psin.TexCoords + (float2(0, 0)) * DirwardDown_dxdy);
+                    return Destination.y < pos_here.y - FragSharpFramework__FragSharpStd__Float(dirward_here.b) - .001;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 bool GpuSim__SimShader__ValidDirward(float4 d)
 {
     return any(abs(d - float4(0, 0, 0, 0)) > .001);
@@ -414,69 +448,11 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
         }
     }
     float4 geo_here = tex2D(AntiGeo, psin.TexCoords + (float2(0, 0)) * AntiGeo_dxdy);
-    float4 dirward_here = float4(0, 0, 0, 0);
     float2 pos_here = vertex.TexCoords * Geo_size;
-    bool other_side = false;
-    if (abs(dir - 0.003921569) < .001)
-    {
-        dirward_here = tex2D(DirwardRight, psin.TexCoords + (float2(0, 0)) * DirwardRight_dxdy);
-        other_side = Destination.x > pos_here.x + FragSharpFramework__FragSharpStd__Float(dirward_here.b) + .001;
-    }
-    else
-    {
-        if (abs(dir - 0.01176471) < .001)
-        {
-            dirward_here = tex2D(DirwardLeft, psin.TexCoords + (float2(0, 0)) * DirwardLeft_dxdy);
-            other_side = Destination.x < pos_here.x - FragSharpFramework__FragSharpStd__Float(dirward_here.b) - .001;
-        }
-        else
-        {
-            if (abs(dir - 0.007843138) < .001)
-            {
-                dirward_here = tex2D(DirwardUp, psin.TexCoords + (float2(0, 0)) * DirwardUp_dxdy);
-                other_side = Destination.y > pos_here.y + FragSharpFramework__FragSharpStd__Float(dirward_here.b) + .001;
-            }
-            else
-            {
-                if (abs(dir - 0.01568628) < .001)
-                {
-                    dirward_here = tex2D(DirwardDown, psin.TexCoords + (float2(0, 0)) * DirwardDown_dxdy);
-                    other_side = Destination.y < pos_here.y - FragSharpFramework__FragSharpStd__Float(dirward_here.b) - .001;
-                }
-            }
-        }
-    }
+    float4 dirward_here = float4(0, 0, 0, 0);
     float4 dirward_here2 = float4(0, 0, 0, 0);
-    bool other_side2 = false;
-    if (abs(dir2 - 0.003921569) < .001)
-    {
-        dirward_here2 = tex2D(DirwardRight, psin.TexCoords + (float2(0, 0)) * DirwardRight_dxdy);
-        other_side2 = Destination.x > pos_here.x + FragSharpFramework__FragSharpStd__Float(dirward_here2.b) + .001;
-    }
-    else
-    {
-        if (abs(dir2 - 0.01176471) < .001)
-        {
-            dirward_here2 = tex2D(DirwardLeft, psin.TexCoords + (float2(0, 0)) * DirwardLeft_dxdy);
-            other_side2 = Destination.x < pos_here.x - FragSharpFramework__FragSharpStd__Float(dirward_here2.b) - .001;
-        }
-        else
-        {
-            if (abs(dir2 - 0.007843138) < .001)
-            {
-                dirward_here2 = tex2D(DirwardUp, psin.TexCoords + (float2(0, 0)) * DirwardUp_dxdy);
-                other_side2 = Destination.y > pos_here.y + FragSharpFramework__FragSharpStd__Float(dirward_here2.b) + .001;
-            }
-            else
-            {
-                if (abs(dir2 - 0.01568628) < .001)
-                {
-                    dirward_here2 = tex2D(DirwardDown, psin.TexCoords + (float2(0, 0)) * DirwardDown_dxdy);
-                    other_side2 = Destination.y < pos_here.y - FragSharpFramework__FragSharpStd__Float(dirward_here2.b) - .001;
-                }
-            }
-        }
-    }
+    bool other_side = GpuSim__Movement_UpdateDirection_RemoveDead__GetDirward(psin, dirward_here, dir, Destination, pos_here, DirwardRight, DirwardRight_size, DirwardRight_dxdy, DirwardLeft, DirwardLeft_size, DirwardLeft_dxdy, DirwardUp, DirwardUp_size, DirwardUp_dxdy, DirwardDown, DirwardDown_size, DirwardDown_dxdy);
+    bool other_side2 = GpuSim__Movement_UpdateDirection_RemoveDead__GetDirward(psin, dirward_here2, dir2, Destination, pos_here, DirwardRight, DirwardRight_size, DirwardRight_dxdy, DirwardLeft, DirwardLeft_size, DirwardLeft_dxdy, DirwardUp, DirwardUp_size, DirwardUp_dxdy, DirwardDown, DirwardDown_size, DirwardDown_dxdy);
     float2 geo_id = geo_here.ba;
     bool use_simple_pathing = false;
     if (geo_here.r > 0 + .001 && (GpuSim__SimShader__ValidDirward(dirward_here) && other_side && all(abs(dirward_here.rg - geo_id) < .001) && (abs(geo_here.g - 0.0) < .001 || blocked && other_side) || GpuSim__SimShader__ValidDirward(dirward_here2) && other_side2 && all(abs(dirward_here2.rg - geo_id) < .001) && (abs(geo_here.g - 0.0) < .001 || blocked2 && other_side2)))
