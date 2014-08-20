@@ -65,6 +65,16 @@ namespace GpuSim
     }
 
     [Copy(typeof(vec4))]
+    public partial struct geo_info
+    {
+        [Hlsl("rg")]
+        public vec2 polar_dist { get { return rg; } set { rg = value; } }
+
+        [Hlsl("ba")]
+        public vec2 circumference { get { return ba; } set { ba = value; } }
+    }
+
+    [Copy(typeof(vec4))]
     public partial struct unit
     {
         [Hlsl("r")]

@@ -749,6 +749,190 @@ namespace GpuSim
 namespace GpuSim
 {
     [Hlsl("float4")]
+    public partial struct geo_info : Convertible<vec4, geo_info>
+    {
+        public geo_info ConvertFrom(vec4 v)
+        {
+            return (geo_info)v;
+        }
+
+        public vec4 ConvertTo()
+        {
+            return (vec4)this;
+        }
+
+        [Hlsl("float4")]
+        public geo_info(float x, float y, float z, float w)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+        }
+
+        [Hlsl("x")]
+        public float x;
+
+        [Hlsl("y")]
+        public float y;
+
+        [Hlsl("z")]
+        public float z;
+
+        [Hlsl("w")]
+        public float w;
+
+        [Hlsl("xy")]
+        public vec2 xy { get { return new vec2(x, y); } set { x = value.x; y = value.y; } }
+
+        [Hlsl("zw")]
+        public vec2 zw { get { return new vec2(z, w); } set { z = value.x; w = value.y; } }
+
+        [Hlsl("xyz")]
+        public vec3 xyz { get { return new vec3(x, y, z); } set { x = value.x; y = value.y; z = value.z; } }
+
+        [Hlsl("yzw")]
+        public vec3 yzw { get { return new vec3(y, z, w); } set { y = value.x; z = value.y; w = value.z; } }
+
+        [Hlsl("r")]
+        public float r { get { return x; } set { x = value; } }
+
+        [Hlsl("g")]
+        public float g { get { return y; } set { y = value; } }
+
+        [Hlsl("b")]
+        public float b { get { return z; } set { z = value; } }
+
+        [Hlsl("a")]
+        public float a { get { return w; } set { w = value; } }
+
+        [Hlsl("rgb")]
+        public vec3 rgb { get { return xyz; } set { xyz = value; } }
+
+        [Hlsl("gba")]
+        public vec3 gba { get { return yzw; } set { yzw = value; } }
+
+        [Hlsl("rg")]
+        public vec2 rg { get { return xy; } set { xy = value; } }
+
+        [Hlsl("ba")]
+        public vec2 ba { get { return zw; } set { zw = value; } }
+
+
+        public static geo_info operator *(float a, geo_info v)
+        {
+            return new geo_info(a * v.x, a * v.y, a * v.z, a * v.w);
+        }
+
+        public static geo_info operator *(geo_info v, float a)
+        {
+            return new geo_info(a * v.x, a * v.y, a * v.z, a * v.w);
+        }
+
+        public static geo_info operator /(float a, geo_info v)
+        {
+            return new geo_info(a / v.x, a / v.y, a / v.z, a / v.w);
+        }
+
+        public static geo_info operator /(geo_info v, float a)
+        {
+            return new geo_info(v.x / a, v.y / a, v.z / a, v.w / a);
+        }
+
+        public static geo_info operator +(geo_info v, geo_info w)
+        {
+            return new geo_info(v.x + w.x, v.y + w.y, v.z + w.z, v.w + w.w);
+        }
+
+        public static geo_info operator -(geo_info v, geo_info w)
+        {
+            return new geo_info(v.x - w.x, v.y - w.y, v.z - w.z, v.w - w.w);
+        }
+
+        public static geo_info operator *(geo_info v, geo_info w)
+        {
+            return new geo_info(v.x * w.x, v.y * w.y, v.z * w.z, v.w * w.w);
+        }
+
+        public static geo_info operator /(geo_info v, geo_info w)
+        {
+            return new geo_info(v.x / w.x, v.y / w.y, v.z / w.z, v.w / w.w);
+        }
+
+        public static bool operator ==(geo_info v, geo_info w)
+        {
+            return
+                v.x == w.x &&
+                v.y == w.y &&
+                v.z == w.z &&
+                v.w == w.w;
+        }
+
+        public static bool operator !=(geo_info v, geo_info w)
+        {
+            return
+                v.x != w.x ||
+                v.y != w.y ||
+                v.z != w.z ||
+                v.w != w.w;
+        }
+
+        public override bool Equals(object o)
+        {
+            return o is geo_info ? this == (geo_info)o : false;
+        }
+
+        public bool Equals(geo_info v)
+        {
+            return this == v;
+        }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode() ^ w.GetHashCode();
+        }
+
+        public static geo_info operator -(geo_info v)
+        {
+            return new geo_info(-v.x, -v.y, -v.z, -v.w);
+        }
+
+        public static implicit operator Vector4(geo_info v)
+        {
+            return new Vector4(v.x, v.y, v.z, v.w);
+        }
+
+        public static implicit operator geo_info(color v)
+        {
+            return new geo_info(v.x, v.y, v.z, v.w);
+        }
+
+        public static implicit operator color(geo_info v)
+        {
+            return new color(v.x, v.y, v.z, v.w);
+        }
+
+        public static explicit operator geo_info(Vector4 v)
+        {
+            return new geo_info(v.X, v.Y, v.Z, v.W);
+        }
+
+        public static explicit operator Color(geo_info v)
+        {
+            return new Color(v.x, v.y, v.z, v.w);
+        }        
+
+        public static readonly geo_info Zero    = new geo_info(0, 0, 0, 0);
+        public static readonly geo_info Nothing = new geo_info(0, 0, 0, 0);
+
+        public static explicit operator geo_info(vec4 v) { return new geo_info(v.x, v.y, v.z, v.w); }
+        public static explicit operator vec4(geo_info v) { return new vec4(v.x, v.y, v.z, v.w); }
+    }
+}
+
+namespace GpuSim
+{
+    [Hlsl("float4")]
     public partial struct unit : Convertible<vec4, unit>
     {
         public unit ConvertFrom(vec4 v)

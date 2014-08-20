@@ -90,9 +90,14 @@ namespace GpuSim
             color output = color.TransparentBlack;
 
             geo here = Geo[Here];
-            float dist = unpack_val(PolarDistance[Here].xy);
-
+            float dist = 0;
+            
             vec2 subcell_pos = get_subcell_pos(vertex, Geo.Size);
+
+            if (subcell_pos.y > .5)
+                dist = unpack_val(PolarDistance[Here].xy);
+            else
+                dist = unpack_val(PolarDistance[Here].zw);
 
             if (here.dir > _0)
             {

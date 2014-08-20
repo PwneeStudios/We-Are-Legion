@@ -70,20 +70,20 @@ sampler fs_param_Texture : register(s3) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float GpuSim__SimShader__unpack_val(float2 packed)
-{
-    float coord = 0;
-    packed = floor(255.0 * packed + float2(0.5, 0.5));
-    coord = 256 * packed.x + packed.y;
-    return coord;
-}
-
 float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
     float j = floor(coords.y);
     return coords - float2(i, j);
+}
+
+float GpuSim__SimShader__unpack_val(float2 packed)
+{
+    float coord = 0;
+    packed = floor(255.0 * packed + float2(0.5, 0.5));
+    coord = 256 * packed.x + packed.y;
+    return coord;
 }
 
 // Compiled vertex shader
@@ -104,8 +104,16 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy);
-    float dist = GpuSim__SimShader__unpack_val(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).xy);
+    float dist = 0;
     float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Geo_size);
+    if (subcell_pos.y > 0.5 + .001)
+    {
+        dist = GpuSim__SimShader__unpack_val(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).xy);
+    }
+    else
+    {
+        dist = GpuSim__SimShader__unpack_val(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).zw);
+    }
     if (here.r > 0.0 + .001)
     {
         dist = dist / 1024.0;
