@@ -345,67 +345,6 @@ namespace GpuSim
         vec4 FragmentShader(VertexOut vertex, Field<geo> Geo, Field<vec4> Distance)
         {
             vec4 info_here = Distance[Here];
-
-            geo
-                here = Geo[Here],
-                right = Geo[RightOne],
-                up = Geo[UpOne],
-                left = Geo[LeftOne],
-                down = Geo[DownOne];
-
-            float
-                dist_here  = unpack_val(Distance[Here].xy),
-                dist_right = unpack_val(Distance[RightOne].xy),
-                dist_up    = unpack_val(Distance[UpOne].xy),
-                dist_left  = unpack_val(Distance[LeftOne].xy),
-                dist_down  = unpack_val(Distance[DownOne].xy);
-
-            float
-                circum_here  = unpack_val(Distance[Here].zw),
-                circum_right = unpack_val(Distance[RightOne].zw),
-                circum_up    = unpack_val(Distance[UpOne].zw),
-                circum_left  = unpack_val(Distance[LeftOne].zw),
-                circum_down  = unpack_val(Distance[DownOne].zw);
-
-            if (here.dir == _0) return vec4.Zero;
-
-            float circum = circum_here;
-            if (right.pos_storage == here.pos_storage) circum = max(circum, circum_right);
-            if (up.pos_storage    == here.pos_storage) circum = max(circum, circum_up);
-            if (left.pos_storage  == here.pos_storage) circum = max(circum, circum_left);
-            if (down.pos_storage  == here.pos_storage) circum = max(circum, circum_down);    
-
-            // Calculate the geo_id of this cell
-            geo temp_geo = geo.Nothing;
-            vec2 pos = vertex.TexCoords * Geo.Size;
-            set_geo_pos_id(ref temp_geo, pos);
-
-            // ... if that geo_id matches the id of the geo info here, then this is the "master" or "12 o' clock" cell of the geodesic line going through this cell.
-            if (here.pos_storage == temp_geo.pos_storage)
-            {
-                // which means the circumference is actually one plus the max polar distance of any adjacent cells from this same geo
-                float dist = 0;
-                if (right.pos_storage == here.pos_storage) dist = max(dist, dist_right);
-                if (up.pos_storage    == here.pos_storage) dist = max(dist, dist_up);
-                if (left.pos_storage  == here.pos_storage) dist = max(dist, dist_left);
-                if (down.pos_storage  == here.pos_storage) dist = max(dist, dist_down);
-                
-                info_here.zw = pack_val_2byte(dist + 1);
-            }
-
-            // Pack the polar distance into 2-bytes and return it in
-            info_here.zw = pack_val_2byte(circum);
-
-            return info_here;
-        }
-    }
-
-    public partial class Geodesic_SetCircumference__Fast : SimShader
-    {
-        [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<geo> Geo, Field<vec4> Distance)
-        {
-            vec4 info_here = Distance[Here];
             geo here       = Geo[Here];
 
             if (here.dir == _0) return vec4.Zero;

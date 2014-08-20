@@ -210,13 +210,7 @@ namespace GpuSim
                 CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PolarDistance);
             }
 
-            //for (int i = 0; i < 512; i++)
-            //{
-            //    Geodesic_SetCircumference.Apply(DataGroup.TempGeo, DataGroup.PolarDistance, Output: DataGroup.Temp1);
-            //    CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PolarDistance);
-            //}
-
-            Geodesic_SetCircumference__Fast.Apply(DataGroup.TempGeo, DataGroup.PolarDistance, Output: DataGroup.Temp1);
+            Geodesic_SetCircumference.Apply(DataGroup.TempGeo, DataGroup.PolarDistance, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PolarDistance);
 
             SwapTempGeo(Anti);
