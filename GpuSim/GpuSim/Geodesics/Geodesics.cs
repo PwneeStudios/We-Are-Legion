@@ -324,11 +324,29 @@ namespace GpuSim
             }
             else
             {
+                //geo into = Geo[dir_to_vec(here.dir)];
+                //if (into.pos_storage == here.pos_storage) dist = unpack_val(Distance[dir_to_vec(here.dir)].xy) - 1;
+                if (here.dir == Dir.Left)  dist = max(_0, dist_left  - 1);
+                if (here.dir == Dir.Right) dist = max(_0, dist_right - 1);
+                if (here.dir == Dir.Up)    dist = max(_0, dist_up    - 1);
+                if (here.dir == Dir.Down)  dist = max(_0, dist_down  - 1);
+
                 // Otherwise its polar distance is 1 plus the polar distance of whatever cell comes "before" it (by following the geo backwards "counterclockwise").
                 if (right.dir == Dir.Left  && dist_right >= dist) dist = dist_right + 1;
                 if (left.dir  == Dir.Right && dist_left  >= dist) dist = dist_left  + 1;
                 if (up.dir    == Dir.Down  && dist_up    >= dist) dist = dist_up    + 1;
                 if (down.dir  == Dir.Up    && dist_down  >= dist) dist = dist_down  + 1;
+
+                //// If nothing points into this tile, then this is a "degenerate" part of the geodesic (flows out, but nothing flows into it) ...
+                //if (right.dir != Dir.Left && left.dir != Dir.Right && up.dir != Dir.Down && down.dir != Dir.Up)
+                //{ 
+                //    // ... in which case the polar distance should be the max of surrounding polar distances
+                //    //if (right.pos_storage == here.pos_storage) dist = max(dist, dist_right - 1);
+                //    //if (up   .pos_storage == here.pos_storage) dist = max(dist, dist_up    - 1);
+                //    //if (left .pos_storage == here.pos_storage) dist = max(dist, dist_left  - 1);
+                //    //if (down .pos_storage == here.pos_storage) dist = max(dist, dist_down  - 1);
+                //    dist = max(max(dist_right, dist_left, dist_up, dist_down) - 1, 0);
+                //}
             }
 
             // Pack the polar distance into 2-bytes and return it in

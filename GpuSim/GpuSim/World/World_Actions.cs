@@ -212,8 +212,7 @@ namespace GpuSim
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.GeoInfo);
 
 
-            var dir = Dir.Down;
-            //foreach (var dir in Dir.Vals)
+            foreach (var dir in Dir.Vals)
             {
                 Identity.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
                 CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.ShiftedGeo);
@@ -222,7 +221,6 @@ namespace GpuSim
 
 
                 for (int i = 0; i < 256; i++)
-                //for (int i = 0; i < 1; i++)
                 {
                     Shift.Apply(DataGroup.ShiftedGeo, dir, Output: DataGroup.Temp1);
                     CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.ShiftedGeo);

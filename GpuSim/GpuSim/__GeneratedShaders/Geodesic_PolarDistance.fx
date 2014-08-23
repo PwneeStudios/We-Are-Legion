@@ -112,6 +112,22 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     else
     {
+        if (abs(here.r - 0.01176471) < .001)
+        {
+            dist = max(0.0, dist_left - 1);
+        }
+        if (abs(here.r - 0.003921569) < .001)
+        {
+            dist = max(0.0, dist_right - 1);
+        }
+        if (abs(here.r - 0.007843138) < .001)
+        {
+            dist = max(0.0, dist_up - 1);
+        }
+        if (abs(here.r - 0.01568628) < .001)
+        {
+            dist = max(0.0, dist_down - 1);
+        }
         if (abs(right.r - 0.01176471) < .001 && dist_right >= dist - .001)
         {
             dist = dist_right + 1;

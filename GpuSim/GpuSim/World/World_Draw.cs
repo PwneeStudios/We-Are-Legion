@@ -94,7 +94,7 @@ namespace GpuSim
 
             //DrawGeoInfo.Using(camvec, CameraAspect, DataGroup.Geo, Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
             //DrawGeoInfo.Using(camvec, CameraAspect, DataGroup.AntiGeo, Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
-            DrawDirwardInfo.Using(camvec, CameraAspect, DataGroup.Dirward[Dir.Down], Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
+            DrawDirwardInfo.Using(camvec, CameraAspect, DataGroup.Dirward[Dir.Up], Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
             DrawPolarInfo.Using(camvec, CameraAspect, DataGroup.Geo, DataGroup.GeoInfo, Assets.DebugTexture_Num); GridHelper.DrawGrid();
             
 
