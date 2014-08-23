@@ -324,29 +324,18 @@ namespace GpuSim
             }
             else
             {
-                //geo into = Geo[dir_to_vec(here.dir)];
-                //if (into.pos_storage == here.pos_storage) dist = unpack_val(Distance[dir_to_vec(here.dir)].xy) - 1;
+                // If this geodesic flows into another tile, then the polar distance here should be 1 less than the distance of the tile it flows into.
+                // This is a fail safe condition that covers degenerate tiles which have nothing flowing into them and only flow out.
                 if (here.dir == Dir.Left)  dist = max(_0, dist_left  - 1);
                 if (here.dir == Dir.Right) dist = max(_0, dist_right - 1);
                 if (here.dir == Dir.Up)    dist = max(_0, dist_up    - 1);
                 if (here.dir == Dir.Down)  dist = max(_0, dist_down  - 1);
 
-                // Otherwise its polar distance is 1 plus the polar distance of whatever cell comes "before" it (by following the geo backwards "counterclockwise").
+                // The polar distance is also 1 plus the polar distance of whatever cell comes "before" it (by following the geo backwards "counterclockwise").
                 if (right.dir == Dir.Left  && dist_right >= dist) dist = dist_right + 1;
                 if (left.dir  == Dir.Right && dist_left  >= dist) dist = dist_left  + 1;
                 if (up.dir    == Dir.Down  && dist_up    >= dist) dist = dist_up    + 1;
                 if (down.dir  == Dir.Up    && dist_down  >= dist) dist = dist_down  + 1;
-
-                //// If nothing points into this tile, then this is a "degenerate" part of the geodesic (flows out, but nothing flows into it) ...
-                //if (right.dir != Dir.Left && left.dir != Dir.Right && up.dir != Dir.Down && down.dir != Dir.Up)
-                //{ 
-                //    // ... in which case the polar distance should be the max of surrounding polar distances
-                //    //if (right.pos_storage == here.pos_storage) dist = max(dist, dist_right - 1);
-                //    //if (up   .pos_storage == here.pos_storage) dist = max(dist, dist_up    - 1);
-                //    //if (left .pos_storage == here.pos_storage) dist = max(dist, dist_left  - 1);
-                //    //if (down .pos_storage == here.pos_storage) dist = max(dist, dist_down  - 1);
-                //    dist = max(max(dist_right, dist_left, dist_up, dist_down) - 1, 0);
-                //}
             }
 
             // Pack the polar distance into 2-bytes and return it in
@@ -427,11 +416,43 @@ namespace GpuSim
             }            
 
             dirward output = dirward.Nothing;
-            output.polarity = 1;
             output.polarity = clockwise > counterclockwise ? 0 : 1;
-            output.geo_id = vec(1,1); // WARNING
+            output.polarity_set = _true;
 
             return output;
+        }
+    }
+
+    public partial class Geodesic_FillMissingPolarity : SimShader
+    {
+        [FragmentShader]
+        dirward FragmentShader(VertexOut vertex, Field<dirward> Dirward, Field<geo> Geo)
+        {
+            geo
+                here  = Geo[Here],
+                right = Geo[RightOne],
+                up    = Geo[UpOne],
+                left  = Geo[LeftOne],
+                down  = Geo[DownOne];
+
+            dirward
+                dirward_here  = Dirward[Here],
+                dirward_right = Dirward[RightOne],
+                dirward_up    = Dirward[UpOne],
+                dirward_left  = Dirward[LeftOne],
+                dirward_down  = Dirward[DownOne];
+
+            if (here.dir == _0) return dirward.Nothing;
+
+            if (dirward_here.polarity_set == _false)
+            {
+                if (right.pos_storage == here.pos_storage && dirward_right.polarity_set == _true) { dirward_here.polarity = dirward_right.polarity; dirward_here.polarity_set = _true; }
+                if (left.pos_storage  == here.pos_storage && dirward_left.polarity_set  == _true) { dirward_here.polarity = dirward_left.polarity;  dirward_here.polarity_set = _true; }
+                if (up.pos_storage    == here.pos_storage && dirward_up.polarity_set    == _true) { dirward_here.polarity = dirward_up.polarity;    dirward_here.polarity_set = _true; }
+                if (down.pos_storage  == here.pos_storage && dirward_down.polarity_set  == _true) { dirward_here.polarity = dirward_down.polarity;  dirward_here.polarity_set = _true; }
+            }
+
+            return dirward_here;
         }
     }
 

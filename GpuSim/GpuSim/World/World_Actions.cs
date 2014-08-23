@@ -148,6 +148,7 @@ namespace GpuSim
             DataGroup.OuterGeo.Clear();
             DataGroup.TempGeo.Clear();
             DataGroup.GeoInfo.Clear();
+            foreach (var dir in Dir.Vals) DataGroup.Dirward[dir].Clear();
             UpdateGeo(false);
             UpdateGeo(true);
         }
@@ -228,6 +229,12 @@ namespace GpuSim
                     CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.ShiftedGeoInfo);
 
                     Geodesic_Polarity.Apply(DataGroup.Dirward[dir], DataGroup.Geo, DataGroup.ShiftedGeo, DataGroup.GeoInfo, DataGroup.ShiftedGeoInfo, dir, Output: DataGroup.Temp1);
+                    DataGroup.Dirward[dir] = CoreMath.SwapReturn(ref DataGroup.Temp1, DataGroup.Dirward[dir]);
+                }
+
+                for (int i = 0; i < 50; i++)
+                {
+                    Geodesic_FillMissingPolarity.Apply(DataGroup.Dirward[dir], DataGroup.Geo, Output: DataGroup.Temp1);
                     DataGroup.Dirward[dir] = CoreMath.SwapReturn(ref DataGroup.Temp1, DataGroup.Dirward[dir]);
                 }
             }

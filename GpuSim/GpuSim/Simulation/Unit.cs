@@ -54,14 +54,14 @@ namespace GpuSim
         [Hlsl("rg")]
         public vec2 geo_id { get { return rg; } set { rg = value; } }
 
+        [Hlsl("g")]
+        public float polarity_set { get { return g; } set { g = value; } }
+
         [Hlsl("b")]
         public float dist_to_wall { get { return b; } set { b = value; } }
 
         [Hlsl("a")]
         public float polarity { get { return a; } set { a = value; } }
-
-        //[Hlsl("ba")]
-        //public vec2 wall_pos_storage { get { return ba; } set { ba = value; } }
     }
 
     [Copy(typeof(vec4))]

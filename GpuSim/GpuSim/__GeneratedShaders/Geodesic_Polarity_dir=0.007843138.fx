@@ -147,9 +147,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         counterclockwise = -(diff);
     }
     float4 output = float4(0, 0, 0, 0);
-    output.a = 1;
     output.a = clockwise > counterclockwise + .001 ? 0 : 1;
-    output.rg = float2(1, 1);
+    output.g = 0.003921569;
     __FinalOutput.Color = output;
     return __FinalOutput;
 }
