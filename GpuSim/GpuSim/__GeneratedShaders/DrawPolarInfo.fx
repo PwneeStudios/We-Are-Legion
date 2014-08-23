@@ -78,6 +78,26 @@ float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size
     return coords - float2(i, j);
 }
 
+float4 GpuSim__DrawDebugInfo__DrawDebugInfoTile(VertexToPixel psin, float index_x, float index_y, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float2 SpriteSize)
+{
+    float4 clr = float4(0.0, 0.0, 0.0, 0.0);
+    if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
+    {
+        return clr;
+    }
+    pos = pos * 0.98 + float2(0.01, 0.01);
+    pos.x += index_x;
+    pos.y += index_y;
+    pos *= SpriteSize;
+    clr += tex2D(Texture, pos);
+    return clr;
+}
+
+float4 GpuSim__DrawDebugInfo__DrawDebugNum(VertexToPixel psin, float num, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+{
+    return GpuSim__DrawDebugInfo__DrawDebugInfoTile(psin, num, 0.0, pos, Texture, Texture_size, Texture_dxdy, float2(1.0 / 128, 1.0 / 4));
+}
+
 float GpuSim__SimShader__unpack_val(float2 packed)
 {
     float coord = 0;
@@ -106,6 +126,21 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy);
     float dist = 0;
     float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Geo_size);
+    if (here.r > 0.0 + .001)
+    {
+        if (all(subcell_pos > float2(0.5, 0.5) + .001))
+        {
+            float2 subcell_pos_1 = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Geo_size * 2);
+            output += GpuSim__DrawDebugInfo__DrawDebugNum(psin, GpuSim__SimShader__unpack_val(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).xy), subcell_pos_1, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy) * float4(1, 0.5019608, 0.5019608, 1.0);
+        }
+        if (all(subcell_pos < float2(0.5, 0.5) - .001))
+        {
+            float2 subcell_pos_2 = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Geo_size * 2);
+            output += GpuSim__DrawDebugInfo__DrawDebugNum(psin, GpuSim__SimShader__unpack_val(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).zw), subcell_pos_2, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy) * float4(1, 0.5019608, 0.5019608, 1.0);
+        }
+        __FinalOutput.Color = output;
+        return __FinalOutput;
+    }
     if (subcell_pos.y > 0.5 + .001)
     {
         dist = GpuSim__SimShader__unpack_val(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).xy);

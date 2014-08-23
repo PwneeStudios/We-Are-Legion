@@ -68,12 +68,7 @@ float2 FragSharpFramework__FragSharpStd__fmod(float2 dividend, float divider)
     return float2(fmod(dividend.x, divider), fmod(dividend.y, divider));
 }
 
-float FragSharpFramework__FragSharpStd__Float(float v)
-{
-    return floor(255 * v + 0.5);
-}
-
-float4 GpuSim__DrawDebugInfo__DrawDebugInfoTile(VertexToPixel psin, float dir, float val, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 GpuSim__DrawDebugInfo__DrawDebugInfoTile(VertexToPixel psin, float index_x, float index_y, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float2 SpriteSize)
 {
     float4 clr = float4(0.0, 0.0, 0.0, 0.0);
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
@@ -81,11 +76,21 @@ float4 GpuSim__DrawDebugInfo__DrawDebugInfoTile(VertexToPixel psin, float dir, f
         return clr;
     }
     pos = pos * 0.98 + float2(0.01, 0.01);
-    pos.x += FragSharpFramework__FragSharpStd__Float(val);
-    pos.y += FragSharpFramework__FragSharpStd__Float(dir - 0.003921569);
-    pos *= float2(1.0 / 32, 1.0 / 4);
+    pos.x += index_x;
+    pos.y += index_y;
+    pos *= SpriteSize;
     clr += tex2D(Texture, pos);
     return clr;
+}
+
+float FragSharpFramework__FragSharpStd__Float(float v)
+{
+    return floor(255 * v + 0.5);
+}
+
+float4 GpuSim__DrawDebugInfo__DrawDebugArrow(VertexToPixel psin, float dir, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+{
+    return GpuSim__DrawDebugInfo__DrawDebugInfoTile(psin, 0.0, FragSharpFramework__FragSharpStd__Float(dir - 0.003921569), pos, Texture, Texture_size, Texture_dxdy, float2(1.0 / 32, 1.0 / 4));
 }
 
 // Compiled vertex shader
@@ -114,7 +119,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         output.g += guid.y;
         output.a = 1.0;
         output.rgb *= output.a;
-        output *= GpuSim__DrawDebugInfo__DrawDebugInfoTile(psin, here.r, 0, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+        output *= GpuSim__DrawDebugInfo__DrawDebugArrow(psin, here.r, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
     __FinalOutput.Color = output;
     return __FinalOutput;

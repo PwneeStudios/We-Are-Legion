@@ -483,9 +483,17 @@ namespace GpuSim
                 Count = _9;
         }
 
-        public static class DebugInfoSpriteSheet
+        public static class DebugArrowsSpriteSheet
         {
             public const int SheetDimX = 32;
+            public const int SheetDimY = 4;
+            public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
+            public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
+        }
+
+        public static class DebugNumSpriteSheet
+        {
+            public const int SheetDimX = 128;
             public const int SheetDimY = 4;
             public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
             public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);

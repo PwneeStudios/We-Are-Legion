@@ -4,7 +4,7 @@ namespace GpuSim
 {
     public partial class DrawDebugInfo : BaseShader
     {
-        protected color DrawDebugInfoTile(float dir, float val, vec2 pos, PointSampler Texture)
+        protected color DrawDebugInfoTile(float index_x, float index_y, vec2 pos, PointSampler Texture, vec2 SpriteSize)
         {
             color clr = color.TransparentBlack;
 
@@ -13,13 +13,23 @@ namespace GpuSim
 
             pos = pos * .98f + vec(.01f, .01f);
 
-            pos.x += Float(val);
-            pos.y += Float(dir - _1);
-            pos *= DebugInfoSpriteSheet.SpriteSize;
+            pos.x += index_x;
+            pos.y += index_y;
+            pos *= SpriteSize;
 
             clr += Texture[pos];
 
             return clr;
+        }
+
+        protected color DrawDebugArrow(float dir, vec2 pos, PointSampler Texture)
+        {
+            return DrawDebugInfoTile(_0, Float(dir - _1), pos, Texture, DebugArrowsSpriteSheet.SpriteSize);
+        }
+
+        protected color DrawDebugNum(float num, vec2 pos, PointSampler Texture)
+        {
+            return DrawDebugInfoTile(num, _0, pos, Texture, DebugNumSpriteSheet.SpriteSize);
         }
     }
 
@@ -50,7 +60,7 @@ namespace GpuSim
                 output.rgb *= output.a;
 
                 // Draw arrow over
-                output *= DrawDebugInfoTile(here.dir, 0, subcell_pos, Texture);
+                output *= DrawDebugArrow(here.dir, subcell_pos, Texture);
             }            
 
             return output;
@@ -99,6 +109,25 @@ namespace GpuSim
             float dist = 0;
             
             vec2 subcell_pos = get_subcell_pos(vertex, Geo.Size);
+
+            if (here.dir > _0)
+            {
+                if (subcell_pos > vec(.5f, .5f))
+                {
+                    vec2 subcell_pos_1 = get_subcell_pos(vertex, Geo.Size * 2);
+                    output += DrawDebugNum(unpack_val(PolarDistance[Here].xy), subcell_pos_1, Texture) * rgb(0xFF8080);
+                }
+
+                if (subcell_pos < vec(.5f, .5f))
+                {
+                    vec2 subcell_pos_2 = get_subcell_pos(vertex, Geo.Size * 2);
+                    output += DrawDebugNum(unpack_val(PolarDistance[Here].zw), subcell_pos_2, Texture) * rgb(0xFF8080);
+                }
+
+                return output;
+            }
+
+
 
             if (subcell_pos.y > .5)
                 dist = unpack_val(PolarDistance[Here].xy);

@@ -143,8 +143,15 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Art\DebugInfo.png">
-      <Name>DebugInfo</Name>
+    <Compile Include="Art\Debug_Num.png">
+      <Name>Debug_Num</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Art\Debug_Arrows.png">
+      <Name>Debug_Arrows</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

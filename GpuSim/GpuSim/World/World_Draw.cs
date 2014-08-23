@@ -92,11 +92,11 @@ namespace GpuSim
             DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, Assets.TileSpriteSheet, MapEditor && DrawGridLines);
             GridHelper.DrawGrid();
 
-            //DrawGeoInfo.Using(camvec, CameraAspect, DataGroup.Geo, Assets.DebugInfoTexture);
-            //DrawGeoInfo.Using(camvec, CameraAspect, DataGroup.AntiGeo, Assets.DebugInfoTexture);
-            DrawDirwardInfo.Using(camvec, CameraAspect, DataGroup.Dirward[Dir.Down], Assets.DebugInfoTexture);
-            //DrawPolarInfo.Using(camvec, CameraAspect, DataGroup.Geo, DataGroup.GeoInfo, Assets.DebugInfoTexture);
-            GridHelper.DrawGrid();
+            //DrawGeoInfo.Using(camvec, CameraAspect, DataGroup.Geo, Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
+            //DrawGeoInfo.Using(camvec, CameraAspect, DataGroup.AntiGeo, Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
+            DrawDirwardInfo.Using(camvec, CameraAspect, DataGroup.Dirward[Dir.Down], Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
+            DrawPolarInfo.Using(camvec, CameraAspect, DataGroup.Geo, DataGroup.GeoInfo, Assets.DebugTexture_Num); GridHelper.DrawGrid();
+            
 
             //DrawGrass.Using(camvec, CameraAspect, Assets.GroundTexture);
             //Ground.Draw(GameClass.Graphics);

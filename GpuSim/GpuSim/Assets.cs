@@ -6,7 +6,7 @@ namespace GpuSim
     public static class Assets
     {
         public static Texture2D
-            DebugInfoTexture,
+            DebugTexture_Arrows, DebugTexture_Num,
 
             BuildingTexture_1,
             ExplosionTexture_1,
@@ -20,7 +20,8 @@ namespace GpuSim
 
         public static void Initialize()
         {
-            DebugInfoTexture = Content.Load<Texture2D>("Art\\DebugInfo");
+            DebugTexture_Arrows = Content.Load<Texture2D>("Art\\Debug_Arrows");
+            DebugTexture_Num = Content.Load<Texture2D>("Art\\Debug_Num");
 
             BuildingTexture_1 = Content.Load<Texture2D>("Art\\Buildings_1");
             ExplosionTexture_1 = Content.Load<Texture2D>("Art\\BuildingExplosion_1");
