@@ -78,6 +78,12 @@ namespace GpuSim
                 output.rgb *= output.a;
             }
 
+            // Draw polarity only
+            if (ValidDirward(here))
+            {
+                return here.polarity > .5 ? vec(1, 0, 0, 1) : vec(0, 1, 0, 1);
+            }
+
             return output;
         }
     }

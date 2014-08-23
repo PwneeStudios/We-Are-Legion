@@ -122,6 +122,7 @@
     <Compile Include="MouseActions\SpawnUnits.cs" />
     <Compile Include="Render.cs" />
     <Compile Include="DataGroup\BuildingUpdate.cs" />
+    <Compile Include="Util\ShaderUtil.cs" />
     <Compile Include="World\World_Util.cs" />
     <Compile Include="World\World_Update.cs" />
     <Compile Include="World\World_Draw.cs" />

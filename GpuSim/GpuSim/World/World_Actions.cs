@@ -147,7 +147,7 @@ namespace GpuSim
             DataGroup.MockTiles.Clear();
             DataGroup.OuterGeo.Clear();
             DataGroup.TempGeo.Clear();
-            DataGroup.PolarDistance.Clear();
+            DataGroup.GeoInfo.Clear();
             UpdateGeo(false);
             UpdateGeo(true);
         }
@@ -200,20 +200,41 @@ namespace GpuSim
             SwapTempGeo(Anti);
         }
 
-        void CalculatePolarDistance(bool Anti)
+        void CalculatePolarDistance()
         {
-            SwapTempGeo(Anti);
-
             for (int i = 0; i < 1024; i++)
             {
-                Geodesic_PolarDistance.Apply(DataGroup.TempGeo, DataGroup.PolarDistance, Output: DataGroup.Temp1);
-                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PolarDistance);
+                Geodesic_PolarDistance.Apply(DataGroup.Geo, DataGroup.GeoInfo, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.GeoInfo);
             }
 
-            Geodesic_SetCircumference.Apply(DataGroup.TempGeo, DataGroup.PolarDistance, Output: DataGroup.Temp1);
-            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PolarDistance);
+            Geodesic_SetCircumference.Apply(DataGroup.Geo, DataGroup.GeoInfo, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.GeoInfo);
 
-            SwapTempGeo(Anti);
+
+            var dir = Dir.Down;
+            //foreach (var dir in Dir.Vals)
+            {
+                Identity.Apply(DataGroup.Geo, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.ShiftedGeo);
+                Identity.Apply(DataGroup.GeoInfo, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.ShiftedGeoInfo);
+
+
+                for (int i = 0; i < 256; i++)
+                //for (int i = 0; i < 1; i++)
+                {
+                    Shift.Apply(DataGroup.ShiftedGeo, dir, Output: DataGroup.Temp1);
+                    CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.ShiftedGeo);
+                    Shift.Apply(DataGroup.ShiftedGeoInfo, dir, Output: DataGroup.Temp1);
+                    CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.ShiftedGeoInfo);
+
+                    Geodesic_Polarity.Apply(DataGroup.Dirward[dir], DataGroup.Geo, DataGroup.ShiftedGeo, DataGroup.GeoInfo, DataGroup.ShiftedGeoInfo, dir, Output: DataGroup.Temp1);
+                    DataGroup.Dirward[dir] = CoreMath.SwapReturn(ref DataGroup.Temp1, DataGroup.Dirward[dir]);
+                }
+            }
+            // probably want a larger total shift than 256 eventually, but keep it less than the width of the map (maybe width minus 1, to avoid boundary condition)
+            // set signal on movement data output once polarity is set, then capture signal and store polarity and geo_id
         }
 
         void DirwardExtend(bool Anti)
@@ -313,20 +334,17 @@ namespace GpuSim
                     foreach (bool polarity in Vals.Bool)
                     {
                         PropagateFullGeoId(polarity);
-                        //SetReducedGeoId(polarity);
-                        //CalculatePolarDistance(polarity);
-                        //GrowGeo(polarity);
                     }
 
-                    CalculatePolarDistance(false);
+                    CalculatePolarDistance();
 
                     foreach (bool polarity in Vals.Bool)
                     {
                         SetReducedGeoId(polarity);
-                        GrowGeo(polarity);
+                        //GrowGeo(polarity);
                     }
 
-                    DirwardExtend(false);
+                    //DirwardExtend(false);
                 }
 
                 if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())

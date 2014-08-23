@@ -100,6 +100,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         output.a = 1.0;
         output.rgb *= output.a;
     }
+    if (GpuSim__SimShader__ValidDirward(here))
+    {
+        __FinalOutput.Color = here.a > 0.5 + .001 ? float4(1, 0, 0, 1) : float4(0, 1, 0, 1);
+        return __FinalOutput;
+    }
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

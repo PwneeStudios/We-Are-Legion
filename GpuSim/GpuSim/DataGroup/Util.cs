@@ -27,6 +27,11 @@ namespace GpuSim
             return (color)ReducedData[0];
         }
 
+        public void CopyFromTo(RenderTarget2D Source, ref RenderTarget2D Destination)
+        {
+            Identity.CopyFromTo(Source, ref Destination, ref Temp1);
+        }
+
         void Swap<T>(ref T a, ref T b)
         {
             T temp = a;

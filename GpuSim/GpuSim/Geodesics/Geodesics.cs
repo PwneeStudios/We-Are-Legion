@@ -372,6 +372,52 @@ namespace GpuSim
         }
     }
 
+    public partial class Geodesic_Polarity : SimShader
+    {
+        [FragmentShader]
+        dirward FragmentShader(VertexOut vertex, Field<dirward> Dirward, Field<geo> Geo, Field<geo> ShiftedGeo, Field<vec4> Info, Field<vec4> ShiftedInfo, [Dir.Vals] float dir)
+        {
+            geo
+                geo_here  =        Geo[Here],
+                geo_shift = ShiftedGeo[Here];
+
+            if (geo_here.dir == _0) return dirward.Nothing;
+
+            vec4
+                info_here  =        Info[Here],
+                info_shift = ShiftedInfo[Here];
+
+            if (geo_here.pos_storage != geo_shift.pos_storage) return Dirward[Here];
+
+            float
+                dist_here  = unpack_val(info_here.xy),
+                dist_shift = unpack_val(info_shift.xy),
+                circum     = unpack_val(info_here.zw);
+
+            float diff = dist_here - dist_shift;
+            float complement = circum - diff;
+
+            float clockwise = 0, counterclockwise = 0;
+            if (diff > 0)
+            {
+                clockwise = diff;
+                counterclockwise = complement;
+            }
+            else
+            {
+                clockwise = complement;
+                counterclockwise = diff;
+            }            
+
+            dirward output = dirward.Nothing;
+            output.polarity = 1;
+            output.polarity = clockwise > counterclockwise ? 0 : 1;
+            output.geo_id = vec(1,1); // WARNING
+
+            return output;
+        }
+    }
+
     public partial class Geodesic_DirwardExtend : SimShader
     {
         [FragmentShader]
