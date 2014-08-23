@@ -395,18 +395,17 @@ namespace GpuSim
                 circum     = unpack_val(info_here.zw);
 
             float diff = dist_here - dist_shift;
-            float complement = circum - diff;
 
             float clockwise = 0, counterclockwise = 0;
             if (diff > 0)
             {
                 clockwise = diff;
-                counterclockwise = complement;
+                counterclockwise = circum - diff;
             }
             else
             {
-                clockwise = complement;
-                counterclockwise = diff;
+                clockwise = circum + diff;
+                counterclockwise = -diff;
             }            
 
             dirward output = dirward.Nothing;

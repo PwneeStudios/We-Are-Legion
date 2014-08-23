@@ -135,17 +135,16 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     float dist_here = GpuSim__SimShader__unpack_val(info_here.xy), dist_shift = GpuSim__SimShader__unpack_val(info_shift.xy), circum = GpuSim__SimShader__unpack_val(info_here.zw);
     float diff = dist_here - dist_shift;
-    float complement = circum - diff;
     float clockwise = 0, counterclockwise = 0;
     if (diff > 0 + .001)
     {
         clockwise = diff;
-        counterclockwise = complement;
+        counterclockwise = circum - diff;
     }
     else
     {
-        clockwise = complement;
-        counterclockwise = diff;
+        clockwise = circum + diff;
+        counterclockwise = -(diff);
     }
     float4 output = float4(0, 0, 0, 0);
     output.a = 1;
