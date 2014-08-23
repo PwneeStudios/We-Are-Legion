@@ -368,7 +368,7 @@ float GpuSim__SimShader__RndFint(float rnd, float f1, float f2)
 
 void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel psin, VertexToPixel vertex, sampler Current, float2 Current_size, float2 Current_dxdy, sampler Previous, float2 Previous_size, float2 Previous_dxdy, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, sampler RandomField, float2 RandomField_size, float2 RandomField_dxdy, sampler Geo, float2 Geo_size, float2 Geo_dxdy, sampler AntiGeo, float2 AntiGeo_size, float2 AntiGeo_dxdy, sampler DirwardRight, float2 DirwardRight_size, float2 DirwardRight_dxdy, sampler DirwardLeft, float2 DirwardLeft_size, float2 DirwardLeft_dxdy, sampler DirwardUp, float2 DirwardUp_size, float2 DirwardUp_dxdy, sampler DirwardDown, float2 DirwardDown_size, float2 DirwardDown_dxdy, float4 data, inout float4 here, inout float4 extra_here)
 {
-    float dir = 0;
+    float dir1 = 0.0, dir2 = 0.0;
     float4 target = tex2D(TargetData, psin.TexCoords + (float2(0, 0)) * TargetData_dxdy);
     float2 CurPos = floor((vertex.TexCoords * TargetData_size + float2(0.5, 0.5)));
     float2 Destination = floor(GpuSim__SimShader__unpack_vec2(target));
@@ -376,46 +376,45 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
     float4 prev_right = tex2D(Previous, psin.TexCoords + (float2(1, 0)) * Previous_dxdy), prev_up = tex2D(Previous, psin.TexCoords + (float2(0, 1)) * Previous_dxdy), prev_left = tex2D(Previous, psin.TexCoords + (float2(-(1), 0)) * Previous_dxdy), prev_down = tex2D(Previous, psin.TexCoords + (float2(0, -(1))) * Previous_dxdy);
     if (Destination.x > CurPos.x + 0.75 + .001)
     {
-        dir = 0.003921569;
+        dir1 = 0.003921569;
     }
     if (Destination.x < CurPos.x - 0.75 - .001)
     {
-        dir = 0.01176471;
+        dir1 = 0.01176471;
     }
     if (Destination.y > CurPos.y + 0.75 + .001)
     {
-        dir = 0.007843138;
+        dir1 = 0.007843138;
     }
     if (Destination.y < CurPos.y - 0.75 - .001)
     {
-        dir = 0.01568628;
+        dir1 = 0.01568628;
     }
     float2 diff = Destination - CurPos;
     float2 mag = abs(diff);
-    float dir2 = 0.0;
-    bool blocked = false;
+    bool blocked1 = false;
     if (mag.x > mag.y + .001 && Destination.x > CurPos.x + 1 + .001)
     {
-        dir = 0.003921569;
-        blocked = GpuSim__SimShader__Something(right) || GpuSim__SimShader__Something(prev_right);
+        dir1 = 0.003921569;
+        blocked1 = GpuSim__SimShader__Something(right) || GpuSim__SimShader__Something(prev_right);
     }
     if (mag.y > mag.x + .001 && Destination.y > CurPos.y + 1 + .001)
     {
-        dir = 0.007843138;
-        blocked = GpuSim__SimShader__Something(up) || GpuSim__SimShader__Something(prev_up);
+        dir1 = 0.007843138;
+        blocked1 = GpuSim__SimShader__Something(up) || GpuSim__SimShader__Something(prev_up);
     }
     if (mag.x > mag.y + .001 && Destination.x < CurPos.x - 1 - .001)
     {
-        dir = 0.01176471;
-        blocked = GpuSim__SimShader__Something(left) || GpuSim__SimShader__Something(prev_left);
+        dir1 = 0.01176471;
+        blocked1 = GpuSim__SimShader__Something(left) || GpuSim__SimShader__Something(prev_left);
     }
     if (mag.y > mag.x + .001 && Destination.y < CurPos.y - 1 - .001)
     {
-        dir = 0.01568628;
-        blocked = GpuSim__SimShader__Something(down) || GpuSim__SimShader__Something(prev_down);
+        dir1 = 0.01568628;
+        blocked1 = GpuSim__SimShader__Something(down) || GpuSim__SimShader__Something(prev_down);
     }
     bool blocked2 = false;
-    if (abs(dir - 0.003921569) < .001 || abs(dir - 0.01176471) < .001)
+    if (abs(dir1 - 0.003921569) < .001 || abs(dir1 - 0.01176471) < .001)
     {
         if (Destination.y > CurPos.y + 0 + .001)
         {
@@ -431,7 +430,7 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
             }
         }
     }
-    if (abs(dir - 0.007843138) < .001 || abs(dir - 0.01568628) < .001)
+    if (abs(dir1 - 0.007843138) < .001 || abs(dir1 - 0.01568628) < .001)
     {
         if (Destination.x > CurPos.x + 0 + .001)
         {
@@ -447,23 +446,39 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
             }
         }
     }
-    float4 geo_here = tex2D(AntiGeo, psin.TexCoords + (float2(0, 0)) * AntiGeo_dxdy);
     float2 pos_here = vertex.TexCoords * Geo_size;
-    float4 dirward_here = float4(0, 0, 0, 0);
+    float4 dirward_here1 = float4(0, 0, 0, 0);
     float4 dirward_here2 = float4(0, 0, 0, 0);
-    bool other_side = GpuSim__Movement_UpdateDirection_RemoveDead__GetDirward(psin, dirward_here, dir, Destination, pos_here, DirwardRight, DirwardRight_size, DirwardRight_dxdy, DirwardLeft, DirwardLeft_size, DirwardLeft_dxdy, DirwardUp, DirwardUp_size, DirwardUp_dxdy, DirwardDown, DirwardDown_size, DirwardDown_dxdy);
+    bool other_side1 = GpuSim__Movement_UpdateDirection_RemoveDead__GetDirward(psin, dirward_here1, dir1, Destination, pos_here, DirwardRight, DirwardRight_size, DirwardRight_dxdy, DirwardLeft, DirwardLeft_size, DirwardLeft_dxdy, DirwardUp, DirwardUp_size, DirwardUp_dxdy, DirwardDown, DirwardDown_size, DirwardDown_dxdy);
     bool other_side2 = GpuSim__Movement_UpdateDirection_RemoveDead__GetDirward(psin, dirward_here2, dir2, Destination, pos_here, DirwardRight, DirwardRight_size, DirwardRight_dxdy, DirwardLeft, DirwardLeft_size, DirwardLeft_dxdy, DirwardUp, DirwardUp_size, DirwardUp_dxdy, DirwardDown, DirwardDown_size, DirwardDown_dxdy);
-    float2 geo_id = geo_here.ba;
-    bool use_simple_pathing = false;
-    if (geo_here.r > 0 + .001 && (GpuSim__SimShader__ValidDirward(dirward_here) && other_side && all(abs(dirward_here.rg - geo_id) < .001) && (abs(geo_here.g - 0.0) < .001 || blocked && other_side) || GpuSim__SimShader__ValidDirward(dirward_here2) && other_side2 && all(abs(dirward_here2.rg - geo_id) < .001) && (abs(geo_here.g - 0.0) < .001 || blocked2 && other_side2)))
+    float polarity1 = dirward_here1.a, polarity2 = dirward_here2.a, chosen_polarity = -(1);
+    float4 geo_here = tex2D(Geo, psin.TexCoords + (float2(0, 0)) * Geo_dxdy), antigeo_here = tex2D(AntiGeo, psin.TexCoords + (float2(0, 0)) * AntiGeo_dxdy);
+    if (all(abs(extra_here.rg - geo_here.ba) < .001) && abs(extra_here.b - 0.003921569) < .001)
     {
-        dir = geo_here.r;
+        polarity1 = extra_here.a;
+        polarity2 = extra_here.a;
+    }
+    float4 geo1 = abs(polarity1 - 1) < .001 ? antigeo_here : geo_here, geo2 = abs(polarity2 - 1) < .001 ? antigeo_here : geo_here;
+    float2 geo_id = geo1.ba;
+    bool use_simple_pathing = false;
+    if (geo1.r > 0 + .001 && GpuSim__SimShader__ValidDirward(dirward_here1) && other_side1 && all(abs(dirward_here1.rg - geo_id) < .001) && (abs(geo1.g - 0.0) < .001 || blocked1 && other_side1))
+    {
+        dir1 = geo1.r;
+        chosen_polarity = polarity1;
     }
     else
     {
-        use_simple_pathing = true;
+        if (geo2.r > 0 + .001 && GpuSim__SimShader__ValidDirward(dirward_here2) && other_side2 && all(abs(dirward_here2.rg - geo_id) < .001) && (abs(geo2.g - 0.0) < .001 || blocked2 && other_side2))
+        {
+            dir1 = geo2.r;
+            chosen_polarity = other_side1 ? polarity1 : polarity2;
+        }
+        else
+        {
+            use_simple_pathing = true;
+        }
     }
-    if (GpuSim__SimShader__Something(tex2D(Current, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(dir)) * Current_dxdy)))
+    if (GpuSim__SimShader__Something(tex2D(Current, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(dir1)) * Current_dxdy)))
     {
         use_simple_pathing = true;
     }
@@ -471,29 +486,33 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
     {
         if ((mag.x > mag.y + .001 || diff.y > 0 + .001 && GpuSim__SimShader__Something(up) || diff.y < 0 - .001 && GpuSim__SimShader__Something(down)) && Destination.x > CurPos.x + 1 + .001 && !(GpuSim__SimShader__Something(right)))
         {
-            dir = 0.003921569;
+            dir1 = 0.003921569;
         }
         if ((mag.y > mag.x + .001 || diff.x > 0 + .001 && GpuSim__SimShader__Something(right) || diff.x < 0 - .001 && GpuSim__SimShader__Something(left)) && Destination.y > CurPos.y + 1 + .001 && !(GpuSim__SimShader__Something(up)))
         {
-            dir = 0.007843138;
+            dir1 = 0.007843138;
         }
         if ((mag.x > mag.y + .001 || diff.y > 0 + .001 && GpuSim__SimShader__Something(up) || diff.y < 0 - .001 && GpuSim__SimShader__Something(down)) && Destination.x < CurPos.x - 1 - .001 && !(GpuSim__SimShader__Something(left)))
         {
-            dir = 0.01176471;
+            dir1 = 0.01176471;
         }
         if ((mag.y > mag.x + .001 || diff.x > 0 + .001 && GpuSim__SimShader__Something(right) || diff.x < 0 - .001 && GpuSim__SimShader__Something(left)) && Destination.y < CurPos.y - 1 - .001 && !(GpuSim__SimShader__Something(down)))
         {
-            dir = 0.01568628;
+            dir1 = 0.01568628;
         }
     }
     float4 rnd = tex2D(RandomField, psin.TexCoords + (float2(0, 0)) * RandomField_dxdy);
-    if (GpuSim__SimShader__IsValid(dir) && rnd.x < 0.1 - .001 && GpuSim__SimShader__Something(tex2D(Current, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(dir)) * Current_dxdy)))
+    if (GpuSim__SimShader__IsValid(dir1) && rnd.x < 0.1 - .001 && GpuSim__SimShader__Something(tex2D(Current, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(dir1)) * Current_dxdy)))
     {
-        dir = GpuSim__SimShader__RndFint(rnd.y, 0.003921569, 0.01568628);
+        dir1 = GpuSim__SimShader__RndFint(rnd.y, 0.003921569, 0.01568628);
     }
-    if (GpuSim__SimShader__IsValid(dir))
+    if (GpuSim__SimShader__IsValid(dir1))
     {
-        here.r = dir;
+        here.r = dir1;
+        if (chosen_polarity >= 0 - .001 && !(use_simple_pathing))
+        {
+            here.g += abs(chosen_polarity - 1) < .001 ? 0.3921569 : 0.03921569;
+        }
     }
     else
     {

@@ -178,6 +178,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     if (geo_here.r > 0 + .001 && GpuSim__SimShader__IsBlockingTile(tex2D(fs_param_Tiles, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(0.01176471)) * fs_param_Tiles_dxdy)))
     {
+        output = dirward_here;
         output.rg = geo_here.ba;
         output.b = 0.0;
     }

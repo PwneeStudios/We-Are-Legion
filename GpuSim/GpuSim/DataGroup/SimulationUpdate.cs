@@ -25,6 +25,11 @@ namespace GpuSim
                                                       Output: Temp1);
             Swap(ref CurrentData, ref Temp1);
 
+            Movement_SetPolarity_Phase1.Apply(CurrentData, Extra, Geo, AntiGeo, Output: Temp1);
+            Swap(ref Extra, ref Temp1);
+            Movement_SetPolarity_Phase2.Apply(CurrentData, Output: Temp1);
+            Swap(ref CurrentData, ref Temp1);
+
             Movement_Phase1.Apply(CurrentData, RandomField, Output: Temp1);
             Movement_Phase2.Apply(CurrentData, Temp1, Output: Temp2);
 

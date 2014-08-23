@@ -37,29 +37,7 @@ sampler fs_param_Data : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Extra, using register location 2
-float2 fs_param_Extra_size;
-float2 fs_param_Extra_dxdy;
-
-Texture fs_param_Extra_Texture;
-sampler fs_param_Extra : register(s2) = sampler_state
-{
-    texture   = <fs_param_Extra_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-float2 fs_param_Destination;
-
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__selected(float4 u)
-{
-    float val = u.b;
-    return val >= 0.5019608 - .001;
-}
 
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
@@ -75,13 +53,19 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 extra_here = tex2D(fs_param_Extra, psin.TexCoords + (float2(0, 0)) * fs_param_Extra_dxdy);
-    if (GpuSim__SimShader__selected(here))
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    if (data_here.g >= 0.3921569 - .001)
     {
-        extra_here = float4(0, 0, 0, 0);
+        data_here.g -= 0.3921569;
     }
-    __FinalOutput.Color = extra_here;
+    else
+    {
+        if (data_here.g >= 0.03921569 - .001)
+        {
+            data_here.g -= 0.03921569;
+        }
+    }
+    __FinalOutput.Color = data_here;
     return __FinalOutput;
 }
 

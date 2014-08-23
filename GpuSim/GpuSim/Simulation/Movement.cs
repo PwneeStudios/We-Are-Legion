@@ -110,95 +110,6 @@ namespace GpuSim
         }
     }
 
-    public partial class Movement_UpdateDirection_WithAaPathfinding : SimShader
-    {
-        [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<data> TargetData, Field<unit> Data, Field<extra> Extra, Field<data> Current, Field<data> Paths_Right, Field<data> Paths_Left, Field<data> Paths_Up, Field<data> Paths_Down)
-        {
-            data here = Current[Here];
-            extra extra_here = Extra[Here];
-
-            if (Something(here))
-            {
-                data path = data.Nothing;
-
-                data
-                    right = Current[RightOne],
-                    up    = Current[UpOne],
-                    left  = Current[LeftOne],
-                    down  = Current[DownOne];
-
-                data
-                    right_path = Paths_Right[Here],
-                    up_path    = Paths_Up   [Here],
-                    left_path  = Paths_Left [Here],
-                    down_path  = Paths_Down [Here];
-
-                data target      = TargetData[Here];
-                unit data_here   = Data[Here];
-                vec2 Destination = unpack_vec2((vec4)target);
-
-                float cur_angle    = atan(vertex.TexCoords.y - Destination.y * TargetData.DxDy.y, vertex.TexCoords.x - Destination.x * TargetData.DxDy.x);
-                cur_angle          = (cur_angle + 3.14159f) / (2 * 3.14159f);
-                float target_angle = extra_here.target_angle;
-
-                if (Destination.x > vertex.TexCoords.x * TargetData.Size.x)
-                {
-                    path = right_path;
-
-                    if (Destination.y < vertex.TexCoords.y * TargetData.Size.y)
-                    {
-                        if (cur_angle < target_angle || right_path.direction == Dir.Right && Something(right))
-                        {
-                            path = down_path;
-                            if (Something(down))
-                                path = right_path;
-                        }
-                    }
-                    else
-                    {
-                        if (cur_angle > target_angle || right_path.direction == Dir.Right && Something(right))
-                        {
-                            path = up_path;
-                            if (Something(up))
-                                path = right_path;
-                        }
-                    }
-                }
-                else
-                {
-                    path = left_path;
-
-                    if (Destination.y < vertex.TexCoords.y * TargetData.Size.y)
-                    {
-                        if (cur_angle > target_angle || left_path.direction == Dir.Left && Something(left))
-                        {
-                            path = down_path;
-                            if (Something(down))
-                                path = left_path;
-                        }
-                    }
-                    else
-                    {
-                        if (cur_angle < target_angle || left_path.direction == Dir.Left && Something(left))
-                        {
-                            path = up_path;
-                            if (Something(up))
-                                path = left_path;
-                        }
-                    }
-                }
-
-                if ((path.g > 1 || path.b > 1) && IsValid(path.direction))
-                {
-                    here.direction = path.direction;
-                }
-            }
-
-            return here;
-        }
-    }
-
     public partial class Movement_UpdateDirection_RemoveDead : SimShader
     {
         [FragmentShader]
@@ -331,7 +242,9 @@ namespace GpuSim
                            Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown,
                            unit data, ref data here, ref extra extra_here)
         {
-            float dir = 0;
+            float
+                dir1 = Dir.None,
+                dir2 = Dir.None;
 
             vec4 target = TargetData[Here];
 
@@ -352,62 +265,82 @@ namespace GpuSim
                 prev_left  = Previous[LeftOne],
                 prev_down  = Previous[DownOne];
 
-            if (Destination.x > CurPos.x + .75f) dir = Dir.Right;
-            if (Destination.x < CurPos.x - .75f) dir = Dir.Left;
-            if (Destination.y > CurPos.y + .75f) dir = Dir.Up;
-            if (Destination.y < CurPos.y - .75f) dir = Dir.Down;
+            if (Destination.x > CurPos.x + .75f) dir1 = Dir.Right;
+            if (Destination.x < CurPos.x - .75f) dir1 = Dir.Left;
+            if (Destination.y > CurPos.y + .75f) dir1 = Dir.Up;
+            if (Destination.y < CurPos.y - .75f) dir1 = Dir.Down;
 
             
             vec2 diff = Destination - CurPos;
             vec2 mag = abs(diff);
 
-            float dir2 = Dir.None;
-            bool blocked = false;
-            if (mag.x > mag.y && Destination.x > CurPos.x + 1) { dir = Dir.Right; blocked = Something(right) || Something(prev_right); }
-            if (mag.y > mag.x && Destination.y > CurPos.y + 1) { dir = Dir.Up;    blocked = Something(up)    || Something(prev_up); }
-            if (mag.x > mag.y && Destination.x < CurPos.x - 1) { dir = Dir.Left;  blocked = Something(left)  || Something(prev_left); }
-            if (mag.y > mag.x && Destination.y < CurPos.y - 1) { dir = Dir.Down;  blocked = Something(down)  || Something(prev_down); }
+            bool blocked1 = false;
+            if (mag.x > mag.y && Destination.x > CurPos.x + 1) { dir1 = Dir.Right; blocked1 = Something(right) || Something(prev_right); }
+            if (mag.y > mag.x && Destination.y > CurPos.y + 1) { dir1 = Dir.Up;    blocked1 = Something(up)    || Something(prev_up); }
+            if (mag.x > mag.y && Destination.x < CurPos.x - 1) { dir1 = Dir.Left;  blocked1 = Something(left)  || Something(prev_left); }
+            if (mag.y > mag.x && Destination.y < CurPos.y - 1) { dir1 = Dir.Down;  blocked1 = Something(down)  || Something(prev_down); }
 
             bool blocked2 = false;
-            if (dir == Dir.Right || dir == Dir.Left)
+            if (dir1 == Dir.Right || dir1 == Dir.Left)
             {
                 if      (Destination.y > CurPos.y + 0) { dir2 = Dir.Up;    blocked2 = Something(up)    || Something(prev_up); }
                 else if (Destination.y < CurPos.y - 0) { dir2 = Dir.Down;  blocked2 = Something(down)  || Something(prev_down); }
             }
-            if (dir == Dir.Up || dir == Dir.Down)
+            if (dir1 == Dir.Up || dir1 == Dir.Down)
             {
                 if      (Destination.x > CurPos.x + 0) { dir2 = Dir.Right; blocked2 = Something(right) || Something(prev_right); }
                 else if (Destination.x < CurPos.x - 0) { dir2 = Dir.Left;  blocked2 = Something(left)  || Something(prev_left); }
             }
 
-            // Check geodesics
-            //geo geo_here = Geo[Here];
-            geo geo_here = AntiGeo[Here];
+            // Get current coordinate
             vec2 pos_here = vertex.TexCoords * Geo.Size;
 
-            dirward dirward_here = dirward.Nothing;
+            // Get dirward extensions for each direction, as well as whether we need to cross over an obstacle to get to where we want to go in that direction.
+            dirward dirward_here1 = dirward.Nothing;
             dirward dirward_here2 = dirward.Nothing;
             
-            bool other_side = GetDirward(ref dirward_here, dir, ref Destination, ref pos_here, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
+            bool other_side1 = GetDirward(ref dirward_here1, dir1, ref Destination, ref pos_here, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
             bool other_side2 = GetDirward(ref dirward_here2, dir2, ref Destination, ref pos_here, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
-            
-            // Check if we should follow the geodesic we are on
-            vec2 geo_id = geo_here.geo_id;
-            bool use_simple_pathing = false;
-            if (geo_here.dir > 0 &&
-               (
-                    ValidDirward(dirward_here)  && other_side  && dirward_here.geo_id  == geo_id && (geo_here.dist == _0 || blocked  && other_side) ||
-                    ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id && (geo_here.dist == _0 || blocked2 && other_side2) 
-               ))
-            {
-                dir = geo_here.dir;
 
-                // Prevent immediate direction reversals
-                //float avoid = Reverse(prior_direction(here));
-                //if (IsValid(geo_here.dir) && geo_here.dir != avoid)
-                //    dir = geo_here.dir;
-                //else
-                //    dir = dir2;
+            // Get polarity based on the dirward extensions
+            float
+                polarity1 = dirward_here1.polarity,
+                polarity2 = dirward_here2.polarity,
+                chosen_polarity = -1;
+
+            // If this unit has already picked a polarity for this geodesic area, then we will stick with that polarity
+            geo
+                geo_here = Geo[Here],
+                antigeo_here = AntiGeo[Here];
+
+            if (extra_here.geo_id == geo_here.geo_id && extra_here.polarity_set == _true)
+            {
+                polarity1 = extra_here.polarity;
+                polarity2 = extra_here.polarity;
+            }
+
+            geo
+                geo1 = polarity1 == 1 ? antigeo_here : geo_here,
+                geo2 = polarity2 == 1 ? antigeo_here : geo_here;
+
+            // Always clockwise
+            //geo
+            //    geo1 = Geo[Here],
+            //    geo2 = Geo[Here];
+
+            // Check if we should follow the geodesic we are on
+            vec2 geo_id = geo1.geo_id;
+            bool use_simple_pathing = false;
+            
+            if      (geo1.dir > 0 && ValidDirward(dirward_here1) && other_side1 && dirward_here1.geo_id == geo_id && (geo1.dist == _0 || blocked1 && other_side1))
+            {
+                dir1 = geo1.dir;
+                chosen_polarity = polarity1;
+            }
+            else if (geo2.dir > 0 && ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id && (geo2.dist == _0 || blocked2 && other_side2))
+            {
+                dir1 = geo2.dir;
+                chosen_polarity = other_side1 ? polarity1 : polarity2;
             }
             else
             {
@@ -415,30 +348,42 @@ namespace GpuSim
                 use_simple_pathing = true;
             }
 
-            if (Something(Current[dir_to_vec(dir)]))
+            // Prevent immediate direction reversals
+            //float avoid = Reverse(prior_direction(here));
+            //if (IsValid(geo_here.dir) && geo_here.dir != avoid)
+            //    dir = geo_here.dir;
+            //else
+            //    dir = dir2;
+
+            if (Something(Current[dir_to_vec(dir1)]))
                 use_simple_pathing = true;
 
             if (use_simple_pathing)
             {
                 // Go toward the cardinal direction that is furthest away. If something is in your way, go perpendicularly, assuming you also need to go in that direction.
-                if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir = Dir.Right;
-                if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up))    dir = Dir.Up;
-                if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left))  dir = Dir.Left;
-                if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down))  dir = Dir.Down;
+                if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x > CurPos.x + 1 && !Something(right)) dir1 = Dir.Right;
+                if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y > CurPos.y + 1 && !Something(up))    dir1 = Dir.Up;
+                if ((mag.x > mag.y || diff.y > 0 && Something(up)    || diff.y < 0 && Something(down)) && Destination.x < CurPos.x - 1 && !Something(left))  dir1 = Dir.Left;
+                if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down))  dir1 = Dir.Down;
             }
 
             vec4 rnd = RandomField[Here];
-            if (IsValid(dir) && rnd.x < .1f && Something(Current[dir_to_vec(dir)]))
+            if (IsValid(dir1) && rnd.x < .1f && Something(Current[dir_to_vec(dir1)]))
             {
-                dir = RndFint(rnd.y, Dir.Right, Dir.Down);
+                dir1 = RndFint(rnd.y, Dir.Right, Dir.Down);
             }
 
             // Last check: is there something in the way of where we want to go? If so, use the alternative orthogonal route (which may be the same direction, but hey, at least we tried).
             //if (Something(Current[dir_to_vec(dir)])) dir = dir2;
 
-            if (IsValid(dir))
+            if (IsValid(dir1))
             {
-                here.direction = dir;
+                here.direction = dir1;
+
+                if (chosen_polarity >= 0 && !use_simple_pathing)
+                {
+                    here.change += chosen_polarity == 1 ? SetPolarity.Counterclockwise : SetPolarity.Clockwise;
+                }
             }
             else
             {
@@ -475,6 +420,52 @@ namespace GpuSim
             if (mag.y > mag.x && diff.y < 0) dir = Dir.Down;
 
             return dir;
+        }
+    }
+
+    public partial class Movement_SetPolarity_Phase1 : SimShader
+    {
+        [FragmentShader]
+        extra FragmentShader(VertexOut vertex, Field<data> Data, Field<extra> Extra, Field<geo> Geo, Field<geo> AntiGeo)
+        {
+            data data_here = Data[Here];
+            extra extra_here = Extra[Here];
+            geo geo_here = Geo[Here];
+
+            if (data_here.change >= SetPolarity.Counterclockwise)
+            {
+                extra_here.geo_id = geo_here.geo_id;
+                extra_here.polarity_set = _true;
+                extra_here.polarity = 1;
+            }
+            else if (data_here.change >= SetPolarity.Clockwise)
+            {
+                extra_here.geo_id = geo_here.geo_id;
+                extra_here.polarity_set = _true;
+                extra_here.polarity = 0;
+            }
+
+            return extra_here;
+        }
+    }
+
+    public partial class Movement_SetPolarity_Phase2 : SimShader
+    {
+        [FragmentShader]
+        data FragmentShader(VertexOut vertex, Field<data> Data)
+        {
+            data data_here = Data[Here];
+
+            if (data_here.change >= SetPolarity.Counterclockwise)
+            {
+                data_here.change -= SetPolarity.Counterclockwise;
+            }
+            else if (data_here.change >= SetPolarity.Clockwise)
+            {
+                data_here.change -= SetPolarity.Clockwise;
+            }
+
+            return data_here;
         }
     }
 }

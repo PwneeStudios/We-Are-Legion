@@ -246,8 +246,6 @@ namespace GpuSim
         {
             SwapTempGeo(Anti);
 
-            foreach (var dir in Dir.Vals) DataGroup.Dirward[dir].Clear();
-
             for (int i = 0; i <= 100; i++)
             {
                 foreach (var dir in Dir.Vals)
@@ -346,10 +344,10 @@ namespace GpuSim
                     foreach (bool polarity in Vals.Bool)
                     {
                         SetReducedGeoId(polarity);
-                        //GrowGeo(polarity);
+                        GrowGeo(polarity);
                     }
 
-                    //DirwardExtend(false);
+                    DirwardExtend(false);
                 }
 
                 if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())

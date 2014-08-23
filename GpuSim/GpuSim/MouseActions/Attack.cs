@@ -61,8 +61,7 @@ namespace GpuSim
 
             if (selected(here))
             {
-                float angle = atan(vertex.TexCoords.y - Destination.y * Data.DxDy.y, vertex.TexCoords.x - Destination.x * Data.DxDy.x);
-                extra_here.target_angle = (angle + 3.14159f) / (2 * 3.14159f);
+                extra_here = extra.Nothing;
             }
 
             return extra_here;

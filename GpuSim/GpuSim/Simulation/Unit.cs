@@ -128,8 +128,14 @@ namespace GpuSim
     [Copy(typeof(vec4))]
     public partial struct extra
     {
+        [Hlsl("rg")]
+        public vec2 geo_id { get { return rg; } set { rg = value; } }
+
+        [Hlsl("b")]
+        public float polarity_set { get { return b; } set { b = value; } }
+
         [Hlsl("a")]
-        public float target_angle { get { return a; } set { a = value; } }
+        public float polarity { get { return a; } set { a = value; } }
     }
 
     [Copy(typeof(vec4))]
@@ -586,6 +592,13 @@ namespace GpuSim
             public const float
                 Moved = _0,
                 Stayed = _1;
+        }
+
+        protected static class SetPolarity
+        {
+            public const float
+                Clockwise = _10,
+                Counterclockwise = _100;
         }
 
         public static class UnitAction

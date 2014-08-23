@@ -553,6 +553,8 @@ namespace GpuSim
 
             if (geo_here.dir > 0 && IsBlockingTile(Tiles[dir_to_vec(dir)]))
             {
+                output = dirward_here;
+
                 output.geo_id = geo_here.geo_id;
                 output.dist_to_wall = _0;
             }
