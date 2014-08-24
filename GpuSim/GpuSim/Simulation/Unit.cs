@@ -57,6 +57,9 @@ namespace GpuSim
         [Hlsl("g")]
         public float polarity_set { get { return g; } set { g = value; } }
 
+        [Hlsl("g")]
+        public float importance { get { return g; } set { g = value; } }
+
         [Hlsl("b")]
         public float dist_to_wall { get { return b; } set { b = value; } }
 

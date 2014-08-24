@@ -456,6 +456,19 @@ namespace GpuSim
         }
     }
 
+    public partial class Geodesic_ClearImportance : SimShader
+    {
+        [FragmentShader]
+        dirward FragmentShader(VertexOut vertex, Field<dirward> Dirward)
+        {
+            dirward dirward_here = Dirward[Here];
+
+            dirward_here.importance = _0;
+
+            return dirward_here;
+        }
+    }
+
     public partial class Geodesic_DirwardExtend : SimShader
     {
         [FragmentShader]

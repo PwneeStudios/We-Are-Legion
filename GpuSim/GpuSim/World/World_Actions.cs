@@ -237,6 +237,9 @@ namespace GpuSim
                     Geodesic_FillMissingPolarity.Apply(DataGroup.Dirward[dir], DataGroup.Geo, Output: DataGroup.Temp1);
                     DataGroup.Dirward[dir] = CoreMath.SwapReturn(ref DataGroup.Temp1, DataGroup.Dirward[dir]);
                 }
+
+                Geodesic_ClearImportance.Apply(DataGroup.Dirward[dir], Output: DataGroup.Temp1);
+                DataGroup.Dirward[dir] = CoreMath.SwapReturn(ref DataGroup.Temp1, DataGroup.Dirward[dir]);
             }
             // probably want a larger total shift than 256 eventually, but keep it less than the width of the map (maybe width minus 1, to avoid boundary condition)
             // set signal on movement data output once polarity is set, then capture signal and store polarity and geo_id

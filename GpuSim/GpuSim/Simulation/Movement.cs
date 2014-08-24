@@ -125,7 +125,6 @@ namespace GpuSim
 
                 // Get info for this unit
                 unit  here       = Unit[Here];
-                extra extra_here = Extra[Here];
 
                 // Remove if dead unit
                 if (here.anim == Anim.Dead && IsUnit(here))
@@ -227,28 +226,56 @@ namespace GpuSim
                 // If we aren't attacking, or if a unit is too far away
                 if (min > auto_attack_cutoff && data_here.action == UnitAction.Attacking || data_here.action == UnitAction.Moving)
                 {
-                    NaivePathfind(vertex, Data, PrevData, TargetData, RandomField,
+                    NaivePathfind(vertex, Data, PrevData, TargetData, Extra, RandomField,
                                   Geo, AntiGeo,
                                   DirwardRight, DirwardLeft, DirwardUp, DirwardDown,
-                                  here, ref data_here, ref extra_here);
+                                  here, ref data_here);
                 }
             }
 
             return data_here;
         }
 
-        void NaivePathfind(VertexOut vertex, Field<data> Current, Field<data> Previous, Field<vec4> TargetData, Field<vec4> RandomField,
+        void swap(ref float a, ref float b)
+        {
+            float _ = a;
+            a = b;
+            b = _;
+        }
+
+        void swap(ref vec2 a, ref vec2 b)
+        {
+            vec2 _ = a;
+            a = b;
+            b = _;
+        }
+
+        void swap(ref bool a, ref bool b)
+        {
+            bool _ = a;
+            a = b;
+            b = _;
+        }
+
+        void swap(ref dirward a, ref dirward b)
+        {
+            dirward _ = a;
+            a = b;
+            b = _;
+        }
+
+        void NaivePathfind(VertexOut vertex, Field<data> Current, Field<data> Previous, Field<vec4> TargetData, Field<extra> Extra, Field<vec4> RandomField,
                            Field<geo> Geo, Field<geo> AntiGeo,
                            Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown,
-                           unit data, ref data here, ref extra extra_here)
+                           unit data, ref data here)
         {
-            float
-                dir1 = Dir.None,
-                dir2 = Dir.None;
-
-            vec4 target = TargetData[Here];
+            // Get geodesic info (of both polarities)
+            geo
+                geo_here = Geo[Here],
+                antigeo_here = AntiGeo[Here];
 
             // Unpack packed info
+            vec4 target = TargetData[Here];
             vec2 CurPos = floor((vertex.TexCoords * TargetData.Size + vec(.5f, .5f)));
             vec2 Destination = floor(unpack_vec2((vec4)target));
 
@@ -265,6 +292,13 @@ namespace GpuSim
                 prev_left  = Previous[LeftOne],
                 prev_down  = Previous[DownOne];
 
+            extra extra_here = Extra[Here];
+
+            // Calculation primary and secondary direction to travel (dir1 and dir2 respectively)
+            float
+                dir1 = Dir.None,
+                dir2 = Dir.None;
+
             if (Destination.x > CurPos.x + .75f) dir1 = Dir.Right;
             if (Destination.x < CurPos.x - .75f) dir1 = Dir.Left;
             if (Destination.y > CurPos.y + .75f) dir1 = Dir.Up;
@@ -274,22 +308,25 @@ namespace GpuSim
             vec2 diff = Destination - CurPos;
             vec2 mag = abs(diff);
 
+            //float prior_dir = prior_direction(here);
+            float prior_dir = Dir.None;
+
             bool blocked1 = false;
-            if (mag.x > mag.y && Destination.x > CurPos.x + 1) { dir1 = Dir.Right; blocked1 = Something(right) || Something(prev_right); }
-            if (mag.y > mag.x && Destination.y > CurPos.y + 1) { dir1 = Dir.Up;    blocked1 = Something(up)    || Something(prev_up); }
-            if (mag.x > mag.y && Destination.x < CurPos.x - 1) { dir1 = Dir.Left;  blocked1 = Something(left)  || Something(prev_left); }
-            if (mag.y > mag.x && Destination.y < CurPos.y - 1) { dir1 = Dir.Down;  blocked1 = Something(down)  || Something(prev_down); }
+            if (mag.x > mag.y && Destination.x > CurPos.x + 1) { dir1 = Dir.Right; blocked1 = Something(right) || Something(prev_right) && prior_dir != Dir.Left; }
+            if (mag.y > mag.x && Destination.y > CurPos.y + 1) { dir1 = Dir.Up;    blocked1 = Something(up)    || Something(prev_up)    && prior_dir != Dir.Down; }
+            if (mag.x > mag.y && Destination.x < CurPos.x - 1) { dir1 = Dir.Left;  blocked1 = Something(left)  || Something(prev_left)  && prior_dir != Dir.Right; }
+            if (mag.y > mag.x && Destination.y < CurPos.y - 1) { dir1 = Dir.Down;  blocked1 = Something(down)  || Something(prev_down)  && prior_dir != Dir.Up; }
 
             bool blocked2 = false;
             if (dir1 == Dir.Right || dir1 == Dir.Left)
             {
-                if      (Destination.y > CurPos.y + 0) { dir2 = Dir.Up;    blocked2 = Something(up)    || Something(prev_up); }
-                else if (Destination.y < CurPos.y - 0) { dir2 = Dir.Down;  blocked2 = Something(down)  || Something(prev_down); }
+                if      (Destination.y > CurPos.y + 0) { dir2 = Dir.Up;    blocked2 = Something(up)    || Something(prev_up)   && prior_dir != Dir.Down; }
+                else if (Destination.y < CurPos.y - 0) { dir2 = Dir.Down;  blocked2 = Something(down)  || Something(prev_down) && prior_dir != Dir.Up; }
             }
             if (dir1 == Dir.Up || dir1 == Dir.Down)
             {
-                if      (Destination.x > CurPos.x + 0) { dir2 = Dir.Right; blocked2 = Something(right) || Something(prev_right); }
-                else if (Destination.x < CurPos.x - 0) { dir2 = Dir.Left;  blocked2 = Something(left)  || Something(prev_left); }
+                if      (Destination.x > CurPos.x + 0) { dir2 = Dir.Right; blocked2 = Something(right) || Something(prev_right) && prior_dir != Dir.Left; }
+                else if (Destination.x < CurPos.x - 0) { dir2 = Dir.Left;  blocked2 = Something(left)  || Something(prev_left)  && prior_dir != Dir.Right; }
             }
 
             // Get current coordinate
@@ -302,6 +339,15 @@ namespace GpuSim
             bool other_side1 = GetDirward(ref dirward_here1, dir1, ref Destination, ref pos_here, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
             bool other_side2 = GetDirward(ref dirward_here2, dir2, ref Destination, ref pos_here, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
 
+            // If we have to cross in both directions, then invert our order of preference (try to cover the short direction first, then the long one)
+            //if (other_side1 && ValidDirward(dirward_here1) && other_side2 && ValidDirward(dirward_here2))
+            //{
+            //    swap(ref other_side1, ref other_side2);
+            //    swap(ref dir1, ref dir2);
+            //    swap(ref dirward_here1, ref dirward_here2);
+            //    swap(ref blocked1, ref blocked2);
+            //}
+
             // Get polarity based on the dirward extensions
             float
                 polarity1 = dirward_here1.polarity,
@@ -309,35 +355,50 @@ namespace GpuSim
                 chosen_polarity = -1;
 
             // If this unit has already picked a polarity for this geodesic area, then we will stick with that polarity
-            geo
-                geo_here = Geo[Here],
-                antigeo_here = AntiGeo[Here];
-
             if (extra_here.geo_id == geo_here.geo_id && extra_here.polarity_set == _true)
             {
                 polarity1 = extra_here.polarity;
                 polarity2 = extra_here.polarity;
             }
+            else
+            { 
+                // ...otherwise we are deciding the polarity for the first time.
+                // We've already picked polarity1 and polarity2 to be the best way around for dir1 and dir2 respectively.
+                // We want to give precedence (to avoid gridlock) to an up/down dir if both dirs are contending to set the polarity
+                //if (other_side1 && ValidDirward(dirward_here1) && other_side2 && ValidDirward(dirward_here2))
+                //{
+                //    if (dir1 == Dir.Up || dir1 == Dir.Down)
+                //        polarity2 = polarity1;
+                //    else
+                //        polarity1 = polarity2;
+                //}
+                
+                //if (other_side1 && ValidDirward(dirward_here1) && other_side2 && ValidDirward(dirward_here2))
+                //{
+                //    if (dirward_here1.dist_to_wall > dirward_here2.dist_to_wall)
+                //        polarity1 = polarity2;
+                //    else
+                //        polarity2 = polarity1;
+                //}
+            }
+            //polarity1 = 1;
+            //polarity2 = 1;
 
+            // Get geodesic info associated with primary and secondary direction (geo1 for dir1 and geo2 for dir2)
             geo
                 geo1 = polarity1 == 1 ? antigeo_here : geo_here,
                 geo2 = polarity2 == 1 ? antigeo_here : geo_here;
-
-            // Always clockwise
-            //geo
-            //    geo1 = Geo[Here],
-            //    geo2 = Geo[Here];
 
             // Check if we should follow the geodesic we are on
             vec2 geo_id = geo1.geo_id;
             bool use_simple_pathing = false;
             
-            if      (geo1.dir > 0 && ValidDirward(dirward_here1) && other_side1 && dirward_here1.geo_id == geo_id && (geo1.dist == _0 || blocked1 && other_side1))
+            if      (geo1.dir > 0 && ValidDirward(dirward_here1) && other_side1 && dirward_here1.geo_id == geo_id && (geo1.dist == _0 || blocked1 && other_side1 /*|| extra_here.polarity_set == _true && extra_here.geo_id == geo1.geo_id*/))
             {
                 dir1 = geo1.dir;
                 chosen_polarity = polarity1;
             }
-            else if (geo2.dir > 0 && ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id && (geo2.dist == _0 || blocked2 && other_side2))
+            else if (geo2.dir > 0 && ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id && (geo2.dist == _0 || blocked2 && other_side2 /*|| extra_here.polarity_set == _true && extra_here.geo_id == geo2.geo_id*/) )//&& other_side1 && ValidDirward(dirward_here1))
             {
                 dir1 = geo2.dir;
                 chosen_polarity = other_side1 ? polarity1 : polarity2;
@@ -350,13 +411,18 @@ namespace GpuSim
 
             // Prevent immediate direction reversals
             //float avoid = Reverse(prior_direction(here));
-            //if (IsValid(geo_here.dir) && geo_here.dir != avoid)
-            //    dir = geo_here.dir;
-            //else
-            //    dir = dir2;
+            //if (!use_simple_pathing && IsValid(dir1) && dir1 == avoid)
+            //    dir1 = dir2;
 
-            if (Something(Current[dir_to_vec(dir1)]))
-                use_simple_pathing = true;
+            // If geodesic pathfinding has us running into something, then default to simple pathfinding
+            if (!use_simple_pathing && Something(Current[dir_to_vec(dir1)]))
+            {
+                if (chosen_polarity == 0)
+                    dir1 = RotateLeft(dir1);
+                else
+                    dir1 = RotateRight(dir1);
+                //use_simple_pathing = true;
+            }
 
             if (use_simple_pathing)
             {
@@ -367,10 +433,40 @@ namespace GpuSim
                 if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down))  dir1 = Dir.Down;
             }
 
-            vec4 rnd = RandomField[Here];
-            if (IsValid(dir1) && rnd.x < .1f && Something(Current[dir_to_vec(dir1)]))
+
+            //if      (Something(down) && Extra[DownOne].polarity_set == _true)
+            //    chosen_polarity = Extra[DownOne].polarity;
+            //else if (Something(right) && Extra[RightOne].polarity_set == _true)
+            //    chosen_polarity = Extra[RightOne].polarity;
+
+            //if (dir1 == Dir.Down)
+            //    chosen_polarity = Extra[DownOne].polarity;
+            //chosen_polarity = 1;
+
+            data in_our_way = Current[dir_to_vec(dir1)];
+            if (IsValid(dir1) && Something(in_our_way))
             {
-                dir1 = RndFint(rnd.y, Dir.Right, Dir.Down);
+                //if (dir1 == Dir.Down || dir1 == Dir.Right)
+                //if (chosen_polarity >= 0 && !use_simple_pathing && (dir1 == Dir.Down || dir1 == Dir.Right))
+                //{
+                //    extra extra_in_our_way = Extra[dir_to_vec(dir1)];
+
+                //    //if (extra_in_our_way.polarity_set == _true)
+                //    chosen_polarity = extra_in_our_way.polarity;
+
+                //    //chosen_polarity = 1;
+                //    use_simple_pathing = false;
+                //}
+                
+                //chosen_polarity = 1;
+                //use_simple_pathing = false;
+
+                // Choose random direction
+                vec4 rnd = RandomField[Here];
+                if (rnd.x < .1f)
+                {
+                    dir1 = RndFint(rnd.y, Dir.Right, Dir.Down);
+                }
             }
 
             // Last check: is there something in the way of where we want to go? If so, use the alternative orthogonal route (which may be the same direction, but hey, at least we tried).
