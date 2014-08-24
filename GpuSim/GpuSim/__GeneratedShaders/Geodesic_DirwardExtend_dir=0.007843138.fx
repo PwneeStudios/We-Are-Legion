@@ -203,22 +203,6 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                     output = forward_left;
                     output.b += 0.003921569;
                 }
-                else
-                {
-                    if (GpuSim__SimShader__ValidDirward(rightward) && all(abs(rightward.rg - geo_rightward.ba) < .001))
-                    {
-                        output = rightward;
-                        output.b += 0.0;
-                    }
-                    else
-                    {
-                        if (GpuSim__SimShader__ValidDirward(leftward) && all(abs(leftward.rg - geo_leftward.ba) < .001))
-                        {
-                            output = leftward;
-                            output.b += 0.0;
-                        }
-                    }
-                }
             }
         }
     }

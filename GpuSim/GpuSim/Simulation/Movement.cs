@@ -361,12 +361,12 @@ namespace GpuSim
             vec2 geo_id = geo1.geo_id;
             bool use_simple_pathing = false;
             
-            if      (geo1.dir > 0 && ValidDirward(dirward_here1) && other_side1 && dirward_here1.geo_id == geo_id && (geo1.dist == _0 || blocked1 || extra_here.polarity_set == _true && extra_here.geo_id == geo1.geo_id))
+            if      (geo1.dir > 0 && ValidDirward(dirward_here1) && other_side1 && dirward_here1.geo_id == geo_id && (/*geo1.dist == _0 ||*/ blocked1 || extra_here.polarity_set == _true && extra_here.geo_id == geo1.geo_id))
             {
                 dir1 = geo1.dir;
                 chosen_polarity = polarity1;
             }
-            else if (geo2.dir > 0 && ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id && (geo2.dist == _0 || blocked2 || extra_here.polarity_set == _true && extra_here.geo_id == geo2.geo_id))
+            else if (geo2.dir > 0 && ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id && (/*geo2.dist == _0 || */blocked2 || extra_here.polarity_set == _true && extra_here.geo_id == geo2.geo_id))
             {
                 dir1 = geo2.dir;
                 chosen_polarity = other_side1 && ValidDirward(dirward_here1) ? polarity1 : polarity2;

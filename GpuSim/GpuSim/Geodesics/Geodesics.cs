@@ -575,8 +575,8 @@ namespace GpuSim
             else if (ValidDirward(forward)       && forward.geo_id       == geo_forward.geo_id)       { output = forward;       output.dist_to_wall += _1; }
             else if (ValidDirward(forward_right) && forward_right.geo_id == geo_forward_right.geo_id) { output = forward_right; output.dist_to_wall += _1; }
             else if (ValidDirward(forward_left)  && forward_left.geo_id  == geo_forward_left.geo_id)  { output = forward_left;  output.dist_to_wall += _1; }
-            else if (ValidDirward(rightward)     && rightward.geo_id     == geo_rightward.geo_id)     { output = rightward;     output.dist_to_wall += _0; }
-            else if (ValidDirward(leftward)      && leftward.geo_id      == geo_leftward.geo_id)      { output = leftward;      output.dist_to_wall += _0; }
+            //else if (ValidDirward(rightward)     && rightward.geo_id     == geo_rightward.geo_id)     { output = rightward;     output.dist_to_wall += _0; }
+            //else if (ValidDirward(leftward)      && leftward.geo_id      == geo_leftward.geo_id)      { output = leftward;      output.dist_to_wall += _0; }
 
             return output;
         }
