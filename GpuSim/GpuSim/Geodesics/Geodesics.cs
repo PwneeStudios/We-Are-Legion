@@ -636,5 +636,41 @@ namespace GpuSim
 
             return outer_geo_here;
         }
+    }
+
+    public partial class Geodesic_Boundary : SimShader
+    {
+        [FragmentShader]
+        geo FragmentShader(VertexOut vertex, Field<geo> Geo)
+        {
+            geo
+                here       = Geo[Here],
+                right      = Geo[RightOne],
+                up         = Geo[UpOne],
+                left       = Geo[LeftOne],
+                down       = Geo[DownOne],
+                up_right   = Geo[UpRight],
+                up_left    = Geo[UpLeft],
+                down_right = Geo[DownRight],
+                down_left  = Geo[DownLeft];
+
+            if (!IsValid(here.dir)) return here;
+
+            vec2 id_here = here.geo_id;
+            if (right     .geo_id != id_here ||
+                left      .geo_id != id_here ||
+                up        .geo_id != id_here ||
+                down      .geo_id != id_here ||
+                up_right  .geo_id != id_here ||
+                up_left   .geo_id != id_here ||
+                down_right.geo_id != id_here ||
+                down_left .geo_id != id_here)
+            {
+                //here.dist = 1;
+                return geo.Nothing;
+            }
+
+            return here;
+        }
     }    
 }

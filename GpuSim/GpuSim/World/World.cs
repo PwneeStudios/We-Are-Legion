@@ -27,7 +27,7 @@ namespace GpuSim
         const double DelayBetweenUpdates = .3333;
 
         public bool MapEditor = true;
-        bool DrawGridLines = true;
+        bool DrawGridLines = false;
         
         public bool SimulationPaused = false;
         public bool WorldPaused = false;

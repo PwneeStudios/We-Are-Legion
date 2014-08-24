@@ -289,6 +289,16 @@ namespace GpuSim
             SwapTempGeo(Anti);
         }
 
+        void MarkGeoBoundary(bool Anti)
+        {
+            SwapTempGeo(Anti);
+
+            Geodesic_Boundary.Apply(DataGroup.TempGeo, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TempGeo);
+
+            SwapTempGeo(Anti);
+        }
+
         void CreateUnits()
         {
             float player = 0, team = 0;
@@ -348,6 +358,7 @@ namespace GpuSim
                     {
                         SetReducedGeoId(polarity);
                         GrowGeo(polarity);
+                        MarkGeoBoundary(polarity);
                     }
 
                     DirwardExtend(false);

@@ -271,7 +271,7 @@ namespace GpuSim
         {
             // Get geodesic info (of both polarities)
             geo
-                geo_here = Geo[Here],
+                geo_here     = Geo[Here],
                 antigeo_here = AntiGeo[Here];
 
             // Unpack packed info
@@ -351,29 +351,6 @@ namespace GpuSim
                 polarity1 = extra_here.polarity;
                 polarity2 = extra_here.polarity;
             }
-            else
-            { 
-                // ...otherwise we are deciding the polarity for the first time.
-                // We've already picked polarity1 and polarity2 to be the best way around for dir1 and dir2 respectively.
-                // We want to give precedence (to avoid gridlock) to an up/down dir if both dirs are contending to set the polarity
-                //if (other_side1 && ValidDirward(dirward_here1) && other_side2 && ValidDirward(dirward_here2))
-                //{
-                //    if (dir1 == Dir.Up || dir1 == Dir.Down)
-                //        polarity2 = polarity1;
-                //    else
-                //        polarity1 = polarity2;
-                //}
-                
-                //if (other_side1 && ValidDirward(dirward_here1) && other_side2 && ValidDirward(dirward_here2))
-                //{
-                //    if (dirward_here1.dist_to_wall > dirward_here2.dist_to_wall)
-                //        polarity1 = polarity2;
-                //    else
-                //        polarity2 = polarity1;
-                //}
-            }
-            //polarity1 = 1;
-            //polarity2 = 1;
 
             // Get geodesic info associated with primary and secondary direction (geo1 for dir1 and geo2 for dir2)
             geo
@@ -384,15 +361,16 @@ namespace GpuSim
             vec2 geo_id = geo1.geo_id;
             bool use_simple_pathing = false;
             
-            if      (geo1.dir > 0 && ValidDirward(dirward_here1) && other_side1 && dirward_here1.geo_id == geo_id && (geo1.dist == _0 || blocked1 && other_side1 || extra_here.polarity_set == _true && extra_here.geo_id == geo1.geo_id))
+            if      (geo1.dir > 0 && ValidDirward(dirward_here1) && other_side1 && dirward_here1.geo_id == geo_id && (geo1.dist == _0 || blocked1 || extra_here.polarity_set == _true && extra_here.geo_id == geo1.geo_id))
             {
                 dir1 = geo1.dir;
                 chosen_polarity = polarity1;
             }
-            else if (geo2.dir > 0 && ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id && (geo2.dist == _0 || blocked2 && other_side2 || extra_here.polarity_set == _true && extra_here.geo_id == geo2.geo_id) ) //&& other_side1 && ValidDirward(dirward_here1)) <- this is bad, never do this
+            else if (geo2.dir > 0 && ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id && (geo2.dist == _0 || blocked2 || extra_here.polarity_set == _true && extra_here.geo_id == geo2.geo_id))
             {
                 dir1 = geo2.dir;
-                chosen_polarity = other_side1 ? polarity1 : polarity2;
+                chosen_polarity = other_side1 && ValidDirward(dirward_here1) ? polarity1 : polarity2;
+                //chosen_polarity = polarity2;
             }
             else
             {
@@ -405,9 +383,10 @@ namespace GpuSim
             //if (!use_simple_pathing && IsValid(dir1) && dir1 == avoid)
             //    dir1 = dir2;
 
-            // If geodesic pathfinding has us running into something, then default to simple pathfinding
-            if (!use_simple_pathing && (Something(Current[dir_to_vec(dir1)]) || geo1.dist > _0))
+            // If geodesic pathfinding has us running into something...
+            if (!use_simple_pathing && (Something(Current[dir_to_vec(dir1)]) || geo1.dist > _0) && geo1.dist < 1)
             {
+                // Turn inward toward the obstacles, if that direction is open
                 float alt_dir;
                 if (chosen_polarity == 0)
                     alt_dir = RotateLeft(dir1);
@@ -416,6 +395,7 @@ namespace GpuSim
                 if (!Something(Current[dir_to_vec(alt_dir)]) && !Something(Previous[dir_to_vec(alt_dir)]))
                     dir1 = alt_dir;
 
+                // ... default to simple pathfinding
                 //use_simple_pathing = true;
             }
 
@@ -438,22 +418,32 @@ namespace GpuSim
             //    chosen_polarity = Extra[DownOne].polarity;
             //chosen_polarity = 1;
 
-            data in_our_way = Current[dir_to_vec(dir1)];
-            if (IsValid(dir1) && Something(in_our_way))
+            if (IsValid(dir1) && Something(Current[dir_to_vec(dir1)]))
             {
-                //if (dir1 == Dir.Down || dir1 == Dir.Right)
-                if (chosen_polarity >= 0 && !use_simple_pathing && (dir1 == Dir.Down || dir1 == Dir.Right))
-                {
-                    extra extra_in_our_way = Extra[dir_to_vec(dir1)];
+                // Resolve polarity collisions. Down/Right units have preference in spreading their polarity during collisions.
+                //if (chosen_polarity >= 0 && !use_simple_pathing && (dir1 == Dir.Down || dir1 == Dir.Right))
+                //{
+                //    extra extra_in_our_way = Extra[dir_to_vec(dir1)];
 
-                    if (extra_in_our_way.polarity_set == _true)
-                        chosen_polarity = extra_in_our_way.polarity;
+                //    if (extra_in_our_way.polarity_set == _true)
+                //        chosen_polarity = extra_in_our_way.polarity;
+
+                //    use_simple_pathing = false;
+                //}
+
+                if (chosen_polarity >= 0 && !use_simple_pathing)
+                {
+                    extra
+                        extra_right = Extra[RightOne],
+                        extra_up    = Extra[UpOne];
+
+                    if (extra_right.polarity_set == _true)
+                        chosen_polarity = extra_right.polarity;
+                    if (extra_up.polarity_set == _true)
+                        chosen_polarity = extra_up.polarity;
 
                     use_simple_pathing = false;
                 }
-                
-                //chosen_polarity = 1;
-                //use_simple_pathing = false;
 
                 // Choose random direction
                 vec4 rnd = RandomField[Here];
