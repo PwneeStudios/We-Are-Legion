@@ -339,15 +339,6 @@ namespace GpuSim
             bool other_side1 = GetDirward(ref dirward_here1, dir1, ref Destination, ref pos_here, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
             bool other_side2 = GetDirward(ref dirward_here2, dir2, ref Destination, ref pos_here, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
 
-            // If we have to cross in both directions, then invert our order of preference (try to cover the short direction first, then the long one)
-            //if (other_side1 && ValidDirward(dirward_here1) && other_side2 && ValidDirward(dirward_here2))
-            //{
-            //    swap(ref other_side1, ref other_side2);
-            //    swap(ref dir1, ref dir2);
-            //    swap(ref dirward_here1, ref dirward_here2);
-            //    swap(ref blocked1, ref blocked2);
-            //}
-
             // Get polarity based on the dirward extensions
             float
                 polarity1 = dirward_here1.polarity,
@@ -393,12 +384,12 @@ namespace GpuSim
             vec2 geo_id = geo1.geo_id;
             bool use_simple_pathing = false;
             
-            if      (geo1.dir > 0 && ValidDirward(dirward_here1) && other_side1 && dirward_here1.geo_id == geo_id && (geo1.dist == _0 || blocked1 && other_side1 /*|| extra_here.polarity_set == _true && extra_here.geo_id == geo1.geo_id*/))
+            if      (geo1.dir > 0 && ValidDirward(dirward_here1) && other_side1 && dirward_here1.geo_id == geo_id && (geo1.dist == _0 || blocked1 && other_side1 || extra_here.polarity_set == _true && extra_here.geo_id == geo1.geo_id))
             {
                 dir1 = geo1.dir;
                 chosen_polarity = polarity1;
             }
-            else if (geo2.dir > 0 && ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id && (geo2.dist == _0 || blocked2 && other_side2 /*|| extra_here.polarity_set == _true && extra_here.geo_id == geo2.geo_id*/) )//&& other_side1 && ValidDirward(dirward_here1))
+            else if (geo2.dir > 0 && ValidDirward(dirward_here2) && other_side2 && dirward_here2.geo_id == geo_id && (geo2.dist == _0 || blocked2 && other_side2 || extra_here.polarity_set == _true && extra_here.geo_id == geo2.geo_id) ) //&& other_side1 && ValidDirward(dirward_here1)) <- this is bad, never do this
             {
                 dir1 = geo2.dir;
                 chosen_polarity = other_side1 ? polarity1 : polarity2;
@@ -415,12 +406,16 @@ namespace GpuSim
             //    dir1 = dir2;
 
             // If geodesic pathfinding has us running into something, then default to simple pathfinding
-            if (!use_simple_pathing && Something(Current[dir_to_vec(dir1)]))
+            if (!use_simple_pathing && (Something(Current[dir_to_vec(dir1)]) || geo1.dist > _0))
             {
+                float alt_dir;
                 if (chosen_polarity == 0)
-                    dir1 = RotateLeft(dir1);
+                    alt_dir = RotateLeft(dir1);
                 else
-                    dir1 = RotateRight(dir1);
+                    alt_dir = RotateRight(dir1);
+                if (!Something(Current[dir_to_vec(alt_dir)]) && !Something(Previous[dir_to_vec(alt_dir)]))
+                    dir1 = alt_dir;
+
                 //use_simple_pathing = true;
             }
 
@@ -447,16 +442,15 @@ namespace GpuSim
             if (IsValid(dir1) && Something(in_our_way))
             {
                 //if (dir1 == Dir.Down || dir1 == Dir.Right)
-                //if (chosen_polarity >= 0 && !use_simple_pathing && (dir1 == Dir.Down || dir1 == Dir.Right))
-                //{
-                //    extra extra_in_our_way = Extra[dir_to_vec(dir1)];
+                if (chosen_polarity >= 0 && !use_simple_pathing && (dir1 == Dir.Down || dir1 == Dir.Right))
+                {
+                    extra extra_in_our_way = Extra[dir_to_vec(dir1)];
 
-                //    //if (extra_in_our_way.polarity_set == _true)
-                //    chosen_polarity = extra_in_our_way.polarity;
+                    if (extra_in_our_way.polarity_set == _true)
+                        chosen_polarity = extra_in_our_way.polarity;
 
-                //    //chosen_polarity = 1;
-                //    use_simple_pathing = false;
-                //}
+                    use_simple_pathing = false;
+                }
                 
                 //chosen_polarity = 1;
                 //use_simple_pathing = false;
