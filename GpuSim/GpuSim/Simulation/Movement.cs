@@ -294,7 +294,7 @@ namespace GpuSim
 
             extra extra_here = Extra[Here];
 
-            // Calculation primary and secondary direction to travel (dir1 and dir2 respectively)
+            // Calculate primary and secondary direction to travel (dir1 and dir2 respectively)
             float
                 dir1 = Dir.None,
                 dir2 = Dir.None;
@@ -308,7 +308,6 @@ namespace GpuSim
             vec2 diff = Destination - CurPos;
             vec2 mag = abs(diff);
 
-            //float prior_dir = prior_direction(here);
             float prior_dir = Dir.None;
 
             bool blocked1 = false;
@@ -343,7 +342,7 @@ namespace GpuSim
             float
                 polarity1 = dirward_here1.polarity,
                 polarity2 = dirward_here2.polarity,
-                chosen_polarity = -1;
+                chosen_polarity = Polarity.Undefined;
 
             // If this unit has already picked a polarity for this geodesic area, then we will stick with that polarity
             if (extra_here.geo_id == geo_here.geo_id && extra_here.polarity_set == _true)
@@ -354,8 +353,8 @@ namespace GpuSim
 
             // Get geodesic info associated with primary and secondary direction (geo1 for dir1 and geo2 for dir2)
             geo
-                geo1 = polarity1 == 1 ? antigeo_here : geo_here,
-                geo2 = polarity2 == 1 ? antigeo_here : geo_here;
+                geo1 = polarity1 == Polarity.Counterclockwise ? antigeo_here : geo_here,
+                geo2 = polarity2 == Polarity.Counterclockwise ? antigeo_here : geo_here;
 
             // Check if we should follow the geodesic we are on
             vec2 geo_id = geo1.geo_id;
@@ -370,7 +369,6 @@ namespace GpuSim
             {
                 dir1 = geo2.dir;
                 chosen_polarity = other_side1 && ValidDirward(dirward_here1) ? polarity1 : polarity2;
-                //chosen_polarity = polarity2;
             }
             else
             {
@@ -378,25 +376,17 @@ namespace GpuSim
                 use_simple_pathing = true;
             }
 
-            // Prevent immediate direction reversals
-            //float avoid = Reverse(prior_direction(here));
-            //if (!use_simple_pathing && IsValid(dir1) && dir1 == avoid)
-            //    dir1 = dir2;
-
             // If geodesic pathfinding has us running into something...
             if (!use_simple_pathing && (Something(Current[dir_to_vec(dir1)]) || geo1.dist > _0) && geo1.dist < 1)
             {
                 // Turn inward toward the obstacles, if that direction is open
                 float alt_dir;
-                if (chosen_polarity == 0)
+                if (chosen_polarity == Polarity.Clockwise)
                     alt_dir = RotateLeft(dir1);
                 else
                     alt_dir = RotateRight(dir1);
                 if (!Something(Current[dir_to_vec(alt_dir)]) && !Something(Previous[dir_to_vec(alt_dir)]))
                     dir1 = alt_dir;
-
-                // ... default to simple pathfinding
-                //use_simple_pathing = true;
             }
 
             if (use_simple_pathing)
@@ -408,44 +398,30 @@ namespace GpuSim
                 if ((mag.y > mag.x || diff.x > 0 && Something(right) || diff.x < 0 && Something(left)) && Destination.y < CurPos.y - 1 && !Something(down))  dir1 = Dir.Down;
             }
 
-
-            //if      (Something(down) && Extra[DownOne].polarity_set == _true)
-            //    chosen_polarity = Extra[DownOne].polarity;
-            //else if (Something(right) && Extra[RightOne].polarity_set == _true)
-            //    chosen_polarity = Extra[RightOne].polarity;
-
-            //if (dir1 == Dir.Down)
-            //    chosen_polarity = Extra[DownOne].polarity;
-            //chosen_polarity = 1;
-
+            // If something is in the way of the direction we want to go...
             if (IsValid(dir1) && Something(Current[dir_to_vec(dir1)]))
             {
-                // Resolve polarity collisions. Down/Right units have preference in spreading their polarity during collisions.
-                //if (chosen_polarity >= 0 && !use_simple_pathing && (dir1 == Dir.Down || dir1 == Dir.Right))
-                //{
-                //    extra extra_in_our_way = Extra[dir_to_vec(dir1)];
-
-                //    if (extra_in_our_way.polarity_set == _true)
-                //        chosen_polarity = extra_in_our_way.polarity;
-
-                //    use_simple_pathing = false;
-                //}
-
-                if (chosen_polarity >= 0 && !use_simple_pathing)
+                // ...and we are using geodesic pathfinding and have a determined polarity...
+                if (chosen_polarity != Polarity.Undefined && !use_simple_pathing)
                 {
+                    // ... then if some up or right from us has polarity set, let's follow their polarity (to avoid traffic jams)
+
                     extra
                         extra_right = Extra[RightOne],
                         extra_up    = Extra[UpOne];
 
+                    // If someone right of us has polarity set, follow them
                     if (extra_right.polarity_set == _true)
                         chosen_polarity = extra_right.polarity;
+
+                    // If someone above us has polarity set, follow them
                     if (extra_up.polarity_set == _true)
                         chosen_polarity = extra_up.polarity;
 
                     use_simple_pathing = false;
                 }
 
-                // Choose random direction
+                // ... and occasionally choose random direction instead
                 vec4 rnd = RandomField[Here];
                 if (rnd.x < .1f)
                 {
@@ -453,20 +429,21 @@ namespace GpuSim
                 }
             }
 
-            // Last check: is there something in the way of where we want to go? If so, use the alternative orthogonal route (which may be the same direction, but hey, at least we tried).
-            //if (Something(Current[dir_to_vec(dir)])) dir = dir2;
-
+            // Final sanity check on direction we want to follow
             if (IsValid(dir1))
             {
                 here.direction = dir1;
 
-                if (chosen_polarity >= 0 && !use_simple_pathing)
+                // If we are choosing a polarity then we need to store it
+                if (chosen_polarity != Polarity.Undefined && !use_simple_pathing)
                 {
-                    here.change += chosen_polarity == 1 ? SetPolarity.Counterclockwise : SetPolarity.Clockwise;
+                    // The polarity is stored in "extra", not "data", so we create a signal pumped into this "data" that will be used to modify the "extra" on a subsequent pass.
+                    here.change += chosen_polarity == Polarity.Counterclockwise ? SetPolarity.Counterclockwise : SetPolarity.Clockwise;
                 }
             }
             else
             {
+                // If we don't have a valid direction and we're attack-moving, then we probably arrived at our destination, so let's guard for now.
                 if (here.action == UnitAction.Attacking)
                     here.action = UnitAction.Guard;
             }
@@ -516,13 +493,13 @@ namespace GpuSim
             {
                 extra_here.geo_id = geo_here.geo_id;
                 extra_here.polarity_set = _true;
-                extra_here.polarity = 1;
+                extra_here.polarity = Polarity.Counterclockwise;
             }
             else if (data_here.change >= SetPolarity.Clockwise)
             {
                 extra_here.geo_id = geo_here.geo_id;
                 extra_here.polarity_set = _true;
-                extra_here.polarity = 0;
+                extra_here.polarity = Polarity.Clockwise;
             }
 
             return extra_here;

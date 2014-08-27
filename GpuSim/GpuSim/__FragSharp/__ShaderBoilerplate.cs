@@ -1159,40 +1159,40 @@ namespace GpuSim
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(Texture2D Geo, Texture2D Distance, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Geo, Texture2D Info, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Geo, Distance);
+            Using(Geo, Info);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Geo, Texture2D Distance, RenderTarget2D Output)
+        public static void Apply(Texture2D Geo, Texture2D Info, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Geo, Distance);
+            Using(Geo, Info);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Geo, Texture2D Distance, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Geo, Texture2D Info, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Geo, Distance);
+            Using(Geo, Info);
         }
-        public static void Using(Texture2D Geo, Texture2D Distance, RenderTarget2D Output)
+        public static void Using(Texture2D Geo, Texture2D Info, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Geo, Distance);
+            Using(Geo, Info);
         }
-        public static void Using(Texture2D Geo, Texture2D Distance)
+        public static void Using(Texture2D Geo, Texture2D Info)
         {
             CompiledEffect.Parameters["fs_param_Geo_Texture"].SetValue(FragSharpMarshal.Marshal(Geo));
             CompiledEffect.Parameters["fs_param_Geo_size"].SetValue(FragSharpMarshal.Marshal(vec(Geo.Width, Geo.Height)));
             CompiledEffect.Parameters["fs_param_Geo_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Geo.Width, Geo.Height)));
-            CompiledEffect.Parameters["fs_param_Distance_Texture"].SetValue(FragSharpMarshal.Marshal(Distance));
-            CompiledEffect.Parameters["fs_param_Distance_size"].SetValue(FragSharpMarshal.Marshal(vec(Distance.Width, Distance.Height)));
-            CompiledEffect.Parameters["fs_param_Distance_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Distance.Width, Distance.Height)));
+            CompiledEffect.Parameters["fs_param_Info_Texture"].SetValue(FragSharpMarshal.Marshal(Info));
+            CompiledEffect.Parameters["fs_param_Info_size"].SetValue(FragSharpMarshal.Marshal(vec(Info.Width, Info.Height)));
+            CompiledEffect.Parameters["fs_param_Info_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Info.Width, Info.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
@@ -1205,40 +1205,40 @@ namespace GpuSim
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(Texture2D Geo, Texture2D Distance, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Geo, Texture2D Info, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Geo, Distance);
+            Using(Geo, Info);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Geo, Texture2D Distance, RenderTarget2D Output)
+        public static void Apply(Texture2D Geo, Texture2D Info, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Geo, Distance);
+            Using(Geo, Info);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Geo, Texture2D Distance, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Geo, Texture2D Info, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Geo, Distance);
+            Using(Geo, Info);
         }
-        public static void Using(Texture2D Geo, Texture2D Distance, RenderTarget2D Output)
+        public static void Using(Texture2D Geo, Texture2D Info, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Geo, Distance);
+            Using(Geo, Info);
         }
-        public static void Using(Texture2D Geo, Texture2D Distance)
+        public static void Using(Texture2D Geo, Texture2D Info)
         {
             CompiledEffect.Parameters["fs_param_Geo_Texture"].SetValue(FragSharpMarshal.Marshal(Geo));
             CompiledEffect.Parameters["fs_param_Geo_size"].SetValue(FragSharpMarshal.Marshal(vec(Geo.Width, Geo.Height)));
             CompiledEffect.Parameters["fs_param_Geo_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Geo.Width, Geo.Height)));
-            CompiledEffect.Parameters["fs_param_Distance_Texture"].SetValue(FragSharpMarshal.Marshal(Distance));
-            CompiledEffect.Parameters["fs_param_Distance_size"].SetValue(FragSharpMarshal.Marshal(vec(Distance.Width, Distance.Height)));
-            CompiledEffect.Parameters["fs_param_Distance_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Distance.Width, Distance.Height)));
+            CompiledEffect.Parameters["fs_param_Info_Texture"].SetValue(FragSharpMarshal.Marshal(Info));
+            CompiledEffect.Parameters["fs_param_Info_size"].SetValue(FragSharpMarshal.Marshal(vec(Info.Width, Info.Height)));
+            CompiledEffect.Parameters["fs_param_Info_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Info.Width, Info.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

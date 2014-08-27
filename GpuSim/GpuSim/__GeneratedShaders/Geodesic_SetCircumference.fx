@@ -37,14 +37,14 @@ sampler fs_param_Geo : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Distance, using register location 2
-float2 fs_param_Distance_size;
-float2 fs_param_Distance_dxdy;
+// Texture Sampler for fs_param_Info, using register location 2
+float2 fs_param_Info_size;
+float2 fs_param_Info_dxdy;
 
-Texture fs_param_Distance_Texture;
-sampler fs_param_Distance : register(s2) = sampler_state
+Texture fs_param_Info_Texture;
+sampler fs_param_Info : register(s2) = sampler_state
 {
-    texture   = <fs_param_Distance_Texture>;
+    texture   = <fs_param_Info_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -83,12 +83,22 @@ float2 GpuSim__SimShader__geo_pos_id(float4 g)
     return GpuSim__SimShader__unpack_vec2_3byte(g.gba);
 }
 
+float GpuSim__SimShader__polar_dist(float4 info)
+{
+    return GpuSim__SimShader__unpack_val(info.rg);
+}
+
 float2 GpuSim__SimShader__pack_val_2byte(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
     packed.y = x - packed.x * 256.0;
     return packed / 255.0;
+}
+
+void GpuSim__SimShader__set_circumference(inout float4 info, float circumference)
+{
+    info.ba = GpuSim__SimShader__pack_val_2byte(circumference);
 }
 
 // Compiled vertex shader
@@ -105,7 +115,7 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 info_here = tex2D(fs_param_Distance, psin.TexCoords + (float2(0, 0)) * fs_param_Distance_dxdy);
+    float4 info_here = tex2D(fs_param_Info, psin.TexCoords + (float2(0, 0)) * fs_param_Info_dxdy);
     float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy);
     if (abs(here.r - 0.0) < .001)
     {
@@ -119,21 +129,21 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float circum = 0;
     if (all(abs(right.gba - here.gba) < .001))
     {
-        circum = max(circum, GpuSim__SimShader__unpack_val(tex2D(fs_param_Distance, psin.TexCoords + (GeoStart + float2(1, 0)) * fs_param_Distance_dxdy).xy));
+        circum = max(circum, GpuSim__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(1, 0)) * fs_param_Info_dxdy)));
     }
     if (all(abs(up.gba - here.gba) < .001))
     {
-        circum = max(circum, GpuSim__SimShader__unpack_val(tex2D(fs_param_Distance, psin.TexCoords + (GeoStart + float2(0, 1)) * fs_param_Distance_dxdy).xy));
+        circum = max(circum, GpuSim__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(0, 1)) * fs_param_Info_dxdy)));
     }
     if (all(abs(left.gba - here.gba) < .001))
     {
-        circum = max(circum, GpuSim__SimShader__unpack_val(tex2D(fs_param_Distance, psin.TexCoords + (GeoStart + float2(-(1), 0)) * fs_param_Distance_dxdy).xy));
+        circum = max(circum, GpuSim__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(-(1), 0)) * fs_param_Info_dxdy)));
     }
     if (all(abs(down.gba - here.gba) < .001))
     {
-        circum = max(circum, GpuSim__SimShader__unpack_val(tex2D(fs_param_Distance, psin.TexCoords + (GeoStart + float2(0, -(1))) * fs_param_Distance_dxdy).xy));
+        circum = max(circum, GpuSim__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(0, -(1))) * fs_param_Info_dxdy)));
     }
-    info_here.zw = GpuSim__SimShader__pack_val_2byte(circum);
+    GpuSim__SimShader__set_circumference(info_here, circum);
     __FinalOutput.Color = info_here;
     return __FinalOutput;
 }

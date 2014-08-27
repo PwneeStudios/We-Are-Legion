@@ -292,7 +292,7 @@ namespace GpuSim
     public partial class Geodesic_PolarDistance : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<geo> Geo, Field<vec4> Distance)
+        geo_info FragmentShader(VertexOut vertex, Field<geo> Geo, Field<geo_info> Info)
         {
             geo
                 here       = Geo[Here],
@@ -302,12 +302,12 @@ namespace GpuSim
                 down       = Geo[DownOne];
 
             float
-                dist_right      = unpack_val(Distance[RightOne].xy),
-                dist_up         = unpack_val(Distance[UpOne].xy),
-                dist_left       = unpack_val(Distance[LeftOne].xy),
-                dist_down       = unpack_val(Distance[DownOne].xy);
+                dist_right      = polar_dist(Info[RightOne]),
+                dist_up         = polar_dist(Info[UpOne]),
+                dist_left       = polar_dist(Info[LeftOne]),
+                dist_down       = polar_dist(Info[DownOne]);
 
-            if (here.dir == _0) return vec4.Zero;
+            if (here.dir == _0) return geo_info.Zero;
 
             float dist = 0;
 
@@ -339,8 +339,8 @@ namespace GpuSim
             }
 
             // Pack the polar distance into 2-bytes and return it in
-            vec4 output = vec4.Zero;
-            output.xy = pack_val_2byte(dist);
+            geo_info output = geo_info.Zero;
+            set_polar_dist(ref output, dist);
             
             return output;
         }
@@ -349,12 +349,12 @@ namespace GpuSim
     public partial class Geodesic_SetCircumference : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<geo> Geo, Field<vec4> Distance)
+        geo_info FragmentShader(VertexOut vertex, Field<geo> Geo, Field<geo_info> Info)
         {
-            vec4 info_here = Distance[Here];
-            geo here       = Geo[Here];
+            geo_info info_here = Info[Here];
+            geo here           = Geo[Here];
 
-            if (here.dir == _0) return vec4.Zero;
+            if (here.dir == _0) return geo_info.Zero;
 
             vec2 pos_here = vertex.TexCoords * Geo.Size;
             vec2 start_pos = geo_pos_id(here);
@@ -367,13 +367,13 @@ namespace GpuSim
                 down       = Geo[GeoStart + DownOne];
 
             float circum = 0;
-            if (right.pos_storage == here.pos_storage) circum = max(circum, unpack_val(Distance[GeoStart + RightOne].xy));
-            if (up   .pos_storage == here.pos_storage) circum = max(circum, unpack_val(Distance[GeoStart + UpOne].xy));
-            if (left .pos_storage == here.pos_storage) circum = max(circum, unpack_val(Distance[GeoStart + LeftOne].xy));
-            if (down .pos_storage == here.pos_storage) circum = max(circum, unpack_val(Distance[GeoStart + DownOne].xy));
+            if (right.pos_storage == here.pos_storage) circum = max(circum, polar_dist(Info[GeoStart + RightOne]));
+            if (up   .pos_storage == here.pos_storage) circum = max(circum, polar_dist(Info[GeoStart + UpOne]));
+            if (left .pos_storage == here.pos_storage) circum = max(circum, polar_dist(Info[GeoStart + LeftOne]));
+            if (down .pos_storage == here.pos_storage) circum = max(circum, polar_dist(Info[GeoStart + DownOne]));
 
             // Pack the polar circumference into 2-bytes
-            info_here.zw = pack_val_2byte(circum);
+            set_circumference(ref info_here, circum);
 
             return info_here;
         }
@@ -382,7 +382,7 @@ namespace GpuSim
     public partial class Geodesic_Polarity : SimShader
     {
         [FragmentShader]
-        dirward FragmentShader(VertexOut vertex, Field<dirward> Dirward, Field<geo> Geo, Field<geo> ShiftedGeo, Field<vec4> Info, Field<vec4> ShiftedInfo, [Dir.Vals] float dir)
+        dirward FragmentShader(VertexOut vertex, Field<dirward> Dirward, Field<geo> Geo, Field<geo> ShiftedGeo, Field<geo_info> Info, Field<geo_info> ShiftedInfo, [Dir.Vals] float dir)
         {
             geo
                 geo_here  =        Geo[Here],
@@ -390,7 +390,7 @@ namespace GpuSim
 
             if (geo_here.dir == _0) return dirward.Nothing;
 
-            vec4
+            geo_info
                 info_here  =        Info[Here],
                 info_shift = ShiftedInfo[Here];
 

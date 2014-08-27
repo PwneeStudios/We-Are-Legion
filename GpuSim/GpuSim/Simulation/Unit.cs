@@ -246,6 +246,26 @@ namespace GpuSim
             return vec(x, y, z, w);
         }
 
+        protected static float polar_dist(geo_info info)
+        {
+            return unpack_val(info.polar_dist);
+        }
+
+        protected static void set_polar_dist(ref geo_info info, float polar_dist)
+        {
+            info.polar_dist = pack_val_2byte(polar_dist);
+        }
+
+        protected static float circumference(geo_info info)
+        {
+            return unpack_val(info.circumference);
+        }
+
+        protected static void set_circumference(ref geo_info info, float circumference)
+        {
+            info.circumference = pack_val_2byte(circumference);
+        }
+
         protected static vec2 geo_pos_id(geo g)
         {
             return unpack_vec2_3byte(g.pos_storage);
@@ -602,6 +622,15 @@ namespace GpuSim
             public const float
                 Clockwise = _10,
                 Counterclockwise = _100;
+        }
+
+        protected static class Polarity
+        {
+            public const float
+                Clockwise = 0,
+                Counterclockwise = 1,
+
+                Undefined = -1;
         }
 
         public static class UnitAction

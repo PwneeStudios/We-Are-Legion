@@ -474,13 +474,13 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
     float4 dirward_here2 = float4(0, 0, 0, 0);
     bool other_side1 = GpuSim__Movement_UpdateDirection_RemoveDead__GetDirward(psin, dirward_here1, dir1, Destination, pos_here, DirwardRight, DirwardRight_size, DirwardRight_dxdy, DirwardLeft, DirwardLeft_size, DirwardLeft_dxdy, DirwardUp, DirwardUp_size, DirwardUp_dxdy, DirwardDown, DirwardDown_size, DirwardDown_dxdy);
     bool other_side2 = GpuSim__Movement_UpdateDirection_RemoveDead__GetDirward(psin, dirward_here2, dir2, Destination, pos_here, DirwardRight, DirwardRight_size, DirwardRight_dxdy, DirwardLeft, DirwardLeft_size, DirwardLeft_dxdy, DirwardUp, DirwardUp_size, DirwardUp_dxdy, DirwardDown, DirwardDown_size, DirwardDown_dxdy);
-    float polarity1 = dirward_here1.a, polarity2 = dirward_here2.a, chosen_polarity = -(1);
+    float polarity1 = dirward_here1.a, polarity2 = dirward_here2.a, chosen_polarity = -1.0;
     if (all(abs(extra_here.rg - geo_here.ba) < .001) && abs(extra_here.b - 0.003921569) < .001)
     {
         polarity1 = extra_here.a;
         polarity2 = extra_here.a;
     }
-    float4 geo1 = abs(polarity1 - 1) < .001 ? antigeo_here : geo_here, geo2 = abs(polarity2 - 1) < .001 ? antigeo_here : geo_here;
+    float4 geo1 = abs(polarity1 - 1.0) < .001 ? antigeo_here : geo_here, geo2 = abs(polarity2 - 1.0) < .001 ? antigeo_here : geo_here;
     float2 geo_id = geo1.ba;
     bool use_simple_pathing = false;
     if (geo1.r > 0 + .001 && GpuSim__SimShader__ValidDirward(dirward_here1) && other_side1 && all(abs(dirward_here1.rg - geo_id) < .001) && (blocked1 || abs(extra_here.b - 0.003921569) < .001 && all(abs(extra_here.rg - geo1.ba) < .001)))
@@ -503,7 +503,7 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
     if (!(use_simple_pathing) && (GpuSim__SimShader__Something(tex2D(Current, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(dir1)) * Current_dxdy)) || geo1.g > 0.0 + .001) && geo1.g < 1 - .001)
     {
         float alt_dir= (float)0;
-        if (abs(chosen_polarity - 0) < .001)
+        if (abs(chosen_polarity - 0.0) < .001)
         {
             alt_dir = GpuSim__SimShader__RotateLeft(dir1);
         }
@@ -537,7 +537,7 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
     }
     if (GpuSim__SimShader__IsValid(dir1) && GpuSim__SimShader__Something(tex2D(Current, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(dir1)) * Current_dxdy)))
     {
-        if (chosen_polarity >= 0 - .001 && !(use_simple_pathing))
+        if (abs(chosen_polarity - -1.0) > .001 && !(use_simple_pathing))
         {
             float4 extra_right = tex2D(Extra, psin.TexCoords + (float2(1, 0)) * Extra_dxdy), extra_up = tex2D(Extra, psin.TexCoords + (float2(0, 1)) * Extra_dxdy);
             if (abs(extra_right.b - 0.003921569) < .001)
@@ -559,9 +559,9 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
     if (GpuSim__SimShader__IsValid(dir1))
     {
         here.r = dir1;
-        if (chosen_polarity >= 0 - .001 && !(use_simple_pathing))
+        if (abs(chosen_polarity - -1.0) > .001 && !(use_simple_pathing))
         {
-            here.g += abs(chosen_polarity - 1) < .001 ? 0.3921569 : 0.03921569;
+            here.g += abs(chosen_polarity - 1.0) < .001 ? 0.3921569 : 0.03921569;
         }
     }
     else

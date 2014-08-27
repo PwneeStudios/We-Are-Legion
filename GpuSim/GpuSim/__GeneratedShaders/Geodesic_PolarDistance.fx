@@ -37,14 +37,14 @@ sampler fs_param_Geo : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Distance, using register location 2
-float2 fs_param_Distance_size;
-float2 fs_param_Distance_dxdy;
+// Texture Sampler for fs_param_Info, using register location 2
+float2 fs_param_Info_size;
+float2 fs_param_Info_dxdy;
 
-Texture fs_param_Distance_Texture;
-sampler fs_param_Distance : register(s2) = sampler_state
+Texture fs_param_Info_Texture;
+sampler fs_param_Info : register(s2) = sampler_state
 {
-    texture   = <fs_param_Distance_Texture>;
+    texture   = <fs_param_Info_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -59,6 +59,11 @@ float GpuSim__SimShader__unpack_val(float2 packed)
     packed = floor(255.0 * packed + float2(0.5, 0.5));
     coord = 256 * packed.x + packed.y;
     return coord;
+}
+
+float GpuSim__SimShader__polar_dist(float4 info)
+{
+    return GpuSim__SimShader__unpack_val(info.rg);
 }
 
 float2 GpuSim__SimShader__pack_val_2byte(float x)
@@ -81,6 +86,11 @@ void GpuSim__SimShader__set_geo_pos_id(inout float4 g, float2 pos)
     g.gba = GpuSim__SimShader__pack_vec2_3byte(pos);
 }
 
+void GpuSim__SimShader__set_polar_dist(inout float4 info, float polar_dist)
+{
+    info.rg = GpuSim__SimShader__pack_val_2byte(polar_dist);
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -96,7 +106,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy), right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 0)) * fs_param_Geo_dxdy), up = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 1)) * fs_param_Geo_dxdy), left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 0)) * fs_param_Geo_dxdy), down = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, -(1))) * fs_param_Geo_dxdy);
-    float dist_right = GpuSim__SimShader__unpack_val(tex2D(fs_param_Distance, psin.TexCoords + (float2(1, 0)) * fs_param_Distance_dxdy).xy), dist_up = GpuSim__SimShader__unpack_val(tex2D(fs_param_Distance, psin.TexCoords + (float2(0, 1)) * fs_param_Distance_dxdy).xy), dist_left = GpuSim__SimShader__unpack_val(tex2D(fs_param_Distance, psin.TexCoords + (float2(-(1), 0)) * fs_param_Distance_dxdy).xy), dist_down = GpuSim__SimShader__unpack_val(tex2D(fs_param_Distance, psin.TexCoords + (float2(0, -(1))) * fs_param_Distance_dxdy).xy);
+    float dist_right = GpuSim__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (float2(1, 0)) * fs_param_Info_dxdy)), dist_up = GpuSim__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (float2(0, 1)) * fs_param_Info_dxdy)), dist_left = GpuSim__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (float2(-(1), 0)) * fs_param_Info_dxdy)), dist_down = GpuSim__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (float2(0, -(1))) * fs_param_Info_dxdy));
     if (abs(here.r - 0.0) < .001)
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
@@ -146,7 +156,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
     }
     float4 output = float4(0, 0, 0, 0);
-    output.xy = GpuSim__SimShader__pack_val_2byte(dist);
+    GpuSim__SimShader__set_polar_dist(output, dist);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

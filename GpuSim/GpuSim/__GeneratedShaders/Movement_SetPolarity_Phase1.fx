@@ -105,7 +105,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         extra_here.rg = geo_here.ba;
         extra_here.b = 0.003921569;
-        extra_here.a = 1;
+        extra_here.a = 1.0;
     }
     else
     {
@@ -113,7 +113,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             extra_here.rg = geo_here.ba;
             extra_here.b = 0.003921569;
-            extra_here.a = 0;
+            extra_here.a = 0.0;
         }
     }
     __FinalOutput.Color = extra_here;
