@@ -61,7 +61,7 @@ namespace GpuSim
 
         public void Initialize()
         {
-            CreateRenderTargets();
+            CreateRenderTargets(true);
             InitialConditions();
         }
 
@@ -71,7 +71,7 @@ namespace GpuSim
             RandomField,
             Tiles, Corspes,
             SelectField,
-            PreviousDraw, CurrentDraw,
+
             Paths_Right, Paths_Left, Paths_Up, Paths_Down,
             DistanceToPlayers, DistanceToOtherTeams, DistanceToBuildings,
 
@@ -79,12 +79,20 @@ namespace GpuSim
             ShiftedGeo, ShiftedGeoInfo,
             MockTiles;
 
-        public Dictionary<float, RenderTarget2D> Dirward = new Dictionary<float, RenderTarget2D>();
+        public Dictionary<float, RenderTarget2D>
+            Dirward = new Dictionary<float, RenderTarget2D>();
         
         public List<RenderTarget2D>
             Multigrid;
 
-        void CreateRenderTargets()
+        void CreateRenderTargets(bool Editor)
+        {
+            CreateRenderTargets_InGameRequired();
+            
+            if (Editor) CreateRenderTargets_EditorRequired();
+        }
+
+        void CreateRenderTargets_InGameRequired()
         {
             CurrentUnits = MakeTarget(w, h);
             PreviousUnits = MakeTarget(w, h);
@@ -102,9 +110,6 @@ namespace GpuSim
 
             RandomField = MakeTarget(w, h);
 
-            CurrentDraw = MakeTarget(w, h);
-            PreviousDraw = MakeTarget(w, h);
-
             Temp1 = MakeTarget(w, h);
             Temp2 = MakeTarget(w, h);
 
@@ -118,13 +123,8 @@ namespace GpuSim
             DistanceToBuildings = MakeTarget(w, h);
 
             Geo = MakeTarget(w, h);
-            OuterGeo = MakeTarget(w, h);
             AntiGeo = MakeTarget(w, h);
-            TempGeo = MakeTarget(w, h);
-            GeoInfo = MakeTarget(w, h);
-            ShiftedGeo = MakeTarget(w, h);
-            ShiftedGeoInfo = MakeTarget(w, h);
-            MockTiles = MakeTarget(w, h);
+            
             foreach (float dir in Dir.Vals)
                 Dirward.Add(dir, MakeTarget(w, h));
 
@@ -135,6 +135,16 @@ namespace GpuSim
                 Multigrid.Add(MakeTarget(n, n));
                 n /= 2;
             }
+        }
+        
+        void CreateRenderTargets_EditorRequired()
+        {
+            OuterGeo = MakeTarget(w, h);
+            TempGeo = MakeTarget(w, h);
+            GeoInfo = MakeTarget(w, h);
+            ShiftedGeo = MakeTarget(w, h);
+            ShiftedGeoInfo = MakeTarget(w, h);
+            MockTiles = MakeTarget(w, h);
         }
 
         RenderTarget2D MakeTarget()

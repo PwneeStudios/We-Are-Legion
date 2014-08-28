@@ -11,7 +11,10 @@ namespace GpuSim
             float GroundRepeat = 100;
             Ground = new RectangleQuad(new vec2(-1, -1), new vec2(1, 1), new vec2(0, 0), new vec2(1, 1) * GroundRepeat);
 
+            //DataGroup = new DataGroup(512, 512);
             DataGroup = new DataGroup(1024, 1024);
+            //DataGroup = new DataGroup(2048, 2048);
+            //DataGroup = new DataGroup(4096, 4096);
 
             Params = new GameParameters();
             PlayerInfo = new PlayerInfo[5];
