@@ -7,8 +7,8 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GpuSim</RootNamespace>
-    <AssemblyName>GpuSim</AssemblyName>
+    <RootNamespace>Terracotta</RootNamespace>
+    <AssemblyName>Terracotta</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
@@ -176,8 +176,8 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GpuSimContent\GpuSimContent.contentproj">
-      <Name>GpuSimContent</Name>
+    <ProjectReference Include="..\TerracottaContent\TerracottaContent.contentproj">
+      <Name>TerracottaContent</Name>
       <XnaReferenceType>Content</XnaReferenceType>
     </ProjectReference>
   </ItemGroup>

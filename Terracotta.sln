@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpuSim", "GpuSim\GpuSim\GpuSim.csproj", "{711F2A20-F9EE-463A-936E-6B683079B831}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerracottaSim", "Terracotta\Terracotta\Terracotta.csproj", "{711F2A20-F9EE-463A-936E-6B683079B831}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpuSimContent", "GpuSim\GpuSimContent\GpuSimContent.contentproj", "{3B7C433E-A48C-4456-ACAE-C63EC83E631C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TerracottaContent", "Terracotta\TerracottaContent\TerracottaContent.contentproj", "{3B7C433E-A48C-4456-ACAE-C63EC83E631C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
