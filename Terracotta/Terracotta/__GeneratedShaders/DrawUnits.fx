@@ -101,6 +101,8 @@ sampler fs_param_Texture : register(s5) = sampler_state
 
 float fs_param_s;
 
+float fs_param_second;
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsUnit(float4 u)
 {
@@ -248,12 +250,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             pre = cur;
         }
-        float frame = fs_param_s * 6 + 255 * cur_unit.a;
+        float _s = abs(cur_unit.a - 0.0) < .001 ? fs_param_second : fs_param_s;
+        float frame = _s * 6 + FragSharpFramework__FragSharpStd__Float(cur_unit.a);
         output += GpuSim__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
     else
     {
-        float frame = fs_param_s * 6 + 255 * 0.02352941;
+        float frame = fs_param_s * 6 + FragSharpFramework__FragSharpStd__Float(0.02352941);
         if (GpuSim__SimShader__IsValid(cur.r))
         {
             float prior_dir = GpuSim__SimShader__prior_direction(cur);

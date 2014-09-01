@@ -9,8 +9,8 @@ namespace GpuSim
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            pos.x += floor(255*Anim.Dead);
-            pos.y += floor(c.direction * 255 + .5f) - 1;
+            pos.x += Float(Anim.Dead);
+            pos.y += Float(c.direction) - 1;
             pos *= UnitSpriteSheet.SpriteSize;
 
             var clr = Texture[pos];

@@ -72,7 +72,7 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnits, Field<unit> PreviousUnits, PointSampler Texture, float s)
+        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnits, Field<unit> PreviousUnits, PointSampler Texture, float s, float second)
         {
             color output = color.TransparentBlack;
 
@@ -92,16 +92,14 @@ namespace GpuSim
             {
                 if (s > .5) pre = cur;
 
-                //float frame = cur_unit.anim > 0 ? s * UnitSpriteSheet.AnimLength + 255 * cur_unit.anim : 0;
-                //float frame = cur_unit.anim > 0 ?
-                //    s * UnitSpriteSheet.AnimLength + 255 * (cur_unit.anim) :
-                //    s * UnitSpriteSheet.AnimLength;
-                float frame = s * UnitSpriteSheet.AnimLength + 255 * cur_unit.anim;
+                float _s = cur_unit.anim == _0 ? second : s;
+
+                float frame = _s * UnitSpriteSheet.AnimLength + Float(cur_unit.anim);
                 output += Sprite(pre, pre_unit, subcell_pos, pre.direction, frame, Texture);
             }
             else
             {
-                float frame = s * UnitSpriteSheet.AnimLength + 255 * Anim.Walk;
+                float frame = s * UnitSpriteSheet.AnimLength + Float(Anim.Walk);
 
                 if (IsValid(cur.direction))
                 {
