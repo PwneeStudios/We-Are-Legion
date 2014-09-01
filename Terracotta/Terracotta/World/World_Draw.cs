@@ -120,6 +120,7 @@ namespace GpuSim
                 {
                     //float corpse_blend = 1f * CoreMath.LerpRestrict(z / 2, 1, z / 16, 0, CameraZoom);
                     float corpse_blend = .5f * CoreMath.LerpRestrict(z / 2, 1, z / 16, 0, CameraZoom);
+                    //float corpse_blend = 0;
 
                     DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet, corpse_blend);
                     GridHelper.DrawGrid();
