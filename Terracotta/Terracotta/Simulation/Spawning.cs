@@ -70,7 +70,7 @@ namespace GpuSim
                 unit_here.player = barracks.player;
                 unit_here.team   = barracks.team;
                 unit_here.type   = UnitType.Footman;
-                unit_here.anim   = Anim.None;
+                unit_here.anim   = Anim.Stand;
             }
 
             return unit_here;

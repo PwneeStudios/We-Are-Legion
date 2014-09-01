@@ -52,7 +52,7 @@ namespace GpuSim
                         }
                         else
                         {
-                            unit_here.anim = Anim.Dead;
+                            unit_here.anim = Anim.Die;
                         }
                     }
                 }

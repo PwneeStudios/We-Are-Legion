@@ -127,7 +127,7 @@ namespace GpuSim
                 unit  here       = Unit[Here];
 
                 // Remove if dead unit
-                if (here.anim == Anim.Dead && IsUnit(here))
+                if (here.anim == Anim.Die && IsUnit(here))
                 {
                     return data.Nothing;
                 }

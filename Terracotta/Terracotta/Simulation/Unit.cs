@@ -492,24 +492,26 @@ namespace GpuSim
         public static class Anim
         {
             public const float
-                None = _0 * UnitSpriteSheet.AnimLength,
-                Attack = _1 * UnitSpriteSheet.AnimLength,
-                Dead = _2 * UnitSpriteSheet.AnimLength;
+                Stand  = _0 * UnitSpriteSheet.AnimLength,
+                Walk   = _1 * UnitSpriteSheet.AnimLength,
+                Attack = _2 * UnitSpriteSheet.AnimLength,
+                Die    = _3 * UnitSpriteSheet.AnimLength,
+                Dead   = _4 * UnitSpriteSheet.AnimLength;
         }
 
         public static class Part
         {
             public const float
                 Center = _0,
-                Right = _1,
-                TR = _2,
-                Up = _3,
-                TL = _4,
-                Left = _5,
-                BL = _6,
-                Down = _7,
-                BR = _8,
-                Count = _9;
+                Right  = _1,
+                TR     = _2,
+                Up     = _3,
+                TL     = _4,
+                Left   = _5,
+                BL     = _6,
+                Down   = _7,
+                BR     = _8,
+                Count  = _9;
         }
 
         public static class DebugArrowsSpriteSheet
@@ -538,10 +540,12 @@ namespace GpuSim
 
         public static class UnitSpriteSheet
         {
-            public const int AnimLength = 5;
-            public const int NumAnims = 3;
-            public const int SheetDimX = NumAnims * AnimLength;
-            public const int SheetDimY = 2 /*Selected,Unselected*/ * 4 /*4 Directions*/;
+            public const int AnimLength = 6;
+            public const int NumAnims = 4;
+            //public const int SheetDimX = NumAnims * AnimLength;
+            //public const int SheetDimY = 2 /*Selected,Unselected*/ * 4 /*4 Directions*/;
+            public const int SheetDimX = 32;
+            public const int SheetDimY = 32;
             public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
             public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
         }

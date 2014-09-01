@@ -120,12 +120,6 @@ bool GpuSim__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
-bool GpuSim__SimShader__selected(float4 u)
-{
-    float val = u.b;
-    return val >= 0.5019608 - .001;
-}
-
 float FragSharpFramework__FragSharpStd__Float(float v)
 {
     return floor(255 * v + 0.5);
@@ -171,18 +165,29 @@ float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
     return clr;
 }
 
+bool GpuSim__SimShader__selected(float4 u)
+{
+    float val = u.b;
+    return val >= 0.5019608 - .001;
+}
+
 float4 GpuSim__DrawUnits__Sprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float direction, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    float selected_offset = GpuSim__SimShader__selected(u) ? 4 : 0;
+    float selected_offset = 0;
     pos.x += floor(frame);
     pos.y += (FragSharpFramework__FragSharpStd__Float(direction) - 1 + selected_offset);
-    pos *= float2(1.0 / 15, 1.0 / 8);
+    pos *= float2(1.0 / 32, 1.0 / 32);
     float4 clr = tex2D(Texture, pos);
-    return GpuSim__SimShader__PlayerColorize(clr, d.g);
+    clr = GpuSim__SimShader__PlayerColorize(clr, d.g);
+    if (abs(clr.a - 0) < .001 && GpuSim__SimShader__selected(u))
+    {
+        clr = float4(0.0627451, 0.8666667, 0.0627451, 1.0);
+    }
+    return clr;
 }
 
 bool GpuSim__SimShader__IsValid(float direction)
@@ -243,12 +248,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             pre = cur;
         }
-        float frame = cur_unit.a > 0 + .001 ? fs_param_s * 5 + 255 * cur_unit.a : 0;
+        float frame = fs_param_s * 6 + 255 * cur_unit.a;
         output += GpuSim__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
     else
     {
-        float frame = fs_param_s * 5;
+        float frame = fs_param_s * 6 + 255 * 0.02352941;
         if (GpuSim__SimShader__IsValid(cur.r))
         {
             float prior_dir = GpuSim__SimShader__prior_direction(cur);

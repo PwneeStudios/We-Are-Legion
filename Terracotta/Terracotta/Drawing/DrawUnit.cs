@@ -48,7 +48,8 @@ namespace GpuSim
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            float selected_offset = selected(u) ? 4 : 0;
+            //float selected_offset = selected(u) ? 4 : 0;
+            float selected_offset = 0;
 
             pos.x += floor(frame);
             pos.y += (Float(direction) - 1 + selected_offset);
@@ -56,7 +57,14 @@ namespace GpuSim
 
             var clr = Texture[pos];
 
-            return PlayerColorize(clr, d.player);
+            //return PlayerColorize(clr, d.player);
+
+            clr = PlayerColorize(clr, d.player);
+            if (clr.a == 0 && selected(u))
+            {
+                clr = rgba(0x10DD10, 1f);
+            }
+            return clr;
 
             //return rgba(1,1,1,1);
             //return Circle(pos);
@@ -84,12 +92,16 @@ namespace GpuSim
             {
                 if (s > .5) pre = cur;
 
-                float frame = cur_unit.anim > 0 ? s * UnitSpriteSheet.AnimLength + 255*cur_unit.anim : 0;
+                //float frame = cur_unit.anim > 0 ? s * UnitSpriteSheet.AnimLength + 255 * cur_unit.anim : 0;
+                //float frame = cur_unit.anim > 0 ?
+                //    s * UnitSpriteSheet.AnimLength + 255 * (cur_unit.anim) :
+                //    s * UnitSpriteSheet.AnimLength;
+                float frame = s * UnitSpriteSheet.AnimLength + 255 * cur_unit.anim;
                 output += Sprite(pre, pre_unit, subcell_pos, pre.direction, frame, Texture);
             }
             else
             {
-                float frame = s * UnitSpriteSheet.AnimLength;
+                float frame = s * UnitSpriteSheet.AnimLength + 255 * Anim.Walk;
 
                 if (IsValid(cur.direction))
                 {

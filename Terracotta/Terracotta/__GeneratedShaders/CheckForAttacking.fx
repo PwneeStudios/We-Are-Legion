@@ -131,7 +131,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             float4 facing = tex2D(fs_param_Unit, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(data_here.r)) * fs_param_Unit_dxdy);
             if (abs(facing.b - unit_here.b) > .001 && abs(facing.b - 0.0) > .001)
             {
-                unit_here.a = 0.01960784;
+                unit_here.a = 0.04705882;
             }
         }
         float4 data_right = tex2D(fs_param_Data, psin.TexCoords + (float2(1, 0)) * fs_param_Data_dxdy), data_up = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 1)) * fs_param_Data_dxdy), data_left = tex2D(fs_param_Data, psin.TexCoords + (float2(-(1), 0)) * fs_param_Data_dxdy), data_down = tex2D(fs_param_Data, psin.TexCoords + (float2(0, -(1))) * fs_param_Data_dxdy);
@@ -147,7 +147,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 }
                 else
                 {
-                    unit_here.a = 0.03921569;
+                    unit_here.a = 0.07058824;
                 }
             }
         }

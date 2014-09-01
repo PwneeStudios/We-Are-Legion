@@ -592,7 +592,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         float4 path = float4(0, 0, 0, 0);
         float4 here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-        if (abs(here.a - 0.03921569) < .001 && GpuSim__SimShader__IsUnit(here))
+        if (abs(here.a - 0.07058824) < .001 && GpuSim__SimShader__IsUnit(here))
         {
             __FinalOutput.Color = float4(0, 0, 0, 0);
             return __FinalOutput;

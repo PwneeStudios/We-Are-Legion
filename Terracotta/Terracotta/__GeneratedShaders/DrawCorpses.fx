@@ -116,9 +116,9 @@ float4 GpuSim__DrawCorpses__Sprite(VertexToPixel psin, float4 c, float2 pos, sam
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    pos.x += floor(255 * 0.03921569);
+    pos.x += floor(255 * 0.09411765);
     pos.y += floor(c.r * 255 + 0.5) - 1;
-    pos *= float2(1.0 / 15, 1.0 / 8);
+    pos *= float2(1.0 / 32, 1.0 / 32);
     float4 clr = tex2D(Texture, pos);
     return GpuSim__SimShader__PlayerColorize(clr, c.b);
 }

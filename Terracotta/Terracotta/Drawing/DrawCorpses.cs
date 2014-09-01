@@ -28,10 +28,10 @@ namespace GpuSim
             vec2 subcell_pos = get_subcell_pos(vertex, Corpses.Size);
 
             if (Something(here))
-	        {
+            {
                 output += Sprite(here, subcell_pos, Texture);
                 output *= blend;
-	        }
+            }
 
             return output;
         }
