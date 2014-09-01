@@ -421,9 +421,9 @@ namespace GpuSim
                     use_simple_pathing = false;
                 }
 
-                // ... and occasionally choose random direction instead
+                // ... and occasionally choose random direction instead (assuming we aren't surrounded)
                 vec4 rnd = RandomField[Here];
-                if (rnd.x < .1f)
+                if (rnd.x < .1f && !(Something(right) && Something(left) && Something(up) && Something(down)))
                 {
                     dir1 = RndFint(rnd.y, Dir.Right, Dir.Down);
                 }

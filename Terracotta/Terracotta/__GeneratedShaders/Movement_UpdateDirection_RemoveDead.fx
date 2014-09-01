@@ -551,7 +551,7 @@ void GpuSim__Movement_UpdateDirection_RemoveDead__NaivePathfind(VertexToPixel ps
             use_simple_pathing = false;
         }
         float4 rnd = tex2D(RandomField, psin.TexCoords + (float2(0, 0)) * RandomField_dxdy);
-        if (rnd.x < 0.1 - .001)
+        if (rnd.x < 0.1 - .001 && !((GpuSim__SimShader__Something(right) && GpuSim__SimShader__Something(left) && GpuSim__SimShader__Something(up) && GpuSim__SimShader__Something(down))))
         {
             dir1 = GpuSim__SimShader__RndFint(rnd.y, 0.003921569, 0.01568628);
         }

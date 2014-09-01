@@ -83,7 +83,7 @@ namespace GpuSim
             {
                 float a = clr.a * blend;
                 //clr = a * clr + (1 - a) * rgba(0x10DD10, 1f);
-                clr = a * clr + (1 - a) * rgba(0x10BB10, .8f);
+                clr = a * clr + (1 - a) * rgba(0x10AA10, 1f);
             }
 
             return clr;

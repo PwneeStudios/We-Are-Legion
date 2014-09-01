@@ -42,11 +42,14 @@ namespace GpuSim
             UnitTexture_8 = Content.Load<Texture2D>("Art\\Units_8");
             UnitTexture_16 = Content.Load<Texture2D>("Art\\Units_16");
 
-            //UnitTexture_1 = Content.Load<Texture2D>("Art\\Soldier_1");
-            //UnitTexture_2 = Content.Load<Texture2D>("Art\\Soldier_2");
-            //UnitTexture_4 = Content.Load<Texture2D>("Art\\Soldier_4");
+
+            UnitTexture_1 = Content.Load<Texture2D>("Art\\Soldier_1");
+            UnitTexture_2 = Content.Load<Texture2D>("Art\\Soldier_2");
+            UnitTexture_4 = Content.Load<Texture2D>("Art\\Soldier_4");
             //UnitTexture_8 = Content.Load<Texture2D>("Art\\Soldier_4");
             //UnitTexture_16 = Content.Load<Texture2D>("Art\\Soldier_4");
+
+
 
 
             GroundTexture = Content.Load<Texture2D>("Art\\Grass");

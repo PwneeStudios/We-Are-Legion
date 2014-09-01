@@ -192,7 +192,7 @@ float4 GpuSim__DrawUnits__Sprite(VertexToPixel psin, float4 u, float4 d, float2 
     if (draw_selected)
     {
         float a = clr.a * blend;
-        clr = a * clr + (1 - a) * float4(0.0627451, 0.7333333, 0.0627451, 0.8);
+        clr = a * clr + (1 - a) * float4(0.0627451, 0.6666667, 0.0627451, 1.0);
     }
     return clr;
 }
