@@ -15,7 +15,8 @@ namespace GpuSim
 
             var clr = Texture[pos];
 
-            return PlayerColorize(clr, c.player);
+            return clr;
+            //return PlayerColorize(clr, c.player);
         }
 
         [FragmentShader]

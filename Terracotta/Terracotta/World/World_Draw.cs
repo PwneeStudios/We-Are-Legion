@@ -119,7 +119,7 @@ namespace GpuSim
                 if (CameraZoom >= z / 8)
                 {
                     //float corpse_blend = 1f * CoreMath.LerpRestrict(z / 2, 1, z / 16, 0, CameraZoom);
-                    float corpse_blend = .5f * CoreMath.LerpRestrict(z / 2, 1, z / 16, 0, CameraZoom);
+                    float corpse_blend = .35f * CoreMath.LerpRestrict(z / 2, 1, z / 16, 0, CameraZoom);
                     //float corpse_blend = 0;
 
                     DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet, corpse_blend);
@@ -139,7 +139,10 @@ namespace GpuSim
             if (CameraZoom > z / 8)
             {
                 float Second = (DrawCount % 60) / 60f;
-                DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete, Second);
+                float blend = CoreMath.LogLerpRestrict(60.0f, 1, 1.25f, 0, CameraZoom);
+                float select_size = CoreMath.LogLerpRestrict(6.0f, .6f, z / 4, 0, CameraZoom);
+
+                DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete, Second, blend, select_size);
             }
             else
                 DrawUnitsZoomedOut.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, UnitsSpriteSheet, PercentSimStepComplete);

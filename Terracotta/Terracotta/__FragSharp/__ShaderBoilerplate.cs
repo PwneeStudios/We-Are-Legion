@@ -773,33 +773,33 @@ namespace GpuSim
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float second, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float second, float blend, float select_size, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, s, second);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, s, second, blend, select_size);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float second, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float second, float blend, float select_size, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, s, second);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, s, second, blend, select_size);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float second, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float second, float blend, float select_size, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, s, second);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, s, second, blend, select_size);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float second, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float second, float blend, float select_size, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, s, second);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, s, second, blend, select_size);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float second)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float second, float blend, float select_size)
         {
             CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
             CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -820,6 +820,8 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
             CompiledEffect.Parameters["fs_param_s"].SetValue(FragSharpMarshal.Marshal(s));
             CompiledEffect.Parameters["fs_param_second"].SetValue(FragSharpMarshal.Marshal(second));
+            CompiledEffect.Parameters["fs_param_blend"].SetValue(FragSharpMarshal.Marshal(blend));
+            CompiledEffect.Parameters["fs_param_select_size"].SetValue(FragSharpMarshal.Marshal(select_size));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

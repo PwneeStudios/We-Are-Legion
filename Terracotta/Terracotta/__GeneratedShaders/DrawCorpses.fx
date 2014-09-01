@@ -75,46 +75,6 @@ float FragSharpFramework__FragSharpStd__Float(float v)
     return floor(255 * v + 0.5);
 }
 
-float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
-{
-    if (abs(player - 0.003921569) < .001)
-    {
-    }
-    else
-    {
-        if (abs(player - 0.007843138) < .001)
-        {
-            float r = clr.r;
-            clr.r = clr.g;
-            clr.g = r;
-            clr.rgb *= 0.5;
-        }
-        else
-        {
-            if (abs(player - 0.01176471) < .001)
-            {
-                float b = clr.b;
-                clr.b = clr.g;
-                clr.g = b;
-            }
-            else
-            {
-                if (abs(player - 0.01568628) < .001)
-                {
-                    float r = clr.r;
-                    clr.r = clr.b;
-                    clr.b = r;
-                }
-                else
-                {
-                    clr.rgb *= 0.1;
-                }
-            }
-        }
-    }
-    return clr;
-}
-
 float4 GpuSim__DrawCorpses__Sprite(VertexToPixel psin, float4 c, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
@@ -125,7 +85,7 @@ float4 GpuSim__DrawCorpses__Sprite(VertexToPixel psin, float4 c, float2 pos, sam
     pos.y += FragSharpFramework__FragSharpStd__Float(c.r) - 1;
     pos *= float2(1.0 / 32, 1.0 / 32);
     float4 clr = tex2D(Texture, pos);
-    return GpuSim__SimShader__PlayerColorize(clr, c.b);
+    return clr;
 }
 
 // Compiled vertex shader

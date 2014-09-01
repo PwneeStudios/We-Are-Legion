@@ -43,13 +43,12 @@ namespace GpuSim
                 return rgba(0, 0, 0, 0);
         }
 
-        protected color Sprite(data u, unit d, vec2 pos, float direction, float frame, PointSampler Texture)
+        protected color Sprite_WithSpriteSelectionCircle(data u, unit d, vec2 pos, float direction, float frame, PointSampler Texture)
         {
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            //float selected_offset = selected(u) ? 4 : 0;
-            float selected_offset = 0;
+            float selected_offset = selected(u) ? 4 : 0;
 
             pos.x += floor(frame);
             pos.y += (Float(direction) - 1 + selected_offset);
@@ -57,22 +56,41 @@ namespace GpuSim
 
             var clr = Texture[pos];
 
-            //return PlayerColorize(clr, d.player);
-
-            clr = PlayerColorize(clr, d.player);
-            if (clr.a == 0 && selected(u))
-            {
-                clr = rgba(0x10DD10, 1f);
-            }
-            return clr;
+            return PlayerColorize(clr, d.player);
 
             //return rgba(1,1,1,1);
             //return Circle(pos);
             //return tex2D(TextureSampler, pos);
         }
 
+        protected color Sprite(data u, unit d, vec2 pos, float direction, float frame, PointSampler Texture, float blend, float select_size)
+        {
+            if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
+                return color.TransparentBlack;
+
+            //bool draw_selected = selected(u) && pos.y > .6 * (blend + 2) / 3;
+            bool draw_selected = selected(u) && pos.y > select_size;
+
+            pos.x += floor(frame);
+            pos.y += (Float(direction) - 1);
+            pos *= UnitSpriteSheet.SpriteSize;
+
+            var clr = Texture[pos];
+
+            clr = PlayerColorize(clr, d.player);
+            
+            if (draw_selected)
+            {
+                float a = clr.a * blend;
+                //clr = a * clr + (1 - a) * rgba(0x10DD10, 1f);
+                clr = a * clr + (1 - a) * rgba(0x10BB10, .8f);
+            }
+
+            return clr;
+        }
+
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnits, Field<unit> PreviousUnits, PointSampler Texture, float s, float second)
+        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnits, Field<unit> PreviousUnits, PointSampler Texture, float s, float second, float blend, float select_size)
         {
             color output = color.TransparentBlack;
 
@@ -95,7 +113,7 @@ namespace GpuSim
                 float _s = cur_unit.anim == _0 ? second : s;
 
                 float frame = _s * UnitSpriteSheet.AnimLength + Float(cur_unit.anim);
-                output += Sprite(pre, pre_unit, subcell_pos, pre.direction, frame, Texture);
+                output += Sprite(pre, pre_unit, subcell_pos, pre.direction, frame, Texture, blend, select_size);
             }
             else
             {
@@ -106,13 +124,13 @@ namespace GpuSim
                     var prior_dir = prior_direction(cur);
 
                     vec2 offset = (1 - s) * direction_to_vec(prior_dir);
-                    output += Sprite(cur, cur_unit, subcell_pos + offset, prior_dir, frame, Texture);
+                    output += Sprite(cur, cur_unit, subcell_pos + offset, prior_dir, frame, Texture, blend, select_size);
                 }
 
                 if (IsValid(pre.direction) && output.a < .025f)
                 {
                     vec2 offset = -s * direction_to_vec(pre.direction);
-                    output += Sprite(pre, pre_unit, subcell_pos + offset, pre.direction, frame, Texture);
+                    output += Sprite(pre, pre_unit, subcell_pos + offset, pre.direction, frame, Texture, blend, select_size);
                 }
             }
 

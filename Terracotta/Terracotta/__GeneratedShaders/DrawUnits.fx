@@ -103,6 +103,10 @@ float fs_param_s;
 
 float fs_param_second;
 
+float fs_param_blend;
+
+float fs_param_select_size;
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsUnit(float4 u)
 {
@@ -125,6 +129,12 @@ bool GpuSim__SimShader__Something(float4 u)
 float FragSharpFramework__FragSharpStd__Float(float v)
 {
     return floor(255 * v + 0.5);
+}
+
+bool GpuSim__SimShader__selected(float4 u)
+{
+    float val = u.b;
+    return val >= 0.5019608 - .001;
 }
 
 float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
@@ -167,27 +177,22 @@ float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
     return clr;
 }
 
-bool GpuSim__SimShader__selected(float4 u)
-{
-    float val = u.b;
-    return val >= 0.5019608 - .001;
-}
-
-float4 GpuSim__DrawUnits__Sprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float direction, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 GpuSim__DrawUnits__Sprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float direction, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float blend, float select_size)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    float selected_offset = 0;
+    bool draw_selected = GpuSim__SimShader__selected(u) && pos.y > select_size + .001;
     pos.x += floor(frame);
-    pos.y += (FragSharpFramework__FragSharpStd__Float(direction) - 1 + selected_offset);
+    pos.y += (FragSharpFramework__FragSharpStd__Float(direction) - 1);
     pos *= float2(1.0 / 32, 1.0 / 32);
     float4 clr = tex2D(Texture, pos);
     clr = GpuSim__SimShader__PlayerColorize(clr, d.g);
-    if (abs(clr.a - 0) < .001 && GpuSim__SimShader__selected(u))
+    if (draw_selected)
     {
-        clr = float4(0.0627451, 0.8666667, 0.0627451, 1.0);
+        float a = clr.a * blend;
+        clr = a * clr + (1 - a) * float4(0.0627451, 0.7333333, 0.0627451, 0.8);
     }
     return clr;
 }
@@ -252,7 +257,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         float _s = abs(cur_unit.a - 0.0) < .001 ? fs_param_second : fs_param_s;
         float frame = _s * 6 + FragSharpFramework__FragSharpStd__Float(cur_unit.a);
-        output += GpuSim__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+        output += GpuSim__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_blend, fs_param_select_size);
     }
     else
     {
@@ -261,12 +266,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             float prior_dir = GpuSim__SimShader__prior_direction(cur);
             float2 offset = (1 - fs_param_s) * GpuSim__SimShader__direction_to_vec(prior_dir);
-            output += GpuSim__DrawUnits__Sprite(psin, cur, cur_unit, subcell_pos + offset, prior_dir, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+            output += GpuSim__DrawUnits__Sprite(psin, cur, cur_unit, subcell_pos + offset, prior_dir, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_blend, fs_param_select_size);
         }
         if (GpuSim__SimShader__IsValid(pre.r) && output.a < 0.025 - .001)
         {
             float2 offset = -(fs_param_s) * GpuSim__SimShader__direction_to_vec(pre.r);
-            output += GpuSim__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos + offset, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+            output += GpuSim__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos + offset, pre.r, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_blend, fs_param_select_size);
         }
     }
     __FinalOutput.Color = output;
