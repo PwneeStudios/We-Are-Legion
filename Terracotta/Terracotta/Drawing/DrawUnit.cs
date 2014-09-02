@@ -2,12 +2,13 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
+    /*
     public partial class DrawUnitsZoomedOut : DrawUnits
     {
         color Presence(data data)
         {
             return (Something(data) && !IsStationary(data)) ?
-                (selected(data) ? rgb(0x54c96b) : rgb(0x917c82)) :
+                (selected(data) ? Color_Selected : Color_Unselected) :
                 rgba(0,0,0,0);
         }
 
@@ -31,6 +32,65 @@ namespace GpuSim
             return output;
         }
     }
+    */
+
+    public partial class DrawUnitsZoomedOut : DrawUnits
+    {
+        color Presence(data data, unit unit)
+        {
+            return (Something(data) && !IsStationary(data)) ?
+                (selected(data) ? SelectedUnitColor.Get(unit.player) : UnitColor.Get(unit.player)) :
+                rgba(0, 0, 0, 0);
+        }
+
+        [FragmentShader]
+        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnit, Field<unit> PreviousUnit, PointSampler Texture, float PercentSimStepComplete)
+        {
+            color output = color.TransparentBlack;
+
+            data data_here  = CurrentData[Here];
+            unit unit_here  = CurrentUnit[Here];
+
+            return Presence(data_here, unit_here);
+        }
+    }
+
+    public partial class DrawUnitsZoomedOutBlur : DrawUnits
+    {
+        color Presence(data data, unit unit)
+        {
+            return (Something(data) && !IsStationary(data)) ?
+                (selected(data) ? SelectedUnitColor.Get(unit.player) : UnitColor.Get(unit.player)) :
+                rgba(0, 0, 0, 0);
+        }
+
+        [FragmentShader]
+        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnit, Field<unit> PreviousUnit, PointSampler Texture, float PercentSimStepComplete)
+        {
+            color output = color.TransparentBlack;
+
+            data
+                data_right = CurrentData[RightOne],
+                data_up = CurrentData[UpOne],
+                data_left = CurrentData[LeftOne],
+                data_down = CurrentData[DownOne],
+                data_here = CurrentData[Here];
+
+            unit
+                unit_right = CurrentUnit[RightOne],
+                unit_up = CurrentUnit[UpOne],
+                unit_left = CurrentUnit[LeftOne],
+                unit_down = CurrentUnit[DownOne],
+                unit_here = CurrentUnit[Here];
+
+            output = .5f *
+                            .25f * (Presence(data_right, unit_right) + Presence(data_up, unit_up) + Presence(data_left, unit_left) + Presence(data_down, unit_down))
+                      + .5f *
+                                    Presence(data_here, unit_here);
+
+            return output;
+        }
+    }
 
     public partial class DrawUnits : BaseShader
     {
@@ -43,32 +103,11 @@ namespace GpuSim
                 return rgba(0, 0, 0, 0);
         }
 
-        protected color Sprite_WithSpriteSelectionCircle(data u, unit d, vec2 pos, float direction, float frame, PointSampler Texture)
-        {
-            if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
-                return color.TransparentBlack;
-
-            float selected_offset = selected(u) ? 4 : 0;
-
-            pos.x += floor(frame);
-            pos.y += (Float(direction) - 1 + selected_offset);
-            pos *= UnitSpriteSheet.SpriteSize;
-
-            var clr = Texture[pos];
-
-            return PlayerColorize(clr, d.player);
-
-            //return rgba(1,1,1,1);
-            //return Circle(pos);
-            //return tex2D(TextureSampler, pos);
-        }
-
         protected color Sprite(data u, unit d, vec2 pos, float direction, float frame, PointSampler Texture, float blend, float select_size)
         {
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            //bool draw_selected = selected(u) && pos.y > .6 * (blend + 2) / 3;
             bool draw_selected = selected(u) && pos.y > select_size;
 
             pos.x += floor(frame);
@@ -82,8 +121,7 @@ namespace GpuSim
             if (draw_selected)
             {
                 float a = clr.a * blend;
-                //clr = a * clr + (1 - a) * rgba(0x10DD10, 1f);
-                clr = a * clr + (1 - a) * rgba(0x10AA10, 1f);
+                clr = a * clr + (1 - a) * SelectedUnitColor.Get(d.player);
             }
 
             return clr;

@@ -136,16 +136,18 @@ namespace GpuSim
             Markers.Draw();
 
             // Units
-            if (CameraZoom > z / 8)
+            if (CameraZoom > z / 4)
             {
                 float Second = (DrawCount % 60) / 60f;
                 float blend = CoreMath.LogLerpRestrict(60.0f, 1, 1.25f, 0, CameraZoom);
                 float select_size = CoreMath.LogLerpRestrict(6.0f, .6f, z / 4, 0, CameraZoom);
-
+                 
                 DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete, Second, blend, select_size);
             }
+            else if (CameraZoom > z / 8)
+                DrawUnitsZoomedOut.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete);
             else
-                DrawUnitsZoomedOut.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, UnitsSpriteSheet, PercentSimStepComplete);
+                DrawUnitsZoomedOutBlur.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete);
             GridHelper.DrawGrid();
 
             // Building icons

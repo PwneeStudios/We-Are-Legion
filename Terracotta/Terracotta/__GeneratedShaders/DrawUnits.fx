@@ -177,6 +177,27 @@ float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
     return clr;
 }
 
+float4 GpuSim__SelectedUnitColor__Get(float player)
+{
+    if (abs(player - 0.003921569) < .001)
+    {
+        return float4(0.0627451, 0.6666667, 0.0627451, 1.0);
+    }
+    if (abs(player - 0.007843138) < .001)
+    {
+        return float4(0.0627451, 0.6666667, 0.0627451, 1.0);
+    }
+    if (abs(player - 0.01176471) < .001)
+    {
+        return float4(0.0627451, 0.6666667, 0.0627451, 1.0);
+    }
+    if (abs(player - 0.01568628) < .001)
+    {
+        return float4(0.0627451, 0.6666667, 0.0627451, 1.0);
+    }
+    return float4(0.0, 0.0, 0.0, 0.0);
+}
+
 float4 GpuSim__DrawUnits__Sprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float direction, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float blend, float select_size)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
@@ -192,7 +213,7 @@ float4 GpuSim__DrawUnits__Sprite(VertexToPixel psin, float4 u, float4 d, float2 
     if (draw_selected)
     {
         float a = clr.a * blend;
-        clr = a * clr + (1 - a) * float4(0.0627451, 0.6666667, 0.0627451, 1.0);
+        clr = a * clr + (1 - a) * GpuSim__SelectedUnitColor__Get(d.g);
     }
     return clr;
 }

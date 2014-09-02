@@ -160,7 +160,7 @@ float4 GpuSim__UnitColor__Get(float player)
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 GpuSim__DrawUnitsZoomedOut__Presence(float4 data, float4 unit)
+float4 GpuSim__DrawUnitsZoomedOutBlur__Presence(float4 data, float4 unit)
 {
     return (GpuSim__SimShader__Something(data) && !(GpuSim__SimShader__IsStationary(data))) ? (GpuSim__SimShader__selected(data) ? GpuSim__SelectedUnitColor__Get(unit.g) : GpuSim__UnitColor__Get(unit.g)) : float4(0, 0, 0, 0);
 }
@@ -182,9 +182,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 data_here = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy);
-    float4 unit_here = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentUnit_dxdy);
-    __FinalOutput.Color = GpuSim__DrawUnitsZoomedOut__Presence(data_here, unit_here);
+    float4 data_right = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(1, 0)) * fs_param_CurrentData_dxdy), data_up = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 1)) * fs_param_CurrentData_dxdy), data_left = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(-(1), 0)) * fs_param_CurrentData_dxdy), data_down = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, -(1))) * fs_param_CurrentData_dxdy), data_here = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy);
+    float4 unit_right = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(1, 0)) * fs_param_CurrentUnit_dxdy), unit_up = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(0, 1)) * fs_param_CurrentUnit_dxdy), unit_left = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(-(1), 0)) * fs_param_CurrentUnit_dxdy), unit_down = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(0, -(1))) * fs_param_CurrentUnit_dxdy), unit_here = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentUnit_dxdy);
+    output = 0.5 * 0.25 * (GpuSim__DrawUnitsZoomedOutBlur__Presence(data_right, unit_right) + GpuSim__DrawUnitsZoomedOutBlur__Presence(data_up, unit_up) + GpuSim__DrawUnitsZoomedOutBlur__Presence(data_left, unit_left) + GpuSim__DrawUnitsZoomedOutBlur__Presence(data_down, unit_down)) + 0.5 * GpuSim__DrawUnitsZoomedOutBlur__Presence(data_here, unit_here);
+    __FinalOutput.Color = output;
     return __FinalOutput;
 }
 

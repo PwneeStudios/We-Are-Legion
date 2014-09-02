@@ -208,7 +208,7 @@ namespace GpuSim
         }
     }
 
-    public class SimShader : GridComputation
+    public partial class SimShader : GridComputation
     {
         public const float _true = _1, _false = _0;
 
@@ -836,78 +836,5 @@ namespace GpuSim
             v.y = unpack_val(vec(extra_y, packed.y));
             return v;
         }
-
-        protected color PlayerColorize(color clr, float player)
-        {
-            if (player == Player.One)
-            {
-            }
-            else if (player == Player.Two)
-            {
-                float r = clr.r;
-                clr.r = clr.g;
-                clr.g = r;
-                clr.rgb *= .5f;
-            }
-            else if (player == Player.Three)
-            {
-                float b = clr.b;
-                clr.b = clr.g;
-                clr.g = b;
-            }
-            else if (player == Player.Four)
-            {
-                float r = clr.r;
-                clr.r = clr.b;
-                clr.b = r;
-            }
-            else
-            {
-                clr.rgb *= .1f;
-            }
-
-            return clr;
-        }
-
-        public class TerritoryColors
-        {
-            public static readonly color
-                Player1 = new color(.7f, .3f, .3f, .5f),
-                Player2 = new color(.1f, .5f, .1f, .5f),
-                Player3 = new color(.3f, .7f, .55f, .5f),
-                Player4 = new color(.3f, .3f, .7f, .5f);
-
-            public static color Get(float player)
-            {
-                if (player == Player.One) return Player1;
-                if (player == Player.Two) return Player2;
-                if (player == Player.Three) return Player3;
-                if (player == Player.Four) return Player4;
-
-                throw new BadPlayerNumberException(player);
-                return color.TransparentBlack;
-            }
-        }
-
-        public class BuildingMarkerColors
-        {
-            public static readonly color
-                Neutral = new color(248/255.0f, 230/255.0f, 33/255.0f, 1f),
-                Player1 = new color(.6f, .2f, .2f, 1f),
-                Player2 = new color(.0f, .4f, .0f, 1f),
-                Player3 = new color(.2f, .6f, .45f, 1f),
-                Player4 = new color(.2f, .2f, .7f, 1f);
-
-            public static color Get(float player)
-            {
-                if (player == Player.One) return Player1;
-                if (player == Player.Two) return Player2;
-                if (player == Player.Three) return Player3;
-                if (player == Player.Four) return Player4;
-
-                throw new BadPlayerNumberException(player);
-                return Neutral;
-            }
-        }
-    }
+   }
 }
