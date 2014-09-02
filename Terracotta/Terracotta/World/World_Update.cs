@@ -60,8 +60,8 @@ namespace GpuSim
             }
 
             float KeyZoomRate = 1.125f * FpsRateModifier;
-            if (Buttons.X.Down() || Keys.X.Down() || Keys.E.Down()) CameraZoom /= KeyZoomRate;
-            else if (Buttons.A.Down() || Keys.Z.Down() || Keys.Q.Down()) CameraZoom *= KeyZoomRate;
+            if (Buttons.X.Down() || Keys.X.Down() || Keys.E.Down())      CameraZoom /= KeyZoomRate;
+            //else if (Buttons.A.Down() || Keys.Z.Down() || Keys.Q.Down()) CameraZoom *= KeyZoomRate;
 
             if (CameraZoom < MaxZoomOut) CameraZoom = MaxZoomOut;
             if (CameraZoom > MaxZoomIn) CameraZoom = MaxZoomIn;

@@ -1,3 +1,5 @@
+using System.IO;
+
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -20,44 +22,47 @@ namespace GpuSim
 
         public static void Initialize()
         {
-            DebugTexture_Arrows = Content.Load<Texture2D>("Art\\Debug_Arrows");
-            DebugTexture_Num = Content.Load<Texture2D>("Art\\Debug_Num");
+            DebugTexture_Arrows = LoadTexture("Debug_Arrows");
+            DebugTexture_Num    = LoadTexture("Debug_Num");
 
-            BuildingTexture_1 = Content.Load<Texture2D>("Art\\Buildings_1");
-            ExplosionTexture_1 = Content.Load<Texture2D>("Art\\BuildingExplosion_1");
+            BuildingTexture_1   = LoadTexture("Buildings_1");
+            ExplosionTexture_1  = LoadTexture("BuildingExplosion_1");
 
-            //UnitTexture_1 = Content.Load<Texture2D>("Art\\Units_1");
-            //UnitTexture_2 = Content.Load<Texture2D>("Art\\Units_2");
-            //UnitTexture_4 = Content.Load<Texture2D>("Art\\Units_4");
-            //UnitTexture_8 = Content.Load<Texture2D>("Art\\Units_8");
-            //UnitTexture_16 = Content.Load<Texture2D>("Art\\Units_16");
+            UnitTexture_1       = LoadTexture("Soldier_1");
+            UnitTexture_2       = LoadTexture("Soldier_2");
+            UnitTexture_4       = LoadTexture("Soldier_4");
+            UnitTexture_8       = LoadTexture("Soldier_8");
+            UnitTexture_16      = LoadTexture("Soldier_16");
 
-            //string unit = "Art\\infantry2";
-            string unit = "Art\\Soldier_1";
-            UnitTexture_1 = Content.Load<Texture2D>(unit);
-            UnitTexture_2 = Content.Load<Texture2D>(unit);
-            UnitTexture_4 = Content.Load<Texture2D>(unit);
-            //UnitTexture_8 = Content.Load<Texture2D>(unit);
-            //UnitTexture_16 = Content.Load<Texture2D>(unit);
-            UnitTexture_8 = Content.Load<Texture2D>("Art\\Units_8");
-            UnitTexture_16 = Content.Load<Texture2D>("Art\\Units_16");
+            TileSpriteSheet     = LoadTexture("TileSet");
 
+            Cursor              = LoadTexture("Cursor");
+            SelectCircle        = LoadTexture("SelectCircle");
+            SelectCircle_Data   = LoadTexture("SelectCircle_Data");
+            AttackMarker        = LoadTexture("AttackMarker");
+        }
 
-            UnitTexture_1 = Content.Load<Texture2D>("Art\\Soldier_1");
-            UnitTexture_2 = Content.Load<Texture2D>("Art\\Soldier_2");
-            UnitTexture_4 = Content.Load<Texture2D>("Art\\Soldier_4");
-            //UnitTexture_8 = Content.Load<Texture2D>("Art\\Soldier_4");
-            //UnitTexture_16 = Content.Load<Texture2D>("Art\\Soldier_4");
-
-
-
-
-            TileSpriteSheet = Content.Load<Texture2D>("Art\\TileSet");
-
-            Cursor = Content.Load<Texture2D>("Art\\Cursor");
-            SelectCircle = Content.Load<Texture2D>("Art\\SelectCircle");
-            SelectCircle_Data = Content.Load<Texture2D>("Art\\SelectCircle_Data");
-            AttackMarker = Content.Load<Texture2D>("Art\\AttackMarker");
+        static bool HotSwap = true;
+        static Texture2D LoadTexture(string FileName)
+        {
+            try
+            {
+                if (HotSwap)
+                {
+                    using (var file = File.OpenRead("Content\\HotSwap\\" + FileName + ".png"))
+                    {
+                        return Texture2D.FromStream(GameClass.Game.GraphicsDevice, file);
+                    }
+                }
+                else
+                {
+                    return Content.Load<Texture2D>("Art\\" + FileName);
+                }
+            }
+            catch
+            {
+                return new Texture2D(GameClass.Game.GraphicsDevice, 1, 1);
+            }
         }
     }
 }

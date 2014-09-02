@@ -60,6 +60,7 @@ namespace GpuSim
             Render.Initialize();
 
             World = new World();
+            World.Load("Beset.m3n");
 
             base.Initialize();
         }
@@ -107,14 +108,19 @@ namespace GpuSim
             if (Buttons.Back.Down())
                 this.Exit();
 
+            if (Keys.Z.Pressed())
+            {
+                Assets.Initialize();
+            }
+
             if (Keys.S.Pressed())
             {
-                World.Save();
+                World.Save("TestSave.m3n");
             }
 
             if (Keys.L.Pressed())
             {
-                World.Load();
+                World.Load("TestSave.m3n");
             }
 
             World.Update();

@@ -43,13 +43,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Art\Grass.png">
-      <Name>Grass</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Art\SelectCircle.png">
       <Name>SelectCircle</Name>
       <Importer>TextureImporter</Importer>
@@ -64,28 +57,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Art\Units_1.png">
-      <Name>Units_1</Name>
+    <Compile Include="Art\Soldier_16.png">
+      <Name>Soldier_16</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Art\Units_16.png">
-      <Name>Units_16</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Art\Units_2.png">
-      <Name>Units_2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Art\Units_4.png">
-      <Name>Units_4</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Art\Units_8.png">
-      <Name>Units_8</Name>
+    <Compile Include="Art\Soldier_8.png">
+      <Name>Soldier_8</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -124,13 +102,6 @@
   <ItemGroup>
     <Compile Include="Art\AttackMarker.png">
       <Name>AttackMarker</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Art\infantry2.png">
-      <Name>infantry2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

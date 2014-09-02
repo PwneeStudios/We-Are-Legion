@@ -79,7 +79,7 @@ namespace GpuSim
 
     public partial class World
     {
-        public void Save()
+        public void Save(string FileName)
         {
             var stream = new FileStream("TestSave.m3n", FileMode.Create);
             var writer = new BinaryWriter(stream);
@@ -104,11 +104,11 @@ namespace GpuSim
             stream.Close();
         }
 
-        public void Load()
+        public void Load(string FileName)
         {
             Render.UnsetDevice();
 
-            var stream = new FileStream("TestSave.m3n", FileMode.Open);
+            var stream = new FileStream(FileName, FileMode.Open);
             var reader = new BinaryReader(stream);
 
             DataGroup.CurrentData.SetData(reader.ReadTexture2D().GetData());
