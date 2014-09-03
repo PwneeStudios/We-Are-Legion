@@ -7,6 +7,10 @@ using Microsoft.Xna.Framework.Input;
 using FragSharpHelper;
 using FragSharpFramework;
 
+#if DEBUG
+using System.IO;
+#endif
+
 namespace GpuSim
 {
     public class GameClass : Game
@@ -51,8 +55,34 @@ namespace GpuSim
             Content.RootDirectory = "Content";
         }
 
+        public string HotSwapDir = "Content\\HotSwap\\";
         protected override void Initialize()
         {
+#if DEBUG
+            string ProjDir  = "C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/";
+            string ArtSrcDir = "C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/Terracotta/TerracottaContent/Art/";
+
+            var cwd = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location).Replace('\\', '/');
+
+            if (cwd.Contains(ProjDir))
+            {
+                HotSwapDir = "C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/Terracotta/Terracotta/bin/x86/Debug/Content/HotSwap/";
+
+                Directory.Delete(HotSwapDir, true);
+
+                var source_art = Directory.EnumerateFiles(ArtSrcDir, "*", SearchOption.AllDirectories);
+
+                foreach (var file in source_art)
+                {
+                    string dest = file.Replace("TerracottaContent/Art", "Terracotta/bin/x86/Debug/Content/HotSwap");
+                    Directory.CreateDirectory(Path.GetDirectoryName(dest));
+                    File.Copy(file, dest);
+                }
+
+                HotSwapDir = ArtSrcDir;
+            }
+#endif
+
             FragSharp.Initialize(Content, GraphicsDevice);
             GridHelper.Initialize(GraphicsDevice);
 
@@ -108,19 +138,22 @@ namespace GpuSim
             if (Buttons.Back.Down())
                 this.Exit();
 
-            if (Keys.Z.Pressed())
+            if (World.MapEditor)
             {
-                Assets.Initialize();
-            }
+                if (Keys.Z.Pressed())
+                {
+                    Assets.Initialize();
+                }
 
-            if (Keys.S.Pressed())
-            {
-                World.Save("TestSave.m3n");
-            }
+                if (Keys.S.Pressed())
+                {
+                    World.Save("TestSave.m3n");
+                }
 
-            if (Keys.L.Pressed())
-            {
-                World.Load("TestSave.m3n");
+                if (Keys.L.Pressed())
+                {
+                    World.Load("TestSave.m3n");
+                }
             }
 
             World.Update();

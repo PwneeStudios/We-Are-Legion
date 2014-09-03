@@ -16,19 +16,6 @@ namespace GpuSim
         }
     }
 
-    public static class Texture2DExtension
-    {
-        public static vec2 UnitSize(this Texture2D Texture)
-        {
-            return new vec2(1, (float)Texture.Height / (float)Texture.Width);
-        }
-
-        public static vec2 Size(this Texture2D Texture)
-        {
-            return new vec2(Texture.Width, Texture.Height);
-        }
-    }
-
     public static class ListExtension
     {
         public static void Swap<T>(this List<T> List, int Index, ref T NewElement)
@@ -41,6 +28,30 @@ namespace GpuSim
 
     public static class Texture2dExtension
     {
+        public static vec2 UnitSize(this Texture2D Texture)
+        {
+            return new vec2(1, (float)Texture.Height / (float)Texture.Width);
+        }
+
+        public static vec2 Size(this Texture2D Texture)
+        {
+            return new vec2(Texture.Width, Texture.Height);
+        }
+
+        public static Texture2D PremultiplyAlpha(this Texture2D texture)
+        {
+            Color[] data = texture.GetData();
+            
+            for (int i = 0; i < data.Length; i++)
+            {
+                data[i] = new Color(new Vector4(data[i].ToVector3() * (data[i].A / 255f), (data[i].A / 255f)));
+            }
+
+            texture.SetData(data);
+
+            return texture;
+        }
+
         static bool BoundsCheck(Rectangle rect, int w, int h)
         {
             return rect.Right <= w && rect.Bottom <= h && rect.Left >= 0 && rect.Top >= 0;

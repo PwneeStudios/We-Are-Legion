@@ -111,12 +111,12 @@ namespace GpuSim
             bool draw_selected = selected(u) && pos.y > select_size;
 
             pos.x += floor(frame);
-            pos.y += (Float(direction) - 1);
+            pos.y += (Float(direction) - 1) +4 * (Float(d.player) - 1);
             pos *= UnitSpriteSheet.SpriteSize;
 
             var clr = Texture[pos];
 
-            clr = PlayerColorize(clr, d.player);
+            //clr = PlayerColorize(clr, d.player);
             
             if (draw_selected)
             {

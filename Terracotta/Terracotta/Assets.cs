@@ -49,9 +49,9 @@ namespace GpuSim
             {
                 if (HotSwap)
                 {
-                    using (var file = File.OpenRead("Content\\HotSwap\\" + FileName + ".png"))
+                    using (var file = File.OpenRead(GameClass.Game.HotSwapDir + FileName + ".png"))
                     {
-                        return Texture2D.FromStream(GameClass.Game.GraphicsDevice, file);
+                        return Texture2D.FromStream(GameClass.Game.GraphicsDevice, file).PremultiplyAlpha();
                     }
                 }
                 else

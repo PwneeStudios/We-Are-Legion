@@ -137,46 +137,6 @@ bool GpuSim__SimShader__selected(float4 u)
     return val >= 0.5019608 - .001;
 }
 
-float4 GpuSim__SimShader__PlayerColorize(float4 clr, float player)
-{
-    if (abs(player - 0.003921569) < .001)
-    {
-    }
-    else
-    {
-        if (abs(player - 0.007843138) < .001)
-        {
-            float r = clr.r;
-            clr.r = clr.g;
-            clr.g = r;
-            clr.rgb *= 0.5;
-        }
-        else
-        {
-            if (abs(player - 0.01176471) < .001)
-            {
-                float b = clr.b;
-                clr.b = clr.g;
-                clr.g = b;
-            }
-            else
-            {
-                if (abs(player - 0.01568628) < .001)
-                {
-                    float r = clr.r;
-                    clr.r = clr.b;
-                    clr.b = r;
-                }
-                else
-                {
-                    clr.rgb *= 0.1;
-                }
-            }
-        }
-    }
-    return clr;
-}
-
 float4 GpuSim__SelectedUnitColor__Get(float player)
 {
     if (abs(player - 0.003921569) < .001)
@@ -206,10 +166,9 @@ float4 GpuSim__DrawUnits__Sprite(VertexToPixel psin, float4 u, float4 d, float2 
     }
     bool draw_selected = GpuSim__SimShader__selected(u) && pos.y > select_size + .001;
     pos.x += floor(frame);
-    pos.y += (FragSharpFramework__FragSharpStd__Float(direction) - 1);
+    pos.y += (FragSharpFramework__FragSharpStd__Float(direction) - 1) + 4 * (FragSharpFramework__FragSharpStd__Float(d.g) - 1);
     pos *= float2(1.0 / 32, 1.0 / 32);
     float4 clr = tex2D(Texture, pos);
-    clr = GpuSim__SimShader__PlayerColorize(clr, d.g);
     if (draw_selected)
     {
         float a = clr.a * blend;
