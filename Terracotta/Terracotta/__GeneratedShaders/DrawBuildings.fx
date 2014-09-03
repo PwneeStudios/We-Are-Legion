@@ -188,7 +188,7 @@ float4 GpuSim__DrawBuildings__Sprite(VertexToPixel psin, float4 u, float4 d, flo
     pos += 255 * float2(u.g, u.a);
     pos.x += floor(frame) * 3;
     pos.y += selected_offset + 6 * (255 * GpuSim__UnitType__BuildingIndex(d.r));
-    pos *= float2(1.0 / 3, 1.0 / 18);
+    pos *= float2(1.0 / 3, 1.0 / 30);
     float4 clr = tex2D(Texture, pos);
     if (GpuSim__SimShader__IsNeutralBuilding(d))
     {

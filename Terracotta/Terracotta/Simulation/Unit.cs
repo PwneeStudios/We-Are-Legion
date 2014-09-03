@@ -557,7 +557,7 @@ namespace GpuSim
             public static readonly vec2 BuildingDim = vec(BuildingDimX, BuildingDimY);
             public static readonly vec2 BuildingSize = vec(BuildingDimX / (float)SheetDimX, BuildingDimY / (float)SheetDimY);
 
-            public const int UnitTypes = 3;
+            public const int UnitTypes = 5;
             public const int SubsheetDimX = 1;
             public const int SubsheetDimY = 2 /*Selected,Unselected*/ * BuildingDimY;
             public static readonly vec2 SubsheetSize = vec(SubsheetDimX / (float)SheetDimX, SubsheetDimY / (float)SheetDimY);
