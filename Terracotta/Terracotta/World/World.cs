@@ -27,7 +27,8 @@ namespace GpuSim
             UserMessages = new UserMessageList();
         }
 
-        const double DelayBetweenUpdates = .3333;
+        //const double DelayBetweenUpdates = .3333;
+        const double DelayBetweenUpdates = .4;
 
         public bool MapEditor = true;
         bool DrawGridLines = false;
