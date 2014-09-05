@@ -126,14 +126,14 @@ namespace GpuSim
         void DrawCircleCursor()
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
-            DrawTexture.Using(camvec, CameraAspect, Assets.SelectCircle);
+            DrawTextureSmooth.Using(camvec, CameraAspect, Assets.SelectCircle);
             RectangleQuad.Draw(GameClass.Graphics, WorldCord, .2f * vec2.Ones / CameraZoom);
         }
 
         void DrawArrowCursor()
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
-            DrawTexture.Using(camvec, CameraAspect, Assets.Cursor);
+            DrawTextureSmooth.Using(camvec, CameraAspect, Assets.Cursor);
 
             vec2 size = .02f * Assets.Cursor.UnitSize() / CameraZoom;
             RectangleQuad.Draw(GameClass.Graphics, WorldCord + new vec2(size.x, -size.y), size);

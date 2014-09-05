@@ -22,6 +22,7 @@ namespace FragSharpFramework
             FragSharp.GraphicsDevice = GraphicsDevice;
             GpuSim.DrawSolid.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawSolid");
             GpuSim.DrawTexture.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTexture");
+            GpuSim.DrawTextureSmooth.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTextureSmooth");
             GpuSim.DrawBuildingsIcons.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawBuildingsIcons");
             GpuSim.DrawBuildings.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawBuildings");
             GpuSim.DrawCorpses.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawCorpses");
@@ -174,6 +175,51 @@ namespace GpuSim
 namespace GpuSim
 {
     public partial class DrawTexture
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Texture, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(cameraPos, cameraAspect, Texture);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Texture, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(cameraPos, cameraAspect, Texture);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Texture, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(cameraPos, cameraAspect, Texture);
+        }
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Texture, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(cameraPos, cameraAspect, Texture);
+        }
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Texture)
+        {
+            CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
+            CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
+            CompiledEffect.Parameters["fs_param_Texture_Texture"].SetValue(FragSharpMarshal.Marshal(Texture));
+            CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
+            CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace GpuSim
+{
+    public partial class DrawTextureSmooth
     {
         public static Effect CompiledEffect;
 

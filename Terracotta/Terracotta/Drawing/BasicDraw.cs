@@ -25,4 +25,19 @@ namespace GpuSim
             return output;
         }
     }
+
+    public partial class DrawTextureSmooth : BaseShader
+    {
+        [FragmentShader]
+        color FragmentShader(VertexOut vertex, TextureSampler Texture)
+        {
+            color output;
+
+            output = Texture[vertex.TexCoords];
+            output *= vertex.Color;
+            output.rgb *= vertex.Color.a;
+
+            return output;
+        }
+    }
 }
