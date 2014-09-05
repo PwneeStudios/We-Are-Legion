@@ -42,7 +42,12 @@ namespace GpuSim
             AttackMarker        = LoadTexture("AttackMarker");
         }
 
+#if DEBUG
         static bool HotSwap = true;
+#else
+        static bool HotSwap = false;
+#endif
+
         static Texture2D LoadTexture(string FileName)
         {
             try

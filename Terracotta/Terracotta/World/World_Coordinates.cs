@@ -9,14 +9,14 @@ namespace GpuSim
             var world = ScreenToWorldCoord(pos);
             world.y = -world.y;
 
-            var grid_coord = GameClass.Screen * (world + vec2.Ones) / 2;
+            var grid_coord = DataGroup.GridSize * (world + vec2.Ones) / 2;
 
             return grid_coord;
         }
 
-        vec2 GridToScreenCoord(vec2 pos)
+        vec2 GridToWorldCood(vec2 pos)
         {
-            pos = 2 * pos / GameClass.Screen - vec2.Ones;
+            pos = 2 * pos / DataGroup.GridSize - vec2.Ones;
             pos.y = -pos.y;
             return pos;
         }

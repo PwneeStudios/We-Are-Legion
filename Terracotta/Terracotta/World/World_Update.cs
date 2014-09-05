@@ -41,8 +41,9 @@ namespace GpuSim
 
             float FpsRateModifier = 1;
 
-            //const float MaxZoomOut = 5.33333f, MaxZoomIn = 200;
-            const float MaxZoomOut = 1, MaxZoomIn = 200;
+            //const float MaxZoomOut = 5.33333f, MaxZoomIn = 200f;
+            //const float MaxZoomOut = 3.2f, MaxZoomIn = 200f;
+            const float MaxZoomOut = 1f, MaxZoomIn = 200f;
 
             // Zoom all the way out
             if (Keys.Space.Down())
@@ -61,7 +62,7 @@ namespace GpuSim
 
             float KeyZoomRate = 1.125f * FpsRateModifier;
             if (Buttons.X.Down() || Keys.X.Down() || Keys.E.Down())      CameraZoom /= KeyZoomRate;
-            //else if (Buttons.A.Down() || Keys.Z.Down() || Keys.Q.Down()) CameraZoom *= KeyZoomRate;
+            else if (Buttons.A.Down() || Keys.Z.Down() || Keys.Q.Down()) CameraZoom *= KeyZoomRate;
 
             if (CameraZoom < MaxZoomOut) CameraZoom = MaxZoomOut;
             if (CameraZoom > MaxZoomIn) CameraZoom = MaxZoomIn;
@@ -99,11 +100,13 @@ namespace GpuSim
 
 
             // Make sure the camera doesn't go too far offscreen
+            //float x_edge = System.Math.Max(CameraAspect / CameraZoom, 1);
+            float x_edge = System.Math.Max(.5f * (CameraAspect / CameraZoom) + .5f * (CameraAspect / MaxZoomOut), 1);
             var TR = ScreenToWorldCoord(new vec2(GameClass.Screen.x, 0));
-            if (TR.x > 1) CameraPos = new vec2(CameraPos.x - (TR.x - 1), CameraPos.y);
+            if (TR.x > x_edge) CameraPos = new vec2(CameraPos.x - (TR.x - x_edge), CameraPos.y);
             if (TR.y > 1) CameraPos = new vec2(CameraPos.x, CameraPos.y - (TR.y - 1));
             var BL = ScreenToWorldCoord(new vec2(0, GameClass.Screen.y));
-            if (BL.x < -1) CameraPos = new vec2(CameraPos.x - (BL.x + 1), CameraPos.y);
+            if (BL.x < -x_edge) CameraPos = new vec2(CameraPos.x - (BL.x + x_edge), CameraPos.y);
             if (BL.y < -1) CameraPos = new vec2(CameraPos.x, CameraPos.y - (BL.y + 1));
 
 

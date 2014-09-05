@@ -401,7 +401,6 @@ namespace GpuSim
             if (SquareWidth < 2) SquareWidth = 0;
             pos = floor(pos);
 
-            //vec2 Destination_Size = new vec2(SquareWidth, SquareWidth) * 1.25f;
             vec2 Destination_Size = new vec2(SquareWidth, SquareWidth) * .8f;
             vec2 Destination_BL = pos - Destination_Size / 2;
 

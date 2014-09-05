@@ -79,7 +79,7 @@ namespace GpuSim
 
             DrawSolid.Using(camvec, CameraAspect, DrawTerritoryPlayer.Unavailable);
 
-            vec2 gWorldCord = GridToScreenCoord(floor(GridCoord));
+            vec2 gWorldCord = GridToWorldCood(floor(GridCoord));
             vec2 size = 1 / DataGroup.GridSize;
             RectangleQuad.Draw(GameClass.Graphics, gWorldCord + new vec2(size.x, -size.y), size);
         }
@@ -99,7 +99,7 @@ namespace GpuSim
                 clr = CanPlace[i + j * _h] ? DrawTerritoryPlayer.Available : DrawTerritoryPlayer.Unavailable;
                 DrawSolid.Using(camvec, CameraAspect, clr);
 
-                vec2 gWorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCoord.x + i), (float)Math.Floor(GridCoord.y + j)));
+                vec2 gWorldCord = GridToWorldCood(new vec2((float)Math.Floor(GridCoord.x + i), (float)Math.Floor(GridCoord.y + j)));
                 vec2 size = 1 / DataGroup.GridSize;
                 RectangleQuad.Draw(GameClass.Graphics, gWorldCord + new vec2(size.x, -size.y), size);
             }
@@ -111,7 +111,7 @@ namespace GpuSim
 
             DrawTexture.Using(camvec, CameraAspect, Assets.BuildingTexture_1);
 
-            vec2 WorldCord = GridToScreenCoord(new vec2((float)Math.Floor(GridCoord.x), (float)Math.Floor(GridCoord.y)));
+            vec2 WorldCord = GridToWorldCood(new vec2((float)Math.Floor(GridCoord.x), (float)Math.Floor(GridCoord.y)));
             vec2 size = 3 * 1 / DataGroup.GridSize;
 
             vec2 uv_size = BuildingSpriteSheet.BuildingSize;
