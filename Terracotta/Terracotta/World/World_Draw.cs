@@ -76,7 +76,7 @@ namespace GpuSim
             {
                 BuildingsSpriteSheet = Assets.BuildingTexture_1;
                 ExplosionSpriteSheet = Assets.ExplosionTexture_1;
-                UnitsSpriteSheet = Assets.UnitTexture_8;
+                UnitsSpriteSheet = Assets.UnitTexture_4;
             }
             else
             {
@@ -91,6 +91,7 @@ namespace GpuSim
 
             PercentSimStepComplete = (float)(SecondsSinceLastUpdate / DelayBetweenUpdates);
 
+            // Draw parts of the world outside the playable map
             if (x_edge > 1)
             {
                 DrawOutsideTiles.Using(camvec, CameraAspect, DataGroup.Tiles, Assets.TileSpriteSheet);
@@ -102,6 +103,7 @@ namespace GpuSim
                 OutsideTiles.Draw(GameClass.Graphics);
             }
 
+            // The the map tiles
             DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, Assets.TileSpriteSheet, MapEditor && DrawGridLines);
             GridHelper.DrawGrid();
 
@@ -143,18 +145,25 @@ namespace GpuSim
             Markers.Draw();
 
             // Units
-            if (CameraZoom > z / 4)
+            if (CameraZoom > z / 8)
             {
-                float Second = (DrawCount % 60) / 60f;
-                float blend = CoreMath.LogLerpRestrict(60.0f, 1, 1.25f, 0, CameraZoom);
-                float select_size = CoreMath.LogLerpRestrict(6.0f, .6f, z / 4, 0, CameraZoom);
-                 
-                DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete, Second, blend, select_size);
+                float second = (DrawCount % 60) / 60f;
+
+                float selection_blend = CoreMath.LogLerpRestrict(60.0f, 1, 1.25f, 0, CameraZoom);
+                float selection_size = CoreMath.LogLerpRestrict(6.0f, .6f, z / 4, 0, CameraZoom);
+
+                float solid_blend = CoreMath.LogLerpRestrict(z / 7, 0, z / 2, 1, CameraZoom);
+                bool solid_blend_flag = solid_blend < 1;
+
+                DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet,
+                    PercentSimStepComplete, second,
+                    selection_blend, selection_size,
+                    solid_blend_flag, solid_blend);
             }
-            else if (CameraZoom > z / 8)
-                DrawUnitsZoomedOut.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete);
             else
+            {
                 DrawUnitsZoomedOutBlur.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete);
+            }
             GridHelper.DrawGrid();
 
             // Building icons

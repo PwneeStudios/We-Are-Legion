@@ -2,68 +2,8 @@ using FragSharpFramework;
 
 namespace GpuSim
 {
-    /*
-    public partial class DrawUnitsZoomedOut : DrawUnits
-    {
-        color Presence(data data)
-        {
-            return (Something(data) && !IsStationary(data)) ?
-                (selected(data) ? Color_Selected : Color_Unselected) :
-                rgba(0,0,0,0);
-        }
-
-        [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, PointSampler Texture, float PercentSimStepComplete)
-        {
-            color output = color.TransparentBlack;
-
-            data
-                right = CurrentData[RightOne],
-                up    = CurrentData[UpOne],
-                left  = CurrentData[LeftOne],
-                down  = CurrentData[DownOne],
-                here  = CurrentData[Here];
-
-            output =    .5f *
-                            .25f * (Presence(right) + Presence(up) + Presence(left) + Presence(down))
-                      + .5f *
-                             Presence(here);
-            
-            return output;
-        }
-    }
-    */
-
-    public partial class DrawUnitsZoomedOut : DrawUnits
-    {
-        color Presence(data data, unit unit)
-        {
-            return (Something(data) && !IsStationary(data)) ?
-                (selected(data) ? SelectedUnitColor.Get(unit.player) : UnitColor.Get(unit.player)) :
-                rgba(0, 0, 0, 0);
-        }
-
-        [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnit, Field<unit> PreviousUnit, PointSampler Texture, float PercentSimStepComplete)
-        {
-            color output = color.TransparentBlack;
-
-            data data_here  = CurrentData[Here];
-            unit unit_here  = CurrentUnit[Here];
-
-            return Presence(data_here, unit_here);
-        }
-    }
-
     public partial class DrawUnitsZoomedOutBlur : DrawUnits
     {
-        color Presence(data data, unit unit)
-        {
-            return (Something(data) && !IsStationary(data)) ?
-                (selected(data) ? SelectedUnitColor.Get(unit.player) : UnitColor.Get(unit.player)) :
-                rgba(0, 0, 0, 0);
-        }
-
         [FragmentShader]
         color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnit, Field<unit> PreviousUnit, PointSampler Texture, float PercentSimStepComplete)
         {
@@ -94,41 +34,52 @@ namespace GpuSim
 
     public partial class DrawUnits : BaseShader
     {
-        color Circle(vec2 pos)
+        protected color Presence(data data, unit unit)
         {
-            float r = length(pos - vec(.5f, .5f));
-            if (r < .3f)
-                return rgba(1, 1, 1, 1);
-            else
-                return rgba(0, 0, 0, 0);
+            return (Something(data) && !IsStationary(data)) ?
+                SolidColor(data, unit) :
+                color.TransparentBlack;
         }
 
-        protected color Sprite(data u, unit d, vec2 pos, float direction, float frame, PointSampler Texture, float blend, float select_size)
+        protected color SolidColor(data data, unit unit)
+        {
+            return selected(data) ? SelectedUnitColor.Get(unit.player) : UnitColor.Get(unit.player);           
+        }
+
+        protected color Sprite(data d, unit u, vec2 pos, float frame, PointSampler Texture,
+            float selection_blend, float selection_size,
+            bool solid_blend_flag, float solid_blend)
         {
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            bool draw_selected = selected(u) && pos.y > select_size;
+            bool draw_selected = selected(d) && pos.y > selection_size;
 
             pos.x += floor(frame);
-            pos.y += (Float(direction) - 1) +4 * (Float(d.player) - 1);
+            pos.y += (Float(d.direction) - 1) + 4 * (Float(u.player) - 1);
             pos *= UnitSpriteSheet.SpriteSize;
 
             var clr = Texture[pos];
 
-            //clr = PlayerColorize(clr, d.player);
-            
             if (draw_selected)
             {
-                float a = clr.a * blend;
-                clr = a * clr + (1 - a) * SelectedUnitColor.Get(d.player);
+                float a = clr.a * selection_blend;
+                clr = a * clr + (1 - a) * SelectedUnitColor.Get(u.player);
+            }
+
+            if (solid_blend_flag)
+            {
+                clr = solid_blend * clr + (1 - solid_blend) * SolidColor(d, u);
             }
 
             return clr;
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnits, Field<unit> PreviousUnits, PointSampler Texture, float s, float second, float blend, float select_size)
+        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnits, Field<unit> PreviousUnits, PointSampler Texture,
+            float s, float t,
+            float selection_blend, float selection_size,
+            [Vals.Bool] bool solid_blend_flag, float solid_blend)
         {
             color output = color.TransparentBlack;
 
@@ -148,10 +99,10 @@ namespace GpuSim
             {
                 if (s > .5) pre = cur;
 
-                float _s = cur_unit.anim == _0 ? second : s;
+                float _s = cur_unit.anim == _0 ? t : s;
 
                 float frame = _s * UnitSpriteSheet.AnimLength + Float(cur_unit.anim);
-                output += Sprite(pre, pre_unit, subcell_pos, pre.direction, frame, Texture, blend, select_size);
+                output += Sprite(pre, pre_unit, subcell_pos, frame, Texture, selection_blend, selection_size, solid_blend_flag, solid_blend);
             }
             else
             {
@@ -160,15 +111,16 @@ namespace GpuSim
                 if (IsValid(cur.direction))
                 {
                     var prior_dir = prior_direction(cur);
+                    cur.direction = prior_dir;
 
                     vec2 offset = (1 - s) * direction_to_vec(prior_dir);
-                    output += Sprite(cur, cur_unit, subcell_pos + offset, prior_dir, frame, Texture, blend, select_size);
+                    output += Sprite(cur, cur_unit, subcell_pos + offset, frame, Texture, selection_blend, selection_size, solid_blend_flag, solid_blend);
                 }
 
                 if (IsValid(pre.direction) && output.a < .025f)
                 {
                     vec2 offset = -s * direction_to_vec(pre.direction);
-                    output += Sprite(pre, pre_unit, subcell_pos + offset, pre.direction, frame, Texture, blend, select_size);
+                    output += Sprite(pre, pre_unit, subcell_pos + offset, frame, Texture, selection_blend, selection_size, solid_blend_flag, solid_blend);
                 }
             }
 
