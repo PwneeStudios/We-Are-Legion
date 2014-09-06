@@ -431,10 +431,12 @@ namespace GpuSim
 
                 Barracks = _2,
                 GoldMine = _3,
+                JadeMine = _4,
 
-                GoldSource = _4,
+                GoldSource = _10,
+                JadeSource = _11,
 
-                BlockingTile = _5;
+                BlockingTile = _20;
         }
 
         protected static bool IsUnit(unit u)

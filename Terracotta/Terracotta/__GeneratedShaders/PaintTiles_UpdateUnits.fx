@@ -60,7 +60,7 @@ bool GpuSim__SimShader__IsBlockingTile(float4 t)
 
 bool GpuSim__SimShader__BlockingTileHere(float4 u)
 {
-    return u.r >= 0.01960784 - .001;
+    return u.r >= 0.07843138 - .001;
 }
 
 // Compiled vertex shader
@@ -81,7 +81,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
     if (GpuSim__SimShader__IsBlockingTile(tile_here))
     {
-        unit_here.r = 0.01960784;
+        unit_here.r = 0.07843138;
         unit_here.g = 0.0;
         unit_here.b = 0.0;
     }

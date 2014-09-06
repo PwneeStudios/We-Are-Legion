@@ -4,6 +4,13 @@ namespace GpuSim
 {
     public partial class World : SimShader
     {
+        //Migrate.Apply(World.DataGroup.CurrentUnits, Output: World.DataGroup.Temp1);
+        //CoreMath.Swap(ref World.DataGroup.Temp1, ref World.DataGroup.CurrentUnits);
+
+        //Migrate.Apply(World.DataGroup.PreviousUnits, Output: World.DataGroup.Temp1);
+        //CoreMath.Swap(ref World.DataGroup.Temp1, ref World.DataGroup.PreviousUnits);
+
+
         public World()
         {
             CameraAspect = GameClass.ScreenAspect;

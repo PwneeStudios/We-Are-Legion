@@ -124,6 +124,7 @@
     <Compile Include="DataGroup\BuildingUpdate.cs" />
     <Compile Include="Simulation\GameColors.cs" />
     <Compile Include="Util\ShaderUtil.cs" />
+    <Compile Include="World\Migrate.cs" />
     <Compile Include="World\World_Util.cs" />
     <Compile Include="World\World_Update.cs" />
     <Compile Include="World\World_Draw.cs" />

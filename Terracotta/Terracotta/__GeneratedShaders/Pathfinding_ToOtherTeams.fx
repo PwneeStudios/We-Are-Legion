@@ -80,12 +80,12 @@ bool GpuSim__SimShader__Something(float4 u)
 
 bool GpuSim__SimShader__IsNeutralBuilding(float4 u)
 {
-    return u.r >= 0.01568628 - .001 && u.r < 0.01960784 - .001;
+    return u.r >= 0.03921569 - .001 && u.r < 0.07843138 - .001;
 }
 
 bool GpuSim__SimShader__BlockingTileHere(float4 u)
 {
-    return u.r >= 0.01960784 - .001;
+    return u.r >= 0.07843138 - .001;
 }
 
 // Compiled vertex shader

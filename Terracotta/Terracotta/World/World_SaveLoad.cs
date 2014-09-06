@@ -81,7 +81,7 @@ namespace GpuSim
     {
         public void Save(string FileName)
         {
-            var stream = new FileStream("TestSave.m3n", FileMode.Create);
+            var stream = new FileStream(FileName, FileMode.Create);
             var writer = new BinaryWriter(stream);
 
             writer.Write(DataGroup.CurrentData);

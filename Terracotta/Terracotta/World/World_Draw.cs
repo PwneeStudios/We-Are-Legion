@@ -97,10 +97,6 @@ namespace GpuSim
             //DrawDirwardInfo.Using(camvec, CameraAspect, DataGroup.Dirward[Dir.Right], Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
             //DrawPolarInfo.Using(camvec, CameraAspect, DataGroup.Geo, DataGroup.GeoInfo, Assets.DebugTexture_Num); GridHelper.DrawGrid();
             
-
-            //DrawGrass.Using(camvec, CameraAspect, Assets.GroundTexture);
-            //Ground.Draw(GameClass.Graphics);
-
             // Territory and corpses
             if (CurUserMode == UserMode.PlaceBuilding && !MapEditor)
             {
@@ -118,9 +114,7 @@ namespace GpuSim
 
                 if (CameraZoom >= z / 8)
                 {
-                    //float corpse_blend = 1f * CoreMath.LerpRestrict(z / 2, 1, z / 16, 0, CameraZoom);
                     float corpse_blend = .35f * CoreMath.LerpRestrict(z / 2, 1, z / 16, 0, CameraZoom);
-                    //float corpse_blend = 0;
 
                     DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet, corpse_blend);
                     GridHelper.DrawGrid();

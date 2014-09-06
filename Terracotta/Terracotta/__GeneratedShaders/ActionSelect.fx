@@ -74,7 +74,7 @@ float fs_param_action;
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__BlockingTileHere(float4 u)
 {
-    return u.r >= 0.01960784 - .001;
+    return u.r >= 0.07843138 - .001;
 }
 
 float FragSharpFramework__FragSharpStd__fint_round(float v)
