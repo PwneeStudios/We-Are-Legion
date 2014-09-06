@@ -39,7 +39,7 @@ namespace GpuSim
 
             graphics = new GraphicsDeviceManager(this);
 
-            Window.Title = "Project Pinnacle, Game 2";
+            Window.Title = "Terracotta";
 
             //graphics.IsFullScreen = false;
             //graphics.PreferredBackBufferWidth = 1024;
