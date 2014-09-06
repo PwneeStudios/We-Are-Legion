@@ -40,9 +40,12 @@ namespace GpuSim
         public class UnitColor
         {
             public static readonly color
-                Player1 = rgb(0x917c82),
+                Player1 = rgb(0x89eae9),
+                Player2 = rgb(0xea8556),
+                //Player1 = rgb(0x917c82),
+                //Player2 = rgb(0xf0b021),
 
-                Player2 = new color(.2f, .7f, .2f, .5f),
+                //Player2 = new color(.2f, .7f, .2f, .5f),
                 Player3 = new color(.4f, .85f, .65f, .5f),
                 Player4 = new color(.4f, .4f, .85f, .5f);
 
@@ -83,8 +86,13 @@ namespace GpuSim
         public class TerritoryColor
         {
             public static readonly color
-                Player1 = new color(.7f, .3f, .3f, .5f),
-                Player2 = new color(.1f, .5f, .1f, .5f),
+                Player1 = rgb(0x0064dc),
+                Player2 = rgb(0xff3220),
+                //Player1 = rgb(0xc097a2),
+                //Player2 = rgb(0xfbc34b),
+
+                //Player1 = new color(.7f, .3f, .3f, .5f),
+                //Player2 = new color(.1f, .5f, .1f, .5f),
                 Player3 = new color(.3f, .7f, .55f, .5f),
                 Player4 = new color(.3f, .3f, .7f, .5f);
 

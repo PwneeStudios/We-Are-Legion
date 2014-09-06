@@ -164,11 +164,11 @@ float4 GpuSim__UnitColor__Get(float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
-        return float4(0.5686275, 0.4862745, 0.509804, 1.0);
+        return float4(0.5372549, 0.9176471, 0.9137255, 1.0);
     }
     if (abs(player - 0.007843138) < .001)
     {
-        return float4(0.2, 0.7, 0.2, 0.5);
+        return float4(0.9176471, 0.5215687, 0.3372549, 1.0);
     }
     if (abs(player - 0.01176471) < .001)
     {

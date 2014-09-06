@@ -69,11 +69,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float _blend = 1;
     if (dist.x < 0.02745098 - .001 && dist.x < enemy_dist.x - .001)
     {
-        clr = float4(0.7, 0.3, 0.3, 0.5);
+        clr = float4(0, 0.3921569, 0.8627451, 1.0);
     }
     if (dist.y < 0.02745098 - .001 && dist.y < enemy_dist.y - .001)
     {
-        clr = float4(0.1, 0.5, 0.1, 0.5);
+        clr = float4(1, 0.1960784, 0.1254902, 1.0);
     }
     if (dist.z < 0.02745098 - .001 && dist.z < enemy_dist.z - .001)
     {
