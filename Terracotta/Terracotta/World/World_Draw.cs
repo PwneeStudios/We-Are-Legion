@@ -82,7 +82,7 @@ namespace GpuSim
             {
                 BuildingsSpriteSheet = Assets.BuildingTexture_1;
                 ExplosionSpriteSheet = Assets.ExplosionTexture_1;
-                UnitsSpriteSheet = Assets.UnitTexture_16;
+                UnitsSpriteSheet = Assets.UnitTexture_4;
             }
 
             // Draw texture to screen
