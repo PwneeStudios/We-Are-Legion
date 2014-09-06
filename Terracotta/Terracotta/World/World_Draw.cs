@@ -7,6 +7,8 @@ namespace GpuSim
 {
     public partial class World : SimShader
     {
+        RectangleQuad OutsideTiles = new RectangleQuad();
+
         public void Draw()
         {
             DrawCount++;
@@ -88,6 +90,17 @@ namespace GpuSim
             GameClass.Graphics.Clear(Color.Black);
 
             PercentSimStepComplete = (float)(SecondsSinceLastUpdate / DelayBetweenUpdates);
+
+            if (x_edge > 1)
+            {
+                DrawOutsideTiles.Using(camvec, CameraAspect, DataGroup.Tiles, Assets.TileSpriteSheet);
+                
+                OutsideTiles.SetupVertices(vec(-x_edge, -1), vec(0, 1), vec(0, 0), vec(-x_edge / 2, 1));
+                OutsideTiles.Draw(GameClass.Graphics);
+
+                OutsideTiles.SetupVertices(vec(x_edge, -1), vec(0, 1), vec(0, 0), vec(x_edge / 2, 1));
+                OutsideTiles.Draw(GameClass.Graphics);
+            }
 
             DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, Assets.TileSpriteSheet, MapEditor && DrawGridLines);
             GridHelper.DrawGrid();

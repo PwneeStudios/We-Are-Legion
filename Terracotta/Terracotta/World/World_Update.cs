@@ -1,3 +1,5 @@
+using System;
+
 using Microsoft.Xna.Framework.Input;
 
 using FragSharpHelper;
@@ -35,6 +37,7 @@ namespace GpuSim
             DrawGridLines = !DrawGridLines;
         }
 
+        float x_edge;
         public void Update()
         {
             EditorUpdate();
@@ -100,8 +103,7 @@ namespace GpuSim
 
 
             // Make sure the camera doesn't go too far offscreen
-            //float x_edge = System.Math.Max(CameraAspect / CameraZoom, 1);
-            float x_edge = System.Math.Max(.5f * (CameraAspect / CameraZoom) + .5f * (CameraAspect / MaxZoomOut), 1);
+            x_edge = Math.Max(.5f * (CameraAspect / CameraZoom) + .5f * (CameraAspect / MaxZoomOut), 1);
             var TR = ScreenToWorldCoord(new vec2(GameClass.Screen.x, 0));
             if (TR.x > x_edge) CameraPos = new vec2(CameraPos.x - (TR.x - x_edge), CameraPos.y);
             if (TR.y > 1) CameraPos = new vec2(CameraPos.x, CameraPos.y - (TR.y - 1));

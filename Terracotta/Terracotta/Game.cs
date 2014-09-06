@@ -41,13 +41,13 @@ namespace GpuSim
 
             Window.Title = "Project Pinnacle, Game 2";
 
-            graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferWidth = 1024;
-            graphics.PreferredBackBufferHeight = 1024;
-
             //graphics.IsFullScreen = false;
-            //graphics.PreferredBackBufferWidth = 1280;
-            //graphics.PreferredBackBufferHeight = 720;
+            //graphics.PreferredBackBufferWidth = 1024;
+            //graphics.PreferredBackBufferHeight = 1024;
+
+            graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferWidth = 1280;
+            graphics.PreferredBackBufferHeight = 720;
 
             //graphics.IsFullScreen = false;
             //graphics.PreferredBackBufferWidth = 1920;
