@@ -1,6 +1,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using FragSharpHelper;
 using FragSharpFramework;
 
 namespace GpuSim
@@ -188,7 +189,7 @@ namespace GpuSim
                 {
                     //DrawGridCell();
                     DrawCircleCursor();
-                    DrawArrowCursor();
+                    //DrawArrowCursor();
                 }
             }
             

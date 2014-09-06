@@ -16,7 +16,7 @@ namespace GpuSim
             
             TileSpriteSheet,
 
-            Cursor, SelectCircle, SelectCircle_Data, AttackMarker;
+            Cursor, SelectCircle, SelectCircle_Data, SelectDot, AttackMarker;
 
         public static ContentManager Content { get { return GameClass.Game.Content; } }
 
@@ -39,6 +39,7 @@ namespace GpuSim
             Cursor              = LoadTexture("Cursor");
             SelectCircle        = LoadTexture("SelectCircle");
             SelectCircle_Data   = LoadTexture("SelectCircle_Data");
+            SelectDot          = LoadTexture("SelectDot");
             AttackMarker        = LoadTexture("AttackMarker");
         }
 

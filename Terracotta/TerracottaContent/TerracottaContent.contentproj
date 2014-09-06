@@ -57,18 +57,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Art\Soldier_16.png">
-      <Name>Soldier_16</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Art\Soldier_8.png">
-      <Name>Soldier_8</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Art\Buildings_1.png">
       <Name>Buildings_1</Name>
       <Importer>TextureImporter</Importer>
@@ -142,6 +130,13 @@
   <ItemGroup>
     <Compile Include="Art\TileSet.png">
       <Name>TileSet</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Art\SelectDot.png">
+      <Name>SelectDot</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
