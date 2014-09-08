@@ -52,6 +52,8 @@ sampler fs_param_Info : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 float GpuSim__SimShader__unpack_val(float2 packed)
 {

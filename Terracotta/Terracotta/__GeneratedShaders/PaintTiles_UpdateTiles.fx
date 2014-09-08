@@ -52,6 +52,8 @@ sampler fs_param_Select : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 void GpuSim__PaintTiles_UpdateTiles__DirtGrassInterface(inout float4 here, inout float4 right, inout float4 up, inout float4 left, inout float4 down, inout float4 up_right, inout float4 up_left, inout float4 down_right, inout float4 down_left)
 {

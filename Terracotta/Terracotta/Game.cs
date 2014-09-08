@@ -9,6 +9,7 @@ using FragSharpFramework;
 
 #if DEBUG
 using System.IO;
+using System.Security.Permissions;
 #endif
 
 namespace GpuSim
@@ -60,32 +61,10 @@ namespace GpuSim
             Content.RootDirectory = "Content";
         }
 
-        public string HotSwapDir = "Content\\HotSwap\\";
         protected override void Initialize()
         {
 #if DEBUG
-            string ProjDir  = "C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/";
-            string ArtSrcDir = "C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/Terracotta/TerracottaContent/Art/";
-
-            var cwd = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location).Replace('\\', '/');
-
-            if (cwd.Contains(ProjDir))
-            {
-                HotSwapDir = "C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/Terracotta/Terracotta/bin/x86/Debug/Content/HotSwap/";
-
-                Directory.Delete(HotSwapDir, true);
-
-                var source_art = Directory.EnumerateFiles(ArtSrcDir, "*", SearchOption.AllDirectories);
-
-                foreach (var file in source_art)
-                {
-                    string dest = file.Replace("TerracottaContent/Art", "Terracotta/bin/x86/Debug/Content/HotSwap");
-                    Directory.CreateDirectory(Path.GetDirectoryName(dest));
-                    File.Copy(file, dest);
-                }
-
-                HotSwapDir = ArtSrcDir;
-            }
+            SetupHotswap();
 #endif
 
             FragSharp.Initialize(Content, GraphicsDevice);
@@ -104,6 +83,55 @@ namespace GpuSim
             base.Initialize();
         }
 
+#if DEBUG
+        public string HotSwapDir = "Content\\HotSwap\\";
+        private void SetupHotswap()
+        {
+            string ProjDir = "C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/";
+            string ArtSrcDir = "C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/Terracotta/TerracottaContent/Art/";
+
+            var cwd = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location).Replace('\\', '/');
+
+            // On the dev machine copy actual art folder to hot swap, and then work from art folder directly
+            if (cwd.Contains(ProjDir))
+            {
+                HotSwapDir = "C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/Terracotta/Terracotta/bin/x86/Debug/Content/HotSwap/";
+
+                Directory.Delete(HotSwapDir, true);
+
+                var source_art = Directory.EnumerateFiles(ArtSrcDir, "*", SearchOption.AllDirectories);
+
+                foreach (var file in source_art)
+                {
+                    string dest = file.Replace("TerracottaContent/Art", "Terracotta/bin/x86/Debug/Content/HotSwap");
+                    Directory.CreateDirectory(Path.GetDirectoryName(dest));
+                    File.Copy(file, dest);
+                }
+
+                HotSwapDir = ArtSrcDir;
+            }
+
+            // Setup watcher
+            FileSystemWatcher watcher = new FileSystemWatcher();
+            watcher.Path = HotSwapDir;
+            watcher.Filter = "*.png";
+
+            // Watcher event handles
+            watcher.Changed += new FileSystemEventHandler(OnHotSwapChanged);
+            watcher.Changed += new FileSystemEventHandler(OnHotSwapChanged);
+            watcher.Created += new FileSystemEventHandler(OnHotSwapChanged);
+            watcher.Deleted += new FileSystemEventHandler(OnHotSwapChanged);
+            
+            // Start watching
+            watcher.EnableRaisingEvents = true;
+        }
+
+        private static void OnHotSwapChanged(object source, FileSystemEventArgs e)
+        {
+            //Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
+            Assets.Initialize();
+        }
+
         /// <summary>
         /// LoadContent will be called once per game and is the place to load
         /// all of your content.
@@ -111,6 +139,7 @@ namespace GpuSim
         protected override void LoadContent()
         {
         }
+#endif
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -149,11 +178,6 @@ namespace GpuSim
 
             if (World.MapEditor)
             {
-                if (Keys.Z.Pressed())
-                {
-                    Assets.Initialize();
-                }
-
                 if (Keys.S.Pressed())
                 {
                     World.Save("TestSave.m3n");

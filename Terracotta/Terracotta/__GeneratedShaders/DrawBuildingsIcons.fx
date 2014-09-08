@@ -41,6 +41,8 @@ sampler fs_param_BuildingDistancess : register(s1) = sampler_state
 
 float fs_param_blend;
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
 {

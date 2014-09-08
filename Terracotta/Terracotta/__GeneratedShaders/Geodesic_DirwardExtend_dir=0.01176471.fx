@@ -68,6 +68,8 @@ sampler fs_param_Dirward : register(s3) = sampler_state
 };
 
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsBlockingTile(float4 t)
 {

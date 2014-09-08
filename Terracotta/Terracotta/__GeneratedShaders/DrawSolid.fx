@@ -26,6 +26,8 @@ float vs_param_cameraAspect;
 // The following are variables used by the fragment shader (fragment parameters).
 float4 fs_param_clr;
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 
 // Compiled vertex shader

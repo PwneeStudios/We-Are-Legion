@@ -3,11 +3,17 @@ using System.IO;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
+using FragSharpFramework;
+
 namespace GpuSim
 {
     public static class Assets
     {
         public static Texture2D
+#if DEBUG
+            FarColors,
+#endif
+
             DebugTexture_Arrows, DebugTexture_Num,
 
             BuildingTexture_1,
@@ -22,6 +28,11 @@ namespace GpuSim
 
         public static void Initialize()
         {
+#if DEBUG
+            FarColors           = LoadTexture("FarColors");
+            SimShader.FarColor = new Field<color>(FarColors);
+#endif
+
             DebugTexture_Arrows = LoadTexture("Debug_Arrows");
             DebugTexture_Num    = LoadTexture("Debug_Num");
 
@@ -31,26 +42,23 @@ namespace GpuSim
             UnitTexture_1       = LoadTexture("Soldier_1");
             UnitTexture_2       = LoadTexture("Soldier_2");
             UnitTexture_4       = LoadTexture("Soldier_4");
-            UnitTexture_8       = LoadTexture("Soldier_8");
-            UnitTexture_16      = LoadTexture("Soldier_16");
 
             TileSpriteSheet     = LoadTexture("TileSet");
 
             Cursor              = LoadTexture("Cursor");
             SelectCircle        = LoadTexture("SelectCircle");
             SelectCircle_Data   = LoadTexture("SelectCircle_Data");
-            SelectDot          = LoadTexture("SelectDot");
+            SelectDot           = LoadTexture("SelectDot");
             AttackMarker        = LoadTexture("AttackMarker");
         }
 
 #if DEBUG
         static bool HotSwap = true;
-#else
-        static bool HotSwap = false;
 #endif
 
         static Texture2D LoadTexture(string FileName)
         {
+#if DEBUG
             try
             {
                 if (HotSwap)
@@ -69,6 +77,9 @@ namespace GpuSim
             {
                 return new Texture2D(GameClass.Game.GraphicsDevice, 1, 1);
             }
+#else
+            return Content.Load<Texture2D>("Art\\" + FileName);
+#endif
         }
     }
 }

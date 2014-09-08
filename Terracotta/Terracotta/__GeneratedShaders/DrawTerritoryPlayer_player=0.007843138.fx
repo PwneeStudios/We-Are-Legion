@@ -40,6 +40,8 @@ sampler fs_param_Path : register(s1) = sampler_state
 };
 
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 float GpuSim__SimShader__Get(float4 tuple, float player)
 {

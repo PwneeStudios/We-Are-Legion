@@ -67,6 +67,8 @@ sampler fs_param_Units : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 float4 FragSharpFramework__FragSharpStd__min(float4 a, float4 b, float4 c, float4 d)
 {

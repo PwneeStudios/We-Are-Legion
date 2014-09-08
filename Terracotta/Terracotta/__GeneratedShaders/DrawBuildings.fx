@@ -86,6 +86,8 @@ sampler fs_param_Explosion : register(s4) = sampler_state
 
 float fs_param_s;
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__IsBuilding(float4 u)
 {

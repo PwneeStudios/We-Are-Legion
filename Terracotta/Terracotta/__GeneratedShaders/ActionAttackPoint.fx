@@ -54,6 +54,8 @@ sampler fs_param_TargetData : register(s2) = sampler_state
 
 float2 fs_param_Destination;
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__selected(float4 u)
 {

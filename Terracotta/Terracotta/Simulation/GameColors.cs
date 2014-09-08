@@ -5,6 +5,10 @@ namespace GpuSim
 {
     public partial class SimShader : GridComputation
     {
+#if DEBUG
+        public static Field<color> FarColor;
+#endif
+
         protected color PlayerColorize(color clr, float player)
         {
             if (player == Player.One)
@@ -40,7 +44,7 @@ namespace GpuSim
         public class UnitColor
         {
             public static readonly color
-                Player1 = rgb(0x89eae9),
+                Player1 = rgb(0x000000),//rgb(0x89eae9),
                 Player2 = rgb(0xea8556),
                 //Player1 = rgb(0x917c82),
                 //Player2 = rgb(0xf0b021),
@@ -51,6 +55,12 @@ namespace GpuSim
 
             public static color Get(float player)
             {
+#if DEBUG
+                if (player == Player.One)   return FarColor[2, 1 + (int)player];
+                if (player == Player.Two)   return FarColor[2, 2 + (int)player];
+                if (player == Player.Three) return FarColor[2, 3 + (int)player];
+                if (player == Player.Four)  return FarColor[2, 4 + (int)player];
+#endif
                 if (player == Player.One)   return Player1;
                 if (player == Player.Two)   return Player2;
                 if (player == Player.Three) return Player3;

@@ -214,7 +214,11 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <PropertyGroup>
-    <PreBuildEvent>"C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\x86\Release\FragSharp.exe" $(ProjectDir) $(TargetDir)</PreBuildEvent>
+    <PreBuildEvent>ECHO ON
+DIR
+ECHO Running FragSharp via the following command line invocation:
+ECHO "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\x86\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)
+"C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\x86\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)</PreBuildEvent>
   </PropertyGroup>
   <!--
       To modify your build process, add your task inside one of the targets below and uncomment it. 

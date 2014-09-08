@@ -71,6 +71,8 @@ bool fs_param_Deselect;
 
 float fs_param_action;
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 bool GpuSim__SimShader__BlockingTileHere(float4 u)
 {

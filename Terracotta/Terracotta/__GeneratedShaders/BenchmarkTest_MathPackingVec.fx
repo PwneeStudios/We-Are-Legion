@@ -37,6 +37,8 @@ sampler fs_param_s : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 float4 GpuSim__BenchmarkTest_MathPackingVec__MathPacking(float4 c)
 {

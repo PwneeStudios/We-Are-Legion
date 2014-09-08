@@ -69,6 +69,8 @@ sampler fs_param_Texture : register(s3) = sampler_state
     AddressV  = Wrap;
 };
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
 {

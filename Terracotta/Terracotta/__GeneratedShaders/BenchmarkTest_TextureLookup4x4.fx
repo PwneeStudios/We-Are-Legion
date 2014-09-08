@@ -82,6 +82,8 @@ sampler fs_param_s4 : register(s4) = sampler_state
     AddressV  = Clamp;
 };
 
+// The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+
 // The following methods are included because they are referenced by the fragment shader.
 
 // Compiled vertex shader
