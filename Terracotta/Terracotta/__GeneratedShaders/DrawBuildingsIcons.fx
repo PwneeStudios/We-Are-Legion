@@ -42,6 +42,20 @@ sampler fs_param_BuildingDistancess : register(s1) = sampler_state
 float fs_param_blend;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+// Texture Sampler for fs_param_FarColor, using register location 2
+float2 fs_param_FarColor_size;
+float2 fs_param_FarColor_dxdy;
+
+Texture fs_param_FarColor_Texture;
+sampler fs_param_FarColor : register(s2) = sampler_state
+{
+    texture   = <fs_param_FarColor_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
 
 // The following methods are included because they are referenced by the fragment shader.
 float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
@@ -52,23 +66,23 @@ float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size
     return coords - float2(i, j);
 }
 
-float4 GpuSim__BuildingMarkerColors__Get(float player)
+float4 GpuSim__BuildingMarkerColors__Get(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
-        return float4(0, 0.1882353, 0.3764706, 1);
+        return tex2D(fs_param_FarColor, float2(3+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.007843138) < .001)
     {
-        return float4(0.2980392, 0.1333333, 0, 1);
+        return tex2D(fs_param_FarColor, float2(3+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01176471) < .001)
     {
-        return float4(0, 0, 0, 1);
+        return tex2D(fs_param_FarColor, float2(3+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01568628) < .001)
     {
-        return float4(0, 0, 0, 1);
+        return tex2D(fs_param_FarColor, float2(3+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
@@ -99,7 +113,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 v = 255 * (info.rg - float2(0.1568628, 0.1568628)) - (subcell_pos - float2(0.5, 0.5));
     if (length(v) < 5.5 - .001)
     {
-        float4 clr = GpuSim__BuildingMarkerColors__Get(info.b);
+        float4 clr = GpuSim__BuildingMarkerColors__Get(psin, info.b);
         __FinalOutput.Color = clr * fs_param_blend;
         return __FinalOutput;
     }

@@ -30,7 +30,7 @@ namespace GpuSim
         {
 #if DEBUG
             FarColors           = LoadTexture("FarColors");
-            SimShader.FarColor = new Field<color>(FarColors);
+            SimShader.FarColor  = new Field<color>(FarColors);
 #endif
 
             DebugTexture_Arrows = LoadTexture("Debug_Arrows");

@@ -11,11 +11,18 @@ namespace PngToCsData
 {
     class Program
     {
-        static string CsPath = @"C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/Terracotta/Terracotta/Drawing/GameColors.cs";
-        static string PngPath  = @"C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/Terracotta/TerracottaContent/Art/FarColors.png";
-
         static void Main(string[] args)
         {
+#if DEBUG
+            args = new string[] {
+                @"C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/Terracotta/Terracotta/Drawing/GameColors.cs",
+                @"C:/Users/Jordan/Desktop/Dir/Pwnee/Games/Terracotta/Terracotta/Terracotta/TerracottaContent/Art/FarColors.png"
+            };
+#endif
+
+            string CsPath = args[0];
+            string PngPath = args[1];
+
             var cs = File.ReadAllText(CsPath);
 
             var img = new Bitmap(Image.FromFile(PngPath));
@@ -27,7 +34,7 @@ namespace PngToCsData
                 int end = cs.IndexOf(")", start);
 
                 var pixel = img.GetPixel(i, j);
-                string new_val = string.Format("0x{0}{1}{2}, {3}", pixel.R.ToString("X2"), pixel.G.ToString("X2"), pixel.B.ToString("X2"), (pixel.A / 255.0f).ToString());
+                string new_val = string.Format("0x{0}{1}{2}, {3}f", pixel.R.ToString("X2"), pixel.G.ToString("X2"), pixel.B.ToString("X2"), (pixel.A / 255.0f).ToString());
 
                 cs = cs.Remove(start, end - start);
                 cs = cs.Insert(start, new_val);
