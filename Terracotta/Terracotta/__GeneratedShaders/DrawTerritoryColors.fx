@@ -49,6 +49,26 @@ float FragSharpFramework__FragSharpStd__min(float a, float b, float c)
     return min(min(a, b), c);
 }
 
+float4 GpuSim__TerritoryColor__Player1()
+{
+    return float4(0, 0.3921569, 0.8627451, 1);
+}
+
+float4 GpuSim__TerritoryColor__Player2()
+{
+    return float4(1, 0.1960784, 0.1254902, 1);
+}
+
+float4 GpuSim__TerritoryColor__Player3()
+{
+    return float4(0, 0, 0, 1);
+}
+
+float4 GpuSim__TerritoryColor__Player4()
+{
+    return float4(0, 0, 0, 1);
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -71,19 +91,19 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float _blend = 1;
     if (dist.x < 0.02745098 - .001 && dist.x < enemy_dist.x - .001)
     {
-        clr = float4(0, 0.3921569, 0.8627451, 1.0);
+        clr = GpuSim__TerritoryColor__Player1();
     }
     if (dist.y < 0.02745098 - .001 && dist.y < enemy_dist.y - .001)
     {
-        clr = float4(1, 0.1960784, 0.1254902, 1.0);
+        clr = GpuSim__TerritoryColor__Player2();
     }
     if (dist.z < 0.02745098 - .001 && dist.z < enemy_dist.z - .001)
     {
-        clr = float4(0.3, 0.7, 0.55, 0.5);
+        clr = GpuSim__TerritoryColor__Player3();
     }
     if (dist.w < 0.02745098 - .001 && dist.w < enemy_dist.w - .001)
     {
-        clr = float4(0.3, 0.3, 0.7, 0.5);
+        clr = GpuSim__TerritoryColor__Player4();
     }
     clr *= _blend;
     clr.a *= fs_param_blend;

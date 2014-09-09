@@ -56,21 +56,21 @@ float4 GpuSim__BuildingMarkerColors__Get(float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
-        return float4(0.6, 0.2, 0.2, 1.0);
+        return float4(0, 0.1882353, 0.3764706, 1);
     }
     if (abs(player - 0.007843138) < .001)
     {
-        return float4(0.0, 0.4, 0.0, 1.0);
+        return float4(0.2980392, 0.1333333, 0, 1);
     }
     if (abs(player - 0.01176471) < .001)
     {
-        return float4(0.2, 0.6, 0.45, 1.0);
+        return float4(0, 0, 0, 1);
     }
     if (abs(player - 0.01568628) < .001)
     {
-        return float4(0.2, 0.2, 0.7, 1.0);
+        return float4(0, 0, 0, 1);
     }
-    return float4(248 / 255.0, 230 / 255.0, 33 / 255.0, 1.0);
+    return float4(0.0, 0.0, 0.0, 0.0);
 }
 
 // Compiled vertex shader

@@ -10,7 +10,6 @@ namespace GpuSim
 			BuildingDist info = BuildingDistancess[Here];
 
 			if (info.dist > _15) return color.TransparentBlack;
-			//return rgba(1, 1, 1, 1);
 
 			vec2 subcell_pos = get_subcell_pos(vertex, BuildingDistancess.Size);
 
@@ -40,12 +39,7 @@ namespace GpuSim
 			pos.y += selected_offset + BuildingSpriteSheet.SubsheetDimY * (255*UnitType.BuildingIndex(d.type));
 			pos *= BuildingSpriteSheet.SpriteSize;
 
-			var clr = Texture[pos];
-
-			if (IsNeutralBuilding(d))
-				return clr;
-			else
-				return PlayerColorize(clr, d.player);
+			return Texture[pos];
 		}
 
 		protected color ExplosionSprite(building u, unit d, vec2 pos, float frame, PointSampler Texture)
