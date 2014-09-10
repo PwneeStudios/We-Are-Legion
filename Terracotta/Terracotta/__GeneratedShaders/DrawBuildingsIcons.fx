@@ -41,6 +41,8 @@ sampler fs_param_BuildingDistancess : register(s1) = sampler_state
 
 float fs_param_blend;
 
+float fs_param_radius;
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 // Texture Sampler for fs_param_FarColor, using register location 2
 float2 fs_param_FarColor_size;
@@ -111,7 +113,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_BuildingDistancess_size);
     float2 v = 255 * (info.rg - float2(0.1568628, 0.1568628)) - (subcell_pos - float2(0.5, 0.5));
-    if (length(v) < 5.5 - .001)
+    if (length(v) < fs_param_radius - .001)
     {
         float4 clr = GpuSim__BuildingMarkerColors__Get(psin, info.b);
         __FinalOutput.Color = clr * fs_param_blend;

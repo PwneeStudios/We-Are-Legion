@@ -86,7 +86,6 @@ namespace FragSharpFramework
             GpuSim.DrawSolid.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawSolid");
             GpuSim.DrawTexture.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTexture");
             GpuSim.DrawTextureSmooth.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTextureSmooth");
-            GpuSim.DrawGrass.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawGrass");
             GpuSim.BoundingTr.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BoundingTr");
             GpuSim.BoundingBl.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BoundingBl");
             GpuSim._BoundingTr.CompiledEffect = Content.Load<Effect>("FragSharpShaders/_BoundingTr");
@@ -2119,33 +2118,33 @@ namespace GpuSim
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistancess, float blend, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistancess, float blend, float radius, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, BuildingDistancess, blend);
+            Using(cameraPos, cameraAspect, BuildingDistancess, blend, radius);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistancess, float blend, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistancess, float blend, float radius, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, BuildingDistancess, blend);
+            Using(cameraPos, cameraAspect, BuildingDistancess, blend, radius);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistancess, float blend, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistancess, float blend, float radius, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, BuildingDistancess, blend);
+            Using(cameraPos, cameraAspect, BuildingDistancess, blend, radius);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistancess, float blend, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistancess, float blend, float radius, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, BuildingDistancess, blend);
+            Using(cameraPos, cameraAspect, BuildingDistancess, blend, radius);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistancess, float blend)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistancess, float blend, float radius)
         {
             CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
             CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -2153,6 +2152,7 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_BuildingDistancess_size"].SetValue(FragSharpMarshal.Marshal(vec(BuildingDistancess.Width, BuildingDistancess.Height)));
             CompiledEffect.Parameters["fs_param_BuildingDistancess_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(BuildingDistancess.Width, BuildingDistancess.Height)));
             CompiledEffect.Parameters["fs_param_blend"].SetValue(FragSharpMarshal.Marshal(blend));
+            CompiledEffect.Parameters["fs_param_radius"].SetValue(FragSharpMarshal.Marshal(radius));
             CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
             CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
@@ -2449,51 +2449,6 @@ namespace GpuSim
 namespace GpuSim
 {
     public partial class DrawTextureSmooth
-    {
-        public static Effect CompiledEffect;
-
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Texture, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Texture);
-            GridHelper.DrawGrid();
-        }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Texture, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Texture);
-            GridHelper.DrawGrid();
-        }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Texture, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Texture);
-        }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Texture, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Texture);
-        }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Texture)
-        {
-            CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
-            CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
-            CompiledEffect.Parameters["fs_param_Texture_Texture"].SetValue(FragSharpMarshal.Marshal(Texture));
-            CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
-            CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
-            CompiledEffect.CurrentTechnique.Passes[0].Apply();
-        }
-    }
-}
-
-
-namespace GpuSim
-{
-    public partial class DrawGrass
     {
         public static Effect CompiledEffect;
 

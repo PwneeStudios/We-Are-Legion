@@ -56,10 +56,10 @@ namespace GpuSim
             //if (dist.w < TerritoryCutoff && dist.w < enemy_dist.w) { clr = Team4; _blend = max(.3f, min(1, (TerritoryCutoff - dist.w) / _3)); }
             
 #if DEBUG
-            if (dist.x < TerritoryCutoff && dist.x < enemy_dist.x) clr = TerritoryColor.Get(Player.One + (int)dist.x);
-            if (dist.y < TerritoryCutoff && dist.y < enemy_dist.y) clr = TerritoryColor.Get(Player.Two + (int)dist.x);
-            if (dist.z < TerritoryCutoff && dist.z < enemy_dist.z) clr = TerritoryColor.Get(Player.Three + (int)dist.x);
-            if (dist.w < TerritoryCutoff && dist.w < enemy_dist.w) clr = TerritoryColor.Get(Player.Four + (int)dist.x);
+            if (dist.x < TerritoryCutoff && dist.x < enemy_dist.x) clr = TerritoryColor.Get(Player.One + ((int)dist.x/100));
+            if (dist.y < TerritoryCutoff && dist.y < enemy_dist.y) clr = TerritoryColor.Get(Player.Two + ((int)dist.x/100));
+            if (dist.z < TerritoryCutoff && dist.z < enemy_dist.z) clr = TerritoryColor.Get(Player.Three + ((int)dist.x/100));
+            if (dist.w < TerritoryCutoff && dist.w < enemy_dist.w) clr = TerritoryColor.Get(Player.Four + ((int)dist.x/100));
 #else
             if (dist.x < TerritoryCutoff && dist.x < enemy_dist.x) clr = TerritoryColor.Player1();
             if (dist.y < TerritoryCutoff && dist.y < enemy_dist.y) clr = TerritoryColor.Player2();

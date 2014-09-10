@@ -150,7 +150,6 @@
     <Compile Include="Drawing\BaseShader.cs" />
     <Compile Include="Drawing\PreDraw.cs" />
     <Compile Include="Drawing\BasicDraw.cs" />
-    <Compile Include="Drawing\DrawGrass.cs" />
     <Compile Include="Simulation\Bounding.cs" />
     <Compile Include="Simulation\Attacking.cs" />
     <Compile Include="Simulation\BuildingDiffusion.cs" />

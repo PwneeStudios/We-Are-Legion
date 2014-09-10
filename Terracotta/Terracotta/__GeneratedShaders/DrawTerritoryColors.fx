@@ -106,19 +106,19 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float _blend = 1;
     if (dist.x < 0.02745098 - .001 && dist.x < enemy_dist.x - .001)
     {
-        clr = GpuSim__TerritoryColor__Get(psin, 0.003921569 + (int)dist.x);
+        clr = GpuSim__TerritoryColor__Get(psin, 0.003921569 + ((int)dist.x / 100));
     }
     if (dist.y < 0.02745098 - .001 && dist.y < enemy_dist.y - .001)
     {
-        clr = GpuSim__TerritoryColor__Get(psin, 0.007843138 + (int)dist.x);
+        clr = GpuSim__TerritoryColor__Get(psin, 0.007843138 + ((int)dist.x / 100));
     }
     if (dist.z < 0.02745098 - .001 && dist.z < enemy_dist.z - .001)
     {
-        clr = GpuSim__TerritoryColor__Get(psin, 0.01176471 + (int)dist.x);
+        clr = GpuSim__TerritoryColor__Get(psin, 0.01176471 + ((int)dist.x / 100));
     }
     if (dist.w < 0.02745098 - .001 && dist.w < enemy_dist.w - .001)
     {
-        clr = GpuSim__TerritoryColor__Get(psin, 0.01568628 + (int)dist.x);
+        clr = GpuSim__TerritoryColor__Get(psin, 0.01568628 + ((int)dist.x / 100));
     }
     clr *= _blend;
     clr.a *= fs_param_blend;

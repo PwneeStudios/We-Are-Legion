@@ -170,8 +170,10 @@ namespace GpuSim
             // Building icons
             if (CameraZoom <= z / 4)
             {
-                float blend = CoreMath.LerpRestrict(z / 4, 0, z / 8, 1, CameraZoom);
-                DrawBuildingsIcons.Using(camvec, CameraAspect, DataGroup.DistanceToBuildings, blend);
+                float blend = CoreMath.LogLerpRestrict(z / 4, 0, z / 8, 1, CameraZoom);
+                float radius = 5.5f / CameraZoom;
+
+                DrawBuildingsIcons.Using(camvec, CameraAspect, DataGroup.DistanceToBuildings, blend, radius);
                 GridHelper.DrawGrid();
             }
 
