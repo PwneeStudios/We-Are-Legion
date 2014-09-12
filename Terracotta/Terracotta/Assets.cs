@@ -18,7 +18,7 @@ namespace GpuSim
             ExplosionTexture_1,
             UnitTexture_1, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
             
-            TileSpriteSheet,
+            TileSpriteSheet_1, TileSpriteSheet_2, TileSpriteSheet_4, TileSpriteSheet_8, TileSpriteSheet_16,
 
             Cursor, SelectCircle, SelectCircle_Data, SelectDot, AttackMarker;
 
@@ -39,7 +39,10 @@ namespace GpuSim
             UnitTexture_2       = LoadTexture("Soldier_2");
             UnitTexture_4       = LoadTexture("Soldier_4");
 
-            TileSpriteSheet     = LoadTexture("TileSet");
+            TileSpriteSheet_1   = LoadTexture("TileSet_1");
+            TileSpriteSheet_2   = LoadTexture("TileSet_2");
+            TileSpriteSheet_4   = LoadTexture("TileSet_4");
+            TileSpriteSheet_8   = LoadTexture("TileSet_8");
 
             Cursor              = LoadTexture("Cursor");
             SelectCircle        = LoadTexture("SelectCircle");

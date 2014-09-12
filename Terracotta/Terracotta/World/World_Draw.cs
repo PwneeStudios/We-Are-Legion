@@ -10,6 +10,119 @@ namespace GpuSim
     {
         RectangleQuad OutsideTiles = new RectangleQuad();
 
+        Texture2D UnitsSprite 
+        {
+            get
+            {
+                float z = 14;
+                if (CameraZoom > z)
+                {
+                    return Assets.UnitTexture_1;
+                }
+                else if (CameraZoom > z / 2)
+                {
+                    return Assets.UnitTexture_2;
+                }
+                else if (CameraZoom > z / 4)
+                {
+                    return Assets.UnitTexture_4;
+                }
+                else if (CameraZoom > z / 8)
+                {
+                    return Assets.UnitTexture_4;
+                }
+                else
+                {
+                    return Assets.UnitTexture_4;
+                }                    
+            }
+        }
+
+        Texture2D BuildingsSprite
+        {
+            get
+            {
+                float z = 14;
+                if (CameraZoom > z)
+                {
+                    return Assets.BuildingTexture_1;
+                }
+                else if (CameraZoom > z / 2)
+                {
+                    return Assets.BuildingTexture_1;
+                }
+                else if (CameraZoom > z / 4)
+                {
+                    return Assets.BuildingTexture_1;
+                }
+                else if (CameraZoom > z / 8)
+                {
+                    return Assets.BuildingTexture_1;
+                }
+                else
+                {
+                    return Assets.BuildingTexture_1;
+                }
+            }
+        }
+
+        Texture2D ExsplosionSprite
+        {
+            get
+            {
+                float z = 14;
+                if (CameraZoom > z)
+                {
+                    return Assets.ExplosionTexture_1;
+                }
+                else if (CameraZoom > z / 2)
+                {
+                    return Assets.ExplosionTexture_1;
+                }
+                else if (CameraZoom > z / 4)
+                {
+                    return Assets.ExplosionTexture_1;
+                }
+                else if (CameraZoom > z / 8)
+                {
+                    return Assets.ExplosionTexture_1;
+                }
+                else
+                {
+                    return Assets.ExplosionTexture_1;
+                }
+            }
+        }
+
+        Texture2D TileSprite
+        {
+            get
+            {
+                float z = 14;
+
+                if (CameraZoom > z)
+                {
+                    return Assets.TileSpriteSheet_1;
+                }
+                else if (CameraZoom > z / 2)
+                {
+                    return Assets.TileSpriteSheet_2;
+                }
+                else if (CameraZoom > z / 4)
+                {
+                    return Assets.TileSpriteSheet_4;
+                }
+                else if (CameraZoom > z / 8)
+                {
+                    return Assets.TileSpriteSheet_8;
+                }
+                else
+                {
+                    return Assets.TileSpriteSheet_8;
+                }
+            }
+        }
+
         public void Draw()
         {
             DrawCount++;
@@ -52,50 +165,18 @@ namespace GpuSim
 
             BenchmarkTests.Run(DataGroup.CurrentData, DataGroup.PreviousData);
 
-            // Choose units texture
-            Texture2D UnitsSpriteSheet = null, BuildingsSpriteSheet = null, ExplosionSpriteSheet = null;
-            float z = 14;
-            if (CameraZoom > z)
-            {
-                BuildingsSpriteSheet = Assets.BuildingTexture_1;
-                ExplosionSpriteSheet = Assets.ExplosionTexture_1;
-                UnitsSpriteSheet = Assets.UnitTexture_1;
-            }
-            else if (CameraZoom > z / 2)
-            {
-                BuildingsSpriteSheet = Assets.BuildingTexture_1;
-                ExplosionSpriteSheet = Assets.ExplosionTexture_1;
-                UnitsSpriteSheet = Assets.UnitTexture_2;
-            }
-            else if (CameraZoom > z / 4)
-            {
-                BuildingsSpriteSheet = Assets.BuildingTexture_1;
-                ExplosionSpriteSheet = Assets.ExplosionTexture_1;
-                UnitsSpriteSheet = Assets.UnitTexture_4;
-            }
-            else if (CameraZoom > z / 8)
-            {
-                BuildingsSpriteSheet = Assets.BuildingTexture_1;
-                ExplosionSpriteSheet = Assets.ExplosionTexture_1;
-                UnitsSpriteSheet = Assets.UnitTexture_4;
-            }
-            else
-            {
-                BuildingsSpriteSheet = Assets.BuildingTexture_1;
-                ExplosionSpriteSheet = Assets.ExplosionTexture_1;
-                UnitsSpriteSheet = Assets.UnitTexture_4;
-            }
-
             // Draw texture to screen
             GameClass.Graphics.SetRenderTarget(null);
             GameClass.Graphics.Clear(Color.Black);
 
             PercentSimStepComplete = (float)(SecondsSinceLastUpdate / DelayBetweenUpdates);
 
+            float z = 14;
+
             // Draw parts of the world outside the playable map
             if (x_edge > 1)
             {
-                DrawOutsideTiles.Using(camvec, CameraAspect, DataGroup.Tiles, Assets.TileSpriteSheet);
+                DrawOutsideTiles.Using(camvec, CameraAspect, DataGroup.Tiles, TileSprite);
                 
                 OutsideTiles.SetupVertices(vec(-x_edge, -1), vec(0, 1), vec(0, 0), vec(-x_edge / 2, 1));
                 OutsideTiles.Draw(GameClass.Graphics);
@@ -105,7 +186,7 @@ namespace GpuSim
             }
 
             // The the map tiles
-            DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, Assets.TileSpriteSheet, MapEditor && DrawGridLines);
+            DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, TileSprite, MapEditor && DrawGridLines);
             GridHelper.DrawGrid();
 
             //DrawGeoInfo.Using(camvec, CameraAspect, DataGroup.Geo, Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
@@ -132,13 +213,13 @@ namespace GpuSim
                 {
                     float corpse_blend = .35f * CoreMath.LerpRestrict(z / 2, 1, z / 16, 0, CameraZoom);
 
-                    DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSpriteSheet, corpse_blend);
+                    DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSprite, corpse_blend);
                     GridHelper.DrawGrid();
                 }
             }
 
             // Buildings
-            DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSpriteSheet, ExplosionSpriteSheet, PercentSimStepComplete);
+            DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSprite, ExsplosionSprite, PercentSimStepComplete);
             GridHelper.DrawGrid();
 
             // Markers
@@ -156,14 +237,14 @@ namespace GpuSim
                 float solid_blend = CoreMath.LogLerpRestrict(z / 7, 0, z / 2, 1, CameraZoom);
                 bool solid_blend_flag = solid_blend < 1;
 
-                DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet,
+                DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSprite,
                     PercentSimStepComplete, second,
                     selection_blend, selection_size,
                     solid_blend_flag, solid_blend);
             }
             else
             {
-                DrawUnitsZoomedOutBlur.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSpriteSheet, PercentSimStepComplete);
+                DrawUnitsZoomedOutBlur.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSprite, PercentSimStepComplete);
             }
             GridHelper.DrawGrid();
 
