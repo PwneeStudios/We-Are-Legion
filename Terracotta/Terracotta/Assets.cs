@@ -10,9 +10,7 @@ namespace GpuSim
     public static class Assets
     {
         public static Texture2D
-#if DEBUG
             FarColors,
-#endif
 
             DebugTexture_Arrows, DebugTexture_Num,
 
@@ -28,10 +26,8 @@ namespace GpuSim
 
         public static void Initialize()
         {
-#if DEBUG
             FarColors           = LoadTexture("FarColors");
             SimShader.FarColor  = new Field<color>(FarColors);
-#endif
 
             DebugTexture_Arrows = LoadTexture("Debug_Arrows");
             DebugTexture_Num    = LoadTexture("Debug_Num");

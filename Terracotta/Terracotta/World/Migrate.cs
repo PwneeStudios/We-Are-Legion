@@ -9,11 +9,8 @@ namespace GpuSim
         {
             unit unit_here = Units[Here];
 
-            if (unit_here.type == _4)
-                unit_here.type = _10;
-
-            if (unit_here.type == _5)
-                unit_here.type = _20;
+            if (unit_here.type == _10)
+                unit_here.type = _3;
 
             return unit_here;
         }

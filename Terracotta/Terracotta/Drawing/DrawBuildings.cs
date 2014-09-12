@@ -35,7 +35,7 @@ namespace GpuSim
             float selected_offset = selected(u) ? 3 : 0;
 
             pos += 255 * vec(u.part_x, u.part_y);
-            pos.x += Float(d.player - _1) * BuildingSpriteSheet.BuildingDimX;
+            pos.x += Float(d.player) * BuildingSpriteSheet.BuildingDimX;
             pos.y += selected_offset + BuildingSpriteSheet.SubsheetDimY * (255*UnitType.BuildingIndex(d.type));
             pos *= BuildingSpriteSheet.SpriteSize;
 

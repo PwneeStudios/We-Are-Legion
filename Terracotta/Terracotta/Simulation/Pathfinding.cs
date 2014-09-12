@@ -40,10 +40,10 @@ namespace GpuSim
                     down  = Path[DownOne];
                 
                 float min_dist = _255;
-                if (left.dist  < min_dist) { set_player(ref output, get_player(left));  min_dist = left.dist;  output.diff = left.diff  - vec(_1, _0); }
-                if (down.dist  < min_dist) { set_player(ref output, get_player(down));  min_dist = down.dist;  output.diff = down.diff  - vec(_0, _1); }
-                if (right.dist < min_dist) { set_player(ref output, get_player(right)); min_dist = right.dist; output.diff = right.diff + vec(_1, _0); }
-                if (up.dist    < min_dist) { set_player(ref output, get_player(up));    min_dist = up.dist;    output.diff = up.diff    + vec(_0, _1); }
+                if (left.dist  < min_dist) { output.player_and_type = left .player_and_type; min_dist = left.dist;  output.diff = left.diff  - vec(_1, _0); }
+                if (down.dist  < min_dist) { output.player_and_type = down .player_and_type; min_dist = down.dist;  output.diff = down.diff  - vec(_0, _1); }
+                if (right.dist < min_dist) { output.player_and_type = right.player_and_type; min_dist = right.dist; output.diff = right.diff + vec(_1, _0); }
+                if (up.dist    < min_dist) { output.player_and_type = up   .player_and_type; min_dist = up.dist;    output.diff = up.diff    + vec(_0, _1); }
 
                 output.dist = min_dist + _1;
             }
@@ -109,7 +109,7 @@ namespace GpuSim
 
             if (Something(data_here))
             {
-                if (IsNeutralBuilding(unit_here) || BlockingTileHere(unit_here))
+                if (BlockingTileHere(unit_here) || unit_here.player == Player.None)
                 {
                     dist_to_enemy_of += 100 * TeamTuple(_1, _1, _1, _1);
                 }

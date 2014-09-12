@@ -73,7 +73,7 @@ namespace GpuSim
 
                         var distance = Get(distance_to, PlayerNumber);
 
-                        bool is_gold_source = unit_here.team == Team.None && unit_here.type == UnitType.GoldSource;
+                        bool is_gold_source = unit_here.team == Team.None && unit_here.type == UnitType.GoldMine;
                         bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
 
                         bool can_place = is_gold_source && (in_territory || MapEditor);

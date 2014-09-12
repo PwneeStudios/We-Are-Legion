@@ -135,25 +135,25 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         float min_dist = 1.0;
         if (left.a < min_dist - .001)
         {
-            GpuSim__SimShader__set_player(output, GpuSim__SimShader__get_player(left));
+            output.b = left.b;
             min_dist = left.a;
             output.rg = left.rg - float2(0.003921569, 0.0);
         }
         if (down.a < min_dist - .001)
         {
-            GpuSim__SimShader__set_player(output, GpuSim__SimShader__get_player(down));
+            output.b = down.b;
             min_dist = down.a;
             output.rg = down.rg - float2(0.0, 0.003921569);
         }
         if (right.a < min_dist - .001)
         {
-            GpuSim__SimShader__set_player(output, GpuSim__SimShader__get_player(right));
+            output.b = right.b;
             min_dist = right.a;
             output.rg = right.rg + float2(0.003921569, 0.0);
         }
         if (up.a < min_dist - .001)
         {
-            GpuSim__SimShader__set_player(output, GpuSim__SimShader__get_player(up));
+            output.b = up.b;
             min_dist = up.a;
             output.rg = up.rg + float2(0.0, 0.003921569);
         }

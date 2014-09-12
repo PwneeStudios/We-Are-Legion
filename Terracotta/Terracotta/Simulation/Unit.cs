@@ -439,7 +439,6 @@ namespace GpuSim
             public const float
                 FirstUnitType = Footman,
                 FirstBuildingType = Barracks,
-                FirstNeutralBuildingType = GoldSource,
                 FirstBlockingTileType = BlockingTile;
 
             public static float BuildingIndex(float type)
@@ -456,9 +455,6 @@ namespace GpuSim
                 GoldMine = _3,
                 JadeMine = _4,
 
-                GoldSource = _10,
-                JadeSource = _11,
-
                 BlockingTile = _20;
         }
 
@@ -470,11 +466,6 @@ namespace GpuSim
         protected static bool IsBuilding(unit u)
         {
             return u.type >= UnitType.FirstBuildingType && u.type < UnitType.FirstBlockingTileType;
-        }
-
-        protected static bool IsNeutralBuilding(unit u)
-        {
-            return u.type >= UnitType.FirstNeutralBuildingType && u.type < UnitType.FirstBlockingTileType;
         }
 
         protected static bool BlockingTileHere(unit u)
@@ -589,7 +580,7 @@ namespace GpuSim
 
             public const int AnimLength = 1;
             public const int NumAnims = 1;
-            public const int SheetDimX = 4 * NumAnims * AnimLength * BuildingDimX;
+            public const int SheetDimX = 5 * NumAnims * AnimLength * BuildingDimX;
             public const int SheetDimY = UnitTypes * SubsheetDimY;
             public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
             public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);

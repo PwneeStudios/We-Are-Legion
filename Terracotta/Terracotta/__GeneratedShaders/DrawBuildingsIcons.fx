@@ -68,25 +68,19 @@ float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size
     return coords - float2(i, j);
 }
 
+int FragSharpFramework__FragSharpStd__Int(float v)
+{
+    return (int)floor(255 * v + 0.5);
+}
+
+float GpuSim__UnitType__BuildingIndex(float type)
+{
+    return type - 0.007843138;
+}
+
 float4 GpuSim__BuildingMarkerColors__Get(VertexToPixel psin, float player, float type)
 {
-    if (abs(player - 0.003921569) < .001)
-    {
-        return tex2D(fs_param_FarColor, float2(3+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
-    }
-    if (abs(player - 0.007843138) < .001)
-    {
-        return tex2D(fs_param_FarColor, float2(3+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
-    }
-    if (abs(player - 0.01176471) < .001)
-    {
-        return tex2D(fs_param_FarColor, float2(3+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
-    }
-    if (abs(player - 0.01568628) < .001)
-    {
-        return tex2D(fs_param_FarColor, float2(3+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
-    }
-    return float4(0.0, 0.0, 0.0, 0.0);
+    return tex2D(fs_param_FarColor, float2(3 + FragSharpFramework__FragSharpStd__Int(GpuSim__UnitType__BuildingIndex(type))+.5,.5+ FragSharpFramework__FragSharpStd__Int(player)) * fs_param_FarColor_dxdy);
 }
 
 float FragSharpFramework__FragSharpStd__fint_round(float v)

@@ -76,8 +76,8 @@ namespace GpuSim
             World = new World();
             World.Load("Beset.m3n");
 
-            //World.Migrate();
-            //Render.UnsetDevice();
+            World.Migrate();
+            Render.UnsetDevice();
             //World.Save("Beset.m3n");
 
             base.Initialize();

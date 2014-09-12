@@ -5,9 +5,9 @@ namespace GpuSim
 {
     public partial class SimShader : GridComputation
     {
-#if DEBUG
         public static Field<color> FarColor;
-#else
+
+#if !DEBUG
         static readonly color
             __0_0   = rgba(0x000000, 1f),
             __0_1   = rgba(0x89EAE9, 1f),
@@ -352,12 +352,7 @@ namespace GpuSim
         {
             public static color Get(float player, float type)
             {
-                return FarColor[3 + Int(type), Int(player)];
-                //if (player == Player.One)   return FarColor[3, 1 + (int)player];
-                //if (player == Player.Two)   return FarColor[3, 2 + (int)player];
-                //if (player == Player.Three) return FarColor[3, 3 + (int)player];
-                //if (player == Player.Four)  return FarColor[3, 4 + (int)player];
-                //return color.TransparentBlack;
+                return FarColor[3 + Int(UnitType.BuildingIndex(type)), Int(player)];
             }
         }
     }
