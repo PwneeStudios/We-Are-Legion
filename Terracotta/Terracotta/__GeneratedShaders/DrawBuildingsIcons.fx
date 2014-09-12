@@ -68,7 +68,7 @@ float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size
     return coords - float2(i, j);
 }
 
-float4 GpuSim__BuildingMarkerColors__Get(VertexToPixel psin, float player)
+float4 GpuSim__BuildingMarkerColors__Get(VertexToPixel psin, float player, float type)
 {
     if (abs(player - 0.003921569) < .001)
     {
@@ -87,6 +87,21 @@ float4 GpuSim__BuildingMarkerColors__Get(VertexToPixel psin, float player)
         return tex2D(fs_param_FarColor, float2(3+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
+}
+
+float FragSharpFramework__FragSharpStd__fint_round(float v)
+{
+    return floor(255 * v + 0.5) * 0.003921569;
+}
+
+float GpuSim__SimShader__get_type(float4 u)
+{
+    return FragSharpFramework__FragSharpStd__fint_round(u.b / 16.0);
+}
+
+float GpuSim__SimShader__get_player(float4 u)
+{
+    return u.b - GpuSim__SimShader__get_type(u) * 16.0;
 }
 
 // Compiled vertex shader
@@ -115,7 +130,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 v = 255 * (info.rg - float2(0.1568628, 0.1568628)) - (subcell_pos - float2(0.5, 0.5));
     if (length(v) < fs_param_radius - .001)
     {
-        float4 clr = GpuSim__BuildingMarkerColors__Get(psin, info.b);
+        float4 clr = GpuSim__BuildingMarkerColors__Get(psin, GpuSim__SimShader__get_player(info), GpuSim__SimShader__get_type(info));
         __FinalOutput.Color = clr * fs_param_blend;
         return __FinalOutput;
     }

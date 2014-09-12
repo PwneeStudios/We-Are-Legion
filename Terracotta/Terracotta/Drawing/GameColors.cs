@@ -350,21 +350,14 @@ namespace GpuSim
 
         public class BuildingMarkerColors
         {
-            public static color Get(float player)
+            public static color Get(float player, float type)
             {
-#if DEBUG
-                if (player == Player.One)   return FarColor[3, 1 + (int)player];
-                if (player == Player.Two)   return FarColor[3, 2 + (int)player];
-                if (player == Player.Three) return FarColor[3, 3 + (int)player];
-                if (player == Player.Four)  return FarColor[3, 4 + (int)player];
-#else
-                if (player == Player.One)   return __3_1;
-                if (player == Player.Two)   return __3_2;
-                if (player == Player.Three) return __3_3;
-                if (player == Player.Four)  return __3_4;
-#endif
-                throw new BadPlayerNumberException(player);
-                return color.TransparentBlack;
+                return FarColor[3 + Int(type), Int(player)];
+                //if (player == Player.One)   return FarColor[3, 1 + (int)player];
+                //if (player == Player.Two)   return FarColor[3, 2 + (int)player];
+                //if (player == Player.Three) return FarColor[3, 3 + (int)player];
+                //if (player == Player.Four)  return FarColor[3, 4 + (int)player];
+                //return color.TransparentBlack;
             }
         }
     }

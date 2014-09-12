@@ -16,7 +16,7 @@ namespace GpuSim
             var v = 255 * (info.diff - Pathfinding_ToBuildings.CenterOffset) - (subcell_pos - vec(.5f, .5f));
             if (length(v) < radius)
             {
-                color clr = BuildingMarkerColors.Get(info.player);
+                color clr = BuildingMarkerColors.Get(get_player(info), get_type(info));
 
                 return clr * blend;
             }
@@ -35,7 +35,7 @@ namespace GpuSim
             float selected_offset = selected(u) ? 3 : 0;
 
             pos += 255 * vec(u.part_x, u.part_y);
-            pos.x += floor(frame) * BuildingSpriteSheet.BuildingDimX;
+            pos.x += Float(d.player - _1) * BuildingSpriteSheet.BuildingDimX;
             pos.y += selected_offset + BuildingSpriteSheet.SubsheetDimY * (255*UnitType.BuildingIndex(d.type));
             pos *= BuildingSpriteSheet.SpriteSize;
 

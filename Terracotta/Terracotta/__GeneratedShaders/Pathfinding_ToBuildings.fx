@@ -80,6 +80,31 @@ bool GpuSim__SimShader__IsBuilding(float4 u)
     return u.r >= 0.007843138 - .001 && u.r < 0.07843138 - .001;
 }
 
+float FragSharpFramework__FragSharpStd__fint_round(float v)
+{
+    return floor(255 * v + 0.5) * 0.003921569;
+}
+
+float GpuSim__SimShader__get_type(float4 u)
+{
+    return FragSharpFramework__FragSharpStd__fint_round(u.b / 16.0);
+}
+
+float GpuSim__SimShader__get_player(float4 u)
+{
+    return u.b - GpuSim__SimShader__get_type(u) * 16.0;
+}
+
+void GpuSim__SimShader__set_type(inout float4 u, float type)
+{
+    u.b = GpuSim__SimShader__get_player(u) + type * 16.0;
+}
+
+void GpuSim__SimShader__set_player(inout float4 u, float player)
+{
+    u.b = player + GpuSim__SimShader__get_type(u) * 16.0;
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -99,7 +124,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 unit_here = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
     if (GpuSim__SimShader__Something(data_here) && GpuSim__SimShader__IsBuilding(unit_here))
     {
-        output.b = unit_here.g;
+        GpuSim__SimShader__set_type(output, unit_here.r);
+        GpuSim__SimShader__set_player(output, unit_here.g);
         output.rg = float2(0.1568628, 0.1568628);
         output.a = 0.0;
     }
@@ -109,25 +135,25 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         float min_dist = 1.0;
         if (left.a < min_dist - .001)
         {
-            output.b = left.b;
+            GpuSim__SimShader__set_player(output, GpuSim__SimShader__get_player(left));
             min_dist = left.a;
             output.rg = left.rg - float2(0.003921569, 0.0);
         }
         if (down.a < min_dist - .001)
         {
-            output.b = down.b;
+            GpuSim__SimShader__set_player(output, GpuSim__SimShader__get_player(down));
             min_dist = down.a;
             output.rg = down.rg - float2(0.0, 0.003921569);
         }
         if (right.a < min_dist - .001)
         {
-            output.b = right.b;
+            GpuSim__SimShader__set_player(output, GpuSim__SimShader__get_player(right));
             min_dist = right.a;
             output.rg = right.rg + float2(0.003921569, 0.0);
         }
         if (up.a < min_dist - .001)
         {
-            output.b = up.b;
+            GpuSim__SimShader__set_player(output, GpuSim__SimShader__get_player(up));
             min_dist = up.a;
             output.rg = up.rg + float2(0.0, 0.003921569);
         }

@@ -154,7 +154,7 @@ namespace GpuSim
         public float diff_y { get { return g; } set { g = value; } }
 
         [Hlsl("b")]
-        public float player { get { return b; } set { b = value; } }
+        public float player_and_type { get { return b; } set { b = value; } }
 
         [Hlsl("a")]
         public float dist { get { return a; } set { a = value; } }
@@ -275,6 +275,29 @@ namespace GpuSim
         {
             g.pos_storage = pack_vec2_3byte(pos);
         }
+
+
+        const float type_offset = 16;
+        protected static float get_type(BuildingDist u)
+        {
+            return fint_round(u.player_and_type / type_offset);
+        }
+
+        protected static void set_type(ref BuildingDist u, float type)
+        {
+            u.player_and_type = get_player(u) + type * type_offset;
+        }
+
+        protected static float get_player(BuildingDist u)
+        {
+            return u.player_and_type - get_type(u) * type_offset;
+        }
+
+        protected static void set_player(ref BuildingDist u, float player)
+        {
+            u.player_and_type = player + get_type(u) * type_offset;
+        }
+
 
         const float select_offset = _128;
         protected static bool selected(data u)
@@ -566,7 +589,7 @@ namespace GpuSim
 
             public const int AnimLength = 1;
             public const int NumAnims = 1;
-            public const int SheetDimX = NumAnims * AnimLength * BuildingDimX;
+            public const int SheetDimX = 4 * NumAnims * AnimLength * BuildingDimX;
             public const int SheetDimY = UnitTypes * SubsheetDimY;
             public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
             public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
