@@ -1,5 +1,8 @@
 using FragSharpFramework;
 
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 namespace GpuSim
 {
     public partial class World : SimShader
@@ -32,6 +35,8 @@ namespace GpuSim
 
             Markers = new MarkerList();
             UserMessages = new UserMessageList();
+
+            Minimap = new RenderTarget2D(GameClass.Game.GraphicsDevice, 256, 256);
         }
 
         //const double DelayBetweenUpdates = .3333;
@@ -66,6 +71,8 @@ namespace GpuSim
         UserMessageList UserMessages;
 
         RectangleQuad Ground;
+
+        public RenderTarget2D Minimap;
 
         double SecondsSinceLastUpdate = DelayBetweenUpdates;
         float PercentSimStepComplete = 0;

@@ -166,9 +166,39 @@ namespace GpuSim
 
             BenchmarkTests.Run(DataGroup.CurrentData, DataGroup.PreviousData);
 
+            DrawMinimapTexture();
             DrawGrids();
+            DrawMinimap();
+
             DrawMouseUi();
             DrawUiText();
+        }
+
+        private void DrawMinimapTexture()
+        {
+            var hold_CameraAspect = CameraAspect;
+            var hold_CameraPos = CameraPos;
+            var hold_CameraZoom = CameraZoom;
+
+            CameraPos = vec2.Zero;
+            CameraZoom = 1;
+
+            GridHelper.GraphicsDevice.SetRenderTarget(Minimap);
+            DrawGrids();
+            GridHelper.GraphicsDevice.SetRenderTarget(null);
+
+            CameraAspect = hold_CameraAspect;
+            CameraPos = hold_CameraPos;
+            CameraZoom = hold_CameraZoom;
+        }
+
+        private void DrawMinimap()
+        {
+            vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
+            DrawTextureSmooth.Using(vec(0, 0, 1, 1), CameraAspect, Minimap);
+
+            vec2 size = vec(.2f, .2f);
+            RectangleQuad.Draw(GameClass.Graphics, vec(-CameraAspect, -1) + new vec2(size.x, size.y), size);
         }
 
         private void DrawUiText()
@@ -211,7 +241,7 @@ namespace GpuSim
         private void DrawGrids()
         {
             // Draw texture to screen
-            GameClass.Graphics.SetRenderTarget(null);
+            //GameClass.Graphics.SetRenderTarget(null);
             GameClass.Graphics.Clear(Color.Black);
 
             PercentSimStepComplete = (float)(SecondsSinceLastUpdate / DelayBetweenUpdates);
