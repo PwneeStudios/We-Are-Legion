@@ -166,6 +166,50 @@ namespace GpuSim
 
             BenchmarkTests.Run(DataGroup.CurrentData, DataGroup.PreviousData);
 
+            DrawGrids();
+            DrawMouseUi();
+            DrawUiText();
+        }
+
+        private void DrawUiText()
+        {
+            Render.StartText();
+
+            // Ui Text
+            DrawUi_TopInfo();
+            DrawUi_PlayerGrid();
+            DrawUi_CursorText();
+
+            // User Messages
+            UserMessages.Update();
+            UserMessages.Draw();
+
+            Render.EndText();
+        }
+
+        private void DrawMouseUi()
+        {
+            CanPlaceBuilding = false;
+            if (GameClass.MouseEnabled)
+            {
+                if (CurUserMode == UserMode.PlaceBuilding)
+                {
+                    DrawAvailabilityGrid();
+                    DrawPotentialBuilding();
+                    DrawArrowCursor();
+                }
+
+                if (CurUserMode == UserMode.Select)
+                {
+                    //DrawGridCell();
+                    DrawCircleCursor();
+                    //DrawArrowCursor();
+                }
+            }
+        }
+
+        private void DrawGrids()
+        {
             // Draw texture to screen
             GameClass.Graphics.SetRenderTarget(null);
             GameClass.Graphics.Clear(Color.Black);
@@ -175,13 +219,13 @@ namespace GpuSim
             float z = 14;
 
             // Draw parts of the world outside the playable map
-            float tiles_solid_blend = CoreMath.LogLerpRestrict(z / 14, 0, z / 2, 1, CameraZoom);
+            float tiles_solid_blend = CoreMath.LogLerpRestrict(1f, 0, 5f, 1, CameraZoom);
             bool tiles_solid_blend_flag = tiles_solid_blend < 1;
 
             if (x_edge > 1)
             {
                 DrawOutsideTiles.Using(camvec, CameraAspect, DataGroup.Tiles, TileSprite, tiles_solid_blend_flag, tiles_solid_blend);
-                
+
                 OutsideTiles.SetupVertices(vec(-x_edge, -1), vec(0, 1), vec(0, 0), vec(-x_edge / 2, 1));
                 OutsideTiles.Draw(GameClass.Graphics);
 
@@ -197,14 +241,14 @@ namespace GpuSim
             //DrawGeoInfo.Using(camvec, CameraAspect, DataGroup.AntiGeo, Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
             //DrawDirwardInfo.Using(camvec, CameraAspect, DataGroup.Dirward[Dir.Right], Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
             //DrawPolarInfo.Using(camvec, CameraAspect, DataGroup.Geo, DataGroup.GeoInfo, Assets.DebugTexture_Num); GridHelper.DrawGrid();
-            
+
             // Territory and corpses
             if (CurUserMode == UserMode.PlaceBuilding && !MapEditor)
             {
                 DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.DistanceToPlayers, PlayerValue);
                 GridHelper.DrawGrid();
             }
-            else 
+            else
             {
                 if (CameraZoom <= z / 4)
                 {
@@ -261,37 +305,6 @@ namespace GpuSim
                 DrawBuildingsIcons.Using(camvec, CameraAspect, DataGroup.DistanceToBuildings, blend, radius);
                 GridHelper.DrawGrid();
             }
-
-            CanPlaceBuilding = false;
-            if (GameClass.MouseEnabled)
-            {
-                if (CurUserMode == UserMode.PlaceBuilding)
-                {
-                    DrawAvailabilityGrid();
-                    DrawPotentialBuilding();
-                    DrawArrowCursor();
-                }
-
-                if (CurUserMode == UserMode.Select)
-                {
-                    //DrawGridCell();
-                    DrawCircleCursor();
-                    //DrawArrowCursor();
-                }
-            }
-            
-            Render.StartText();
-
-            // Ui Text
-            DrawUi_TopInfo();
-            DrawUi_PlayerGrid();
-            DrawUi_CursorText();
-
-            // User Messages
-            UserMessages.Update();
-            UserMessages.Draw();
-
-            Render.EndText();
         }
 
         private void UpdateAllPlayerUnitCounts()
