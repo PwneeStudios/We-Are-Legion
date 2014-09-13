@@ -23,8 +23,12 @@ namespace FragSharpFramework
             GpuSim.DrawGeoInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawGeoInfo");
             GpuSim.DrawDirwardInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawDirwardInfo");
             GpuSim.DrawPolarInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPolarInfo");
-            GpuSim.DrawTiles.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTiles");
-            GpuSim.DrawOutsideTiles.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawOutsideTiles");
+            GpuSim.DrawTiles.CompiledEffect_draw_grid_true_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawTiles_draw_grid=true_solid_blend_flag=true");
+            GpuSim.DrawTiles.CompiledEffect_draw_grid_true_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawTiles_draw_grid=true_solid_blend_flag=false");
+            GpuSim.DrawTiles.CompiledEffect_draw_grid_false_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawTiles_draw_grid=false_solid_blend_flag=true");
+            GpuSim.DrawTiles.CompiledEffect_draw_grid_false_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawTiles_draw_grid=false_solid_blend_flag=false");
+            GpuSim.DrawOutsideTiles.CompiledEffect_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawOutsideTiles_solid_blend_flag=true");
+            GpuSim.DrawOutsideTiles.CompiledEffect_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawOutsideTiles_solid_blend_flag=false");
             GpuSim.Geodesic_Outline.CompiledEffect_Anti_true = Content.Load<Effect>("FragSharpShaders/Geodesic_Outline_Anti=true");
             GpuSim.Geodesic_Outline.CompiledEffect_Anti_false = Content.Load<Effect>("FragSharpShaders/Geodesic_Outline_Anti=false");
             GpuSim.Geodesic_OutlineCleanup.CompiledEffect_Anti_true = Content.Load<Effect>("FragSharpShaders/Geodesic_OutlineCleanup_Anti=true");
@@ -277,40 +281,55 @@ namespace GpuSim
 }
 
 
+
+
+
 namespace GpuSim
 {
     public partial class DrawTiles
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_draw_grid_true_solid_blend_flag_true;
+        public static Effect CompiledEffect_draw_grid_true_solid_blend_flag_false;
+        public static Effect CompiledEffect_draw_grid_false_solid_blend_flag_true;
+        public static Effect CompiledEffect_draw_grid_false_solid_blend_flag_false;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool draw_grid, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool draw_grid, bool solid_blend_flag, float solid_blend, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Tiles, Texture, draw_grid);
+            Using(cameraPos, cameraAspect, Tiles, Texture, draw_grid, solid_blend_flag, solid_blend);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool draw_grid, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool draw_grid, bool solid_blend_flag, float solid_blend, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Tiles, Texture, draw_grid);
+            Using(cameraPos, cameraAspect, Tiles, Texture, draw_grid, solid_blend_flag, solid_blend);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool draw_grid, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool draw_grid, bool solid_blend_flag, float solid_blend, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Tiles, Texture, draw_grid);
+            Using(cameraPos, cameraAspect, Tiles, Texture, draw_grid, solid_blend_flag, solid_blend);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool draw_grid, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool draw_grid, bool solid_blend_flag, float solid_blend, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Tiles, Texture, draw_grid);
+            Using(cameraPos, cameraAspect, Tiles, Texture, draw_grid, solid_blend_flag, solid_blend);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool draw_grid)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool draw_grid, bool solid_blend_flag, float solid_blend)
         {
+            Effect CompiledEffect = null;
+
+            if (draw_grid == true && solid_blend_flag == true) CompiledEffect = CompiledEffect_draw_grid_true_solid_blend_flag_true;
+            else if (draw_grid == true && solid_blend_flag == false) CompiledEffect = CompiledEffect_draw_grid_true_solid_blend_flag_false;
+            else if (draw_grid == false && solid_blend_flag == true) CompiledEffect = CompiledEffect_draw_grid_false_solid_blend_flag_true;
+            else if (draw_grid == false && solid_blend_flag == false) CompiledEffect = CompiledEffect_draw_grid_false_solid_blend_flag_false;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
             CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
             CompiledEffect.Parameters["fs_param_Tiles_Texture"].SetValue(FragSharpMarshal.Marshal(Tiles));
@@ -319,47 +338,59 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_Texture_Texture"].SetValue(FragSharpMarshal.Marshal(Texture));
             CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
             CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
-            CompiledEffect.Parameters["fs_param_draw_grid"].SetValue(FragSharpMarshal.Marshal(draw_grid));
+            CompiledEffect.Parameters["fs_param_solid_blend"].SetValue(FragSharpMarshal.Marshal(solid_blend));
+            CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
+            CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
+            CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
 }
 
 
+
 namespace GpuSim
 {
     public partial class DrawOutsideTiles
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_solid_blend_flag_true;
+        public static Effect CompiledEffect_solid_blend_flag_false;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool solid_blend_flag, float solid_blend, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Tiles, Texture);
+            Using(cameraPos, cameraAspect, Tiles, Texture, solid_blend_flag, solid_blend);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool solid_blend_flag, float solid_blend, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Tiles, Texture);
+            Using(cameraPos, cameraAspect, Tiles, Texture, solid_blend_flag, solid_blend);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool solid_blend_flag, float solid_blend, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Tiles, Texture);
+            Using(cameraPos, cameraAspect, Tiles, Texture, solid_blend_flag, solid_blend);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool solid_blend_flag, float solid_blend, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Tiles, Texture);
+            Using(cameraPos, cameraAspect, Tiles, Texture, solid_blend_flag, solid_blend);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Tiles, Texture2D Texture, bool solid_blend_flag, float solid_blend)
         {
+            Effect CompiledEffect = null;
+
+            if (solid_blend_flag == true) CompiledEffect = CompiledEffect_solid_blend_flag_true;
+            else if (solid_blend_flag == false) CompiledEffect = CompiledEffect_solid_blend_flag_false;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
             CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
             CompiledEffect.Parameters["fs_param_Tiles_Texture"].SetValue(FragSharpMarshal.Marshal(Tiles));
@@ -368,6 +399,10 @@ namespace GpuSim
             CompiledEffect.Parameters["fs_param_Texture_Texture"].SetValue(FragSharpMarshal.Marshal(Texture));
             CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
             CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
+            CompiledEffect.Parameters["fs_param_solid_blend"].SetValue(FragSharpMarshal.Marshal(solid_blend));
+            CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
+            CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
+            CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

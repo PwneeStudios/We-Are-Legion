@@ -98,6 +98,7 @@ namespace GpuSim
         {
             get
             {
+                //return Assets.TileSpriteSheet_1;
                 float z = 14;
 
                 if (CameraZoom > z)
@@ -174,9 +175,12 @@ namespace GpuSim
             float z = 14;
 
             // Draw parts of the world outside the playable map
+            float tiles_solid_blend = CoreMath.LogLerpRestrict(z / 14, 0, z / 2, 1, CameraZoom);
+            bool tiles_solid_blend_flag = tiles_solid_blend < 1;
+
             if (x_edge > 1)
             {
-                DrawOutsideTiles.Using(camvec, CameraAspect, DataGroup.Tiles, TileSprite);
+                DrawOutsideTiles.Using(camvec, CameraAspect, DataGroup.Tiles, TileSprite, tiles_solid_blend_flag, tiles_solid_blend);
                 
                 OutsideTiles.SetupVertices(vec(-x_edge, -1), vec(0, 1), vec(0, 0), vec(-x_edge / 2, 1));
                 OutsideTiles.Draw(GameClass.Graphics);
@@ -186,7 +190,7 @@ namespace GpuSim
             }
 
             // The the map tiles
-            DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, TileSprite, MapEditor && DrawGridLines);
+            DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, TileSprite, MapEditor && DrawGridLines, tiles_solid_blend_flag, tiles_solid_blend);
             GridHelper.DrawGrid();
 
             //DrawGeoInfo.Using(camvec, CameraAspect, DataGroup.Geo, Assets.DebugTexture_Arrows); GridHelper.DrawGrid();

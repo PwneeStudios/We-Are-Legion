@@ -4,7 +4,7 @@ namespace GpuSim
 {
     public partial class DrawTiles : BaseShader
     {
-        protected color Sprite(tile c, vec2 pos, PointSampler Texture)
+        protected color Sprite(tile c, vec2 pos, PointSampler Texture, bool solid_blend_flag, float solid_blend)
         {
             color clr = color.TransparentBlack;
 
@@ -17,7 +17,13 @@ namespace GpuSim
             pos.y += Float(c.j);
             pos *= TileSpriteSheet.SpriteSize;
 
-            clr += Texture[pos];
+            clr = Texture[pos];
+
+            if (solid_blend_flag)
+            {
+                color solid_clr = FarColor[Int(c.type), 6 + (int)(c.type)];
+                clr = solid_blend * clr + (1 - solid_blend) * solid_clr;
+            }
 
             return clr;
         }
@@ -34,7 +40,8 @@ namespace GpuSim
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<tile> Tiles, PointSampler Texture, bool draw_grid)
+        color FragmentShader(VertexOut vertex, Field<tile> Tiles, PointSampler Texture, [Vals.Bool] bool draw_grid,
+            [Vals.Bool] bool solid_blend_flag, float solid_blend)
         {
             color output = color.TransparentBlack;
 
@@ -44,7 +51,7 @@ namespace GpuSim
 
             if (here.type > _0)
             {
-                output += Sprite(here, subcell_pos, Texture);
+                output += Sprite(here, subcell_pos, Texture, solid_blend_flag, solid_blend);
 
                 if (draw_grid) output += GridLines(subcell_pos);
             }
@@ -56,7 +63,8 @@ namespace GpuSim
     public partial class DrawOutsideTiles : DrawTiles
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<tile> Tiles, PointSampler Texture)
+        color FragmentShader(VertexOut vertex, Field<tile> Tiles, PointSampler Texture,
+            [Vals.Bool] bool solid_blend_flag, float solid_blend)
         {
             color output = color.TransparentBlack;
 
@@ -66,7 +74,7 @@ namespace GpuSim
             here.i = _0;
             here.j = _25;
 
-            output += Sprite(here, subcell_pos, Texture);
+            output += Sprite(here, subcell_pos, Texture, solid_blend_flag, solid_blend);
 
             return output;
         }

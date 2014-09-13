@@ -54,7 +54,23 @@ sampler fs_param_Texture : register(s2) = sampler_state
     AddressV  = Wrap;
 };
 
+float fs_param_solid_blend;
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+// Texture Sampler for fs_param_FarColor, using register location 3
+float2 fs_param_FarColor_size;
+float2 fs_param_FarColor_dxdy;
+
+Texture fs_param_FarColor_Texture;
+sampler fs_param_FarColor : register(s3) = sampler_state
+{
+    texture   = <fs_param_FarColor_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
 
 // The following methods are included because they are referenced by the fragment shader.
 float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
@@ -70,7 +86,12 @@ float FragSharpFramework__FragSharpStd__Float(float v)
     return floor(255 * v + 0.5);
 }
 
-float4 GpuSim__DrawTiles__Sprite(VertexToPixel psin, float4 c, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+int FragSharpFramework__FragSharpStd__Int(float v)
+{
+    return (int)floor(255 * v + 0.5);
+}
+
+float4 GpuSim__DrawTiles__Sprite(VertexToPixel psin, float4 c, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, bool solid_blend_flag, float solid_blend)
 {
     float4 clr = float4(0.0, 0.0, 0.0, 0.0);
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
@@ -81,7 +102,12 @@ float4 GpuSim__DrawTiles__Sprite(VertexToPixel psin, float4 c, float2 pos, sampl
     pos.x += FragSharpFramework__FragSharpStd__Float(c.g);
     pos.y += FragSharpFramework__FragSharpStd__Float(c.b);
     pos *= float2(1.0 / 32, 1.0 / 32);
-    clr += tex2D(Texture, pos);
+    clr = tex2D(Texture, pos);
+    if (solid_blend_flag)
+    {
+        float4 solid_clr = tex2D(fs_param_FarColor, float2(FragSharpFramework__FragSharpStd__Int(c.r)+.5,.5+ 6 + (int)(c.r)) * fs_param_FarColor_dxdy);
+        clr = solid_blend * clr + (1 - solid_blend) * solid_clr;
+    }
     return clr;
 }
 
@@ -106,7 +132,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 here = float4(0, 0, 0, 0);
     here.g = 0.0;
     here.b = 0.09803922;
-    output += GpuSim__DrawTiles__Sprite(psin, here, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+    output += GpuSim__DrawTiles__Sprite(psin, here, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, true, fs_param_solid_blend);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }
