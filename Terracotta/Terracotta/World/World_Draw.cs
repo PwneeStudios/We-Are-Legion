@@ -192,13 +192,34 @@ namespace GpuSim
             CameraZoom = hold_CameraZoom;
         }
 
+        private void DrawBox(vec2 p1, vec2 p2, float width)
+        {
+            DrawLine(vec(p1.x, p1.y), vec(p2.x, p1.y), width);
+            DrawLine(vec(p2.x, p1.y), vec(p2.x, p2.y), width);
+            DrawLine(vec(p2.x, p2.y), vec(p1.x, p2.y), width);
+            DrawLine(vec(p1.x, p2.y), vec(p1.x, p1.y), width);
+        }
+
+        private void DrawLine(vec2 p1, vec2 p2, float width)
+        {
+            var q = new RectangleQuad();
+            vec2 thick = vec(width, width);
+            q.SetupVertices(min(p1 - thick, p2 - thick), max(p1 + thick, p2 + thick), vec2.Zero, vec2.Ones);
+            q.Draw(GameClass.Graphics);
+        }
+
         private void DrawMinimap()
         {
-            vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
-            DrawTextureSmooth.Using(vec(0, 0, 1, 1), CameraAspect, Minimap);
-
             vec2 size = vec(.2f, .2f);
-            RectangleQuad.Draw(GameClass.Graphics, vec(-CameraAspect, -1) + new vec2(size.x, size.y), size);
+            vec2 center = vec(-CameraAspect, -1) + new vec2(size.x, size.y);
+            DrawTextureSmooth.Using(vec(0, 0, 1, 1), CameraAspect, Minimap);
+            RectangleQuad.Draw(GameClass.Graphics, center, size);
+
+            vec2 cam = CameraPos * size;
+            vec2 bl = center + cam - vec(CameraAspect, 1) * size / CameraZoom;
+            vec2 tr = center + cam + vec(CameraAspect, 1) * size / CameraZoom;
+            DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, new color(.9f, .9f, .9f, .8f));
+            DrawBox(bl, tr, .001f);
         }
 
         private void DrawUiText()
