@@ -244,7 +244,7 @@ namespace GpuSim
                 e.Texture = Assets.White;
                 Elements.Add(name, e);
 
-                //if (!name.Contains("[Text]"))
+                if (!name.Contains("[Text]"))
                 {
                     Order.Add(e);
                 }
@@ -284,87 +284,65 @@ namespace GpuSim
             }
         }
 
-        Ui TopUi;
+        Ui TopUi, TopUi_Player1, TopUi_Player2;
         void MakeTopUi()
         {
             if (TopUi != null) return;
 
-            TopUi = new Ui();
-
             float a = CameraAspect;
 
-            Ui.Element("Bar");
-            Ui.e.SetupPosition(vec(a - 1.65f, 0.99814814814815f), vec(a - -0.00185185185185f, 0.94814814814815f));
+            TopUi = new Ui();
+            Ui.Element("Upper Ui");
+            Ui.e.SetupPosition(vec(a - 1.87777777777778f, 0.8962962962963f), vec(a - -0.04444444444444f, 1f));
+            Ui.e.Texture = Assets.TopUi;
 
-            Ui.Element("Tab");
-            Ui.e.SetupPosition(vec(a - 1.92037037037037f, 0.99814814814815f), vec(a - 1.65f, 0.94814814814815f));
 
+            TopUi_Player1 = new Ui();
             Ui.Element("[Text] Jade");
-            Ui.e.SetupPosition(vec(a - 0.2537037037037f, 0.99074074074074f), vec(a - 0.10555555555556f, 0.95925925925926f));
-
-            Ui.Element("Jade");
-            Ui.e.SetupPosition(vec(a - 0.30185185185185f, 0.99444444444444f), vec(a - 0.26481481481481f, 0.9537037037037f));
+            Ui.e.SetupPosition(vec(a - 0.21111111111111f, 0.96111111111111f), vec(a - 0.06296296296296f, 0.99259259259259f));
 
             Ui.Element("[Text] Jade mines");
-            Ui.e.SetupPosition(vec(a - 0.45555555555556f, 0.99259259259259f), vec(a - 0.38518518518518f, 0.96111111111111f));
-
-            Ui.Element("Jade mine");
-            Ui.e.SetupPosition(vec(a - 0.53703703703704f, 1f), vec(a - 0.46481481481481f, 0.95f));
+            Ui.e.SetupPosition(vec(a - 0.4037037037037f, 0.96296296296296f), vec(a - 0.33333333333333f, 0.99444444444444f));
 
             Ui.Element("[Text] Gold");
-            Ui.e.SetupPosition(vec(a - 0.80740740740741f, 0.98888888888889f), vec(a - 0.65925925925926f, 0.95740740740741f));
-
-            Ui.Element("Gold");
-            Ui.e.SetupPosition(vec(a - 0.85555555555556f, 0.99444444444444f), vec(a - 0.81851851851852f, 0.9537037037037f));
+            Ui.e.SetupPosition(vec(a - 0.7462962962963f, 0.96111111111111f), vec(a - 0.59814814814815f, 0.99259259259259f));
 
             Ui.Element("[Text] Gold mines");
-            Ui.e.SetupPosition(vec(a - 1.00925925925926f, 0.99074074074074f), vec(a - 0.93888888888889f, 0.95925925925926f));
-
-            Ui.Element("Gold mine");
-            Ui.e.SetupPosition(vec(a - 1.09074074074074f, 0.9962962962963f), vec(a - 1.01666666666667f, 0.94814814814815f));
+            Ui.e.SetupPosition(vec(a - 0.93703703703704f, 0.96296296296296f), vec(a - 0.86666666666667f, 0.99444444444444f));
 
             Ui.Element("[Text] Units");
-            Ui.e.SetupPosition(vec(a - 1.32222222222222f, 0.98888888888889f), vec(a - 1.19074074074074f, 0.95740740740741f));
-
-            Ui.Element("Unit");
-            Ui.e.SetupPosition(vec(a - 1.36851851851852f, 0.99444444444444f), vec(a - 1.32777777777778f, 0.9537037037037f));
+            Ui.e.SetupPosition(vec(a - 1.27037037037037f, 0.96111111111111f), vec(a - 1.13888888888889f, 0.99259259259259f));
 
             Ui.Element("[Text] Barrackses");
-            Ui.e.SetupPosition(vec(a - 1.51481481481481f, 0.99074074074074f), vec(a - 1.4462962962963f, 0.95925925925926f));
-
-            Ui.Element("Barracks");
-            Ui.e.SetupPosition(vec(a - 1.6f, 0.99444444444444f), vec(a - 1.52777777777778f, 0.94814814814815f));
+            Ui.e.SetupPosition(vec(a - 1.46851851851852f, 0.96296296296296f), vec(a - 1.4f, 0.99444444444444f));
 
 
-            Ui.Element("Bar");
-            Ui.e.SetColor(rgba(0x6c839c, .69f));
-            
-            Ui.Element("Tab");
-            Ui.e.SetColor(rgba(0x6c839c, .90f));
+            TopUi_Player2 = new Ui();
+            Ui.Element("[Text] Jade");
+            Ui.e.SetupPosition(vec(a - 0.21111111111111f, 0.90740740740741f), vec(a - 0.06296296296296f, 0.93888888888889f));
 
-            Ui.Element("Barracks");
-            SetBuildingQuad(Ui.e.Bl, Ui.e.size, UnitType.Barracks, 1, Ui.e);
+            Ui.Element("[Text] Jade mines");
+            Ui.e.SetupPosition(vec(a - 0.4037037037037f, 0.90925925925926f), vec(a - 0.33333333333333f, 0.94074074074074f));
 
-            Ui.Element("Gold mine");
-            SetBuildingQuad(Ui.e.Bl, Ui.e.size, UnitType.GoldMine, 1, Ui.e);
+            Ui.Element("[Text] Gold");
+            Ui.e.SetupPosition(vec(a - 0.7462962962963f, 0.90740740740741f), vec(a - 0.59814814814815f, 0.93888888888889f));
 
-            Ui.Element("Jade mine");
-            SetBuildingQuad(Ui.e.Bl, Ui.e.size, UnitType.JadeMine, 1, Ui.e);
+            Ui.Element("[Text] Gold mines");
+            Ui.e.SetupPosition(vec(a - 0.93703703703704f, 0.90925925925926f), vec(a - 0.86666666666667f, 0.94074074074074f));
 
-            Ui.Element("Unit");
-            SetUnitQuad(Ui.e.Bl, Ui.e.size, 1, 0, Dir.Right, Ui.e);
+            Ui.Element("[Text] Units");
+            Ui.e.SetupPosition(vec(a - 1.27037037037037f, 0.90740740740741f), vec(a - 1.13888888888889f, 0.93888888888889f));
 
-            Ui.Element("Gold");
-            Ui.e.Texture = Assets.Gold;
-
-            Ui.Element("Jade");
-            Ui.e.Texture = Assets.Jade;
+            Ui.Element("[Text] Barrackses");
+            Ui.e.SetupPosition(vec(a - 1.46851851851852f, 0.90925925925926f), vec(a - 1.4f, 0.94074074074074f));
         }
 
         private void DrawTopUi()
         {
             MakeTopUi();
             TopUi.Draw();
+            TopUi_Player1.Draw();
+            TopUi_Player2.Draw();
         }
 
         vec2 ToBatchCoord(vec2 p)
@@ -377,43 +355,52 @@ namespace GpuSim
             Render.StartText();
 
             // Top Ui
-            string s;
-            float scale = .942f;
-
-            Ui.Element("[Text] Barrackses");
-            s = string.Format("{0:#,##0}", DataGroup.BarracksCount[1]);
-            Render.DrawText(s, ToBatchCoord(Ui.e.Bl), scale, rgb(0xff1010));
-
-            Ui.Element("[Text] Units");
-            s = string.Format("{0:#,##0}", DataGroup.UnitCount[1]);
-            Render.DrawText(s, ToBatchCoord(Ui.e.Bl), scale);
-
-            Ui.Element("[Text] Gold mines");
-            s = string.Format("{0:#,##0}", PlayerInfo[1].GoldMines);
-            Render.DrawText(s, ToBatchCoord(Ui.e.Bl), scale);
-
-            Ui.Element("[Text] Gold");
-            s = string.Format("{0:#,##0}", PlayerInfo[1].GoldMines);
-            Render.DrawText(s, ToBatchCoord(Ui.e.Bl), scale);
-
-            Ui.Element("[Text] Jade mines");
-            s = "0";
-            Render.DrawText(s, ToBatchCoord(Ui.e.Bl), scale);
-
-            Ui.Element("[Text] Jade");
-            s = "0";
-            Render.DrawText(s, ToBatchCoord(Ui.e.Bl), scale);
+            Ui.ActiveUi = TopUi_Player1;
+            DrawPlayerInfo(1);
+            Ui.ActiveUi = TopUi_Player2;
+            DrawPlayerInfo(2);
 
             //// Ui Text
             //DrawUi_TopInfo();
             //DrawUi_PlayerGrid();
-            //DrawUi_CursorText();
+            DrawUi_CursorText();
 
-            //// User Messages
-            //UserMessages.Update();
-            //UserMessages.Draw();
+            // User Messages
+            UserMessages.Update();
+            UserMessages.Draw();
 
             Render.EndText();
+        }
+
+        private void DrawPlayerInfo(int player)
+        {
+            string s;
+            float scale = .5f;
+            vec2 offset = vec(.0043f, .012f);
+
+            Ui.Element("[Text] Barrackses");
+            s = string.Format("{0:#,##0}", DataGroup.BarracksCount[player]);
+            Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
+
+            Ui.Element("[Text] Units");
+            s = string.Format("{0:#,##0}", DataGroup.UnitCount[player]);
+            Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
+
+            Ui.Element("[Text] Gold mines");
+            s = string.Format("{0:#,##0}", PlayerInfo[player].GoldMines);
+            Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
+
+            Ui.Element("[Text] Gold");
+            s = string.Format("{0:#,##0}", PlayerInfo[player].Gold);
+            Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
+
+            Ui.Element("[Text] Jade mines");
+            s = string.Format("{0:#,##0}", 0);
+            Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
+
+            Ui.Element("[Text] Jade");
+            s = string.Format("{0:#,##0}", 100000);
+            Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
         }
 
         private void DrawMouseUi()

@@ -42,11 +42,15 @@ namespace GpuSim
 
             Window.Title = "Terracotta";
 
+            //graphics.IsFullScreen = true;
+            //graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            //graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+
             graphics.IsFullScreen = false;
             graphics.PreferredBackBufferWidth = 1024;
             graphics.PreferredBackBufferHeight = 1024;
 
-            //graphics.IsFullScreen = false;
+            //graphics.IsFullScreen = true;
             //graphics.PreferredBackBufferWidth = 1280;
             //graphics.PreferredBackBufferHeight = 720;
 

@@ -29,7 +29,7 @@ namespace GpuSim
     public partial class DrawTextureSmooth : BaseShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, TextureSampler Texture)
+        color FragmentShader(VertexOut vertex, TextureSampler<Clamp, Linear> Texture)
         {
             color output;
 

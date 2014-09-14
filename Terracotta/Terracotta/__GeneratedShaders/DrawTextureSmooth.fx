@@ -35,8 +35,8 @@ sampler fs_param_Texture : register(s1) = sampler_state
     MipFilter = Linear;
     MagFilter = Linear;
     MinFilter = Linear;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.

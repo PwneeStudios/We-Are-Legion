@@ -87,7 +87,7 @@ namespace GpuSim
 
         public static void DrawText(SpriteFont font, string text, vec2 pos, float scale, Alignment align, color clr)
         {
-            vec2 size = (vec2)font.MeasureString(text) * scale;
+            vec2 size = (vec2)font.MeasureString(text);// *scale;
             vec2 origin = size * 0.5f;
 
             if (align.HasFlag(Alignment.Left))

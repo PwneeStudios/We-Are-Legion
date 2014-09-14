@@ -22,7 +22,7 @@ namespace GpuSim
 
             Cursor, SelectCircle, SelectCircle_Data, SelectDot, AttackMarker,
             
-            Gold, Jade;
+            TopUi, Gold, Jade;
 
         public static ContentManager Content { get { return GameClass.Game.Content; } }
 
@@ -53,8 +53,9 @@ namespace GpuSim
             SelectDot           = LoadTexture("SelectDot");
             AttackMarker        = LoadTexture("AttackMarker");
 
-            Gold = LoadTexture("Gold");
-            Jade = LoadTexture("Jade");
+            TopUi = LoadTexture("TopUi");
+            Gold  = LoadTexture("Gold");
+            Jade  = LoadTexture("Jade");
         }
 
 #if DEBUG

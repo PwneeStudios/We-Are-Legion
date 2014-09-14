@@ -121,7 +121,7 @@ namespace GpuSim
 
         RectangleQuad SetUnitQuad(vec2 pos, vec2 size, int player, int frame, float dir, RectangleQuad quad = null)
         {
-            size.y = size.x;
+            //size.x = size.y;
 
             vec2 uv_size = UnitSpriteSheet.SpriteSize;
             
@@ -143,13 +143,14 @@ namespace GpuSim
 
         RectangleQuad SetBuildingQuad(vec2 pos, vec2 size, float type, int player, RectangleQuad quad = null)
         {
-            size.y = size.x;
+            //size.x = size.y;
 
             vec2 uv_size = BuildingSpriteSheet.BuildingSize;
             
             vec2 uv_offset;
-            uv_offset.x = player * BuildingSpriteSheet.BuildingDimX * BuildingSpriteSheet.SpriteSize.x;
+            uv_offset.x = player * BuildingSpriteSheet.BuildingDimX;
             uv_offset.y = BuildingSpriteSheet.SubsheetDimY * Float(UnitType.BuildingIndex(type));
+            uv_offset *= BuildingSpriteSheet.SpriteSize;
 
             if (quad == null)
             {
