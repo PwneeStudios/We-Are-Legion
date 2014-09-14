@@ -56,8 +56,70 @@ namespace GpuSim
             }
         }
 
+        RectangleQuad q = new RectangleQuad();
+        vec2 unit_count_pos, building_count_pos;
+        void DrawCursorInfo()
+        {
+            vec2 mouse = ScreenToUiCoord(Input.CurMousePos);
+            color clr = rgba(0x888888c, .5f).Premultiplied;
+
+            vec2 size = vec(.125f, .024f);
+
+            if (DataGroup.SelectedUnits > 0)
+            {
+                vec2 pos = mouse + vec(.16f, .215f) + vec(size.x, 0);
+                vec2 unit = pos + vec(.01f, .025f) - vec(size.x, 0);
+                vec2 unit_size = vec(.025f, .025f);
+                unit_count_pos = pos + vec(.075f, .0285f) - vec(size.x, 0);
+
+                DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, clr);
+                RectangleQuad.Draw(GameClass.Graphics, pos, size);
+
+                SetUnitQuad(unit, unit_size, 1, 0, Dir.Right, q);
+                DrawTexture.Using(vec(0, 0, 1, 1), CameraAspect, q.Texture);
+                q.Draw(GameClass.Graphics);
+            }
+
+            //if (DataGroup.SelectedBarracks > 0)
+            //{
+            //    vec2 b_size = vec(.125f, .024f);
+            //    vec2 b_pos = mouse + vec(.19f, .155f) + vec(size.x, 0);
+            //    vec2 b_unit = b_pos + vec(.01f, .034f) - vec(size.x, 0);
+            //    vec2 b_unit_size = vec(.035f, .035f);
+            //    building_count_pos = b_pos + vec(.095f, .0285f) - vec(size.x, 0);
+
+            //    DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, clr);
+            //    RectangleQuad.Draw(GameClass.Graphics, b_pos, b_size);
+
+            //    SetBuildingQuad(b_unit, b_unit_size, UnitType.Barracks, 1, q);
+            //    DrawTexture.Using(vec(0, 0, 1, 1), CameraAspect, q.Texture);
+            //    q.Draw(GameClass.Graphics);
+            //}
+        }
+
         void DrawUi_CursorText()
         {
+            if (CurUserMode != UserMode.Select) return;
+
+            string unit_count = string.Empty;
+            string building_count = string.Empty;
+
+            vec2 mouse = ScreenToUiCoord(Input.CurMousePos);
+            vec2 pos = mouse + vec(.23f, .2435f);
+
+            if (DataGroup.SelectedUnits > 0)
+            {
+                unit_count = string.Format("{0:#,##0}", DataGroup.SelectedUnits);
+            }
+            //if (DataGroup.SelectedBarracks > 0)
+            //{
+            //    building_count = string.Format("{0:#,##0}", DataGroup.SelectedBarracks);
+            //}
+
+            Render.DrawText(unit_count, ToBatchCoord(unit_count_pos), .5f);
+            Render.DrawText(building_count, ToBatchCoord(building_count_pos), .5f);
+
+            /*
             if (CurUserMode != UserMode.Select) return;
 
             string selected_count = string.Empty;
@@ -69,8 +131,9 @@ namespace GpuSim
                 selected_count = string.Format("[{0:#,##0}]", DataGroup.SelectedBarracks);
             else
                 selected_count = "[0]";
-
+            
             Render.DrawText(selected_count, Input.CurMousePos + new vec2(30, -130), 1);
+             */
         }
 
         void DrawGridCell()

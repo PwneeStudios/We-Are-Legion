@@ -175,6 +175,8 @@ namespace GpuSim
             DrawTopUi();
 
             DrawMouseUi();
+            DrawCursorInfo();
+
             DrawUiText();
         }
 

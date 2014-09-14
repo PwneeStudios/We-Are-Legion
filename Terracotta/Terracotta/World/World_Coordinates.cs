@@ -31,6 +31,16 @@ namespace GpuSim
             return WorldCord;
         }
 
+        vec2 ScreenToUiCoord(vec2 pos)
+        {
+            var screen = GameClass.Screen;
+            var ScreenCord = (2 * pos - screen) / screen;
+            vec2 WorldCord;
+            WorldCord.x = CameraAspect * ScreenCord.x;
+            WorldCord.y = -ScreenCord.y;
+            return WorldCord;
+        }
+
         vec2 GetShiftedCamera(vec2 pos, vec4 prev_camvec, vec2 prev_worldcoord)
         {
             var screen = GameClass.Screen;
