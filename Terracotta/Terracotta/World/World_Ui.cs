@@ -15,15 +15,15 @@ namespace GpuSim
                     + (", Player " + PlayerNumber.ToString())
                     + (SimulationPaused ? ", Paused" : "");
                 
-                Render.DrawText(header, vec(10, 0));
+                Render.DrawText(header, vec(10, 0), 1);
             }
             else
             {
                 var top_ui_gold = string.Format("Gold {0:#,##0}", PlayerInfo[PlayerNumber].Gold);
                 var top_ui_units = string.Format("Units {0:#,##0}", DataGroup.UnitCount[PlayerNumber]);
 
-                Render.DrawText(top_ui_gold, vec(10, 0));
-                Render.DrawText(top_ui_units, vec(170, 0));
+                Render.DrawText(top_ui_gold, vec(10, 0), 1);
+                Render.DrawText(top_ui_units, vec(170, 0), 1);
             }
         }
 
@@ -34,10 +34,10 @@ namespace GpuSim
 
             float row4 = 1024, row3 = 924, row2 = 824, row1 = 724, row0 = 624;
 
-            Render.DrawText("Raxes", vec(row1, y), align: Alignment.RightJusitfy);
-            Render.DrawText("Units", vec(row2, y), align: Alignment.RightJusitfy);
-            Render.DrawText("Mines", vec(row3, y), align: Alignment.RightJusitfy);
-            Render.DrawText("Gold", vec(row4, y), align: Alignment.RightJusitfy);
+            Render.DrawText("Raxes", vec(row1, y), 1, align: Alignment.RightJusitfy);
+            Render.DrawText("Units", vec(row2, y), 1, align: Alignment.RightJusitfy);
+            Render.DrawText("Mines", vec(row3, y), 1, align: Alignment.RightJusitfy);
+            Render.DrawText("Gold", vec(row4, y), 1, align: Alignment.RightJusitfy);
 
             for (int player = 1; player <= 4; player++)
             {
@@ -48,11 +48,11 @@ namespace GpuSim
                 var mines = string.Format("{0:#,##0}", PlayerInfo[player].GoldMines);
                 var raxes = string.Format("{0:#,##0}", DataGroup.BarracksCount[player]);
 
-                Render.DrawText("Player " + player.ToString(), vec(row0, y), align: Alignment.RightJusitfy);
-                Render.DrawText(raxes, vec(row1, y), align: Alignment.RightJusitfy);
-                Render.DrawText(units, vec(row2, y), align: Alignment.RightJusitfy);
-                Render.DrawText(mines, vec(row3, y), align: Alignment.RightJusitfy);
-                Render.DrawText(gold, vec(row4, y), align: Alignment.RightJusitfy);
+                Render.DrawText("Player " + player.ToString(), vec(row0, y), 1, align: Alignment.RightJusitfy);
+                Render.DrawText(raxes, vec(row1, y), 1, align: Alignment.RightJusitfy);
+                Render.DrawText(units, vec(row2, y), 1, align: Alignment.RightJusitfy);
+                Render.DrawText(mines, vec(row3, y), 1, align: Alignment.RightJusitfy);
+                Render.DrawText(gold, vec(row4, y), 1, align: Alignment.RightJusitfy);
             }
         }
 
@@ -70,7 +70,7 @@ namespace GpuSim
             else
                 selected_count = "[0]";
 
-            Render.DrawText(selected_count, Input.CurMousePos + new vec2(30, -130));
+            Render.DrawText(selected_count, Input.CurMousePos + new vec2(30, -130), 1);
         }
 
         void DrawGridCell()
@@ -114,13 +114,53 @@ namespace GpuSim
             vec2 WorldCord = GridToWorldCood(new vec2((float)Math.Floor(GridCoord.x), (float)Math.Floor(GridCoord.y)));
             vec2 size = 3 * 1 / DataGroup.GridSize;
 
-            vec2 uv_size = BuildingSpriteSheet.BuildingSize;
-            vec2 uv_sheet_size = BuildingSpriteSheet.SubsheetSize;
-            vec2 uv_offset = new vec2(0, uv_sheet_size.y * ((255) * UnitType.BuildingIndex(BuildingType)));
-
-            var building = new RectangleQuad(WorldCord, WorldCord + 2 * new vec2(size.x, -size.y), new vec2(0, uv_size.y) + uv_offset, new vec2(uv_size.x, 0) + uv_offset);
+            var building = SetBuildingQuad(WorldCord, size, BuildingType, PlayerNumber);
             building.SetColor(new color(1, 1, 1, .7f));
             building.Draw(GameClass.Graphics);
+        }
+
+        RectangleQuad SetUnitQuad(vec2 pos, vec2 size, int player, int frame, float dir, RectangleQuad quad = null)
+        {
+            size.y = size.x;
+
+            vec2 uv_size = UnitSpriteSheet.SpriteSize;
+            
+            vec2 uv_offset;
+            uv_offset.x = frame;
+            uv_offset.y = (Float(dir) - 1) + 4 * (player - 1);
+            uv_offset *= UnitSpriteSheet.SpriteSize;
+
+            if (quad == null)
+            {
+                quad = new RectangleQuad();
+            }
+
+            quad.SetupVertices(pos, pos + 2 * new vec2(size.x, -size.y), new vec2(0, uv_size.y) + uv_offset, new vec2(uv_size.x, 0) + uv_offset);
+            quad.Texture = Assets.UnitTexture_1;
+
+            return quad;
+        }
+
+        RectangleQuad SetBuildingQuad(vec2 pos, vec2 size, float type, int player, RectangleQuad quad = null)
+        {
+            size.y = size.x;
+
+            vec2 uv_size = BuildingSpriteSheet.BuildingSize;
+            
+            vec2 uv_offset;
+            uv_offset.x = player * BuildingSpriteSheet.BuildingDimX * BuildingSpriteSheet.SpriteSize.x;
+            uv_offset.y = BuildingSpriteSheet.SubsheetDimY * Float(UnitType.BuildingIndex(type));
+
+            if (quad == null)
+            {
+                quad = new RectangleQuad();
+            }
+
+            //quad.SetupVertices(quad.Bl, quad.Tr, new vec2(0, uv_size.y) + uv_offset, new vec2(uv_size.x, 0) + uv_offset);
+            quad.SetupVertices(pos, pos + 2 * new vec2(size.x, -size.y), new vec2(0, uv_size.y) + uv_offset, new vec2(uv_size.x, 0) + uv_offset);
+            quad.Texture = Assets.BuildingTexture_1;
+
+            return quad;
         }
 
         void DrawCircleCursor()

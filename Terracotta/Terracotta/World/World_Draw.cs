@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -168,7 +170,9 @@ namespace GpuSim
 
             DrawMinimapTexture();
             DrawGrids();
+            
             DrawMinimap();
+            DrawTopUi();
 
             DrawMouseUi();
             DrawUiText();
@@ -182,6 +186,7 @@ namespace GpuSim
 
             CameraPos = vec2.Zero;
             CameraZoom = 1;
+            CameraAspect = 1;
 
             GridHelper.GraphicsDevice.SetRenderTarget(Minimap);
             DrawGrids();
@@ -218,22 +223,195 @@ namespace GpuSim
             vec2 cam = CameraPos * size;
             vec2 bl = center + cam - vec(CameraAspect, 1) * size / CameraZoom;
             vec2 tr = center + cam + vec(CameraAspect, 1) * size / CameraZoom;
-            DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, new color(.9f, .9f, .9f, .8f));
+            bl = max(bl, center - size);
+            tr = min(tr, center + size);
+            DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, new color(.6f, .6f, .6f, .5f));
             DrawBox(bl, tr, .001f);
+        }
+
+        class Ui
+        {
+            public Ui()
+            {
+                ActiveUi = this;
+            }
+
+            public Dictionary<string, RectangleQuad> Elements = new Dictionary<string, RectangleQuad>();
+            public List<RectangleQuad> Order = new List<RectangleQuad>();
+
+            public void Add(string name, RectangleQuad e)
+            {
+                e.Texture = Assets.White;
+                Elements.Add(name, e);
+
+                //if (!name.Contains("[Text]"))
+                {
+                    Order.Add(e);
+                }
+            }
+
+            public void Draw()
+            {
+                foreach (var e in Order)
+                {
+                    DrawElement(e);
+                }
+            }
+
+            // Static
+
+            public static Ui ActiveUi;
+            public static RectangleQuad e;
+
+            public static void Element(string name)
+            {
+                if (Ui.ActiveUi.Elements.ContainsKey(name))
+                {
+                    Ui.e = Ui.ActiveUi.Elements[name];
+                    return;
+                }
+
+                var e = new RectangleQuad(vec2.Zero, vec2.Zero, vec2.Zero, vec2.Ones);
+
+                Ui.ActiveUi.Add(name, e);
+                Ui.e = e;
+            }
+
+            static void DrawElement(RectangleQuad e)
+            {
+                DrawTextureSmooth.Using(vec(0, 0, 1, 1), GameClass.ScreenAspect, e.Texture);
+                e.Draw(GameClass.Graphics);
+            }
+        }
+
+        Ui TopUi;
+        void MakeTopUi()
+        {
+            if (TopUi != null) return;
+
+            TopUi = new Ui();
+
+            float a = CameraAspect;
+
+            Ui.Element("Bar");
+            Ui.e.SetupPosition(vec(a - 1.65f, 0.99814814814815f), vec(a - -0.00185185185185f, 0.94814814814815f));
+
+            Ui.Element("Tab");
+            Ui.e.SetupPosition(vec(a - 1.92037037037037f, 0.99814814814815f), vec(a - 1.65f, 0.94814814814815f));
+
+            Ui.Element("[Text] Jade");
+            Ui.e.SetupPosition(vec(a - 0.2537037037037f, 0.99074074074074f), vec(a - 0.10555555555556f, 0.95925925925926f));
+
+            Ui.Element("Jade");
+            Ui.e.SetupPosition(vec(a - 0.30185185185185f, 0.99444444444444f), vec(a - 0.26481481481481f, 0.9537037037037f));
+
+            Ui.Element("[Text] Jade mines");
+            Ui.e.SetupPosition(vec(a - 0.45555555555556f, 0.99259259259259f), vec(a - 0.38518518518518f, 0.96111111111111f));
+
+            Ui.Element("Jade mine");
+            Ui.e.SetupPosition(vec(a - 0.53703703703704f, 1f), vec(a - 0.46481481481481f, 0.95f));
+
+            Ui.Element("[Text] Gold");
+            Ui.e.SetupPosition(vec(a - 0.80740740740741f, 0.98888888888889f), vec(a - 0.65925925925926f, 0.95740740740741f));
+
+            Ui.Element("Gold");
+            Ui.e.SetupPosition(vec(a - 0.85555555555556f, 0.99444444444444f), vec(a - 0.81851851851852f, 0.9537037037037f));
+
+            Ui.Element("[Text] Gold mines");
+            Ui.e.SetupPosition(vec(a - 1.00925925925926f, 0.99074074074074f), vec(a - 0.93888888888889f, 0.95925925925926f));
+
+            Ui.Element("Gold mine");
+            Ui.e.SetupPosition(vec(a - 1.09074074074074f, 0.9962962962963f), vec(a - 1.01666666666667f, 0.94814814814815f));
+
+            Ui.Element("[Text] Units");
+            Ui.e.SetupPosition(vec(a - 1.32222222222222f, 0.98888888888889f), vec(a - 1.19074074074074f, 0.95740740740741f));
+
+            Ui.Element("Unit");
+            Ui.e.SetupPosition(vec(a - 1.36851851851852f, 0.99444444444444f), vec(a - 1.32777777777778f, 0.9537037037037f));
+
+            Ui.Element("[Text] Barrackses");
+            Ui.e.SetupPosition(vec(a - 1.51481481481481f, 0.99074074074074f), vec(a - 1.4462962962963f, 0.95925925925926f));
+
+            Ui.Element("Barracks");
+            Ui.e.SetupPosition(vec(a - 1.6f, 0.99444444444444f), vec(a - 1.52777777777778f, 0.94814814814815f));
+
+
+            Ui.Element("Bar");
+            Ui.e.SetColor(rgba(0x6c839c, .69f));
+            
+            Ui.Element("Tab");
+            Ui.e.SetColor(rgba(0x6c839c, .90f));
+
+            Ui.Element("Barracks");
+            SetBuildingQuad(Ui.e.Bl, Ui.e.size, UnitType.Barracks, 1, Ui.e);
+
+            Ui.Element("Gold mine");
+            SetBuildingQuad(Ui.e.Bl, Ui.e.size, UnitType.GoldMine, 1, Ui.e);
+
+            Ui.Element("Jade mine");
+            SetBuildingQuad(Ui.e.Bl, Ui.e.size, UnitType.JadeMine, 1, Ui.e);
+
+            Ui.Element("Unit");
+            SetUnitQuad(Ui.e.Bl, Ui.e.size, 1, 0, Dir.Right, Ui.e);
+
+            Ui.Element("Gold");
+            Ui.e.Texture = Assets.Gold;
+
+            Ui.Element("Jade");
+            Ui.e.Texture = Assets.Jade;
+        }
+
+        private void DrawTopUi()
+        {
+            MakeTopUi();
+            TopUi.Draw();
+        }
+
+        vec2 ToBatchCoord(vec2 p)
+        {
+            return vec((p.x + CameraAspect) / (2 * CameraAspect), (1 - (p.y + 1) / 2)) * GameClass.Screen;
         }
 
         private void DrawUiText()
         {
             Render.StartText();
 
-            // Ui Text
-            DrawUi_TopInfo();
-            DrawUi_PlayerGrid();
-            DrawUi_CursorText();
+            // Top Ui
+            string s;
+            float scale = .942f;
 
-            // User Messages
-            UserMessages.Update();
-            UserMessages.Draw();
+            Ui.Element("[Text] Barrackses");
+            s = string.Format("{0:#,##0}", DataGroup.BarracksCount[1]);
+            Render.DrawText(s, ToBatchCoord(Ui.e.Bl), scale, rgb(0xff1010));
+
+            Ui.Element("[Text] Units");
+            s = string.Format("{0:#,##0}", DataGroup.UnitCount[1]);
+            Render.DrawText(s, ToBatchCoord(Ui.e.Bl), scale);
+
+            Ui.Element("[Text] Gold mines");
+            s = string.Format("{0:#,##0}", PlayerInfo[1].GoldMines);
+            Render.DrawText(s, ToBatchCoord(Ui.e.Bl), scale);
+
+            Ui.Element("[Text] Gold");
+            s = string.Format("{0:#,##0}", PlayerInfo[1].GoldMines);
+            Render.DrawText(s, ToBatchCoord(Ui.e.Bl), scale);
+
+            Ui.Element("[Text] Jade mines");
+            s = "0";
+            Render.DrawText(s, ToBatchCoord(Ui.e.Bl), scale);
+
+            Ui.Element("[Text] Jade");
+            s = "0";
+            Render.DrawText(s, ToBatchCoord(Ui.e.Bl), scale);
+
+            //// Ui Text
+            //DrawUi_TopInfo();
+            //DrawUi_PlayerGrid();
+            //DrawUi_CursorText();
+
+            //// User Messages
+            //UserMessages.Update();
+            //UserMessages.Draw();
 
             Render.EndText();
         }

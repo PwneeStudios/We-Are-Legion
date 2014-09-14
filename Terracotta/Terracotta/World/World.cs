@@ -39,6 +39,7 @@ namespace GpuSim
             Minimap = new RenderTarget2D(GameClass.Game.GraphicsDevice, 256, 256);
         }
 
+        //const double DelayBetweenUpdates = .01;
         //const double DelayBetweenUpdates = .3333;
         const double DelayBetweenUpdates = .4;
 

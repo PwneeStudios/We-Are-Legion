@@ -50,7 +50,7 @@ namespace GpuSim
             //graphics.PreferredBackBufferWidth = 1280;
             //graphics.PreferredBackBufferHeight = 720;
 
-            //graphics.IsFullScreen = false;
+            //graphics.IsFullScreen = true;
             //graphics.PreferredBackBufferWidth = 1920;
             //graphics.PreferredBackBufferHeight = 1080;
 

@@ -25,12 +25,14 @@ namespace GpuSim
     public static class Render
     {
         static SpriteBatch MySpriteBatch;
-        static SpriteFont DefaultFont;
+        
+        static SpriteFont Font1, Font2;
 
         public static void Initialize()
         {
             MySpriteBatch = new SpriteBatch(GameClass.Graphics);
-            DefaultFont = GameClass.ContentManager.Load<SpriteFont>("Default");
+            Font1 = GameClass.ContentManager.Load<SpriteFont>("Default");
+            Font2 = GameClass.ContentManager.Load<SpriteFont>("Bauhaus");
         }
 
         public static void StandardRenderSetup()
@@ -73,19 +75,19 @@ namespace GpuSim
             MySpriteBatch.End();
         }
 
-        public static void DrawText(string text, vec2 pos, Alignment align = Alignment.LeftJusitfy)
+        public static void DrawText(string text, vec2 pos, float scale, Alignment align = Alignment.LeftJusitfy)
         {
-            DrawText(DefaultFont, text, pos, align, new color(1f, 1f, 1f, 1f));
+            DrawText(Font2, text, pos, scale, align, new color(1f, 1f, 1f, 1f));
         }
 
-        public static void DrawText(string text, vec2 pos, color clr, Alignment align = Alignment.LeftJusitfy)
+        public static void DrawText(string text, vec2 pos, float scale, color clr, Alignment align = Alignment.LeftJusitfy)
         {
-            DrawText(DefaultFont, text, pos, align, clr);
+            DrawText(Font2, text, pos, scale, align, clr);
         }
 
-        public static void DrawText(SpriteFont font, string text, vec2 pos, Alignment align, color clr)
+        public static void DrawText(SpriteFont font, string text, vec2 pos, float scale, Alignment align, color clr)
         {
-            vec2 size = (vec2)font.MeasureString(text);
+            vec2 size = (vec2)font.MeasureString(text) * scale;
             vec2 origin = size * 0.5f;
 
             if (align.HasFlag(Alignment.Left))
@@ -100,7 +102,7 @@ namespace GpuSim
             if (align.HasFlag(Alignment.Bottom))
                 origin.y += size.y / 2;
             
-            MySpriteBatch.DrawString(font, text, pos, (Color)clr.Premultiplied, 0, origin, 1, SpriteEffects.None, 0);
+            MySpriteBatch.DrawString(font, text, pos, (Color)clr.Premultiplied, 0, origin, scale, SpriteEffects.None, 0);
         }
     }
 }

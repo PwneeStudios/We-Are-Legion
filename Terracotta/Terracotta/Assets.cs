@@ -10,7 +10,7 @@ namespace GpuSim
     public static class Assets
     {
         public static Texture2D
-            FarColors,
+            White, FarColors,
 
             DebugTexture_Arrows, DebugTexture_Num,
 
@@ -20,12 +20,15 @@ namespace GpuSim
             
             TileSpriteSheet_1, TileSpriteSheet_2, TileSpriteSheet_4, TileSpriteSheet_8, TileSpriteSheet_16,
 
-            Cursor, SelectCircle, SelectCircle_Data, SelectDot, AttackMarker;
+            Cursor, SelectCircle, SelectCircle_Data, SelectDot, AttackMarker,
+            
+            Gold, Jade;
 
         public static ContentManager Content { get { return GameClass.Game.Content; } }
 
         public static void Initialize()
         {
+            White               = LoadTexture("White");
             FarColors           = LoadTexture("FarColors");
             SimShader.FarColor  = new Field<color>(FarColors);
 
@@ -49,6 +52,9 @@ namespace GpuSim
             SelectCircle_Data   = LoadTexture("SelectCircle_Data");
             SelectDot           = LoadTexture("SelectDot");
             AttackMarker        = LoadTexture("AttackMarker");
+
+            Gold = LoadTexture("Gold");
+            Jade = LoadTexture("Jade");
         }
 
 #if DEBUG

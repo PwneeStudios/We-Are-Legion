@@ -130,6 +130,11 @@ bool GpuSim__SimShader__selected(float4 u)
     return val >= 0.5019608 - .001;
 }
 
+float2 FragSharpFramework__FragSharpStd__Float(float2 v)
+{
+    return floor(255 * v + float2(0.5, 0.5));
+}
+
 float FragSharpFramework__FragSharpStd__Float(float v)
 {
     return floor(255 * v + 0.5);
@@ -147,9 +152,9 @@ float4 GpuSim__DrawBuildings__Sprite(VertexToPixel psin, float4 u, float4 d, flo
         return float4(0.0, 0.0, 0.0, 0.0);
     }
     float selected_offset = GpuSim__SimShader__selected(u) ? 3 : 0;
-    pos += 255 * float2(u.g, u.a);
+    pos += FragSharpFramework__FragSharpStd__Float(float2(u.g, u.a));
     pos.x += FragSharpFramework__FragSharpStd__Float(d.g) * 3;
-    pos.y += selected_offset + 6 * (255 * GpuSim__UnitType__BuildingIndex(d.r));
+    pos.y += selected_offset + 6 * FragSharpFramework__FragSharpStd__Float(GpuSim__UnitType__BuildingIndex(d.r));
     pos *= float2(1.0 / 15, 1.0 / 30);
     return tex2D(Texture, pos);
 }

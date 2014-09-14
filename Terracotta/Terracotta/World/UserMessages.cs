@@ -63,7 +63,7 @@ namespace GpuSim
 
         public void Draw(vec2 pos)
         {
-            Render.DrawText(Message, pos, align : Alignment.Center, clr : new color(1f, 1f, 1f, alpha));
+            Render.DrawText(Message, pos, 1, align : Alignment.Center, clr : new color(1f, 1f, 1f, alpha));
         }
 
         public void Update()
