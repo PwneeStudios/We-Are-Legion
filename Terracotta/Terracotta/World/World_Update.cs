@@ -14,6 +14,7 @@ namespace Terracotta
             if (!MapEditor) return;
 
             if (Keys.P.Pressed()) Editor_TogglePause();
+            if (Keys.D0.Pressed()) Editor_SwitchPlayer(0);
             if (Keys.D1.Pressed()) Editor_SwitchPlayer(1);
             if (Keys.D2.Pressed()) Editor_SwitchPlayer(2);
             if (Keys.D3.Pressed()) Editor_SwitchPlayer(3);
@@ -37,6 +38,7 @@ namespace Terracotta
             DrawGridLines = !DrawGridLines;
         }
 
+        public static float StaticMaxZoomOut = 1;
         float x_edge;
         public void Update()
         {
@@ -51,11 +53,14 @@ namespace Terracotta
             float MaxZoomOut, MaxZoomIn;
             if (MapEditor)
             {
-                MaxZoomOut = 1f; MaxZoomIn = 200f; // Full zoom-in/out
+                // Full zoom-in/out
+                MaxZoomOut = 1f;
+                MaxZoomIn = 200f;
             }
             else
             {
-                MaxZoomOut = 7.5f; MaxZoomIn = 200f; // Full zoom-in, Partial zoom-out
+                MaxZoomOut = World.StaticMaxZoomOut;
+                MaxZoomIn = 200f; // Full zoom-in, Partial zoom-out
             }
 
             // Zoom all the way out

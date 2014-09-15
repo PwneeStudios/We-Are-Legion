@@ -28,7 +28,7 @@ namespace Terracotta
                 CanPlace[i + j * _w] = false;
             }
 
-            if (BuildingType == UnitType.Barracks)
+            if (BuildingType == UnitType.Barracks && PlayerNumber > 0)
             {
                 var _data = DataGroup.CurrentData.GetData<building>(GridCoord, new vec2(_w, _h));
                 var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
@@ -73,10 +73,11 @@ namespace Terracotta
 
                         var distance = Get(distance_to, PlayerNumber);
 
+                        bool occupied = unit_here.type > 0;
                         bool is_gold_source = unit_here.team == Team.None && unit_here.type == UnitType.GoldMine;
                         bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
 
-                        bool can_place = is_gold_source && (in_territory || MapEditor);
+                        bool can_place = (is_gold_source || MapEditor && !occupied) && (in_territory || MapEditor);
                         CanPlace[i + j * _w] = can_place;
 
                         if (!can_place) CanPlaceBuilding = false;

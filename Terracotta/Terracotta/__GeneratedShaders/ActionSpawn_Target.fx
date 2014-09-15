@@ -109,11 +109,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 target = tex2D(fs_param_Target, psin.TexCoords + (float2(0, 0)) * fs_param_Target_dxdy);
     if (Terracotta__SimShader__Something(select) && !(Terracotta__SimShader__Something(data_here)))
     {
-        if (abs((int)(psin.TexCoords.x * fs_param_Data_size.x) % 2 - 0) < .001 && abs((int)(psin.TexCoords.y * fs_param_Data_size.y) % 2 - 0) < .001)
-        {
-            float2 pos = psin.TexCoords * fs_param_Data_size;
-            target = Terracotta__SimShader__pack_vec2(pos);
-        }
+        float2 pos = psin.TexCoords * fs_param_Data_size;
+        target = Terracotta__SimShader__pack_vec2(pos);
     }
     __FinalOutput.Color = target;
     return __FinalOutput;

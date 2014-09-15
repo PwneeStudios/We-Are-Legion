@@ -230,7 +230,7 @@ namespace Terracotta
             if (player == 3) return tuple.PlayerThree;
             if (player == 4) return tuple.PlayerFour;
 
-            throw new BadPlayerNumberException(player);
+            //throw new BadPlayerNumberException(player);
             return 0;
         }
 

@@ -98,12 +98,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     if (Terracotta__SimShader__Something(select) && !(Terracotta__SimShader__Something(data_here)))
     {
-        if (abs((int)(psin.TexCoords.x * fs_param_Units_size.x) % 2 - 0) < .001 && abs((int)(psin.TexCoords.y * fs_param_Units_size.y) % 2 - 0) < .001)
-        {
-            unit_here.g = fs_param_player;
-            unit_here.b = fs_param_team;
-            unit_here.r = 0.003921569;
-        }
+        unit_here.g = fs_param_player;
+        unit_here.b = fs_param_team;
+        unit_here.r = 0.003921569;
     }
     __FinalOutput.Color = unit_here;
     return __FinalOutput;

@@ -208,20 +208,23 @@ namespace Terracotta
 
                     if (Keys.D1.Down() || Keys.NumPad1.Down())
                     {
+                        World.StaticMaxZoomOut = 7.5f;
                         State = GameState.Loading;
                         ScenarioToLoad = "Beset.m3n";
                         DrawFullScreen(Assets.DemoScreen3);
                     }
                     else if (Keys.D2.Down() || Keys.NumPad2.Down())
                     {
+                        World.StaticMaxZoomOut = 5.61781263f;
                         State = GameState.Loading;
-                        ScenarioToLoad = "Beset.m3n";
+                        ScenarioToLoad = "Gilgamesh.m3n";
                         DrawFullScreen(Assets.DemoScreen3);
                     }
                     else if (Keys.D3.Down() || Keys.NumPad3.Down())
                     {
+                        World.StaticMaxZoomOut = 1f;
                         State = GameState.Loading;
-                        ScenarioToLoad = "Beset.m3n";
+                        ScenarioToLoad = "Nice.m3n";
                         DrawFullScreen(Assets.DemoScreen3);
                     }
                     else if (Keys.Back.Down())

@@ -20,11 +20,13 @@ namespace Terracotta
     {
         public void Migrate()
         {
-            UnitMigrate.Apply(DataGroup.CurrentUnits, Output: DataGroup.Temp1);
-            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
+            DataGroup.Corspes.Clear();
 
-            UnitMigrate.Apply(DataGroup.PreviousUnits, Output: DataGroup.Temp1);
-            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousUnits);
+            //UnitMigrate.Apply(DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            //CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
+
+            //UnitMigrate.Apply(DataGroup.PreviousUnits, Output: DataGroup.Temp1);
+            //CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousUnits);
         }
     }
 }

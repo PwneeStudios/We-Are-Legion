@@ -12,8 +12,8 @@ namespace Terracotta
 
             if (Something(select) && !Something(here))
             {
-                if ((int)(vertex.TexCoords.x * Data.Size.x) % 2 == 0 &&
-                    (int)(vertex.TexCoords.y * Data.Size.y) % 2 == 0)
+                //if ((int)(vertex.TexCoords.x * Data.Size.x) % 2 == 0 &&
+                //    (int)(vertex.TexCoords.y * Data.Size.y) % 2 == 0)
                 {
                     here.direction = Dir.Right;
                     here.action = UnitAction.Guard;
@@ -36,8 +36,8 @@ namespace Terracotta
 
             if (Something(select) && !Something(data_here))
             {
-                if ((int)(vertex.TexCoords.x * Units.Size.x) % 2 == 0 &&
-                    (int)(vertex.TexCoords.y * Units.Size.y) % 2 == 0)
+                //if ((int)(vertex.TexCoords.x * Units.Size.x) % 2 == 0 &&
+                //    (int)(vertex.TexCoords.y * Units.Size.y) % 2 == 0)
                 {
                     unit_here.player = player;
                     unit_here.team = team;
@@ -61,8 +61,8 @@ namespace Terracotta
 
             if (Something(select) && !Something(data_here))
             {
-                if ((int)(vertex.TexCoords.x * Data.Size.x) % 2 == 0 &&
-                    (int)(vertex.TexCoords.y * Data.Size.y) % 2 == 0)
+                //if ((int)(vertex.TexCoords.x * Data.Size.x) % 2 == 0 &&
+                //    (int)(vertex.TexCoords.y * Data.Size.y) % 2 == 0)
                 {
                     vec2 pos = vertex.TexCoords * Data.Size;
                     target = pack_vec2(pos);
