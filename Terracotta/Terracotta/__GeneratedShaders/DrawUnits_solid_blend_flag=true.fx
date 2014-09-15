@@ -126,12 +126,12 @@ sampler fs_param_FarColor : register(s6) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__IsUnit(float4 u)
+bool Terracotta__SimShader__IsUnit(float4 u)
 {
     return abs(u.r - 0.003921569) < .001;
 }
 
-float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
+float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -139,7 +139,7 @@ float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size
     return coords - float2(i, j);
 }
 
-bool GpuSim__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
 }
@@ -149,13 +149,13 @@ float FragSharpFramework__FragSharpStd__Float(float v)
     return floor(255 * v + 0.5);
 }
 
-bool GpuSim__SimShader__selected(float4 u)
+bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
     return val >= 0.5019608 - .001;
 }
 
-float4 GpuSim__SelectedUnitColor__Get(VertexToPixel psin, float player)
+float4 Terracotta__SelectedUnitColor__Get(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
@@ -176,7 +176,7 @@ float4 GpuSim__SelectedUnitColor__Get(VertexToPixel psin, float player)
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 GpuSim__UnitColor__Get(VertexToPixel psin, float player)
+float4 Terracotta__UnitColor__Get(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
@@ -197,18 +197,18 @@ float4 GpuSim__UnitColor__Get(VertexToPixel psin, float player)
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 GpuSim__DrawUnits__SolidColor(VertexToPixel psin, float4 data, float4 unit)
+float4 Terracotta__DrawUnits__SolidColor(VertexToPixel psin, float4 data, float4 unit)
 {
-    return GpuSim__SimShader__selected(data) ? GpuSim__SelectedUnitColor__Get(psin, unit.g) : GpuSim__UnitColor__Get(psin, unit.g);
+    return Terracotta__SimShader__selected(data) ? Terracotta__SelectedUnitColor__Get(psin, unit.g) : Terracotta__UnitColor__Get(psin, unit.g);
 }
 
-float4 GpuSim__DrawUnits__Sprite(VertexToPixel psin, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
+float4 Terracotta__DrawUnits__Sprite(VertexToPixel psin, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    bool draw_selected = GpuSim__SimShader__selected(d) && pos.y > selection_size + .001;
+    bool draw_selected = Terracotta__SimShader__selected(d) && pos.y > selection_size + .001;
     pos.x += floor(frame);
     pos.y += (FragSharpFramework__FragSharpStd__Float(d.r) - 1) + 4 * (FragSharpFramework__FragSharpStd__Float(u.g) - 1);
     pos *= float2(1.0 / 32, 1.0 / 32);
@@ -216,16 +216,16 @@ float4 GpuSim__DrawUnits__Sprite(VertexToPixel psin, float4 d, float4 u, float2 
     if (draw_selected)
     {
         float a = clr.a * selection_blend;
-        clr = a * clr + (1 - a) * GpuSim__SelectedUnitColor__Get(psin, u.g);
+        clr = a * clr + (1 - a) * Terracotta__SelectedUnitColor__Get(psin, u.g);
     }
     if (solid_blend_flag)
     {
-        clr = solid_blend * clr + (1 - solid_blend) * GpuSim__DrawUnits__SolidColor(psin, d, u);
+        clr = solid_blend * clr + (1 - solid_blend) * Terracotta__DrawUnits__SolidColor(psin, d, u);
     }
     return clr;
 }
 
-bool GpuSim__SimShader__IsValid(float direction)
+bool Terracotta__SimShader__IsValid(float direction)
 {
     return direction > 0 + .001;
 }
@@ -235,7 +235,7 @@ float FragSharpFramework__FragSharpStd__fint_round(float v)
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float GpuSim__SimShader__prior_direction(float4 u)
+float Terracotta__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
     if (val >= 0.5019608 - .001)
@@ -246,10 +246,10 @@ float GpuSim__SimShader__prior_direction(float4 u)
     return val;
 }
 
-float2 GpuSim__SimShader__direction_to_vec(float direction)
+float2 Terracotta__SimShader__direction_to_vec(float direction)
 {
     float angle = (direction * 255 - 1) * (3.141593 / 2.0);
-    return GpuSim__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Terracotta__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
 // Compiled vertex shader
@@ -271,13 +271,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 cur = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy), pre = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousData_dxdy);
     float4 cur_unit = tex2D(fs_param_CurrentUnits, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentUnits_dxdy), pre_unit = tex2D(fs_param_PreviousUnits, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousUnits_dxdy);
-    if (!(GpuSim__SimShader__IsUnit(cur_unit)) && !(GpuSim__SimShader__IsUnit(pre_unit)))
+    if (!(Terracotta__SimShader__IsUnit(cur_unit)) && !(Terracotta__SimShader__IsUnit(pre_unit)))
     {
         __FinalOutput.Color = output;
         return __FinalOutput;
     }
-    float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_CurrentData_size);
-    if (GpuSim__SimShader__Something(cur) && abs(cur.g - 0.003921569) < .001)
+    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos(psin, fs_param_CurrentData_size);
+    if (Terracotta__SimShader__Something(cur) && abs(cur.g - 0.003921569) < .001)
     {
         if (fs_param_s > 0.5 + .001)
         {
@@ -285,22 +285,22 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         float _s = abs(cur_unit.a - 0.0) < .001 ? fs_param_t : fs_param_s;
         float frame = _s * 6 + FragSharpFramework__FragSharpStd__Float(cur_unit.a);
-        output += GpuSim__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
+        output += Terracotta__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
     }
     else
     {
         float frame = fs_param_s * 6 + FragSharpFramework__FragSharpStd__Float(0.02352941);
-        if (GpuSim__SimShader__IsValid(cur.r))
+        if (Terracotta__SimShader__IsValid(cur.r))
         {
-            float prior_dir = GpuSim__SimShader__prior_direction(cur);
+            float prior_dir = Terracotta__SimShader__prior_direction(cur);
             cur.r = prior_dir;
-            float2 offset = (1 - fs_param_s) * GpuSim__SimShader__direction_to_vec(prior_dir);
-            output += GpuSim__DrawUnits__Sprite(psin, cur, cur_unit, subcell_pos + offset, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
+            float2 offset = (1 - fs_param_s) * Terracotta__SimShader__direction_to_vec(prior_dir);
+            output += Terracotta__DrawUnits__Sprite(psin, cur, cur_unit, subcell_pos + offset, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
         }
-        if (GpuSim__SimShader__IsValid(pre.r) && output.a < 0.025 - .001)
+        if (Terracotta__SimShader__IsValid(pre.r) && output.a < 0.025 - .001)
         {
-            float2 offset = -(fs_param_s) * GpuSim__SimShader__direction_to_vec(pre.r);
-            output += GpuSim__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos + offset, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
+            float2 offset = -(fs_param_s) * Terracotta__SimShader__direction_to_vec(pre.r);
+            output += Terracotta__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos + offset, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
         }
     }
     __FinalOutput.Color = output;

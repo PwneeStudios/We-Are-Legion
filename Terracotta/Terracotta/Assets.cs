@@ -5,11 +5,13 @@ using Microsoft.Xna.Framework.Graphics;
 
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     public static class Assets
     {
         public static Texture2D
+            DemoScreen1, DemoScreen2, DemoScreen3,
+
             White, FarColors,
 
             DebugTexture_Arrows, DebugTexture_Num,
@@ -22,12 +24,16 @@ namespace GpuSim
 
             Cursor, SelectCircle, SelectCircle_Data, SelectDot, AttackMarker,
             
-            TopUi, Gold, Jade;
+            TopUi;
 
         public static ContentManager Content { get { return GameClass.Game.Content; } }
 
         public static void Initialize()
         {
+            DemoScreen1 = LoadTexture("DemoScreen1");
+            DemoScreen2 = LoadTexture("DemoScreen2");
+            DemoScreen3 = LoadTexture("DemoScreen3");
+
             White               = LoadTexture("White");
             FarColors           = LoadTexture("FarColors");
             SimShader.FarColor  = new Field<color>(FarColors);
@@ -54,8 +60,6 @@ namespace GpuSim
             AttackMarker        = LoadTexture("AttackMarker");
 
             TopUi = LoadTexture("TopUi");
-            Gold  = LoadTexture("Gold");
-            Jade  = LoadTexture("Jade");
         }
 
 #if DEBUG

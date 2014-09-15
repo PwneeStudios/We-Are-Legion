@@ -89,12 +89,12 @@ float fs_param_s;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__IsBuilding(float4 u)
+bool Terracotta__SimShader__IsBuilding(float4 u)
 {
     return u.r >= 0.007843138 - .001 && u.r < 0.07843138 - .001;
 }
 
-float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
+float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -102,17 +102,17 @@ float2 GpuSim__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size
     return coords - float2(i, j);
 }
 
-bool GpuSim__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-float GpuSim__ExplosionSpriteSheet__ExplosionFrame(float s, float4 building_here)
+float Terracotta__ExplosionSpriteSheet__ExplosionFrame(float s, float4 building_here)
 {
     return (s + 255 * (building_here.r - 0.02745098)) * 6;
 }
 
-float4 GpuSim__DrawBuildings__ExplosionSprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 Terracotta__DrawBuildings__ExplosionSprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
@@ -124,7 +124,7 @@ float4 GpuSim__DrawBuildings__ExplosionSprite(VertexToPixel psin, float4 u, floa
     return tex2D(Texture, pos);
 }
 
-bool GpuSim__SimShader__selected(float4 u)
+bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
     return val >= 0.5019608 - .001;
@@ -140,21 +140,21 @@ float FragSharpFramework__FragSharpStd__Float(float v)
     return floor(255 * v + 0.5);
 }
 
-float GpuSim__UnitType__BuildingIndex(float type)
+float Terracotta__UnitType__BuildingIndex(float type)
 {
     return type - 0.007843138;
 }
 
-float4 GpuSim__DrawBuildings__Sprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 Terracotta__DrawBuildings__Sprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    float selected_offset = GpuSim__SimShader__selected(u) ? 3 : 0;
+    float selected_offset = Terracotta__SimShader__selected(u) ? 3 : 0;
     pos += FragSharpFramework__FragSharpStd__Float(float2(u.g, u.a));
     pos.x += FragSharpFramework__FragSharpStd__Float(d.g) * 3;
-    pos.y += selected_offset + 6 * FragSharpFramework__FragSharpStd__Float(GpuSim__UnitType__BuildingIndex(d.r));
+    pos.y += selected_offset + 6 * FragSharpFramework__FragSharpStd__Float(Terracotta__UnitType__BuildingIndex(d.r));
     pos *= float2(1.0 / 15, 1.0 / 30);
     return tex2D(Texture, pos);
 }
@@ -178,26 +178,26 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 building_here = tex2D(fs_param_Buildings, psin.TexCoords + (float2(0, 0)) * fs_param_Buildings_dxdy);
     float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    if (!(GpuSim__SimShader__IsBuilding(unit_here)))
+    if (!(Terracotta__SimShader__IsBuilding(unit_here)))
     {
         __FinalOutput.Color = output;
         return __FinalOutput;
     }
-    float2 subcell_pos = GpuSim__SimShader__get_subcell_pos(psin, fs_param_Buildings_size);
-    if (GpuSim__SimShader__Something(building_here))
+    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos(psin, fs_param_Buildings_size);
+    if (Terracotta__SimShader__Something(building_here))
     {
         if (building_here.r >= 0.02745098 - .001)
         {
-            float frame = GpuSim__ExplosionSpriteSheet__ExplosionFrame(fs_param_s, building_here);
+            float frame = Terracotta__ExplosionSpriteSheet__ExplosionFrame(fs_param_s, building_here);
             if (frame < 16 - .001)
             {
-                output += GpuSim__DrawBuildings__ExplosionSprite(psin, building_here, unit_here, subcell_pos, frame, fs_param_Explosion, fs_param_Explosion_size, fs_param_Explosion_dxdy);
+                output += Terracotta__DrawBuildings__ExplosionSprite(psin, building_here, unit_here, subcell_pos, frame, fs_param_Explosion, fs_param_Explosion_size, fs_param_Explosion_dxdy);
             }
         }
         else
         {
             float frame = 0;
-            output += GpuSim__DrawBuildings__Sprite(psin, building_here, unit_here, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+            output += Terracotta__DrawBuildings__Sprite(psin, building_here, unit_here, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
     }
     __FinalOutput.Color = output;

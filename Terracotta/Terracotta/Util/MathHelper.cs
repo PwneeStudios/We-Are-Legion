@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework;
 using FragSharpHelper;
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     public static class CoreMath
     {

@@ -1,4 +1,4 @@
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DataGroup : SimShader
     {

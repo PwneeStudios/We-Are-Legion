@@ -55,33 +55,33 @@ sampler fs_param_CurrentData : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool GpuSim__SimShader__IsStationary(float4 d)
+bool Terracotta__SimShader__IsStationary(float4 d)
 {
     return d.r >= 0.01960784 - .001;
 }
 
-bool GpuSim__SimShader__Stayed(float4 u)
+bool Terracotta__SimShader__Stayed(float4 u)
 {
-    return GpuSim__SimShader__IsStationary(u) || abs(u.g - 0.003921569) < .001;
+    return Terracotta__SimShader__IsStationary(u) || abs(u.g - 0.003921569) < .001;
 }
 
-bool GpuSim__SimShader__IsValid(float direction)
+bool Terracotta__SimShader__IsValid(float direction)
 {
     return direction > 0 + .001;
 }
 
-float2 GpuSim__SimShader__dir_to_vec(float direction)
+float2 Terracotta__SimShader__dir_to_vec(float direction)
 {
     float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
-    return GpuSim__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Terracotta__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
-float GpuSim__SimShader__Reverse(float dir)
+float Terracotta__SimShader__Reverse(float dir)
 {
     dir += 2 * 0.003921569;
     if (dir > 0.01568628 + .001)
@@ -96,7 +96,7 @@ float FragSharpFramework__FragSharpStd__fint_round(float v)
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float GpuSim__SimShader__prior_direction(float4 u)
+float Terracotta__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
     if (val >= 0.5019608 - .001)
@@ -123,15 +123,15 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy);
     float4 output = float4(0, 0, 0, 0);
-    if (GpuSim__SimShader__Something(here))
+    if (Terracotta__SimShader__Something(here))
     {
-        if (GpuSim__SimShader__Stayed(here))
+        if (Terracotta__SimShader__Stayed(here))
         {
             output = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
         }
         else
         {
-            output = tex2D(fs_param_Data, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(GpuSim__SimShader__Reverse(GpuSim__SimShader__prior_direction(here)))) * fs_param_Data_dxdy);
+            output = tex2D(fs_param_Data, psin.TexCoords + (Terracotta__SimShader__dir_to_vec(Terracotta__SimShader__Reverse(Terracotta__SimShader__prior_direction(here)))) * fs_param_Data_dxdy);
         }
     }
     __FinalOutput.Color = output;

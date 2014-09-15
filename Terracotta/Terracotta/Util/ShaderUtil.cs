@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Identity : SimShader
     {

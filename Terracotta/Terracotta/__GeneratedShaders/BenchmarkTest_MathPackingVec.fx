@@ -40,7 +40,7 @@ sampler fs_param_s : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float4 GpuSim__BenchmarkTest_MathPackingVec__MathPacking(float4 c)
+float4 Terracotta__BenchmarkTest_MathPackingVec__MathPacking(float4 c)
 {
     float4 x1 = floor(c / 4.0);
     float4 x2 = c - 3.2 * x1;
@@ -63,7 +63,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 right = tex2D(fs_param_s, psin.TexCoords + (float2(1, 0)) * fs_param_s_dxdy), up = tex2D(fs_param_s, psin.TexCoords + (float2(0, 1)) * fs_param_s_dxdy), left = tex2D(fs_param_s, psin.TexCoords + (float2(-(1), 0)) * fs_param_s_dxdy), down = tex2D(fs_param_s, psin.TexCoords + (float2(0, -(1))) * fs_param_s_dxdy);
-    output = GpuSim__BenchmarkTest_MathPackingVec__MathPacking(right) + GpuSim__BenchmarkTest_MathPackingVec__MathPacking(left) + GpuSim__BenchmarkTest_MathPackingVec__MathPacking(up) + GpuSim__BenchmarkTest_MathPackingVec__MathPacking(down);
+    output = Terracotta__BenchmarkTest_MathPackingVec__MathPacking(right) + Terracotta__BenchmarkTest_MathPackingVec__MathPacking(left) + Terracotta__BenchmarkTest_MathPackingVec__MathPacking(up) + Terracotta__BenchmarkTest_MathPackingVec__MathPacking(down);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

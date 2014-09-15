@@ -71,23 +71,23 @@ sampler fs_param_Dirward : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__IsBlockingTile(float4 t)
+bool Terracotta__SimShader__IsBlockingTile(float4 t)
 {
     return t.r >= 0.01176471 - .001 || abs(t.r - 0.003921569) < .001 && abs(t.b - 0.1215686) > .001;
 }
 
-bool GpuSim__SimShader__IsValid(float direction)
+bool Terracotta__SimShader__IsValid(float direction)
 {
     return direction > 0 + .001;
 }
 
-float2 GpuSim__SimShader__dir_to_vec(float direction)
+float2 Terracotta__SimShader__dir_to_vec(float direction)
 {
     float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
-    return GpuSim__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Terracotta__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
-bool GpuSim__SimShader__ValidDirward(float4 d)
+bool Terracotta__SimShader__ValidDirward(float4 d)
 {
     return any(abs(d - float4(0, 0, 0, 0)) > .001);
 }
@@ -109,7 +109,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 here = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 0)) * fs_param_Tiles_dxdy);
     float4 geo_here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy), geo_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 0)) * fs_param_Geo_dxdy), geo_up = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 1)) * fs_param_Geo_dxdy), geo_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 0)) * fs_param_Geo_dxdy), geo_down = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, -(1))) * fs_param_Geo_dxdy), geo_up_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 1)) * fs_param_Geo_dxdy), geo_up_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 1)) * fs_param_Geo_dxdy), geo_down_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, -(1))) * fs_param_Geo_dxdy), geo_down_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Geo_dxdy);
     float4 dirward_here = tex2D(fs_param_Dirward, psin.TexCoords + (float2(0, 0)) * fs_param_Dirward_dxdy), dirward_right = tex2D(fs_param_Dirward, psin.TexCoords + (float2(1, 0)) * fs_param_Dirward_dxdy), dirward_up = tex2D(fs_param_Dirward, psin.TexCoords + (float2(0, 1)) * fs_param_Dirward_dxdy), dirward_left = tex2D(fs_param_Dirward, psin.TexCoords + (float2(-(1), 0)) * fs_param_Dirward_dxdy), dirward_down = tex2D(fs_param_Dirward, psin.TexCoords + (float2(0, -(1))) * fs_param_Dirward_dxdy), dirward_up_right = tex2D(fs_param_Dirward, psin.TexCoords + (float2(1, 1)) * fs_param_Dirward_dxdy), dirward_up_left = tex2D(fs_param_Dirward, psin.TexCoords + (float2(-(1), 1)) * fs_param_Dirward_dxdy), dirward_down_right = tex2D(fs_param_Dirward, psin.TexCoords + (float2(1, -(1))) * fs_param_Dirward_dxdy), dirward_down_left = tex2D(fs_param_Dirward, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Dirward_dxdy);
-    if (GpuSim__SimShader__IsBlockingTile(here))
+    if (Terracotta__SimShader__IsBlockingTile(here))
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;
@@ -178,7 +178,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
         }
     }
-    if (geo_here.r > 0 + .001 && GpuSim__SimShader__IsBlockingTile(tex2D(fs_param_Tiles, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(0.01176471)) * fs_param_Tiles_dxdy)))
+    if (geo_here.r > 0 + .001 && Terracotta__SimShader__IsBlockingTile(tex2D(fs_param_Tiles, psin.TexCoords + (Terracotta__SimShader__dir_to_vec(0.01176471)) * fs_param_Tiles_dxdy)))
     {
         output = dirward_here;
         output.rg = geo_here.ba;
@@ -186,21 +186,21 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     else
     {
-        if (GpuSim__SimShader__ValidDirward(forward) && all(abs(forward.rg - geo_forward.ba) < .001))
+        if (Terracotta__SimShader__ValidDirward(forward) && all(abs(forward.rg - geo_forward.ba) < .001))
         {
             output = forward;
             output.b += 0.003921569;
         }
         else
         {
-            if (GpuSim__SimShader__ValidDirward(forward_right) && all(abs(forward_right.rg - geo_forward_right.ba) < .001))
+            if (Terracotta__SimShader__ValidDirward(forward_right) && all(abs(forward_right.rg - geo_forward_right.ba) < .001))
             {
                 output = forward_right;
                 output.b += 0.003921569;
             }
             else
             {
-                if (GpuSim__SimShader__ValidDirward(forward_left) && all(abs(forward_left.rg - geo_forward_left.ba) < .001))
+                if (Terracotta__SimShader__ValidDirward(forward_left) && all(abs(forward_left.rg - geo_forward_left.ba) < .001))
                 {
                     output = forward_left;
                     output.b += 0.003921569;

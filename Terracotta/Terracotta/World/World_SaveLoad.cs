@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GpuSim
+namespace Terracotta
 {
     public static class BinaryWriterExtension
     {
@@ -84,6 +84,7 @@ namespace GpuSim
             var stream = new FileStream(FileName, FileMode.Create);
             var writer = new BinaryWriter(stream);
 
+            // Grid data
             writer.Write(DataGroup.CurrentData);
             writer.Write(DataGroup.CurrentUnits);
             writer.Write(DataGroup.PreviousData);
@@ -100,6 +101,16 @@ namespace GpuSim
             writer.Write(DataGroup.AntiGeo);
             foreach (var dir in Dir.Vals) writer.Write(DataGroup.Dirward[dir]);
 
+            // Info
+            writer.Write(CameraPos.x);
+            writer.Write(CameraPos.y);
+            writer.Write(CameraZoom);
+            for (int i = 1; i <= 4; i++)
+            {
+                writer.Write(PlayerInfo[i].Gold);
+                writer.Write(PlayerInfo[i].GoldMines);
+            }
+
             writer.Close();
             stream.Close();
         }
@@ -111,6 +122,7 @@ namespace GpuSim
             var stream = new FileStream(FileName, FileMode.Open);
             var reader = new BinaryReader(stream);
 
+            // Grid data
             DataGroup.CurrentData.SetData(reader.ReadTexture2D().GetData());
             DataGroup.CurrentUnits.SetData(reader.ReadTexture2D().GetData());
             DataGroup.PreviousData.SetData(reader.ReadTexture2D().GetData());
@@ -127,8 +139,22 @@ namespace GpuSim
             DataGroup.AntiGeo.SetData(reader.ReadTexture2D().GetData());
             foreach (var dir in Dir.Vals) DataGroup.Dirward[dir].SetData(reader.ReadTexture2D().GetData());
 
+            // Info
+            CameraPos.x = reader.ReadSingle();
+            CameraPos.y = reader.ReadSingle();
+            CameraZoom = reader.ReadSingle();
+            for (int i = 1; i <= 4; i++)
+            {
+                PlayerInfo[i].Gold = reader.ReadInt32();
+                PlayerInfo[i].GoldMines = reader.ReadInt32();
+            }
+
             reader.Close();
             stream.Close();
+
+            //Render.UnsetDevice();
+            //Migrate();
+            //Render.UnsetDevice();
         }
     }
 }

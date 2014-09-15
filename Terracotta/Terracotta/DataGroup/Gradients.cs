@@ -12,7 +12,7 @@ using Microsoft.Xna.Framework.Media;
 using FragSharpHelper;
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DataGroup : SimShader
     {

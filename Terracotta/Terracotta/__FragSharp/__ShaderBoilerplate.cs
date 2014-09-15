@@ -20,121 +20,121 @@ namespace FragSharpFramework
         {
             FragSharp.Content = Content;
             FragSharp.GraphicsDevice = GraphicsDevice;
-            GpuSim.DrawGeoInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawGeoInfo");
-            GpuSim.DrawDirwardInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawDirwardInfo");
-            GpuSim.DrawPolarInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPolarInfo");
-            GpuSim.DrawTiles.CompiledEffect_draw_grid_true_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawTiles_draw_grid=true_solid_blend_flag=true");
-            GpuSim.DrawTiles.CompiledEffect_draw_grid_true_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawTiles_draw_grid=true_solid_blend_flag=false");
-            GpuSim.DrawTiles.CompiledEffect_draw_grid_false_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawTiles_draw_grid=false_solid_blend_flag=true");
-            GpuSim.DrawTiles.CompiledEffect_draw_grid_false_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawTiles_draw_grid=false_solid_blend_flag=false");
-            GpuSim.DrawOutsideTiles.CompiledEffect_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawOutsideTiles_solid_blend_flag=true");
-            GpuSim.DrawOutsideTiles.CompiledEffect_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawOutsideTiles_solid_blend_flag=false");
-            GpuSim.Geodesic_Outline.CompiledEffect_Anti_true = Content.Load<Effect>("FragSharpShaders/Geodesic_Outline_Anti=true");
-            GpuSim.Geodesic_Outline.CompiledEffect_Anti_false = Content.Load<Effect>("FragSharpShaders/Geodesic_Outline_Anti=false");
-            GpuSim.Geodesic_OutlineCleanup.CompiledEffect_Anti_true = Content.Load<Effect>("FragSharpShaders/Geodesic_OutlineCleanup_Anti=true");
-            GpuSim.Geodesic_OutlineCleanup.CompiledEffect_Anti_false = Content.Load<Effect>("FragSharpShaders/Geodesic_OutlineCleanup_Anti=false");
-            GpuSim.Geodesic_StorePos.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_StorePos");
-            GpuSim.Geodesic_ExtremityPropagation.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_ExtremityPropagation");
-            GpuSim.Geodesic_SetGeoId.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_SetGeoId");
-            GpuSim.Geodesic_PolarDistance.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_PolarDistance");
-            GpuSim.Geodesic_SetCircumference.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_SetCircumference");
-            GpuSim.Geodesic_Polarity.CompiledEffect_dir_0p003921569 = Content.Load<Effect>("FragSharpShaders/Geodesic_Polarity_dir=0.003921569");
-            GpuSim.Geodesic_Polarity.CompiledEffect_dir_0p007843138 = Content.Load<Effect>("FragSharpShaders/Geodesic_Polarity_dir=0.007843138");
-            GpuSim.Geodesic_Polarity.CompiledEffect_dir_0p01176471 = Content.Load<Effect>("FragSharpShaders/Geodesic_Polarity_dir=0.01176471");
-            GpuSim.Geodesic_Polarity.CompiledEffect_dir_0p01568628 = Content.Load<Effect>("FragSharpShaders/Geodesic_Polarity_dir=0.01568628");
-            GpuSim.Geodesic_FillMissingPolarity.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_FillMissingPolarity");
-            GpuSim.Geodesic_ClearImportance.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_ClearImportance");
-            GpuSim.Geodesic_DirwardExtend.CompiledEffect_dir_0p003921569 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.003921569");
-            GpuSim.Geodesic_DirwardExtend.CompiledEffect_dir_0p007843138 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.007843138");
-            GpuSim.Geodesic_DirwardExtend.CompiledEffect_dir_0p01176471 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.01176471");
-            GpuSim.Geodesic_DirwardExtend.CompiledEffect_dir_0p01568628 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.01568628");
-            GpuSim.Geodesic_ConvertToBlocking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_ConvertToBlocking");
-            GpuSim.Geodesic_Flatten.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_Flatten");
-            GpuSim.Geodesic_Boundary.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_Boundary");
-            GpuSim.Action_PaintTiles.CompiledEffect_type_0p003921569 = Content.Load<Effect>("FragSharpShaders/Action_PaintTiles_type=0.003921569");
-            GpuSim.Action_PaintTiles.CompiledEffect_type_0p007843138 = Content.Load<Effect>("FragSharpShaders/Action_PaintTiles_type=0.007843138");
-            GpuSim.Action_PaintTiles.CompiledEffect_type_0p01960784 = Content.Load<Effect>("FragSharpShaders/Action_PaintTiles_type=0.01960784");
-            GpuSim.PaintTiles_UpdateData.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PaintTiles_UpdateData");
-            GpuSim.PaintTiles_UpdateUnits.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PaintTiles_UpdateUnits");
-            GpuSim.PaintTiles_UpdateTiles.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PaintTiles_UpdateTiles");
-            GpuSim.ActionDelete_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionDelete_Data");
-            GpuSim.ActionSelect.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSelect");
-            GpuSim.DataDrawMouse.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DataDrawMouse");
-            GpuSim.ActionSpawn_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Data");
-            GpuSim.ActionSpawn_Unit.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Unit");
-            GpuSim.ActionSpawn_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Target");
-            GpuSim.Identity.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Identity");
-            GpuSim.Shift.CompiledEffect_dir_0p003921569 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.003921569");
-            GpuSim.Shift.CompiledEffect_dir_0p007843138 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.007843138");
-            GpuSim.Shift.CompiledEffect_dir_0p01176471 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.01176471");
-            GpuSim.Shift.CompiledEffect_dir_0p01568628 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.01568628");
-            GpuSim.UnitMigrate.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UnitMigrate");
-            GpuSim.BenchmarkTest_TextureLookup4x4.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup4x4");
-            GpuSim.BenchmarkTest_TextureLookup1x1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup1x1");
-            GpuSim.BenchmarkTest_TextureLookupWithConditional.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookupWithConditional");
-            GpuSim.BenchmarkTest_TextureLookupWithComplexMath.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookupWithComplexMath");
-            GpuSim.BenchmarkTest_TextureLookup1x5.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup1x5");
-            GpuSim.BenchmarkTest_MathPacking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_MathPacking");
-            GpuSim.BenchmarkTest_MathPackingVec.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_MathPackingVec");
-            GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0");
-            GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.003921569");
-            GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.007843138");
-            GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.01176471");
-            GpuSim.DrawTerritoryPlayer.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.01568628");
-            GpuSim.DrawTerritoryColors.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTerritoryColors");
-            GpuSim.DrawBuildingsIcons.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawBuildingsIcons");
-            GpuSim.DrawBuildings.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawBuildings");
-            GpuSim.DrawCorpses.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawCorpses");
-            GpuSim.DrawPrecomputation_Cur.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPrecomputation_Cur");
-            GpuSim.DrawPrecomputation_Pre.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPrecomputation_Pre");
-            GpuSim.DrawSolid.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawSolid");
-            GpuSim.DrawTexture.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTexture");
-            GpuSim.DrawTextureSmooth.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTextureSmooth");
-            GpuSim.BoundingTr.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BoundingTr");
-            GpuSim.BoundingBl.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BoundingBl");
-            GpuSim._BoundingTr.CompiledEffect = Content.Load<Effect>("FragSharpShaders/_BoundingTr");
-            GpuSim._BoundingBl.CompiledEffect = Content.Load<Effect>("FragSharpShaders/_BoundingBl");
-            GpuSim.CheckForAttacking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CheckForAttacking");
-            GpuSim.BuildingInfusion_Delete.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingInfusion_Delete");
-            GpuSim.BuildingInfusion_Selection.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingInfusion_Selection");
-            GpuSim.BuildingDiffusion_Selection.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Selection");
-            GpuSim.BuildingInfusion_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingInfusion_Data");
-            GpuSim.BuildingDiffusion_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Data");
-            GpuSim.BuildingDiffusion_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Target");
-            GpuSim.SpawnUnits.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SpawnUnits");
-            GpuSim.SetSpawn_Unit.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SetSpawn_Unit");
-            GpuSim.SetSpawn_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SetSpawn_Target");
-            GpuSim.SetSpawn_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SetSpawn_Data");
-            GpuSim.AddCorpses.CompiledEffect = Content.Load<Effect>("FragSharpShaders/AddCorpses");
-            GpuSim.UpdateRandomField.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UpdateRandomField");
-            GpuSim.CountGoldMines.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountGoldMines");
-            GpuSim.CountReduce_4x1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_4x1byte");
-            GpuSim.CountUnits.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0");
-            GpuSim.CountUnits.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.003921569");
-            GpuSim.CountUnits.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.007843138");
-            GpuSim.CountUnits.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.01176471");
-            GpuSim.CountUnits.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.01568628");
-            GpuSim.CountReduce_3byte1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_3byte1byte");
-            GpuSim.ActionAttackSquare.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare");
-            GpuSim.ActionAttackPoint.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint");
-            GpuSim.ActionAttack2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttack2");
-            GpuSim.Pathfinding_ToBuildings.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToBuildings");
-            GpuSim.Pathfinding_ToPlayers.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToPlayers");
-            GpuSim.Pathfinding_ToOtherTeams.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToOtherTeams");
-            GpuSim.Movement_Phase1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase1");
-            GpuSim.Movement_Phase2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase2");
-            GpuSim.Movement_Convect.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Convect");
-            GpuSim.Movement_UpdateDirection_RemoveDead.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_UpdateDirection_RemoveDead");
-            GpuSim.Movement_SetPolarity_Phase1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_SetPolarity_Phase1");
-            GpuSim.Movement_SetPolarity_Phase2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_SetPolarity_Phase2");
-            GpuSim.DrawUnitsZoomedOutBlur.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawUnitsZoomedOutBlur");
-            GpuSim.DrawUnits.CompiledEffect_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawUnits_solid_blend_flag=true");
-            GpuSim.DrawUnits.CompiledEffect_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawUnits_solid_blend_flag=false");
+            Terracotta.DrawGeoInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawGeoInfo");
+            Terracotta.DrawDirwardInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawDirwardInfo");
+            Terracotta.DrawPolarInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPolarInfo");
+            Terracotta.DrawTiles.CompiledEffect_draw_grid_true_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawTiles_draw_grid=true_solid_blend_flag=true");
+            Terracotta.DrawTiles.CompiledEffect_draw_grid_true_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawTiles_draw_grid=true_solid_blend_flag=false");
+            Terracotta.DrawTiles.CompiledEffect_draw_grid_false_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawTiles_draw_grid=false_solid_blend_flag=true");
+            Terracotta.DrawTiles.CompiledEffect_draw_grid_false_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawTiles_draw_grid=false_solid_blend_flag=false");
+            Terracotta.DrawOutsideTiles.CompiledEffect_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawOutsideTiles_solid_blend_flag=true");
+            Terracotta.DrawOutsideTiles.CompiledEffect_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawOutsideTiles_solid_blend_flag=false");
+            Terracotta.Geodesic_Outline.CompiledEffect_Anti_true = Content.Load<Effect>("FragSharpShaders/Geodesic_Outline_Anti=true");
+            Terracotta.Geodesic_Outline.CompiledEffect_Anti_false = Content.Load<Effect>("FragSharpShaders/Geodesic_Outline_Anti=false");
+            Terracotta.Geodesic_OutlineCleanup.CompiledEffect_Anti_true = Content.Load<Effect>("FragSharpShaders/Geodesic_OutlineCleanup_Anti=true");
+            Terracotta.Geodesic_OutlineCleanup.CompiledEffect_Anti_false = Content.Load<Effect>("FragSharpShaders/Geodesic_OutlineCleanup_Anti=false");
+            Terracotta.Geodesic_StorePos.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_StorePos");
+            Terracotta.Geodesic_ExtremityPropagation.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_ExtremityPropagation");
+            Terracotta.Geodesic_SetGeoId.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_SetGeoId");
+            Terracotta.Geodesic_PolarDistance.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_PolarDistance");
+            Terracotta.Geodesic_SetCircumference.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_SetCircumference");
+            Terracotta.Geodesic_Polarity.CompiledEffect_dir_0p003921569 = Content.Load<Effect>("FragSharpShaders/Geodesic_Polarity_dir=0.003921569");
+            Terracotta.Geodesic_Polarity.CompiledEffect_dir_0p007843138 = Content.Load<Effect>("FragSharpShaders/Geodesic_Polarity_dir=0.007843138");
+            Terracotta.Geodesic_Polarity.CompiledEffect_dir_0p01176471 = Content.Load<Effect>("FragSharpShaders/Geodesic_Polarity_dir=0.01176471");
+            Terracotta.Geodesic_Polarity.CompiledEffect_dir_0p01568628 = Content.Load<Effect>("FragSharpShaders/Geodesic_Polarity_dir=0.01568628");
+            Terracotta.Geodesic_FillMissingPolarity.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_FillMissingPolarity");
+            Terracotta.Geodesic_ClearImportance.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_ClearImportance");
+            Terracotta.Geodesic_DirwardExtend.CompiledEffect_dir_0p003921569 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.003921569");
+            Terracotta.Geodesic_DirwardExtend.CompiledEffect_dir_0p007843138 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.007843138");
+            Terracotta.Geodesic_DirwardExtend.CompiledEffect_dir_0p01176471 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.01176471");
+            Terracotta.Geodesic_DirwardExtend.CompiledEffect_dir_0p01568628 = Content.Load<Effect>("FragSharpShaders/Geodesic_DirwardExtend_dir=0.01568628");
+            Terracotta.Geodesic_ConvertToBlocking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_ConvertToBlocking");
+            Terracotta.Geodesic_Flatten.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_Flatten");
+            Terracotta.Geodesic_Boundary.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Geodesic_Boundary");
+            Terracotta.Action_PaintTiles.CompiledEffect_type_0p003921569 = Content.Load<Effect>("FragSharpShaders/Action_PaintTiles_type=0.003921569");
+            Terracotta.Action_PaintTiles.CompiledEffect_type_0p007843138 = Content.Load<Effect>("FragSharpShaders/Action_PaintTiles_type=0.007843138");
+            Terracotta.Action_PaintTiles.CompiledEffect_type_0p01960784 = Content.Load<Effect>("FragSharpShaders/Action_PaintTiles_type=0.01960784");
+            Terracotta.PaintTiles_UpdateData.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PaintTiles_UpdateData");
+            Terracotta.PaintTiles_UpdateUnits.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PaintTiles_UpdateUnits");
+            Terracotta.PaintTiles_UpdateTiles.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PaintTiles_UpdateTiles");
+            Terracotta.ActionDelete_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionDelete_Data");
+            Terracotta.ActionSelect.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSelect");
+            Terracotta.DataDrawMouse.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DataDrawMouse");
+            Terracotta.ActionSpawn_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Data");
+            Terracotta.ActionSpawn_Unit.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Unit");
+            Terracotta.ActionSpawn_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Target");
+            Terracotta.Identity.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Identity");
+            Terracotta.Shift.CompiledEffect_dir_0p003921569 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.003921569");
+            Terracotta.Shift.CompiledEffect_dir_0p007843138 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.007843138");
+            Terracotta.Shift.CompiledEffect_dir_0p01176471 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.01176471");
+            Terracotta.Shift.CompiledEffect_dir_0p01568628 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.01568628");
+            Terracotta.UnitMigrate.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UnitMigrate");
+            Terracotta.BenchmarkTest_TextureLookup4x4.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup4x4");
+            Terracotta.BenchmarkTest_TextureLookup1x1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup1x1");
+            Terracotta.BenchmarkTest_TextureLookupWithConditional.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookupWithConditional");
+            Terracotta.BenchmarkTest_TextureLookupWithComplexMath.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookupWithComplexMath");
+            Terracotta.BenchmarkTest_TextureLookup1x5.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup1x5");
+            Terracotta.BenchmarkTest_MathPacking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_MathPacking");
+            Terracotta.BenchmarkTest_MathPackingVec.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_MathPackingVec");
+            Terracotta.DrawTerritoryPlayer.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0");
+            Terracotta.DrawTerritoryPlayer.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.003921569");
+            Terracotta.DrawTerritoryPlayer.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.007843138");
+            Terracotta.DrawTerritoryPlayer.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.01176471");
+            Terracotta.DrawTerritoryPlayer.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.01568628");
+            Terracotta.DrawTerritoryColors.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTerritoryColors");
+            Terracotta.DrawBuildingsIcons.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawBuildingsIcons");
+            Terracotta.DrawBuildings.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawBuildings");
+            Terracotta.DrawCorpses.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawCorpses");
+            Terracotta.DrawPrecomputation_Cur.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPrecomputation_Cur");
+            Terracotta.DrawPrecomputation_Pre.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPrecomputation_Pre");
+            Terracotta.DrawSolid.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawSolid");
+            Terracotta.DrawTexture.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTexture");
+            Terracotta.DrawTextureSmooth.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTextureSmooth");
+            Terracotta.BoundingTr.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BoundingTr");
+            Terracotta.BoundingBl.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BoundingBl");
+            Terracotta._BoundingTr.CompiledEffect = Content.Load<Effect>("FragSharpShaders/_BoundingTr");
+            Terracotta._BoundingBl.CompiledEffect = Content.Load<Effect>("FragSharpShaders/_BoundingBl");
+            Terracotta.CheckForAttacking.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CheckForAttacking");
+            Terracotta.BuildingInfusion_Delete.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingInfusion_Delete");
+            Terracotta.BuildingInfusion_Selection.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingInfusion_Selection");
+            Terracotta.BuildingDiffusion_Selection.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Selection");
+            Terracotta.BuildingInfusion_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingInfusion_Data");
+            Terracotta.BuildingDiffusion_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Data");
+            Terracotta.BuildingDiffusion_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BuildingDiffusion_Target");
+            Terracotta.SpawnUnits.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SpawnUnits");
+            Terracotta.SetSpawn_Unit.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SetSpawn_Unit");
+            Terracotta.SetSpawn_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SetSpawn_Target");
+            Terracotta.SetSpawn_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SetSpawn_Data");
+            Terracotta.AddCorpses.CompiledEffect = Content.Load<Effect>("FragSharpShaders/AddCorpses");
+            Terracotta.UpdateRandomField.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UpdateRandomField");
+            Terracotta.CountGoldMines.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountGoldMines");
+            Terracotta.CountReduce_4x1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_4x1byte");
+            Terracotta.CountUnits.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0");
+            Terracotta.CountUnits.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.003921569");
+            Terracotta.CountUnits.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.007843138");
+            Terracotta.CountUnits.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.01176471");
+            Terracotta.CountUnits.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.01568628");
+            Terracotta.CountReduce_3byte1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_3byte1byte");
+            Terracotta.ActionAttackSquare.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare");
+            Terracotta.ActionAttackPoint.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint");
+            Terracotta.ActionAttack2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionAttack2");
+            Terracotta.Pathfinding_ToBuildings.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToBuildings");
+            Terracotta.Pathfinding_ToPlayers.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToPlayers");
+            Terracotta.Pathfinding_ToOtherTeams.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToOtherTeams");
+            Terracotta.Movement_Phase1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase1");
+            Terracotta.Movement_Phase2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase2");
+            Terracotta.Movement_Convect.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Convect");
+            Terracotta.Movement_UpdateDirection_RemoveDead.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_UpdateDirection_RemoveDead");
+            Terracotta.Movement_SetPolarity_Phase1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_SetPolarity_Phase1");
+            Terracotta.Movement_SetPolarity_Phase2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_SetPolarity_Phase2");
+            Terracotta.DrawUnitsZoomedOutBlur.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawUnitsZoomedOutBlur");
+            Terracotta.DrawUnits.CompiledEffect_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawUnits_solid_blend_flag=true");
+            Terracotta.DrawUnits.CompiledEffect_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawUnits_solid_blend_flag=false");
         }
     }
 }
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawGeoInfo
     {
@@ -182,7 +182,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawDirwardInfo
     {
@@ -230,7 +230,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawPolarInfo
     {
@@ -284,7 +284,7 @@ namespace GpuSim
 
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawTiles
     {
@@ -349,7 +349,7 @@ namespace GpuSim
 
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawOutsideTiles
     {
@@ -410,7 +410,7 @@ namespace GpuSim
 
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_Outline
     {
@@ -462,7 +462,7 @@ namespace GpuSim
 
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_OutlineCleanup
     {
@@ -516,7 +516,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_StorePos
     {
@@ -559,7 +559,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_ExtremityPropagation
     {
@@ -602,7 +602,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_SetGeoId
     {
@@ -645,7 +645,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_PolarDistance
     {
@@ -691,7 +691,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_SetCircumference
     {
@@ -740,7 +740,7 @@ namespace GpuSim
 
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_Polarity
     {
@@ -807,7 +807,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_FillMissingPolarity
     {
@@ -853,7 +853,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_ClearImportance
     {
@@ -899,7 +899,7 @@ namespace GpuSim
 
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_DirwardExtend
     {
@@ -960,7 +960,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_ConvertToBlocking
     {
@@ -1006,7 +1006,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_Flatten
     {
@@ -1052,7 +1052,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Geodesic_Boundary
     {
@@ -1097,7 +1097,7 @@ namespace GpuSim
 
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Action_PaintTiles
     {
@@ -1156,7 +1156,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class PaintTiles_UpdateData
     {
@@ -1205,7 +1205,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class PaintTiles_UpdateUnits
     {
@@ -1251,7 +1251,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class PaintTiles_UpdateTiles
     {
@@ -1297,7 +1297,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class ActionDelete_Data
     {
@@ -1340,7 +1340,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class ActionSelect
     {
@@ -1391,7 +1391,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DataDrawMouse
     {
@@ -1435,7 +1435,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class ActionSpawn_Data
     {
@@ -1481,7 +1481,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class ActionSpawn_Unit
     {
@@ -1532,7 +1532,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class ActionSpawn_Target
     {
@@ -1581,7 +1581,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Identity
     {
@@ -1627,7 +1627,7 @@ namespace GpuSim
 
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Shift
     {
@@ -1682,7 +1682,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class UnitMigrate
     {
@@ -1725,7 +1725,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BenchmarkTest_TextureLookup4x4
     {
@@ -1777,7 +1777,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BenchmarkTest_TextureLookup1x1
     {
@@ -1820,7 +1820,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BenchmarkTest_TextureLookupWithConditional
     {
@@ -1863,7 +1863,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BenchmarkTest_TextureLookupWithComplexMath
     {
@@ -1906,7 +1906,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BenchmarkTest_TextureLookup1x5
     {
@@ -1949,7 +1949,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BenchmarkTest_MathPacking
     {
@@ -1992,7 +1992,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BenchmarkTest_MathPackingVec
     {
@@ -2039,7 +2039,7 @@ namespace GpuSim
 
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawTerritoryPlayer
     {
@@ -2098,7 +2098,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawTerritoryColors
     {
@@ -2147,7 +2147,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawBuildingsIcons
     {
@@ -2197,7 +2197,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawBuildings
     {
@@ -2252,7 +2252,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawCorpses
     {
@@ -2301,7 +2301,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawPrecomputation_Cur
     {
@@ -2347,7 +2347,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawPrecomputation_Pre
     {
@@ -2393,7 +2393,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawSolid
     {
@@ -2436,7 +2436,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawTexture
     {
@@ -2481,7 +2481,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawTextureSmooth
     {
@@ -2526,7 +2526,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BoundingTr
     {
@@ -2569,7 +2569,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BoundingBl
     {
@@ -2612,7 +2612,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class _BoundingTr
     {
@@ -2655,7 +2655,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class _BoundingBl
     {
@@ -2698,7 +2698,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class CheckForAttacking
     {
@@ -2747,7 +2747,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BuildingInfusion_Delete
     {
@@ -2793,7 +2793,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BuildingInfusion_Selection
     {
@@ -2839,7 +2839,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BuildingDiffusion_Selection
     {
@@ -2885,7 +2885,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BuildingInfusion_Data
     {
@@ -2931,7 +2931,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BuildingDiffusion_Data
     {
@@ -2977,7 +2977,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class BuildingDiffusion_Target
     {
@@ -3026,7 +3026,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class SpawnUnits
     {
@@ -3078,7 +3078,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class SetSpawn_Unit
     {
@@ -3124,7 +3124,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class SetSpawn_Target
     {
@@ -3173,7 +3173,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class SetSpawn_Data
     {
@@ -3219,7 +3219,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class AddCorpses
     {
@@ -3268,7 +3268,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class UpdateRandomField
     {
@@ -3311,7 +3311,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class CountGoldMines
     {
@@ -3357,7 +3357,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class CountReduce_4x1byte
     {
@@ -3404,7 +3404,7 @@ namespace GpuSim
 
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class CountUnits
     {
@@ -3465,7 +3465,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class CountReduce_3byte1byte
     {
@@ -3508,7 +3508,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class ActionAttackSquare
     {
@@ -3558,7 +3558,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class ActionAttackPoint
     {
@@ -3605,7 +3605,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class ActionAttack2
     {
@@ -3652,7 +3652,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Pathfinding_ToBuildings
     {
@@ -3701,7 +3701,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Pathfinding_ToPlayers
     {
@@ -3750,7 +3750,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Pathfinding_ToOtherTeams
     {
@@ -3799,7 +3799,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Movement_Phase1
     {
@@ -3845,7 +3845,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Movement_Phase2
     {
@@ -3891,7 +3891,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Movement_Convect
     {
@@ -3937,7 +3937,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Movement_UpdateDirection_RemoveDead
     {
@@ -4016,7 +4016,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Movement_SetPolarity_Phase1
     {
@@ -4068,7 +4068,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class Movement_SetPolarity_Phase2
     {
@@ -4111,7 +4111,7 @@ namespace GpuSim
 }
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawUnitsZoomedOutBlur
     {
@@ -4173,7 +4173,7 @@ namespace GpuSim
 
 
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawUnits
     {

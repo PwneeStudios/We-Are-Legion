@@ -3,7 +3,7 @@ using System;
 using FragSharpHelper;
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class World : SimShader
     {

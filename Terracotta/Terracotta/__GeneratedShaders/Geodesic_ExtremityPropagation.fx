@@ -46,7 +46,7 @@ float FragSharpFramework__FragSharpStd__fint_floor(float v)
     return floor(255 * v) * 0.003921569;
 }
 
-float GpuSim__SimShader__unpack_val(float2 packed)
+float Terracotta__SimShader__unpack_val(float2 packed)
 {
     float coord = 0;
     packed = floor(255.0 * packed + float2(0.5, 0.5));
@@ -54,23 +54,23 @@ float GpuSim__SimShader__unpack_val(float2 packed)
     return coord;
 }
 
-float2 GpuSim__SimShader__unpack_vec2_3byte(float3 packed)
+float2 Terracotta__SimShader__unpack_vec2_3byte(float3 packed)
 {
     float extra_bits = packed.z;
     float extra_y = FragSharpFramework__FragSharpStd__fint_floor(extra_bits / 16);
     float extra_x = FragSharpFramework__FragSharpStd__fint_floor(extra_bits - 16 * extra_y);
     float2 v = float2(0, 0);
-    v.x = GpuSim__SimShader__unpack_val(float2(extra_x, packed.x));
-    v.y = GpuSim__SimShader__unpack_val(float2(extra_y, packed.y));
+    v.x = Terracotta__SimShader__unpack_val(float2(extra_x, packed.x));
+    v.y = Terracotta__SimShader__unpack_val(float2(extra_y, packed.y));
     return v;
 }
 
-float2 GpuSim__SimShader__geo_pos_id(float4 g)
+float2 Terracotta__SimShader__geo_pos_id(float4 g)
 {
-    return GpuSim__SimShader__unpack_vec2_3byte(g.gba);
+    return Terracotta__SimShader__unpack_vec2_3byte(g.gba);
 }
 
-float GpuSim__Geodesic_ExtremityPropagation__flatten(float2 pos)
+float Terracotta__Geodesic_ExtremityPropagation__flatten(float2 pos)
 {
     return pos.x + 4096 * pos.y;
 }
@@ -95,8 +95,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         __FinalOutput.Color = here;
         return __FinalOutput;
     }
-    float2 extr_here = GpuSim__SimShader__geo_pos_id(here), extr_right = GpuSim__SimShader__geo_pos_id(right), extr_up = GpuSim__SimShader__geo_pos_id(up), extr_left = GpuSim__SimShader__geo_pos_id(left), extr_down = GpuSim__SimShader__geo_pos_id(down), extr_up_right = GpuSim__SimShader__geo_pos_id(up_right), extr_up_left = GpuSim__SimShader__geo_pos_id(up_left), extr_down_right = GpuSim__SimShader__geo_pos_id(down_right), extr_down_left = GpuSim__SimShader__geo_pos_id(down_left);
-    float val_here = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_here), val_right = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_right), val_up = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_up), val_left = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_left), val_down = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_down), val_up_right = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_up_right), val_up_left = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_up_left), val_down_right = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_down_right), val_down_left = GpuSim__Geodesic_ExtremityPropagation__flatten(extr_down_left);
+    float2 extr_here = Terracotta__SimShader__geo_pos_id(here), extr_right = Terracotta__SimShader__geo_pos_id(right), extr_up = Terracotta__SimShader__geo_pos_id(up), extr_left = Terracotta__SimShader__geo_pos_id(left), extr_down = Terracotta__SimShader__geo_pos_id(down), extr_up_right = Terracotta__SimShader__geo_pos_id(up_right), extr_up_left = Terracotta__SimShader__geo_pos_id(up_left), extr_down_right = Terracotta__SimShader__geo_pos_id(down_right), extr_down_left = Terracotta__SimShader__geo_pos_id(down_left);
+    float val_here = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_here), val_right = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_right), val_up = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_up), val_left = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_left), val_down = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_down), val_up_right = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_up_right), val_up_left = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_up_left), val_down_right = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_down_right), val_down_left = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_down_left);
     if (val_here < val_right - .001)
     {
         here.gba = right.gba;

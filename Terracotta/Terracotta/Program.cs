@@ -1,4 +1,4 @@
-namespace GpuSim
+namespace Terracotta
 {
 #if WINDOWS || XBOX
     static class Program

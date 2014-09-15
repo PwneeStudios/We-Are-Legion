@@ -57,13 +57,13 @@ float2 fs_param_Destination;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__selected(float4 u)
+bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
     return val >= 0.5019608 - .001;
 }
 
-float2 GpuSim__SimShader__pack_val_2byte(float x)
+float2 Terracotta__SimShader__pack_val_2byte(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -71,10 +71,10 @@ float2 GpuSim__SimShader__pack_val_2byte(float x)
     return packed / 255.0;
 }
 
-float4 GpuSim__SimShader__pack_vec2(float2 v)
+float4 Terracotta__SimShader__pack_vec2(float2 v)
 {
-    float2 packed_x = GpuSim__SimShader__pack_val_2byte(v.x);
-    float2 packed_y = GpuSim__SimShader__pack_val_2byte(v.y);
+    float2 packed_x = Terracotta__SimShader__pack_val_2byte(v.x);
+    float2 packed_y = Terracotta__SimShader__pack_val_2byte(v.y);
     return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 
@@ -94,10 +94,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 target = float4(0, 0, 0, 0);
-    if (GpuSim__SimShader__selected(here))
+    if (Terracotta__SimShader__selected(here))
     {
         float2 dest = fs_param_Destination;
-        target = GpuSim__SimShader__pack_vec2(dest);
+        target = Terracotta__SimShader__pack_vec2(dest);
     }
     else
     {

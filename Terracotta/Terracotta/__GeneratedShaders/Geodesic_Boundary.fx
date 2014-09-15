@@ -40,7 +40,7 @@ sampler fs_param_Geo : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__IsValid(float direction)
+bool Terracotta__SimShader__IsValid(float direction)
 {
     return direction > 0 + .001;
 }
@@ -60,7 +60,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy), right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 0)) * fs_param_Geo_dxdy), up = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 1)) * fs_param_Geo_dxdy), left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 0)) * fs_param_Geo_dxdy), down = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, -(1))) * fs_param_Geo_dxdy), up_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 1)) * fs_param_Geo_dxdy), up_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 1)) * fs_param_Geo_dxdy), down_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, -(1))) * fs_param_Geo_dxdy), down_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Geo_dxdy);
-    if (!(GpuSim__SimShader__IsValid(here.r)))
+    if (!(Terracotta__SimShader__IsValid(here.r)))
     {
         __FinalOutput.Color = here;
         return __FinalOutput;

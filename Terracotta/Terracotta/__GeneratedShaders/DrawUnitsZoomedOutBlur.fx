@@ -118,23 +118,23 @@ sampler fs_param_FarColor : register(s6) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool GpuSim__SimShader__IsStationary(float4 d)
+bool Terracotta__SimShader__IsStationary(float4 d)
 {
     return d.r >= 0.01960784 - .001;
 }
 
-bool GpuSim__SimShader__selected(float4 u)
+bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
     return val >= 0.5019608 - .001;
 }
 
-float4 GpuSim__SelectedUnitColor__Get(VertexToPixel psin, float player)
+float4 Terracotta__SelectedUnitColor__Get(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
@@ -155,7 +155,7 @@ float4 GpuSim__SelectedUnitColor__Get(VertexToPixel psin, float player)
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 GpuSim__UnitColor__Get(VertexToPixel psin, float player)
+float4 Terracotta__UnitColor__Get(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
@@ -176,14 +176,14 @@ float4 GpuSim__UnitColor__Get(VertexToPixel psin, float player)
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 GpuSim__DrawUnits__SolidColor(VertexToPixel psin, float4 data, float4 unit)
+float4 Terracotta__DrawUnits__SolidColor(VertexToPixel psin, float4 data, float4 unit)
 {
-    return GpuSim__SimShader__selected(data) ? GpuSim__SelectedUnitColor__Get(psin, unit.g) : GpuSim__UnitColor__Get(psin, unit.g);
+    return Terracotta__SimShader__selected(data) ? Terracotta__SelectedUnitColor__Get(psin, unit.g) : Terracotta__UnitColor__Get(psin, unit.g);
 }
 
-float4 GpuSim__DrawUnits__Presence(VertexToPixel psin, float4 data, float4 unit)
+float4 Terracotta__DrawUnits__Presence(VertexToPixel psin, float4 data, float4 unit)
 {
-    return (GpuSim__SimShader__Something(data) && !(GpuSim__SimShader__IsStationary(data))) ? GpuSim__DrawUnits__SolidColor(psin, data, unit) : float4(0.0, 0.0, 0.0, 0.0);
+    return (Terracotta__SimShader__Something(data) && !(Terracotta__SimShader__IsStationary(data))) ? Terracotta__DrawUnits__SolidColor(psin, data, unit) : float4(0.0, 0.0, 0.0, 0.0);
 }
 
 // Compiled vertex shader
@@ -205,7 +205,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 data_right = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(1, 0)) * fs_param_CurrentData_dxdy), data_up = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 1)) * fs_param_CurrentData_dxdy), data_left = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(-(1), 0)) * fs_param_CurrentData_dxdy), data_down = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, -(1))) * fs_param_CurrentData_dxdy), data_here = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy);
     float4 unit_right = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(1, 0)) * fs_param_CurrentUnit_dxdy), unit_up = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(0, 1)) * fs_param_CurrentUnit_dxdy), unit_left = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(-(1), 0)) * fs_param_CurrentUnit_dxdy), unit_down = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(0, -(1))) * fs_param_CurrentUnit_dxdy), unit_here = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentUnit_dxdy);
-    output = 0.5 * 0.25 * (GpuSim__DrawUnits__Presence(psin, data_right, unit_right) + GpuSim__DrawUnits__Presence(psin, data_up, unit_up) + GpuSim__DrawUnits__Presence(psin, data_left, unit_left) + GpuSim__DrawUnits__Presence(psin, data_down, unit_down)) + 0.5 * GpuSim__DrawUnits__Presence(psin, data_here, unit_here);
+    output = 0.5 * 0.25 * (Terracotta__DrawUnits__Presence(psin, data_right, unit_right) + Terracotta__DrawUnits__Presence(psin, data_up, unit_up) + Terracotta__DrawUnits__Presence(psin, data_left, unit_left) + Terracotta__DrawUnits__Presence(psin, data_down, unit_down)) + 0.5 * Terracotta__DrawUnits__Presence(psin, data_here, unit_here);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

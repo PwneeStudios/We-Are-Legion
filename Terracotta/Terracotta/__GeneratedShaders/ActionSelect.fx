@@ -74,7 +74,7 @@ float fs_param_action;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__BlockingTileHere(float4 u)
+bool Terracotta__SimShader__BlockingTileHere(float4 u)
 {
     return u.r >= 0.07843138 - .001;
 }
@@ -84,7 +84,7 @@ float FragSharpFramework__FragSharpStd__fint_round(float v)
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float GpuSim__SimShader__prior_direction(float4 u)
+float Terracotta__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
     if (val >= 0.5019608 - .001)
@@ -95,22 +95,22 @@ float GpuSim__SimShader__prior_direction(float4 u)
     return val;
 }
 
-void GpuSim__SimShader__set_selected(inout float4 u, bool selected)
+void Terracotta__SimShader__set_selected(inout float4 u, bool selected)
 {
-    u.b = GpuSim__SimShader__prior_direction(u) + (selected ? 0.5019608 : 0.0);
+    u.b = Terracotta__SimShader__prior_direction(u) + (selected ? 0.5019608 : 0.0);
 }
 
-bool GpuSim__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool GpuSim__SimShader__IsUnit(float4 u)
+bool Terracotta__SimShader__IsUnit(float4 u)
 {
     return abs(u.r - 0.003921569) < .001;
 }
 
-bool GpuSim__SimShader__selected(float4 u)
+bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
     return val >= 0.5019608 - .001;
@@ -133,18 +133,18 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    if (select.r > 0 + .001 && (abs(select.g - 0.0) < .001 || abs(unit_here.g - select.g) < .001) && !(GpuSim__SimShader__BlockingTileHere(unit_here)))
+    if (select.r > 0 + .001 && (abs(select.g - 0.0) < .001 || abs(unit_here.g - select.g) < .001) && !(Terracotta__SimShader__BlockingTileHere(unit_here)))
     {
-        GpuSim__SimShader__set_selected(data_here, true);
+        Terracotta__SimShader__set_selected(data_here, true);
     }
     else
     {
         if (fs_param_Deselect)
         {
-            GpuSim__SimShader__set_selected(data_here, false);
+            Terracotta__SimShader__set_selected(data_here, false);
         }
     }
-    if (GpuSim__SimShader__Something(data_here) && GpuSim__SimShader__IsUnit(unit_here) && GpuSim__SimShader__selected(data_here) && fs_param_action < 0.04705882 - .001)
+    if (Terracotta__SimShader__Something(data_here) && Terracotta__SimShader__IsUnit(unit_here) && Terracotta__SimShader__selected(data_here) && fs_param_action < 0.04705882 - .001)
     {
         data_here.a = fs_param_action;
     }

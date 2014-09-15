@@ -1,7 +1,7 @@
 ﻿using System;
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     [Copy(typeof(vec4))]
     public partial struct corpse

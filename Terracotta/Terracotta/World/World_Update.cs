@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Input;
 using FragSharpHelper;
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class World : SimShader
     {
@@ -46,7 +46,17 @@ namespace GpuSim
 
             //const float MaxZoomOut = 5.33333f, MaxZoomIn = 200f;
             //const float MaxZoomOut = 3.2f, MaxZoomIn = 200f;
-            const float MaxZoomOut = 1f, MaxZoomIn = 200f;
+            //const float MaxZoomOut = 1f, MaxZoomIn = 200f; // Full zoom-in/out
+
+            float MaxZoomOut, MaxZoomIn;
+            if (MapEditor)
+            {
+                MaxZoomOut = 1f; MaxZoomIn = 200f; // Full zoom-in/out
+            }
+            else
+            {
+                MaxZoomOut = 7.5f; MaxZoomIn = 200f; // Full zoom-in, Partial zoom-out
+            }
 
             // Zoom all the way out
             if (Keys.Space.Down())
@@ -145,7 +155,14 @@ namespace GpuSim
         {
             for (int player = 1; player <= 4; player++)
             {
-                PlayerInfo[player].Gold += PlayerInfo[player].GoldMines;
+                PlayerInfo[player].Gold +=
+                    PlayerInfo[player].GoldMines * Params.GoldPerMinePerTick +
+                    DataGroup.BarracksCount[player] * Params.GoldPerBarracksPerTick;
+
+                if (PlayerInfo[player].Gold < 0)
+                {
+                    PlayerInfo[player].Gold = 0;
+                }
             }
         }
     }

@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace GpuSim
+namespace Terracotta
 {
     public static class PerfTimer
     {

@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Input;
 using FragSharpHelper;
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     [Flags]
     public enum Alignment
@@ -26,13 +26,14 @@ namespace GpuSim
     {
         static SpriteBatch MySpriteBatch;
         
-        static SpriteFont Font1, Font2;
+        static SpriteFont Font1, Font2, Font3;
 
         public static void Initialize()
         {
             MySpriteBatch = new SpriteBatch(GameClass.Graphics);
             Font1 = GameClass.ContentManager.Load<SpriteFont>("Default");
             Font2 = GameClass.ContentManager.Load<SpriteFont>("Bauhaus");
+            Font3 = GameClass.ContentManager.Load<SpriteFont>("Eras");
         }
 
         public static void StandardRenderSetup()

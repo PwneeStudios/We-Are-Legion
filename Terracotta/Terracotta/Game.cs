@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -7,12 +9,7 @@ using Microsoft.Xna.Framework.Input;
 using FragSharpHelper;
 using FragSharpFramework;
 
-#if DEBUG
-using System.IO;
-using System.Security.Permissions;
-#endif
-
-namespace GpuSim
+namespace Terracotta
 {
     public class GameClass : Game
     {
@@ -46,13 +43,17 @@ namespace GpuSim
             //graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             //graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
-            graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferWidth = 1024;
-            graphics.PreferredBackBufferHeight = 1024;
+            //graphics.IsFullScreen = false;
+            //graphics.PreferredBackBufferWidth = 1024;
+            //graphics.PreferredBackBufferHeight = 1024;
 
             //graphics.IsFullScreen = true;
             //graphics.PreferredBackBufferWidth = 1280;
             //graphics.PreferredBackBufferHeight = 720;
+
+            graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferWidth = 1440;
+            graphics.PreferredBackBufferHeight = 1080;
 
             //graphics.IsFullScreen = true;
             //graphics.PreferredBackBufferWidth = 1920;
@@ -77,12 +78,9 @@ namespace GpuSim
             Assets.Initialize();
             Render.Initialize();
 
-            World = new World();
-            World.Load("Beset.m3n");
-
-            World.Migrate();
-            Render.UnsetDevice();
-            //World.Save("Beset.m3n");
+            //World = new World();
+            //World.Load("Beset.m3n");
+            //Render.UnsetDevice();
 
             base.Initialize();
         }
@@ -166,6 +164,11 @@ namespace GpuSim
 
         int DrawCount = 0;
 
+        enum GameState { TitleScreen, Menu, Loading, Game }
+        GameState State = GameState.TitleScreen;
+        double TimeSinceLoad = 0;
+        string ScenarioToLoad = null;
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -174,29 +177,156 @@ namespace GpuSim
         {
             GameClass.Time = gameTime;
             DrawCount++;
+            TimeSinceLoad += gameTime.ElapsedGameTime.TotalSeconds;
 
-            Input.Update();
+            if (IsActive)
+            {
+                Input.Update();
+            }
 
             if (Buttons.Back.Down())
                 this.Exit();
 
-            if (World.MapEditor)
+            switch (State)
             {
-                if (Keys.S.Pressed())
-                {
-                    World.Save("TestSave.m3n");
-                }
+                case GameState.TitleScreen:
+                    Render.StandardRenderSetup();
+                    DrawFullScreen(Assets.DemoScreen1);
 
-                if (Keys.L.Pressed())
-                {
-                    World.Load("TestSave.m3n");
-                }
+                    if (gameTime.TotalGameTime.Seconds > .4f)
+                        if (Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||
+                            Keys.Enter.Pressed() || Keys.Space.Pressed() || Keys.Escape.Pressed())
+                        {
+                            State = GameState.Menu;
+                        }
+
+                    break;
+
+                case GameState.Menu:
+                    Render.StandardRenderSetup();
+                    DrawFullScreen(Assets.DemoScreen2);
+
+                    if (Keys.D1.Down() || Keys.NumPad1.Down())
+                    {
+                        State = GameState.Loading;
+                        ScenarioToLoad = "Beset.m3n";
+                        DrawFullScreen(Assets.DemoScreen3);
+                    }
+                    else if (Keys.D2.Down() || Keys.NumPad2.Down())
+                    {
+                        State = GameState.Loading;
+                        ScenarioToLoad = "Beset.m3n";
+                        DrawFullScreen(Assets.DemoScreen3);
+                    }
+                    else if (Keys.D3.Down() || Keys.NumPad3.Down())
+                    {
+                        State = GameState.Loading;
+                        ScenarioToLoad = "Beset.m3n";
+                        DrawFullScreen(Assets.DemoScreen3);
+                    }
+                    else if (Keys.Back.Down())
+                    {
+                        State = GameState.TitleScreen;
+                    }
+                    else if (Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||
+                        Keys.Enter.Pressed() || Keys.Space.Pressed() || Keys.Escape.Pressed())
+                    {
+                        if (World != null)
+                        {
+                            State = GameState.Game;
+                        }
+                    }
+
+                    break;
+
+                case GameState.Loading:
+                    Render.StandardRenderSetup();
+                    DrawFullScreen(Assets.DemoScreen3);
+
+                    if (ScenarioToLoad != null)
+                    {
+                        World = new World();
+                        World.Load(Path.Combine("Content", Path.Combine("Maps", ScenarioToLoad)));
+                        ScenarioToLoad = null;
+                        TimeSinceLoad = 0;
+                        DrawFullScreen(Assets.DemoScreen3);
+                    }
+
+                    if (TimeSinceLoad > .3f)
+                    {
+                        BlackOverlay((float)(TimeSinceLoad - .3f) / .7f);
+                    }
+
+                    if (TimeSinceLoad > 1f)
+                    {
+                        State = GameState.Game;
+                    }
+
+                    break;
+
+                case GameState.Game:
+                    if (Keys.Escape.Pressed())
+                    {
+                        State = GameState.Menu;
+                    }
+
+                    DrawGame(gameTime);
+
+                    if (TimeSinceLoad < 1.5f)
+                    {
+                        BlackOverlay(1f - (float)(TimeSinceLoad - 1.3f) / .2f);
+                    }
+
+                    break;
             }
 
-            World.Update();
-            World.Draw();
-
             base.Draw(gameTime);
+        }
+
+        private void BlackOverlay(float s)
+        {
+            float a = 1920f / 1080f;
+            var q = new RectangleQuad();
+
+            q.SetupVertices(new vec2(-a, -1), new vec2(a, 1), vec2.Zero, vec2.Ones);
+            q.SetColor(new color(1f, 1f, 1f, 1f));
+            DrawSolid.Using(new vec4(0, 0, 1, 1), ScreenAspect, new color(0f, 0f, 0f, s));
+            q.Draw(GameClass.Graphics);
+            Render.UnsetDevice();
+        }
+
+        static void DrawFullScreen(Texture2D texture)
+        {
+            float a = 1920f / 1080f;
+            var q = new RectangleQuad();
+
+            q.SetupVertices(new vec2(-a, -1), new vec2(a, 1), vec2.Zero, vec2.Ones);
+            q.SetColor(new color(1f, 1f, 1f, 1f));
+            DrawTextureSmooth.Using(new vec4(0, 0, 1, 1), ScreenAspect, texture);
+            q.Draw(GameClass.Graphics);
+        }
+
+        void DrawGame(GameTime gameTime)
+        {
+            if (IsActive)
+            {
+                if (World.MapEditor)
+                {
+                    if (Keys.S.Pressed())
+                    {
+                        World.Save("TestSave.m3n");
+                    }
+
+                    if (Keys.L.Pressed())
+                    {
+                        World.Load("TestSave.m3n");
+                    }
+                }
+
+                World.Update();
+            }
+
+            World.Draw();
         }
     }
 }

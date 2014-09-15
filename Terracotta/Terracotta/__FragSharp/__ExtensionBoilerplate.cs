@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     [Hlsl("float4")]
     public partial struct corpse : Convertible<vec4, corpse>
@@ -194,7 +194,7 @@ namespace GpuSim
     }
 }
 
-namespace GpuSim
+namespace Terracotta
 {
     [Hlsl("float4")]
     public partial struct tile : Convertible<vec4, tile>
@@ -378,7 +378,7 @@ namespace GpuSim
     }
 }
 
-namespace GpuSim
+namespace Terracotta
 {
     [Hlsl("float4")]
     public partial struct geo : Convertible<vec4, geo>
@@ -562,7 +562,7 @@ namespace GpuSim
     }
 }
 
-namespace GpuSim
+namespace Terracotta
 {
     [Hlsl("float4")]
     public partial struct dirward : Convertible<vec4, dirward>
@@ -746,7 +746,7 @@ namespace GpuSim
     }
 }
 
-namespace GpuSim
+namespace Terracotta
 {
     [Hlsl("float4")]
     public partial struct geo_info : Convertible<vec4, geo_info>
@@ -930,7 +930,7 @@ namespace GpuSim
     }
 }
 
-namespace GpuSim
+namespace Terracotta
 {
     [Hlsl("float4")]
     public partial struct unit : Convertible<vec4, unit>
@@ -1114,7 +1114,7 @@ namespace GpuSim
     }
 }
 
-namespace GpuSim
+namespace Terracotta
 {
     [Hlsl("float4")]
     public partial struct data : Convertible<vec4, data>
@@ -1298,7 +1298,7 @@ namespace GpuSim
     }
 }
 
-namespace GpuSim
+namespace Terracotta
 {
     [Hlsl("float4")]
     public partial struct building : Convertible<vec4, building>
@@ -1482,7 +1482,7 @@ namespace GpuSim
     }
 }
 
-namespace GpuSim
+namespace Terracotta
 {
     [Hlsl("float4")]
     public partial struct extra : Convertible<vec4, extra>
@@ -1666,7 +1666,7 @@ namespace GpuSim
     }
 }
 
-namespace GpuSim
+namespace Terracotta
 {
     [Hlsl("float4")]
     public partial struct BuildingDist : Convertible<vec4, BuildingDist>
@@ -1850,7 +1850,7 @@ namespace GpuSim
     }
 }
 
-namespace GpuSim
+namespace Terracotta
 {
     [Hlsl("float4")]
     public partial struct PlayerTuple : Convertible<vec4, PlayerTuple>
@@ -2034,7 +2034,7 @@ namespace GpuSim
     }
 }
 
-namespace GpuSim
+namespace Terracotta
 {
     [Hlsl("float4")]
     public partial struct TeamTuple : Convertible<vec4, TeamTuple>

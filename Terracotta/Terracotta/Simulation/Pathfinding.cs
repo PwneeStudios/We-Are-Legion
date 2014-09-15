@@ -1,6 +1,6 @@
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     /// <summary>
     /// Propagates the path to units of each player. Stores the result for Player 1 in .x, of Player 2 in .y, etc.

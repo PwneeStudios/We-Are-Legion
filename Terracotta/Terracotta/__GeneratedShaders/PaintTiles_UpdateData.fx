@@ -70,12 +70,12 @@ sampler fs_param_Data : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__IsBlockingTile(float4 t)
+bool Terracotta__SimShader__IsBlockingTile(float4 t)
 {
     return t.r >= 0.01176471 - .001 || abs(t.r - 0.003921569) < .001 && abs(t.b - 0.1215686) > .001;
 }
 
-bool GpuSim__SimShader__BlockingTileHere(float4 u)
+bool Terracotta__SimShader__BlockingTileHere(float4 u)
 {
     return u.r >= 0.07843138 - .001;
 }
@@ -97,14 +97,14 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 tile_here = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 0)) * fs_param_Tiles_dxdy);
     float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    if (GpuSim__SimShader__IsBlockingTile(tile_here))
+    if (Terracotta__SimShader__IsBlockingTile(tile_here))
     {
         data_here = float4(0, 0, 0, 0);
         data_here.r = 0.01960784;
     }
     else
     {
-        if (GpuSim__SimShader__BlockingTileHere(unit_here))
+        if (Terracotta__SimShader__BlockingTileHere(unit_here))
         {
             data_here = float4(0, 0, 0, 0);
         }

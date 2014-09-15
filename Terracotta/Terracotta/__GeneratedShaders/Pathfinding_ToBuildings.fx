@@ -70,12 +70,12 @@ sampler fs_param_CurData : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool GpuSim__SimShader__IsBuilding(float4 u)
+bool Terracotta__SimShader__IsBuilding(float4 u)
 {
     return u.r >= 0.007843138 - .001 && u.r < 0.07843138 - .001;
 }
@@ -85,24 +85,24 @@ float FragSharpFramework__FragSharpStd__fint_round(float v)
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float GpuSim__SimShader__get_type(float4 u)
+float Terracotta__SimShader__get_type(float4 u)
 {
     return FragSharpFramework__FragSharpStd__fint_round(u.b / 16.0);
 }
 
-float GpuSim__SimShader__get_player(float4 u)
+float Terracotta__SimShader__get_player(float4 u)
 {
-    return u.b - GpuSim__SimShader__get_type(u) * 16.0;
+    return u.b - Terracotta__SimShader__get_type(u) * 16.0;
 }
 
-void GpuSim__SimShader__set_type(inout float4 u, float type)
+void Terracotta__SimShader__set_type(inout float4 u, float type)
 {
-    u.b = GpuSim__SimShader__get_player(u) + type * 16.0;
+    u.b = Terracotta__SimShader__get_player(u) + type * 16.0;
 }
 
-void GpuSim__SimShader__set_player(inout float4 u, float player)
+void Terracotta__SimShader__set_player(inout float4 u, float player)
 {
-    u.b = player + GpuSim__SimShader__get_type(u) * 16.0;
+    u.b = player + Terracotta__SimShader__get_type(u) * 16.0;
 }
 
 // Compiled vertex shader
@@ -122,10 +122,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0, 0, 0, 0);
     float4 data_here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 unit_here = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
-    if (GpuSim__SimShader__Something(data_here) && GpuSim__SimShader__IsBuilding(unit_here))
+    if (Terracotta__SimShader__Something(data_here) && Terracotta__SimShader__IsBuilding(unit_here))
     {
-        GpuSim__SimShader__set_type(output, unit_here.r);
-        GpuSim__SimShader__set_player(output, unit_here.g);
+        Terracotta__SimShader__set_type(output, unit_here.r);
+        Terracotta__SimShader__set_player(output, unit_here.g);
         output.rg = float2(0.1568628, 0.1568628);
         output.a = 0.0;
     }

@@ -1,12 +1,15 @@
-namespace GpuSim
+namespace Terracotta
 {
     public class GameParameters : SimShader
     {
         public int
-            BarracksCost = 2500,
-            GoldMineCost = 5000,
+            BarracksCost = 250,
+            GoldMineCost = 500,
 
-            StartGold = 7500;
+            GoldPerBarracksPerTick = 0,
+            GoldPerMinePerTick = 3,
+
+            StartGold = 750;
 
         public int BuildingCost(float type)
         {

@@ -61,7 +61,7 @@ float FragSharpFramework__FragSharpStd__fint_floor(float v)
     return floor(255 * v) * 0.003921569;
 }
 
-float GpuSim__SimShader__unpack_val(float2 packed)
+float Terracotta__SimShader__unpack_val(float2 packed)
 {
     float coord = 0;
     packed = floor(255.0 * packed + float2(0.5, 0.5));
@@ -69,28 +69,28 @@ float GpuSim__SimShader__unpack_val(float2 packed)
     return coord;
 }
 
-float2 GpuSim__SimShader__unpack_vec2_3byte(float3 packed)
+float2 Terracotta__SimShader__unpack_vec2_3byte(float3 packed)
 {
     float extra_bits = packed.z;
     float extra_y = FragSharpFramework__FragSharpStd__fint_floor(extra_bits / 16);
     float extra_x = FragSharpFramework__FragSharpStd__fint_floor(extra_bits - 16 * extra_y);
     float2 v = float2(0, 0);
-    v.x = GpuSim__SimShader__unpack_val(float2(extra_x, packed.x));
-    v.y = GpuSim__SimShader__unpack_val(float2(extra_y, packed.y));
+    v.x = Terracotta__SimShader__unpack_val(float2(extra_x, packed.x));
+    v.y = Terracotta__SimShader__unpack_val(float2(extra_y, packed.y));
     return v;
 }
 
-float2 GpuSim__SimShader__geo_pos_id(float4 g)
+float2 Terracotta__SimShader__geo_pos_id(float4 g)
 {
-    return GpuSim__SimShader__unpack_vec2_3byte(g.gba);
+    return Terracotta__SimShader__unpack_vec2_3byte(g.gba);
 }
 
-float GpuSim__SimShader__polar_dist(float4 info)
+float Terracotta__SimShader__polar_dist(float4 info)
 {
-    return GpuSim__SimShader__unpack_val(info.rg);
+    return Terracotta__SimShader__unpack_val(info.rg);
 }
 
-float2 GpuSim__SimShader__pack_val_2byte(float x)
+float2 Terracotta__SimShader__pack_val_2byte(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -98,9 +98,9 @@ float2 GpuSim__SimShader__pack_val_2byte(float x)
     return packed / 255.0;
 }
 
-void GpuSim__SimShader__set_circumference(inout float4 info, float circumference)
+void Terracotta__SimShader__set_circumference(inout float4 info, float circumference)
 {
-    info.ba = GpuSim__SimShader__pack_val_2byte(circumference);
+    info.ba = Terracotta__SimShader__pack_val_2byte(circumference);
 }
 
 // Compiled vertex shader
@@ -125,27 +125,27 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         return __FinalOutput;
     }
     float2 pos_here = psin.TexCoords * fs_param_Geo_size;
-    float2 start_pos = GpuSim__SimShader__geo_pos_id(here);
+    float2 start_pos = Terracotta__SimShader__geo_pos_id(here);
     float2 GeoStart = (start_pos - pos_here);
     float4 right = tex2D(fs_param_Geo, psin.TexCoords + (GeoStart + float2(1, 0)) * fs_param_Geo_dxdy), up = tex2D(fs_param_Geo, psin.TexCoords + (GeoStart + float2(0, 1)) * fs_param_Geo_dxdy), left = tex2D(fs_param_Geo, psin.TexCoords + (GeoStart + float2(-(1), 0)) * fs_param_Geo_dxdy), down = tex2D(fs_param_Geo, psin.TexCoords + (GeoStart + float2(0, -(1))) * fs_param_Geo_dxdy);
     float circum = 0;
     if (all(abs(right.gba - here.gba) < .001))
     {
-        circum = max(circum, GpuSim__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(1, 0)) * fs_param_Info_dxdy)));
+        circum = max(circum, Terracotta__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(1, 0)) * fs_param_Info_dxdy)));
     }
     if (all(abs(up.gba - here.gba) < .001))
     {
-        circum = max(circum, GpuSim__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(0, 1)) * fs_param_Info_dxdy)));
+        circum = max(circum, Terracotta__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(0, 1)) * fs_param_Info_dxdy)));
     }
     if (all(abs(left.gba - here.gba) < .001))
     {
-        circum = max(circum, GpuSim__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(-(1), 0)) * fs_param_Info_dxdy)));
+        circum = max(circum, Terracotta__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(-(1), 0)) * fs_param_Info_dxdy)));
     }
     if (all(abs(down.gba - here.gba) < .001))
     {
-        circum = max(circum, GpuSim__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(0, -(1))) * fs_param_Info_dxdy)));
+        circum = max(circum, Terracotta__SimShader__polar_dist(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(0, -(1))) * fs_param_Info_dxdy)));
     }
-    GpuSim__SimShader__set_circumference(info_here, circum);
+    Terracotta__SimShader__set_circumference(info_here, circum);
     __FinalOutput.Color = info_here;
     return __FinalOutput;
 }

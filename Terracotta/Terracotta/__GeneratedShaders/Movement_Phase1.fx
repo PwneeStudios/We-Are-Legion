@@ -55,12 +55,12 @@ sampler fs_param_Random : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool GpuSim__SimShader__IsStationary(float4 d)
+bool Terracotta__SimShader__IsStationary(float4 d)
 {
     return d.r >= 0.01960784 - .001;
 }
@@ -71,7 +71,7 @@ float FragSharpFramework__FragSharpStd__fint_floor(float v)
     return floor(255 * v) * 0.003921569;
 }
 
-float GpuSim__SimShader__RndFint(float rnd, float f1, float f2)
+float Terracotta__SimShader__RndFint(float rnd, float f1, float f2)
 {
     f2 += 0.003921569;
     f2 -= 0.0006;
@@ -94,10 +94,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy), output = float4(0, 0, 0, 0);
-    if (GpuSim__SimShader__Something(here))
+    if (Terracotta__SimShader__Something(here))
     {
         output = here;
-        if (!(GpuSim__SimShader__IsStationary(here)))
+        if (!(Terracotta__SimShader__IsStationary(here)))
         {
             output.g = 0.003921569;
         }
@@ -105,7 +105,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         return __FinalOutput;
     }
     float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy);
-    float rnd = GpuSim__SimShader__RndFint(tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy).x, 0.0, 0.01176471);
+    float rnd = Terracotta__SimShader__RndFint(tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy).x, 0.0, 0.01176471);
     if (abs(rnd - 0.0) < .001)
     {
         if (abs(right.a - 0.0) > .001 && abs(right.a - 0.01176471) > .001 && abs(right.r - 0.01176471) < .001)
@@ -191,7 +191,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
         }
     }
-    if (GpuSim__SimShader__Something(output))
+    if (Terracotta__SimShader__Something(output))
     {
         output.g = 0.0;
         __FinalOutput.Color = output;

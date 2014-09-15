@@ -55,31 +55,31 @@ sampler fs_param_Next : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__IsStationary(float4 d)
+bool Terracotta__SimShader__IsStationary(float4 d)
 {
     return d.r >= 0.01960784 - .001;
 }
 
-bool GpuSim__SimShader__IsValid(float direction)
+bool Terracotta__SimShader__IsValid(float direction)
 {
     return direction > 0 + .001;
 }
 
-float2 GpuSim__SimShader__dir_to_vec(float direction)
+float2 Terracotta__SimShader__dir_to_vec(float direction)
 {
     float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
-    return GpuSim__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Terracotta__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
-bool GpuSim__SimShader__selected(float4 u)
+bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
     return val >= 0.5019608 - .001;
 }
 
-void GpuSim__SimShader__set_prior_direction(inout float4 u, float dir)
+void Terracotta__SimShader__set_prior_direction(inout float4 u, float dir)
 {
-    u.b = dir + (GpuSim__SimShader__selected(u) ? 0.5019608 : 0.0);
+    u.b = dir + (Terracotta__SimShader__selected(u) ? 0.5019608 : 0.0);
 }
 
 // Compiled vertex shader
@@ -98,17 +98,17 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 next = tex2D(fs_param_Next, psin.TexCoords + (float2(0, 0)) * fs_param_Next_dxdy);
     float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    if (GpuSim__SimShader__IsStationary(next))
+    if (Terracotta__SimShader__IsStationary(next))
     {
         __FinalOutput.Color = next;
         return __FinalOutput;
     }
-    float4 ahead = tex2D(fs_param_Next, psin.TexCoords + (GpuSim__SimShader__dir_to_vec(here.r)) * fs_param_Next_dxdy);
+    float4 ahead = tex2D(fs_param_Next, psin.TexCoords + (Terracotta__SimShader__dir_to_vec(here.r)) * fs_param_Next_dxdy);
     if (abs(ahead.g - 0.0) < .001 && abs(ahead.r - here.r) < .001)
     {
         next = float4(0, 0, 0, 0);
     }
-    GpuSim__SimShader__set_prior_direction(next, next.r);
+    Terracotta__SimShader__set_prior_direction(next, next.r);
     __FinalOutput.Color = next;
     return __FinalOutput;
 }

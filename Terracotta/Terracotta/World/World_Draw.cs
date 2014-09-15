@@ -6,7 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using FragSharpHelper;
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class World : SimShader
     {
@@ -131,39 +131,42 @@ namespace GpuSim
             DrawCount++;
             Render.StandardRenderSetup();
 
-            if (NotPaused_SimulationUpdate)
-                SecondsSinceLastUpdate += GameClass.ElapsedSeconds;
-
-            UpdateAllPlayerUnitCounts();
-
-            switch (CurUserMode)
+            if (GameClass.Game.IsActive)
             {
-                case UserMode.PlaceBuilding:
-                    if (UnselectAll)
-                    {
+                if (NotPaused_SimulationUpdate)
+                    SecondsSinceLastUpdate += GameClass.ElapsedSeconds;
+
+                UpdateAllPlayerUnitCounts();
+
+                switch (CurUserMode)
+                {
+                    case UserMode.PlaceBuilding:
+                        if (UnselectAll)
+                        {
+                            SelectionUpdate();
+                            UnselectAll = false;
+                        }
+
+                        PlaceBuilding();
+                        break;
+
+                    case UserMode.Select:
+                        // Count the selected units for the player. Must be done at least before every attack command.
+                        var selected = DataGroup.DoUnitCount(PlayerOrNeutral, true);
+                        DataGroup.SelectedUnits = selected.Item1;
+                        DataGroup.SelectedBarracks = selected.Item2;
+
                         SelectionUpdate();
-                        UnselectAll = false;
-                    }
+                        break;
+                }
 
-                    PlaceBuilding();
-                    break;
+                // Check if we need to do a simulation update
+                if (GameClass.UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates)
+                {
+                    SecondsSinceLastUpdate -= DelayBetweenUpdates;
 
-                case UserMode.Select:
-                    // Count the selected units for the player. Must be done at least before every attack command.
-                    var selected = DataGroup.DoUnitCount(PlayerOrNeutral, true);
-                    DataGroup.SelectedUnits = selected.Item1;
-                    DataGroup.SelectedBarracks = selected.Item2;
-
-                    SelectionUpdate();
-                    break;
-            }
-
-            // Check if we need to do a simulation update
-            if (GameClass.UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates)
-            {
-                SecondsSinceLastUpdate -= DelayBetweenUpdates;
-
-                SimulationUpdate();
+                    SimulationUpdate();
+                }
             }
 
             BenchmarkTests.Run(DataGroup.CurrentData, DataGroup.PreviousData);

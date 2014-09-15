@@ -75,12 +75,12 @@ float4 FragSharpFramework__FragSharpStd__min(float4 a, float4 b, float4 c, float
     return min(min(a, b), min(c, d));
 }
 
-bool GpuSim__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool GpuSim__SimShader__BlockingTileHere(float4 u)
+bool Terracotta__SimShader__BlockingTileHere(float4 u)
 {
     return u.r >= 0.07843138 - .001;
 }
@@ -103,9 +103,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
     float4 right = tex2D(fs_param_Path, psin.TexCoords + (float2(1, 0)) * fs_param_Path_dxdy), up = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 1)) * fs_param_Path_dxdy), left = tex2D(fs_param_Path, psin.TexCoords + (float2(-(1), 0)) * fs_param_Path_dxdy), down = tex2D(fs_param_Path, psin.TexCoords + (float2(0, -(1))) * fs_param_Path_dxdy);
     float4 dist_to_enemy_of = FragSharpFramework__FragSharpStd__min(right, up, left, down) + float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
-    if (GpuSim__SimShader__Something(data_here))
+    if (Terracotta__SimShader__Something(data_here))
     {
-        if (GpuSim__SimShader__BlockingTileHere(unit_here) || abs(unit_here.g - 0.0) < .001)
+        if (Terracotta__SimShader__BlockingTileHere(unit_here) || abs(unit_here.g - 0.0) < .001)
         {
             dist_to_enemy_of += 100 * float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
         }

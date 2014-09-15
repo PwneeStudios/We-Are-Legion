@@ -55,12 +55,12 @@ sampler fs_param_OuterGeo : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__IsValid(float direction)
+bool Terracotta__SimShader__IsValid(float direction)
 {
     return direction > 0 + .001;
 }
 
-void GpuSim__Geodesic_Flatten__InheritsFrom(inout float4 outer_geo, float4 inner_geo)
+void Terracotta__Geodesic_Flatten__InheritsFrom(inout float4 outer_geo, float4 inner_geo)
 {
     outer_geo.g = inner_geo.g + 0.003921569;
     outer_geo.ba = inner_geo.ba;
@@ -82,57 +82,57 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 geo_here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy), geo_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 0)) * fs_param_Geo_dxdy), geo_up = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 1)) * fs_param_Geo_dxdy), geo_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 0)) * fs_param_Geo_dxdy), geo_down = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, -(1))) * fs_param_Geo_dxdy), geo_up_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 1)) * fs_param_Geo_dxdy), geo_up_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 1)) * fs_param_Geo_dxdy), geo_down_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, -(1))) * fs_param_Geo_dxdy), geo_down_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Geo_dxdy);
     float4 outer_geo_here = tex2D(fs_param_OuterGeo, psin.TexCoords + (float2(0, 0)) * fs_param_OuterGeo_dxdy);
-    if (GpuSim__SimShader__IsValid(geo_here.r))
+    if (Terracotta__SimShader__IsValid(geo_here.r))
     {
         __FinalOutput.Color = geo_here;
         return __FinalOutput;
     }
     outer_geo_here.g = 1.0;
-    if (outer_geo_here.g > geo_right.g + .001 && GpuSim__SimShader__IsValid(geo_right.r))
+    if (outer_geo_here.g > geo_right.g + .001 && Terracotta__SimShader__IsValid(geo_right.r))
     {
-        GpuSim__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_right);
+        Terracotta__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_right);
     }
     else
     {
-        if (outer_geo_here.g > geo_up.g + .001 && GpuSim__SimShader__IsValid(geo_up.r))
+        if (outer_geo_here.g > geo_up.g + .001 && Terracotta__SimShader__IsValid(geo_up.r))
         {
-            GpuSim__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_up);
+            Terracotta__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_up);
         }
         else
         {
-            if (outer_geo_here.g > geo_left.g + .001 && GpuSim__SimShader__IsValid(geo_left.r))
+            if (outer_geo_here.g > geo_left.g + .001 && Terracotta__SimShader__IsValid(geo_left.r))
             {
-                GpuSim__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_left);
+                Terracotta__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_left);
             }
             else
             {
-                if (outer_geo_here.g > geo_down.g + .001 && GpuSim__SimShader__IsValid(geo_down.r))
+                if (outer_geo_here.g > geo_down.g + .001 && Terracotta__SimShader__IsValid(geo_down.r))
                 {
-                    GpuSim__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_down);
+                    Terracotta__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_down);
                 }
                 else
                 {
-                    if (outer_geo_here.g > geo_up_right.g + .001 && GpuSim__SimShader__IsValid(geo_up_right.r))
+                    if (outer_geo_here.g > geo_up_right.g + .001 && Terracotta__SimShader__IsValid(geo_up_right.r))
                     {
-                        GpuSim__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_up_right);
+                        Terracotta__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_up_right);
                     }
                     else
                     {
-                        if (outer_geo_here.g > geo_up_left.g + .001 && GpuSim__SimShader__IsValid(geo_up_left.r))
+                        if (outer_geo_here.g > geo_up_left.g + .001 && Terracotta__SimShader__IsValid(geo_up_left.r))
                         {
-                            GpuSim__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_up_left);
+                            Terracotta__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_up_left);
                         }
                         else
                         {
-                            if (outer_geo_here.g > geo_down_right.g + .001 && GpuSim__SimShader__IsValid(geo_down_right.r))
+                            if (outer_geo_here.g > geo_down_right.g + .001 && Terracotta__SimShader__IsValid(geo_down_right.r))
                             {
-                                GpuSim__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_down_right);
+                                Terracotta__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_down_right);
                             }
                             else
                             {
-                                if (outer_geo_here.g > geo_down_left.g + .001 && GpuSim__SimShader__IsValid(geo_down_left.r))
+                                if (outer_geo_here.g > geo_down_left.g + .001 && Terracotta__SimShader__IsValid(geo_down_left.r))
                                 {
-                                    GpuSim__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_down_left);
+                                    Terracotta__Geodesic_Flatten__InheritsFrom(outer_geo_here, geo_down_left);
                                 }
                             }
                         }

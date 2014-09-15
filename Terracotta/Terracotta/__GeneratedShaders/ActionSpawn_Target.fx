@@ -70,12 +70,12 @@ sampler fs_param_Select : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-float2 GpuSim__SimShader__pack_val_2byte(float x)
+float2 Terracotta__SimShader__pack_val_2byte(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -83,10 +83,10 @@ float2 GpuSim__SimShader__pack_val_2byte(float x)
     return packed / 255.0;
 }
 
-float4 GpuSim__SimShader__pack_vec2(float2 v)
+float4 Terracotta__SimShader__pack_vec2(float2 v)
 {
-    float2 packed_x = GpuSim__SimShader__pack_val_2byte(v.x);
-    float2 packed_y = GpuSim__SimShader__pack_val_2byte(v.y);
+    float2 packed_x = Terracotta__SimShader__pack_val_2byte(v.x);
+    float2 packed_y = Terracotta__SimShader__pack_val_2byte(v.y);
     return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 
@@ -107,12 +107,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     float4 target = tex2D(fs_param_Target, psin.TexCoords + (float2(0, 0)) * fs_param_Target_dxdy);
-    if (GpuSim__SimShader__Something(select) && !(GpuSim__SimShader__Something(data_here)))
+    if (Terracotta__SimShader__Something(select) && !(Terracotta__SimShader__Something(data_here)))
     {
         if (abs((int)(psin.TexCoords.x * fs_param_Data_size.x) % 2 - 0) < .001 && abs((int)(psin.TexCoords.y * fs_param_Data_size.y) % 2 - 0) < .001)
         {
             float2 pos = psin.TexCoords * fs_param_Data_size;
-            target = GpuSim__SimShader__pack_vec2(pos);
+            target = Terracotta__SimShader__pack_vec2(pos);
         }
     }
     __FinalOutput.Color = target;

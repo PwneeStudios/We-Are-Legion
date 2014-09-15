@@ -1,6 +1,6 @@
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawPrecomputation_Cur : SimShader
     {

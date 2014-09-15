@@ -40,7 +40,7 @@ sampler fs_param_Geo : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 GpuSim__SimShader__ReducedGeoId(float2 p)
+float2 Terracotta__SimShader__ReducedGeoId(float2 p)
 {
     return float2(((int)(round(p.x)) % 256) / 256.0, ((int)(round(p.y)) % 256) / 256.0);
 }
@@ -51,7 +51,7 @@ float FragSharpFramework__FragSharpStd__fint_floor(float v)
     return floor(255 * v) * 0.003921569;
 }
 
-float GpuSim__SimShader__unpack_val(float2 packed)
+float Terracotta__SimShader__unpack_val(float2 packed)
 {
     float coord = 0;
     packed = floor(255.0 * packed + float2(0.5, 0.5));
@@ -59,20 +59,20 @@ float GpuSim__SimShader__unpack_val(float2 packed)
     return coord;
 }
 
-float2 GpuSim__SimShader__unpack_vec2_3byte(float3 packed)
+float2 Terracotta__SimShader__unpack_vec2_3byte(float3 packed)
 {
     float extra_bits = packed.z;
     float extra_y = FragSharpFramework__FragSharpStd__fint_floor(extra_bits / 16);
     float extra_x = FragSharpFramework__FragSharpStd__fint_floor(extra_bits - 16 * extra_y);
     float2 v = float2(0, 0);
-    v.x = GpuSim__SimShader__unpack_val(float2(extra_x, packed.x));
-    v.y = GpuSim__SimShader__unpack_val(float2(extra_y, packed.y));
+    v.x = Terracotta__SimShader__unpack_val(float2(extra_x, packed.x));
+    v.y = Terracotta__SimShader__unpack_val(float2(extra_y, packed.y));
     return v;
 }
 
-float2 GpuSim__SimShader__geo_pos_id(float4 g)
+float2 Terracotta__SimShader__geo_pos_id(float4 g)
 {
-    return GpuSim__SimShader__unpack_vec2_3byte(g.gba);
+    return Terracotta__SimShader__unpack_vec2_3byte(g.gba);
 }
 
 // Compiled vertex shader
@@ -90,7 +90,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 geo_here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy);
-    geo_here.ba = GpuSim__SimShader__ReducedGeoId(GpuSim__SimShader__geo_pos_id(geo_here));
+    geo_here.ba = Terracotta__SimShader__ReducedGeoId(Terracotta__SimShader__geo_pos_id(geo_here));
     geo_here.g = 0.0;
     __FinalOutput.Color = geo_here;
     return __FinalOutput;

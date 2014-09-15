@@ -55,24 +55,24 @@ sampler fs_param_Building : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool GpuSim__SimShader__IsBuilding(float4 u)
+bool Terracotta__SimShader__IsBuilding(float4 u)
 {
     return u.r >= 0.007843138 - .001 && u.r < 0.07843138 - .001;
 }
 
-float2 GpuSim__SimShader__center_dir(float4 b)
+float2 Terracotta__SimShader__center_dir(float4 b)
 {
     float2 part = float2(b.g, b.a);
     part = -(255) * (part - float2(0.003921569, 0.003921569));
     return part;
 }
 
-float GpuSim__SimShader__prior_direction(float4 u)
+float Terracotta__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
     if (val >= 0.5019608 - .001)
@@ -82,12 +82,12 @@ float GpuSim__SimShader__prior_direction(float4 u)
     return val;
 }
 
-void GpuSim__SimShader__set_selected(inout float4 u, bool selected)
+void Terracotta__SimShader__set_selected(inout float4 u, bool selected)
 {
-    u.b = GpuSim__SimShader__prior_direction(u) + (selected ? 0.5019608 : 0.0);
+    u.b = Terracotta__SimShader__prior_direction(u) + (selected ? 0.5019608 : 0.0);
 }
 
-bool GpuSim__SimShader__selected(float4 u)
+bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
     return val >= 0.5019608 - .001;
@@ -109,15 +109,15 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 0)) * fs_param_Building_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (GpuSim__SimShader__Something(building_here) && GpuSim__SimShader__IsBuilding(unit_here))
+    if (Terracotta__SimShader__Something(building_here) && Terracotta__SimShader__IsBuilding(unit_here))
     {
-        float4 center = tex2D(fs_param_Building, psin.TexCoords + (GpuSim__SimShader__center_dir(building_here)) * fs_param_Building_dxdy);
-        if (!(GpuSim__SimShader__Something(center)))
+        float4 center = tex2D(fs_param_Building, psin.TexCoords + (Terracotta__SimShader__center_dir(building_here)) * fs_param_Building_dxdy);
+        if (!(Terracotta__SimShader__Something(center)))
         {
             __FinalOutput.Color = float4(0, 0, 0, 0);
             return __FinalOutput;
         }
-        GpuSim__SimShader__set_selected(building_here, GpuSim__SimShader__selected(center));
+        Terracotta__SimShader__set_selected(building_here, Terracotta__SimShader__selected(center));
     }
     __FinalOutput.Color = building_here;
     return __FinalOutput;

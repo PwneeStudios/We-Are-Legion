@@ -1,6 +1,6 @@
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DrawTiles : BaseShader
     {
@@ -73,6 +73,7 @@ namespace GpuSim
             tile here = tile.Nothing;
             here.i = _0;
             here.j = _25;
+            here.type = TileType.Trees;
 
             output += Sprite(here, subcell_pos, Texture, solid_blend_flag, solid_blend);
 

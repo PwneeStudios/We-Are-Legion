@@ -55,7 +55,7 @@ sampler fs_param_Select : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool GpuSim__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
 }
@@ -76,7 +76,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    if (GpuSim__SimShader__Something(select) && !(GpuSim__SimShader__Something(here)))
+    if (Terracotta__SimShader__Something(select) && !(Terracotta__SimShader__Something(here)))
     {
         if (abs((int)(psin.TexCoords.x * fs_param_Data_size.x) % 2 - 0) < .001 && abs((int)(psin.TexCoords.y * fs_param_Data_size.y) % 2 - 0) < .001)
         {

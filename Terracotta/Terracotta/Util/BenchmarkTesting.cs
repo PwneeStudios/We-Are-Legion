@@ -3,7 +3,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     public static class BenchmarkTests
     {

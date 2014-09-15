@@ -3,7 +3,7 @@ using FragSharpFramework;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class World : SimShader
     {
@@ -43,7 +43,7 @@ namespace GpuSim
         //const double DelayBetweenUpdates = .3333;
         const double DelayBetweenUpdates = .4;
 
-        public bool MapEditor = true;
+        public bool MapEditor = false;
         bool DrawGridLines = false;
         
         public bool SimulationPaused = false;

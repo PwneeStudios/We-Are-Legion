@@ -1,4 +1,4 @@
-namespace GpuSim
+namespace Terracotta
 {
     public class PlayerInfo
     {

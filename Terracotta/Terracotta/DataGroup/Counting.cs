@@ -2,7 +2,7 @@ using System;
 
 using FragSharpFramework;
 
-namespace GpuSim
+namespace Terracotta
 {
     public partial class DataGroup : SimShader
     {
