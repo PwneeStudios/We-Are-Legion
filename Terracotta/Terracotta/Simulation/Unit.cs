@@ -561,7 +561,7 @@ namespace Terracotta
             //public const int SheetDimX = NumAnims * AnimLength;
             //public const int SheetDimY = 2 /*Selected,Unselected*/ * 4 /*4 Directions*/;
             public const int SheetDimX = 32;
-            public const int SheetDimY = 32;
+            public const int SheetDimY = 3 * 32;
             public static readonly vec2 SheetDim = vec(SheetDimX, SheetDimY);
             public static readonly vec2 SpriteSize = vec(1f / SheetDimX, 1f / SheetDimY);
         }

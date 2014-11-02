@@ -85,7 +85,7 @@ float4 Terracotta__DrawCorpses__Sprite(VertexToPixel psin, float4 c, float2 pos,
     }
     pos.x += FragSharpFramework__FragSharpStd__Float(0.09411765);
     pos.y += FragSharpFramework__FragSharpStd__Float(c.r) - 1;
-    pos *= float2(1.0 / 32, 1.0 / 32);
+    pos *= float2(1.0 / 32, 1.0 / 96);
     float4 clr = tex2D(Texture, pos);
     return clr;
 }

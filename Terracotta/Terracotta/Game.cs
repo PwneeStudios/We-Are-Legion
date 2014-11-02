@@ -164,8 +164,10 @@ namespace Terracotta
 
         int DrawCount = 0;
 
-        enum GameState { TitleScreen, Menu, Loading, Game }
-        GameState State = GameState.TitleScreen;
+        enum GameState { TitleScreen, Menu, Loading, Game,    ToEditor }
+        //GameState State = GameState.TitleScreen;
+        GameState State = GameState.ToEditor;
+
         double TimeSinceLoad = 0;
         string ScenarioToLoad = null;
 
@@ -189,6 +191,15 @@ namespace Terracotta
 
             switch (State)
             {
+                case GameState.ToEditor:
+                    World = new World();
+                    //World.Load("TestSave.m3n");
+                    World.MapEditor = true;
+                    
+                    State = GameState.Game;
+
+                    break;
+
                 case GameState.TitleScreen:
                     Render.StandardRenderSetup();
                     DrawFullScreen(Assets.DemoScreen1);

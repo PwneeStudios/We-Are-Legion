@@ -62,7 +62,7 @@ namespace Terracotta
                 MaxZoomOut = World.StaticMaxZoomOut;
                 MaxZoomIn = 200f; // Full zoom-in, Partial zoom-out
             }
-
+            MaxZoomOut = 1f;
             // Zoom all the way out
             if (Keys.Space.Down())
                 CameraZoom = MaxZoomOut;
