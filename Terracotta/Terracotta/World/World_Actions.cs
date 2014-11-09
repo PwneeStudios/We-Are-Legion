@@ -308,6 +308,11 @@ namespace Terracotta
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
         }
 
+        void RaiseSkeletons()
+        {
+            SpawnUnits(PlayerValue, TeamValue, UnitType.Skeleton, UnitDistribution.OnCorpses);
+        }
+
         void CreateUnits()
         {
             float player = 0, team = 0;
@@ -346,7 +351,8 @@ namespace Terracotta
 
             if (Input.LeftMousePressed)
             {
-                Firestorm();
+                //Firestorm();
+                RaiseSkeletons();
             }
         }
 
