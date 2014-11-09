@@ -41,7 +41,7 @@ namespace Terracotta
                 {
                     unit_here.player = player;
                     unit_here.team = team;
-                    unit_here.type = UnitType.Footman;
+                    unit_here.type = UnitType.DragonLord;
                 }
             }
 

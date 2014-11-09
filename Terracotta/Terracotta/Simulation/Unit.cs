@@ -416,6 +416,11 @@ namespace Terracotta
 
         public static class Player
         {
+            public static float Num(unit u)
+            {
+                return Float(u.player) - 1;
+            }
+
             [FragSharpFramework.Vals(None, One, Two, Three, Four)]
                 public class ValsAttribute : Attribute { }
 
@@ -441,6 +446,16 @@ namespace Terracotta
                 FirstBuildingType = Barracks,
                 FirstBlockingTileType = BlockingTile;
 
+            public static float UnitIndex(unit u)
+            {
+                return Float(u.type - FirstUnitType);
+            }
+
+            public static float UnitIndex(float type)
+            {
+                return type - FirstUnitType;
+            }
+
             public static float BuildingIndex(float type)
             {
                 return type - FirstBuildingType;
@@ -449,18 +464,22 @@ namespace Terracotta
             public const float
                 None = _0,
 
-                Footman = _1,
+                Footman     = _1,
+                DragonLord  = _2,
+                Necromancer = _3,
+                Skeleton    = _4,
+                ClaySoldier = _5,
 
-                Barracks = _2,
-                GoldMine = _3,
-                JadeMine = _4,
+                Barracks = _6,
+                GoldMine = _7,
+                JadeMine = _8,
 
                 BlockingTile = _20;
         }
 
         protected static bool IsUnit(unit u)
         {
-            return u.type == UnitType.Footman;
+            return u.type >= UnitType.FirstUnitType && u.type < UnitType.FirstBuildingType;
         }
 
         protected static bool IsBuilding(unit u)
@@ -607,6 +626,11 @@ namespace Terracotta
 
         public static class Dir
         {
+            public static float Num(data d)
+            {
+                return Float(d.direction) - 1;
+            }
+
             [FragSharpFramework.Vals(Right, Up, Left, Down)]
                 public class ValsAttribute : Attribute { }
 

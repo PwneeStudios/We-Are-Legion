@@ -128,7 +128,7 @@ sampler fs_param_FarColor : register(s6) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Terracotta__SimShader__IsUnit(float4 u)
 {
-    return abs(u.r - 0.003921569) < .001;
+    return u.r >= 0.003921569 - .001 && u.r < 0.02352941 - .001;
 }
 
 float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
@@ -153,6 +153,21 @@ bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
     return val >= 0.5019608 - .001;
+}
+
+float Terracotta__Dir__Num(float4 d)
+{
+    return FragSharpFramework__FragSharpStd__Float(d.r) - 1;
+}
+
+float Terracotta__Player__Num(float4 u)
+{
+    return FragSharpFramework__FragSharpStd__Float(u.g) - 1;
+}
+
+float Terracotta__UnitType__UnitIndex(float4 u)
+{
+    return FragSharpFramework__FragSharpStd__Float(u.r - 0.003921569);
 }
 
 float4 Terracotta__SelectedUnitColor__Get(VertexToPixel psin, float player)
@@ -210,7 +225,7 @@ float4 Terracotta__DrawUnits__Sprite(VertexToPixel psin, float4 d, float4 u, flo
     }
     bool draw_selected = Terracotta__SimShader__selected(d) && pos.y > selection_size + .001;
     pos.x += floor(frame);
-    pos.y += (FragSharpFramework__FragSharpStd__Float(d.r) - 1) + 4 * (FragSharpFramework__FragSharpStd__Float(u.g) - 1) + 4 * 16;
+    pos.y += Terracotta__Dir__Num(d) + 4 * Terracotta__Player__Num(u) + 4 * 4 * Terracotta__UnitType__UnitIndex(u);
     pos *= float2(1.0 / 32, 1.0 / 96);
     float4 clr = tex2D(Texture, pos);
     if (draw_selected)

@@ -75,7 +75,7 @@ int FragSharpFramework__FragSharpStd__Int(float v)
 
 float Terracotta__UnitType__BuildingIndex(float type)
 {
-    return type - 0.007843138;
+    return type - 0.02352941;
 }
 
 float4 Terracotta__BuildingMarkerColors__Get(VertexToPixel psin, float player, float type)

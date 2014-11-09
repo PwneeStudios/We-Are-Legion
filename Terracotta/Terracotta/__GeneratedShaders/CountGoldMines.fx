@@ -84,7 +84,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (Terracotta__SimShader__Something(data_here))
     {
         float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-        if (abs(unit_here.r - 0.01176471) < .001 && Terracotta__SimShader__IsCenter(data_here))
+        if (abs(unit_here.r - 0.02745098) < .001 && Terracotta__SimShader__IsCenter(data_here))
         {
             if (abs(unit_here.g - 0.003921569) < .001)
             {

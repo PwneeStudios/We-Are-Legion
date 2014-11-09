@@ -70,7 +70,7 @@ bool Terracotta__SimShader__selected(float4 u)
 
 bool Terracotta__SimShader__IsUnit(float4 u)
 {
-    return abs(u.r - 0.003921569) < .001;
+    return u.r >= 0.003921569 - .001 && u.r < 0.02352941 - .001;
 }
 
 float3 Terracotta__SimShader__pack_coord_3byte(float x)
@@ -111,7 +111,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             output.xyz = Terracotta__SimShader__pack_coord_3byte(1);
         }
-        if (abs(unit_here.r - 0.007843138) < .001 && Terracotta__SimShader__IsCenter(data_here) && valid)
+        if (abs(unit_here.r - 0.02352941) < .001 && Terracotta__SimShader__IsCenter(data_here) && valid)
         {
             output.w = 0.003921569;
         }

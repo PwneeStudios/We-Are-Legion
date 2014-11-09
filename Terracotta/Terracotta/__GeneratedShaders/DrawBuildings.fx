@@ -91,7 +91,7 @@ float fs_param_s;
 // The following methods are included because they are referenced by the fragment shader.
 bool Terracotta__SimShader__IsBuilding(float4 u)
 {
-    return u.r >= 0.007843138 - .001 && u.r < 0.07843138 - .001;
+    return u.r >= 0.02352941 - .001 && u.r < 0.07843138 - .001;
 }
 
 float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
@@ -142,7 +142,7 @@ float FragSharpFramework__FragSharpStd__Float(float v)
 
 float Terracotta__UnitType__BuildingIndex(float type)
 {
-    return type - 0.007843138;
+    return type - 0.02352941;
 }
 
 float4 Terracotta__DrawBuildings__Sprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)

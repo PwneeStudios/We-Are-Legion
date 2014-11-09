@@ -100,7 +100,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         unit_here.g = fs_param_player;
         unit_here.b = fs_param_team;
-        unit_here.r = 0.003921569;
+        unit_here.r = 0.007843138;
     }
     __FinalOutput.Color = unit_here;
     return __FinalOutput;

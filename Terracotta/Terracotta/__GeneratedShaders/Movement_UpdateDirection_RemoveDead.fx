@@ -227,12 +227,12 @@ bool Terracotta__SimShader__Something(float4 u)
 
 bool Terracotta__SimShader__IsUnit(float4 u)
 {
-    return abs(u.r - 0.003921569) < .001;
+    return u.r >= 0.003921569 - .001 && u.r < 0.02352941 - .001;
 }
 
 bool Terracotta__SimShader__IsBuilding(float4 u)
 {
-    return u.r >= 0.007843138 - .001 && u.r < 0.07843138 - .001;
+    return u.r >= 0.02352941 - .001 && u.r < 0.07843138 - .001;
 }
 
 float Terracotta__ExplosionSpriteSheet__ExplosionFrame(float s, float4 building_here)

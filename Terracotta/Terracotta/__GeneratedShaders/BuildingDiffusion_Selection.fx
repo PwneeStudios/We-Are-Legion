@@ -62,7 +62,7 @@ bool Terracotta__SimShader__Something(float4 u)
 
 bool Terracotta__SimShader__IsBuilding(float4 u)
 {
-    return u.r >= 0.007843138 - .001 && u.r < 0.07843138 - .001;
+    return u.r >= 0.02352941 - .001 && u.r < 0.07843138 - .001;
 }
 
 float2 Terracotta__SimShader__center_dir(float4 b)

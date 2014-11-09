@@ -56,7 +56,7 @@ namespace Terracotta
             bool draw_selected = selected(d) && pos.y > selection_size;
 
             pos.x += floor(frame);
-            pos.y += (Float(d.direction) - 1) + 4 * (Float(u.player) - 1) + 4*16;
+            pos.y += Dir.Num(d) + 4 * Player.Num(u) + 4 * 4 * UnitType.UnitIndex(u);
             pos *= UnitSpriteSheet.SpriteSize;
 
             var clr = Texture[pos];
