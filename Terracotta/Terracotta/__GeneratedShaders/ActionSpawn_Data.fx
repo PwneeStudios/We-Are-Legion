@@ -22,42 +22,12 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Data, using register location 1
-float2 fs_param_Data_size;
-float2 fs_param_Data_dxdy;
-
-Texture fs_param_Data_Texture;
-sampler fs_param_Data : register(s1) = sampler_state
-{
-    texture   = <fs_param_Data_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-// Texture Sampler for fs_param_Units, using register location 2
-float2 fs_param_Units_size;
-float2 fs_param_Units_dxdy;
-
-Texture fs_param_Units_Texture;
-sampler fs_param_Units : register(s2) = sampler_state
-{
-    texture   = <fs_param_Units_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-// Texture Sampler for fs_param_Select, using register location 3
+// Texture Sampler for fs_param_Select, using register location 1
 float2 fs_param_Select_size;
 float2 fs_param_Select_dxdy;
 
 Texture fs_param_Select_Texture;
-sampler fs_param_Select : register(s3) = sampler_state
+sampler fs_param_Select : register(s1) = sampler_state
 {
     texture   = <fs_param_Select_Texture>;
     MipFilter = Point;
@@ -67,12 +37,20 @@ sampler fs_param_Select : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
-float fs_param_player;
+// Texture Sampler for fs_param_Data, using register location 2
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
 
-float fs_param_team;
-
-float fs_param_type;
-
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s2) = sampler_state
+{
+    texture   = <fs_param_Data_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
@@ -80,19 +58,6 @@ float fs_param_type;
 bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
-}
-
-bool Terracotta__UnitDistribution__Contains(float distribution, float2 v)
-{
-    if (abs(distribution - 1.0) < .001)
-    {
-        return true;
-    }
-    if (abs(distribution - 2.0) < .001)
-    {
-        return abs((int)(v.x) % 2 - 0) < .001 && abs((int)(v.y) % 2 - 0) < .001;
-    }
-    return false;
 }
 
 // Compiled vertex shader
@@ -109,19 +74,14 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    if (Terracotta__SimShader__Something(select) && !(Terracotta__SimShader__Something(data_here)))
+    float4 here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    if (Terracotta__SimShader__Something(select))
     {
-        if (Terracotta__UnitDistribution__Contains(2, psin.TexCoords * fs_param_Select_size))
-        {
-            unit_here.g = fs_param_player;
-            unit_here.b = fs_param_team;
-            unit_here.r = fs_param_type;
-        }
+        here.r = 0.003921569;
+        here.a = 0.01176471;
     }
-    __FinalOutput.Color = unit_here;
+    __FinalOutput.Color = here;
     return __FinalOutput;
 }
 

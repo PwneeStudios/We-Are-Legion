@@ -3,18 +3,19 @@ using FragSharpFramework;
 
 namespace Terracotta
 {
-    public class UnitDistribution
+    public class UnitDistribution : BaseShader
     {
-        [FragSharpFramework.Vals(Full, EveryOther)]
+        [FragSharpFramework.Vals(Full, EveryOther, OnCorpses)]
         public class ValsAttribute : Attribute { }
 
-        public static readonly float[] Vals = new float[] { Full, EveryOther };
+        public static readonly float[] Vals = new float[] { Full, EveryOther, OnCorpses };
 
         public const float
             Full = 1,
-            EveryOther = 2;
+            EveryOther = 2,
+            OnCorpses = 3;
 
-        public static bool Contains(float distribution, vec2 v)
+        public static bool Contains(float distribution, vec2 v, Field<corpse> Corpses)
         {
             if (distribution == Full)
             {
@@ -26,25 +27,47 @@ namespace Terracotta
                 return (int)(v.x) % 2 == 0 && (int)(v.y) % 2 == 0;
             }
 
+            if (distribution == OnCorpses)
+            {
+                return CorpsePresent(Corpses[Here]);
+            }
+
             return false;
+        }
+    }
+
+    public partial class ActionSpawn_Filter : SimShader
+    {
+        [FragmentShader]
+        data FragmentShader(VertexOut vertex, Field<data> Select, Field<data> Data, Field<unit> Units, Field<corpse> Corpses, [UnitDistribution.Vals] float distribution)
+        {
+            data select = Select[Here];
+            data here = Data[Here];
+
+            if (Something(select) && !Something(here))
+            {
+                if (UnitDistribution.Contains(distribution, vertex.TexCoords * Select.Size, Corpses))
+                {
+                    return select;
+                }
+            }
+
+            return data.Nothing;
         }
     }
 
     public partial class ActionSpawn_Data : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<data> Data, Field<data> Select, [UnitDistribution.Vals] float distribution)
+        data FragmentShader(VertexOut vertex, Field<data> Select, Field<data> Data)
         {
-            data here = Data[Here];
             data select = Select[Here];
+            data here = Data[Here];
 
-            if (Something(select) && !Something(here))
+            if (Something(select))
             {
-                if (UnitDistribution.Contains(distribution, vertex.TexCoords * Select.Size))
-                {
-                    here.direction = Dir.Right;
-                    here.action = UnitAction.Guard;
-                }
+                here.direction = Dir.Right;
+                here.action = UnitAction.Guard;
             }
 
             return here;
@@ -54,47 +77,54 @@ namespace Terracotta
     public partial class ActionSpawn_Unit : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Units, Field<data> Select, float player, float team, float type, [UnitDistribution.Vals] float distribution)
+        unit FragmentShader(VertexOut vertex, Field<data> Select, Field<unit> Units, float player, float team, float type)
         {
-            data data_here = Data[Here];
-            unit unit_here = Units[Here];
-
             data select = Select[Here];
+            unit here = Units[Here];
 
-            if (Something(select) && !Something(data_here))
+            if (Something(select))
             {
-                if (UnitDistribution.Contains(distribution, vertex.TexCoords * Select.Size))
-                {
-                    unit_here.player = player;
-                    unit_here.team = team;
-                    unit_here.type = type;
-                }
+                here.player = player;
+                here.team = team;
+                here.type = type;
             }
 
-            return unit_here;
+            return here;
         }
     }
 
     public partial class ActionSpawn_Target : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<vec4> Target, Field<data> Select, [UnitDistribution.Vals] float distribution)
+        vec4 FragmentShader(VertexOut vertex, Field<data> Select, Field<vec4> Target)
         {
-            data data_here = Data[Here];
             data select = Select[Here];
+            vec4 here = Target[Here];
 
-            vec4 target = Target[Here];
-
-            if (Something(select) && !Something(data_here))
+            if (Something(select))
             {
-                if (UnitDistribution.Contains(distribution, vertex.TexCoords * Select.Size))
-                {
-                    vec2 pos = vertex.TexCoords * Data.Size;
-                    target = pack_vec2(pos);
-                }
+                vec2 pos = vertex.TexCoords * Target.Size;
+                here = pack_vec2(pos);
             }
 
-            return target;
+            return here;
+        }
+    }
+
+    public partial class ActionSpawn_Corpse : SimShader
+    {
+        [FragmentShader]
+        corpse FragmentShader(VertexOut vertex, Field<data> Select, Field<corpse> Corpses)
+        {
+            data select = Select[Here];
+            corpse here = Corpses[Here];
+
+            if (Something(select))
+            {
+                here = corpse.Nothing;
+            }
+
+            return here;
         }
     }    
 }

@@ -710,7 +710,7 @@ namespace Terracotta
             return u.direction > 0;
         }
 
-        protected static bool Something(corpse u)
+        protected static bool CorpsePresent(corpse u)
         {
             return u.direction > 0;
         }

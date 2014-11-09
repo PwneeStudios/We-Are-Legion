@@ -309,17 +309,26 @@ namespace Terracotta
             if (Keys.Y.Down()) { player = Player.Three; team = Team.Three; }
             if (Keys.U.Down()) { player = Player.Four; team = Team.Four; }
 
-            SpawnUnits(player, team, UnitType.Skeleton, UnitDistribution.EveryOther);
+            SpawnUnits(player, team, UnitType.Skeleton, UnitDistribution.OnCorpses);
         }
 
         private void SpawnUnits(float player, float team, float type, float distribution)
         {
-            ActionSpawn_Unit.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.SelectField, player, team, type, distribution, Output: DataGroup.Temp1);
+            ActionSpawn_Filter.Apply(DataGroup.SelectField, DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.Corspes, distribution, Output: DataGroup.Temp2);
+            var Filter = DataGroup.Temp2;
+
+            ActionSpawn_Unit.Apply(Filter, DataGroup.CurrentUnits, player, team, type, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
-            ActionSpawn_Target.Apply(DataGroup.CurrentData, DataGroup.TargetData, DataGroup.SelectField, distribution, Output: DataGroup.Temp1);
+            ActionSpawn_Target.Apply(Filter, DataGroup.TargetData, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TargetData);
-            ActionSpawn_Data.Apply(DataGroup.CurrentData, DataGroup.SelectField, distribution, Output: DataGroup.Temp1);
+            ActionSpawn_Data.Apply(Filter, DataGroup.CurrentData, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
+
+            if (distribution == UnitDistribution.OnCorpses)
+            {
+                ActionSpawn_Corpse.Apply(Filter, DataGroup.Corspes, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Corspes);
+            }
         }
 
         void SelectionUpdate()
