@@ -356,6 +356,7 @@ namespace Terracotta
             }
         }
 
+        bool SkipDeselect = false;
         void SelectionUpdate(bool EffectSelection = true)
         {
             if (!GameClass.HasFocus) return;
@@ -367,6 +368,12 @@ namespace Terracotta
                 || CurUserMode != UserMode.Select
                 || Keys.Back.Down() || Keys.Escape.Down();
             bool Selecting = Input.LeftMouseDown && (CurUserMode == UserMode.Select || CurUserMode == UserMode.CastSpell);
+
+            if (SkipDeselect)
+            {
+                Deselect = false;
+                SkipDeselect = false;
+            }
 
             vec2 size = SelectSize;
             DataGroup.SelectAlongLine(WorldCord, WorldCordPrev, size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);

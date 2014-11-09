@@ -11,6 +11,8 @@ namespace Terracotta
     {
         public void EditorUpdate()
         {
+            if (_MapEditor && Keys.OemTilde.Pressed()) Editor_ToggleGridLines();
+
             if (!MapEditor) return;
 
             if (Keys.P.Pressed()) Editor_TogglePause();
@@ -19,7 +21,6 @@ namespace Terracotta
             if (Keys.D2.Pressed()) Editor_SwitchPlayer(2);
             if (Keys.D3.Pressed()) Editor_SwitchPlayer(3);
             if (Keys.D4.Pressed()) Editor_SwitchPlayer(4);
-            if (Keys.OemTilde.Pressed()) Editor_ToggleGridLines();
         }
 
         void Editor_SwitchPlayer(int player)
@@ -152,6 +153,7 @@ namespace Terracotta
             if (Keys.Escape.Down() || Keys.Back.Down() || Input.RightMousePressed)
             {
                 CurUserMode = UserMode.Select;
+                SkipDeselect = true;
             }
         }
 

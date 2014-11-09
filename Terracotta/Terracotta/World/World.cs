@@ -43,7 +43,20 @@ namespace Terracotta
         const double DelayBetweenUpdates = .3333;
         //const double DelayBetweenUpdates = .4;
 
-        public bool MapEditor = false;
+        bool _MapEditor = false;
+        public bool MapEditor
+        {
+            get
+            {
+                return _MapEditor && DrawGridLines;
+            }
+
+            set
+            {
+                _MapEditor = true;
+                DrawGridLines = true;
+            }
+        }
         bool DrawGridLines = false;
         
         public bool SimulationPaused = false;
