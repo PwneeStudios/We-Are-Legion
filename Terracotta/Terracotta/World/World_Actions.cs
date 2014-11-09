@@ -340,7 +340,17 @@ namespace Terracotta
             }
         }
 
-        void SelectionUpdate()
+        void Spells()
+        {
+            SelectionUpdate(EffectSelection : false);
+
+            if (Input.LeftMousePressed)
+            {
+                Firestorm();
+            }
+        }
+
+        void SelectionUpdate(bool EffectSelection = true)
         {
             if (!GameClass.HasFocus) return;
 
@@ -350,10 +360,10 @@ namespace Terracotta
             bool Deselect = Input.LeftMousePressed && !Keys.LeftShift.Down() && !Keys.RightShift.Down()
                 || CurUserMode != UserMode.Select
                 || Keys.Back.Down() || Keys.Escape.Down();
-            bool Selecting = Input.LeftMouseDown && CurUserMode == UserMode.Select;
+            bool Selecting = Input.LeftMouseDown && (CurUserMode == UserMode.Select || CurUserMode == UserMode.CastSpell);
 
-            vec2 size = vec2.Ones * .2f / CameraZoom;
-            DataGroup.SelectAlongLine(WorldCord, WorldCordPrev, size, Deselect, Selecting, PlayerOrNeutral);
+            vec2 size = SelectSize;
+            DataGroup.SelectAlongLine(WorldCord, WorldCordPrev, size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
 
             if (CurUserMode != UserMode.Select) return;
 
@@ -391,11 +401,6 @@ namespace Terracotta
                 if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())
                 {
                     CreateUnits();
-                }
-
-                if (Keys.F.Down())
-                {
-                    Firestorm();
                 }
 
                 if (Keys.Delete.Down() || Keys.Back.Down())

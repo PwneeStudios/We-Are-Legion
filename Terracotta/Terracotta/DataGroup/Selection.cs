@@ -29,7 +29,7 @@ namespace Terracotta
             SelectedBound_BL = SimShader.unpack_vec2(bound_bl);
         }
 
-        public void SelectAlongLine(vec2 p1, vec2 p2, vec2 size, bool Deselect, bool Selecting, float PlayerValue)
+        public void SelectAlongLine(vec2 p1, vec2 p2, vec2 size, bool Deselect, bool Selecting, float PlayerValue, bool EffectSelection)
         {
             DataDrawMouse.Using(Assets.SelectCircle_Data, PlayerValue, Output: SelectField, Clear: Color.Transparent);
 
@@ -45,7 +45,7 @@ namespace Terracotta
                 }
             }
 
-            if (!Keys.F.Down())
+            if (EffectSelection)
             {
                 SelectUnits(Deselect);
             }

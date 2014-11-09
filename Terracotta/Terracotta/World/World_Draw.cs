@@ -158,6 +158,10 @@ namespace Terracotta
 
                         SelectionUpdate();
                         break;
+
+                    case UserMode.CastSpell:
+                        Spells();
+                        break;
                 }
 
                 // Check if we need to do a simulation update
@@ -408,28 +412,33 @@ namespace Terracotta
             Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
         }
 
-        private void DrawMouseUi()
+        void DrawMouseUi()
         {
             CanPlaceBuilding = false;
             if (GameClass.MouseEnabled)
             {
-                if (CurUserMode == UserMode.PlaceBuilding)
-                {
-                    DrawAvailabilityGrid();
-                    DrawPotentialBuilding();
-                    DrawArrowCursor();
-                }
+                switch (CurUserMode)
+                { 
+                    case UserMode.PlaceBuilding:
+                        DrawAvailabilityGrid();
+                        DrawPotentialBuilding();
+                        DrawArrowCursor();
+                        break;
 
-                if (CurUserMode == UserMode.Select)
-                {
-                    //DrawGridCell();
-                    DrawCircleCursor();
-                    //DrawArrowCursor();
+                    case UserMode.Select:
+                        //DrawGridCell();
+                        DrawCircleCursor();
+                        //DrawArrowCursor();
+                        break;
+
+                    case UserMode.CastSpell:
+                        DrawCircleCursor();
+                        break;
                 }
             }
         }
 
-        private void DrawGrids()
+        void DrawGrids()
         {
             // Draw texture to screen
             //GameClass.Graphics.SetRenderTarget(null);

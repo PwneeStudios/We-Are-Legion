@@ -60,41 +60,47 @@ namespace Terracotta
         vec2 unit_count_pos, building_count_pos;
         void DrawCursorInfo()
         {
-            vec2 mouse = ScreenToUiCoord(Input.CurMousePos);
-            color clr = rgba(0x888888c, .5f).Premultiplied;
-
-            vec2 size = vec(.125f, .024f);
-
-            if (DataGroup.SelectedUnits > 0)
+            switch (CurUserMode)
             {
-                vec2 pos = mouse + vec(.16f, .215f) + vec(size.x, 0);
-                vec2 unit = pos + vec(.01f, .025f) - vec(size.x, 0);
-                vec2 unit_size = vec(.025f, .025f);
-                unit_count_pos = pos + vec(.075f, .0285f) - vec(size.x, 0);
+                case UserMode.Select:
+                    vec2 mouse = ScreenToUiCoord(Input.CurMousePos);
+                    color clr = rgba(0x888888c, .5f).Premultiplied;
 
-                DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, clr);
-                RectangleQuad.Draw(GameClass.Graphics, pos, size);
+                    vec2 size = vec(.125f, .024f);
 
-                SetUnitQuad(unit, unit_size, 1, 0, Dir.Right, q);
-                DrawTexture.Using(vec(0, 0, 1, 1), CameraAspect, q.Texture);
-                q.Draw(GameClass.Graphics);
+                    if (DataGroup.SelectedUnits > 0)
+                    {
+                        vec2 pos = mouse + vec(.16f, .215f) + vec(size.x, 0);
+                        vec2 unit = pos + vec(.01f, .025f) - vec(size.x, 0);
+                        vec2 unit_size = vec(.025f, .025f);
+                        unit_count_pos = pos + vec(.075f, .0285f) - vec(size.x, 0);
+
+                        DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, clr);
+                        RectangleQuad.Draw(GameClass.Graphics, pos, size);
+
+                        SetUnitQuad(unit, unit_size, 1, 0, Dir.Right, q);
+                        DrawTexture.Using(vec(0, 0, 1, 1), CameraAspect, q.Texture);
+                        q.Draw(GameClass.Graphics);
+                    }
+
+                    //if (DataGroup.SelectedBarracks > 0)
+                    //{
+                    //    vec2 b_size = vec(.125f, .024f);
+                    //    vec2 b_pos = mouse + vec(.19f, .155f) + vec(size.x, 0);
+                    //    vec2 b_unit = b_pos + vec(.01f, .034f) - vec(size.x, 0);
+                    //    vec2 b_unit_size = vec(.035f, .035f);
+                    //    building_count_pos = b_pos + vec(.095f, .0285f) - vec(size.x, 0);
+
+                    //    DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, clr);
+                    //    RectangleQuad.Draw(GameClass.Graphics, b_pos, b_size);
+
+                    //    SetBuildingQuad(b_unit, b_unit_size, UnitType.Barracks, 1, q);
+                    //    DrawTexture.Using(vec(0, 0, 1, 1), CameraAspect, q.Texture);
+                    //    q.Draw(GameClass.Graphics);
+                    //}
+
+                    break;
             }
-
-            //if (DataGroup.SelectedBarracks > 0)
-            //{
-            //    vec2 b_size = vec(.125f, .024f);
-            //    vec2 b_pos = mouse + vec(.19f, .155f) + vec(size.x, 0);
-            //    vec2 b_unit = b_pos + vec(.01f, .034f) - vec(size.x, 0);
-            //    vec2 b_unit_size = vec(.035f, .035f);
-            //    building_count_pos = b_pos + vec(.095f, .0285f) - vec(size.x, 0);
-
-            //    DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, clr);
-            //    RectangleQuad.Draw(GameClass.Graphics, b_pos, b_size);
-
-            //    SetBuildingQuad(b_unit, b_unit_size, UnitType.Barracks, 1, q);
-            //    DrawTexture.Using(vec(0, 0, 1, 1), CameraAspect, q.Texture);
-            //    q.Draw(GameClass.Graphics);
-            //}
         }
 
         void DrawUi_CursorText()
@@ -222,11 +228,12 @@ namespace Terracotta
             return quad;
         }
 
+        
         void DrawCircleCursor()
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
             DrawTextureSmooth.Using(camvec, CameraAspect, Assets.SelectCircle);
-            RectangleQuad.Draw(GameClass.Graphics, WorldCord, .2f * vec2.Ones / CameraZoom);
+            RectangleQuad.Draw(GameClass.Graphics, WorldCord, SelectSize);
 
             DrawTextureSmooth.Using(camvec, CameraAspect, Assets.SelectDot);
             RectangleQuad.Draw(GameClass.Graphics, WorldCord, .0075f * vec2.Ones / CameraZoom);
@@ -258,7 +265,7 @@ namespace Terracotta
             vec2 pos = ScreenToWorldCoord(Input.CurMousePos);
 
             vec2 cell_size = 2 * (1 / DataGroup.GridSize);
-            vec2 size = 30 * cell_size;
+            vec2 size = vec(1.266f, 1.35f) * 30 * cell_size;
 
             Markers.Add(new Marker(this, pos, size, Assets.ExplosionTexture_1, -1f, frames : ExplosionSpriteSheet.AnimLength));
         }

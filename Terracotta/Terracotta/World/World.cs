@@ -86,12 +86,37 @@ namespace Terracotta
         float TeamValue = Team.One;
         int TeamNumber { get { return Int(TeamValue); } }
 
-        enum UserMode { PlaceBuilding, Select };
+        enum UserMode { PlaceBuilding, Select, CastSpell, };
         UserMode CurUserMode = UserMode.Select;
         float BuildingType = UnitType.GoldMine;
         bool UnselectAll = false;
 
+        enum Spell { None, Fireball, RaiseSkeletons, SummonNecromancer, RaiseTerracotta, Convert, Flamewall, Resurrect, CorpseExplode, }
+        Spell CurSpell = Spell.None;
+
         bool CanPlaceBuilding = false;
         bool[] CanPlace = new bool[3 * 3];
+
+        vec2 SelectSize
+        {
+            get
+            {
+                vec2 Scaled = vec2.Ones / CameraZoom;
+                vec2 cell_size = 2 * (1 / DataGroup.GridSize);
+
+                if (CurUserMode == UserMode.Select) return .2f * Scaled;
+
+                if (CurUserMode == UserMode.CastSpell)
+                {
+                    switch (CurSpell)
+                    { 
+                        case Spell.Fireball:
+                            return 30 * cell_size;
+                    }
+                }
+
+                return .2f * Scaled;
+            }
+        }
     }
 }

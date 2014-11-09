@@ -128,6 +128,13 @@ namespace Terracotta
 
 
             // Switch modes
+            if (Keys.F.Down())
+            {
+                CurUserMode = UserMode.CastSpell;
+                UnselectAll = false;
+                CurSpell = Spell.Fireball;
+            }
+
             if (Keys.B.Down())
             {
                 CurUserMode = UserMode.PlaceBuilding;
@@ -142,7 +149,7 @@ namespace Terracotta
                 BuildingType = UnitType.GoldMine;
             }
 
-            if (Keys.Escape.Down() || Keys.Back.Down() || CurUserMode == UserMode.PlaceBuilding && Input.RightMousePressed)
+            if (Keys.Escape.Down() || Keys.Back.Down() || Input.RightMousePressed)
             {
                 CurUserMode = UserMode.Select;
             }
