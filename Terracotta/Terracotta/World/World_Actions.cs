@@ -309,7 +309,8 @@ namespace Terracotta
             if (Keys.Y.Down()) { player = Player.Three; team = Team.Three; }
             if (Keys.U.Down()) { player = Player.Four; team = Team.Four; }
 
-            SpawnUnits(player, team, UnitType.Skeleton, UnitDistribution.OnCorpses);
+            //SpawnUnits(player, team, UnitType.Skeleton, UnitDistribution.OnCorpses);
+            SpawnUnits(player, team, UnitType.ClaySoldier, UnitDistribution.EveryOther);
         }
 
         private void SpawnUnits(float player, float team, float type, float distribution)
