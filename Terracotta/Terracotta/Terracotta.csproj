@@ -123,6 +123,7 @@
     <Compile Include="Render.cs" />
     <Compile Include="DataGroup\BuildingUpdate.cs" />
     <Compile Include="Drawing\GameColors.cs" />
+    <Compile Include="Simulation\Magic.cs" />
     <Compile Include="Util\ShaderUtil.cs" />
     <Compile Include="World\Migrate.cs" />
     <Compile Include="World\World_Util.cs" />

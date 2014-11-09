@@ -5,7 +5,7 @@ namespace Terracotta
     public partial class CheckForAttacking : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> Unit, Field<data> Data, Field<vec4> Random)
+        unit FragmentShader(VertexOut vertex, Field<unit> Unit, Field<data> Data, Field<vec4> Random, Field<magic> Magic)
         {
             unit unit_here = Unit[Here];
             data data_here = Data[Here];
@@ -56,6 +56,11 @@ namespace Terracotta
                         }
                     }
                 }
+            }
+
+            if (IsUnit(unit_here) && Magic[Here].kill == _true)
+            {
+                unit_here.anim = Anim.Die;
             }
 
             return unit_here;

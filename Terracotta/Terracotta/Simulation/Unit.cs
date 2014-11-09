@@ -30,6 +30,13 @@ namespace Terracotta
     }
 
     [Copy(typeof(vec4))]
+    public partial struct magic
+    {
+        [Hlsl("r")]
+        public float kill { get { return r; } set { r = value; } }
+    }
+
+    [Copy(typeof(vec4))]
     public partial struct geo
     {
         [Hlsl("r")]

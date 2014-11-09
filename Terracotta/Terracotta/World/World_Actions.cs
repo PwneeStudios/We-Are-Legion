@@ -300,6 +300,14 @@ namespace Terracotta
             SwapTempGeo(Anti);
         }
 
+        void Firestorm()
+        {
+            AddExplosion();
+
+            Kill.Apply(DataGroup.SelectField, DataGroup.Magic, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
+        }
+
         void CreateUnits()
         {
             float player = 0, team = 0;
@@ -383,6 +391,11 @@ namespace Terracotta
                 if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())
                 {
                     CreateUnits();
+                }
+
+                if (Keys.F.Down())
+                {
+                    Firestorm();
                 }
 
                 if (Keys.Delete.Down() || Keys.Back.Down())

@@ -67,6 +67,21 @@ sampler fs_param_Random : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
+// Texture Sampler for fs_param_Magic, using register location 4
+float2 fs_param_Magic_size;
+float2 fs_param_Magic_dxdy;
+
+Texture fs_param_Magic_Texture;
+sampler fs_param_Magic : register(s4) = sampler_state
+{
+    texture   = <fs_param_Magic_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
@@ -153,6 +168,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 }
             }
         }
+    }
+    if (Terracotta__SimShader__IsUnit(unit_here) && abs(tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy).r - 0.003921569) < .001)
+    {
+        unit_here.a = 0.07058824;
     }
     __FinalOutput.Color = unit_here;
     return __FinalOutput;

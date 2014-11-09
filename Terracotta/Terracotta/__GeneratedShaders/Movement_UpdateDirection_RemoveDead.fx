@@ -127,12 +127,27 @@ sampler fs_param_RandomField : register(s7) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Geo, using register location 8
+// Texture Sampler for fs_param_Magic, using register location 8
+float2 fs_param_Magic_size;
+float2 fs_param_Magic_dxdy;
+
+Texture fs_param_Magic_Texture;
+sampler fs_param_Magic : register(s8) = sampler_state
+{
+    texture   = <fs_param_Magic_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_Geo, using register location 9
 float2 fs_param_Geo_size;
 float2 fs_param_Geo_dxdy;
 
 Texture fs_param_Geo_Texture;
-sampler fs_param_Geo : register(s8) = sampler_state
+sampler fs_param_Geo : register(s9) = sampler_state
 {
     texture   = <fs_param_Geo_Texture>;
     MipFilter = Point;
@@ -142,12 +157,12 @@ sampler fs_param_Geo : register(s8) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_AntiGeo, using register location 9
+// Texture Sampler for fs_param_AntiGeo, using register location 10
 float2 fs_param_AntiGeo_size;
 float2 fs_param_AntiGeo_dxdy;
 
 Texture fs_param_AntiGeo_Texture;
-sampler fs_param_AntiGeo : register(s9) = sampler_state
+sampler fs_param_AntiGeo : register(s10) = sampler_state
 {
     texture   = <fs_param_AntiGeo_Texture>;
     MipFilter = Point;
@@ -157,12 +172,12 @@ sampler fs_param_AntiGeo : register(s9) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_DirwardRight, using register location 10
+// Texture Sampler for fs_param_DirwardRight, using register location 11
 float2 fs_param_DirwardRight_size;
 float2 fs_param_DirwardRight_dxdy;
 
 Texture fs_param_DirwardRight_Texture;
-sampler fs_param_DirwardRight : register(s10) = sampler_state
+sampler fs_param_DirwardRight : register(s11) = sampler_state
 {
     texture   = <fs_param_DirwardRight_Texture>;
     MipFilter = Point;
@@ -172,12 +187,12 @@ sampler fs_param_DirwardRight : register(s10) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_DirwardLeft, using register location 11
+// Texture Sampler for fs_param_DirwardLeft, using register location 12
 float2 fs_param_DirwardLeft_size;
 float2 fs_param_DirwardLeft_dxdy;
 
 Texture fs_param_DirwardLeft_Texture;
-sampler fs_param_DirwardLeft : register(s11) = sampler_state
+sampler fs_param_DirwardLeft : register(s12) = sampler_state
 {
     texture   = <fs_param_DirwardLeft_Texture>;
     MipFilter = Point;
@@ -187,12 +202,12 @@ sampler fs_param_DirwardLeft : register(s11) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_DirwardUp, using register location 12
+// Texture Sampler for fs_param_DirwardUp, using register location 13
 float2 fs_param_DirwardUp_size;
 float2 fs_param_DirwardUp_dxdy;
 
 Texture fs_param_DirwardUp_Texture;
-sampler fs_param_DirwardUp : register(s12) = sampler_state
+sampler fs_param_DirwardUp : register(s13) = sampler_state
 {
     texture   = <fs_param_DirwardUp_Texture>;
     MipFilter = Point;
@@ -202,12 +217,12 @@ sampler fs_param_DirwardUp : register(s12) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_DirwardDown, using register location 13
+// Texture Sampler for fs_param_DirwardDown, using register location 14
 float2 fs_param_DirwardDown_size;
 float2 fs_param_DirwardDown_dxdy;
 
 Texture fs_param_DirwardDown_Texture;
-sampler fs_param_DirwardDown : register(s13) = sampler_state
+sampler fs_param_DirwardDown : register(s14) = sampler_state
 {
     texture   = <fs_param_DirwardDown_Texture>;
     MipFilter = Point;
@@ -618,6 +633,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                     return __FinalOutput;
                 }
             }
+        }
+        if (Terracotta__SimShader__IsUnit(here) && abs(tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy).r - 0.003921569) < .001)
+        {
+            data_here.a = 0.0;
+            __FinalOutput.Color = data_here;
+            return __FinalOutput;
         }
         if (Terracotta__SimShader__IsBuilding(here))
         {

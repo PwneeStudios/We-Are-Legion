@@ -69,7 +69,7 @@ namespace Terracotta
             Temp1, Temp2,
             PreviousUnits, CurrentUnits, PreviousData, CurrentData, Extra, TargetData,
             RandomField,
-            Tiles, Corspes,
+            Tiles, Corspes, Magic,
             SelectField,
 
             Paths_Right, Paths_Left, Paths_Up, Paths_Down,
@@ -105,6 +105,7 @@ namespace Terracotta
 
             Tiles = MakeTarget(w, h);
             Corspes = MakeTarget(w, h);
+            Magic = MakeTarget(w, h);
 
             SelectField = MakeTarget(w, h);
 

@@ -67,6 +67,8 @@ namespace FragSharpFramework
             Terracotta.ActionSpawn_Unit.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Unit");
             Terracotta.ActionSpawn_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Target");
             Terracotta.ActionSpawn_Corpse.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Corpse");
+            Terracotta.UpdateMagic.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UpdateMagic");
+            Terracotta.Kill.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Kill");
             Terracotta.Identity.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Identity");
             Terracotta.Shift.CompiledEffect_dir_0p003921569 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.003921569");
             Terracotta.Shift.CompiledEffect_dir_0p007843138 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.007843138");
@@ -1692,6 +1694,95 @@ namespace Terracotta
 
 namespace Terracotta
 {
+    public partial class UpdateMagic
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D Magic, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Magic);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Magic, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Magic);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Magic, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Magic);
+        }
+        public static void Using(Texture2D Magic, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Magic);
+        }
+        public static void Using(Texture2D Magic)
+        {
+            CompiledEffect.Parameters["fs_param_Magic_Texture"].SetValue(FragSharpMarshal.Marshal(Magic));
+            CompiledEffect.Parameters["fs_param_Magic_size"].SetValue(FragSharpMarshal.Marshal(vec(Magic.Width, Magic.Height)));
+            CompiledEffect.Parameters["fs_param_Magic_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Magic.Width, Magic.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace Terracotta
+{
+    public partial class Kill
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D Select, Texture2D Magic, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Select, Magic);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Select, Texture2D Magic, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Select, Magic);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Select, Texture2D Magic, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Select, Magic);
+        }
+        public static void Using(Texture2D Select, Texture2D Magic, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Select, Magic);
+        }
+        public static void Using(Texture2D Select, Texture2D Magic)
+        {
+            CompiledEffect.Parameters["fs_param_Select_Texture"].SetValue(FragSharpMarshal.Marshal(Select));
+            CompiledEffect.Parameters["fs_param_Select_size"].SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
+            CompiledEffect.Parameters["fs_param_Select_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Select.Width, Select.Height)));
+            CompiledEffect.Parameters["fs_param_Magic_Texture"].SetValue(FragSharpMarshal.Marshal(Magic));
+            CompiledEffect.Parameters["fs_param_Magic_size"].SetValue(FragSharpMarshal.Marshal(vec(Magic.Width, Magic.Height)));
+            CompiledEffect.Parameters["fs_param_Magic_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Magic.Width, Magic.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace Terracotta
+{
     public partial class Identity
     {
         public static Effect CompiledEffect;
@@ -2813,33 +2904,33 @@ namespace Terracotta
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(Texture2D Unit, Texture2D Data, Texture2D Random, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Unit, Texture2D Data, Texture2D Random, Texture2D Magic, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Unit, Data, Random);
+            Using(Unit, Data, Random, Magic);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Unit, Texture2D Data, Texture2D Random, RenderTarget2D Output)
+        public static void Apply(Texture2D Unit, Texture2D Data, Texture2D Random, Texture2D Magic, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Unit, Data, Random);
+            Using(Unit, Data, Random, Magic);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Unit, Texture2D Data, Texture2D Random, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Unit, Texture2D Data, Texture2D Random, Texture2D Magic, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Unit, Data, Random);
+            Using(Unit, Data, Random, Magic);
         }
-        public static void Using(Texture2D Unit, Texture2D Data, Texture2D Random, RenderTarget2D Output)
+        public static void Using(Texture2D Unit, Texture2D Data, Texture2D Random, Texture2D Magic, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Unit, Data, Random);
+            Using(Unit, Data, Random, Magic);
         }
-        public static void Using(Texture2D Unit, Texture2D Data, Texture2D Random)
+        public static void Using(Texture2D Unit, Texture2D Data, Texture2D Random, Texture2D Magic)
         {
             CompiledEffect.Parameters["fs_param_Unit_Texture"].SetValue(FragSharpMarshal.Marshal(Unit));
             CompiledEffect.Parameters["fs_param_Unit_size"].SetValue(FragSharpMarshal.Marshal(vec(Unit.Width, Unit.Height)));
@@ -2850,6 +2941,9 @@ namespace Terracotta
             CompiledEffect.Parameters["fs_param_Random_Texture"].SetValue(FragSharpMarshal.Marshal(Random));
             CompiledEffect.Parameters["fs_param_Random_size"].SetValue(FragSharpMarshal.Marshal(vec(Random.Width, Random.Height)));
             CompiledEffect.Parameters["fs_param_Random_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Random.Width, Random.Height)));
+            CompiledEffect.Parameters["fs_param_Magic_Texture"].SetValue(FragSharpMarshal.Marshal(Magic));
+            CompiledEffect.Parameters["fs_param_Magic_size"].SetValue(FragSharpMarshal.Marshal(vec(Magic.Width, Magic.Height)));
+            CompiledEffect.Parameters["fs_param_Magic_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Magic.Width, Magic.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
@@ -4052,33 +4146,33 @@ namespace Terracotta
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PrevData, Texture2D PathToOtherTeams, Texture2D RandomField, Texture2D Geo, Texture2D AntiGeo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PrevData, Texture2D PathToOtherTeams, Texture2D RandomField, Texture2D Magic, Texture2D Geo, Texture2D AntiGeo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(TargetData, Unit, Extra, Data, PrevData, PathToOtherTeams, RandomField, Geo, AntiGeo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
+            Using(TargetData, Unit, Extra, Data, PrevData, PathToOtherTeams, RandomField, Magic, Geo, AntiGeo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PrevData, Texture2D PathToOtherTeams, Texture2D RandomField, Texture2D Geo, Texture2D AntiGeo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown, RenderTarget2D Output)
+        public static void Apply(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PrevData, Texture2D PathToOtherTeams, Texture2D RandomField, Texture2D Magic, Texture2D Geo, Texture2D AntiGeo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(TargetData, Unit, Extra, Data, PrevData, PathToOtherTeams, RandomField, Geo, AntiGeo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
+            Using(TargetData, Unit, Extra, Data, PrevData, PathToOtherTeams, RandomField, Magic, Geo, AntiGeo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PrevData, Texture2D PathToOtherTeams, Texture2D RandomField, Texture2D Geo, Texture2D AntiGeo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PrevData, Texture2D PathToOtherTeams, Texture2D RandomField, Texture2D Magic, Texture2D Geo, Texture2D AntiGeo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(TargetData, Unit, Extra, Data, PrevData, PathToOtherTeams, RandomField, Geo, AntiGeo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
+            Using(TargetData, Unit, Extra, Data, PrevData, PathToOtherTeams, RandomField, Magic, Geo, AntiGeo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
         }
-        public static void Using(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PrevData, Texture2D PathToOtherTeams, Texture2D RandomField, Texture2D Geo, Texture2D AntiGeo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown, RenderTarget2D Output)
+        public static void Using(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PrevData, Texture2D PathToOtherTeams, Texture2D RandomField, Texture2D Magic, Texture2D Geo, Texture2D AntiGeo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(TargetData, Unit, Extra, Data, PrevData, PathToOtherTeams, RandomField, Geo, AntiGeo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
+            Using(TargetData, Unit, Extra, Data, PrevData, PathToOtherTeams, RandomField, Magic, Geo, AntiGeo, DirwardRight, DirwardLeft, DirwardUp, DirwardDown);
         }
-        public static void Using(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PrevData, Texture2D PathToOtherTeams, Texture2D RandomField, Texture2D Geo, Texture2D AntiGeo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown)
+        public static void Using(Texture2D TargetData, Texture2D Unit, Texture2D Extra, Texture2D Data, Texture2D PrevData, Texture2D PathToOtherTeams, Texture2D RandomField, Texture2D Magic, Texture2D Geo, Texture2D AntiGeo, Texture2D DirwardRight, Texture2D DirwardLeft, Texture2D DirwardUp, Texture2D DirwardDown)
         {
             CompiledEffect.Parameters["fs_param_TargetData_Texture"].SetValue(FragSharpMarshal.Marshal(TargetData));
             CompiledEffect.Parameters["fs_param_TargetData_size"].SetValue(FragSharpMarshal.Marshal(vec(TargetData.Width, TargetData.Height)));
@@ -4101,6 +4195,9 @@ namespace Terracotta
             CompiledEffect.Parameters["fs_param_RandomField_Texture"].SetValue(FragSharpMarshal.Marshal(RandomField));
             CompiledEffect.Parameters["fs_param_RandomField_size"].SetValue(FragSharpMarshal.Marshal(vec(RandomField.Width, RandomField.Height)));
             CompiledEffect.Parameters["fs_param_RandomField_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(RandomField.Width, RandomField.Height)));
+            CompiledEffect.Parameters["fs_param_Magic_Texture"].SetValue(FragSharpMarshal.Marshal(Magic));
+            CompiledEffect.Parameters["fs_param_Magic_size"].SetValue(FragSharpMarshal.Marshal(vec(Magic.Width, Magic.Height)));
+            CompiledEffect.Parameters["fs_param_Magic_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Magic.Width, Magic.Height)));
             CompiledEffect.Parameters["fs_param_Geo_Texture"].SetValue(FragSharpMarshal.Marshal(Geo));
             CompiledEffect.Parameters["fs_param_Geo_size"].SetValue(FragSharpMarshal.Marshal(vec(Geo.Width, Geo.Height)));
             CompiledEffect.Parameters["fs_param_Geo_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Geo.Width, Geo.Height)));

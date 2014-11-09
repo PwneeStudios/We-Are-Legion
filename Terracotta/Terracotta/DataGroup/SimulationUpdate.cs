@@ -20,7 +20,7 @@ namespace Terracotta
             Swap(ref Corspes, ref Temp1);
 
 
-            Movement_UpdateDirection_RemoveDead.Apply(TargetData, CurrentUnits, Extra, CurrentData, PreviousData, DistanceToOtherTeams, RandomField,
+            Movement_UpdateDirection_RemoveDead.Apply(TargetData, CurrentUnits, Extra, CurrentData, PreviousData, DistanceToOtherTeams, RandomField, Magic,
                                                       Geo, AntiGeo, Dirward[Dir.Right], Dirward[Dir.Left], Dirward[Dir.Up], Dirward[Dir.Down],
                                                       Output: Temp1);
             Swap(ref CurrentData, ref Temp1);
@@ -45,7 +45,7 @@ namespace Terracotta
             Swap(ref PreviousUnits, ref Temp1);
 
 
-            CheckForAttacking.Apply(CurrentUnits, CurrentData, RandomField, Output: Temp1);
+            CheckForAttacking.Apply(CurrentUnits, CurrentData, RandomField, Magic, Output: Temp1);
             Swap(ref CurrentUnits, ref Temp1);
 
 
@@ -58,6 +58,9 @@ namespace Terracotta
             SetSpawn_Data.Apply(CurrentUnits, CurrentData, Output: Temp1);
             Swap(ref CurrentData, ref Temp1);
 
+
+            UpdateMagic.Apply(Magic, Output: Temp1);
+            CoreMath.Swap(ref Temp1, ref Magic);
 
             UpdateRandomField.Apply(RandomField, Output: Temp1);
             Swap(ref RandomField, ref Temp1);

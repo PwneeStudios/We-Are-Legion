@@ -45,6 +45,14 @@ namespace Terracotta
                 }
             }
 
+            if (!Keys.F.Down())
+            {
+                SelectUnits(Deselect);
+            }
+        }
+
+        private void SelectUnits(bool Deselect)
+        {
             var action = Input.RightMousePressed ? SimShader.UnitAction.Attacking : SimShader.UnitAction.NoChange;
             ActionSelect.Apply(CurrentData, CurrentUnits, SelectField, Deselect, action, Output: Temp1);
             Swap(ref Temp1, ref CurrentData);

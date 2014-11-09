@@ -26,24 +26,31 @@ namespace Terracotta
         }
     }
 
-    public class Marker
+    public class Marker : BaseShader
     {
         float alpha;
         float alpha_fade;
+
+        float frame_length = 1;
+        float t = 0;
+        int frame = 0, frames = 1;
 
         RectangleQuad quad;
         Texture2D texture;
 
         World world;
 
-        public Marker(World world, vec2 pos, vec2 size, Texture2D texture, float alpha_fade)
+        public Marker(World world, vec2 pos, vec2 size, Texture2D texture, float alpha_fade, int frames = 1, float frame_length = .1f)
         {
             this.world = world;
 
             alpha = 1;
             this.alpha_fade = alpha_fade;
 
-            quad = new RectangleQuad(pos - size / 2, pos + size / 2, vec2.Zero, vec2.Ones);
+            this.frames = frames;
+            this.frame_length = frame_length;
+
+            quad = new RectangleQuad(pos - size / 2, pos + size / 2, vec2.Zero, vec(1.0f / frames, 1));
             this.texture = texture;
         }
 
@@ -58,7 +65,15 @@ namespace Terracotta
 
         public void Update()
         {
-            alpha += (float)GameClass.Time.ElapsedGameTime.TotalSeconds * alpha_fade;
+            float delta_t = (float)GameClass.Time.ElapsedGameTime.TotalSeconds;
+
+            alpha += delta_t * alpha_fade;
+            
+            t += delta_t;
+            frame = (int)(t / frame_length);
+            if (frame >= frames) frame = frames;
+
+            quad.SetupUv(vec(frame / (float)frames, 0), vec((frame + 1) / (float)frames, 1));
         }
     }
 }

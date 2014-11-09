@@ -184,8 +184,6 @@ namespace Terracotta
 
         RectangleQuad SetUnitQuad(vec2 pos, vec2 size, int player, int frame, float dir, RectangleQuad quad = null)
         {
-            //size.x = size.y;
-
             vec2 uv_size = UnitSpriteSheet.SpriteSize;
             
             vec2 uv_offset;
@@ -206,8 +204,6 @@ namespace Terracotta
 
         RectangleQuad SetBuildingQuad(vec2 pos, vec2 size, float type, int player, RectangleQuad quad = null)
         {
-            //size.x = size.y;
-
             vec2 uv_size = BuildingSpriteSheet.BuildingSize;
             
             vec2 uv_offset;
@@ -220,7 +216,6 @@ namespace Terracotta
                 quad = new RectangleQuad();
             }
 
-            //quad.SetupVertices(quad.Bl, quad.Tr, new vec2(0, uv_size.y) + uv_offset, new vec2(uv_size.x, 0) + uv_offset);
             quad.SetupVertices(pos, pos + 2 * new vec2(size.x, -size.y), new vec2(0, uv_size.y) + uv_offset, new vec2(uv_size.x, 0) + uv_offset);
             quad.Texture = Assets.BuildingTexture_1;
 
@@ -256,6 +251,16 @@ namespace Terracotta
             vec2 size = cell_size * bigger;
 
             Markers.Add(new Marker(this, pos, size, Assets.AttackMarker, -1f));
+        }
+
+        void AddExplosion()
+        {
+            vec2 pos = ScreenToWorldCoord(Input.CurMousePos);
+
+            vec2 cell_size = 2 * (1 / DataGroup.GridSize);
+            vec2 size = 30 * cell_size;
+
+            Markers.Add(new Marker(this, pos, size, Assets.ExplosionTexture_1, -1f, frames : ExplosionSpriteSheet.AnimLength));
         }
 
         void AddUserMessage(string Message)

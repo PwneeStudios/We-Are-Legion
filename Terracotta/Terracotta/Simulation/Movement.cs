@@ -113,7 +113,7 @@ namespace Terracotta
     public partial class Movement_UpdateDirection_RemoveDead : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<vec4> TargetData, Field<unit> Unit, Field<extra> Extra, Field<data> Data, Field<data> PrevData, Field<vec4> PathToOtherTeams, Field<vec4> RandomField,
+        data FragmentShader(VertexOut vertex, Field<vec4> TargetData, Field<unit> Unit, Field<extra> Extra, Field<data> Data, Field<data> PrevData, Field<vec4> PathToOtherTeams, Field<vec4> RandomField, Field<magic> Magic,
                             Field<geo> Geo, Field<geo> AntiGeo,
                             Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown)
         {
@@ -124,7 +124,7 @@ namespace Terracotta
                 data path = data.Nothing;
 
                 // Get info for this unit
-                unit  here       = Unit[Here];
+                unit here = Unit[Here];
 
                 // Remove if dead unit
                 if (here.anim == Anim.Die && IsUnit(here))
@@ -132,6 +132,7 @@ namespace Terracotta
                     return data.Nothing;
                 }
 
+                // Remove if dead building
                 building b = (building)(vec4)data_here;
                 if (IsBuilding(here))
                 {
@@ -152,6 +153,13 @@ namespace Terracotta
                         if (frame >= ExplosionSpriteSheet.AnimLength)
                             return data.Nothing;
                     }
+                }
+
+                // Units that are about to be incinerated can't move.
+                if (IsUnit(here) && Magic[Here].kill == _true)
+                {
+                    data_here.action = UnitAction.Stopped;
+                    return data_here;
                 }
 
                 // Buildings can't move.
