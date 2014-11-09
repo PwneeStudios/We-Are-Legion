@@ -11,7 +11,7 @@ namespace Terracotta
             data data_here = Data[Here];
             corpse corpse_here = Corpses[Here];
 
-            if (Something(data_here) && unit_here.anim == Anim.Die && IsUnit(unit_here))
+            if (Something(data_here) && unit_here.anim == Anim.Die && LeavesCorpse(unit_here))
             {
                 corpse_here.direction = data_here.direction;
                 corpse_here.type = unit_here.type;

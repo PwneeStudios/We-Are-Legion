@@ -80,6 +80,11 @@ bool Terracotta__SimShader__IsUnit(float4 u)
     return u.r >= 0.003921569 - .001 && u.r < 0.02352941 - .001;
 }
 
+bool Terracotta__SimShader__LeavesCorpse(float4 u)
+{
+    return Terracotta__SimShader__IsUnit(u) && abs(u.r - 0.01568628) > .001;
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -97,7 +102,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 corpse_here = tex2D(fs_param_Corpses, psin.TexCoords + (float2(0, 0)) * fs_param_Corpses_dxdy);
-    if (Terracotta__SimShader__Something(data_here) && abs(unit_here.a - 0.07058824) < .001 && Terracotta__SimShader__IsUnit(unit_here))
+    if (Terracotta__SimShader__Something(data_here) && abs(unit_here.a - 0.07058824) < .001 && Terracotta__SimShader__LeavesCorpse(unit_here))
     {
         corpse_here.r = data_here.r;
         corpse_here.g = unit_here.r;

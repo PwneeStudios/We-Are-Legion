@@ -477,6 +477,11 @@ namespace Terracotta
                 BlockingTile = _20;
         }
 
+        protected static bool LeavesCorpse(unit u)
+        {
+            return IsUnit(u) && u.type != UnitType.Skeleton;
+        }
+
         protected static bool IsUnit(unit u)
         {
             return u.type >= UnitType.FirstUnitType && u.type < UnitType.FirstBuildingType;
