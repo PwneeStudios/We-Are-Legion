@@ -16,7 +16,6 @@ namespace Terracotta
             var clr = Texture[pos];
 
             return clr;
-            //return PlayerColorize(clr, c.player);
         }
 
         [FragmentShader]

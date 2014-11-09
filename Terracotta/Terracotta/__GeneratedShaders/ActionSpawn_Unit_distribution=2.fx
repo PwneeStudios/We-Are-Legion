@@ -71,12 +71,28 @@ float fs_param_player;
 
 float fs_param_team;
 
+float fs_param_type;
+
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
 bool Terracotta__SimShader__Something(float4 u)
 {
     return u.r > 0 + .001;
+}
+
+bool Terracotta__UnitDistribution__Contains(float distribution, float2 v)
+{
+    if (abs(distribution - 1.0) < .001)
+    {
+        return true;
+    }
+    if (abs(distribution - 2.0) < .001)
+    {
+        return abs((int)(v.x) % 2 - 0) < .001 && abs((int)(v.y) % 2 - 0) < .001;
+    }
+    return false;
 }
 
 // Compiled vertex shader
@@ -98,9 +114,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     if (Terracotta__SimShader__Something(select) && !(Terracotta__SimShader__Something(data_here)))
     {
-        unit_here.g = fs_param_player;
-        unit_here.b = fs_param_team;
-        unit_here.r = 0.007843138;
+        if (Terracotta__UnitDistribution__Contains(2, psin.TexCoords * fs_param_Select_size))
+        {
+            unit_here.g = fs_param_player;
+            unit_here.b = fs_param_team;
+            unit_here.r = fs_param_type;
+        }
     }
     __FinalOutput.Color = unit_here;
     return __FinalOutput;

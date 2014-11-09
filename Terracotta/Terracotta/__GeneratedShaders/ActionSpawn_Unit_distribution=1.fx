@@ -37,14 +37,14 @@ sampler fs_param_Data : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Target, using register location 2
-float2 fs_param_Target_size;
-float2 fs_param_Target_dxdy;
+// Texture Sampler for fs_param_Units, using register location 2
+float2 fs_param_Units_size;
+float2 fs_param_Units_dxdy;
 
-Texture fs_param_Target_Texture;
-sampler fs_param_Target : register(s2) = sampler_state
+Texture fs_param_Units_Texture;
+sampler fs_param_Units : register(s2) = sampler_state
 {
-    texture   = <fs_param_Target_Texture>;
+    texture   = <fs_param_Units_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -67,6 +67,13 @@ sampler fs_param_Select : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
+float fs_param_player;
+
+float fs_param_team;
+
+float fs_param_type;
+
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
@@ -75,19 +82,17 @@ bool Terracotta__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
-float2 Terracotta__SimShader__pack_val_2byte(float x)
+bool Terracotta__UnitDistribution__Contains(float distribution, float2 v)
 {
-    float2 packed = float2(0, 0);
-    packed.x = floor(x / 256.0);
-    packed.y = x - packed.x * 256.0;
-    return packed / 255.0;
-}
-
-float4 Terracotta__SimShader__pack_vec2(float2 v)
-{
-    float2 packed_x = Terracotta__SimShader__pack_val_2byte(v.x);
-    float2 packed_y = Terracotta__SimShader__pack_val_2byte(v.y);
-    return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
+    if (abs(distribution - 1.0) < .001)
+    {
+        return true;
+    }
+    if (abs(distribution - 2.0) < .001)
+    {
+        return abs((int)(v.x) % 2 - 0) < .001 && abs((int)(v.y) % 2 - 0) < .001;
+    }
+    return false;
 }
 
 // Compiled vertex shader
@@ -105,14 +110,18 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    float4 target = tex2D(fs_param_Target, psin.TexCoords + (float2(0, 0)) * fs_param_Target_dxdy);
     if (Terracotta__SimShader__Something(select) && !(Terracotta__SimShader__Something(data_here)))
     {
-        float2 pos = psin.TexCoords * fs_param_Data_size;
-        target = Terracotta__SimShader__pack_vec2(pos);
+        if (Terracotta__UnitDistribution__Contains(1, psin.TexCoords * fs_param_Select_size))
+        {
+            unit_here.g = fs_param_player;
+            unit_here.b = fs_param_team;
+            unit_here.r = fs_param_type;
+        }
     }
-    __FinalOutput.Color = target;
+    __FinalOutput.Color = unit_here;
     return __FinalOutput;
 }
 

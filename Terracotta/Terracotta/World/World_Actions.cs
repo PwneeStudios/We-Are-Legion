@@ -309,11 +309,16 @@ namespace Terracotta
             if (Keys.Y.Down()) { player = Player.Three; team = Team.Three; }
             if (Keys.U.Down()) { player = Player.Four; team = Team.Four; }
 
-            ActionSpawn_Unit.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.SelectField, player, team, Output: DataGroup.Temp1);
+            SpawnUnits(player, team, UnitType.Skeleton, UnitDistribution.EveryOther);
+        }
+
+        private void SpawnUnits(float player, float team, float type, float distribution)
+        {
+            ActionSpawn_Unit.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.SelectField, player, team, type, distribution, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
-            ActionSpawn_Target.Apply(DataGroup.CurrentData, DataGroup.TargetData, DataGroup.SelectField, Output: DataGroup.Temp1);
+            ActionSpawn_Target.Apply(DataGroup.CurrentData, DataGroup.TargetData, DataGroup.SelectField, distribution, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TargetData);
-            ActionSpawn_Data.Apply(DataGroup.CurrentData, DataGroup.SelectField, Output: DataGroup.Temp1);
+            ActionSpawn_Data.Apply(DataGroup.CurrentData, DataGroup.SelectField, distribution, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
         }
 
