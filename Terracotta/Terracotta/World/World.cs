@@ -102,7 +102,7 @@ namespace Terracotta
             get
             {
                 vec2 Scaled = vec2.Ones / CameraZoom;
-                vec2 cell_size = 2 * (1 / DataGroup.GridSize);
+                vec2 cell_size = (1 / DataGroup.GridSize);
 
                 if (CurUserMode == UserMode.Select) return .2f * Scaled;
 
