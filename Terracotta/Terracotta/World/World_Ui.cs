@@ -276,7 +276,8 @@ namespace Terracotta
             vec2 cell_size = 2 * (1 / DataGroup.GridSize);
             vec2 size = vec(1.266f, 1.35f) * 30 * cell_size;
 
-            Markers.Add(new Marker(this, pos, size, Assets.ExplosionTexture_1, -1f, frames : ExplosionSpriteSheet.AnimLength));
+            Markers.Add(new Marker(this, pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterTiles));
+            Markers.Add(new Marker(this, pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterUnits, alpha : 1));
         }
 
         void AddUserMessage(string Message)

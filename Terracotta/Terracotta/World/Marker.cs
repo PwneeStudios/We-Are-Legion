@@ -14,9 +14,9 @@ namespace Terracotta
             Markers.Add(marker);
         }
 
-        public void Draw()
+        public void Draw(DrawOrder CurrentDrawOrder)
         {
-            foreach (var marker in Markers) marker.Draw();
+            foreach (var marker in Markers) if (marker.MyDrawOrder == CurrentDrawOrder) marker.Draw();
         }
 
         public void Update()
@@ -26,8 +26,12 @@ namespace Terracotta
         }
     }
 
+    public enum DrawOrder { AfterTiles, AfterUnits }
+
     public class Marker : BaseShader
     {
+        public DrawOrder MyDrawOrder;
+
         float alpha;
         float alpha_fade;
 
@@ -40,11 +44,11 @@ namespace Terracotta
 
         World world;
 
-        public Marker(World world, vec2 pos, vec2 size, Texture2D texture, float alpha_fade, int frames = 1, float frame_length = .1f)
+        public Marker(World world, vec2 pos, vec2 size, Texture2D texture, float alpha_fade, int frames = 1, float frame_length = .1f, DrawOrder DrawOrder = DrawOrder.AfterTiles, float alpha = 1)
         {
             this.world = world;
 
-            alpha = 1;
+            this.alpha = alpha;
             this.alpha_fade = alpha_fade;
 
             this.frames = frames;
@@ -52,6 +56,8 @@ namespace Terracotta
 
             quad = new RectangleQuad(pos - size / 2, pos + size / 2, vec2.Zero, vec(1.0f / frames, 1));
             this.texture = texture;
+
+            this.MyDrawOrder = DrawOrder;
         }
 
         public bool Dead { get { return alpha <= 0; } }

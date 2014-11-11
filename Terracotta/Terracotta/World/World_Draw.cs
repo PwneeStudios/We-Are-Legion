@@ -506,7 +506,7 @@ namespace Terracotta
 
             // Markers
             Markers.Update();
-            Markers.Draw();
+            Markers.Draw(DrawOrder.AfterTiles);
 
             // Units
             if (CameraZoom > z / 8)
@@ -529,6 +529,9 @@ namespace Terracotta
                 DrawUnitsZoomedOutBlur.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSprite, PercentSimStepComplete);
             }
             GridHelper.DrawGrid();
+
+            // Markers
+            Markers.Draw(DrawOrder.AfterUnits);
 
             // Building icons
             if (CameraZoom <= z / 4)
