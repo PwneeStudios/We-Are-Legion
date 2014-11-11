@@ -48,13 +48,27 @@ namespace Terracotta
         {
             get
             {
-                return _MapEditor && DrawGridLines;
+                return _MapEditor;
             }
 
             set
             {
-                _MapEditor = true;
-                DrawGridLines = true;
+                _MapEditor = value;
+                _MapEditorActive = value;
+            }
+        }
+        
+        bool _MapEditorActive = false;
+        public bool MapEditorActive
+        {
+            get
+            {
+                return MapEditor && _MapEditorActive;
+            }
+
+            set
+            {
+                _MapEditorActive = value;
             }
         }
         bool DrawGridLines = false;
@@ -63,13 +77,13 @@ namespace Terracotta
         public bool WorldPaused = false;
 
         bool NotPaused_SimulationUpdate { get { return !SimulationPaused; } } // Allow unit orders even if simulation is paused, as long as we're in the map editor and the world isn't paused
-        bool NotPaused_UnitOrders { get { return !SimulationPaused || MapEditor && !WorldPaused; } } // Allow unit orders even if simulation is paused, as long as we're in the map editor and the world isn't paused
+        bool NotPaused_UnitOrders { get { return !SimulationPaused || MapEditorActive && !WorldPaused; } } // Allow unit orders even if simulation is paused, as long as we're in the map editor and the world isn't paused
 
         /// <summary>
         /// If this is a map editor then the current player is "None", so anything can be selected.
         /// Otherwise this returns the player value of this client.
         /// </summary>
-        public float PlayerOrNeutral { get { return MapEditor ? Player.None : PlayerValue; } }
+        public float PlayerOrNeutral { get { return MapEditorActive ? Player.None : PlayerValue; } }
 
         vec2 CameraPos = vec2.Zero;
         float CameraZoom = 30;
@@ -123,8 +137,10 @@ namespace Terracotta
                 {
                     switch (CurSpell)
                     { 
-                        case Spell.Fireball:
-                            return 30 * cell_size;
+                        case Spell.Fireball: return 30 * cell_size;
+                        case Spell.RaiseSkeletons: return 30 * cell_size;
+                        case Spell.SummonNecromancer: return 30 * cell_size;
+                        case Spell.RaiseTerracotta: return 30 * cell_size;
                     }
                 }
 

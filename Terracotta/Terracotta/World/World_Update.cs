@@ -11,9 +11,9 @@ namespace Terracotta
     {
         public void EditorUpdate()
         {
-            if (_MapEditor && Keys.OemTilde.Pressed()) Editor_ToggleGridLines();
+            if (MapEditor && Keys.OemTilde.Pressed()) Editor_ToggleMapEditor();
 
-            if (!MapEditor) return;
+            if (!MapEditorActive) return;
 
             if (Keys.P.Pressed()) Editor_TogglePause();
             if (Keys.D0.Pressed()) Editor_SwitchPlayer(0);
@@ -39,6 +39,11 @@ namespace Terracotta
             DrawGridLines = !DrawGridLines;
         }
 
+        void Editor_ToggleMapEditor()
+        {
+            MapEditorActive = !MapEditorActive;
+        }
+
         public static float StaticMaxZoomOut = 1;
         float x_edge;
         public void Update()
@@ -52,7 +57,7 @@ namespace Terracotta
             //const float MaxZoomOut = 1f, MaxZoomIn = 200f; // Full zoom-in/out
 
             float MaxZoomOut, MaxZoomIn;
-            if (MapEditor)
+            if (MapEditorActive)
             {
                 // Full zoom-in/out
                 MaxZoomOut = 1f;
@@ -129,11 +134,15 @@ namespace Terracotta
 
 
             // Switch modes
-            if (Keys.F.Down())
+            if (Keys.D1.Pressed() || Keys.D2.Pressed() || Keys.D3.Pressed() || Keys.D4.Pressed())
             {
+                if (Keys.D1.Pressed()) CurSpell = Spell.Fireball;
+                if (Keys.D2.Pressed()) CurSpell = Spell.RaiseSkeletons;
+                if (Keys.D3.Pressed()) CurSpell = Spell.SummonNecromancer;
+                if (Keys.D4.Pressed()) CurSpell = Spell.RaiseTerracotta;
+
                 CurUserMode = UserMode.CastSpell;
                 UnselectAll = false;
-                CurSpell = Spell.Fireball;
             }
 
             if (Keys.B.Down())

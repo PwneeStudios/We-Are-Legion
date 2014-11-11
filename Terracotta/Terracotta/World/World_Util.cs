@@ -6,14 +6,14 @@ namespace Terracotta
     {
         void SubtractGold(int amount, int player)
         {
-            if (MapEditor) return;
+            if (MapEditorActive) return;
 
             PlayerInfo[player].Gold -= amount;
         }
 
         bool CanAffordBuilding(float building_type, int player)
         {
-            if (MapEditor) return true;
+            if (MapEditorActive) return true;
 
             var cost = Params.BuildingCost(building_type);
 

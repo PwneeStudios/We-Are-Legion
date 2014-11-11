@@ -464,7 +464,7 @@ namespace Terracotta
             }
 
             // The the map tiles
-            DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, TileSprite, MapEditor && DrawGridLines, tiles_solid_blend_flag, tiles_solid_blend);
+            DrawTiles.Using(camvec, CameraAspect, DataGroup.Tiles, TileSprite, MapEditorActive && DrawGridLines, tiles_solid_blend_flag, tiles_solid_blend);
             GridHelper.DrawGrid();
 
             //DrawGeoInfo.Using(camvec, CameraAspect, DataGroup.Geo, Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
@@ -473,7 +473,7 @@ namespace Terracotta
             //DrawPolarInfo.Using(camvec, CameraAspect, DataGroup.Geo, DataGroup.GeoInfo, Assets.DebugTexture_Num); GridHelper.DrawGrid();
 
             // Territory and corpses
-            if (CurUserMode == UserMode.PlaceBuilding && !MapEditor)
+            if (CurUserMode == UserMode.PlaceBuilding && !MapEditorActive)
             {
                 DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.DistanceToPlayers, PlayerValue);
                 GridHelper.DrawGrid();

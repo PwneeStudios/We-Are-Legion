@@ -9,7 +9,7 @@ namespace Terracotta
     {
         void DrawUi_TopInfo()
         {
-            if (MapEditor)
+            if (MapEditorActive)
             {
                 string header = "Map editor"
                     + (", Player " + PlayerNumber.ToString())

@@ -324,7 +324,7 @@ namespace Terracotta
         {
             if (IsActive)
             {
-                if (World.MapEditor)
+                if (World.MapEditorActive)
                 {
                     if (Keys.S.Pressed())
                     {

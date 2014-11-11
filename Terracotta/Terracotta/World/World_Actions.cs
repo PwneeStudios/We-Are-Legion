@@ -48,7 +48,7 @@ namespace Terracotta
                         bool occupied = building_here.direction > 0;
                         bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
 
-                        bool can_place = !occupied && (in_territory || MapEditor);
+                        bool can_place = !occupied && (in_territory || MapEditorActive);
                         CanPlace[i + j * _w] = can_place;
 
                         if (!can_place) CanPlaceBuilding = false;
@@ -77,7 +77,7 @@ namespace Terracotta
                         bool is_gold_source = unit_here.team == Team.None && unit_here.type == UnitType.GoldMine;
                         bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
 
-                        bool can_place = (is_gold_source || MapEditor && !occupied) && (in_territory || MapEditor);
+                        bool can_place = (is_gold_source || MapEditorActive && !occupied) && (in_territory || MapEditorActive);
                         CanPlace[i + j * _w] = can_place;
 
                         if (!can_place) CanPlaceBuilding = false;
@@ -300,7 +300,7 @@ namespace Terracotta
             SwapTempGeo(Anti);
         }
 
-        void Firestorm()
+        void Fireball()
         {
             AddExplosion();
 
@@ -311,6 +311,16 @@ namespace Terracotta
         void RaiseSkeletons()
         {
             SpawnUnits(PlayerValue, TeamValue, UnitType.Skeleton, UnitDistribution.OnCorpses);
+        }
+
+        void SummonNecromancer()
+        {
+            SpawnUnits(PlayerValue, TeamValue, UnitType.Skeleton, UnitDistribution.OnCorpses);
+        }
+
+        void RaiseTerracotta()
+        {
+            SpawnUnits(PlayerValue, TeamValue, UnitType.ClaySoldier, UnitDistribution.EveryOther);
         }
 
         void CreateUnits()
@@ -351,8 +361,13 @@ namespace Terracotta
 
             if (Input.LeftMousePressed)
             {
-                //Firestorm();
-                RaiseSkeletons();
+                switch (CurSpell)
+                {
+                    case Spell.Fireball: Fireball(); break;
+                    case Spell.RaiseSkeletons: RaiseSkeletons(); break;
+                    case Spell.SummonNecromancer: SummonNecromancer(); break;
+                    case Spell.RaiseTerracotta: RaiseTerracotta(); break;
+                }
             }
         }
 
@@ -385,7 +400,7 @@ namespace Terracotta
                 DataGroup.Building_SelectionSpread();
             }
 
-            if (MapEditor)
+            if (MapEditorActive)
             {
                 if (Keys.C.Down() || Keys.V.Down() || Keys.N.Down())
                 {
