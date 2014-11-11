@@ -231,11 +231,11 @@ namespace Terracotta
         }
 
 
-        public void DrawCursor(Texture2D Texture, vec2 Size)
+        public void DrawCursor(Texture2D Texture, vec2 Size, float Angle = 0)
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
             DrawTextureSmooth.Using(camvec, CameraAspect, Texture);
-            RectangleQuad.Draw(GameClass.Graphics, WorldCord, Size);
+            RectangleQuad.Draw(GameClass.Graphics, WorldCord, Size, Angle);
         }
 
         void DrawCircleCursor()

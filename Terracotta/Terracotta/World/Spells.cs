@@ -41,7 +41,7 @@ namespace Terracotta
 
             Flamefield = spell = new Spell("Flamefield");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
-            spell.DrawCursor = () => W.DrawCursor(Assets.SelectCircle, 30 * W.CellSize);
+            spell.DrawCursor = FlameCursor;
             spell.Execute = () => W.Fireball();
 
             SkeletonArmy = spell = new Spell("Skeleton Army");
@@ -58,6 +58,16 @@ namespace Terracotta
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = () => W.DrawCursor(Assets.SelectCircle, 30 * W.CellSize);
             spell.Execute = () => W.SpawnUnits(W.PlayerValue, W.TeamValue, UnitType.ClaySoldier, UnitDistribution.EveryOther);
+        }
+
+        static void FlameCursor()
+        {
+            //W.DrawCursor(Assets.AoE_Fire, 30 * W.CellSize, .65f * cos(.555f * W.T));
+            //W.DrawCursor(Assets.AoE_Fire, 30 * W.CellSize);
+
+            float size = 30 + .5f * cos(2f * W.T);
+            float angle = .2f * cos(.555f * W.T);
+            W.DrawCursor(Assets.AoE_Fire, size * W.CellSize, angle);
         }
 
         public static void Add(Spell spell)

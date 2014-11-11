@@ -23,6 +23,7 @@ namespace Terracotta
             TileSpriteSheet_1, TileSpriteSheet_2, TileSpriteSheet_4, TileSpriteSheet_8, TileSpriteSheet_16,
 
             Cursor, SelectCircle, SelectCircle_Data, SelectDot, AttackMarker,
+            AoE_Fire,
             
             TopUi;
 
@@ -58,6 +59,8 @@ namespace Terracotta
             SelectCircle_Data   = LoadTexture("SelectCircle_Data");
             SelectDot           = LoadTexture("SelectDot");
             AttackMarker        = LoadTexture("AttackMarker");
+
+            AoE_Fire = LoadTexture("AoE_Fire");
 
             TopUi = LoadTexture("TopUi");
         }

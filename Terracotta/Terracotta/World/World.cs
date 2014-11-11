@@ -102,6 +102,7 @@ namespace Terracotta
 
         public RenderTarget2D Minimap;
 
+        public float T = 0;
         double SecondsSinceLastUpdate = DelayBetweenUpdates;
         float PercentSimStepComplete = 0;
 

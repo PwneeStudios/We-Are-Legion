@@ -134,7 +134,10 @@ namespace Terracotta
             if (GameClass.Game.IsActive)
             {
                 if (NotPaused_SimulationUpdate)
+                {
                     SecondsSinceLastUpdate += GameClass.ElapsedSeconds;
+                    T += (float)GameClass.ElapsedSeconds;
+                }
 
                 UpdateAllPlayerUnitCounts();
 
