@@ -51,6 +51,21 @@ namespace Terracotta
             }
         }
 
+        public void SelectInArea(vec2 pos, vec2 size, bool Deselect, bool Selecting, float PlayerValue, bool EffectSelection)
+        {
+            DataDrawMouse.Using(Assets.SelectCircle_Data, PlayerValue, Output: SelectField, Clear: Color.Transparent);
+
+            if (Selecting)
+            {
+                RectangleQuad.Draw(GraphicsDevice, pos, size);
+            }
+
+            if (EffectSelection)
+            {
+                SelectUnits(Deselect);
+            }
+        }
+
         private void SelectUnits(bool Deselect)
         {
             var action = Input.RightMousePressed ? SimShader.UnitAction.Attacking : SimShader.UnitAction.NoChange;

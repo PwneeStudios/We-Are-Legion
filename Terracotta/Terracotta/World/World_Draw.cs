@@ -143,7 +143,7 @@ namespace Terracotta
                     case UserMode.PlaceBuilding:
                         if (UnselectAll)
                         {
-                            SelectionUpdate();
+                            SelectionUpdate(SelectSize);
                             UnselectAll = false;
                         }
 
@@ -156,11 +156,15 @@ namespace Terracotta
                         DataGroup.SelectedUnits = selected.Item1;
                         DataGroup.SelectedBarracks = selected.Item2;
 
-                        SelectionUpdate();
+                        SelectionUpdate(SelectSize);
                         break;
 
                     case UserMode.CastSpell:
-                        Spells();
+                        CurSpell.Selecting();
+
+                        if (Input.LeftMousePressed)
+                            CurSpell.Execute();
+
                         break;
                 }
 
@@ -432,7 +436,7 @@ namespace Terracotta
                         break;
 
                     case UserMode.CastSpell:
-                        DrawCircleCursor();
+                        CurSpell.DrawCursor();
                         break;
                 }
             }

@@ -78,9 +78,7 @@ namespace Terracotta
             Assets.Initialize();
             Render.Initialize();
 
-            //World = new World();
-            //World.Load("Beset.m3n");
-            //Render.UnsetDevice();
+            Spells.Initialize();
 
             base.Initialize();
         }

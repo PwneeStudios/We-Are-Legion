@@ -125,6 +125,7 @@
     <Compile Include="Drawing\GameColors.cs" />
     <Compile Include="Simulation\Magic.cs" />
     <Compile Include="Util\ShaderUtil.cs" />
+    <Compile Include="World\Spells.cs" />
     <Compile Include="World\Migrate.cs" />
     <Compile Include="World\World_Util.cs" />
     <Compile Include="World\World_Update.cs" />

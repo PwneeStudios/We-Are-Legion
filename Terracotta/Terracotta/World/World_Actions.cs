@@ -300,27 +300,12 @@ namespace Terracotta
             SwapTempGeo(Anti);
         }
 
-        void Fireball()
+        public void Fireball()
         {
             AddExplosion();
 
             Kill.Apply(DataGroup.SelectField, DataGroup.Magic, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
-        }
-
-        void RaiseSkeletons()
-        {
-            SpawnUnits(PlayerValue, TeamValue, UnitType.Skeleton, UnitDistribution.OnCorpses);
-        }
-
-        void SummonNecromancer()
-        {
-            SpawnUnits(PlayerValue, TeamValue, UnitType.Skeleton, UnitDistribution.OnCorpses);
-        }
-
-        void RaiseTerracotta()
-        {
-            SpawnUnits(PlayerValue, TeamValue, UnitType.ClaySoldier, UnitDistribution.EveryOther);
         }
 
         void CreateUnits()
@@ -332,11 +317,10 @@ namespace Terracotta
             if (Keys.Y.Down()) { player = Player.Three; team = Team.Three; }
             if (Keys.U.Down()) { player = Player.Four; team = Team.Four; }
 
-            //SpawnUnits(player, team, UnitType.Skeleton, UnitDistribution.OnCorpses);
-            SpawnUnits(player, team, UnitType.ClaySoldier, UnitDistribution.EveryOther);
+            SpawnUnits(player, team, UnitType.Footman, UnitDistribution.Full);
         }
 
-        private void SpawnUnits(float player, float team, float type, float distribution)
+        public void SpawnUnits(float player, float team, float type, float distribution)
         {
             ActionSpawn_Filter.Apply(DataGroup.SelectField, DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.Corspes, distribution, Output: DataGroup.Temp2);
             var Filter = DataGroup.Temp2;
@@ -355,24 +339,8 @@ namespace Terracotta
             }
         }
 
-        void Spells()
-        {
-            SelectionUpdate(EffectSelection : false);
-
-            if (Input.LeftMousePressed)
-            {
-                switch (CurSpell)
-                {
-                    case Spell.Fireball: Fireball(); break;
-                    case Spell.RaiseSkeletons: RaiseSkeletons(); break;
-                    case Spell.SummonNecromancer: SummonNecromancer(); break;
-                    case Spell.RaiseTerracotta: RaiseTerracotta(); break;
-                }
-            }
-        }
-
         bool SkipDeselect = false;
-        void SelectionUpdate(bool EffectSelection = true)
+        public void SelectionUpdate(vec2 Size, bool EffectSelection = true, bool LineSelect = true)
         {
             if (!GameClass.HasFocus) return;
 
@@ -390,8 +358,10 @@ namespace Terracotta
                 SkipDeselect = false;
             }
 
-            vec2 size = SelectSize;
-            DataGroup.SelectAlongLine(WorldCord, WorldCordPrev, size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
+            if (LineSelect)
+                DataGroup.SelectAlongLine(WorldCord, WorldCordPrev, Size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
+            else
+                DataGroup.SelectInArea(WorldCord, Size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
 
             if (CurUserMode != UserMode.Select) return;
 

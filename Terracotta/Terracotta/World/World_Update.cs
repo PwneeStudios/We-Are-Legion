@@ -136,10 +136,10 @@ namespace Terracotta
             // Switch modes
             if (Keys.D1.Pressed() || Keys.D2.Pressed() || Keys.D3.Pressed() || Keys.D4.Pressed())
             {
-                if (Keys.D1.Pressed()) CurSpell = Spell.Fireball;
-                if (Keys.D2.Pressed()) CurSpell = Spell.RaiseSkeletons;
-                if (Keys.D3.Pressed()) CurSpell = Spell.SummonNecromancer;
-                if (Keys.D4.Pressed()) CurSpell = Spell.RaiseTerracotta;
+                if (Keys.D1.Pressed()) CurSpell = Spells.Flamefield;
+                if (Keys.D2.Pressed()) CurSpell = Spells.SkeletonArmy;
+                if (Keys.D3.Pressed()) CurSpell = Spells.Necromancer;
+                if (Keys.D4.Pressed()) CurSpell = Spells.TerracottaArmy;
 
                 CurUserMode = UserMode.CastSpell;
                 UnselectAll = false;

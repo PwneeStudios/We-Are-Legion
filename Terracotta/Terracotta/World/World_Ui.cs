@@ -1,5 +1,7 @@
 using System;
 
+using Microsoft.Xna.Framework.Graphics;
+
 using FragSharpHelper;
 using FragSharpFramework;
 
@@ -228,7 +230,14 @@ namespace Terracotta
             return quad;
         }
 
-        
+
+        public void DrawCursor(Texture2D Texture, vec2 Size)
+        {
+            vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
+            DrawTextureSmooth.Using(camvec, CameraAspect, Texture);
+            RectangleQuad.Draw(GameClass.Graphics, WorldCord, Size);
+        }
+
         void DrawCircleCursor()
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);

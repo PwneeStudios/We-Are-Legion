@@ -107,43 +107,30 @@ namespace Terracotta
 
         int DrawCount = 0;
 
-        float PlayerValue = Player.One;
-        int PlayerNumber { get { return Int(PlayerValue); } }
+        public float PlayerValue = Player.One;
+        public int PlayerNumber { get { return Int(PlayerValue); } }
 
-        float TeamValue = Team.One;
-        int TeamNumber { get { return Int(TeamValue); } }
+        public float TeamValue = Team.One;
+        public int TeamNumber { get { return Int(TeamValue); } }
 
         enum UserMode { PlaceBuilding, Select, CastSpell, };
         UserMode CurUserMode = UserMode.Select;
         float BuildingType = UnitType.GoldMine;
         bool UnselectAll = false;
 
-        enum Spell { None, Fireball, RaiseSkeletons, SummonNecromancer, RaiseTerracotta, Convert, Flamewall, Resurrect, CorpseExplode, }
-        Spell CurSpell = Spell.None;
+        Spell CurSpell = null;
 
         bool CanPlaceBuilding = false;
         bool[] CanPlace = new bool[3 * 3];
+
+        public vec2 GridSize { get { return DataGroup.GridSize; } }
+        public vec2 CellSize { get { return DataGroup.CellSize; } }
+        public vec2 Scaled { get { return vec2.Ones / CameraZoom; } }
 
         vec2 SelectSize
         {
             get
             {
-                vec2 Scaled = vec2.Ones / CameraZoom;
-                vec2 cell_size = (1 / DataGroup.GridSize);
-
-                if (CurUserMode == UserMode.Select) return .2f * Scaled;
-
-                if (CurUserMode == UserMode.CastSpell)
-                {
-                    switch (CurSpell)
-                    { 
-                        case Spell.Fireball: return 30 * cell_size;
-                        case Spell.RaiseSkeletons: return 30 * cell_size;
-                        case Spell.SummonNecromancer: return 30 * cell_size;
-                        case Spell.RaiseTerracotta: return 30 * cell_size;
-                    }
-                }
-
                 return .2f * Scaled;
             }
         }
