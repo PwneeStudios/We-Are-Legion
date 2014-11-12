@@ -92,7 +92,7 @@ namespace Terracotta
             writer.Write(DataGroup.Extra);
             writer.Write(DataGroup.TargetData);
             writer.Write(DataGroup.Tiles);
-            writer.Write(DataGroup.Corspes);
+            writer.Write(DataGroup.Corpses);
             //writer.Write(DataGroup.Magic);
             writer.Write(DataGroup.DistanceToOtherTeams);
 
@@ -131,7 +131,7 @@ namespace Terracotta
             DataGroup.Extra.SetData(reader.ReadTexture2D().GetData());
             DataGroup.TargetData.SetData(reader.ReadTexture2D().GetData());
             DataGroup.Tiles.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.Corspes.SetData(reader.ReadTexture2D().GetData());
+            DataGroup.Corpses.SetData(reader.ReadTexture2D().GetData());
             //DataGroup.Magic.SetData(reader.ReadTexture2D().GetData());
             DataGroup.DistanceToOtherTeams.SetData(reader.ReadTexture2D().GetData());
 

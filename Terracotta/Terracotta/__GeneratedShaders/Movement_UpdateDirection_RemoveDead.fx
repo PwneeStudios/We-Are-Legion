@@ -605,6 +605,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy);
     if (Terracotta__SimShader__Something(data_here))
     {
         float4 path = float4(0, 0, 0, 0);
@@ -634,7 +635,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 }
             }
         }
-        if (Terracotta__SimShader__IsUnit(here) && abs(tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy).r - 0.003921569) < .001)
+        if (Terracotta__SimShader__IsUnit(here) && abs(magic_here.r - 0.003921569) < .001)
         {
             data_here.a = 0.0;
             __FinalOutput.Color = data_here;

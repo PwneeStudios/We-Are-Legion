@@ -67,6 +67,21 @@ sampler fs_param_Random : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
+// Texture Sampler for fs_param_Magic, using register location 4
+float2 fs_param_Magic_size;
+float2 fs_param_Magic_dxdy;
+
+Texture fs_param_Magic_Texture;
+sampler fs_param_Magic : register(s4) = sampler_state
+{
+    texture   = <fs_param_Magic_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
@@ -96,6 +111,21 @@ float Terracotta__SimShader__Reverse(float dir)
     return dir;
 }
 
+float2 Terracotta__SimShader__pack_val_2byte(float x)
+{
+    float2 packed = float2(0, 0);
+    packed.x = floor(x / 256.0);
+    packed.y = x - packed.x * 256.0;
+    return packed / 255.0;
+}
+
+float4 Terracotta__SimShader__pack_vec2(float2 v)
+{
+    float2 packed_x = Terracotta__SimShader__pack_val_2byte(v.x);
+    float2 packed_y = Terracotta__SimShader__pack_val_2byte(v.y);
+    return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -115,6 +145,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (Terracotta__SimShader__Something(data_here) && abs(data_here.a - 0.01568628) < .001)
     {
         target = tex2D(fs_param_Target, psin.TexCoords + (Terracotta__SimShader__dir_to_vec(Terracotta__SimShader__Reverse(data_here.r))) * fs_param_Target_dxdy);
+    }
+    if (Terracotta__SimShader__Something(data_here) && abs(data_here.a - 0.01960784) < .001)
+    {
+        float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
+        float2 pos = fs_param_Target_size * rnd.xy;
+        target = Terracotta__SimShader__pack_vec2(pos);
     }
     __FinalOutput.Color = target;
     return __FinalOutput;

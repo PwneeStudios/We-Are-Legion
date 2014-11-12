@@ -37,9 +37,78 @@ sampler fs_param_Magic : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
+// Texture Sampler for fs_param_CurrentData, using register location 2
+float2 fs_param_CurrentData_size;
+float2 fs_param_CurrentData_dxdy;
+
+Texture fs_param_CurrentData_Texture;
+sampler fs_param_CurrentData : register(s2) = sampler_state
+{
+    texture   = <fs_param_CurrentData_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_PreviousData, using register location 3
+float2 fs_param_PreviousData_size;
+float2 fs_param_PreviousData_dxdy;
+
+Texture fs_param_PreviousData_Texture;
+sampler fs_param_PreviousData : register(s3) = sampler_state
+{
+    texture   = <fs_param_PreviousData_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_Corpses, using register location 4
+float2 fs_param_Corpses_size;
+float2 fs_param_Corpses_dxdy;
+
+Texture fs_param_Corpses_Texture;
+sampler fs_param_Corpses : register(s4) = sampler_state
+{
+    texture   = <fs_param_Corpses_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_Necromancy, using register location 5
+float2 fs_param_Necromancy_size;
+float2 fs_param_Necromancy_dxdy;
+
+Texture fs_param_Necromancy_Texture;
+sampler fs_param_Necromancy : register(s5) = sampler_state
+{
+    texture   = <fs_param_Necromancy_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
+bool Terracotta__SimShader__CorpsePresent(float4 u)
+{
+    return u.r > 0 + .001;
+}
+
+bool Terracotta__SimShader__Something(float4 u)
+{
+    return u.r > 0 + .001;
+}
 
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
@@ -56,7 +125,37 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy);
+    float4 corpse_here = tex2D(fs_param_Corpses, psin.TexCoords + (float2(0, 0)) * fs_param_Corpses_dxdy);
+    float4 necromancy = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(0, 0)) * fs_param_Necromancy_dxdy);
+    float4 cur_data = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy), prev_data = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousData_dxdy);
     here.r = 0.0;
+    here.g = 0.0;
+    if (Terracotta__SimShader__CorpsePresent(corpse_here) && !(Terracotta__SimShader__Something(cur_data)) && !(Terracotta__SimShader__Something(prev_data)))
+    {
+        float player = 0.0;
+        float necro = 0.0;
+        if (necromancy.r > necro + .001)
+        {
+            necro = necromancy.r;
+            player = 0.003921569;
+        }
+        if (necromancy.g > necro + .001)
+        {
+            necro = necromancy.g;
+            player = 0.007843138;
+        }
+        if (necromancy.b > necro + .001)
+        {
+            necro = necromancy.b;
+            player = 0.01176471;
+        }
+        if (necromancy.a > necro + .001)
+        {
+            necro = necromancy.a;
+            player = 0.01568628;
+        }
+        here.g = player;
+    }
     __FinalOutput.Color = here;
     return __FinalOutput;
 }

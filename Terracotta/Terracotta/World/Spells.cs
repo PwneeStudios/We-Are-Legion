@@ -52,7 +52,7 @@ namespace Terracotta
             Necromancer = spell = new Spell("Necromancer");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = () => W.DrawCursor(Assets.SelectCircle, 30 * W.CellSize);
-            spell.Execute = () => W.SpawnUnits(W.PlayerValue, W.TeamValue, UnitType.Skeleton, UnitDistribution.OnCorpses);
+            spell.Execute = () => W.SpawnUnits(W.PlayerValue, W.TeamValue, UnitType.Necromancer, UnitDistribution.Full);
 
             TerracottaArmy = spell = new Spell("Terracotta Army");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
@@ -66,7 +66,7 @@ namespace Terracotta
             //W.DrawCursor(Assets.AoE_Fire, 30 * W.CellSize);
 
             float size = 30 + .5f * cos(2f * W.T);
-            float angle = .2f * cos(.555f * W.T);
+            float angle = 0;
             W.DrawCursor(Assets.AoE_Fire, size * W.CellSize, angle);
         }
 

@@ -322,7 +322,7 @@ namespace Terracotta
 
         public void SpawnUnits(float player, float team, float type, float distribution)
         {
-            ActionSpawn_Filter.Apply(DataGroup.SelectField, DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.Corspes, distribution, Output: DataGroup.Temp2);
+            ActionSpawn_Filter.Apply(DataGroup.SelectField, DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.Corpses, distribution, Output: DataGroup.Temp2);
             var Filter = DataGroup.Temp2;
 
             ActionSpawn_Unit.Apply(Filter, DataGroup.CurrentUnits, player, team, type, Output: DataGroup.Temp1);
@@ -334,8 +334,8 @@ namespace Terracotta
 
             if (distribution == UnitDistribution.OnCorpses)
             {
-                ActionSpawn_Corpse.Apply(Filter, DataGroup.Corspes, Output: DataGroup.Temp1);
-                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Corspes);
+                ActionSpawn_Corpse.Apply(Filter, DataGroup.Corpses, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Corpses);
             }
         }
 

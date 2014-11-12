@@ -498,7 +498,7 @@ namespace Terracotta
                 {
                     float corpse_blend = .35f * CoreMath.LerpRestrict(z / 2, 1, z / 16, 0, CameraZoom);
 
-                    DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corspes, UnitsSprite, corpse_blend);
+                    DrawCorpses.Using(camvec, CameraAspect, DataGroup.Corpses, UnitsSprite, corpse_blend);
                     GridHelper.DrawGrid();
                 }
             }

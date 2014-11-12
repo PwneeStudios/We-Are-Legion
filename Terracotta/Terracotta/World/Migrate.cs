@@ -20,7 +20,7 @@ namespace Terracotta
     {
         public void Migrate()
         {
-            DataGroup.Corspes.Clear();
+            DataGroup.Corpses.Clear();
 
             //UnitMigrate.Apply(DataGroup.CurrentUnits, Output: DataGroup.Temp1);
             //CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);

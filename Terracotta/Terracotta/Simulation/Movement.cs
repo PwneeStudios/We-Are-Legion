@@ -117,7 +117,8 @@ namespace Terracotta
                             Field<geo> Geo, Field<geo> AntiGeo,
                             Field<dirward> DirwardRight, Field<dirward> DirwardLeft, Field<dirward> DirwardUp, Field<dirward> DirwardDown)
         {
-            data  data_here  = Data[Here];
+            data data_here = Data[Here];
+            magic magic_here = Magic[Here];
 
             if (Something(data_here))
             {
@@ -156,7 +157,7 @@ namespace Terracotta
                 }
 
                 // Units that are about to be incinerated can't move.
-                if (IsUnit(here) && Magic[Here].kill == _true)
+                if (IsUnit(here) && magic_here.kill == _true)
                 {
                     data_here.action = UnitAction.Stopped;
                     return data_here;
@@ -176,39 +177,39 @@ namespace Terracotta
                 // Get nearby paths to other teams
                 vec4
                     _value_right = PathToOtherTeams[RightOne],
-                    _value_up    = PathToOtherTeams[UpOne],
-                    _value_left  = PathToOtherTeams[LeftOne],
-                    _value_down  = PathToOtherTeams[DownOne];
+                    _value_up = PathToOtherTeams[UpOne],
+                    _value_left = PathToOtherTeams[LeftOne],
+                    _value_down = PathToOtherTeams[DownOne];
 
                 // Get specific paths to enemies of this particular unit
                 float value_right = 1, value_left = 1, value_up = 1, value_down = 1;
                 if (here.team == Team.One)
                 {
                     value_right = _value_right.x;
-                    value_left  = _value_left.x;
-                    value_up    = _value_up.x;
-                    value_down  = _value_down.x;
+                    value_left = _value_left.x;
+                    value_up = _value_up.x;
+                    value_down = _value_down.x;
                 }
                 else if (here.team == Team.Two)
                 {
                     value_right = _value_right.y;
-                    value_left  = _value_left.y;
-                    value_up    = _value_up.y;
-                    value_down  = _value_down.y;
+                    value_left = _value_left.y;
+                    value_up = _value_up.y;
+                    value_down = _value_down.y;
                 }
                 else if (here.team == Team.Three)
                 {
                     value_right = _value_right.z;
-                    value_left  = _value_left.z;
-                    value_up    = _value_up.z;
-                    value_down  = _value_down.z;
+                    value_left = _value_left.z;
+                    value_up = _value_up.z;
+                    value_down = _value_down.z;
                 }
                 else if (here.team == Team.Four)
                 {
                     value_right = _value_right.w;
-                    value_left  = _value_left.w;
-                    value_up    = _value_up.w;
-                    value_down  = _value_down.w;
+                    value_left = _value_left.w;
+                    value_up = _value_up.w;
+                    value_down = _value_down.w;
                 }
 
                 const float auto_attack_cutoff = _12;
@@ -218,9 +219,9 @@ namespace Terracotta
                 if (data_here.action == UnitAction.Attacking || data_here.action == UnitAction.Guard)
                 {
                     if (value_right < min) { data_here.direction = Dir.Right; min = value_right; }
-                    if (value_up    < min) { data_here.direction = Dir.Up;    min = value_up; }
-                    if (value_left  < min) { data_here.direction = Dir.Left;  min = value_left; }
-                    if (value_down  < min) { data_here.direction = Dir.Down;  min = value_down; }
+                    if (value_up < min) { data_here.direction = Dir.Up; min = value_up; }
+                    if (value_left < min) { data_here.direction = Dir.Left; min = value_left; }
+                    if (value_down < min) { data_here.direction = Dir.Down; min = value_down; }
                 }
 
                 if (min > auto_attack_cutoff) data_here.direction = hold_dir;

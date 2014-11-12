@@ -34,6 +34,9 @@ namespace Terracotta
     {
         [Hlsl("r")]
         public float kill { get { return r; } set { r = value; } }
+
+        [Hlsl("g")]
+        public float raising_player { get { return g; } set { g = value; } }
     }
 
     [Copy(typeof(vec4))]
@@ -697,7 +700,8 @@ namespace Terracotta
                 Attacking = _2,
                 Guard = _3,
                 Spawning = _4,
-                Count = _5,
+                Raising = _5,
+                Count = _6,
 
                 NoChange = _12;
         }

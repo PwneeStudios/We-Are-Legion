@@ -5,11 +5,17 @@ namespace Terracotta
     public partial class AddCorpses : SimShader
     {
         [FragmentShader]
-        corpse FragmentShader(VertexOut vertex, Field<unit> Unit, Field<data> Data, Field<corpse> Corpses)
+        corpse FragmentShader(VertexOut vertex, Field<unit> Unit, Field<data> Data, Field<corpse> Corpses, Field<magic> Magic)
         {
             unit unit_here = Unit[Here];
             data data_here = Data[Here];
             corpse corpse_here = Corpses[Here];
+            magic magic_here = Magic[Here];
+
+            if (magic_here.raising_player != Player.None)
+            {
+                corpse_here = corpse.Nothing;
+            }
 
             if (Something(data_here) && unit_here.anim == Anim.Die && LeavesCorpse(unit_here))
             {

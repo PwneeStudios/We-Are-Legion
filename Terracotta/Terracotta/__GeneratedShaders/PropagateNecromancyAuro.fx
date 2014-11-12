@@ -22,14 +22,14 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Unit, using register location 1
-float2 fs_param_Unit_size;
-float2 fs_param_Unit_dxdy;
+// Texture Sampler for fs_param_Necromancy, using register location 1
+float2 fs_param_Necromancy_size;
+float2 fs_param_Necromancy_dxdy;
 
-Texture fs_param_Unit_Texture;
-sampler fs_param_Unit : register(s1) = sampler_state
+Texture fs_param_Necromancy_Texture;
+sampler fs_param_Necromancy : register(s1) = sampler_state
 {
-    texture   = <fs_param_Unit_Texture>;
+    texture   = <fs_param_Necromancy_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -52,12 +52,27 @@ sampler fs_param_Data : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
+// Texture Sampler for fs_param_Units, using register location 3
+float2 fs_param_Units_size;
+float2 fs_param_Units_dxdy;
+
+Texture fs_param_Units_Texture;
+sampler fs_param_Units : register(s3) = sampler_state
+{
+    texture   = <fs_param_Units_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__Something(float4 u)
+float4 FragSharpFramework__FragSharpStd__max(float4 a, float4 b, float4 c, float4 d)
 {
-    return u.r > 0 + .001;
+    return max(max(a, b), max(c, d));
 }
 
 // Compiled vertex shader
@@ -75,12 +90,29 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (Terracotta__SimShader__Something(data_here) && (abs(data_here.a - 0.01568628) < .001 || abs(data_here.a - 0.01960784) < .001))
+    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
+    float4 right = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(1, 0)) * fs_param_Necromancy_dxdy), up = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(0, 1)) * fs_param_Necromancy_dxdy), left = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(-(1), 0)) * fs_param_Necromancy_dxdy), down = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(0, -(1))) * fs_param_Necromancy_dxdy);
+    float4 necromancy = FragSharpFramework__FragSharpStd__max(right, up, left, down) - float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
+    if (abs(unit_here.r - 0.01176471) < .001)
     {
-        data_here.a = 0.007843138;
+        if (abs(unit_here.g - 0.003921569) < .001)
+        {
+            necromancy.r = 1.0;
+        }
+        if (abs(unit_here.g - 0.007843138) < .001)
+        {
+            necromancy.g = 1.0;
+        }
+        if (abs(unit_here.g - 0.01176471) < .001)
+        {
+            necromancy.b = 1.0;
+        }
+        if (abs(unit_here.g - 0.01568628) < .001)
+        {
+            necromancy.a = 1.0;
+        }
     }
-    __FinalOutput.Color = data_here;
+    __FinalOutput.Color = necromancy;
     return __FinalOutput;
 }
 

@@ -71,7 +71,7 @@ namespace Terracotta
             RandomField.SetData(_random);
 
             Tiles.SetData(_tiles);
-            Corspes.SetData(_corpses);
+            Corpses.SetData(_corpses);
         }
     }
 }
