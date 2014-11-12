@@ -9,9 +9,59 @@ namespace Terracotta
 {
     public partial class World : SimShader
     {
+        public void UpdateCellAvailability()
+        {
+            CanPlaceItem = false;
+
+            if (!GameClass.HasFocus) return;
+
+            vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);
+
+            Render.UnsetDevice();
+
+            CanPlaceItem = false;
+
+            var _data = DataGroup.CurrentData.GetData<data>(GridCoord, new vec2(1, 1));
+
+            color clr = color.TransparentBlack;
+            if (_data != null)
+            {
+                CanPlaceItem = true;
+
+                var here = _data[0];
+
+                bool occupied = here.direction > 0;
+
+                CanPlaceItem = !occupied;
+            }
+        }
+
+        public void PlaceUnit(float unit_tpe)
+        {
+            Render.UnsetDevice();
+
+            if (!CanPlaceItem)
+            {
+                Message_CanNotPlaceHere();
+            }
+            else
+            {
+                try
+                {
+                    vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);
+                    Create.PlaceUnit(DataGroup, GridCoord, unit_tpe, PlayerValue, TeamValue);
+
+                    CanPlaceItem = false;
+                }
+                catch
+                {
+                }
+            }
+        }
+ 
         void PlaceBuilding()
         {
-            CanPlaceBuilding = false;
+            CanPlaceItem = false;
 
             if (!GameClass.HasFocus) return;
 
@@ -21,7 +71,7 @@ namespace Terracotta
 
             Render.UnsetDevice();
 
-            CanPlaceBuilding = false;
+            CanPlaceItem = false;
             for (int i = 0; i < _w; i++)
             for (int j = 0; j < _h; j++)
             {
@@ -36,7 +86,7 @@ namespace Terracotta
                 color clr = color.TransparentBlack;
                 if (_data != null)
                 {
-                    CanPlaceBuilding = true;
+                    CanPlaceItem = true;
                     for (int i = 0; i < _w; i++)
                     for (int j = 0; j < _h; j++)
                     {
@@ -51,7 +101,7 @@ namespace Terracotta
                         bool can_place = !occupied && (in_territory || MapEditorActive);
                         CanPlace[i + j * _w] = can_place;
 
-                        if (!can_place) CanPlaceBuilding = false;
+                        if (!can_place) CanPlaceItem = false;
                     }
                 }
             }
@@ -64,7 +114,7 @@ namespace Terracotta
                 color clr = color.TransparentBlack;
                 if (_data != null)
                 {
-                    CanPlaceBuilding = true;
+                    CanPlaceItem = true;
                     for (int i = 0; i < _w; i++)
                     for (int j = 0; j < _h; j++)
                     {
@@ -80,14 +130,14 @@ namespace Terracotta
                         bool can_place = (is_gold_source || MapEditorActive && !occupied) && (in_territory || MapEditorActive);
                         CanPlace[i + j * _w] = can_place;
 
-                        if (!can_place) CanPlaceBuilding = false;
+                        if (!can_place) CanPlaceItem = false;
                     }
                 }
             }
 
             if (Input.LeftMousePressed)
             {
-                if (!CanPlaceBuilding)
+                if (!CanPlaceItem)
                 {
                     Message_CanNotPlaceHere();
                 }
@@ -100,7 +150,7 @@ namespace Terracotta
                     Create.PlaceBuilding(DataGroup, GridCoord, BuildingType, PlayerValue, TeamValue);
 
                     SubtractGold(Params.BuildingCost(BuildingType), PlayerNumber);
-                    CanPlaceBuilding = false;
+                    CanPlaceItem = false;
                 }
                 catch
                 {

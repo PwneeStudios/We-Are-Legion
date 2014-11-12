@@ -421,7 +421,7 @@ namespace Terracotta
 
         void DrawMouseUi()
         {
-            CanPlaceBuilding = false;
+            CanPlaceItem = false;
             if (GameClass.MouseEnabled)
             {
                 switch (CurUserMode)

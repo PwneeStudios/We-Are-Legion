@@ -144,11 +144,12 @@ namespace Terracotta
              */
         }
 
-        void DrawGridCell()
+        public void DrawGridCell()
         {
             vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);
 
-            DrawSolid.Using(camvec, CameraAspect, DrawTerritoryPlayer.Unavailable);
+            color clr = CanPlaceItem ? DrawTerritoryPlayer.Available : DrawTerritoryPlayer.Unavailable;
+            DrawSolid.Using(camvec, CameraAspect, clr);
 
             vec2 gWorldCord = GridToWorldCood(floor(GridCoord));
             vec2 size = 1 / DataGroup.GridSize;
@@ -163,7 +164,7 @@ namespace Terracotta
 
             color clr = color.TransparentBlack;
 
-            CanPlaceBuilding = true;
+            CanPlaceItem = true;
             for (int i = 0; i < _w; i++)
             for (int j = 0; j < _h; j++)
             {
@@ -238,7 +239,7 @@ namespace Terracotta
             RectangleQuad.Draw(GameClass.Graphics, WorldCord, Size, Angle);
         }
 
-        void DrawCircleCursor()
+        public void DrawCircleCursor()
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
             DrawTextureSmooth.Using(camvec, CameraAspect, Assets.SelectCircle);
@@ -248,7 +249,7 @@ namespace Terracotta
             RectangleQuad.Draw(GameClass.Graphics, WorldCord, .0075f * vec2.Ones / CameraZoom);
         }
 
-        void DrawArrowCursor()
+        public void DrawArrowCursor()
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
             DrawTextureSmooth.Using(camvec, CameraAspect, Assets.Cursor);

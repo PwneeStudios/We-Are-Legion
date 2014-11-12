@@ -121,7 +121,7 @@ namespace Terracotta
 
         Spell CurSpell = null;
 
-        bool CanPlaceBuilding = false;
+        bool CanPlaceItem = false;
         bool[] CanPlace = new bool[3 * 3];
 
         public vec2 GridSize { get { return DataGroup.GridSize; } }

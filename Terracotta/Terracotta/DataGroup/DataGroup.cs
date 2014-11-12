@@ -33,6 +33,27 @@ namespace Terracotta
             d.TargetData.SetData(coord, size, _target);
         }
 
+        public static void MakeUnit(float type, float player, float team, int i, int j, int GridWidth, int GridHeight, Color[] Units, Color[] Data, Color[] TargetData)
+        {
+            Units[0] = (Color)new unit(type, player, team, 0);
+            var d = new data(Dir.Up, Change.Stayed, 0, UnitAction.Guard);
+            set_prior_direction(ref d, Dir.Down);
+            set_selected(ref d, false);
+            Data[0] = (Color)d;
+
+            TargetData[0] = new Color(rnd.Next(0, 4), rnd.Next(0, 256), rnd.Next(0, 4), rnd.Next(0, 256));
+        }
+
+        public static void PlaceUnit(DataGroup d, vec2 coord, float unit_type, float player, float team)
+        {
+            MakeUnit(unit_type, player, team, 0, 0, 1, 1, _unit, _data, _target);
+
+            vec2 size = new vec2(1, 1);
+            d.CurrentUnits.SetData(coord, size, _unit);
+            d.CurrentData.SetData(coord, size, _data);
+            d.TargetData.SetData(coord, size, _target);
+        }
+
         /// <summary>
         /// Scratch space.
         /// </summary>
