@@ -68,6 +68,8 @@ namespace Terracotta
             {
                 here.direction = Dir.Right;
                 here.action = UnitAction.Guard;
+                here.change = Change.Stayed;
+                set_prior_direction(ref here, here.direction);
             }
 
             return here;

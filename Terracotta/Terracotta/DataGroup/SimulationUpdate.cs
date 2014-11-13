@@ -2,6 +2,19 @@ namespace Terracotta
 {
     public partial class DataGroup : SimShader
     {
+        public void PausedSimulationUpdate()
+        {
+            UpdateGradient_ToOtherTeams();
+            UpdateGradient_ToOtherTeams();
+
+            UpdateGradient_ToPlayers();
+            UpdateGradient_ToPlayers();
+
+            UpdateGradient_ToBuildings();
+
+            Building_InfusionDiffusion();
+        }
+
         public void SimulationUpdate()
         {
             UpdateGradient_ToOtherTeams();
@@ -15,6 +28,15 @@ namespace Terracotta
 
             Building_InfusionDiffusion();
 
+            // Spawning
+            SpawnUnits.Apply(CurrentUnits, CurrentData, PreviousData, RandomField, Magic, Output: Temp1);
+            Swap(ref CurrentData, ref Temp1);
+            SetSpawn_Unit.Apply(CurrentUnits, CurrentData, Magic, Output: Temp1);
+            Swap(ref CurrentUnits, ref Temp1);
+            SetSpawn_Target.Apply(TargetData, CurrentData, RandomField, Magic, Output: Temp1);
+            Swap(ref TargetData, ref Temp1);
+            SetSpawn_Data.Apply(CurrentUnits, CurrentData, Output: Temp1);
+            Swap(ref CurrentData, ref Temp1);
 
             // Corpses
             AddCorpses.Apply(CurrentUnits, CurrentData, Corpses, Magic, Output: Temp1);
@@ -57,16 +79,6 @@ namespace Terracotta
 
             PropagateNecromancyAuro.Apply(Necromancy, CurrentData, CurrentUnits, Output: Temp1);
             CoreMath.Swap(ref Temp1, ref Necromancy);
-
-            // Spawning
-            SpawnUnits.Apply(CurrentUnits, CurrentData, PreviousData, RandomField, Magic, Output: Temp1);
-            Swap(ref CurrentData, ref Temp1);
-            SetSpawn_Unit.Apply(CurrentUnits, CurrentData, Magic, Output: Temp1);
-            Swap(ref CurrentUnits, ref Temp1);
-            SetSpawn_Target.Apply(TargetData, CurrentData, RandomField, Magic, Output: Temp1);
-            Swap(ref TargetData, ref Temp1);
-            SetSpawn_Data.Apply(CurrentUnits, CurrentData, Output: Temp1);
-            Swap(ref CurrentData, ref Temp1);
 
             // Random field
             UpdateRandomField.Apply(RandomField, Output: Temp1);

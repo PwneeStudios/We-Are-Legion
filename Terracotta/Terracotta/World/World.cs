@@ -54,7 +54,7 @@ namespace Terracotta
             set
             {
                 _MapEditor = value;
-                _MapEditorActive = value;
+                MapEditorActive = value;
             }
         }
         
@@ -69,6 +69,7 @@ namespace Terracotta
             set
             {
                 _MapEditorActive = value;
+                SimulationPaused = MapEditorActive;
             }
         }
         bool DrawGridLines = false;

@@ -138,6 +138,10 @@ namespace Terracotta
                     SecondsSinceLastUpdate += GameClass.ElapsedSeconds;
                     T += (float)GameClass.ElapsedSeconds;
                 }
+                else
+                {
+                    DataGroup.PausedSimulationUpdate();
+                }
 
                 UpdateAllPlayerUnitCounts();
 
@@ -191,10 +195,13 @@ namespace Terracotta
             DrawMouseUi();
             DrawCursorInfo();
 
-            DrawUiText();
+            Render.StartText();
+                DrawUiText();
+                MapEditorUiText();
+            Render.EndText();
         }
 
-        private void DrawMinimapTexture()
+        void DrawMinimapTexture()
         {
             var hold_CameraAspect = CameraAspect;
             var hold_CameraPos = CameraPos;
@@ -213,7 +220,7 @@ namespace Terracotta
             CameraZoom = hold_CameraZoom;
         }
 
-        private void DrawBox(vec2 p1, vec2 p2, float width)
+        void DrawBox(vec2 p1, vec2 p2, float width)
         {
             DrawLine(vec(p1.x, p1.y), vec(p2.x, p1.y), width);
             DrawLine(vec(p2.x, p1.y), vec(p2.x, p2.y), width);
@@ -243,61 +250,6 @@ namespace Terracotta
             tr = min(tr, center + size);
             DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, new color(.6f, .6f, .6f, .5f));
             DrawBox(bl, tr, .001f);
-        }
-
-        class Ui
-        {
-            public Ui()
-            {
-                ActiveUi = this;
-            }
-
-            public Dictionary<string, RectangleQuad> Elements = new Dictionary<string, RectangleQuad>();
-            public List<RectangleQuad> Order = new List<RectangleQuad>();
-
-            public void Add(string name, RectangleQuad e)
-            {
-                e.Texture = Assets.White;
-                Elements.Add(name, e);
-
-                if (!name.Contains("[Text]"))
-                {
-                    Order.Add(e);
-                }
-            }
-
-            public void Draw()
-            {
-                foreach (var e in Order)
-                {
-                    DrawElement(e);
-                }
-            }
-
-            // Static
-
-            public static Ui ActiveUi;
-            public static RectangleQuad e;
-
-            public static void Element(string name)
-            {
-                if (Ui.ActiveUi.Elements.ContainsKey(name))
-                {
-                    Ui.e = Ui.ActiveUi.Elements[name];
-                    return;
-                }
-
-                var e = new RectangleQuad(vec2.Zero, vec2.Zero, vec2.Zero, vec2.Ones);
-
-                Ui.ActiveUi.Add(name, e);
-                Ui.e = e;
-            }
-
-            static void DrawElement(RectangleQuad e)
-            {
-                DrawTextureSmooth.Using(vec(0, 0, 1, 1), GameClass.ScreenAspect, e.Texture);
-                e.Draw(GameClass.Graphics);
-            }
         }
 
         Ui TopUi, TopUi_Player1, TopUi_Player2;
@@ -353,7 +305,7 @@ namespace Terracotta
             Ui.e.SetupPosition(vec(a - 1.46851851851852f, 0.90925925925926f), vec(a - 1.4f, 0.94074074074074f));
         }
 
-        private void DrawTopUi()
+        void DrawTopUi()
         {
             MakeTopUi();
             TopUi.Draw();
@@ -366,10 +318,8 @@ namespace Terracotta
             return vec((p.x + CameraAspect) / (2 * CameraAspect), (1 - (p.y + 1) / 2)) * GameClass.Screen;
         }
 
-        private void DrawUiText()
+        void DrawUiText()
         {
-            Render.StartText();
-
             // Top Ui
             Ui.ActiveUi = TopUi_Player1;
             DrawPlayerInfo(1);
@@ -384,11 +334,9 @@ namespace Terracotta
             // User Messages
             UserMessages.Update();
             UserMessages.Draw();
-
-            Render.EndText();
         }
 
-        private void DrawPlayerInfo(int player)
+        void DrawPlayerInfo(int player)
         {
             string s;
             float scale = .5f;
@@ -417,6 +365,21 @@ namespace Terracotta
             Ui.Element("[Text] Jade");
             s = string.Format("{0:#,##0}", 100000);
             Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
+        }
+
+        void MapEditorUiText()
+        {
+            if (MapEditor)
+            {
+                if (MapEditorActive)
+                {
+                    Render.DrawText("Map Editor, Paused\nPlayer " + PlayerNumber, vec(0, 0), 1);
+                }
+                else
+                {
+                    Render.DrawText("Map Editor, Playing", vec(0, 0), 1);
+                }
+            }
         }
 
         void DrawMouseUi()

@@ -59,7 +59,7 @@ namespace Terracotta
             GameClass.Graphics.SetRenderTarget(null);
         }
 
-        static bool TextStarted = false;
+        public static bool TextStarted = false;
         public static void StartText()
         {
             if (TextStarted) return;

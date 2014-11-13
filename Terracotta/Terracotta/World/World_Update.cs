@@ -12,10 +12,11 @@ namespace Terracotta
         public void EditorUpdate()
         {
             if (MapEditor && Keys.OemTilde.Pressed()) Editor_ToggleMapEditor();
+            if (MapEditor && Keys.P.Pressed()) Editor_ToggleMapEditor();
 
             if (!MapEditorActive) return;
 
-            if (Keys.P.Pressed()) Editor_TogglePause();
+            //if (Keys.P.Pressed()) Editor_TogglePause();
             if (Keys.D0.Pressed()) Editor_SwitchPlayer(0);
             if (Keys.D1.Pressed()) Editor_SwitchPlayer(1);
             if (Keys.D2.Pressed()) Editor_SwitchPlayer(2);
@@ -133,18 +134,24 @@ namespace Terracotta
             if (BL.y < -1) CameraPos = new vec2(CameraPos.x, CameraPos.y - (BL.y + 1));
 
 
-            // Switch modes
-            if (Keys.D1.Pressed() || Keys.D2.Pressed() || Keys.D3.Pressed() || Keys.D4.Pressed())
-            {
-                if (Keys.D1.Pressed()) CurSpell = Spells.Flamefield;
-                if (Keys.D2.Pressed()) CurSpell = Spells.SkeletonArmy;
-                if (Keys.D3.Pressed()) CurSpell = Spells.Necromancer;
-                if (Keys.D4.Pressed()) CurSpell = Spells.TerracottaArmy;
+            // Switch input modes
 
-                CurUserMode = UserMode.CastSpell;
-                UnselectAll = false;
+            // Switch to spells (must be playing, not in editor)
+            if (!SimulationPaused)
+            {
+                if (Keys.D1.Pressed() || Keys.D2.Pressed() || Keys.D3.Pressed() || Keys.D4.Pressed())
+                {
+                    if (Keys.D1.Pressed()) CurSpell = Spells.Flamefield;
+                    if (Keys.D2.Pressed()) CurSpell = Spells.SkeletonArmy;
+                    if (Keys.D3.Pressed()) CurSpell = Spells.Necromancer;
+                    if (Keys.D4.Pressed()) CurSpell = Spells.TerracottaArmy;
+
+                    CurUserMode = UserMode.CastSpell;
+                    UnselectAll = false;
+                }
             }
 
+            // Switch to building placement
             if (Keys.B.Down())
             {
                 CurUserMode = UserMode.PlaceBuilding;
@@ -159,6 +166,7 @@ namespace Terracotta
                 BuildingType = UnitType.GoldMine;
             }
 
+            // Switch to standard select
             if (Keys.Escape.Down() || Keys.Back.Down() || Input.RightMousePressed)
             {
                 CurUserMode = UserMode.Select;

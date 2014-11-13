@@ -60,6 +60,17 @@ bool Terracotta__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
+bool Terracotta__SimShader__selected(float4 u)
+{
+    float val = u.b;
+    return val >= 0.5019608 - .001;
+}
+
+void Terracotta__SimShader__set_prior_direction(inout float4 u, float dir)
+{
+    u.b = dir + (Terracotta__SimShader__selected(u) ? 0.5019608 : 0.0);
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -80,6 +91,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         here.r = 0.003921569;
         here.a = 0.01176471;
+        here.g = 0.003921569;
+        Terracotta__SimShader__set_prior_direction(here, here.r);
     }
     __FinalOutput.Color = here;
     return __FinalOutput;

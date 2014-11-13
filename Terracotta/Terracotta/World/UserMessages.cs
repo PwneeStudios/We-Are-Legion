@@ -24,13 +24,16 @@ namespace Terracotta
         {
             vec2 pos = GameClass.Screen * new vec2(.5f, .8f) - UserMessage.Spacing * UserMessages.Count;
 
-            Render.StartText();
+            bool TextStartedAlready = Render.TextStarted;
+            if (!TextStartedAlready) Render.StartText();
+
             foreach (var message in UserMessages)
             {
                 message.Draw(pos);
                 pos += UserMessage.Spacing;
             }
-            Render.EndText();
+
+            if (!TextStartedAlready) Render.EndText();
         }
 
         public void Update()

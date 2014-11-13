@@ -377,10 +377,24 @@ namespace Terracotta
 
             ActionSpawn_Unit.Apply(Filter, DataGroup.CurrentUnits, player, team, type, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
+
+            if (SimulationPaused)
+            {
+                ActionSpawn_Unit.Apply(Filter, DataGroup.PreviousUnits, player, team, type, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousUnits);
+            }
+
             ActionSpawn_Target.Apply(Filter, DataGroup.TargetData, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TargetData);
+            
             ActionSpawn_Data.Apply(Filter, DataGroup.CurrentData, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
+
+            if (SimulationPaused)
+            {
+                ActionSpawn_Data.Apply(Filter, DataGroup.PreviousData, Output: DataGroup.Temp1);
+                CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousData);
+            }
 
             if (distribution == UnitDistribution.OnCorpses)
             {
