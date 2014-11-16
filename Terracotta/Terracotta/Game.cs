@@ -193,7 +193,7 @@ namespace Terracotta
                     World = new World();
                     //World.Load("TestSave.m3n");
                     World.MapEditor = true;
-                    
+
                     State = GameState.Game;
 
                     break;

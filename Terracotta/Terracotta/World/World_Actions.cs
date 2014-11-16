@@ -78,7 +78,7 @@ namespace Terracotta
                 CanPlace[i + j * _w] = false;
             }
 
-            if (BuildingType == UnitType.Barracks && PlayerNumber > 0)
+            if (BuildingUserIsPlacing == UnitType.Barracks && PlayerNumber > 0)
             {
                 var _data = DataGroup.CurrentData.GetData<building>(GridCoord, new vec2(_w, _h));
                 var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
@@ -106,7 +106,7 @@ namespace Terracotta
                 }
             }
 
-            if (BuildingType == UnitType.GoldMine)
+            if (BuildingUserIsPlacing == UnitType.GoldMine)
             {
                 var _data = DataGroup.CurrentUnits.GetData<unit>(GridCoord, new vec2(_w, _h));
                 var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
@@ -141,15 +141,15 @@ namespace Terracotta
                 {
                     Message_CanNotPlaceHere();
                 }
-                else if (!CanAffordBuilding(BuildingType, PlayerNumber))
+                else if (!CanAffordBuilding(BuildingUserIsPlacing, PlayerNumber))
                 {
                     Message_InsufficientGold();
                 }
                 else try
                 {
-                    Create.PlaceBuilding(DataGroup, GridCoord, BuildingType, PlayerValue, TeamValue);
+                    Create.PlaceBuilding(DataGroup, GridCoord, BuildingUserIsPlacing, PlayerValue, TeamValue);
 
-                    SubtractGold(Params.BuildingCost(BuildingType), PlayerNumber);
+                    SubtractGold(Params.BuildingCost(BuildingUserIsPlacing), PlayerNumber);
                     CanPlaceItem = false;
                 }
                 catch
@@ -157,7 +157,17 @@ namespace Terracotta
                 }
             }
         }
-        
+
+        void PlaceUnits()
+        {
+            SelectionUpdate(SelectSize, EffectSelection: false, LineSelect: true);
+
+            if (Input.LeftMouseDown)
+            {
+                SpawnUnits(PlayerValue, TeamValue, UnitUserIsPlacing, UnitPlaceStyle);
+            }
+        }
+
         void DeleteUnits()
         {
             ActionDelete_Data.Apply(DataGroup.CurrentData, Output: DataGroup.Temp1);
@@ -358,20 +368,14 @@ namespace Terracotta
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
         }
 
-        void CreateUnits()
-        {
-            float player = 0, team = 0;
-
-            if (Keys.R.Down()) { player = Player.One; team = Team.One; }
-            if (Keys.T.Down()) { player = Player.Two; team = Team.Two; }
-            if (Keys.Y.Down()) { player = Player.Three; team = Team.Three; }
-            if (Keys.U.Down()) { player = Player.Four; team = Team.Four; }
-
-            SpawnUnits(player, team, UnitType.Footman, UnitDistribution.Full);
-        }
-
         public void SpawnUnits(float player, float team, float type, float distribution)
         {
+            if (distribution == UnitDistribution.Single)
+            {
+                PlaceUnit(type);
+                return;
+            }
+
             ActionSpawn_Filter.Apply(DataGroup.SelectField, DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.Corpses, distribution, Output: DataGroup.Temp2);
             var Filter = DataGroup.Temp2;
 
@@ -414,7 +418,7 @@ namespace Terracotta
             bool Deselect = Input.LeftMousePressed && !Keys.LeftShift.Down() && !Keys.RightShift.Down()
                 || CurUserMode != UserMode.Select
                 || Keys.Back.Down() || Keys.Escape.Down();
-            bool Selecting = Input.LeftMouseDown && (CurUserMode == UserMode.Select || CurUserMode == UserMode.CastSpell);
+            bool Selecting = Input.LeftMouseDown && (CurUserMode == UserMode.Select || CurUserMode == UserMode.CastSpell || CurUserMode == UserMode.PlaceUnits);
 
             if (SkipDeselect)
             {
@@ -458,11 +462,6 @@ namespace Terracotta
                     }
 
                     DirwardExtend(false);
-                }
-
-                if (Keys.R.Down() || Keys.T.Down() || Keys.Y.Down() || Keys.U.Down())
-                {
-                    CreateUnits();
                 }
 
                 if (Keys.Delete.Down() || Keys.Back.Down())

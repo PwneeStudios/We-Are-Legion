@@ -156,14 +156,14 @@ namespace Terracotta
             {
                 CurUserMode = UserMode.PlaceBuilding;
                 UnselectAll = true; 
-                BuildingType = UnitType.Barracks;
+                BuildingUserIsPlacing = UnitType.Barracks;
             }
 
             if (Keys.G.Down())
             {
                 CurUserMode = UserMode.PlaceBuilding;
                 UnselectAll = true;
-                BuildingType = UnitType.GoldMine;
+                BuildingUserIsPlacing = UnitType.GoldMine;
             }
 
             // Switch to standard select
@@ -171,6 +171,21 @@ namespace Terracotta
             {
                 CurUserMode = UserMode.Select;
                 SkipDeselect = true;
+            }
+
+            // Switch to unit placement (editor only)
+            if (MapEditorActive)
+            {
+                if (Keys.R.Down()) { UnitUserIsPlacing = UnitType.Footman; CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
+                if (Keys.T.Down()) { UnitUserIsPlacing = UnitType.Footman; CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
+                if (Keys.Y.Down()) { UnitUserIsPlacing = UnitType.Footman; CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
+                if (Keys.U.Down()) { UnitUserIsPlacing = UnitType.Footman; CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
+
+                if (Keys.Tab.Pressed())
+                {
+                    UnitPlaceStyle++;
+                    if (UnitPlaceStyle > UnitDistribution.Last) UnitPlaceStyle = UnitDistribution.First;
+                }
             }
         }
 

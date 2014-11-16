@@ -157,6 +157,16 @@ namespace Terracotta
                         PlaceBuilding();
                         break;
 
+                    case UserMode.PlaceUnits:
+                        if (UnselectAll)
+                        {
+                            SelectionUpdate(SelectSize);
+                            UnselectAll = false;
+                        }
+
+                        PlaceUnits();
+                        break;
+
                     case UserMode.Select:
                         // Count the selected units for the player. Must be done at least before every attack command.
                         var selected = DataGroup.DoUnitCount(PlayerOrNeutral, true);
@@ -373,7 +383,13 @@ namespace Terracotta
             {
                 if (MapEditorActive)
                 {
-                    Render.DrawText("Map Editor, Paused\nPlayer " + PlayerNumber, vec(0, 0), 1);
+                    string s = "Map Editor, Paused\nPlayer " + PlayerNumber;
+                    if (CurUserMode == UserMode.PlaceUnits)
+                    {
+                        s += "\nUnit: " + UnitType.Name(UnitUserIsPlacing) + ", " + UnitDistribution.Name(UnitPlaceStyle);
+                    }
+                    
+                    Render.DrawText(s, vec(0, 0), 1);
                 }
                 else
                 {
@@ -395,10 +411,23 @@ namespace Terracotta
                         DrawArrowCursor();
                         break;
 
+                    case UserMode.PlaceUnits:
+                        if (UnitPlaceStyle == UnitDistribution.Single)
+                        {
+                            UpdateCellAvailability();
+
+                            DrawGridCell();
+                            DrawArrowCursor();
+                        }
+                        else
+                        {
+                            DrawCircleCursor();
+                        }
+
+                        break;
+
                     case UserMode.Select:
-                        //DrawGridCell();
                         DrawCircleCursor();
-                        //DrawArrowCursor();
                         break;
 
                     case UserMode.CastSpell:

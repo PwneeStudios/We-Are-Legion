@@ -485,6 +485,23 @@ namespace Terracotta
                 JadeMine = _8,
 
                 BlockingTile = _20;
+
+            public static string Name(float unit)
+            {
+                if (unit == None) return "None";
+
+                if (unit == Footman) return "Soldier";
+                if (unit == DragonLord) return "Dragon Lord";
+                if (unit == Necromancer) return "Necromancer";
+                if (unit == Skeleton) return "Skeleton Warrior";
+                if (unit == ClaySoldier) return "Terracotta Soldier";
+
+                if (unit == Barracks) return "Barracks";
+                if (unit == GoldMine) return "Gold Mine";
+                if (unit == JadeMine) return "Jade Mine";
+
+                return "Invalid Unit Type";
+            }
         }
 
         protected static bool LeavesCorpse(unit u)

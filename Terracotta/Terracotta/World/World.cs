@@ -115,9 +115,11 @@ namespace Terracotta
         public float TeamValue = Team.One;
         public int TeamNumber { get { return Int(TeamValue); } }
 
-        enum UserMode { PlaceBuilding, Select, CastSpell, };
+        enum UserMode { PlaceBuilding, PlaceUnits, Select, CastSpell, };
         UserMode CurUserMode = UserMode.Select;
-        float BuildingType = UnitType.GoldMine;
+        float BuildingUserIsPlacing = UnitType.GoldMine;
+        float UnitUserIsPlacing = UnitType.Footman;
+        float UnitPlaceStyle = UnitDistribution.EveryOther;
         bool UnselectAll = false;
 
         Spell CurSpell = null;

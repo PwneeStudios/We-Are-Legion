@@ -9,55 +9,6 @@ namespace Terracotta
 {
     public partial class World : SimShader
     {
-        void DrawUi_TopInfo()
-        {
-            if (MapEditorActive)
-            {
-                string header = "Map editor"
-                    + (", Player " + PlayerNumber.ToString())
-                    + (SimulationPaused ? ", Paused" : "");
-                
-                Render.DrawText(header, vec(10, 0), 1);
-            }
-            else
-            {
-                var top_ui_gold = string.Format("Gold {0:#,##0}", PlayerInfo[PlayerNumber].Gold);
-                var top_ui_units = string.Format("Units {0:#,##0}", DataGroup.UnitCount[PlayerNumber]);
-
-                Render.DrawText(top_ui_gold, vec(10, 0), 1);
-                Render.DrawText(top_ui_units, vec(170, 0), 1);
-            }
-        }
-
-        void DrawUi_PlayerGrid()
-        {
-            float y = 0;
-            float spacing = 20;
-
-            float row4 = 1024, row3 = 924, row2 = 824, row1 = 724, row0 = 624;
-
-            Render.DrawText("Raxes", vec(row1, y), 1, align: Alignment.RightJusitfy);
-            Render.DrawText("Units", vec(row2, y), 1, align: Alignment.RightJusitfy);
-            Render.DrawText("Mines", vec(row3, y), 1, align: Alignment.RightJusitfy);
-            Render.DrawText("Gold", vec(row4, y), 1, align: Alignment.RightJusitfy);
-
-            for (int player = 1; player <= 4; player++)
-            {
-                y += spacing;
-
-                var gold = string.Format("{0:#,##0}", PlayerInfo[player].Gold);
-                var units = string.Format("{0:#,##0}", DataGroup.UnitCount[player]);
-                var mines = string.Format("{0:#,##0}", PlayerInfo[player].GoldMines);
-                var raxes = string.Format("{0:#,##0}", DataGroup.BarracksCount[player]);
-
-                Render.DrawText("Player " + player.ToString(), vec(row0, y), 1, align: Alignment.RightJusitfy);
-                Render.DrawText(raxes, vec(row1, y), 1, align: Alignment.RightJusitfy);
-                Render.DrawText(units, vec(row2, y), 1, align: Alignment.RightJusitfy);
-                Render.DrawText(mines, vec(row3, y), 1, align: Alignment.RightJusitfy);
-                Render.DrawText(gold, vec(row4, y), 1, align: Alignment.RightJusitfy);
-            }
-        }
-
         RectangleQuad q = new RectangleQuad();
         vec2 unit_count_pos, building_count_pos;
         void DrawCursorInfo()
@@ -186,7 +137,7 @@ namespace Terracotta
             vec2 WorldCord = GridToWorldCood(new vec2((float)Math.Floor(GridCoord.x), (float)Math.Floor(GridCoord.y)));
             vec2 size = 3 * 1 / DataGroup.GridSize;
 
-            var building = SetBuildingQuad(WorldCord, size, BuildingType, PlayerNumber);
+            var building = SetBuildingQuad(WorldCord, size, BuildingUserIsPlacing, PlayerNumber);
             building.SetColor(new color(1, 1, 1, .7f));
             building.Draw(GameClass.Graphics);
         }

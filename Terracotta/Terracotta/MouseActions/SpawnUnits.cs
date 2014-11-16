@@ -8,12 +8,18 @@ namespace Terracotta
         [FragSharpFramework.Vals(Full, EveryOther, OnCorpses)]
         public class ValsAttribute : Attribute { }
 
-        public static readonly float[] Vals = new float[] { Full, EveryOther, OnCorpses };
+        public static readonly float[] Vals = new float[] { Full, EveryOther, OnCorpses, Single };
 
         public const float
+            None = 0,
+
             Full = 1,
             EveryOther = 2,
-            OnCorpses = 3;
+            OnCorpses = 3,
+            Single = 4,
+            
+            First = 1,
+            Last = 5;
 
         public static bool Contains(float distribution, vec2 v, Field<corpse> Corpses)
         {
@@ -33,6 +39,18 @@ namespace Terracotta
             }
 
             return false;
+        }
+
+        public static string Name(float distribution)
+        {
+            if (distribution == None) return "None";
+
+            if (distribution == Full) return "Full";
+            if (distribution == EveryOther) return "Every Other";
+            if (distribution == OnCorpses) return "On Corpses";
+            if (distribution == Single) return "Single";
+
+            return "Invalid Distribution Type";
         }
     }
 
