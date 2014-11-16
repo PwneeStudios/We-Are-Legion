@@ -47,12 +47,12 @@ namespace Terracotta
             SkeletonArmy = spell = new Spell("Skeleton Army");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = () => W.DrawCursor(Assets.SelectCircle, 30 * W.CellSize);
-            spell.Execute = () => W.SpawnUnits(W.PlayerValue, W.TeamValue, UnitType.Skeleton, UnitDistribution.OnCorpses);
+            spell.Execute = () => W.RaiseSkeletons(vec(30, 30));
 
             Necromancer = spell = new Spell("Necromancer");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = NecroCursor;
-            spell.Execute = () => W.Necromancer();
+            spell.Execute = () => W.SummonNecromancer();
 
             TerracottaArmy = spell = new Spell("Terracotta Army");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);

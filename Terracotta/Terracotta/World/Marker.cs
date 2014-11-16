@@ -33,7 +33,9 @@ namespace Terracotta
         public DrawOrder MyDrawOrder;
 
         float alpha;
-        float alpha_fade;
+        float dalpha_dt;
+        
+        vec2 pos, size, dsize_dt;
 
         float frame_length = 1;
         float t = 0;
@@ -44,12 +46,16 @@ namespace Terracotta
 
         World world;
 
-        public Marker(World world, vec2 pos, vec2 size, Texture2D texture, float alpha_fade, int frames = 1, float frame_length = .1f, DrawOrder DrawOrder = DrawOrder.AfterTiles, float alpha = 1)
+        public Marker(World world, vec2 pos, vec2 size, Texture2D texture, float alpha_fade = -1, int frames = 1, float frame_length = .1f, DrawOrder DrawOrder = DrawOrder.AfterTiles, float alpha = 1, vec2 dsize_dt = default(vec2))
         {
             this.world = world;
 
             this.alpha = alpha;
-            this.alpha_fade = alpha_fade;
+            this.dalpha_dt = alpha_fade;
+            
+            this.pos = pos;
+            this.size = size;
+            this.dsize_dt = dsize_dt;
 
             this.frames = frames;
             this.frame_length = frame_length;
@@ -71,15 +77,17 @@ namespace Terracotta
 
         public void Update()
         {
-            float delta_t = (float)GameClass.Time.ElapsedGameTime.TotalSeconds;
+            float dt = (float)GameClass.Time.ElapsedGameTime.TotalSeconds;
 
-            alpha += delta_t * alpha_fade;
+            alpha += dalpha_dt * dt;
             
-            t += delta_t;
+            t += dt;
             frame = (int)(t / frame_length);
-            if (frame >= frames) frame = frames;
+            if (frame >= frames) frame = frames - 1;
 
-            quad.SetupUv(vec(frame / (float)frames, 0), vec((frame + 1) / (float)frames, 1));
+            size += dsize_dt * dt;
+            quad.SetupVertices(pos - size / 2, pos + size / 2, vec(frame / (float)frames, 0), vec((frame + 1) / (float)frames, 1));
+            //quad.SetupUv(vec(frame / (float)frames, 0), vec((frame + 1) / (float)frames, 1));
         }
     }
 }

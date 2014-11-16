@@ -368,7 +368,17 @@ namespace Terracotta
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
         }
 
-        public void Necromancer()
+        public void RaiseSkeletons(vec2 area)
+        {
+            AddSummonAreaEffect(area);
+
+            SpawnUnits(PlayerValue, TeamValue, UnitType.Skeleton, UnitDistribution.OnCorpses);
+
+            //CurUserMode = UserMode.Select;
+            //SkipDeselect = true;
+        }
+
+        public void SummonNecromancer()
         {
             AddSummonUnitEffect();
 
