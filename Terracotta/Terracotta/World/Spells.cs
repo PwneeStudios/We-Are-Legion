@@ -46,7 +46,7 @@ namespace Terracotta
 
             SkeletonArmy = spell = new Spell("Skeleton Army");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
-            spell.DrawCursor = () => W.DrawCursor(Assets.SelectCircle, 30 * W.CellSize);
+            spell.DrawCursor = SkeletonCursor;
             spell.Execute = () => W.RaiseSkeletons(vec(30, 30));
 
             Necromancer = spell = new Spell("Necromancer");
@@ -56,8 +56,26 @@ namespace Terracotta
 
             TerracottaArmy = spell = new Spell("Terracotta Army");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
-            spell.DrawCursor = () => W.DrawCursor(Assets.SelectCircle, 30 * W.CellSize);
-            spell.Execute = () => W.SpawnUnits(W.PlayerValue, W.TeamValue, UnitType.ClaySoldier, UnitDistribution.EveryOther);
+            spell.DrawCursor = TerracottaCursor;
+            spell.Execute = () => W.SummonTerracotta(vec(30, 30));
+        }
+
+        static void SkeletonCursor()
+        {
+            float size = 30 + .5f * cos(2f * W.T);
+            float angle = 0;
+            W.DrawCursor(Assets.AoE_Skeleton, size * W.CellSize, angle);
+        }
+
+        static void TerracottaCursor()
+        {
+            float size_1 = 30 + .5f * sin(2f * W.T);
+            float angle_1 = 3.5f * W.T;
+            W.DrawCursor(Assets.AoE_Terra, size_1 * W.CellSize, angle_1);
+
+            float size_2 = 4.5f + 30 + .5f * sin(-2f * W.T);
+            float angle_2 = -3.5f * W.T;
+            W.DrawCursor(Assets.AoE_Terra, size_2 * W.CellSize, angle_2);
         }
 
         static void NecroCursor()

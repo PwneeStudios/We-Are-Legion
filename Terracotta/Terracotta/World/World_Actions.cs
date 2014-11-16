@@ -378,6 +378,16 @@ namespace Terracotta
             //SkipDeselect = true;
         }
 
+        public void SummonTerracotta(vec2 area)
+        {
+            AddSummonAreaEffect(area);
+
+            SpawnUnits(PlayerValue, TeamValue, UnitType.ClaySoldier, UnitDistribution.EveryOther);
+
+            //CurUserMode = UserMode.Select;
+            //SkipDeselect = true;
+        }
+
         public void SummonNecromancer()
         {
             AddSummonUnitEffect();
@@ -386,6 +396,7 @@ namespace Terracotta
 
             CurUserMode = UserMode.Select;
             SkipDeselect = true;
+            SkipSelect = true;
         }
 
         public void SpawnUnits(float player, float team, float type, float distribution, bool raising = true)
@@ -430,6 +441,7 @@ namespace Terracotta
         }
 
         bool SkipDeselect = false;
+        bool SkipSelect = false;
         public void SelectionUpdate(vec2 Size, bool EffectSelection = true, bool LineSelect = true)
         {
             if (!GameClass.HasFocus) return;
@@ -446,6 +458,12 @@ namespace Terracotta
             {
                 Deselect = false;
                 SkipDeselect = false;
+            }
+
+            if (SkipSelect)
+            {
+                Selecting = false;
+                if (CurUserMode != UserMode.Select || !Input.LeftMouseDown) SkipSelect = false;
             }
 
             if (LineSelect)
