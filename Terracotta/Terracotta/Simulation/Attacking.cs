@@ -10,6 +10,9 @@ namespace Terracotta
             unit unit_here = Unit[Here];
             data data_here = Data[Here];
 
+            bool DoRaiseAnim = false;
+            if (unit_here.anim == Anim.StartRaise) DoRaiseAnim = true;
+
             // Reset unit animation to stand/walk
             if (IsUnit(unit_here)) unit_here.anim = _0;
 
@@ -63,6 +66,11 @@ namespace Terracotta
                 unit_here.anim = Anim.Die;
             }
 
+            if (IsUnit(unit_here) && DoRaiseAnim)
+            {
+                unit_here.anim = Anim.DoRaise;
+            }
+            
             return unit_here;
         }
     }

@@ -563,7 +563,10 @@ namespace Terracotta
                 Walk   = _1 * UnitSpriteSheet.AnimLength,
                 Attack = _2 * UnitSpriteSheet.AnimLength,
                 Die    = _3 * UnitSpriteSheet.AnimLength,
-                Dead   = _4 * UnitSpriteSheet.AnimLength;
+                Dead   = _4 * UnitSpriteSheet.AnimLength,
+                
+                StartRaise = _10 * UnitSpriteSheet.AnimLength,
+                DoRaise    = _11 * UnitSpriteSheet.AnimLength;
         }
 
         public static class Part

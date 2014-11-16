@@ -88,7 +88,7 @@ namespace Terracotta
                 pre = PreviousData[Here];
             
             unit
-                cur_unit  = CurrentUnits[Here],
+                cur_unit = CurrentUnits[Here],
                 pre_unit = PreviousUnits[Here];
 
             if (!IsUnit(cur_unit) && !IsUnit(pre_unit)) return output;
@@ -99,7 +99,13 @@ namespace Terracotta
             {
                 if (s > .5) pre = cur;
 
-                float _s = cur_unit.anim == _0 ? t : s;
+                float _s = (cur_unit.anim == _0 ? t : s);
+
+                if (cur_unit.anim == Anim.DoRaise)
+                {
+                    cur_unit.anim = Anim.Die;
+                    _s = 1f - _s;
+                }
 
                 float frame = _s * UnitSpriteSheet.AnimLength + Float(cur_unit.anim);
                 output += Sprite(pre, pre_unit, subcell_pos, frame, Texture, selection_blend, selection_size, solid_blend_flag, solid_blend);

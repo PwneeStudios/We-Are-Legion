@@ -97,7 +97,7 @@ namespace Terracotta
     public partial class ActionSpawn_Unit : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<data> Select, Field<unit> Units, float player, float team, float type)
+        unit FragmentShader(VertexOut vertex, Field<data> Select, Field<unit> Units, float player, float team, float type, [Vals.Bool] bool raising)
         {
             data select = Select[Here];
             unit here = Units[Here];
@@ -107,6 +107,15 @@ namespace Terracotta
                 here.player = player;
                 here.team = team;
                 here.type = type;
+
+                if (raising)
+                {
+                    here.anim = Anim.DoRaise;
+                }
+                else
+                {
+                    here.anim = Anim.Stand;
+                }
             }
 
             return here;

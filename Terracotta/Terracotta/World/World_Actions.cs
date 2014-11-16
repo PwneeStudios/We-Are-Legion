@@ -49,7 +49,7 @@ namespace Terracotta
                 try
                 {
                     vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);
-                    Create.PlaceUnit(DataGroup, GridCoord, unit_tpe, PlayerValue, TeamValue);
+                    Create.PlaceUnit(DataGroup, GridCoord, unit_tpe, PlayerValue, TeamValue, SetPrevious: MapEditorActive);
 
                     CanPlaceItem = false;
                 }
@@ -368,8 +368,10 @@ namespace Terracotta
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
         }
 
-        public void SpawnUnits(float player, float team, float type, float distribution)
+        public void SpawnUnits(float player, float team, float type, float distribution, bool raising = true)
         {
+            if (MapEditorActive) raising = false;
+
             if (distribution == UnitDistribution.Single)
             {
                 PlaceUnit(type);
@@ -379,12 +381,12 @@ namespace Terracotta
             ActionSpawn_Filter.Apply(DataGroup.SelectField, DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.Corpses, distribution, Output: DataGroup.Temp2);
             var Filter = DataGroup.Temp2;
 
-            ActionSpawn_Unit.Apply(Filter, DataGroup.CurrentUnits, player, team, type, Output: DataGroup.Temp1);
+            ActionSpawn_Unit.Apply(Filter, DataGroup.CurrentUnits, player, team, type, raising, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
 
             if (SimulationPaused)
             {
-                ActionSpawn_Unit.Apply(Filter, DataGroup.PreviousUnits, player, team, type, Output: DataGroup.Temp1);
+                ActionSpawn_Unit.Apply(Filter, DataGroup.PreviousUnits, player, team, type, raising, Output: DataGroup.Temp1);
                 CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousUnits);
             }
 

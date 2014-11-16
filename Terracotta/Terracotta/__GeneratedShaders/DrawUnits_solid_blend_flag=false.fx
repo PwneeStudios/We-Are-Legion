@@ -298,7 +298,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             pre = cur;
         }
-        float _s = abs(cur_unit.a - 0.0) < .001 ? fs_param_t : fs_param_s;
+        float _s = (abs(cur_unit.a - 0.0) < .001 ? fs_param_t : fs_param_s);
+        if (abs(cur_unit.a - 0.2588235) < .001)
+        {
+            cur_unit.a = 0.07058824;
+            _s = 1.0 - _s;
+        }
         float frame = _s * 6 + FragSharpFramework__FragSharpStd__Float(cur_unit.a);
         output += Terracotta__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
     }

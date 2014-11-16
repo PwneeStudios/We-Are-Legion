@@ -125,23 +125,23 @@ namespace Terracotta
                 data path = data.Nothing;
 
                 // Get info for this unit
-                unit here = Unit[Here];
+                unit unit_here = Unit[Here];
 
                 // Remove if dead unit
-                if (here.anim == Anim.Die && IsUnit(here))
+                if (unit_here.anim == Anim.Die && IsUnit(unit_here))
                 {
                     return data.Nothing;
                 }
 
                 // Remove if dead building
                 building b = (building)(vec4)data_here;
-                if (IsBuilding(here))
+                if (IsBuilding(unit_here))
                 {
                     // If this building is alive
                     if (data_here.direction == Dir.Stationary)
                     {
                         // If this is a building that has been hit enough times to explode
-                        if (here.hit_count >= _5)
+                        if (unit_here.hit_count >= _5)
                         {
                             data_here.direction = Dir.StationaryDying;
                         }
@@ -156,15 +156,21 @@ namespace Terracotta
                     }
                 }
 
-                // Units that are about to be incinerated can't move.
-                if (IsUnit(here) && magic_here.kill == _true)
+                // Units that are done being raised should switch to attacking.
+                if (IsUnit(unit_here) && unit_here.anim == Anim.DoRaise)
+                {
+                    data_here.action = UnitAction.Attacking;
+                }
+
+                // Units that are about to be incinerated or are being raised can't move.
+                if (IsUnit(unit_here) && (magic_here.kill == _true || unit_here.anim == Anim.StartRaise))
                 {
                     data_here.action = UnitAction.Stopped;
                     return data_here;
                 }
 
                 // Buildings can't move.
-                if (IsBuilding(here))
+                if (IsBuilding(unit_here))
                 {
                     if (IsCenter((building)(vec4)data_here))
                     {
@@ -183,28 +189,28 @@ namespace Terracotta
 
                 // Get specific paths to enemies of this particular unit
                 float value_right = 1, value_left = 1, value_up = 1, value_down = 1;
-                if (here.team == Team.One)
+                if (unit_here.team == Team.One)
                 {
                     value_right = _value_right.x;
                     value_left = _value_left.x;
                     value_up = _value_up.x;
                     value_down = _value_down.x;
                 }
-                else if (here.team == Team.Two)
+                else if (unit_here.team == Team.Two)
                 {
                     value_right = _value_right.y;
                     value_left = _value_left.y;
                     value_up = _value_up.y;
                     value_down = _value_down.y;
                 }
-                else if (here.team == Team.Three)
+                else if (unit_here.team == Team.Three)
                 {
                     value_right = _value_right.z;
                     value_left = _value_left.z;
                     value_up = _value_up.z;
                     value_down = _value_down.z;
                 }
-                else if (here.team == Team.Four)
+                else if (unit_here.team == Team.Four)
                 {
                     value_right = _value_right.w;
                     value_left = _value_left.w;
@@ -238,7 +244,7 @@ namespace Terracotta
                     NaivePathfind(vertex, Data, PrevData, TargetData, Extra, RandomField,
                                   Geo, AntiGeo,
                                   DirwardRight, DirwardLeft, DirwardUp, DirwardDown,
-                                  here, ref data_here);
+                                  unit_here, ref data_here);
                 }
             }
 

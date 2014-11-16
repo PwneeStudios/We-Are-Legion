@@ -609,18 +609,18 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (Terracotta__SimShader__Something(data_here))
     {
         float4 path = float4(0, 0, 0, 0);
-        float4 here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-        if (abs(here.a - 0.07058824) < .001 && Terracotta__SimShader__IsUnit(here))
+        float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
+        if (abs(unit_here.a - 0.07058824) < .001 && Terracotta__SimShader__IsUnit(unit_here))
         {
             __FinalOutput.Color = float4(0, 0, 0, 0);
             return __FinalOutput;
         }
         float4 b = data_here;
-        if (Terracotta__SimShader__IsBuilding(here))
+        if (Terracotta__SimShader__IsBuilding(unit_here))
         {
             if (abs(data_here.r - 0.01960784) < .001)
             {
-                if (here.a >= 0.01960784 - .001)
+                if (unit_here.a >= 0.01960784 - .001)
                 {
                     data_here.r = 0.02352941;
                 }
@@ -635,13 +635,17 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 }
             }
         }
-        if (Terracotta__SimShader__IsUnit(here) && abs(magic_here.r - 0.003921569) < .001)
+        if (Terracotta__SimShader__IsUnit(unit_here) && abs(unit_here.a - 0.2588235) < .001)
+        {
+            data_here.a = 0.007843138;
+        }
+        if (Terracotta__SimShader__IsUnit(unit_here) && (abs(magic_here.r - 0.003921569) < .001 || abs(unit_here.a - 0.2352941) < .001))
         {
             data_here.a = 0.0;
             __FinalOutput.Color = data_here;
             return __FinalOutput;
         }
-        if (Terracotta__SimShader__IsBuilding(here))
+        if (Terracotta__SimShader__IsBuilding(unit_here))
         {
             if (Terracotta__SimShader__IsCenter(data_here))
             {
@@ -652,7 +656,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         float4 _value_right = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(1, 0)) * fs_param_PathToOtherTeams_dxdy), _value_up = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, 1)) * fs_param_PathToOtherTeams_dxdy), _value_left = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(-(1), 0)) * fs_param_PathToOtherTeams_dxdy), _value_down = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, -(1))) * fs_param_PathToOtherTeams_dxdy);
         float value_right = 1, value_left = 1, value_up = 1, value_down = 1;
-        if (abs(here.b - 0.003921569) < .001)
+        if (abs(unit_here.b - 0.003921569) < .001)
         {
             value_right = _value_right.x;
             value_left = _value_left.x;
@@ -661,7 +665,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         else
         {
-            if (abs(here.b - 0.007843138) < .001)
+            if (abs(unit_here.b - 0.007843138) < .001)
             {
                 value_right = _value_right.y;
                 value_left = _value_left.y;
@@ -670,7 +674,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
             else
             {
-                if (abs(here.b - 0.01176471) < .001)
+                if (abs(unit_here.b - 0.01176471) < .001)
                 {
                     value_right = _value_right.z;
                     value_left = _value_left.z;
@@ -679,7 +683,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 }
                 else
                 {
-                    if (abs(here.b - 0.01568628) < .001)
+                    if (abs(unit_here.b - 0.01568628) < .001)
                     {
                         value_right = _value_right.w;
                         value_left = _value_left.w;
@@ -725,7 +729,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         if (min > auto_attack_cutoff + .001 && abs(data_here.a - 0.007843138) < .001 || abs(data_here.a - 0.003921569) < .001)
         {
-            Terracotta__Movement_UpdateDirection_RemoveDead__NaivePathfind(psin, psin, fs_param_Data, fs_param_Data_size, fs_param_Data_dxdy, fs_param_PrevData, fs_param_PrevData_size, fs_param_PrevData_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, fs_param_Extra, fs_param_Extra_size, fs_param_Extra_dxdy, fs_param_RandomField, fs_param_RandomField_size, fs_param_RandomField_dxdy, fs_param_Geo, fs_param_Geo_size, fs_param_Geo_dxdy, fs_param_AntiGeo, fs_param_AntiGeo_size, fs_param_AntiGeo_dxdy, fs_param_DirwardRight, fs_param_DirwardRight_size, fs_param_DirwardRight_dxdy, fs_param_DirwardLeft, fs_param_DirwardLeft_size, fs_param_DirwardLeft_dxdy, fs_param_DirwardUp, fs_param_DirwardUp_size, fs_param_DirwardUp_dxdy, fs_param_DirwardDown, fs_param_DirwardDown_size, fs_param_DirwardDown_dxdy, here, data_here);
+            Terracotta__Movement_UpdateDirection_RemoveDead__NaivePathfind(psin, psin, fs_param_Data, fs_param_Data_size, fs_param_Data_dxdy, fs_param_PrevData, fs_param_PrevData_size, fs_param_PrevData_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, fs_param_Extra, fs_param_Extra_size, fs_param_Extra_dxdy, fs_param_RandomField, fs_param_RandomField_size, fs_param_RandomField_dxdy, fs_param_Geo, fs_param_Geo_size, fs_param_Geo_dxdy, fs_param_AntiGeo, fs_param_AntiGeo_size, fs_param_AntiGeo_dxdy, fs_param_DirwardRight, fs_param_DirwardRight_size, fs_param_DirwardRight_dxdy, fs_param_DirwardLeft, fs_param_DirwardLeft_size, fs_param_DirwardLeft_dxdy, fs_param_DirwardUp, fs_param_DirwardUp_size, fs_param_DirwardUp_dxdy, fs_param_DirwardDown, fs_param_DirwardDown_size, fs_param_DirwardDown_dxdy, unit_here, data_here);
         }
     }
     __FinalOutput.Color = data_here;

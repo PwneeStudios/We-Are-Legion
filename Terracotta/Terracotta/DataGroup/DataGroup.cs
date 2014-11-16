@@ -44,7 +44,7 @@ namespace Terracotta
             TargetData[0] = new Color(rnd.Next(0, 4), rnd.Next(0, 256), rnd.Next(0, 4), rnd.Next(0, 256));
         }
 
-        public static void PlaceUnit(DataGroup d, vec2 coord, float unit_type, float player, float team)
+        public static void PlaceUnit(DataGroup d, vec2 coord, float unit_type, float player, float team, bool SetPrevious = false)
         {
             MakeUnit(unit_type, player, team, 0, 0, 1, 1, _unit, _data, _target);
 
@@ -52,6 +52,12 @@ namespace Terracotta
             d.CurrentUnits.SetData(coord, size, _unit);
             d.CurrentData.SetData(coord, size, _data);
             d.TargetData.SetData(coord, size, _target);
+
+            if (SetPrevious)
+            {
+                d.PreviousUnits.SetData(coord, size, _unit);
+                d.PreviousData.SetData(coord, size, _data);                
+            }
         }
 
         /// <summary>

@@ -137,6 +137,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    bool DoRaiseAnim = false;
+    if (abs(unit_here.a - 0.2352941) < .001)
+    {
+        DoRaiseAnim = true;
+    }
     if (Terracotta__SimShader__IsUnit(unit_here))
     {
         unit_here.a = 0.0;
@@ -172,6 +177,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (Terracotta__SimShader__IsUnit(unit_here) && abs(tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy).r - 0.003921569) < .001)
     {
         unit_here.a = 0.07058824;
+    }
+    if (Terracotta__SimShader__IsUnit(unit_here) && DoRaiseAnim)
+    {
+        unit_here.a = 0.2588235;
     }
     __FinalOutput.Color = unit_here;
     return __FinalOutput;

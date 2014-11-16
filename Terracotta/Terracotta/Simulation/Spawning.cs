@@ -14,57 +14,54 @@ namespace Terracotta
             vec4 rnd = Random[Here];
             magic magic_here = Magic[Here];
 
-            if (!Something(cur_data) && !Something(prev_data))
-            {             
-                // Check for barracks spawning
-                if (rnd.x > .93)
+            // Check for barracks spawning
+            if (!Something(cur_data) && !Something(prev_data) && rnd.x > .93)
+            {
+                unit
+                    unit_right = Unit[RightOne],
+                    unit_up = Unit[UpOne],
+                    unit_left = Unit[LeftOne],
+                    unit_down = Unit[DownOne];
+
+                data
+                    data_right = PreviousData[RightOne],
+                    data_up = PreviousData[UpOne],
+                    data_left = PreviousData[LeftOne],
+                    data_down = PreviousData[DownOne];
+
+                float spawn_dir = Dir.None;
+
+                // Spawn units on the side of the barracks facing the target they are headed toward
+                //if (unit_left.type == UnitType.Barracks && prior_direction(data_left) == Dir.Right) spawn_dir = Dir.Right;
+                //if (unit_right.type == UnitType.Barracks && prior_direction(data_right) == Dir.Left) spawn_dir = Dir.Left;
+                //if (unit_up.type == UnitType.Barracks && prior_direction(data_up) == Dir.Down) spawn_dir = Dir.Down;
+                //if (unit_down.type == UnitType.Barracks && prior_direction(data_down) == Dir.Up) spawn_dir = Dir.Up;
+
+                // Spawn units anywhere adjacent to the barracks
+                if (unit_left.type == UnitType.Barracks) spawn_dir = Dir.Right;
+                if (unit_right.type == UnitType.Barracks) spawn_dir = Dir.Left;
+                if (unit_up.type == UnitType.Barracks) spawn_dir = Dir.Down;
+                if (unit_down.type == UnitType.Barracks) spawn_dir = Dir.Up;
+
+                if (IsValid(spawn_dir))
                 {
-                    unit
-                        unit_right = Unit[RightOne],
-                        unit_up = Unit[UpOne],
-                        unit_left = Unit[LeftOne],
-                        unit_down = Unit[DownOne];
-
-                    data
-                        data_right = PreviousData[RightOne],
-                        data_up = PreviousData[UpOne],
-                        data_left = PreviousData[LeftOne],
-                        data_down = PreviousData[DownOne];
-
-                    float spawn_dir = Dir.None;
-
-                    // Spawn units on the side of the barracks facing the target they are headed toward
-                    //if (unit_left.type == UnitType.Barracks && prior_direction(data_left) == Dir.Right) spawn_dir = Dir.Right;
-                    //if (unit_right.type == UnitType.Barracks && prior_direction(data_right) == Dir.Left) spawn_dir = Dir.Left;
-                    //if (unit_up.type == UnitType.Barracks && prior_direction(data_up) == Dir.Down) spawn_dir = Dir.Down;
-                    //if (unit_down.type == UnitType.Barracks && prior_direction(data_down) == Dir.Up) spawn_dir = Dir.Up;
-
-                    // Spawn units anywhere adjacent to the barracks
-                    if (unit_left.type == UnitType.Barracks) spawn_dir = Dir.Right;
-                    if (unit_right.type == UnitType.Barracks) spawn_dir = Dir.Left;
-                    if (unit_up.type == UnitType.Barracks) spawn_dir = Dir.Down;
-                    if (unit_down.type == UnitType.Barracks) spawn_dir = Dir.Up;
-
-                    if (IsValid(spawn_dir))
-                    {
-                        cur_data.direction = spawn_dir;
-                        cur_data.action = UnitAction.Spawning;
-                        cur_data.change = Change.Stayed;
-                        set_selected(ref cur_data, false);
-                        set_prior_direction(ref cur_data, cur_data.direction);
-                    }
+                    cur_data.direction = spawn_dir;
+                    cur_data.action = UnitAction.Spawning;
+                    cur_data.change = Change.Stayed;
+                    set_selected(ref cur_data, false);
+                    set_prior_direction(ref cur_data, cur_data.direction);
                 }
-                else
+            }
+            else
+            {
+                // Otherwise check if we are raising a skeleton
+                if (!Something(cur_data) && magic_here.raising_player != Player.None)
                 {
-                    // Otherwise check if we are raising a skeleton
-                    if (magic_here.raising_player != Player.None)
-                    {
-                        cur_data.direction = Dir.Right;
-                        cur_data.action = UnitAction.Raising;
-                        cur_data.change = Change.Stayed;
-                        set_selected(ref cur_data, false);
-                        set_prior_direction(ref cur_data, cur_data.direction);
-                    }
+                    cur_data.direction = Dir.Right;
+                    cur_data.action = UnitAction.Raising;
+                    cur_data.change = Change.Stayed;
+                    set_selected(ref cur_data, false);
+                    set_prior_direction(ref cur_data, cur_data.direction);
                 }
             }
 
@@ -95,7 +92,7 @@ namespace Terracotta
                 unit_here.player = magic_here.raising_player;
                 unit_here.team = magic_here.raising_player;
                 unit_here.type = UnitType.Skeleton;
-                unit_here.anim = Anim.Stand;
+                unit_here.anim = Anim.StartRaise;
             }
 
             return unit_here;

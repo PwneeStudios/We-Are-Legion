@@ -12,7 +12,8 @@ namespace Terracotta
             corpse corpse_here = Corpses[Here];
             magic magic_here = Magic[Here];
 
-            if (magic_here.raising_player != Player.None)
+            // Removed corpses that are being raised.
+            if (magic_here.raising_player != Player.None && unit_here.anim == Anim.StartRaise)
             {
                 corpse_here = corpse.Nothing;
             }

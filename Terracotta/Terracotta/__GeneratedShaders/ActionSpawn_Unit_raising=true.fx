@@ -58,6 +58,7 @@ float fs_param_team;
 
 float fs_param_type;
 
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
@@ -87,6 +88,14 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         here.g = fs_param_player;
         here.b = fs_param_team;
         here.r = fs_param_type;
+        if (true)
+        {
+            here.a = 0.2588235;
+        }
+        else
+        {
+            here.a = 0.0;
+        }
     }
     __FinalOutput.Color = here;
     return __FinalOutput;

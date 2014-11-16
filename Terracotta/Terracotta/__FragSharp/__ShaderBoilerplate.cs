@@ -64,7 +64,8 @@ namespace FragSharpFramework
             Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_2 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=2");
             Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_3 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=3");
             Terracotta.ActionSpawn_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Data");
-            Terracotta.ActionSpawn_Unit.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Unit");
+            Terracotta.ActionSpawn_Unit.CompiledEffect_raising_true = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Unit_raising=true");
+            Terracotta.ActionSpawn_Unit.CompiledEffect_raising_false = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Unit_raising=false");
             Terracotta.ActionSpawn_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Target");
             Terracotta.ActionSpawn_Corpse.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Corpse");
             Terracotta.UpdateMagic.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UpdateMagic");
@@ -1552,40 +1553,49 @@ namespace Terracotta
 }
 
 
+
 namespace Terracotta
 {
     public partial class ActionSpawn_Unit
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_raising_true;
+        public static Effect CompiledEffect_raising_false;
 
-        public static void Apply(Texture2D Select, Texture2D Units, float player, float team, float type, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Select, Texture2D Units, float player, float team, float type, bool raising, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Select, Units, player, team, type);
+            Using(Select, Units, player, team, type, raising);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Select, Texture2D Units, float player, float team, float type, RenderTarget2D Output)
+        public static void Apply(Texture2D Select, Texture2D Units, float player, float team, float type, bool raising, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Select, Units, player, team, type);
+            Using(Select, Units, player, team, type, raising);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Select, Texture2D Units, float player, float team, float type, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Select, Texture2D Units, float player, float team, float type, bool raising, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Select, Units, player, team, type);
+            Using(Select, Units, player, team, type, raising);
         }
-        public static void Using(Texture2D Select, Texture2D Units, float player, float team, float type, RenderTarget2D Output)
+        public static void Using(Texture2D Select, Texture2D Units, float player, float team, float type, bool raising, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Select, Units, player, team, type);
+            Using(Select, Units, player, team, type, raising);
         }
-        public static void Using(Texture2D Select, Texture2D Units, float player, float team, float type)
+        public static void Using(Texture2D Select, Texture2D Units, float player, float team, float type, bool raising)
         {
+            Effect CompiledEffect = null;
+
+            if (raising == true) CompiledEffect = CompiledEffect_raising_true;
+            else if (raising == false) CompiledEffect = CompiledEffect_raising_false;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["fs_param_Select_Texture"].SetValue(FragSharpMarshal.Marshal(Select));
             CompiledEffect.Parameters["fs_param_Select_size"].SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
             CompiledEffect.Parameters["fs_param_Select_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Select.Width, Select.Height)));

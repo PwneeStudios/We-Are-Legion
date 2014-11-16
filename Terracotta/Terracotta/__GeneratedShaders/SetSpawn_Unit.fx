@@ -126,7 +126,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         unit_here.g = magic_here.g;
         unit_here.b = magic_here.g;
         unit_here.r = 0.01568628;
-        unit_here.a = 0.0;
+        unit_here.a = 0.2352941;
     }
     __FinalOutput.Color = unit_here;
     return __FinalOutput;

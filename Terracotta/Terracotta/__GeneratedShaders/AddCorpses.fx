@@ -118,7 +118,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 corpse_here = tex2D(fs_param_Corpses, psin.TexCoords + (float2(0, 0)) * fs_param_Corpses_dxdy);
     float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy);
-    if (abs(magic_here.g - 0.0) > .001)
+    if (abs(magic_here.g - 0.0) > .001 && abs(unit_here.a - 0.2352941) < .001)
     {
         corpse_here = float4(0, 0, 0, 0);
     }

@@ -24,10 +24,10 @@ namespace Terracotta
             {
                 float player = Player.None;
                 float necro = _0;
-                if (necromancy.PlayerOne > necro) { necro = necromancy.PlayerOne; player = Player.One; }
-                if (necromancy.PlayerTwo > necro) { necro = necromancy.PlayerTwo; player = Player.Two; }
+                if (necromancy.PlayerOne   > necro) { necro = necromancy.PlayerOne;   player = Player.One; }
+                if (necromancy.PlayerTwo   > necro) { necro = necromancy.PlayerTwo;   player = Player.Two; }
                 if (necromancy.PlayerThree > necro) { necro = necromancy.PlayerThree; player = Player.Three; }
-                if (necromancy.PlayerFour > necro) { necro = necromancy.PlayerFour; player = Player.Four; }
+                if (necromancy.PlayerFour  > necro) { necro = necromancy.PlayerFour;  player = Player.Four; }
 
                 here.raising_player = player;
             }

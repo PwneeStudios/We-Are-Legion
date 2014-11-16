@@ -185,7 +185,7 @@ namespace Terracotta
                 if (Keys.Tab.Pressed())
                 {
                     UnitPlaceStyle++;
-                    if (UnitPlaceStyle > UnitDistribution.Last) UnitPlaceStyle = UnitDistribution.First;
+                    if (UnitPlaceStyle >= UnitDistribution.Last) UnitPlaceStyle = UnitDistribution.First;
                 }
             }
         }
