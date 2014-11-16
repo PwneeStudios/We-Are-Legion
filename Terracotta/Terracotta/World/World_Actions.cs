@@ -368,6 +368,16 @@ namespace Terracotta
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
         }
 
+        public void Necromancer()
+        {
+            AddSummonUnitEffect();
+
+            PlaceUnit(UnitType.Necromancer);
+
+            CurUserMode = UserMode.Select;
+            SkipDeselect = true;
+        }
+
         public void SpawnUnits(float player, float team, float type, float distribution, bool raising = true)
         {
             if (MapEditorActive) raising = false;

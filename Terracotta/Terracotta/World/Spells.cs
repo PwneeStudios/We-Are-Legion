@@ -52,7 +52,7 @@ namespace Terracotta
             Necromancer = spell = new Spell("Necromancer");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = NecroCursor;
-            spell.Execute = () => W.PlaceUnit(UnitType.Necromancer);
+            spell.Execute = () => W.Necromancer();
 
             TerracottaArmy = spell = new Spell("Terracotta Army");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);

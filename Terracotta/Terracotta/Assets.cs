@@ -17,7 +17,7 @@ namespace Terracotta
             DebugTexture_Arrows, DebugTexture_Num,
 
             BuildingTexture_1,
-            ExplosionTexture_1,
+            ExplosionTexture_1, MagicTexture,
             UnitTexture_1, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
             
             TileSpriteSheet_1, TileSpriteSheet_2, TileSpriteSheet_4, TileSpriteSheet_8, TileSpriteSheet_16,
@@ -43,7 +43,9 @@ namespace Terracotta
             DebugTexture_Num    = LoadTexture("Debug_Num");
 
             BuildingTexture_1   = LoadTexture("Buildings_1");
+            
             ExplosionTexture_1  = LoadTexture("BuildingExplosion_1");
+            MagicTexture        = LoadTexture("MagicEffect");
 
             UnitTexture_1       = LoadTexture("Soldier_1");
             UnitTexture_2       = LoadTexture("Soldier_2");
