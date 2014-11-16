@@ -176,10 +176,11 @@ namespace Terracotta
             // Switch to unit placement (editor only)
             if (MapEditorActive)
             {
-                if (Keys.R.Down()) { UnitUserIsPlacing = UnitType.Footman; CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
-                if (Keys.T.Down()) { UnitUserIsPlacing = UnitType.Footman; CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
-                if (Keys.Y.Down()) { UnitUserIsPlacing = UnitType.Footman; CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
-                if (Keys.U.Down()) { UnitUserIsPlacing = UnitType.Footman; CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
+                if (Keys.R.Down()) { UnitUserIsPlacing = UnitType.Footman;     CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
+                if (Keys.T.Down()) { UnitUserIsPlacing = UnitType.DragonLord;  CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
+                if (Keys.Y.Down()) { UnitUserIsPlacing = UnitType.Necromancer; CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
+                if (Keys.U.Down()) { UnitUserIsPlacing = UnitType.Skeleton;    CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
+                if (Keys.I.Down()) { UnitUserIsPlacing = UnitType.ClaySoldier; CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
 
                 if (Keys.Tab.Pressed())
                 {
