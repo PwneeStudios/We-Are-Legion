@@ -322,7 +322,7 @@ namespace Terracotta
             MakeTopUi();
             TopUi.Draw();
             TopUi_Player1.Draw();
-            TopUi_Player2.Draw();
+            //TopUi_Player2.Draw();
         }
 
         vec2 ToBatchCoord(vec2 p)
@@ -335,13 +335,16 @@ namespace Terracotta
             // Top Ui
             Ui.ActiveUi = TopUi_Player1;
             DrawPlayerInfo(1);
-            Ui.ActiveUi = TopUi_Player2;
-            DrawPlayerInfo(2);
+            //Ui.ActiveUi = TopUi_Player2;
+            //DrawPlayerInfo(2);
 
             //// Ui Text
             //DrawUi_TopInfo();
             //DrawUi_PlayerGrid();
             DrawUi_CursorText();
+
+            // Spell
+            DrawUi_SpellText();
 
             // User Messages
             UserMessages.Update();
@@ -377,6 +380,15 @@ namespace Terracotta
             Ui.Element("[Text] Jade");
             s = string.Format("{0:#,##0}", 100000);
             Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
+        }
+
+        void DrawUi_SpellText()
+        {
+            if (CurUserMode == UserMode.CastSpell)
+            {
+                string s = CurSpell.Name;
+                Render.DrawText(s, GameClass.Screen * vec(.95f, .985f), 1, rgba(0xdddddd, .95f), Alignment.Right | Alignment.Bottom);
+            }
         }
 
         void MapEditorUiText()

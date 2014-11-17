@@ -23,6 +23,8 @@ namespace Terracotta
             id = next_id;
             next_id++;
 
+            this.Name = Name;
+
             Spells.Add(this);
         }
     }
