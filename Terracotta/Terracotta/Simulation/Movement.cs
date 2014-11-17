@@ -218,7 +218,9 @@ namespace Terracotta
                     value_down = _value_down.w;
                 }
 
-                const float auto_attack_cutoff = _12;
+                float auto_attack_cutoff = _12;
+                if (unit_here.type == UnitType.DragonLord) auto_attack_cutoff = _2;
+                if (unit_here.type == UnitType.Necromancer) auto_attack_cutoff = _2;
 
                 float min = 256;
                 float hold_dir = data_here.direction;
@@ -230,7 +232,17 @@ namespace Terracotta
                     if (value_down < min) { data_here.direction = Dir.Down; min = value_down; }
                 }
 
-                if (min > auto_attack_cutoff) data_here.direction = hold_dir;
+                if (min > auto_attack_cutoff)
+                {
+                    // Not within auto attack range, so fallback to previous direction.
+                    data_here.direction = hold_dir;
+                }
+                else
+                {
+                    // If we're within auto attack range and we're a necromancer, we should run away.
+                    // Necromancers are cowards.
+                    if (unit_here.type == UnitType.Necromancer) TurnAround(ref data_here);
+                }
 
                 // If we are guarding and a unit is close, switch to attacking
                 if (min < auto_attack_cutoff && data_here.action == UnitAction.Guard)

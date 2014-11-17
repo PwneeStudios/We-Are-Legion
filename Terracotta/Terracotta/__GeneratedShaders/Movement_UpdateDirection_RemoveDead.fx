@@ -314,6 +314,15 @@ float Terracotta__Movement_UpdateDirection_RemoveDead__BuildingDirection(VertexT
     return dir;
 }
 
+void Terracotta__SimShader__TurnAround(inout float4 u)
+{
+    u.r += 2 * 0.003921569;
+    if (u.r > 0.01568628 + .001)
+    {
+        u.r -= 4 * 0.003921569;
+    }
+}
+
 float FragSharpFramework__FragSharpStd__Float(float v)
 {
     return floor(255 * v + 0.5);
@@ -694,6 +703,14 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
         }
         float auto_attack_cutoff = 0.04705882;
+        if (abs(unit_here.r - 0.007843138) < .001)
+        {
+            auto_attack_cutoff = 0.007843138;
+        }
+        if (abs(unit_here.r - 0.01176471) < .001)
+        {
+            auto_attack_cutoff = 0.007843138;
+        }
         float min = 256;
         float hold_dir = data_here.r;
         if (abs(data_here.a - 0.007843138) < .001 || abs(data_here.a - 0.01176471) < .001)
@@ -722,6 +739,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         if (min > auto_attack_cutoff + .001)
         {
             data_here.r = hold_dir;
+        }
+        else
+        {
+            if (abs(unit_here.r - 0.01176471) < .001)
+            {
+                Terracotta__SimShader__TurnAround(data_here);
+            }
         }
         if (min < auto_attack_cutoff - .001 && abs(data_here.a - 0.01176471) < .001)
         {
