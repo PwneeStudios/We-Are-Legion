@@ -163,8 +163,8 @@ namespace Terracotta
         int DrawCount = 0;
 
         enum GameState { TitleScreen, Menu, Loading, Game,    ToEditor }
-        //GameState State = GameState.TitleScreen;
-        GameState State = GameState.ToEditor;
+        GameState State = GameState.TitleScreen;
+        //GameState State = GameState.ToEditor;
 
         double TimeSinceLoad = 0;
         string ScenarioToLoad = null;
@@ -194,8 +194,8 @@ namespace Terracotta
                     
                     //World.Load("TestSave.m3n");
                     //World.Load(Path.Combine("Content", Path.Combine("Maps", "Beset.m3n")));
-                    World.Load(Path.Combine("Content", Path.Combine("Maps", "Gilgamesh.m3n")));
-                    //World.Load(Path.Combine("Content", Path.Combine("Maps", "Nice.m3n")));
+                    //World.Load(Path.Combine("Content", Path.Combine("Maps", "Gilgamesh.m3n")));
+                    World.Load(Path.Combine("Content", Path.Combine("Maps", "Nice.m3n")));
 
                     World.MapEditor = true;
 

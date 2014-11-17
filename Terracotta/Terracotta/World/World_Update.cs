@@ -166,6 +166,13 @@ namespace Terracotta
                 BuildingUserIsPlacing = UnitType.GoldMine;
             }
 
+            if (Keys.J.Down())
+            {
+                CurUserMode = UserMode.PlaceBuilding;
+                UnselectAll = true;
+                BuildingUserIsPlacing = UnitType.JadeMine;
+            }
+
             // Switch to standard select
             if (Keys.Escape.Down() || Keys.Back.Down() || Input.RightMousePressed)
             {

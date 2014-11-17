@@ -106,7 +106,7 @@ namespace Terracotta
                 }
             }
 
-            if (BuildingUserIsPlacing == UnitType.GoldMine)
+            if (BuildingUserIsPlacing == UnitType.GoldMine || BuildingUserIsPlacing == UnitType.JadeMine)
             {
                 var _data = DataGroup.CurrentUnits.GetData<unit>(GridCoord, new vec2(_w, _h));
                 var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
@@ -124,10 +124,10 @@ namespace Terracotta
                         var distance = Get(distance_to, PlayerNumber);
 
                         bool occupied = unit_here.type > 0;
-                        bool is_gold_source = unit_here.team == Team.None && unit_here.type == UnitType.GoldMine;
+                        bool is_valid_source = unit_here.team == Team.None && unit_here.type == BuildingUserIsPlacing;
                         bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
 
-                        bool can_place = (is_gold_source || MapEditorActive && !occupied) && (in_territory || MapEditorActive);
+                        bool can_place = (is_valid_source || MapEditorActive && !occupied) && (in_territory || MapEditorActive);
                         CanPlace[i + j * _w] = can_place;
 
                         if (!can_place) CanPlaceItem = false;
