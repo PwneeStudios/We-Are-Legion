@@ -9,8 +9,14 @@ namespace Terracotta
         {
             unit unit_here = Units[Here];
 
-            if (unit_here.type == _10)
-                unit_here.type = _3;
+            if (unit_here.type == _2)
+                unit_here.type = _6;
+
+            if (unit_here.type == _3)
+                unit_here.type = _7;
+
+            if (unit_here.type == _4)
+                unit_here.type = _8;
 
             return unit_here;
         }
@@ -20,13 +26,17 @@ namespace Terracotta
     {
         public void Migrate()
         {
-            DataGroup.Corpses.Clear();
+            Render.UnsetDevice();
 
-            //UnitMigrate.Apply(DataGroup.CurrentUnits, Output: DataGroup.Temp1);
-            //CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
+            //DataGroup.Corpses.Clear();
 
-            //UnitMigrate.Apply(DataGroup.PreviousUnits, Output: DataGroup.Temp1);
-            //CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousUnits);
+            UnitMigrate.Apply(DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
+
+            UnitMigrate.Apply(DataGroup.PreviousUnits, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousUnits);
+
+            Render.UnsetDevice();
         }
     }
 }

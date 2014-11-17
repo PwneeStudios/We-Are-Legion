@@ -191,7 +191,12 @@ namespace Terracotta
             {
                 case GameState.ToEditor:
                     World = new World();
+                    
                     //World.Load("TestSave.m3n");
+                    //World.Load(Path.Combine("Content", Path.Combine("Maps", "Beset.m3n")));
+                    World.Load(Path.Combine("Content", Path.Combine("Maps", "Gilgamesh.m3n")));
+                    //World.Load(Path.Combine("Content", Path.Combine("Maps", "Nice.m3n")));
+
                     World.MapEditor = true;
 
                     State = GameState.Game;

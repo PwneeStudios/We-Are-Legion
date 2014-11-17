@@ -93,7 +93,8 @@ namespace Terracotta
             writer.Write(DataGroup.TargetData);
             writer.Write(DataGroup.Tiles);
             writer.Write(DataGroup.Corpses);
-            //writer.Write(DataGroup.Magic);
+            writer.Write(DataGroup.Magic);
+            writer.Write(DataGroup.Necromancy);
             writer.Write(DataGroup.DistanceToOtherTeams);
 
             writer.Write(DataGroup.RandomField);
@@ -132,7 +133,8 @@ namespace Terracotta
             DataGroup.TargetData.SetData(reader.ReadTexture2D().GetData());
             DataGroup.Tiles.SetData(reader.ReadTexture2D().GetData());
             DataGroup.Corpses.SetData(reader.ReadTexture2D().GetData());
-            //DataGroup.Magic.SetData(reader.ReadTexture2D().GetData());
+            DataGroup.Magic.SetData(reader.ReadTexture2D().GetData());
+            DataGroup.Necromancy.SetData(reader.ReadTexture2D().GetData());
             DataGroup.DistanceToOtherTeams.SetData(reader.ReadTexture2D().GetData());
 
             DataGroup.RandomField.SetData(reader.ReadTexture2D().GetData());
@@ -154,9 +156,7 @@ namespace Terracotta
             reader.Close();
             stream.Close();
 
-            //Render.UnsetDevice();
             //Migrate();
-            //Render.UnsetDevice();
         }
     }
 }
