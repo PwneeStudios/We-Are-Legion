@@ -23,8 +23,6 @@ namespace Terracotta
             UpdateGradient_ToPlayers();
             UpdateGradient_ToPlayers();
 
-            UpdateGradient_ToBuildings();
-
 
             Building_InfusionDiffusion();
 

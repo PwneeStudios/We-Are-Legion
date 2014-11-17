@@ -37,14 +37,14 @@ sampler fs_param_Path : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Current, using register location 2
-float2 fs_param_Current_size;
-float2 fs_param_Current_dxdy;
+// Texture Sampler for fs_param_Data, using register location 2
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
 
-Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s2) = sampler_state
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s2) = sampler_state
 {
-    texture   = <fs_param_Current_Texture>;
+    texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -52,14 +52,14 @@ sampler fs_param_Current : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_CurData, using register location 3
-float2 fs_param_CurData_size;
-float2 fs_param_CurData_dxdy;
+// Texture Sampler for fs_param_Unit, using register location 3
+float2 fs_param_Unit_size;
+float2 fs_param_Unit_dxdy;
 
-Texture fs_param_CurData_Texture;
-sampler fs_param_CurData : register(s3) = sampler_state
+Texture fs_param_Unit_Texture;
+sampler fs_param_Unit : register(s3) = sampler_state
 {
-    texture   = <fs_param_CurData_Texture>;
+    texture   = <fs_param_Unit_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -120,11 +120,20 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0, 0, 0, 0);
-    float4 data_here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    float4 unit_here = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
-    if (Terracotta__SimShader__Something(data_here) && Terracotta__SimShader__IsBuilding(unit_here))
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
+    if (Terracotta__SimShader__Something(data_here) && (Terracotta__SimShader__IsBuilding(unit_here) || abs(unit_here.r - 0.007843138) < .001 || abs(unit_here.r - 0.01176471) < .001))
     {
-        Terracotta__SimShader__set_type(output, unit_here.r);
+        float type = unit_here.r;
+        if (abs(type - 0.007843138) < .001)
+        {
+            type = 0.03529412;
+        }
+        if (abs(type - 0.01176471) < .001)
+        {
+            type = 0.03921569;
+        }
+        Terracotta__SimShader__set_type(output, type);
         Terracotta__SimShader__set_player(output, unit_here.g);
         output.rg = float2(0.1568628, 0.1568628);
         output.a = 0.0;

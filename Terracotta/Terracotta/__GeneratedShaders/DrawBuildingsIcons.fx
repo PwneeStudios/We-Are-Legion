@@ -24,14 +24,14 @@ float4 vs_param_cameraPos;
 float vs_param_cameraAspect;
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_BuildingDistancess, using register location 1
-float2 fs_param_BuildingDistancess_size;
-float2 fs_param_BuildingDistancess_dxdy;
+// Texture Sampler for fs_param_BuildingDistances, using register location 1
+float2 fs_param_BuildingDistances_size;
+float2 fs_param_BuildingDistances_dxdy;
 
-Texture fs_param_BuildingDistancess_Texture;
-sampler fs_param_BuildingDistancess : register(s1) = sampler_state
+Texture fs_param_BuildingDistances_Texture;
+sampler fs_param_BuildingDistances : register(s1) = sampler_state
 {
-    texture   = <fs_param_BuildingDistancess_Texture>;
+    texture   = <fs_param_BuildingDistances_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -114,13 +114,13 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 info = tex2D(fs_param_BuildingDistancess, psin.TexCoords + (float2(0, 0)) * fs_param_BuildingDistancess_dxdy);
+    float4 info = tex2D(fs_param_BuildingDistances, psin.TexCoords + (float2(0, 0)) * fs_param_BuildingDistances_dxdy);
     if (info.a > 0.05882353 + .001)
     {
         __FinalOutput.Color = float4(0.0, 0.0, 0.0, 0.0);
         return __FinalOutput;
     }
-    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos(psin, fs_param_BuildingDistancess_size);
+    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos(psin, fs_param_BuildingDistances_size);
     float2 v = 255 * (info.rg - float2(0.1568628, 0.1568628)) - (subcell_pos - float2(0.5, 0.5));
     if (length(v) < fs_param_radius - .001)
     {

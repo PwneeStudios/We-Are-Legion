@@ -28,7 +28,7 @@ namespace Terracotta
             Swap(ref DistanceToPlayers, ref Temp1);
         }
 
-        void UpdateGradient_ToBuildings()
+        public void UpdateGradient_ToBuildings()
         {
             Pathfinding_ToBuildings.Apply(DistanceToBuildings, CurrentData, CurrentUnits, Output: Temp1);
             Swap(ref DistanceToBuildings, ref Temp1);

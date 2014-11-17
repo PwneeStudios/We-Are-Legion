@@ -196,6 +196,8 @@ namespace Terracotta
 
             BenchmarkTests.Run(DataGroup.CurrentData, DataGroup.PreviousData);
 
+            DataGroup.UpdateGradient_ToBuildings();
+
             DrawMinimapTexture();
             DrawGrids();
             

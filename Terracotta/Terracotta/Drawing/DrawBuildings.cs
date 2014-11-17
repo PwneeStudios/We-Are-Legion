@@ -5,13 +5,13 @@ namespace Terracotta
     public partial class DrawBuildingsIcons : BaseShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<BuildingDist> BuildingDistancess, float blend, float radius)
+        color FragmentShader(VertexOut vertex, Field<BuildingDist> BuildingDistances, float blend, float radius)
         {
-            BuildingDist info = BuildingDistancess[Here];
+            BuildingDist info = BuildingDistances[Here];
 
             if (info.dist > _15) return color.TransparentBlack;
 
-            vec2 subcell_pos = get_subcell_pos(vertex, BuildingDistancess.Size);
+            vec2 subcell_pos = get_subcell_pos(vertex, BuildingDistances.Size);
 
             var v = 255 * (info.diff - Pathfinding_ToBuildings.CenterOffset) - (subcell_pos - vec(.5f, .5f));
             if (length(v) < radius)

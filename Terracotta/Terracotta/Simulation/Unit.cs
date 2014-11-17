@@ -483,6 +483,8 @@ namespace Terracotta
                 Barracks = _6,
                 GoldMine = _7,
                 JadeMine = _8,
+                DragonLordIcon  = _9,
+                NecromancerIcon = _10,
 
                 BlockingTile = _20;
 

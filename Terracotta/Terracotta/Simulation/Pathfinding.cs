@@ -17,16 +17,20 @@ namespace Terracotta
         }
 
         [FragmentShader]
-        BuildingDist FragmentShader(VertexOut vertex, Field<BuildingDist> Path, Field<data> Current, Field<unit> CurData)
+        BuildingDist FragmentShader(VertexOut vertex, Field<BuildingDist> Path, Field<data> Data, Field<unit> Unit)
         {
             BuildingDist output = BuildingDist.Nothing;
 
-            data data_here = Current[Here];
-            unit unit_here = CurData[Here];
+            data data_here = Data[Here];
+            unit unit_here = Unit[Here];
 
-            if (Something(data_here) && IsBuilding(unit_here))
+            if (Something(data_here) && (IsBuilding(unit_here) || unit_here.type == UnitType.DragonLord || unit_here.type == UnitType.Necromancer))
             {
-                set_type(ref output, unit_here.type);
+                float type = unit_here.type;
+                if (type == UnitType.DragonLord)  type = UnitType.DragonLordIcon;
+                if (type == UnitType.Necromancer) type = UnitType.NecromancerIcon;
+
+                set_type(ref output, type);
                 set_player(ref output, unit_here.player);
                 output.diff = CenterOffset;
                 output.dist = _0;
