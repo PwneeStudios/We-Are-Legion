@@ -193,20 +193,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Art\DemoScreen1.png">
-      <Name>DemoScreen1</Name>
+    <Compile Include="Art\Screen-Title.png">
+      <Name>Screen-Title</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Art\DemoScreen2.png">
-      <Name>DemoScreen2</Name>
+    <Compile Include="Art\Screen-Instructions.png">
+      <Name>Screen-Instructions</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Art\DemoScreen3.png">
-      <Name>DemoScreen3</Name>
+    <Compile Include="Art\Screen-Loading.png">
+      <Name>Screen-Loading</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -247,6 +247,18 @@
     </Compile>
     <Compile Include="Art\AoE_Terra.png">
       <Name>AoE_Terra</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Art\Screen-Scenarios.png">
+      <Name>Screen-Scenarios</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Art\Screen-Spells.png">
+      <Name>Screen-Spells</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

@@ -79,11 +79,34 @@ namespace Terracotta
 
     public partial class World
     {
+        static byte[] bytes;
+
+        public void SaveInBuffer()
+        {
+            var ms = new MemoryStream();
+            var writer = new BinaryWriter(ms);
+
+            Save(writer);
+
+            bytes = ms.GetBuffer();
+
+            writer.Close();
+            ms.Close();
+        }
+
         public void Save(string FileName)
         {
             var stream = new FileStream(FileName, FileMode.Create);
             var writer = new BinaryWriter(stream);
 
+            Save(writer);
+
+            writer.Close();
+            stream.Close();
+        }
+
+        public void Save(BinaryWriter writer)
+        {
             // Grid data
             writer.Write(DataGroup.CurrentData);
             writer.Write(DataGroup.CurrentUnits);
@@ -112,9 +135,19 @@ namespace Terracotta
                 writer.Write(PlayerInfo[i].Gold);
                 writer.Write(PlayerInfo[i].GoldMines);
             }
+        }
 
-            writer.Close();
-            stream.Close();
+        public void LoadFromBuffer()
+        {
+            Render.UnsetDevice();
+
+            var ms = new MemoryStream(bytes);
+            var reader = new BinaryReader(ms);
+
+            Load(reader);
+
+            reader.Close();
+            ms.Close();
         }
 
         public void Load(string FileName)
@@ -124,6 +157,16 @@ namespace Terracotta
             var stream = new FileStream(FileName, FileMode.Open);
             var reader = new BinaryReader(stream);
 
+            Load(reader);
+
+            reader.Close();
+            stream.Close();
+
+            //Migrate();
+        }
+
+        public void Load(BinaryReader reader)
+        {
             // Grid data
             DataGroup.CurrentData.SetData(reader.ReadTexture2D().GetData());
             DataGroup.CurrentUnits.SetData(reader.ReadTexture2D().GetData());
@@ -152,11 +195,6 @@ namespace Terracotta
                 PlayerInfo[i].Gold = reader.ReadInt32();
                 PlayerInfo[i].GoldMines = reader.ReadInt32();
             }
-
-            reader.Close();
-            stream.Close();
-
-            //Migrate();
         }
     }
 }

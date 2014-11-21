@@ -10,7 +10,7 @@ namespace Terracotta
     public static class Assets
     {
         public static Texture2D
-            DemoScreen1, DemoScreen2, DemoScreen3,
+            ScreenTitle, ScreenSpells, ScreenInstructions, ScreenScenarios, ScreenLoading,
 
             White, FarColors,
 
@@ -31,9 +31,11 @@ namespace Terracotta
 
         public static void Initialize()
         {
-            DemoScreen1 = LoadTexture("DemoScreen1");
-            DemoScreen2 = LoadTexture("DemoScreen2");
-            DemoScreen3 = LoadTexture("DemoScreen3");
+            ScreenTitle        = LoadTexture("Screen-Title");
+            ScreenSpells       = LoadTexture("Screen-Spells");
+            ScreenInstructions = LoadTexture("Screen-Instructions");
+            ScreenScenarios    = LoadTexture("Screen-Scenarios");
+            ScreenLoading      = LoadTexture("Screen-Loading");
 
             White               = LoadTexture("White");
             FarColors           = LoadTexture("FarColors");

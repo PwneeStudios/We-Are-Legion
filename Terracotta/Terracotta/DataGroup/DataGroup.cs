@@ -184,6 +184,7 @@ namespace Terracotta
         RenderTarget2D MakeTarget(int w, int h)
         {
             return new RenderTarget2D(GameClass.Game.GraphicsDevice, w, h);
+            //return new RenderTarget2D(GameClass.Game.GraphicsDevice, w, h, false, SurfaceFormat.Color, DepthFormat.None, 1, RenderTargetUsage.PreserveContents);
         }
     }
 }

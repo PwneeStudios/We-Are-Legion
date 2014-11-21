@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 
+using Windows = System.Windows.Forms;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -31,6 +33,8 @@ namespace Terracotta
 
         public static World World;
 
+        bool FullScreen = true;
+
         public GameClass()
         {
             Game = this;
@@ -39,9 +43,9 @@ namespace Terracotta
 
             Window.Title = "Terracotta";
 
-            //graphics.IsFullScreen = true;
-            //graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            //graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
             //graphics.IsFullScreen = false;
             //graphics.PreferredBackBufferWidth = 1024;
@@ -51,9 +55,9 @@ namespace Terracotta
             //graphics.PreferredBackBufferWidth = 1280;
             //graphics.PreferredBackBufferHeight = 720;
 
-            graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferWidth = 1440;
-            graphics.PreferredBackBufferHeight = 1080;
+            //graphics.IsFullScreen = false;
+            //graphics.PreferredBackBufferWidth = 1440;
+            //graphics.PreferredBackBufferHeight = 1080;
 
             //graphics.IsFullScreen = true;
             //graphics.PreferredBackBufferWidth = 1920;
@@ -64,6 +68,11 @@ namespace Terracotta
             IsFixedTimeStep = !UnlimitedSpeed;
 
             Content.RootDirectory = "Content";
+
+            if (FullScreen)
+            {
+                FakeFullscreen();
+            }
         }
 
         protected override void Initialize()
@@ -160,14 +169,91 @@ namespace Terracotta
             base.Update(gameTime);
         }
 
+        protected override void OnDeactivated(object sender, EventArgs args)
+        {
+            Render.UnsetDevice();
+
+            if (!FocusSaved && World != null)
+            {
+                World.SaveInBuffer();
+                FocusSaved = true;
+            }
+
+            FakeMinimize();
+
+            base.OnDeactivated(sender, args);
+        }
+
+        bool ActivateFakeFullScreen = false;
+        protected override void OnActivated(object sender, EventArgs args)
+        {
+            if (FocusSaved && World != null)
+            {
+                World.LoadFromBuffer();
+                FocusSaved = false;
+            }
+
+            //FakeFullscreen();
+            ActivateFakeFullScreen = true;
+
+            base.OnActivated(sender, args);
+        }
+
+        void FakeFullscreen()
+        {
+            ActivateFakeFullScreen = false;
+
+            IntPtr hWnd = Window.Handle;
+            var control = Windows.Control.FromHandle(hWnd);
+            var form = control.FindForm();
+
+            if (FullScreen)
+            {
+                //control.Show();
+                control.Location = new System.Drawing.Point(0, 0);
+
+                form.TopMost = true;
+
+                form.FormBorderStyle = Windows.FormBorderStyle.None;
+                //form.WindowState = Windows.FormWindowState.Maximized;
+            }
+            else
+            {
+                form.TopMost = false;
+
+                form.FormBorderStyle = Windows.FormBorderStyle.FixedSingle;
+                //form.WindowState = Windows.FormWindowState.Normal;
+            }
+        }
+
+        void FakeMinimize()
+        {
+            IntPtr hWnd = Window.Handle;
+            var control = Windows.Control.FromHandle(hWnd);
+            var form = control.FindForm();
+
+            if (FullScreen)
+            {
+                form.TopMost = false;
+
+                form.FormBorderStyle = Windows.FormBorderStyle.None;
+                //form.WindowState = Windows.FormWindowState.Minimized;
+
+                control.Location = new System.Drawing.Point(-10000, -10000);
+            }
+        }
+
+
         int DrawCount = 0;
 
-        enum GameState { TitleScreen, Menu, Loading, Game,    ToEditor }
+        enum GameState { TitleScreen, Spells, Instructions, ScenarioMenu, Loading, Game,       ToEditor }
         GameState State = GameState.TitleScreen;
         //GameState State = GameState.ToEditor;
 
         double TimeSinceLoad = 0;
         string ScenarioToLoad = null;
+
+        bool FocusSaved = false;
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -181,7 +267,17 @@ namespace Terracotta
 
             if (IsActive)
             {
+                if (ActivateFakeFullScreen) FakeFullscreen();
+
                 Input.Update();
+            }
+            else
+            {
+                Graphics.SetRenderTarget(null);
+                Graphics.Clear(Color.Black);
+
+                base.Draw(gameTime);
+                return;
             }
 
             if (Buttons.Back.Down())
@@ -205,45 +301,79 @@ namespace Terracotta
 
                 case GameState.TitleScreen:
                     Render.StandardRenderSetup();
-                    DrawFullScreen(Assets.DemoScreen1);
+                    DrawFullScreen(Assets.ScreenTitle);
 
-                    if (gameTime.TotalGameTime.Seconds > .4f)
-                        if (Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||
-                            Keys.Enter.Pressed() || Keys.Space.Pressed() || Keys.Escape.Pressed())
-                        {
-                            State = GameState.Menu;
-                        }
+                    if (gameTime.TotalGameTime.Seconds < .25f)
+                        break;
+
+                    if (Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||
+                        Keys.Enter.Pressed() || Keys.Space.Pressed() || Keys.Escape.Pressed())
+                    {
+                        State = GameState.Spells;
+                    }
 
                     break;
 
-                case GameState.Menu:
+                case GameState.Spells:
                     Render.StandardRenderSetup();
-                    DrawFullScreen(Assets.DemoScreen2);
+                    DrawFullScreen(Assets.ScreenSpells);
+
+                    if (Keys.Back.Pressed())
+                    {
+                        State = GameState.TitleScreen;
+                    }
+                    else if (Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||
+                        Keys.Enter.Pressed() || Keys.Space.Pressed() || Keys.Escape.Pressed())
+                    {
+                        State = GameState.Instructions;
+                    }
+
+                    break;
+
+                case GameState.Instructions:
+                    Render.StandardRenderSetup();
+                    DrawFullScreen(Assets.ScreenInstructions);
+
+                    if (Keys.Back.Pressed())
+                    {
+                        State = GameState.Spells;
+                    }
+                    else if (Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||
+                        Keys.Enter.Pressed() || Keys.Space.Pressed() || Keys.Escape.Pressed())
+                    {
+                        State = GameState.ScenarioMenu;
+                    }
+                    
+                    break;
+
+                case GameState.ScenarioMenu:
+                    Render.StandardRenderSetup();
+                    DrawFullScreen(Assets.ScreenScenarios);
 
                     if (Keys.D1.Down() || Keys.NumPad1.Down())
                     {
                         World.StaticMaxZoomOut = 7.5f;
                         State = GameState.Loading;
                         ScenarioToLoad = "Beset.m3n";
-                        DrawFullScreen(Assets.DemoScreen3);
+                        DrawFullScreen(Assets.ScreenLoading);
                     }
                     else if (Keys.D2.Down() || Keys.NumPad2.Down())
                     {
                         World.StaticMaxZoomOut = 5.61781263f;
                         State = GameState.Loading;
                         ScenarioToLoad = "Gilgamesh.m3n";
-                        DrawFullScreen(Assets.DemoScreen3);
+                        DrawFullScreen(Assets.ScreenLoading);
                     }
                     else if (Keys.D3.Down() || Keys.NumPad3.Down())
                     {
                         World.StaticMaxZoomOut = 1f;
                         State = GameState.Loading;
                         ScenarioToLoad = "Nice.m3n";
-                        DrawFullScreen(Assets.DemoScreen3);
+                        DrawFullScreen(Assets.ScreenLoading);
                     }
-                    else if (Keys.Back.Down())
+                    else if (Keys.Back.Pressed())
                     {
-                        State = GameState.TitleScreen;
+                        State = GameState.Instructions;
                     }
                     else if (Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||
                         Keys.Enter.Pressed() || Keys.Space.Pressed() || Keys.Escape.Pressed())
@@ -258,7 +388,7 @@ namespace Terracotta
 
                 case GameState.Loading:
                     Render.StandardRenderSetup();
-                    DrawFullScreen(Assets.DemoScreen3);
+                    DrawFullScreen(Assets.ScreenLoading);
 
                     if (ScenarioToLoad != null)
                     {
@@ -266,7 +396,7 @@ namespace Terracotta
                         World.Load(Path.Combine("Content", Path.Combine("Maps", ScenarioToLoad)));
                         ScenarioToLoad = null;
                         TimeSinceLoad = 0;
-                        DrawFullScreen(Assets.DemoScreen3);
+                        DrawFullScreen(Assets.ScreenLoading);
                     }
 
                     if (TimeSinceLoad > .3f)
@@ -284,7 +414,7 @@ namespace Terracotta
                 case GameState.Game:
                     if (Keys.Escape.Pressed())
                     {
-                        State = GameState.Menu;
+                        State = GameState.ScenarioMenu;
                     }
 
                     DrawGame(gameTime);
