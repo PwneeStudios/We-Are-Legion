@@ -33,9 +33,12 @@ namespace Terracotta
         {
             List<string> args = new List<string>(args_);
 
-            if      (args.Count > 0 && args.Contains("--server")) { Server = true; Console.WriteLine("Terracotta Server."); }
-            else if (args.Count > 0 && args.Contains("--client")) { Client = true; Console.WriteLine("Terracotta Client."); }
+            if      (args.Count > 0 && args.Contains("--server")) Server = true;
+            else if (args.Count > 0 && args.Contains("--client")) Client = true;
             else Client = true;
+
+            if (Server) Console.WriteLine("Terracotta Server.");
+            if (Client) Console.WriteLine("Terracotta Client.");
 
 #if DEBUG
             if (args.Count == 0 || args.Contains("--debug"))
@@ -61,6 +64,10 @@ namespace Terracotta
                 int xpos = 0;
                 int ypos = Client ? 0 : 1080 / 2;
                 SetWindowPos(MyConsole, 0, xpos, ypos, 0, 0, SWP_NOSIZE);
+                Console.BufferWidth = 169;
+                Console.WindowWidth = 169;
+                Console.BufferHeight = Int16.MaxValue - 1;
+                Console.WindowHeight = 37;
             }
 #endif
 

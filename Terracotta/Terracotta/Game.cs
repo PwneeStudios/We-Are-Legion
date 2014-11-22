@@ -91,7 +91,7 @@ namespace Terracotta
             {
                 var form = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
 
-                int xpos = 1920 / 2;
+                int xpos = 1920 - 512 - 14;
                 int ypos = Program.Client ? 0 : 1080 / 2;
                 form.Location = new System.Drawing.Point(xpos, ypos);
             }

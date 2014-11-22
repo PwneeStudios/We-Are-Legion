@@ -5,6 +5,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Collections.Generic;
 using System.Collections.Concurrent;
 
 using FragSharpHelper;
@@ -16,20 +17,21 @@ namespace Terracotta
     {
         TcpClient client = null;
         NetworkStream stream = null;
-        byte[] bytes = new Byte[256];
-        String data = String.Empty;
+        byte[] bytes = new byte[1 << 16];
 
         void ReceiveThread()
         {
             while (true)
             {
                 if (stream.DataAvailable)
-                {                    
-                    Int32 bytes_read = stream.Read(bytes, 0, bytes.Length);
-                    data = Encoding.ASCII.GetString(bytes, 0, bytes_read);
+                {
+                    var messages = stream.Receive(bytes);
 
-                    Networking.Inbox.Enqueue(data);
-                    Console.WriteLine("(Client) Received: {0}", data);
+                    foreach (var message in messages)
+                    {
+                        Networking.Inbox.Enqueue(message);
+                        Console.WriteLine("(Client) Received: {0}", message);
+                    }
                 }
             }
         }
@@ -43,7 +45,7 @@ namespace Terracotta
                 if (Networking.Outbox.TryDequeue(out message))
                 {
                     stream.Send(message.Item2);
-                    Console.WriteLine("(Client) Sent: {0}", data);
+                    Console.WriteLine("(Client) Sent: {0}", message.Item2);
                 }
 
                 Thread.SpinWait(1);
@@ -58,7 +60,11 @@ namespace Terracotta
                 IPAddress server_addr = IPAddress.Parse("127.0.0.1");
 
                 client = new TcpClient();
+
+                Console.Write("Waiting to connect... ");
                 client.Connect(server_addr, port);
+                Console.WriteLine("Connected!");
+
                 stream = client.GetStream();
 
                 new Thread(ReceiveThread).Start();
@@ -84,20 +90,23 @@ namespace Terracotta
         TcpListener server = null;
         TcpClient client = null;
         NetworkStream stream = null;
-        byte[] bytes = new Byte[256];
-        String data = String.Empty;
+        byte[] bytes = new byte[1 << 16];
 
         void ReceiveThread()
         {
             while (true)
             {
+                Thread.Sleep(1000);
+
                 if (stream.DataAvailable)
                 {
-                    Int32 bytes_read = stream.Read(bytes, 0, bytes.Length);
-                    data = Encoding.ASCII.GetString(bytes, 0, bytes_read);
-                    Console.WriteLine("(Server) Received: {0}", data);
+                    var messages = stream.Receive(bytes);
 
-                    //Networking.Send_PlayerActionAck(data);
+                    foreach (var message in messages)
+                    {
+                        Console.WriteLine("(Server) Received: {0}", message);
+                        Networking.Inbox.Enqueue(message);
+                    }
                 }
             }
         }
@@ -119,7 +128,7 @@ namespace Terracotta
                         stream.Send(message.Item2);
                     }
 
-                    Console.WriteLine("(Server) Sent to {1}: {0}", data, message.Item1);
+                    Console.WriteLine("(Server) Sent to {1}: {0}", message.Item2, message.Item1);
                 }
 
                 Thread.SpinWait(1);
@@ -222,7 +231,7 @@ namespace Terracotta
 
         static Message _ = new Message("");
 
-        public static void Send_PlayerActionAck(string message)
+        public static void ToClients_PlayerActionAck(string message)
         {
             var msg = _ | MessageType.PlayerActionAck | message;
 
@@ -231,7 +240,7 @@ namespace Terracotta
 
         public static void ToServer_Select(vec2 v1, vec2 v2)
         {
-            ToServer(_ | MessageType.PlayerAction | GameClass.World.PlayerNumber | PlayerAction.Select | v1 | v2);
+            ToServer(_ | MessageType.PlayerAction | GameClass.World.SimStep | GameClass.World.PlayerNumber | PlayerAction.Select | v1 | v2);
         }
 
         public static void Parse()
@@ -266,7 +275,7 @@ namespace Terracotta
         {
             try
             {
-                var bytes = Encoding.ASCII.GetBytes(message);
+                var bytes = Encoding.ASCII.GetBytes(message + '|');
                 stream.Write(bytes, 0, bytes.Length);
 
                 return true;
@@ -275,6 +284,17 @@ namespace Terracotta
             {
                 return false;
             }
+        }
+
+        public static List<string> Receive(this NetworkStream stream, byte[] scratch)
+        {
+            Int32 bytes_read = stream.Read(scratch, 0, 1 << 16);
+            string data = Encoding.ASCII.GetString(scratch, 0, bytes_read);
+
+            var messages = new List<string>(data.Split('|'));
+
+            if (messages.Count <= 1) return messages;
+            else return messages.GetRange(0, messages.Count - 1);
         }
     }
 }
