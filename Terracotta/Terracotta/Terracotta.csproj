@@ -5,7 +5,6 @@
     <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Terracotta</RootNamespace>
     <AssemblyName>Terracotta</AssemblyName>
@@ -35,6 +34,7 @@
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputType>Exe</OutputType>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -48,6 +48,7 @@
     <XnaCompressContent>false</XnaCompressContent>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputType>WinExe</OutputType>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\x86\Release</OutputPath>
@@ -58,6 +59,9 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <PlatformTarget>x86</PlatformTarget>
     <XnaCompressContent>true</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FragSharpFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
@@ -114,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
+    <Compile Include="Networking.cs" />
     <Compile Include="Drawing\DrawDebugInfo.cs" />
     <Compile Include="Drawing\DrawTiles.cs" />
     <Compile Include="Geodesics\Geodesics.cs" />
@@ -224,6 +229,10 @@ $(SolutionDir)PngToCsData\PngToCsData\bin\Release\PngToCsData.exe $(ProjectDir)D
 ECHO Running FragSharp via the following command line invocation:
 ECHO "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\x86\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)
 "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\x86\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <!--
       To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -72,7 +72,7 @@ namespace Terracotta
         }
 
 #if DEBUG
-        static bool HotSwap = true;
+        public static bool HotSwap = true;
 #endif
 
         static Texture2D LoadTexture(string FileName)
@@ -80,7 +80,7 @@ namespace Terracotta
 #if DEBUG
             try
             {
-                if (HotSwap)
+                if (HotSwap && !Program.Server && !Program.Client)
                 {
                     using (var file = File.OpenRead(GameClass.Game.HotSwapDir + FileName + ".png"))
                     {

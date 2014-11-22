@@ -110,6 +110,20 @@ float fs_param_selection_size;
 float fs_param_solid_blend;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+// Texture Sampler for fs_param_FarColor, using register location 6
+float2 fs_param_FarColor_size;
+float2 fs_param_FarColor_dxdy;
+
+Texture fs_param_FarColor_Texture;
+sampler fs_param_FarColor : register(s6) = sampler_state
+{
+    texture   = <fs_param_FarColor_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
 
 // The following methods are included because they are referenced by the fragment shader.
 bool Terracotta__SimShader__IsUnit(float4 u)
@@ -156,51 +170,51 @@ float Terracotta__UnitType__UnitIndex(float4 u)
     return FragSharpFramework__FragSharpStd__Float(u.r - 0.003921569);
 }
 
-float4 Terracotta__SelectedUnitColor__Get(float player)
+float4 Terracotta__SelectedUnitColor__Get(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.007843138) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01176471) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01568628) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 Terracotta__UnitColor__Get(float player)
+float4 Terracotta__UnitColor__Get(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
-        return float4(0.4392157, 0.4078431, 0.6117647, 1.0);
+        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.007843138) < .001)
     {
-        return float4(0.572549, 0.2588235, 0.2235294, 1.0);
+        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01176471) < .001)
     {
-        return float4(0.3803922, 0.6117647, 0.7058824, 1.0);
+        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01568628) < .001)
     {
-        return float4(0.9647059, 0.6431373, 0.6980392, 1.0);
+        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 Terracotta__DrawUnits__SolidColor(float4 data, float4 unit)
+float4 Terracotta__DrawUnits__SolidColor(VertexToPixel psin, float4 data, float4 unit)
 {
-    return Terracotta__SimShader__selected(data) ? Terracotta__SelectedUnitColor__Get(unit.g) : Terracotta__UnitColor__Get(unit.g);
+    return Terracotta__SimShader__selected(data) ? Terracotta__SelectedUnitColor__Get(psin, unit.g) : Terracotta__UnitColor__Get(psin, unit.g);
 }
 
 float4 Terracotta__DrawUnits__Sprite(VertexToPixel psin, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
@@ -217,11 +231,11 @@ float4 Terracotta__DrawUnits__Sprite(VertexToPixel psin, float4 d, float4 u, flo
     if (draw_selected)
     {
         float a = clr.a * selection_blend;
-        clr = a * clr + (1 - a) * Terracotta__SelectedUnitColor__Get(u.g);
+        clr = a * clr + (1 - a) * Terracotta__SelectedUnitColor__Get(psin, u.g);
     }
     if (solid_blend_flag)
     {
-        clr = solid_blend * clr + (1 - solid_blend) * Terracotta__DrawUnits__SolidColor(d, u);
+        clr = solid_blend * clr + (1 - solid_blend) * Terracotta__DrawUnits__SolidColor(psin, d, u);
     }
     return clr;
 }

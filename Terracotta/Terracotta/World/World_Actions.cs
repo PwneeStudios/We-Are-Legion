@@ -446,8 +446,8 @@ namespace Terracotta
         {
             if (!GameClass.HasFocus) return;
 
-            vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
-            vec2 WorldCordPrev = ScreenToWorldCoord(Input.PrevMousePos);
+            vec2 WorldCoord = ScreenToWorldCoord(Input.CurMousePos);
+            vec2 WorldCoordPrev = ScreenToWorldCoord(Input.PrevMousePos);
 
             bool Deselect = Input.LeftMousePressed && !Keys.LeftShift.Down() && !Keys.RightShift.Down()
                 || CurUserMode != UserMode.Select
@@ -467,9 +467,15 @@ namespace Terracotta
             }
 
             if (LineSelect)
-                DataGroup.SelectAlongLine(WorldCord, WorldCordPrev, Size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
+            {
+                if (Selecting) Networking.ToServer_Select(WorldCoord, WorldCoordPrev);
+                
+                DataGroup.SelectAlongLine(WorldCoord, WorldCoordPrev, Size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
+            }
             else
-                DataGroup.SelectInArea(WorldCord, Size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
+            {
+                DataGroup.SelectInArea(WorldCoord, Size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
+            }
 
             if (CurUserMode != UserMode.Select) return;
 

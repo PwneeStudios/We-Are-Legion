@@ -11,6 +11,11 @@ using Microsoft.Xna.Framework.Input;
 using FragSharpHelper;
 using FragSharpFramework;
 
+using System.Text;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+
 namespace Terracotta
 {
     public class GameClass : Game
@@ -33,7 +38,8 @@ namespace Terracotta
 
         public static World World;
 
-        bool FullScreen = true;
+        bool FullScreen = false;
+        bool AutoSaveOnTab = false;
 
         public GameClass()
         {
@@ -43,23 +49,21 @@ namespace Terracotta
 
             Window.Title = "Terracotta";
 
-            graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            //graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            //graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
-            //graphics.IsFullScreen = false;
+            graphics.PreferredBackBufferWidth = 512;
+            graphics.PreferredBackBufferHeight = 512;
+
             //graphics.PreferredBackBufferWidth = 1024;
             //graphics.PreferredBackBufferHeight = 1024;
 
-            //graphics.IsFullScreen = true;
             //graphics.PreferredBackBufferWidth = 1280;
             //graphics.PreferredBackBufferHeight = 720;
 
-            //graphics.IsFullScreen = false;
             //graphics.PreferredBackBufferWidth = 1440;
             //graphics.PreferredBackBufferHeight = 1080;
 
-            //graphics.IsFullScreen = true;
             //graphics.PreferredBackBufferWidth = 1920;
             //graphics.PreferredBackBufferHeight = 1080;
 
@@ -78,7 +82,19 @@ namespace Terracotta
         protected override void Initialize()
         {
 #if DEBUG
-            SetupHotswap();
+            if (Assets.HotSwap && !Program.Server && !Program.Client)
+                SetupHotswap();
+#endif
+
+#if DEBUG
+            if (Program.MultiDebug)
+            {
+                var form = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
+
+                int xpos = 1920 / 2;
+                int ypos = Program.Client ? 0 : 1080 / 2;
+                form.Location = new System.Drawing.Point(xpos, ypos);
+            }
 #endif
 
             FragSharp.Initialize(Content, GraphicsDevice);
@@ -88,6 +104,8 @@ namespace Terracotta
             Render.Initialize();
 
             Spells.Initialize();
+
+            Networking.Start();
 
             base.Initialize();
         }
@@ -173,7 +191,7 @@ namespace Terracotta
         {
             Render.UnsetDevice();
 
-            if (!FocusSaved && World != null)
+            if (AutoSaveOnTab && !FocusSaved && World != null)
             {
                 World.SaveInBuffer();
                 FocusSaved = true;
@@ -187,13 +205,12 @@ namespace Terracotta
         bool ActivateFakeFullScreen = false;
         protected override void OnActivated(object sender, EventArgs args)
         {
-            if (FocusSaved && World != null)
+            if (AutoSaveOnTab && FocusSaved && World != null)
             {
                 World.LoadFromBuffer();
                 FocusSaved = false;
             }
 
-            //FakeFullscreen();
             ActivateFakeFullScreen = true;
 
             base.OnActivated(sender, args);
