@@ -16,6 +16,8 @@ namespace Terracotta
 
         public World()
         {
+            PlayerNumber = Program.StartupPlayerNumber;
+
             CameraAspect = GameClass.ScreenAspect;
 
             float GroundRepeat = 100;
@@ -91,7 +93,7 @@ namespace Terracotta
         public float CameraAspect = 1;
         public vec4 camvec { get { return new vec4(CameraPos.x, CameraPos.y, CameraZoom, CameraZoom); } }
 
-        DataGroup DataGroup;
+        public DataGroup DataGroup;
 
         GameParameters Params;
         PlayerInfo[] PlayerInfo;
@@ -110,7 +112,18 @@ namespace Terracotta
         int DrawCount = 0;
 
         public float PlayerValue = Player.One;
-        public int PlayerNumber { get { return Int(PlayerValue); } }
+        public int PlayerNumber
+        {
+            get
+            {
+                return Int(PlayerValue);
+            }
+
+            set
+            {
+                PlayerValue = Player.Vals[value];
+            }
+        }
 
         public float TeamValue = Team.One;
         public int TeamNumber { get { return Int(TeamValue); } }

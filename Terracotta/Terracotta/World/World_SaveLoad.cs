@@ -152,6 +152,30 @@ namespace Terracotta
 
         public void Load(string FileName)
         {
+            if (Program.MultiDebug)
+            {
+                for (int i = 0; i < 10; i++)
+                {
+                    try
+                    {
+                        _Load(FileName);
+                        return;
+                    }
+                    catch (IOException e)
+                    {
+                    }
+
+                    System.Threading.Thread.Sleep(100);
+                }
+            }
+            else
+            {
+                _Load(FileName);
+            }
+        }
+
+        void _Load(string FileName)
+        {
             Render.UnsetDevice();
 
             var stream = new FileStream(FileName, FileMode.Open);

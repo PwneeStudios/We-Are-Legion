@@ -104,7 +104,7 @@ namespace Terracotta
             //    CameraPos += Input.DeltaMousPos / CameraZoom * MoveRate_ClickAndDrag * new vec2(-1, 1);
 
             // Move the camera via: Push Edge
-            if (GameClass.MouseEnabled)
+            if (GameClass.MouseEnabled && !Program.MultiDebug)
             {
                 float MoveRate_PushEdge = .075f * FpsRateModifier;
                 var push_dir = vec2.Zero;

@@ -16,11 +16,33 @@ namespace Terracotta
     public enum MessageType { PlayerAction, PlayerActionAck, EndOfStep }
     public enum PlayerAction { Select, Attack }
 
-    public abstract class GenericMessage
+    public abstract class GenericMessage : SimShader
     {
         public MessageStr _ = new MessageStr("");
 
-        public GenericMessage SubMessage = null;
+        GenericMessage _Inner = null, _Outer = null;
+
+        public GenericMessage Inner
+        {
+            get { return _Inner; }
+            set { _Inner = value; Inner.Outer = this; }
+        }
+
+        public GenericMessage Outer
+        {
+            get { return _Outer; }
+            set { _Outer = value; }
+        }
+
+        public GenericMessage Innermost
+        {
+            get
+            {
+                if (Inner == null) return this;
+                else return Inner.Innermost;
+            }
+        }
+
         public abstract MessageStr EncodeHead();
 
         public override string ToString()
@@ -30,13 +52,40 @@ namespace Terracotta
 
         public string Encode()
         {
-            if (SubMessage == null) return EncodeHead();
-            else return EncodeHead() | SubMessage.Encode();
+            if (Inner == null) return EncodeHead();
+            else return EncodeHead() | Inner.Encode();
         }
 
         protected static T ToEnum<T>(string s)
         {
             return (T)Enum.Parse(typeof(T), s);
+        }
+
+        protected static string Pop(ref string s)
+        {
+            string head;
+            HeadTail(s, out head, out s);
+            return head;
+        }
+
+        protected static int PopInt(ref string s)
+        { 
+            return int.Parse(Pop(ref s));
+        }
+
+        protected static bool PopBool(ref string s)
+        {
+            return bool.Parse(Pop(ref s));
+        }
+
+        protected static vec2 PopVec2(ref string s)
+        {
+            return vec2.Parse(Pop(ref s));
+        }
+
+        protected static T Pop<T>(ref string s)
+        {
+            return ToEnum<T>(Pop(ref s));
         }
 
         protected static void HeadTail(string s, out string head, out string tail)
@@ -73,24 +122,21 @@ namespace Terracotta
         public Message(MessageType Type, Message SubMessage)
         {
             this.Type = Type;
-            this.SubMessage = SubMessage;
+            this.Inner = SubMessage;
         }
 
         public static Message Parse(string s)
         {
-            string _Type, tail;
-            HeadTail(s, out _Type, out tail);
+            var Type = Pop<MessageType>(ref s);
+            var message = new Message(Type);
 
-            var Type = ToEnum<MessageType>(_Type);
-            var msg = new Message(Type);
-
-            switch (msg.Type)
+            switch (message.Type)
             {
-                case MessageType.PlayerAction: msg.SubMessage = MessagePlayerAction.Parse(tail); break;
-                case MessageType.PlayerActionAck: msg.SubMessage = Message.Parse(tail); break;
+                case MessageType.PlayerAction: message.Inner = MessagePlayerAction.Parse(s); break;
+                case MessageType.PlayerActionAck: message.Inner = Message.Parse(s); break;
             }
 
-            return msg;
+            return message;
         }
 
         public override MessageStr EncodeHead()
@@ -119,18 +165,15 @@ namespace Terracotta
 
         public static MessagePlayerAction Parse(string s)
         {
-            string _SimStep, _PlayerNumber, _Action, tail;
-            HeadTail(s, out _SimStep, out _PlayerNumber, out _Action, out tail);
-
-            int SimStep      = int.Parse(_SimStep);
-            int PlayerNumber = int.Parse(_PlayerNumber);
-            var Action       = ToEnum<PlayerAction>(_Action);
+            int SimStep      = PopInt(ref s);
+            int PlayerNumber = PopInt(ref s);
+            var Action       = Pop<PlayerAction>(ref s);
 
             var msg = new MessagePlayerAction(SimStep, PlayerNumber, Action);
 
             switch (msg.Action)
             {
-                case PlayerAction.Select: msg.SubMessage = MessageSelect.Parse(tail); break;
+                case PlayerAction.Select: msg.Inner = MessageSelect.Parse(s); break;
             }
 
             return msg;
@@ -141,40 +184,52 @@ namespace Terracotta
     {
         public abstract Message MakeFullMessage();
 
+        public MessagePlayerAction Action { get { return Outer as MessagePlayerAction; } }
+
         public Message MakeFullMessage(PlayerAction Action)
         {
             var Message = new Message(MessageType.PlayerAction);
-            Message.SubMessage = new MessagePlayerAction(GameClass.World.SimStep, GameClass.World.PlayerNumber, Action);
-            Message.SubMessage.SubMessage = this;
+            Message.Inner = new MessagePlayerAction(GameClass.World.SimStep, GameClass.World.PlayerNumber, Action);
+            Message.Inner.Inner = this;
 
             return Message;
         }
+
+        public abstract void Do();
     }
 
     public class MessageSelect : MessagePlayerActionTail
     {
-        public vec2 v1, v2;
+        public vec2 size, v1, v2;
+        public bool deselect;
 
-        public MessageSelect(vec2 v1, vec2 v2)
+        public MessageSelect(vec2 size, bool deselect, vec2 v1, vec2 v2)
         {
+            this.size = size;
+            this.deselect = deselect;
             this.v1 = v1;
             this.v2 = v2;
         }
 
-        public override MessageStr EncodeHead() { return _ | v1 | v2; }
+        public override MessageStr EncodeHead() { return _ | size | deselect | v1 | v2; }
         public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.Select); }
 
         public static MessageSelect Parse(string s)
         {
-            string _v1, _v2, tail;
-            HeadTail(s, out _v1, out _v2, out tail);
+            vec2 size = PopVec2(ref s);
+            bool deselect = PopBool(ref s);
+            vec2 v1 = PopVec2(ref s);
+            vec2 v2 = PopVec2(ref s);
 
-            vec2 v1 = vec2.Parse(_v1);
-            vec2 v2 = vec2.Parse(_v2);
-
-            var msg = new MessageSelect(v1, v2);
+            var msg = new MessageSelect(size, deselect, v1, v2);
 
             return msg;
+        }
+
+        public override void Do()
+        {
+            Console.WriteLine("   Do select");
+            GameClass.Data.SelectAlongLine(v1, v2, size, deselect, true, Player.Vals[Action.PlayerNumber], true);
         }
     }
 
@@ -216,6 +271,11 @@ namespace Terracotta
         }
 
         public static MessageStr operator |(MessageStr m, int v)
+        {
+            return new MessageStr(m.MyString + s(v));
+        }
+
+        public static MessageStr operator |(MessageStr m, bool v)
         {
             return new MessageStr(m.MyString + s(v));
         }

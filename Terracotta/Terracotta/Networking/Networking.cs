@@ -15,29 +15,17 @@ namespace Terracotta
 {
     public static class Networking
     {
-        public static ConcurrentQueue<string>
-            Inbox  = new ConcurrentQueue<string>();
+        public static ConcurrentQueue<Message>
+            Inbox = new ConcurrentQueue<Message>();
 
-        public static ConcurrentQueue<Tuple<int, string>>
-            Outbox = new ConcurrentQueue<Tuple<int, string>>();
+        public static ConcurrentQueue<Tuple<int, Message>>
+            Outbox = new ConcurrentQueue<Tuple<int, Message>>();
 
         static MessageStr _ = new MessageStr("");
 
-        public static void ToClients_PlayerActionAck(string message)
-        {
-            var msg = _ | MessageType.PlayerActionAck | message;
-
-            ToClients(msg);
-        }
-
-        //public static void ToServer_Select(vec2 v1, vec2 v2)
-        //{
-        //    ToServer(_ | MessageType.PlayerAction | GameClass.World.SimStep | GameClass.World.PlayerNumber | PlayerAction.Select | v1 | v2);
-        //}
-
         public static void ToServer(Message message)
         {
-            ToServer(message.Encode());
+            Outbox.Enqueue(new Tuple<int, Message>(0, message));
         }
 
         public static void ToServer(MessagePlayerActionTail message)
@@ -50,21 +38,12 @@ namespace Terracotta
             
         }
 
-        public static void ToServer(string message)
-        {
-            Outbox.Enqueue(new Tuple<int, string>(0, message));
-        }
-
         public static void ToClients(Message message)
-        {
-            ToClients(message.Encode());
-        }
-
-        public static void ToClients(string message)
         {
             if (Program.Server)
             {
-                Outbox.Enqueue(new Tuple<int, string>(1, message));
+                Outbox.Enqueue(new Tuple<int, Message>(0, message));
+                Outbox.Enqueue(new Tuple<int, Message>(1, message));
             }
             else
             {

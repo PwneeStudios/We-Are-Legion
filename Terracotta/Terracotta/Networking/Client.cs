@@ -27,10 +27,19 @@ namespace Terracotta
                 {
                     var messages = stream.Receive(bytes);
 
-                    foreach (var message in messages)
+                    foreach (var s in messages)
                     {
-                        Networking.Inbox.Enqueue(message);
-                        Console.WriteLine("(Client) Received: {0}", message);
+                        try
+                        {
+                            var message = Message.Parse(s);
+
+                            Networking.Inbox.Enqueue(message);
+                            Console.WriteLine("(Client) Received: {0}", message);
+                        }
+                        catch
+                        {
+                            Console.WriteLine("(Client) Received Malformed: {0}", s);
+                        }
                     }
                 }
             }
@@ -38,14 +47,15 @@ namespace Terracotta
 
         void SendThread()
         {
-            Tuple<int, string> message = null;
+            Tuple<int, Message> message = null;
 
             while (true)
             {
                 if (Networking.Outbox.TryDequeue(out message))
                 {
-                    stream.Send(message.Item2);
-                    Console.WriteLine("(Client) Sent: {0}", message.Item2);
+                    string encoding = message.Item2.Encode();
+                    stream.Send(encoding);
+                    Console.WriteLine("(Client) Sent: {0}", encoding);
                 }
 
                 Thread.SpinWait(1);

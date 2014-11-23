@@ -30,25 +30,18 @@ namespace Terracotta
                 {
                     var messages = stream.Receive(bytes);
 
-                    foreach (var message in messages)
+                    foreach (var s in messages)
                     {
-                        Console.WriteLine("(Server) Received: {0}", message);
-
                         try
                         {
-                            var msg = Message.Parse(message);
-                            //Console.WriteLine("Parsed {0}", msg);
-
-                            if (msg.Type == MessageType.PlayerAction)
-                            {
-                                Networking.ToClients(new Message(MessageType.PlayerActionAck, msg));
-                            }
+                            var message = Message.Parse(s);
 
                             Networking.Inbox.Enqueue(message);
+                            Console.WriteLine("(Server) Received: {0}", message);
                         }
                         catch
                         {
-                            Console.WriteLine("(Server) Received Malformed: {0}", message);
+                            Console.WriteLine("(Server) Received Malformed: {0}", s);
                         }
                     }
                 }
@@ -57,22 +50,25 @@ namespace Terracotta
 
         void SendThread()
         {
-            Tuple<int, string> message = null;
+            Tuple<int, Message> message = null;
 
             while (true)
             {
                 if (Networking.Outbox.TryDequeue(out message))
                 {
+                    string encoding = message.Item2.Encode();
+
                     if (message.Item1 == 0)
                     {
+                        //Console.WriteLine("Sent something to myself!");
                         Networking.Inbox.Enqueue(message.Item2);
                     }
                     else
                     {
-                        stream.Send(message.Item2);
+                        stream.Send(encoding);
                     }
 
-                    Console.WriteLine("(Server) Sent to {1}: {0}", message.Item2, message.Item1);
+                    Console.WriteLine("(Server) Sent to {1}: {0}", encoding, message.Item1);
                 }
 
                 Thread.SpinWait(1);

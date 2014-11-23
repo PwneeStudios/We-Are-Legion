@@ -24,6 +24,9 @@ namespace Terracotta
             Server = false,
             Client = false;
 
+        public static int
+            StartupPlayerNumber = 1;
+
         public static bool MultiDebug = false;
 
         /// <summary>
@@ -33,12 +36,17 @@ namespace Terracotta
         {
             List<string> args = new List<string>(args_);
 
-            if      (args.Count > 0 && args.Contains("--server")) Server = true;
-            else if (args.Count > 0 && args.Contains("--client")) Client = true;
+            if (args.Contains("--p1")) StartupPlayerNumber = 1;
+            if (args.Contains("--p2")) StartupPlayerNumber = 2;
+            if (args.Contains("--p3")) StartupPlayerNumber = 3;
+            if (args.Contains("--p4")) StartupPlayerNumber = 4;
+
+            if      (args.Contains("--server")) Server = true;
+            else if (args.Contains("--client")) Client = true;
             else Client = true;
 
-            if (Server) Console.WriteLine("Terracotta Server.");
-            if (Client) Console.WriteLine("Terracotta Client.");
+            if (Server) Console.WriteLine("Terracotta Server. Player {0}", StartupPlayerNumber);
+            if (Client) Console.WriteLine("Terracotta Client. Player {0}", StartupPlayerNumber);
 
 #if DEBUG
             if (args.Count == 0 || args.Contains("--debug"))
@@ -49,13 +57,13 @@ namespace Terracotta
             if (Client && args.Count == 0)
             {
                 var dir = System.IO.Directory.GetCurrentDirectory();
-                System.Diagnostics.Process.Start(System.IO.Path.Combine(dir, "Terracotta.exe"), "--server --debug");
+                System.Diagnostics.Process.Start(System.IO.Path.Combine(dir, "Terracotta.exe"), "--server --debug --p2");
             }
 
             if (Server && args.Count == 0)
             {
                 var dir = System.IO.Directory.GetCurrentDirectory();
-                System.Diagnostics.Process.Start(System.IO.Path.Combine(dir, "Terracotta.exe"), "--client --debug");
+                System.Diagnostics.Process.Start(System.IO.Path.Combine(dir, "Terracotta.exe"), "--client --debug --p2");
             }
 
             if (MultiDebug)

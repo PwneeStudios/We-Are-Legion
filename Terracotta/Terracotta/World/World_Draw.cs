@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
@@ -126,12 +127,37 @@ namespace Terracotta
             }
         }
 
+        void ProcessInbox()
+        {
+            Message message;
+            while (Networking.Inbox.TryDequeue(out message))
+            {
+                Console.WriteLine("  -Processing {0}", message);
+
+                if (Program.Server)
+                {
+                    if (message.Type == MessageType.PlayerAction)
+                    {
+                        Networking.ToClients(new Message(MessageType.PlayerActionAck, message));
+                    }
+                }
+
+                var action = message.Innermost as MessagePlayerActionTail;
+                if (null != action && message.Type == MessageType.PlayerActionAck)
+                {
+                    action.Do();
+                }
+            }
+        }
+
         public void Draw()
         {
+            ProcessInbox();
+
             DrawCount++;
             Render.StandardRenderSetup();
 
-            if (GameClass.Game.IsActive)
+            if (GameClass.GameActive)
             {
                 if (NotPaused_SimulationUpdate)
                 {
@@ -145,6 +171,7 @@ namespace Terracotta
 
                 UpdateAllPlayerUnitCounts();
 
+                if (GameClass.HasFocus)
                 switch (CurUserMode)
                 {
                     case UserMode.PlaceBuilding:

@@ -20,6 +20,8 @@ namespace Terracotta
 {
     public class GameClass : Game
     {
+        public static bool GameActive { get { return GameClass.Game.IsActive || Program.MultiDebug; } }
+
         public static GameClass Game;
         public static GameTime Time;
         public static double ElapsedSeconds { get { return Time.ElapsedGameTime.TotalSeconds; } }
@@ -37,6 +39,7 @@ namespace Terracotta
         GraphicsDeviceManager graphics;
 
         public static World World;
+        public static DataGroup Data { get { return World.DataGroup; } }
 
         bool FullScreen = false;
         bool AutoSaveOnTab = false;
@@ -263,9 +266,10 @@ namespace Terracotta
 
         int DrawCount = 0;
 
-        enum GameState { TitleScreen, Spells, Instructions, ScenarioMenu, Loading, Game,       ToEditor }
-        GameState State = GameState.TitleScreen;
+        enum GameState { TitleScreen, Spells, Instructions, ScenarioMenu, Loading, Game,       ToEditor, ToTest }
+        //GameState State = GameState.TitleScreen;
         //GameState State = GameState.ToEditor;
+        GameState State = GameState.ToTest;
 
         double TimeSinceLoad = 0;
         string ScenarioToLoad = null;
@@ -282,7 +286,7 @@ namespace Terracotta
             DrawCount++;
             TimeSinceLoad += gameTime.ElapsedGameTime.TotalSeconds;
 
-            if (IsActive)
+            if (GameClass.GameActive)
             {
                 if (ActivateFakeFullScreen) FakeFullscreen();
 
@@ -311,6 +315,17 @@ namespace Terracotta
                     World.Load(Path.Combine("Content", Path.Combine("Maps", "Nice.m3n")));
 
                     World.MapEditor = true;
+
+                    State = GameState.Game;
+
+                    break;
+
+                case GameState.ToTest:
+                    World = new World();
+
+                    World.Load(Path.Combine("Content", Path.Combine("Maps", "Beset.m3n")));
+
+                    World.MapEditor = false;
 
                     State = GameState.Game;
 
@@ -472,7 +487,7 @@ namespace Terracotta
 
         void DrawGame(GameTime gameTime)
         {
-            if (IsActive)
+            if (GameClass.GameActive && GameClass.HasFocus)
             {
                 if (World.MapEditorActive)
                 {
