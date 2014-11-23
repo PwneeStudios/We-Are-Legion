@@ -118,7 +118,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
-    <Compile Include="Networking.cs" />
+    <Compile Include="Networking\Server.cs" />
+    <Compile Include="Networking\Client.cs" />
+    <Compile Include="Networking\Message.cs" />
+    <Compile Include="Networking\Networking.cs" />
     <Compile Include="Drawing\DrawDebugInfo.cs" />
     <Compile Include="Drawing\DrawTiles.cs" />
     <Compile Include="Geodesics\Geodesics.cs" />

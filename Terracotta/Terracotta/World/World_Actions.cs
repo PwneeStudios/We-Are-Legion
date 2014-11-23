@@ -468,7 +468,7 @@ namespace Terracotta
 
             if (LineSelect)
             {
-                if (Selecting) Networking.ToServer_Select(WorldCoord, WorldCoordPrev);
+                if (Selecting) Networking.ToServer(new MessageSelect(WorldCoord, WorldCoordPrev));
                 
                 DataGroup.SelectAlongLine(WorldCoord, WorldCoordPrev, Size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
             }
