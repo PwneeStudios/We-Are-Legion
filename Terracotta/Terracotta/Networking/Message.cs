@@ -5,6 +5,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
@@ -13,12 +14,28 @@ using FragSharpFramework;
 
 namespace Terracotta
 {
-    public enum MessageType { PlayerAction, PlayerActionAck, Bookend }
+    public enum MessageType { PlayerAction, PlayerActionAck, Bookend, StartingStep }
     public enum PlayerAction { Select, Attack }
 
     public abstract class GenericMessage : SimShader
     {
         public MessageStr _ = new MessageStr("");
+
+        public GameClient _Source;
+        public GameClient Source
+        {
+            get
+            {
+                if (_Source == null && Outer != null) return Outer.Source;
+                if (_Source != null) return _Source;
+                return null;
+            }
+
+            set
+            {
+                _Source = value;
+            }
+        }
 
         GenericMessage _Inner = null, _Outer = null;
 
@@ -136,6 +153,7 @@ namespace Terracotta
                 case MessageType.PlayerAction    : message.Inner = MessagePlayerAction.Parse(s); break;
                 case MessageType.PlayerActionAck : message.Inner = Message.Parse(s); break;
                 case MessageType.Bookend         : message.Inner = MessageBookend.Parse(s); break;
+                case MessageType.StartingStep    : message.Inner = MessageStartingStep.Parse(s); break;
             }
 
             return message;
@@ -164,6 +182,36 @@ namespace Terracotta
         {
             GameClass.World.ServerSimStep = SimStep;
             Console.WriteLine("   Do Bookend. Server is now at step {0}. We're at step {1}", GameClass.World.ServerSimStep, GameClass.World.SimStep);
+        }
+    }
+
+    public class MessageStartingStep : MessageTail
+    {
+        public int SimStep;
+
+        public MessageStartingStep(int SimStep)
+        {
+            this.SimStep = SimStep;
+        }
+
+        public override MessageStr EncodeHead() { return _ | SimStep; }
+        public static MessageStartingStep Parse(string s) { return new MessageStartingStep(PopInt(ref s)); }
+        public override Message MakeFullMessage() { return new Message(MessageType.StartingStep, this); }
+
+        public override void Do()
+        {
+            if (Program.Server)
+            {
+                Source.SimStep = SimStep;
+                GameClass.World.MinClientSimStep = Server.Clients.Min(client => client.SimStep);
+
+                Console.WriteLine("   Do StartingStep. Client {0} is now at step {1}. We're at step {2}:{3}", Source.Index, SimStep, GameClass.World.SimStep, GameClass.World.ServerSimStep);
+                Console.WriteLine("   Min sim step is now {0}", GameClass.World.MinClientSimStep);
+            }
+            else
+            {
+                Console.WriteLine("   WARNING!!!!! MessageStartingStep should never be received by a client.");
+            }
         }
     }
 

@@ -146,7 +146,12 @@ namespace Terracotta
                 {
                     message.Innermost.Do();
                 }
-                
+
+                if (message.Type == MessageType.StartingStep)
+                {
+                    message.Innermost.Do();
+                }
+
                 if (message.Type == MessageType.PlayerActionAck)
                 {
                     message.Innermost.Do();
@@ -229,7 +234,7 @@ namespace Terracotta
                 // Check if we need to do a simulation update
                 if (GameClass.UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates || SimStep + 2 < ServerSimStep)
                 {
-                    if (SimStep < ServerSimStep)
+                    if (SimStep < ServerSimStep && !(Program.Server && MinClientSimStep + 2 < ServerSimStep))
                     {
                         SecondsSinceLastUpdate -= DelayBetweenUpdates;
                         if (SecondsSinceLastUpdate < 0) SecondsSinceLastUpdate = 0;
@@ -237,6 +242,12 @@ namespace Terracotta
                         SimulationUpdate();
 
                         SentBookend = false;
+                        Networking.ToServer(new MessageStartingStep(SimStep));
+                    }
+                    else
+                    {
+                        SecondsSinceLastUpdate -= GameClass.ElapsedSeconds;
+                        T -= (float)GameClass.ElapsedSeconds;
                     }
                 }
             }

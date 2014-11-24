@@ -37,8 +37,12 @@ namespace Terracotta
         {
             if (Program.Server)
             {
-                Outbox.Enqueue(new Tuple<int, Message>(0, message));
-                Outbox.Enqueue(new Tuple<int, Message>(1, message));
+                foreach (var client in Server.Clients)
+                {
+                    int index = client.Index;
+
+                    Outbox.Enqueue(new Tuple<int, Message>(index, message));
+                }
             }
             else
             {

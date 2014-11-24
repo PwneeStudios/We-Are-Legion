@@ -32,6 +32,7 @@ namespace Terracotta
                         try
                         {
                             var message = Message.Parse(s);
+                            message.Source = GameClient.Server;
 
                             Networking.Inbox.Enqueue(message);
                             Console.WriteLine("(Client) Received: {0}", message);
