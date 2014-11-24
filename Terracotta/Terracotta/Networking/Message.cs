@@ -151,7 +151,7 @@ namespace Terracotta
             switch (message.Type)
             {
                 case MessageType.PlayerAction    : message.Inner = MessagePlayerAction.Parse(s); break;
-                case MessageType.PlayerActionAck : message.Inner = Message.Parse(s); break;
+                case MessageType.PlayerActionAck : message.Inner = MessagePlayerActionAck.Parse(s); break;
                 case MessageType.Bookend         : message.Inner = MessageBookend.Parse(s); break;
                 case MessageType.StartingStep    : message.Inner = MessageStartingStep.Parse(s); break;
             }
@@ -212,6 +212,33 @@ namespace Terracotta
             {
                 Console.WriteLine("   WARNING!!!!! MessageStartingStep should never be received by a client.");
             }
+        }
+    }
+             
+    public class MessagePlayerActionAck : MessageTail
+    {
+        public int ActivationSimStep = 0;
+
+        public MessagePlayerActionAck(int ActivationSimStep, Message message)
+        {
+            this.ActivationSimStep = ActivationSimStep;
+            this.Inner = message;
+        }
+
+        public override MessageStr EncodeHead() { return _ | ActivationSimStep; }
+        public static MessagePlayerActionAck Parse(string s) { return new MessagePlayerActionAck(PopInt(ref s), Message.Parse(s)); }
+        public override Message MakeFullMessage() { return new Message(MessageType.PlayerActionAck, this); }
+
+        public override void Do()
+        {
+            var q = GameClass.World.QueuedActions;
+
+            if (!q.ContainsKey(ActivationSimStep))
+            {
+                q.Add(ActivationSimStep, new List<GenericMessage>());
+            }
+
+            q[ActivationSimStep].Add(this.Outer);
         }
     }
 

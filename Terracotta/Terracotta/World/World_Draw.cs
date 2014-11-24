@@ -127,6 +127,21 @@ namespace Terracotta
             }
         }
 
+        public Dictionary<int, List<GenericMessage>> QueuedActions = new Dictionary<int, List<GenericMessage>>();
+
+        void DeququeActions(int SimStep)
+        {
+            if (!QueuedActions.ContainsKey(SimStep)) return;
+
+            var actions = QueuedActions[SimStep];
+            foreach (var action in actions)
+            {
+                action.Innermost.Do();
+            }
+
+            QueuedActions[SimStep] = null;
+        }
+
         void ProcessInbox()
         {
             Message message;
@@ -138,7 +153,7 @@ namespace Terracotta
                 {
                     if (message.Type == MessageType.PlayerAction)
                     {
-                        Networking.ToClients(new Message(MessageType.PlayerActionAck, message));
+                        Networking.ToClients(new MessagePlayerActionAck(ServerSimStep + 1, message));
                     }
                 }
 
@@ -154,7 +169,8 @@ namespace Terracotta
 
                 if (message.Type == MessageType.PlayerActionAck)
                 {
-                    message.Innermost.Do();
+                    message.Inner.Do();
+                    //message.Innermost.Do();
                 }
             }
         }
@@ -239,6 +255,7 @@ namespace Terracotta
                         SecondsSinceLastUpdate -= DelayBetweenUpdates;
                         if (SecondsSinceLastUpdate < 0) SecondsSinceLastUpdate = 0;
 
+                        DeququeActions(SimStep + 1);
                         SimulationUpdate();
 
                         SentBookend = false;
