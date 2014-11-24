@@ -156,20 +156,8 @@ namespace Terracotta
             this.SimStep = SimStep;
         }
 
-        public override MessageStr EncodeHead()
-        {
-            return _ | SimStep;
-        }
-
-        public static MessageBookend Parse(string s)
-        {
-            int SimStep = PopInt(ref s);
-
-            var message = new MessageBookend(SimStep);
-
-            return message;
-        }
-
+        public override MessageStr EncodeHead() { return _ | SimStep; }
+        public static MessageBookend Parse(string s) { return new MessageBookend(PopInt(ref s)); }
         public override Message MakeFullMessage() { return new Message(MessageType.Bookend, this); }
 
         public override void Do()
@@ -192,18 +180,11 @@ namespace Terracotta
             this.Action = Action;
         }
 
-        public override MessageStr EncodeHead()
-        {
- 	        return _ | SimStep | PlayerNumber | Action;
-        }
+        public override MessageStr EncodeHead() { return _ | SimStep | PlayerNumber | Action; }
 
         public static MessagePlayerAction Parse(string s)
         {
-            int SimStep      = PopInt(ref s);
-            int PlayerNumber = PopInt(ref s);
-            var Action       = Pop<PlayerAction>(ref s);
-
-            var message = new MessagePlayerAction(SimStep, PlayerNumber, Action);
+            var message = new MessagePlayerAction(PopInt(ref s), PopInt(ref s), Pop<PlayerAction>(ref s));
 
             switch (message.Action)
             {
@@ -247,19 +228,8 @@ namespace Terracotta
         }
 
         public override MessageStr EncodeHead() { return _ | size | deselect | v1 | v2; }
+        public static MessageSelect Parse(string s) { return new MessageSelect(PopVec2(ref s), PopBool(ref s), PopVec2(ref s), PopVec2(ref s)); }
         public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.Select); }
-
-        public static MessageSelect Parse(string s)
-        {
-            vec2 size = PopVec2(ref s);
-            bool deselect = PopBool(ref s);
-            vec2 v1 = PopVec2(ref s);
-            vec2 v2 = PopVec2(ref s);
-
-            var message = new MessageSelect(size, deselect, v1, v2);
-
-            return message;
-        }
 
         public override void Do()
         {
