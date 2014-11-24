@@ -44,6 +44,7 @@ namespace Terracotta
             if      (args.Contains("--server")) Server = true;
             else if (args.Contains("--client")) Client = true;
             else Client = true;
+            //else Server = true;
 
             if (Server) Console.WriteLine("Terracotta Server. Player {0}", StartupPlayerNumber);
             if (Client) Console.WriteLine("Terracotta Client. Player {0}", StartupPlayerNumber);

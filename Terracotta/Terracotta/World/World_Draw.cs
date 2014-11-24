@@ -142,14 +142,19 @@ namespace Terracotta
                     }
                 }
 
-                var action = message.Innermost as MessagePlayerActionTail;
-                if (null != action && message.Type == MessageType.PlayerActionAck)
+                if (message.Type == MessageType.Bookend)
                 {
-                    action.Do();
+                    message.Innermost.Do();
+                }
+                
+                if (message.Type == MessageType.PlayerActionAck)
+                {
+                    message.Innermost.Do();
                 }
             }
         }
 
+        bool SentBookend = false;
         public void Draw()
         {
             ProcessInbox();
@@ -212,12 +217,27 @@ namespace Terracotta
                         break;
                 }
 
-                // Check if we need to do a simulation update
-                if (GameClass.UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates)
+                if (Program.Server)
                 {
-                    SecondsSinceLastUpdate -= DelayBetweenUpdates;
+                    if (SecondsSinceLastUpdate > .75f * DelayBetweenUpdates && SimStep == ServerSimStep && !SentBookend)
+                    {
+                        SentBookend = true;
+                        Networking.ToClients(new MessageBookend(ServerSimStep + 1));
+                    }
+                }
 
-                    SimulationUpdate();
+                // Check if we need to do a simulation update
+                if (GameClass.UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates || SimStep + 2 < ServerSimStep)
+                {
+                    if (SimStep < ServerSimStep)
+                    {
+                        SecondsSinceLastUpdate -= DelayBetweenUpdates;
+                        if (SecondsSinceLastUpdate < 0) SecondsSinceLastUpdate = 0;
+
+                        SimulationUpdate();
+
+                        SentBookend = false;
+                    }
                 }
             }
 

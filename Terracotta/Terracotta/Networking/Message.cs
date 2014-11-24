@@ -13,7 +13,7 @@ using FragSharpFramework;
 
 namespace Terracotta
 {
-    public enum MessageType { PlayerAction, PlayerActionAck, EndOfStep }
+    public enum MessageType { PlayerAction, PlayerActionAck, Bookend }
     public enum PlayerAction { Select, Attack }
 
     public abstract class GenericMessage : SimShader
@@ -44,6 +44,7 @@ namespace Terracotta
         }
 
         public abstract MessageStr EncodeHead();
+        public virtual void Do() { }
 
         public override string ToString()
         {
@@ -119,7 +120,7 @@ namespace Terracotta
             this.Type = Type;
         }
 
-        public Message(MessageType Type, Message SubMessage)
+        public Message(MessageType Type, GenericMessage SubMessage)
         {
             this.Type = Type;
             this.Inner = SubMessage;
@@ -132,8 +133,9 @@ namespace Terracotta
 
             switch (message.Type)
             {
-                case MessageType.PlayerAction: message.Inner = MessagePlayerAction.Parse(s); break;
-                case MessageType.PlayerActionAck: message.Inner = Message.Parse(s); break;
+                case MessageType.PlayerAction    : message.Inner = MessagePlayerAction.Parse(s); break;
+                case MessageType.PlayerActionAck : message.Inner = Message.Parse(s); break;
+                case MessageType.Bookend         : message.Inner = MessageBookend.Parse(s); break;
             }
 
             return message;
@@ -142,6 +144,38 @@ namespace Terracotta
         public override MessageStr EncodeHead()
         {
  	        return _ | Type;
+        }
+    }
+
+    public class MessageBookend : MessageTail
+    {
+        public int SimStep;
+
+        public MessageBookend(int SimStep)
+        {
+            this.SimStep = SimStep;
+        }
+
+        public override MessageStr EncodeHead()
+        {
+            return _ | SimStep;
+        }
+
+        public static MessageBookend Parse(string s)
+        {
+            int SimStep = PopInt(ref s);
+
+            var message = new MessageBookend(SimStep);
+
+            return message;
+        }
+
+        public override Message MakeFullMessage() { return new Message(MessageType.Bookend, this); }
+
+        public override void Do()
+        {
+            GameClass.World.ServerSimStep = SimStep;
+            Console.WriteLine("   Do Bookend. Server is now at step {0}. We're at step {1}", GameClass.World.ServerSimStep, GameClass.World.SimStep);
         }
     }
 
@@ -169,21 +203,24 @@ namespace Terracotta
             int PlayerNumber = PopInt(ref s);
             var Action       = Pop<PlayerAction>(ref s);
 
-            var msg = new MessagePlayerAction(SimStep, PlayerNumber, Action);
+            var message = new MessagePlayerAction(SimStep, PlayerNumber, Action);
 
-            switch (msg.Action)
+            switch (message.Action)
             {
-                case PlayerAction.Select: msg.Inner = MessageSelect.Parse(s); break;
+                case PlayerAction.Select: message.Inner = MessageSelect.Parse(s); break;
             }
 
-            return msg;
+            return message;
         }
     }
 
-    public abstract class MessagePlayerActionTail : GenericMessage
+    public abstract class MessageTail : GenericMessage
     {
         public abstract Message MakeFullMessage();
+    }
 
+    public abstract class MessagePlayerActionTail : MessageTail
+    {
         public MessagePlayerAction Action { get { return Outer as MessagePlayerAction; } }
 
         public Message MakeFullMessage(PlayerAction Action)
@@ -194,8 +231,6 @@ namespace Terracotta
 
             return Message;
         }
-
-        public abstract void Do();
     }
 
     public class MessageSelect : MessagePlayerActionTail
@@ -221,9 +256,9 @@ namespace Terracotta
             vec2 v1 = PopVec2(ref s);
             vec2 v2 = PopVec2(ref s);
 
-            var msg = new MessageSelect(size, deselect, v1, v2);
+            var message = new MessageSelect(size, deselect, v1, v2);
 
-            return msg;
+            return message;
         }
 
         public override void Do()

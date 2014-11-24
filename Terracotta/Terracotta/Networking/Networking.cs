@@ -28,14 +28,9 @@ namespace Terracotta
             Outbox.Enqueue(new Tuple<int, Message>(0, message));
         }
 
-        public static void ToServer(MessagePlayerActionTail message)
+        public static void ToServer(MessageTail message)
         {
             ToServer(message.MakeFullMessage());
-        }
-
-        public static void Parse()
-        { 
-            
         }
 
         public static void ToClients(Message message)
@@ -49,6 +44,11 @@ namespace Terracotta
             {
                 throw new Exception("Clients cannot send messages to clients.");
             }
+        }
+
+        public static void ToClients(MessageTail message)
+        {
+            ToClients(message.MakeFullMessage());
         }
 
         public static void Start()

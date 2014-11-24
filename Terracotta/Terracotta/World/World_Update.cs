@@ -197,7 +197,7 @@ namespace Terracotta
             }
         }
 
-        public int SimStep = 0;
+        public int SimStep = 0, ServerSimStep = 0;
         void SimulationUpdate()
         {
             DataGroup.DoGoldMineCount(PlayerInfo);
