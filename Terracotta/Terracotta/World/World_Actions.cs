@@ -548,8 +548,8 @@ namespace Terracotta
             Destination_BL = floor(Destination_BL);
             Destination_BL = max(Destination_BL, vec2.Zero);
 
-            //Networking.ToServer(new MessageAttackMove(Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size));
-            DataGroup.AttackMoveApply(PlayerValue, Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size);
+            Networking.ToServer(new MessageAttackMove(Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size));
+            //DataGroup.AttackMoveApply(PlayerValue, Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size);
 
             AddAttackMarker();
         }
