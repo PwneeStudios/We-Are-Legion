@@ -68,17 +68,16 @@ namespace Terracotta
 
         private void SelectUnits(bool Deselect)
         {
-            var action = Input.RightMousePressed ? SimShader.UnitAction.Attacking : SimShader.UnitAction.NoChange;
-            ActionSelect.Apply(CurrentData, CurrentUnits, SelectField, Deselect, action, Output: Temp1);
+            ActionSelect.Apply(CurrentData, CurrentUnits, SelectField, Deselect, Output: Temp1);
             Swap(ref Temp1, ref CurrentData);
 
-            ActionSelect.Apply(PreviousData, CurrentUnits, SelectField, Deselect, SimShader.UnitAction.NoChange, Output: Temp1);
+            ActionSelect.Apply(PreviousData, CurrentUnits, SelectField, Deselect, Output: Temp1);
             Swap(ref Temp1, ref PreviousData);
         }
 
         public void AttackMoveApply(float Player, vec2 pos, vec2 Selected_BL, vec2 Selected_Size, vec2 Destination_BL, vec2 Destination_Size)
         {
-            ActionSelect.Apply(CurrentData, CurrentUnits, SelectField, false, SimShader.UnitAction.Attacking, Output: Temp1);
+            SetSelectedAction.Apply(CurrentData, CurrentUnits, SimShader.UnitAction.Attacking, Output: Temp1);
             Swap(ref Temp1, ref CurrentData);
 
             ActionAttackSquare.Apply(CurrentData, TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: Temp1);

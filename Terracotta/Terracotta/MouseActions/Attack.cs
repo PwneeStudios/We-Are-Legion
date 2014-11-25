@@ -2,6 +2,23 @@ using FragSharpFramework;
 
 namespace Terracotta
 {
+    public partial class SetSelectedAction : SimShader
+    {
+        [FragmentShader]
+        data FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, float action)
+        {
+            data data_here = Data[Here];
+            unit unit_here = Unit[Here];
+
+            if (Something(data_here) && IsUnit(unit_here) && selected(data_here) && action < UnitAction.NoChange)
+            {
+                data_here.action = action;
+            }
+
+            return data_here;
+        }
+    }
+
     public partial class ActionAttackSquare : SimShader
     {
         [FragmentShader]
