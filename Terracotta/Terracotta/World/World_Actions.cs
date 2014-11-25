@@ -469,7 +469,6 @@ namespace Terracotta
             if (LineSelect)
             {
                 if (Input.LeftMousePressed && Selecting && EffectSelection) Networking.ToServer(new MessageSelect(Size, Deselect, WorldCoord, WorldCoordPrev));
-                
                 //DataGroup.SelectAlongLine(WorldCoord, WorldCoordPrev, Size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
             }
             else
@@ -531,7 +530,7 @@ namespace Terracotta
 
             if (DataGroup.SelectedUnits == 0 && DataGroup.SelectedBarracks == 0) return;
 
-            vec2 pos = ScreenToGridCoord(Input.CurMousePos);
+            vec2 Pos = ScreenToGridCoord(Input.CurMousePos);
 
             vec2 Selected_BL = DataGroup.SelectedBound_BL;
             vec2 Selected_Size = DataGroup.SelectedBound_TR - DataGroup.SelectedBound_BL;
@@ -540,16 +539,17 @@ namespace Terracotta
 
             float SquareWidth = (float)Math.Sqrt(DataGroup.SelectedUnits);
             if (SquareWidth < 2) SquareWidth = 0;
-            pos = floor(pos);
+            Pos = floor(Pos);
 
             vec2 Destination_Size = new vec2(SquareWidth, SquareWidth) * .8f;
-            vec2 Destination_BL = pos - Destination_Size / 2;
+            vec2 Destination_BL = Pos - Destination_Size / 2;
 
             Destination_Size = floor(Destination_Size);
             Destination_BL = floor(Destination_BL);
             Destination_BL = max(Destination_BL, vec2.Zero);
 
-            DataGroup.AttackMoveApply(pos, Selected_BL, Selected_Size, Destination_Size, Destination_BL);
+            //Networking.ToServer(new MessageAttackMove(Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size));
+            DataGroup.AttackMoveApply(PlayerValue, Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size);
 
             AddAttackMarker();
         }

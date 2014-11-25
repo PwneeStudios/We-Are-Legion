@@ -84,7 +84,7 @@ namespace Terracotta
                 Console.BufferHeight = Int16.MaxValue - 1;
                 Console.WindowHeight = 37;
 
-                ShowWindow(MyConsole, SW_HIDE);
+                //ShowWindow(MyConsole, SW_HIDE);
             }
 #endif
 

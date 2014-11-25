@@ -15,7 +15,7 @@ using FragSharpFramework;
 namespace Terracotta
 {
     public enum MessageType { PlayerAction, PlayerActionAck, Bookend, StartingStep }
-    public enum PlayerAction { Select, Attack }
+    public enum PlayerAction { Select, AttackMove }
 
     public abstract class GenericMessage : SimShader
     {
@@ -264,6 +264,7 @@ namespace Terracotta
             switch (message.Action)
             {
                 case PlayerAction.Select: message.Inner = MessageSelect.Parse(s); break;
+                case PlayerAction.AttackMove: message.Inner = MessageAttackMove.Parse(s); break;
             }
 
             return message;
@@ -286,6 +287,31 @@ namespace Terracotta
             Message.Inner.Inner = this;
 
             return Message;
+        }
+    }
+
+    public class MessageAttackMove : MessagePlayerActionTail
+    {
+        public vec2
+            Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size;
+
+        public MessageAttackMove(vec2 Pos, vec2 Selected_BL, vec2 Selected_Size, vec2 Destination_BL, vec2 Destination_Size)
+        {
+            this.Pos = Pos;
+            this.Selected_BL = Selected_BL;
+            this.Selected_Size = Selected_Size;
+            this.Destination_BL = Destination_BL;
+            this.Destination_Size = Destination_Size;
+        }
+
+        public override MessageStr EncodeHead() { return _ | Pos | Selected_BL | Selected_Size | Destination_BL | Destination_Size; }
+        public static MessageAttackMove Parse(string s) { return new MessageAttackMove(PopVec2(ref s), PopVec2(ref s), PopVec2(ref s), PopVec2(ref s), PopVec2(ref s)); }
+        public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.AttackMove); }
+
+        public override void Do()
+        {
+            Console.WriteLine("   Do attack move");
+            GameClass.Data.AttackMoveApply(Player.Vals[Action.PlayerNumber], Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size);
         }
     }
 

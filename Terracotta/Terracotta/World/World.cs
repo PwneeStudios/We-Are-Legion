@@ -42,8 +42,8 @@ namespace Terracotta
         }
 
         //const double DelayBetweenUpdates = .01;
-        const double DelayBetweenUpdates = .3333;
-        //const double DelayBetweenUpdates = .4;
+        //const double DelayBetweenUpdates = .3333;
+        const double DelayBetweenUpdates = 5;
 
         bool _MapEditor = false;
         public bool MapEditor

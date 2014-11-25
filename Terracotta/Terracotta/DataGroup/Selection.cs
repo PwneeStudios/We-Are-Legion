@@ -76,7 +76,7 @@ namespace Terracotta
             Swap(ref Temp1, ref PreviousData);
         }
 
-        public void AttackMoveApply(vec2 pos, vec2 Selected_BL, vec2 Selected_Size, vec2 Destination_Size, vec2 Destination_BL)
+        public void AttackMoveApply(float Player, vec2 pos, vec2 Selected_BL, vec2 Selected_Size, vec2 Destination_BL, vec2 Destination_Size)
         {
             ActionAttackSquare.Apply(CurrentData, TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: Temp1);
             Swap(ref TargetData, ref Temp1);
