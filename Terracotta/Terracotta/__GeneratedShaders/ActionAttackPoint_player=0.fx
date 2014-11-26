@@ -52,25 +52,46 @@ sampler fs_param_Unit : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-float fs_param_action;
+// Texture Sampler for fs_param_TargetData, using register location 3
+float2 fs_param_TargetData_size;
+float2 fs_param_TargetData_dxdy;
+
+Texture fs_param_TargetData_Texture;
+sampler fs_param_TargetData : register(s3) = sampler_state
+{
+    texture   = <fs_param_TargetData_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+float2 fs_param_Destination;
+
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__Something(float4 u)
-{
-    return u.r > 0 + .001;
-}
-
-bool Terracotta__SimShader__IsUnit(float4 u)
-{
-    return u.r >= 0.003921569 - .001 && u.r < 0.02352941 - .001;
-}
-
 bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
     return val >= 0.5019608 - .001;
+}
+
+float2 Terracotta__SimShader__pack_val_2byte(float x)
+{
+    float2 packed = float2(0, 0);
+    packed.x = floor(x / 256.0);
+    packed.y = x - packed.x * 256.0;
+    return packed / 255.0;
+}
+
+float4 Terracotta__SimShader__pack_vec2(float2 v)
+{
+    float2 packed_x = Terracotta__SimShader__pack_val_2byte(v.x);
+    float2 packed_y = Terracotta__SimShader__pack_val_2byte(v.y);
+    return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 
 // Compiled vertex shader
@@ -89,11 +110,17 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (Terracotta__SimShader__Something(data_here) && Terracotta__SimShader__IsUnit(unit_here) && Terracotta__SimShader__selected(data_here) && fs_param_action < 0.04705882 - .001)
+    float4 target = float4(0, 0, 0, 0);
+    if (abs(0 - unit_here.g) < .001 && Terracotta__SimShader__selected(data_here))
     {
-        data_here.a = fs_param_action;
+        float2 dest = fs_param_Destination;
+        target = Terracotta__SimShader__pack_vec2(dest);
     }
-    __FinalOutput.Color = data_here;
+    else
+    {
+        target = tex2D(fs_param_TargetData, psin.TexCoords + (float2(0, 0)) * fs_param_TargetData_dxdy);
+    }
+    __FinalOutput.Color = target;
     return __FinalOutput;
 }
 

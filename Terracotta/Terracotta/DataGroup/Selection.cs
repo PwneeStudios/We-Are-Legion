@@ -75,15 +75,15 @@ namespace Terracotta
             Swap(ref Temp1, ref PreviousData);
         }
 
-        public void AttackMoveApply(float Player, vec2 pos, vec2 Selected_BL, vec2 Selected_Size, vec2 Destination_BL, vec2 Destination_Size)
+        public void AttackMoveApply(float Player, vec2 Pos, vec2 Selected_BL, vec2 Selected_Size, vec2 Destination_BL, vec2 Destination_Size)
         {
-            SetSelectedAction.Apply(CurrentData, CurrentUnits, SimShader.UnitAction.Attacking, Output: Temp1);
+            SetSelectedAction.Apply(CurrentData, CurrentUnits, SimShader.UnitAction.Attacking, Player, Output: Temp1);
             Swap(ref Temp1, ref CurrentData);
 
-            ActionAttackSquare.Apply(CurrentData, TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Output: Temp1);
+            ActionAttackSquare.Apply(CurrentData, CurrentUnits, TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Player, Output: Temp1);
             Swap(ref TargetData, ref Temp1);
 
-            ActionAttack2.Apply(CurrentData, Extra, pos, Output: Temp1);
+            ActionAttack2.Apply(CurrentData, CurrentUnits, Extra, Pos, Player, Output: Temp1);
             Swap(ref Extra, ref Temp1);
         }
     }

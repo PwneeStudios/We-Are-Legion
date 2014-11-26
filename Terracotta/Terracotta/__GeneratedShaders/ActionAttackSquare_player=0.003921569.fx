@@ -22,14 +22,14 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Current, using register location 1
-float2 fs_param_Current_size;
-float2 fs_param_Current_dxdy;
+// Texture Sampler for fs_param_Data, using register location 1
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
 
-Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s1) = sampler_state
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s1) = sampler_state
 {
-    texture   = <fs_param_Current_Texture>;
+    texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -37,12 +37,27 @@ sampler fs_param_Current : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_TargetData, using register location 2
+// Texture Sampler for fs_param_Unit, using register location 2
+float2 fs_param_Unit_size;
+float2 fs_param_Unit_dxdy;
+
+Texture fs_param_Unit_Texture;
+sampler fs_param_Unit : register(s2) = sampler_state
+{
+    texture   = <fs_param_Unit_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
+// Texture Sampler for fs_param_TargetData, using register location 3
 float2 fs_param_TargetData_size;
 float2 fs_param_TargetData_dxdy;
 
 Texture fs_param_TargetData_Texture;
-sampler fs_param_TargetData : register(s2) = sampler_state
+sampler fs_param_TargetData : register(s3) = sampler_state
 {
     texture   = <fs_param_TargetData_Texture>;
     MipFilter = Point;
@@ -59,6 +74,7 @@ float2 fs_param_Destination_Size;
 float2 fs_param_Selection_BL;
 
 float2 fs_param_Selection_Size;
+
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
@@ -98,11 +114,12 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 target = float4(0, 0, 0, 0);
-    if (Terracotta__SimShader__selected(here))
+    if (abs(0.003921569 - unit_here.g) < .001 && Terracotta__SimShader__selected(data_here))
     {
-        float2 pos = psin.TexCoords * fs_param_Current_size;
+        float2 pos = psin.TexCoords * fs_param_Data_size;
         pos = (pos - fs_param_Selection_BL) / fs_param_Selection_Size;
         pos = pos * fs_param_Destination_Size + fs_param_Destination_BL;
         target = Terracotta__SimShader__pack_vec2(pos);
