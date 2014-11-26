@@ -183,12 +183,22 @@ namespace Terracotta
             DrawCount++;
             Render.StandardRenderSetup();
 
+            double PreviousSecondsSinceLastUpdate = SecondsSinceLastUpdate;
+
             if (GameClass.GameActive)
             {
                 if (NotPaused_SimulationUpdate)
                 {
-                    SecondsSinceLastUpdate += GameClass.ElapsedSeconds;
-                    T += (float)GameClass.ElapsedSeconds;
+                    double Elapsed = GameClass.ElapsedSeconds;
+
+                    if (SimStep + SecondsSinceLastUpdate / DelayBetweenUpdates + .25f < ServerSimStep)
+                    {
+                        Elapsed *= 1.15f;
+                        Console.WriteLine("            -- Elasped = {0}", Elapsed);
+                    }
+
+                    SecondsSinceLastUpdate += Elapsed;
+                    T += (float)Elapsed;
                 }
                 else
                 {
@@ -263,7 +273,7 @@ namespace Terracotta
                     }
                     else
                     {
-                        SecondsSinceLastUpdate -= GameClass.ElapsedSeconds;
+                        SecondsSinceLastUpdate = PreviousSecondsSinceLastUpdate;
                         T -= (float)GameClass.ElapsedSeconds;
                     }
                 }

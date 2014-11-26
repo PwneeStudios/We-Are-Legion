@@ -19,10 +19,11 @@ namespace Terracotta
         NetworkStream stream = null;
         byte[] bytes = new byte[1 << 16];
 
-        void ReceiveThread()
+        void SendReceiveThread()
         {
             while (true)
             {
+                // Receive
                 if (stream.DataAvailable)
                 {
                     var messages = stream.Receive(bytes);
@@ -43,23 +44,18 @@ namespace Terracotta
                         }
                     }
                 }
-            }
-        }
 
-        void SendThread()
-        {
-            Tuple<int, Message> message = null;
-
-            while (true)
-            {
-                if (Networking.Outbox.TryDequeue(out message))
+                // Send
+                Tuple<int, Message> outgoing = null;
+                if (Networking.Outbox.TryDequeue(out outgoing))
                 {
-                    string encoding = message.Item2.Encode();
+                    string encoding = outgoing.Item2.Encode();
                     stream.Send(encoding);
                     Console.WriteLine("(Client) Sent: {0}", encoding);
                 }
 
-                Thread.SpinWait(1);
+                Thread.Sleep(1);
+                //Thread.SpinWait(1);
             }
         }
 
@@ -78,8 +74,7 @@ namespace Terracotta
 
                 stream = client.GetStream();
 
-                new Thread(ReceiveThread).Start();
-                new Thread(SendThread).Start();
+                new Thread(SendReceiveThread).Start();
             }
             catch (ArgumentNullException e)
             {

@@ -50,12 +50,13 @@ namespace Terracotta
         
         public static List<GameClient> Clients;
 
-        void ReceiveThread()
+        void SendReceiveThread()
         {
+            Tuple<int, Message> package = null;
+
             while (true)
             {
-                //Thread.Sleep(1000);
-
+                // Receive
                 foreach (var client in Clients)
                 {
                     if (client.IsServer) continue;
@@ -81,15 +82,8 @@ namespace Terracotta
                         }
                     }
                 }
-            }
-        }
 
-        void SendThread()
-        {
-            Tuple<int, Message> package = null;
-
-            while (true)
-            {
+                // Send
                 if (Networking.Outbox.TryDequeue(out package))
                 {
                     int index    = package.Item1;
@@ -114,7 +108,9 @@ namespace Terracotta
                     }
                 }
 
-                Thread.SpinWait(1);
+                //Thread.Sleep(1000);
+                Thread.Sleep(1);
+                //Thread.SpinWait(1);
             }
         }
 
@@ -137,8 +133,7 @@ namespace Terracotta
                 Clients.Add(new GameClient(client, 1));
                 Console.WriteLine("Connected!");
 
-                new Thread(ReceiveThread).Start();
-                new Thread(SendThread).Start();
+                new Thread(SendReceiveThread).Start();
             }
             catch (ArgumentNullException e)
             {
