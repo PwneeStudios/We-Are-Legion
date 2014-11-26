@@ -212,18 +212,18 @@ float4 Terracotta__UnitColor__Get(VertexToPixel psin, float player)
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 Terracotta__DrawUnits__SolidColor(VertexToPixel psin, float4 data, float4 unit)
+float4 Terracotta__DrawUnits__SolidColor(VertexToPixel psin, float player, float4 data, float4 unit)
 {
-    return Terracotta__SimShader__selected(data) ? Terracotta__SelectedUnitColor__Get(psin, unit.g) : Terracotta__UnitColor__Get(psin, unit.g);
+    return abs(unit.g - player) < .001 && Terracotta__SimShader__selected(data) ? Terracotta__SelectedUnitColor__Get(psin, unit.g) : Terracotta__UnitColor__Get(psin, unit.g);
 }
 
-float4 Terracotta__DrawUnits__Sprite(VertexToPixel psin, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
+float4 Terracotta__DrawUnits__Sprite(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    bool draw_selected = Terracotta__SimShader__selected(d) && pos.y > selection_size + .001;
+    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__selected(d) && pos.y > selection_size + .001;
     pos.x += floor(frame);
     pos.y += Terracotta__Dir__Num(d) + 4 * Terracotta__Player__Num(u) + 4 * 4 * Terracotta__UnitType__UnitIndex(u);
     pos *= float2(1.0 / 32, 1.0 / 96);
@@ -235,7 +235,7 @@ float4 Terracotta__DrawUnits__Sprite(VertexToPixel psin, float4 d, float4 u, flo
     }
     if (solid_blend_flag)
     {
-        clr = solid_blend * clr + (1 - solid_blend) * Terracotta__DrawUnits__SolidColor(psin, d, u);
+        clr = solid_blend * clr + (1 - solid_blend) * Terracotta__DrawUnits__SolidColor(psin, player, d, u);
     }
     return clr;
 }
@@ -305,7 +305,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             _s = 1.0 - _s;
         }
         float frame = _s * 6 + FragSharpFramework__FragSharpStd__Float(cur_unit.a);
-        output += Terracotta__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
+        output += Terracotta__DrawUnits__Sprite(psin, 0, pre, pre_unit, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
     }
     else
     {
@@ -315,12 +315,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             float prior_dir = Terracotta__SimShader__prior_direction(cur);
             cur.r = prior_dir;
             float2 offset = (1 - fs_param_s) * Terracotta__SimShader__direction_to_vec(prior_dir);
-            output += Terracotta__DrawUnits__Sprite(psin, cur, cur_unit, subcell_pos + offset, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
+            output += Terracotta__DrawUnits__Sprite(psin, 0, cur, cur_unit, subcell_pos + offset, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
         }
         if (Terracotta__SimShader__IsValid(pre.r) && output.a < 0.025 - .001)
         {
             float2 offset = -(fs_param_s) * Terracotta__SimShader__direction_to_vec(pre.r);
-            output += Terracotta__DrawUnits__Sprite(psin, pre, pre_unit, subcell_pos + offset, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
+            output += Terracotta__DrawUnits__Sprite(psin, 0, pre, pre_unit, subcell_pos + offset, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
         }
     }
     __FinalOutput.Color = output;

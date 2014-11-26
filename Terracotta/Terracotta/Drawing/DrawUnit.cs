@@ -5,7 +5,9 @@ namespace Terracotta
     public partial class DrawUnitsZoomedOutBlur : DrawUnits
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnit, Field<unit> PreviousUnit, PointSampler Texture, float PercentSimStepComplete)
+        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnit, Field<unit> PreviousUnit, PointSampler Texture,
+            [Player.Vals] float player,
+            float PercentSimStepComplete)
         {
             color output = color.TransparentBlack;
 
@@ -24,9 +26,9 @@ namespace Terracotta
                 unit_here = CurrentUnit[Here];
 
             output = .5f *
-                            .25f * (Presence(data_right, unit_right) + Presence(data_up, unit_up) + Presence(data_left, unit_left) + Presence(data_down, unit_down))
+                            .25f * (Presence(player, data_right, unit_right) + Presence(player, data_up, unit_up) + Presence(player, data_left, unit_left) + Presence(player, data_down, unit_down))
                       + .5f *
-                                    Presence(data_here, unit_here);
+                                    Presence(player, data_here, unit_here);
 
             return output;
         }
@@ -34,26 +36,26 @@ namespace Terracotta
 
     public partial class DrawUnits : BaseShader
     {
-        protected color Presence(data data, unit unit)
+        protected color Presence(float player, data data, unit unit)
         {
             return (Something(data) && !IsStationary(data)) ?
-                SolidColor(data, unit) :
+                SolidColor(player, data, unit) :
                 color.TransparentBlack;
         }
 
-        protected color SolidColor(data data, unit unit)
+        protected color SolidColor(float player, data data, unit unit)
         {
-            return selected(data) ? SelectedUnitColor.Get(unit.player) : UnitColor.Get(unit.player);           
+            return unit.player == player && selected(data) ? SelectedUnitColor.Get(unit.player) : UnitColor.Get(unit.player);           
         }
 
-        protected color Sprite(data d, unit u, vec2 pos, float frame, PointSampler Texture,
+        protected color Sprite(float player, data d, unit u, vec2 pos, float frame, PointSampler Texture,
             float selection_blend, float selection_size,
             bool solid_blend_flag, float solid_blend)
         {
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            bool draw_selected = selected(d) && pos.y > selection_size;
+            bool draw_selected = u.player == player && selected(d) && pos.y > selection_size;
 
             pos.x += floor(frame);
             pos.y += Dir.Num(d) + 4 * Player.Num(u) + 4 * 4 * UnitType.UnitIndex(u);
@@ -69,7 +71,7 @@ namespace Terracotta
 
             if (solid_blend_flag)
             {
-                clr = solid_blend * clr + (1 - solid_blend) * SolidColor(d, u);
+                clr = solid_blend * clr + (1 - solid_blend) * SolidColor(player, d, u);
             }
 
             return clr;
@@ -77,6 +79,7 @@ namespace Terracotta
 
         [FragmentShader]
         color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnits, Field<unit> PreviousUnits, PointSampler Texture,
+            [Player.Vals] float player,
             float s, float t,
             float selection_blend, float selection_size,
             [Vals.Bool] bool solid_blend_flag, float solid_blend)
@@ -108,7 +111,7 @@ namespace Terracotta
                 }
 
                 float frame = _s * UnitSpriteSheet.AnimLength + Float(cur_unit.anim);
-                output += Sprite(pre, pre_unit, subcell_pos, frame, Texture, selection_blend, selection_size, solid_blend_flag, solid_blend);
+                output += Sprite(player, pre, pre_unit, subcell_pos, frame, Texture, selection_blend, selection_size, solid_blend_flag, solid_blend);
             }
             else
             {
@@ -120,13 +123,13 @@ namespace Terracotta
                     cur.direction = prior_dir;
 
                     vec2 offset = (1 - s) * direction_to_vec(prior_dir);
-                    output += Sprite(cur, cur_unit, subcell_pos + offset, frame, Texture, selection_blend, selection_size, solid_blend_flag, solid_blend);
+                    output += Sprite(player, cur, cur_unit, subcell_pos + offset, frame, Texture, selection_blend, selection_size, solid_blend_flag, solid_blend);
                 }
 
                 if (IsValid(pre.direction) && output.a < .025f)
                 {
                     vec2 offset = -s * direction_to_vec(pre.direction);
-                    output += Sprite(pre, pre_unit, subcell_pos + offset, frame, Texture, selection_blend, selection_size, solid_blend_flag, solid_blend);
+                    output += Sprite(player, pre, pre_unit, subcell_pos + offset, frame, Texture, selection_blend, selection_size, solid_blend_flag, solid_blend);
                 }
             }
 

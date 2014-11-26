@@ -614,13 +614,16 @@ namespace Terracotta
                 bool solid_blend_flag = solid_blend < 1;
 
                 DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSprite,
+                    PlayerValue,
                     PercentSimStepComplete, second,
                     selection_blend, selection_size,
                     solid_blend_flag, solid_blend);
             }
             else
             {
-                DrawUnitsZoomedOutBlur.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSprite, PercentSimStepComplete);
+                DrawUnitsZoomedOutBlur.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSprite,
+                    PlayerValue,
+                    PercentSimStepComplete);
             }
             GridHelper.DrawGrid();
 

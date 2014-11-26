@@ -152,9 +152,21 @@ namespace FragSharpFramework
             Terracotta.Movement_UpdateDirection_RemoveDead.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_UpdateDirection_RemoveDead");
             Terracotta.Movement_SetPolarity_Phase1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_SetPolarity_Phase1");
             Terracotta.Movement_SetPolarity_Phase2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_SetPolarity_Phase2");
-            Terracotta.DrawUnitsZoomedOutBlur.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawUnitsZoomedOutBlur");
-            Terracotta.DrawUnits.CompiledEffect_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawUnits_solid_blend_flag=true");
-            Terracotta.DrawUnits.CompiledEffect_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawUnits_solid_blend_flag=false");
+            Terracotta.DrawUnitsZoomedOutBlur.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/DrawUnitsZoomedOutBlur_player=0");
+            Terracotta.DrawUnitsZoomedOutBlur.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/DrawUnitsZoomedOutBlur_player=0.003921569");
+            Terracotta.DrawUnitsZoomedOutBlur.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/DrawUnitsZoomedOutBlur_player=0.007843138");
+            Terracotta.DrawUnitsZoomedOutBlur.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/DrawUnitsZoomedOutBlur_player=0.01176471");
+            Terracotta.DrawUnitsZoomedOutBlur.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/DrawUnitsZoomedOutBlur_player=0.01568628");
+            Terracotta.DrawUnits.CompiledEffect_player_0_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawUnits_player=0_solid_blend_flag=true");
+            Terracotta.DrawUnits.CompiledEffect_player_0_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawUnits_player=0_solid_blend_flag=false");
+            Terracotta.DrawUnits.CompiledEffect_player_0p003921569_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawUnits_player=0.003921569_solid_blend_flag=true");
+            Terracotta.DrawUnits.CompiledEffect_player_0p003921569_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawUnits_player=0.003921569_solid_blend_flag=false");
+            Terracotta.DrawUnits.CompiledEffect_player_0p007843138_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawUnits_player=0.007843138_solid_blend_flag=true");
+            Terracotta.DrawUnits.CompiledEffect_player_0p007843138_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawUnits_player=0.007843138_solid_blend_flag=false");
+            Terracotta.DrawUnits.CompiledEffect_player_0p01176471_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawUnits_player=0.01176471_solid_blend_flag=true");
+            Terracotta.DrawUnits.CompiledEffect_player_0p01176471_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawUnits_player=0.01176471_solid_blend_flag=false");
+            Terracotta.DrawUnits.CompiledEffect_player_0p01568628_solid_blend_flag_true = Content.Load<Effect>("FragSharpShaders/DrawUnits_player=0.01568628_solid_blend_flag=true");
+            Terracotta.DrawUnits.CompiledEffect_player_0p01568628_solid_blend_flag_false = Content.Load<Effect>("FragSharpShaders/DrawUnits_player=0.01568628_solid_blend_flag=false");
         }
     }
 }
@@ -4545,40 +4557,58 @@ namespace Terracotta
 }
 
 
+
+
+
+
 namespace Terracotta
 {
     public partial class DrawUnitsZoomedOutBlur
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_player_0;
+        public static Effect CompiledEffect_player_0p003921569;
+        public static Effect CompiledEffect_player_0p007843138;
+        public static Effect CompiledEffect_player_0p01176471;
+        public static Effect CompiledEffect_player_0p01568628;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float PercentSimStepComplete, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float player, float PercentSimStepComplete, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnit, PreviousUnit, Texture, PercentSimStepComplete);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnit, PreviousUnit, Texture, player, PercentSimStepComplete);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float PercentSimStepComplete, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float player, float PercentSimStepComplete, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnit, PreviousUnit, Texture, PercentSimStepComplete);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnit, PreviousUnit, Texture, player, PercentSimStepComplete);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float PercentSimStepComplete, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float player, float PercentSimStepComplete, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnit, PreviousUnit, Texture, PercentSimStepComplete);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnit, PreviousUnit, Texture, player, PercentSimStepComplete);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float PercentSimStepComplete, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float player, float PercentSimStepComplete, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnit, PreviousUnit, Texture, PercentSimStepComplete);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnit, PreviousUnit, Texture, player, PercentSimStepComplete);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float PercentSimStepComplete)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float player, float PercentSimStepComplete)
         {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
+            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
+            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
+            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
+            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
             CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
             CompiledEffect.Parameters["fs_param_CurrentData_Texture"].SetValue(FragSharpMarshal.Marshal(CurrentData));
@@ -4607,45 +4637,69 @@ namespace Terracotta
 
 
 
+
+
+
+
+
+
+
+
 namespace Terracotta
 {
     public partial class DrawUnits
     {
-        public static Effect CompiledEffect_solid_blend_flag_true;
-        public static Effect CompiledEffect_solid_blend_flag_false;
+        public static Effect CompiledEffect_player_0_solid_blend_flag_true;
+        public static Effect CompiledEffect_player_0_solid_blend_flag_false;
+        public static Effect CompiledEffect_player_0p003921569_solid_blend_flag_true;
+        public static Effect CompiledEffect_player_0p003921569_solid_blend_flag_false;
+        public static Effect CompiledEffect_player_0p007843138_solid_blend_flag_true;
+        public static Effect CompiledEffect_player_0p007843138_solid_blend_flag_false;
+        public static Effect CompiledEffect_player_0p01176471_solid_blend_flag_true;
+        public static Effect CompiledEffect_player_0p01176471_solid_blend_flag_false;
+        public static Effect CompiledEffect_player_0p01568628_solid_blend_flag_true;
+        public static Effect CompiledEffect_player_0p01568628_solid_blend_flag_false;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, player, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, player, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, player, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, player, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
         {
             Effect CompiledEffect = null;
 
-            if (solid_blend_flag == true) CompiledEffect = CompiledEffect_solid_blend_flag_true;
-            else if (solid_blend_flag == false) CompiledEffect = CompiledEffect_solid_blend_flag_false;
+            if (abs((float)(player - 0)) < .001 && solid_blend_flag == true) CompiledEffect = CompiledEffect_player_0_solid_blend_flag_true;
+            else if (abs((float)(player - 0)) < .001 && solid_blend_flag == false) CompiledEffect = CompiledEffect_player_0_solid_blend_flag_false;
+            else if (abs((float)(player - 0.003921569)) < .001 && solid_blend_flag == true) CompiledEffect = CompiledEffect_player_0p003921569_solid_blend_flag_true;
+            else if (abs((float)(player - 0.003921569)) < .001 && solid_blend_flag == false) CompiledEffect = CompiledEffect_player_0p003921569_solid_blend_flag_false;
+            else if (abs((float)(player - 0.007843138)) < .001 && solid_blend_flag == true) CompiledEffect = CompiledEffect_player_0p007843138_solid_blend_flag_true;
+            else if (abs((float)(player - 0.007843138)) < .001 && solid_blend_flag == false) CompiledEffect = CompiledEffect_player_0p007843138_solid_blend_flag_false;
+            else if (abs((float)(player - 0.01176471)) < .001 && solid_blend_flag == true) CompiledEffect = CompiledEffect_player_0p01176471_solid_blend_flag_true;
+            else if (abs((float)(player - 0.01176471)) < .001 && solid_blend_flag == false) CompiledEffect = CompiledEffect_player_0p01176471_solid_blend_flag_false;
+            else if (abs((float)(player - 0.01568628)) < .001 && solid_blend_flag == true) CompiledEffect = CompiledEffect_player_0p01568628_solid_blend_flag_true;
+            else if (abs((float)(player - 0.01568628)) < .001 && solid_blend_flag == false) CompiledEffect = CompiledEffect_player_0p01568628_solid_blend_flag_false;
 
             if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
 
