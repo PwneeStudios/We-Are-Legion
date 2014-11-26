@@ -58,7 +58,11 @@ namespace FragSharpFramework
             Terracotta.PaintTiles_UpdateUnits.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PaintTiles_UpdateUnits");
             Terracotta.PaintTiles_UpdateTiles.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PaintTiles_UpdateTiles");
             Terracotta.ActionDelete_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionDelete_Data");
-            Terracotta.ActionSelect.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSelect");
+            Terracotta.ActionSelect.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0");
+            Terracotta.ActionSelect.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.003921569");
+            Terracotta.ActionSelect.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.007843138");
+            Terracotta.ActionSelect.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01176471");
+            Terracotta.ActionSelect.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01568628");
             Terracotta.DataDrawMouse.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DataDrawMouse");
             Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_1 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=1");
             Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_2 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=2");
@@ -1377,40 +1381,58 @@ namespace Terracotta
 }
 
 
+
+
+
+
 namespace Terracotta
 {
     public partial class ActionSelect
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_player_0;
+        public static Effect CompiledEffect_player_0p003921569;
+        public static Effect CompiledEffect_player_0p007843138;
+        public static Effect CompiledEffect_player_0p01176471;
+        public static Effect CompiledEffect_player_0p01568628;
 
-        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D Select, bool Deselect, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Unit, Select, Deselect);
+            Using(Data, Unit, Select, player, deselect);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D Select, bool Deselect, RenderTarget2D Output)
+        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Unit, Select, Deselect);
+            Using(Data, Unit, Select, player, deselect);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, bool Deselect, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Unit, Select, Deselect);
+            Using(Data, Unit, Select, player, deselect);
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, bool Deselect, RenderTarget2D Output)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Unit, Select, Deselect);
+            Using(Data, Unit, Select, player, deselect);
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, bool Deselect)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect)
         {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
+            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
+            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
+            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
+            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
             CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
             CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
@@ -1420,7 +1442,7 @@ namespace Terracotta
             CompiledEffect.Parameters["fs_param_Select_Texture"].SetValue(FragSharpMarshal.Marshal(Select));
             CompiledEffect.Parameters["fs_param_Select_size"].SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
             CompiledEffect.Parameters["fs_param_Select_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Select.Width, Select.Height)));
-            CompiledEffect.Parameters["fs_param_Deselect"].SetValue(FragSharpMarshal.Marshal(Deselect));
+            CompiledEffect.Parameters["fs_param_deselect"].SetValue(FragSharpMarshal.Marshal(deselect));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

@@ -5,10 +5,17 @@ namespace Terracotta
     public partial class ActionSelect : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, Field<unit> Select, bool Deselect)
+        data FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, Field<unit> Select,
+            [Player.Vals] float player,
+            bool deselect)
         {
-            data data_here = Data[Here];
             unit unit_here = Unit[Here];
+            data data_here = Data[Here];
+
+            if (unit_here.player != player)
+            {
+                return data_here;
+            }
 
             unit select = Select[Here];
 
@@ -19,7 +26,7 @@ namespace Terracotta
             }
             else
             {
-                if (Deselect)
+                if (deselect)
                     set_selected(ref data_here, false);
             }
 

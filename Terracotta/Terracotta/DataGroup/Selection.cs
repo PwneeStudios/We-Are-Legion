@@ -29,9 +29,9 @@ namespace Terracotta
             SelectedBound_BL = SimShader.unpack_vec2(bound_bl);
         }
 
-        public void SelectAlongLine(vec2 p1, vec2 p2, vec2 size, bool Deselect, bool Selecting, float PlayerValue, bool EffectSelection)
+        public void SelectAlongLine(vec2 p1, vec2 p2, vec2 size, bool Deselect, bool Selecting, float Player, bool EffectSelection)
         {
-            DataDrawMouse.Using(Assets.SelectCircle_Data, PlayerValue, Output: SelectField, Clear: Color.Transparent);
+            DataDrawMouse.Using(Assets.SelectCircle_Data, Player, Output: SelectField, Clear: Color.Transparent);
 
             if (Selecting)
             {
@@ -47,13 +47,13 @@ namespace Terracotta
 
             if (EffectSelection)
             {
-                SelectUnits(Deselect);
+                SelectUnits(Player, Deselect);
             }
         }
 
-        public void SelectInArea(vec2 pos, vec2 size, bool Deselect, bool Selecting, float PlayerValue, bool EffectSelection)
+        public void SelectInArea(vec2 pos, vec2 size, bool Deselect, bool Selecting, float Player, bool EffectSelection)
         {
-            DataDrawMouse.Using(Assets.SelectCircle_Data, PlayerValue, Output: SelectField, Clear: Color.Transparent);
+            DataDrawMouse.Using(Assets.SelectCircle_Data, Player, Output: SelectField, Clear: Color.Transparent);
 
             if (Selecting)
             {
@@ -62,16 +62,16 @@ namespace Terracotta
 
             if (EffectSelection)
             {
-                SelectUnits(Deselect);
+                SelectUnits(Player, Deselect);
             }
         }
 
-        private void SelectUnits(bool Deselect)
+        private void SelectUnits(float Player, bool Deselect)
         {
-            ActionSelect.Apply(CurrentData, CurrentUnits, SelectField, Deselect, Output: Temp1);
+            ActionSelect.Apply(CurrentData, CurrentUnits, SelectField, Player, Deselect, Output: Temp1);
             Swap(ref Temp1, ref CurrentData);
 
-            ActionSelect.Apply(PreviousData, CurrentUnits, SelectField, Deselect, Output: Temp1);
+            ActionSelect.Apply(PreviousData, CurrentUnits, SelectField, Player, Deselect, Output: Temp1);
             Swap(ref Temp1, ref PreviousData);
         }
 

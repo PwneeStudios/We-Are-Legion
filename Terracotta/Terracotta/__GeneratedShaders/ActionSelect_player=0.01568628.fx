@@ -67,7 +67,7 @@ sampler fs_param_Select : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
-bool fs_param_Deselect;
+bool fs_param_deselect;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
@@ -112,8 +112,13 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    if (abs(unit_here.g - 0.01568628) > .001)
+    {
+        __FinalOutput.Color = data_here;
+        return __FinalOutput;
+    }
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     if (select.r > 0 + .001 && (abs(select.g - 0.0) < .001 || abs(unit_here.g - select.g) < .001) && !(Terracotta__SimShader__BlockingTileHere(unit_here)))
     {
@@ -121,7 +126,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     else
     {
-        if (fs_param_Deselect)
+        if (fs_param_deselect)
         {
             Terracotta__SimShader__set_selected(data_here, false);
         }
