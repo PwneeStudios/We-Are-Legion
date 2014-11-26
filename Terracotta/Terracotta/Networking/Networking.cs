@@ -25,7 +25,12 @@ namespace Terracotta
 
         public static void ToServer(Message message)
         {
-            Outbox.Enqueue(new Tuple<int, Message>(0, message));
+            //new Thread(() =>
+            //{
+            //    Thread.Sleep(100);
+
+                Outbox.Enqueue(new Tuple<int, Message>(0, message));
+            //}).Start();
         }
 
         public static void ToServer(MessageTail message)
@@ -35,19 +40,25 @@ namespace Terracotta
 
         public static void ToClients(Message message)
         {
-            if (Program.Server)
-            {
-                foreach (var client in Server.Clients)
-                {
-                    int index = client.Index;
+            //new Thread(() =>
+            //{
+            //    Thread.Sleep(100);
 
-                    Outbox.Enqueue(new Tuple<int, Message>(index, message));
+                if (Program.Server)
+                {
+                    foreach (var client in Server.Clients)
+                    {
+                        int index = client.Index;
+
+                        Console.WriteLine("* Enqueued {0}", message);
+                        Outbox.Enqueue(new Tuple<int, Message>(index, message));
+                    }
                 }
-            }
-            else
-            {
-                throw new Exception("Clients cannot send messages to clients.");
-            }
+                else
+                {
+                    throw new Exception("Clients cannot send messages to clients.");
+                }
+            //}).Start();
         }
 
         public static void ToClients(MessageTail message)

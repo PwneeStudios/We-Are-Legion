@@ -65,7 +65,7 @@ namespace Terracotta
             {
                 Int32 port = 13000;
                 IPAddress server_addr = IPAddress.Parse("127.0.0.1");
-
+                //IPAddress server_addr = IPAddress.Parse("72.229.112.45");
                 client = new TcpClient();
 
                 Console.Write("Waiting to connect... ");

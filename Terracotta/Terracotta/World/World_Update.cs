@@ -197,7 +197,16 @@ namespace Terracotta
             }
         }
 
-        public int SimStep = 0, ServerSimStep = 0, MinClientSimStep = 0;
+        public int
+            /// The simulation step the GPU sim is currently on.
+            SimStep = 0,
+            /// The simulation step the server is on or is nearly on.
+            ServerSimStep = 0,
+            /// The simulatin step that any acknowledged actions should occur on.
+            AckSimStep = 0,
+            /// The minimum simulation step of any client/server.
+            MinClientSimStep = 0;
+
         void SimulationUpdate()
         {
             DataGroup.DoGoldMineCount(PlayerInfo);

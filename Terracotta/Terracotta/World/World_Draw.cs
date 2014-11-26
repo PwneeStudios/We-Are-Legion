@@ -153,7 +153,7 @@ namespace Terracotta
                 {
                     if (message.Type == MessageType.PlayerAction)
                     {
-                        Networking.ToClients(new MessagePlayerActionAck(ServerSimStep + 1, message));
+                        Networking.ToClients(new MessagePlayerActionAck(AckSimStep, message));
                     }
                 }
 
@@ -253,6 +253,7 @@ namespace Terracotta
                     if (SecondsSinceLastUpdate > .75f * DelayBetweenUpdates && SimStep == ServerSimStep && !SentBookend)
                     {
                         SentBookend = true;
+                        AckSimStep = ServerSimStep + 2;
                         Networking.ToClients(new MessageBookend(ServerSimStep + 1));
                     }
                 }

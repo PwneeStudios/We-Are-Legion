@@ -108,7 +108,7 @@ namespace Terracotta
                     }
                 }
 
-                //Thread.Sleep(1000);
+                //Thread.Sleep(200);
                 Thread.Sleep(1);
                 //Thread.SpinWait(1);
             }
@@ -120,6 +120,7 @@ namespace Terracotta
             {
                 Int32 port = 13000;
                 IPAddress local_addr = IPAddress.Parse("127.0.0.1");
+                //IPAddress local_addr = IPAddress.Parse("72.229.112.45");
 
                 server = new TcpListener(local_addr, port);
                 server.Start();

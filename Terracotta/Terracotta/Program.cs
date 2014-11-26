@@ -61,13 +61,13 @@ namespace Terracotta
                 MultiDebug = true;
             }
 
-            if (Client && args.Count == 0)
+            if (MultiDebug && Client && args.Count == 0)
             {
                 var dir = System.IO.Directory.GetCurrentDirectory();
                 System.Diagnostics.Process.Start(System.IO.Path.Combine(dir, "Terracotta.exe"), "--server --debug --p2");
             }
 
-            if (Server && args.Count == 0)
+            if (MultiDebug && Server && args.Count == 0)
             {
                 var dir = System.IO.Directory.GetCurrentDirectory();
                 System.Diagnostics.Process.Start(System.IO.Path.Combine(dir, "Terracotta.exe"), "--client --debug --p2");
