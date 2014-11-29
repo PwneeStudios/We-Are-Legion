@@ -71,8 +71,22 @@ namespace Terracotta
             //graphics.PreferredBackBufferHeight = 1080;
 
 
-            graphics.SynchronizeWithVerticalRetrace = !UnlimitedSpeed;
-            IsFixedTimeStep = !UnlimitedSpeed;
+            if (Program.MaxFps)
+            {
+                graphics.SynchronizeWithVerticalRetrace = false;
+                IsFixedTimeStep = false;
+            }
+            else
+            {
+                graphics.SynchronizeWithVerticalRetrace = !UnlimitedSpeed;
+                IsFixedTimeStep = !UnlimitedSpeed;
+            }
+
+            if (Program.Headless)
+            {
+                graphics.PreferredBackBufferWidth = 1;
+                graphics.PreferredBackBufferHeight = 1;
+            }
 
             Content.RootDirectory = "Content";
 
@@ -267,9 +281,13 @@ namespace Terracotta
         int DrawCount = 0;
 
         enum GameState { TitleScreen, Spells, Instructions, ScenarioMenu, Loading, Game,       ToEditor, ToTest }
-        //GameState State = GameState.TitleScreen;
-        //GameState State = GameState.ToEditor;
+        
+#if DEBUG
+        //GameState State = Program.MultiDebug ? GameState.ToTest : GameState.ToEditor;
         GameState State = GameState.ToTest;
+#else
+        GameState State = GameState.TitleScreen;
+#endif
 
         double TimeSinceLoad = 0;
         string ScenarioToLoad = null;
@@ -312,7 +330,7 @@ namespace Terracotta
                     //World.Load("TestSave.m3n");
                     //World.Load(Path.Combine("Content", Path.Combine("Maps", "Beset.m3n")));
                     //World.Load(Path.Combine("Content", Path.Combine("Maps", "Gilgamesh.m3n")));
-                    World.Load(Path.Combine("Content", Path.Combine("Maps", "Nice.m3n")));
+                    //World.Load(Path.Combine("Content", Path.Combine("Maps", "Nice.m3n")));
 
                     World.MapEditor = true;
 

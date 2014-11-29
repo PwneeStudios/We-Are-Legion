@@ -1,5 +1,6 @@
 using System;
 
+using Microsoft.Xna.Framework.Graphics;
 using FragSharpFramework;
 
 namespace Terracotta
@@ -32,6 +33,16 @@ namespace Terracotta
             int barracks_count = Int(count.w);
             
             return new Tuple<int,int>(unit_count, barracks_count);
+        }
+
+        public string DoHash(RenderTarget2D input)
+        {
+            Hash.Apply(input, HashField, Output: Multigrid[0]);
+
+            vec4 hash = MultigridReduce((tx, rt) => HashReduce.Apply(tx, HashField, rt));
+
+            string s = string.Format("{0}{1}{2}{3}", hash.x, hash.y, hash.z, hash.w);
+            return s.GetHashCode().ToString();
         }
     }
 }

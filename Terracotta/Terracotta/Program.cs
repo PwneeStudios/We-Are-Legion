@@ -5,6 +5,22 @@ using System.Runtime.InteropServices;
 
 namespace Terracotta
 {
+    public static class Log
+    {
+        public static bool
+            SpeedMods = false,
+            Errors = true,
+            Receive = false,
+            Send = false,
+            Outbox = false,
+            Processing = false,
+            Do = true,
+            UpdateSim = false,
+            Delays = true,
+            Draws = false,
+            DoUpdates = false;
+    }
+
     public static class Program
     {
 #if DEBUG
@@ -30,10 +46,16 @@ namespace Terracotta
             Server = false,
             Client = false;
 
+        public static int Port = 13000;
+        public static string IpAddress = "127.0.0.1";
+                                    
         public static int
             StartupPlayerNumber = 1;
 
         public static bool MultiDebug = false;
+        public static bool LogHash = false;
+        public static bool Headless = false;
+        public static bool MaxFps = false;
 
         /// <summary>
         /// The main entry point for the application.
@@ -52,8 +74,23 @@ namespace Terracotta
             else Client = true;
             //else Server = true;
 
+            if (args.Contains("--ip")) { int i = args.IndexOf("--ip"); IpAddress = args[i + 1]; }
+            if (args.Contains("--port")) { int i = args.IndexOf("--port"); Port = int.Parse(args[i + 1]); }
+
+            if (args.Contains("--loghash")) { LogHash = true; }
+            if (args.Contains("--headless")) { Headless = true; }
+            if (args.Contains("--maxfps")) { MaxFps = true; }
+
+            // Log settings
+            Console.WriteLine("ip set to {0}", IpAddress);
+            Console.WriteLine("port set to {0}", Port);
+
             if (Server) Console.WriteLine("Terracotta Server. Player {0}", StartupPlayerNumber);
             if (Client) Console.WriteLine("Terracotta Client. Player {0}", StartupPlayerNumber);
+
+            if (LogHash) Console.WriteLine("Logging hashes");
+            if (Headless) Console.WriteLine("Headless");
+            if (MaxFps) Console.WriteLine("Max fps");
 
 #if DEBUG
             if (args.Count == 0 || args.Contains("--debug"))
@@ -64,7 +101,7 @@ namespace Terracotta
             if (MultiDebug && Client && args.Count == 0)
             {
                 var dir = System.IO.Directory.GetCurrentDirectory();
-                System.Diagnostics.Process.Start(System.IO.Path.Combine(dir, "Terracotta.exe"), "--server --debug --p2");
+                System.Diagnostics.Process.Start(System.IO.Path.Combine(dir, "Terracotta.exe"), "--server --debug --p2 --headless");
             }
 
             if (MultiDebug && Server && args.Count == 0)

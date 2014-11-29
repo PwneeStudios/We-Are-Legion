@@ -4,6 +4,22 @@ namespace Terracotta
 {
     public partial class DataGroup : SimShader
     {
+        void MakeHashField()
+        {
+            HashField = MakeTarget(w, h);
+
+            Color[] _hash = new Color[w * h];
+
+            var rnd = new System.Random(5902981);
+            for (int i = 0; i < w; i++)
+            for (int j = 0; j < h; j++)
+            {
+                _hash[i * h + j] = new Color(rnd.IntRange(0, 256), rnd.IntRange(0, 256), rnd.IntRange(0, 256), rnd.IntRange(0, 256));
+            }
+
+            HashField.SetData(_hash);
+        }
+
         void InitialConditions()
         {
             Color[] _unit = new Color[w * h];

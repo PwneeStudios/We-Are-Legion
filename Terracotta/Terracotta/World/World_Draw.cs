@@ -147,7 +147,7 @@ namespace Terracotta
             Message message;
             while (Networking.Inbox.TryDequeue(out message))
             {
-                Console.WriteLine("  -Processing {0}", message);
+                if (Log.Processing) Console.WriteLine("  -Processing {0}", message);
 
                 if (Program.Server)
                 {
@@ -191,11 +191,18 @@ namespace Terracotta
                 {
                     double Elapsed = GameClass.ElapsedSeconds;
 
-                    if (SimStep + SecondsSinceLastUpdate / DelayBetweenUpdates + .25f < ServerSimStep)
+                    if (SimStep + SecondsSinceLastUpdate / DelayBetweenUpdates < ServerSimStep - .25f)
+                    //if (SimStep + SecondsSinceLastUpdate / DelayBetweenUpdates < ServerSimStep - .5f)
                     {
                         Elapsed *= 1.15f;
-                        Console.WriteLine("            -- Elasped = {0}", Elapsed);
+                        if (Log.SpeedMods) Console.WriteLine("            -- Speed up please, Elasped = {3}  # {0}/{1} :{2}", Elapsed, SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates);
                     }
+
+                    //if (!Program.Server && SimStep + SecondsSinceLastUpdate / DelayBetweenUpdates > ServerSimStep - .15f)
+                    //{
+                    //    Elapsed /= 1.15f;
+                    //    if (Log.SpeedMods) Console.WriteLine("            -- Slow down please, Elasped = {3}  # {0}/{1} :{2}", Elapsed, SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates);
+                    //}
 
                     SecondsSinceLastUpdate += Elapsed;
                     T += (float)Elapsed;
@@ -250,10 +257,12 @@ namespace Terracotta
 
                 if (Program.Server)
                 {
-                    if (SecondsSinceLastUpdate > .75f * DelayBetweenUpdates && SimStep == ServerSimStep && !SentBookend)
+                    if (SecondsSinceLastUpdate / DelayBetweenUpdates > .75f && SimStep == ServerSimStep && !SentBookend)
                     {
+                        if (Log.UpdateSim) Console.WriteLine("Ready for bookend. {0}/{1} : {2}", SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates);
                         SentBookend = true;
                         AckSimStep = ServerSimStep + 2;
+                        //AckSimStep = ServerSimStep + 5;
                         Networking.ToClients(new MessageBookend(ServerSimStep + 1));
                     }
                 }
@@ -269,24 +278,59 @@ namespace Terracotta
                         DeququeActions(SimStep + 1);
                         SimulationUpdate();
 
+                        if (Program.LogHash)
+                        {
+                            string curdata_hash = DataGroup.DoHash(DataGroup.CurrentData);
+                            string prevdata_hash = DataGroup.DoHash(DataGroup.PreviousData);
+                            string curunit_hash = DataGroup.DoHash(DataGroup.CurrentUnits);
+                            string prevunit_hash = DataGroup.DoHash(DataGroup.PreviousUnits);
+                            string target_hash = DataGroup.DoHash(DataGroup.TargetData);
+                            string extra_hash = DataGroup.DoHash(DataGroup.Extra);
+                            Console.WriteLine("Hash = {0} {1} {2} {3} {4} {5}", curdata_hash, prevdata_hash, curunit_hash, prevunit_hash, target_hash, extra_hash, target_hash, extra_hash);
+                        }
+
                         SentBookend = false;
                         Networking.ToServer(new MessageStartingStep(SimStep));
+
+                        if (Log.UpdateSim)
+                            Console.WriteLine("Just updated sim # {0}/{1} : {2}      min={3}", SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates, MinClientSimStep);
                     }
                     else
                     {
-                        SecondsSinceLastUpdate = PreviousSecondsSinceLastUpdate;
+                        if (Log.Delays) Console.WriteLine("-Reverting from # {0}/{1} : {2}", SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates);
+                        SecondsSinceLastUpdate = DelayBetweenUpdates;
                         T -= (float)GameClass.ElapsedSeconds;
+                        if (Log.Delays) Console.WriteLine("-Reverting to # {0}/{1} : {2}", SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates);
+                    }
+                }
+                else
+                {
+                    if (Program.Server)
+                    {
+                        if (Log.Draws) Console.WriteLine("Draw step {0},  {1}", DrawCount, SecondsSinceLastUpdate / DelayBetweenUpdates);
                     }
                 }
             }
 
             BenchmarkTests.Run(DataGroup.CurrentData, DataGroup.PreviousData);
 
+            if (!Program.Headless)
+            {
+                DrawWorld();
+            }
+            else
+            {
+                GridHelper.GraphicsDevice.SetRenderTarget(null);
+            }
+        }
+
+        private void DrawWorld()
+        {
             DataGroup.UpdateGradient_ToBuildings();
 
             DrawMinimapTexture();
             DrawGrids();
-            
+
             DrawMinimap();
             DrawTopUi();
 

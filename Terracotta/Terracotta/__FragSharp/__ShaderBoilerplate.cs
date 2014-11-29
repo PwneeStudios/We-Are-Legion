@@ -72,6 +72,8 @@ namespace FragSharpFramework
             Terracotta.ActionSpawn_Unit.CompiledEffect_raising_false = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Unit_raising=false");
             Terracotta.ActionSpawn_Target.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Target");
             Terracotta.ActionSpawn_Corpse.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Corpse");
+            Terracotta.HashReduce.CompiledEffect = Content.Load<Effect>("FragSharpShaders/HashReduce");
+            Terracotta.Hash.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Hash");
             Terracotta.UpdateMagic.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UpdateMagic");
             Terracotta.Kill.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Kill");
             Terracotta.PropagateNecromancyAuro.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PropagateNecromancyAuro");
@@ -1747,6 +1749,98 @@ namespace Terracotta
             CompiledEffect.Parameters["fs_param_Corpses_Texture"].SetValue(FragSharpMarshal.Marshal(Corpses));
             CompiledEffect.Parameters["fs_param_Corpses_size"].SetValue(FragSharpMarshal.Marshal(vec(Corpses.Width, Corpses.Height)));
             CompiledEffect.Parameters["fs_param_Corpses_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Corpses.Width, Corpses.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace Terracotta
+{
+    public partial class HashReduce
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D PreviousLevel, Texture2D Noise, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(PreviousLevel, Noise);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D PreviousLevel, Texture2D Noise, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(PreviousLevel, Noise);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D PreviousLevel, Texture2D Noise, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(PreviousLevel, Noise);
+        }
+        public static void Using(Texture2D PreviousLevel, Texture2D Noise, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(PreviousLevel, Noise);
+        }
+        public static void Using(Texture2D PreviousLevel, Texture2D Noise)
+        {
+            CompiledEffect.Parameters["fs_param_PreviousLevel_Texture"].SetValue(FragSharpMarshal.Marshal(PreviousLevel));
+            CompiledEffect.Parameters["fs_param_PreviousLevel_size"].SetValue(FragSharpMarshal.Marshal(vec(PreviousLevel.Width, PreviousLevel.Height)));
+            CompiledEffect.Parameters["fs_param_PreviousLevel_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousLevel.Width, PreviousLevel.Height)));
+            CompiledEffect.Parameters["fs_param_Noise_Texture"].SetValue(FragSharpMarshal.Marshal(Noise));
+            CompiledEffect.Parameters["fs_param_Noise_size"].SetValue(FragSharpMarshal.Marshal(vec(Noise.Width, Noise.Height)));
+            CompiledEffect.Parameters["fs_param_Noise_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Noise.Width, Noise.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace Terracotta
+{
+    public partial class Hash
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D F, Texture2D Noise, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(F, Noise);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D F, Texture2D Noise, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(F, Noise);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D F, Texture2D Noise, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(F, Noise);
+        }
+        public static void Using(Texture2D F, Texture2D Noise, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(F, Noise);
+        }
+        public static void Using(Texture2D F, Texture2D Noise)
+        {
+            CompiledEffect.Parameters["fs_param_F_Texture"].SetValue(FragSharpMarshal.Marshal(F));
+            CompiledEffect.Parameters["fs_param_F_size"].SetValue(FragSharpMarshal.Marshal(vec(F.Width, F.Height)));
+            CompiledEffect.Parameters["fs_param_F_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(F.Width, F.Height)));
+            CompiledEffect.Parameters["fs_param_Noise_Texture"].SetValue(FragSharpMarshal.Marshal(Noise));
+            CompiledEffect.Parameters["fs_param_Noise_size"].SetValue(FragSharpMarshal.Marshal(vec(Noise.Width, Noise.Height)));
+            CompiledEffect.Parameters["fs_param_Noise_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Noise.Width, Noise.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
@@ -3924,33 +4018,33 @@ namespace Terracotta
         public static Effect CompiledEffect_player_0p01176471;
         public static Effect CompiledEffect_player_0p01568628;
 
-        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size, float player, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size_Inv, float player, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Unit, TargetData, Destination_BL, Destination_Size, Selection_BL, Selection_Size, player);
+            Using(Data, Unit, TargetData, Destination_BL, Destination_Size, Selection_BL, Selection_Size_Inv, player);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size, float player, RenderTarget2D Output)
+        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size_Inv, float player, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Unit, TargetData, Destination_BL, Destination_Size, Selection_BL, Selection_Size, player);
+            Using(Data, Unit, TargetData, Destination_BL, Destination_Size, Selection_BL, Selection_Size_Inv, player);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size, float player, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size_Inv, float player, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Unit, TargetData, Destination_BL, Destination_Size, Selection_BL, Selection_Size, player);
+            Using(Data, Unit, TargetData, Destination_BL, Destination_Size, Selection_BL, Selection_Size_Inv, player);
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size, float player, RenderTarget2D Output)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size_Inv, float player, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Unit, TargetData, Destination_BL, Destination_Size, Selection_BL, Selection_Size, player);
+            Using(Data, Unit, TargetData, Destination_BL, Destination_Size, Selection_BL, Selection_Size_Inv, player);
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size, float player)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size_Inv, float player)
         {
             Effect CompiledEffect = null;
 
@@ -3974,7 +4068,7 @@ namespace Terracotta
             CompiledEffect.Parameters["fs_param_Destination_BL"].SetValue(FragSharpMarshal.Marshal(Destination_BL));
             CompiledEffect.Parameters["fs_param_Destination_Size"].SetValue(FragSharpMarshal.Marshal(Destination_Size));
             CompiledEffect.Parameters["fs_param_Selection_BL"].SetValue(FragSharpMarshal.Marshal(Selection_BL));
-            CompiledEffect.Parameters["fs_param_Selection_Size"].SetValue(FragSharpMarshal.Marshal(Selection_Size));
+            CompiledEffect.Parameters["fs_param_Selection_Size_Inv"].SetValue(FragSharpMarshal.Marshal(Selection_Size_Inv));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

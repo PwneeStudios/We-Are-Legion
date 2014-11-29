@@ -78,9 +78,12 @@ namespace Terracotta
         public void AttackMoveApply(float Player, vec2 Pos, vec2 Selected_BL, vec2 Selected_Size, vec2 Destination_BL, vec2 Destination_Size)
         {
             SetSelectedAction.Apply(CurrentData, CurrentUnits, SimShader.UnitAction.Attacking, Player, Output: Temp1);
-            Swap(ref Temp1, ref CurrentData);
+            Swap(ref CurrentData, ref Temp1);
 
-            ActionAttackSquare.Apply(CurrentData, CurrentUnits, TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size, Player, Output: Temp1);
+            //ActionAttackPoint.Apply(CurrentData, CurrentUnits, TargetData, Pos, Player, Output: Temp1);
+            var Selected_Size_Inv = vec(1, 1);//1f / Selection_Size;
+            Destination_Size /= Selected_Size;
+            ActionAttackSquare.Apply(CurrentData, CurrentUnits, TargetData, Destination_BL, Destination_Size, Selected_BL, Selected_Size_Inv, Player, Output: Temp1);
             Swap(ref TargetData, ref Temp1);
 
             ActionAttack2.Apply(CurrentData, CurrentUnits, Extra, Pos, Player, Output: Temp1);

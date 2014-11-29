@@ -118,6 +118,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets.cs" />
+    <Compile Include="Networking\PlayerActionMessages.cs" />
     <Compile Include="Networking\Server.cs" />
     <Compile Include="Networking\Client.cs" />
     <Compile Include="Networking\Message.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Render.cs" />
     <Compile Include="DataGroup\BuildingUpdate.cs" />
     <Compile Include="Drawing\GameColors.cs" />
+    <Compile Include="Simulation\Hash.cs" />
     <Compile Include="Simulation\Magic.cs" />
     <Compile Include="Util\ShaderUtil.cs" />
     <Compile Include="Util\Ui.cs" />

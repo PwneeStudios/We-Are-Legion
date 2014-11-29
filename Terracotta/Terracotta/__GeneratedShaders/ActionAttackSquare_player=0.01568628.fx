@@ -73,7 +73,7 @@ float2 fs_param_Destination_Size;
 
 float2 fs_param_Selection_BL;
 
-float2 fs_param_Selection_Size;
+float2 fs_param_Selection_Size_Inv;
 
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
@@ -120,8 +120,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (abs(0.01568628 - unit_here.g) < .001 && Terracotta__SimShader__selected(data_here))
     {
         float2 pos = psin.TexCoords * fs_param_Data_size;
-        pos = (pos - fs_param_Selection_BL) / fs_param_Selection_Size;
+        pos = (pos - fs_param_Selection_BL) * fs_param_Selection_Size_Inv;
         pos = pos * fs_param_Destination_Size + fs_param_Destination_BL;
+        pos = round(pos);
         target = Terracotta__SimShader__pack_vec2(pos);
     }
     else

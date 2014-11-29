@@ -22,7 +22,7 @@ namespace Terracotta
     public partial class ActionAttackSquare : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, Field<data> TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size, [Player.Vals] float player)
+        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, Field<data> TargetData, vec2 Destination_BL, vec2 Destination_Size, vec2 Selection_BL, vec2 Selection_Size_Inv, [Player.Vals] float player)
         {
             data data_here = Data[Here];
             unit unit_here = Unit[Here];
@@ -32,8 +32,9 @@ namespace Terracotta
             {
                 vec2 pos = vertex.TexCoords * Data.Size;
 
-                pos = (pos - Selection_BL) / Selection_Size;
+                pos = (pos - Selection_BL) * Selection_Size_Inv;
                 pos = pos * Destination_Size + Destination_BL;
+                pos = round(pos);
 
                 target = pack_vec2(pos);
             }

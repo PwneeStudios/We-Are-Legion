@@ -93,6 +93,8 @@ namespace Terracotta
         }
 
         public RenderTarget2D
+            HashField,
+
             Temp1, Temp2,
             PreviousUnits, CurrentUnits, PreviousData, CurrentData, Extra, TargetData,
             RandomField,
@@ -121,6 +123,8 @@ namespace Terracotta
 
         void CreateRenderTargets_InGameRequired()
         {
+            MakeHashField();
+
             CurrentUnits = MakeTarget(w, h);
             PreviousUnits = MakeTarget(w, h);
 

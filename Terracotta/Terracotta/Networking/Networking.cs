@@ -8,9 +8,6 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
-using FragSharpHelper;
-using FragSharpFramework;
-
 namespace Terracotta
 {
     public static class Networking
@@ -50,7 +47,7 @@ namespace Terracotta
                     {
                         int index = client.Index;
 
-                        Console.WriteLine("* Enqueued {0}", message);
+                        if (Log.Outbox) Console.WriteLine("* Enqueued {0}", message);
                         Outbox.Enqueue(new Tuple<int, Message>(index, message));
                     }
                 }

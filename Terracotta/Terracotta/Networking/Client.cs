@@ -8,9 +8,6 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
-using FragSharpHelper;
-using FragSharpFramework;
-
 namespace Terracotta
 {
     public class Client
@@ -36,11 +33,11 @@ namespace Terracotta
                             message.Source = GameClient.Server;
 
                             Networking.Inbox.Enqueue(message);
-                            Console.WriteLine("(Client) Received: {0}", message);
+                            if (Log.Receive) Console.WriteLine("(Client) Received: {0}", message);
                         }
                         catch
                         {
-                            Console.WriteLine("(Client) Received Malformed: {0}", s);
+                            if (Log.Errors) Console.WriteLine("(Client) Received Malformed: {0}", s);
                         }
                     }
                 }
@@ -51,7 +48,7 @@ namespace Terracotta
                 {
                     string encoding = outgoing.Item2.Encode();
                     stream.Send(encoding);
-                    Console.WriteLine("(Client) Sent: {0}", encoding);
+                    if (Log.Send) Console.WriteLine("(Client) Sent: {0}", encoding);
                 }
 
                 Thread.Sleep(1);
@@ -63,13 +60,12 @@ namespace Terracotta
         {
             try
             {
-                Int32 port = 13000;
-                IPAddress server_addr = IPAddress.Parse("127.0.0.1");
-                //IPAddress server_addr = IPAddress.Parse("72.229.112.45");
+                IPAddress server_addr = IPAddress.Parse(Program.IpAddress);
+                                
                 client = new TcpClient();
 
                 Console.Write("Waiting to connect... ");
-                client.Connect(server_addr, port);
+                client.Connect(server_addr, Program.Port);
                 Console.WriteLine("Connected!");
 
                 stream = client.GetStream();
