@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
@@ -21,9 +22,37 @@ namespace Terracotta
             DoUpdates = false;
     }
 
+    public static class ConsoleHelper
+    {
+        public static void CreateConsole()
+        {
+            AllocConsole();
+
+            // stdout's handle seems to always be equal to 7
+            IntPtr defaultStdout = new IntPtr(7);
+            IntPtr currentStdout = GetStdHandle(StdOutputHandle);
+
+            if (currentStdout != defaultStdout)
+                // reset stdout
+                SetStdHandle(StdOutputHandle, defaultStdout);
+
+            // reopen stdout
+            TextWriter writer = new StreamWriter(Console.OpenStandardOutput()) { AutoFlush = true };
+            Console.SetOut(writer);
+        }
+
+        // P/Invoke required:
+        private const UInt32 StdOutputHandle = 0xFFFFFFF5;
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GetStdHandle(UInt32 nStdHandle);
+        [DllImport("kernel32.dll")]
+        private static extern void SetStdHandle(UInt32 nStdHandle, IntPtr handle);
+        [DllImport("kernel32")]
+        static extern bool AllocConsole();
+    }
+
     public static class Program
     {
-#if DEBUG
         const int SWP_NOSIZE = 0x0001;
 
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
@@ -40,7 +69,7 @@ namespace Terracotta
 
         const int SW_HIDE = 0;
         const int SW_SHOW = 5;
-#endif
+
 
         public static bool
             Server = false,
@@ -50,12 +79,16 @@ namespace Terracotta
         public static string IpAddress = "127.0.0.1";
                                     
         public static int
-            StartupPlayerNumber = 1;
+            StartupPlayerNumber = 1,
+            Width = -1,
+            Height = -1;
 
-        public static bool MultiDebug = false;
-        public static bool LogHash = false;
-        public static bool Headless = false;
-        public static bool MaxFps = false;
+        public static bool
+            MultiDebug = false,
+            LogHash = false,
+            Headless = false,
+            MaxFps = false,
+            HasConsole = false;
 
         /// <summary>
         /// The main entry point for the application.
@@ -81,6 +114,20 @@ namespace Terracotta
             if (args.Contains("--headless")) { Headless = true; }
             if (args.Contains("--maxfps")) { MaxFps = true; }
 
+            if (args.Contains("--console")) { HasConsole = true; }
+
+            if (args.Contains("--w")) { int i = args.IndexOf("--w"); Width = int.Parse(args[i + 1]); }
+            if (args.Contains("--h")) { int i = args.IndexOf("--h"); Height = int.Parse(args[i + 1]); }
+
+#if DEBUG
+            if (args.Count == 0 || args.Contains("--multidebug"))
+            {
+                MultiDebug = true;
+                HasConsole = true;
+                Program.Width = Program.Height = 512;
+            }
+#endif
+
             // Log settings
             Console.WriteLine("ip set to {0}", IpAddress);
             Console.WriteLine("port set to {0}", Port);
@@ -88,30 +135,27 @@ namespace Terracotta
             if (Server) Console.WriteLine("Terracotta Server. Player {0}", StartupPlayerNumber);
             if (Client) Console.WriteLine("Terracotta Client. Player {0}", StartupPlayerNumber);
 
-            if (LogHash) Console.WriteLine("Logging hashes");
-            if (Headless) Console.WriteLine("Headless");
-            if (MaxFps) Console.WriteLine("Max fps");
-
-#if DEBUG
-            if (args.Count == 0 || args.Contains("--debug"))
-            {
-                MultiDebug = true;
-            }
-
-            if (MultiDebug && Client && args.Count == 0)
-            {
-                var dir = System.IO.Directory.GetCurrentDirectory();
-                System.Diagnostics.Process.Start(System.IO.Path.Combine(dir, "Terracotta.exe"), "--server --debug --p2 --headless");
-            }
-
-            if (MultiDebug && Server && args.Count == 0)
-            {
-                var dir = System.IO.Directory.GetCurrentDirectory();
-                System.Diagnostics.Process.Start(System.IO.Path.Combine(dir, "Terracotta.exe"), "--client --debug --p2");
-            }
+            if (LogHash) Console.WriteLine("Logging hashes enabled");
+            if (Headless) Console.WriteLine("Headless enabled");
+            if (MaxFps) Console.WriteLine("Max fps enabled");
+            if (HasConsole) { Console.WriteLine("Console enabled"); ConsoleHelper.CreateConsole(); }
 
             if (MultiDebug)
             {
+                Console.WriteLine("MultiDebug enabled");
+
+                if (MultiDebug && Client && args.Count == 0)
+                {
+                    var dir = System.IO.Directory.GetCurrentDirectory();
+                    System.Diagnostics.Process.Start(System.IO.Path.Combine(dir, "Terracotta.exe"), "--server --console --multidebug --p2 --headless");
+                }
+
+                if (MultiDebug && Server && args.Count == 0)
+                {
+                    var dir = System.IO.Directory.GetCurrentDirectory();
+                    System.Diagnostics.Process.Start(System.IO.Path.Combine(dir, "Terracotta.exe"), "--client --console --multidebug --p2");
+                }
+
                 IntPtr MyConsole = GetConsoleWindow();
                 int xpos = 0;
                 int ypos = Client ? 0 : 1080 / 2;
@@ -120,10 +164,7 @@ namespace Terracotta
                 Console.WindowWidth = 169;
                 Console.BufferHeight = Int16.MaxValue - 1;
                 Console.WindowHeight = 37;
-
-                //ShowWindow(MyConsole, SW_HIDE);
             }
-#endif
 
 
             using (GameClass game = new GameClass())

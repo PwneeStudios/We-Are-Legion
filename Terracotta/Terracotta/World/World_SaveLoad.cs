@@ -152,7 +152,11 @@ namespace Terracotta
 
         public void Load(string FileName)
         {
+#if DEBUG
+            if (true)
+#else
             if (Program.MultiDebug)
+#endif
             {
                 for (int i = 0; i < 10; i++)
                 {

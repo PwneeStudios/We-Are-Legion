@@ -52,24 +52,17 @@ namespace Terracotta
 
             Window.Title = "Terracotta";
 
-            //graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            //graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-
-            graphics.PreferredBackBufferWidth = 512;
-            graphics.PreferredBackBufferHeight = 512;
-
-            //graphics.PreferredBackBufferWidth = 1024;
-            //graphics.PreferredBackBufferHeight = 1024;
-
-            //graphics.PreferredBackBufferWidth = 1280;
-            //graphics.PreferredBackBufferHeight = 720;
-
-            //graphics.PreferredBackBufferWidth = 1440;
-            //graphics.PreferredBackBufferHeight = 1080;
-
-            //graphics.PreferredBackBufferWidth = 1920;
-            //graphics.PreferredBackBufferHeight = 1080;
-
+            if (Program.Width < 0 || Program.Height < 0)
+            {
+                FullScreen = true;
+                graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+                graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+            }
+            else
+            {
+                graphics.PreferredBackBufferWidth = Program.Width;
+                graphics.PreferredBackBufferHeight = Program.Height;
+            }
 
             if (Program.MaxFps)
             {
@@ -293,6 +286,12 @@ namespace Terracotta
         string ScenarioToLoad = null;
 
         bool FocusSaved = false;
+
+        protected override void OnExiting(object sender, EventArgs args)
+        {
+            Environment.Exit(0);
+            base.OnExiting(sender, args);
+        }
 
         /// <summary>
         /// This is called when the game should draw itself.
