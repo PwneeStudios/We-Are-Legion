@@ -5,7 +5,7 @@ import time
 import sys
  
 buffer_size = 4096
-delay = 0.0001
+delay = 0.2
 forward_to = ('127.0.0.1', 13000)
  
 class Forward:
@@ -29,10 +29,8 @@ class TheServer:
         self.server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.server.bind((host, port))
         
-        print 'about to listen'
         self.server.listen(200)
-        print 'listening'
- 
+        
     def main_loop(self):
         self.input_list.append(self.server)
         while 1:
@@ -86,9 +84,8 @@ class TheServer:
         self.channel[self.s].send(data)
  
 if __name__ == '__main__':
-    print 'starting up'
     server = TheServer('', 13001)
-    print 'server created'
+
     try:
         server.main_loop()
     except KeyboardInterrupt:
