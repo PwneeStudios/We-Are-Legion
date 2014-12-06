@@ -149,8 +149,8 @@ namespace Terracotta
         {
             foreach (var client in Clients)
             {
-                client.Stream.Close();
-                client.Client.Close();
+                if (client.Stream != null) client.Stream.Close();
+                if (client.Client != null) client.Client.Close();
             }
         }
     }

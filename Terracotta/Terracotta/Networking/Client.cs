@@ -58,32 +58,42 @@ namespace Terracotta
 
         public Client()
         {
-            try
+            for (int i = 0; i < 50; i++)
             {
-                IPAddress server_addr = IPAddress.Parse(Program.IpAddress);
-                                
-                client = new TcpClient();
+                try
+                {
+                    IPAddress server_addr = IPAddress.Parse(Program.IpAddress);
 
-                Console.Write("Waiting to connect... ");
-                client.Connect(server_addr, Program.Port);
-                Console.WriteLine("Connected!");
+                    client = new TcpClient();
 
-                stream = client.GetStream();
+                    Console.Write("Waiting to connect... " + (i > 0 ? "(attempt {0})" : ""), i);
+                    client.Connect(server_addr, Program.Port);
+                    Console.WriteLine("Connected!");
 
-                new Thread(SendReceiveThread).Start();
+                    stream = client.GetStream();
+
+                    new Thread(SendReceiveThread).Start();
+                    break;
+                }
+                catch (ArgumentNullException e)
+                {
+                    Console.WriteLine("ArgumentNullException: {0}", e);
+                    CloseAll();
+                }
+                catch (SocketException e)
+                {
+                    Console.WriteLine("SocketException: {0}", e);
+                    CloseAll();
+                }
+
+                Thread.Sleep(100);
             }
-            catch (ArgumentNullException e)
-            {
-                Console.WriteLine("ArgumentNullException: {0}", e);
-                stream.Close();
-                client.Close();
-            }
-            catch (SocketException e)
-            {
-                Console.WriteLine("SocketException: {0}", e);
-                stream.Close();
-                client.Close();
-            }
+        }
+
+        void CloseAll()
+        {
+            if (stream != null) stream.Close();
+            if (client != null) client.Close();
         }
     }
 }
