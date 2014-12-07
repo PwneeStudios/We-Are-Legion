@@ -58,6 +58,18 @@ namespace Terracotta
 
         public Client()
         {
+            Connect();
+            
+            Start();
+        }
+
+        void Start()
+        {
+            new Thread(SendReceiveThread).Start();
+        }
+
+        void Connect()
+        {
             for (int i = 0; i < 50; i++)
             {
                 try
@@ -72,7 +84,6 @@ namespace Terracotta
 
                     stream = client.GetStream();
 
-                    new Thread(SendReceiveThread).Start();
                     break;
                 }
                 catch (ArgumentNullException e)

@@ -21,6 +21,8 @@ namespace Terracotta
 
         public bool IsServer = false;
 
+        public bool HasLoaded = false;
+
         public GameClient(bool IsServer = false)
         {
             this.IsServer = IsServer;
@@ -122,10 +124,15 @@ namespace Terracotta
                 Clients = new List<GameClient>();
                 Clients.Add(GameClient.Server);
 
-                Console.Write("Waiting for a connection... ");
-                var client = server.AcceptTcpClient();
-                Clients.Add(new GameClient(client, 1));
-                Console.WriteLine("Connected!");
+                for (int i = 1; i < Program.NumPlayers; i++)
+                {
+                    Console.Write("Waiting for a connection... ");
+                    var client = server.AcceptTcpClient();
+                    Clients.Add(new GameClient(client, i));
+                    Console.WriteLine("Connected!");
+                }
+
+                Console.WriteLine("All players connected!");
 
                 new Thread(SendReceiveThread).Start();
             }

@@ -15,12 +15,14 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Terracotta
 {
     public class GameClass : Game
     {
-        public static bool GameActive { get { return GameClass.Game.IsActive || Program.MultiDebug; } }
+        public static bool GameActive { get { return GameClass.Game.IsActive || Program.AlwaysActive; } }
 
         public static GameClass Game;
         public static GameTime Time;
@@ -96,16 +98,12 @@ namespace Terracotta
                 SetupHotswap();
 #endif
 
-#if DEBUG
-            if (Program.MultiDebug)
+            if (Program.PosX >= 0 && Program.PosY >= 0)
             {
                 var form = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
 
-                int xpos = 1920 - 512 - 14;
-                int ypos = Program.Client ? 0 : 1080 / 2;
-                form.Location = new System.Drawing.Point(xpos, ypos);
+                form.Location = new System.Drawing.Point(Program.PosX - 14, Program.PosY);
             }
-#endif
 
             FragSharp.Initialize(Content, GraphicsDevice);
             GridHelper.Initialize(GraphicsDevice);
@@ -293,6 +291,13 @@ namespace Terracotta
             base.OnExiting(sender, args);
         }
 
+        void SetScenarioToLoad(string name)
+        {
+            Program.WorldLoaded = false;
+            ScenarioToLoad = name;
+            State = GameState.Loading;
+        }
+
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -338,13 +343,10 @@ namespace Terracotta
                     break;
 
                 case GameState.ToTest:
-                    World = new World();
+                    Render.StandardRenderSetup();
+                    DrawFullScreen(Assets.ScreenLoading);
 
-                    World.Load(Path.Combine("Content", Path.Combine("Maps", "Beset.m3n")));
-
-                    World.MapEditor = false;
-
-                    State = GameState.Game;
+                    SetScenarioToLoad("Beset.m3n");
 
                     break;
 
@@ -402,22 +404,19 @@ namespace Terracotta
                     if (Keys.D1.Down() || Keys.NumPad1.Down())
                     {
                         World.StaticMaxZoomOut = 7.5f;
-                        State = GameState.Loading;
-                        ScenarioToLoad = "Beset.m3n";
+                        SetScenarioToLoad("Beset.m3n");
                         DrawFullScreen(Assets.ScreenLoading);
                     }
                     else if (Keys.D2.Down() || Keys.NumPad2.Down())
                     {
                         World.StaticMaxZoomOut = 5.61781263f;
-                        State = GameState.Loading;
-                        ScenarioToLoad = "Gilgamesh.m3n";
+                        SetScenarioToLoad("Gilgamesh.m3n");
                         DrawFullScreen(Assets.ScreenLoading);
                     }
                     else if (Keys.D3.Down() || Keys.NumPad3.Down())
                     {
                         World.StaticMaxZoomOut = 1f;
-                        State = GameState.Loading;
-                        ScenarioToLoad = "Nice.m3n";
+                        SetScenarioToLoad("Nice.m3n");
                         DrawFullScreen(Assets.ScreenLoading);
                     }
                     else if (Keys.Back.Pressed())
@@ -436,6 +435,8 @@ namespace Terracotta
                     break;
 
                 case GameState.Loading:
+                    PreGame();
+
                     Render.StandardRenderSetup();
                     DrawFullScreen(Assets.ScreenLoading);
 
@@ -443,9 +444,19 @@ namespace Terracotta
                     {
                         World = new World();
                         World.Load(Path.Combine("Content", Path.Combine("Maps", ScenarioToLoad)));
+                        
+                        Program.WorldLoaded = true;
+                        Networking.ToServer(new Message(MessageType.DoneLoading));
+                        
                         ScenarioToLoad = null;
                         TimeSinceLoad = 0;
                         DrawFullScreen(Assets.ScreenLoading);
+                    }
+
+                    if (!Program.GameStarted)
+                    {
+                        TimeSinceLoad = 0;
+                        break;
                     }
 
                     if (TimeSinceLoad > .3f)
@@ -500,6 +511,33 @@ namespace Terracotta
             q.SetColor(new color(1f, 1f, 1f, 1f));
             DrawTextureSmooth.Using(new vec4(0, 0, 1, 1), ScreenAspect, texture);
             q.Draw(GameClass.Graphics);
+        }
+
+        void PreGame()
+        {
+            Message message;
+            while (Networking.Inbox.TryDequeue(out message))
+            {
+                if (Log.Processing) Console.WriteLine("  -Processing {0}", message);
+
+                if (message.Type == MessageType.Start)
+                {
+                    Program.GameStarted = true;
+                }
+
+                if (Program.Server)
+                {
+                    if (message.Type == MessageType.DoneLoading)
+                    {
+                        message.Source.HasLoaded = true;
+
+                        if (!Program.GameStarted && Server.Clients.Count(client => client.HasLoaded) == Program.NumPlayers)
+                        {
+                            Networking.ToClients(new Message(MessageType.Start));
+                        }
+                    }
+                }
+            }
         }
 
         void DrawGame(GameTime gameTime)

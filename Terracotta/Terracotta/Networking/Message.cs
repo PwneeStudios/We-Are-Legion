@@ -11,7 +11,11 @@ using System.Collections.Concurrent;
 
 namespace Terracotta
 {
-    public enum MessageType { PlayerAction, PlayerActionAck, Bookend, StartingStep }
+    public enum MessageType {
+        DoneLoading, Start, Pause, Unpause,
+        PlayerAction, PlayerActionAck, Bookend, StartingStep
+    }
+
     public enum PlayerAction { Select, AttackMove }
 
     public abstract class GenericMessage : SimShader

@@ -5,7 +5,7 @@ import time
 import sys
  
 buffer_size = 4096
-delay = 0.2
+delay = 0.5
 forward_to = ('127.0.0.1', 13000)
  
 class Forward:

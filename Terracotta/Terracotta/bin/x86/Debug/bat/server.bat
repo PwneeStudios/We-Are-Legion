@@ -1,3 +1,3 @@
 cd %~dp0\..
-start Terracotta.exe --server --console --multidebug --port 13000 --p2 --w 512 --h 512
+start Terracotta.exe --server --port 13000 --p2 --n 2    --debug --double
 
