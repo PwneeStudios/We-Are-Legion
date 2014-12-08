@@ -16,7 +16,9 @@ namespace Terracotta
         PlayerAction, PlayerActionAck, Bookend, StartingStep
     }
 
-    public enum PlayerAction { Select, AttackMove }
+    public enum PlayerAction {
+        Select, AttackMove, PlaceBuilding, CastSpell
+    }
 
     public abstract class GenericMessage : SimShader
     {
@@ -246,25 +248,28 @@ namespace Terracotta
     {
         public int SimStep;
         public int PlayerNumber;
+        public int TeamNumber;
         public PlayerAction Action;
 
-        public MessagePlayerAction(int SimStep, int PlayerNumber, PlayerAction Action)
+        public MessagePlayerAction(int SimStep, int PlayerNumber, int TeamNumber, PlayerAction Action)
         {
             this.SimStep = SimStep;
             this.PlayerNumber = PlayerNumber;
+            this.TeamNumber = TeamNumber;
             this.Action = Action;
         }
 
-        public override MessageStr EncodeHead() { return _ | SimStep | PlayerNumber | Action; }
+        public override MessageStr EncodeHead() { return _ | SimStep | PlayerNumber | TeamNumber | Action; }
 
         public static MessagePlayerAction Parse(string s)
         {
-            var message = new MessagePlayerAction(PopInt(ref s), PopInt(ref s), Pop<PlayerAction>(ref s));
+            var message = new MessagePlayerAction(PopInt(ref s), PopInt(ref s), PopInt(ref s), Pop<PlayerAction>(ref s));
 
             switch (message.Action)
             {
                 case PlayerAction.Select: message.Inner = MessageSelect.Parse(s); break;
                 case PlayerAction.AttackMove: message.Inner = MessageAttackMove.Parse(s); break;
+                case PlayerAction.PlaceBuilding: message.Inner = MessagePlaceBuilding.Parse(s); break;
             }
 
             return message;

@@ -147,13 +147,31 @@ namespace Terracotta
                 }
                 else try
                 {
-                    Create.PlaceBuilding(DataGroup, GridCoord, BuildingUserIsPlacing, PlayerValue, TeamValue);
-
-                    SubtractGold(Params.BuildingCost(BuildingUserIsPlacing), PlayerNumber);
-                    CanPlaceItem = false;
+                    Networking.ToServer(new MessagePlaceBuilding(GridCoord, BuildingUserIsPlacing));
                 }
                 catch
                 {
+                }
+            }
+        }
+
+        public void PlaceBuildingApply(int PlayerNum, int TeamNum, vec2 Pos, float Building)
+        {
+            while (true)
+            {
+                try
+                {
+                    Render.UnsetDevice();
+                    Create.PlaceBuilding(DataGroup, Pos, Building, Player.Vals[PlayerNum], Team.Vals[TeamNum]);
+
+                    SubtractGold(Params.BuildingCost(Building), PlayerNum);
+                    CanPlaceItem = false;
+
+                    return;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
             }
         }

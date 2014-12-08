@@ -21,12 +21,17 @@ namespace Terracotta
             return vec2.Parse(Pop(ref s));
         }
 
+        protected static float PopFloat(ref string s)
+        {
+            return float.Parse(Pop(ref s));
+        }
+
         public MessagePlayerAction Action { get { return Outer as MessagePlayerAction; } }
 
         public Message MakeFullMessage(PlayerAction Action)
         {
             var Message = new Message(MessageType.PlayerAction);
-            Message.Inner = new MessagePlayerAction(GameClass.World.SimStep, GameClass.World.PlayerNumber, Action);
+            Message.Inner = new MessagePlayerAction(GameClass.World.SimStep, GameClass.World.PlayerNumber, GameClass.World.TeamNumber, Action);
             Message.Inner.Inner = this;
 
             return Message;
@@ -55,6 +60,31 @@ namespace Terracotta
         {
             if (Log.Do) Console.WriteLine("   Do attack move at {0} : {1}", GameClass.World.SimStep, this);
             GameClass.Data.AttackMoveApply(Player.Vals[Action.PlayerNumber], Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size);
+        }
+    }
+
+    public class MessagePlaceBuilding : MessagePlayerActionTail
+    {
+        public vec2
+            Pos;
+
+        public float
+            Building;
+
+        public MessagePlaceBuilding(vec2 Pos, float Building)
+        {
+            this.Pos = Pos;
+            this.Building = Building;
+        }
+
+        public override MessageStr EncodeHead() { return _ | Pos | Building; }
+        public static MessagePlaceBuilding Parse(string s) { return new MessagePlaceBuilding(PopVec2(ref s), PopFloat(ref s)); }
+        public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.PlaceBuilding); }
+
+        public override void Do()
+        {
+            if (Log.Do) Console.WriteLine("   Do place building at {0} : {1}", GameClass.World.SimStep, this);
+            GameClass.World.PlaceBuildingApply(Action.PlayerNumber, Action.TeamNumber, Pos, Building);
         }
     }
 
@@ -120,6 +150,11 @@ namespace Terracotta
         }
 
         public static MessageStr operator |(MessageStr m, int v)
+        {
+            return new MessageStr(m.MyString + s(v));
+        }
+
+        public static MessageStr operator |(MessageStr m, float v)
         {
             return new MessageStr(m.MyString + s(v));
         }
