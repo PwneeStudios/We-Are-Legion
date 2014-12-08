@@ -88,6 +88,34 @@ namespace Terracotta
         }
     }
 
+    public class MessageCastSpell : MessagePlayerActionTail
+    {
+        public int
+            SpellIndex;
+
+        public vec2
+            Pos;
+
+        public MessageCastSpell(int SpellIndex, vec2 Pos)
+        {
+            this.SpellIndex = SpellIndex;
+            this.Pos = Pos;
+        }
+
+        public override MessageStr EncodeHead() { return _ | SpellIndex | Pos; }
+        public static MessageCastSpell Parse(string s) { return new MessageCastSpell(PopInt(ref s), PopVec2(ref s)); }
+        public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.CastSpell); }
+
+        public override void Do()
+        {
+            if (Log.Do) Console.WriteLine("   Do cast spell at {0} : {1}", GameClass.World.SimStep, this);
+
+            var spell = Spells.SpellList[SpellIndex];
+
+            spell.Apply(Action.PlayerNumber, Pos);
+        }
+    }
+
     public class MessageSelect : MessagePlayerActionTail
     {
         public vec2 size, v1, v2;

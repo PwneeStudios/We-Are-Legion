@@ -247,10 +247,10 @@ namespace Terracotta
                         break;
 
                     case UserMode.CastSpell:
-                        CurSpell.Selecting();
-
                         if (Input.LeftMousePressed)
-                            CurSpell.Execute();
+                        {
+                            CastSpell(CurSpell);
+                        }
 
                         break;
                 }

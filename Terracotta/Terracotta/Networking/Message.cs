@@ -270,6 +270,7 @@ namespace Terracotta
                 case PlayerAction.Select: message.Inner = MessageSelect.Parse(s); break;
                 case PlayerAction.AttackMove: message.Inner = MessageAttackMove.Parse(s); break;
                 case PlayerAction.PlaceBuilding: message.Inner = MessagePlaceBuilding.Parse(s); break;
+                case PlayerAction.CastSpell: message.Inner = MessageCastSpell.Parse(s); break;
             }
 
             return message;

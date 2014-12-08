@@ -380,7 +380,14 @@ namespace Terracotta
 
         public void Fireball()
         {
+            
+        }
+
+        public void FireballApply(int PlayerNumber, vec2 Pos)
+        {
             AddExplosion();
+
+            GameClass.Data.SelectInArea(Pos, vec(30, 30), false, true, Player.Vals[PlayerNumber], false);
 
             Kill.Apply(DataGroup.SelectField, DataGroup.Magic, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
@@ -388,33 +395,42 @@ namespace Terracotta
 
         public void RaiseSkeletons(vec2 area)
         {
+            //CurUserMode = UserMode.Select;
+            //SkipDeselect = true;
+        }
+
+        public void RaiseSkeletonsApply(int PlayerNumber, vec2 Pos, vec2 area)
+        {
             AddSummonAreaEffect(area);
 
             SpawnUnits(PlayerValue, TeamValue, UnitType.Skeleton, UnitDistribution.OnCorpses);
-
-            //CurUserMode = UserMode.Select;
-            //SkipDeselect = true;
         }
 
         public void SummonTerracotta(vec2 area)
         {
-            AddSummonAreaEffect(area);
-
-            SpawnUnits(PlayerValue, TeamValue, UnitType.ClaySoldier, UnitDistribution.EveryOther);
-
             //CurUserMode = UserMode.Select;
             //SkipDeselect = true;
         }
 
+        public void SummonTerracottaApply(int PlayerNumber, vec2 Pos, vec2 area)
+        {
+            AddSummonAreaEffect(area);
+
+            SpawnUnits(PlayerValue, TeamValue, UnitType.ClaySoldier, UnitDistribution.EveryOther);
+        }
+
         public void SummonNecromancer()
+        {
+            CurUserMode = UserMode.Select;
+            SkipDeselect = true;
+            SkipSelect = true;
+        }
+
+        public void SummonNecromancerApply(int PlayerNumber, vec2 Pos)
         {
             AddSummonUnitEffect();
 
             PlaceUnit(UnitType.Necromancer);
-
-            CurUserMode = UserMode.Select;
-            SkipDeselect = true;
-            SkipSelect = true;
         }
 
         public void SpawnUnits(float player, float team, float type, float distribution, bool raising = true)
@@ -487,7 +503,6 @@ namespace Terracotta
             if (LineSelect)
             {
                 if (Input.LeftMousePressed && Selecting && EffectSelection) Networking.ToServer(new MessageSelect(Size, Deselect, WorldCoord, WorldCoordPrev));
-                //DataGroup.SelectAlongLine(WorldCoord, WorldCoordPrev, Size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
             }
             else
             {
@@ -567,9 +582,17 @@ namespace Terracotta
             Destination_BL = max(Destination_BL, vec2.Zero);
 
             Networking.ToServer(new MessageAttackMove(Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size));
-            //DataGroup.AttackMoveApply(PlayerValue, Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size);
 
             AddAttackMarker();
+        }
+
+        void CastSpell(Spell spell)
+        {
+            CurSpell.Execute();
+
+            //vec2 Pos = ScreenToWorldCoord(Input.CurMousePos);
+            vec2 Pos = ScreenToGridCoord(Input.CurMousePos);
+            Networking.ToServer(new MessageCastSpell(Spells.SpellList.IndexOf(spell), Pos));
         }
     }
 }
