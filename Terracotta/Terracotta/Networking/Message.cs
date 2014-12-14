@@ -9,6 +9,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
+using FragSharpHelper;
+using FragSharpFramework;
+
 namespace Terracotta
 {
     public enum MessageType {
@@ -274,6 +277,64 @@ namespace Terracotta
             }
 
             return message;
+        }
+    }
+
+    public class MessageStr
+    {
+        public string MyString = "";
+
+        public static char Seperator = ' ';
+        public static string s<T>(T v)
+        {
+            return v.ToString() + Seperator;
+        }
+
+        public MessageStr(string str)
+        {
+            MyString = str;
+        }
+
+        public static MessageStr operator |(MessageStr m, MessageType t)
+        {
+            return new MessageStr(m.MyString + s(t));
+        }
+
+        public static MessageStr operator |(MessageStr m, PlayerAction t)
+        {
+            return new MessageStr(m.MyString + s(t));
+        }
+
+        public static MessageStr operator |(MessageStr m, string str)
+        {
+            if (str == null) return m;
+
+            return new MessageStr(m.MyString + str);
+        }
+
+        public static MessageStr operator |(MessageStr m, vec2 v)
+        {
+            return new MessageStr(m.MyString + s(v));
+        }
+
+        public static MessageStr operator |(MessageStr m, int v)
+        {
+            return new MessageStr(m.MyString + s(v));
+        }
+
+        public static MessageStr operator |(MessageStr m, float v)
+        {
+            return new MessageStr(m.MyString + s(v));
+        }
+
+        public static MessageStr operator |(MessageStr m, bool v)
+        {
+            return new MessageStr(m.MyString + s(v));
+        }
+
+        public static implicit operator string(MessageStr m)
+        {
+            return m.MyString;
         }
     }
 }

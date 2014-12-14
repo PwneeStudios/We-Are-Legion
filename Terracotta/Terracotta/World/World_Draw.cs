@@ -527,7 +527,7 @@ namespace Terracotta
             {
                 if (MapEditorActive)
                 {
-                    string s = "Map Editor, Paused\nPlayer " + PlayerNumber;
+                    string s = "Map Editor, Paused\nPlayer " + MyPlayerNumber;
                     if (CurUserMode == UserMode.PlaceUnits)
                     {
                         s += "\nUnit: " + UnitType.Name(UnitUserIsPlacing) + ", " + UnitDistribution.Name(UnitPlaceStyle);
@@ -618,7 +618,7 @@ namespace Terracotta
             // Territory and corpses
             if (CurUserMode == UserMode.PlaceBuilding && !MapEditorActive)
             {
-                DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.DistanceToPlayers, PlayerValue);
+                DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.DistanceToPlayers, MyPlayerValue);
                 GridHelper.DrawGrid();
             }
             else
@@ -659,7 +659,7 @@ namespace Terracotta
                 bool solid_blend_flag = solid_blend < 1;
 
                 DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSprite,
-                    PlayerValue,
+                    MyPlayerValue,
                     PercentSimStepComplete, second,
                     selection_blend, selection_size,
                     solid_blend_flag, solid_blend);
@@ -667,7 +667,7 @@ namespace Terracotta
             else
             {
                 DrawUnitsZoomedOutBlur.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSprite,
-                    PlayerValue,
+                    MyPlayerValue,
                     PercentSimStepComplete);
             }
             GridHelper.DrawGrid();

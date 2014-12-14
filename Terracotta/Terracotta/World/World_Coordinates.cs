@@ -1,3 +1,4 @@
+using FragSharpHelper;
 using FragSharpFramework;
 
 namespace Terracotta
@@ -34,6 +35,22 @@ namespace Terracotta
             size = 2 * size / DataGroup.GridSize;
 
             return size;
+        }
+
+        vec2 WorldMousePos
+        {
+            get
+            {
+                return ScreenToWorldCoord(Input.CurMousePos);
+            }
+        }
+
+        vec2 GridMousePos
+        {
+            get
+            {
+                return ScreenToGridCoord(Input.CurMousePos);
+            }
         }
 
         vec2 ScreenToWorldCoord(vec2 pos)

@@ -15,9 +15,9 @@ namespace Terracotta
 
         public Action Selecting;
         public Action DrawCursor;
-        public Action Execute;
+        public Func<bool> Execute;
 
-        public delegate void SpellExecution(int PlayerNumer, vec2 Pos);
+        public delegate void SpellExecution(int PlayerNumer, int TeamNumber, vec2 Pos);
         public SpellExecution Apply;
 
         static int next_id = 0;
@@ -48,25 +48,25 @@ namespace Terracotta
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = FlameCursor;
             spell.Execute = () => W.Fireball();
-            spell.Apply = (p, v) => W.FireballApply(p, v);
+            spell.Apply = (p, t, v) => W.FireballApply(p, t, v);
 
             SkeletonArmy = spell = new Spell("Skeleton Army");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = SkeletonCursor;
             spell.Execute = () => W.RaiseSkeletons(vec(30, 30));
-            spell.Apply = (p, v) => W.RaiseSkeletonsApply(p, v, vec(30, 30));
+            spell.Apply = (p, t, v) => W.RaiseSkeletonsApply(p, t, v, vec(30, 30));
 
             Necromancer = spell = new Spell("Necromancer");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = NecroCursor;
             spell.Execute = () => W.SummonNecromancer();
-            spell.Apply = (p, v) => W.SummonNecromancerApply(p, v);
+            spell.Apply = (p, t, v) => W.SummonNecromancerApply(p, t, v);
 
             TerracottaArmy = spell = new Spell("Terracotta Army");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = TerracottaCursor;
             spell.Execute = () => W.SummonTerracotta(vec(30, 30));
-            spell.Apply = (p, v) => W.SummonTerracottaApply(p, v, vec(30, 30));
+            spell.Apply = (p, t, v) => W.SummonTerracottaApply(p, t, v, vec(30, 30));
         }
 
         static void SkeletonCursor()

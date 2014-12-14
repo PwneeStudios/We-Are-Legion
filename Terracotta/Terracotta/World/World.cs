@@ -16,7 +16,8 @@ namespace Terracotta
 
         public World()
         {
-            PlayerNumber = Program.StartupPlayerNumber;
+            MyPlayerNumber = Program.StartupPlayerNumber;
+            MyTeamNumber = Program.StartupTeamNumber;
 
             CameraAspect = GameClass.ScreenAspect;
 
@@ -86,7 +87,7 @@ namespace Terracotta
         /// If this is a map editor then the current player is "None", so anything can be selected.
         /// Otherwise this returns the player value of this client.
         /// </summary>
-        public float PlayerOrNeutral { get { return MapEditorActive ? Player.None : PlayerValue; } }
+        public float PlayerOrNeutral { get { return MapEditorActive ? Player.None : MyPlayerValue; } }
 
         vec2 CameraPos = vec2.Zero;
         float CameraZoom = 30;
@@ -111,22 +112,33 @@ namespace Terracotta
 
         int DrawCount = 0;
 
-        public float PlayerValue = Player.One;
-        public int PlayerNumber
+        public float MyPlayerValue = Player.One;
+        public int MyPlayerNumber
         {
             get
             {
-                return Int(PlayerValue);
+                return Int(MyPlayerValue);
             }
 
             set
             {
-                PlayerValue = Player.Vals[value];
+                MyPlayerValue = Player.Vals[value];
             }
         }
 
-        public float TeamValue = Team.One;
-        public int TeamNumber { get { return Int(TeamValue); } }
+        public float MyTeamValue = Team.One;
+        public int MyTeamNumber
+        {
+            get
+            {
+                return Int(MyTeamValue);
+            }
+
+            set
+            {
+                MyTeamValue = Team.Vals[value];
+            }
+        }
 
         enum UserMode { PlaceBuilding, PlaceUnits, Select, CastSpell, };
         UserMode CurUserMode = UserMode.Select;

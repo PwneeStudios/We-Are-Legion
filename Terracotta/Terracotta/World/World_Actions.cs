@@ -36,26 +36,46 @@ namespace Terracotta
             }
         }
 
-        public void PlaceUnit(float unit_tpe)
+        public bool CellAvailable_1x1(vec2 GridCoord)
+        {
+            //if (!GameClass.HasFocus) return false;
+
+            Render.UnsetDevice();
+
+            bool Available = false;
+
+            var _data = DataGroup.CurrentData.GetData<data>(GridCoord, new vec2(1, 1));
+
+            color clr = color.TransparentBlack;
+            if (_data != null)
+            {
+                Available = true;
+
+                var here = _data[0];
+
+                bool occupied = here.direction > 0;
+
+                Available = !occupied;
+            }
+
+            return Available;
+        }
+
+        public void PlaceUnit(float unit_tpe, vec2 GridCoord, float PlayerValue, float TeamValue)
         {
             Render.UnsetDevice();
 
-            if (!CanPlaceItem)
-            {
-                Message_CanNotPlaceHere();
-            }
-            else
+            if (CellAvailable_1x1(GridCoord))
             {
                 try
                 {
-                    vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);
                     Create.PlaceUnit(DataGroup, GridCoord, unit_tpe, PlayerValue, TeamValue, SetPrevious: MapEditorActive);
 
                     CanPlaceItem = false;
                 }
                 catch
                 {
-                }
+                }                
             }
         }
  
@@ -78,7 +98,7 @@ namespace Terracotta
                 CanPlace[i + j * _w] = false;
             }
 
-            if (BuildingUserIsPlacing == UnitType.Barracks && PlayerNumber > 0)
+            if (BuildingUserIsPlacing == UnitType.Barracks && MyPlayerNumber > 0)
             {
                 var _data = DataGroup.CurrentData.GetData<building>(GridCoord, new vec2(_w, _h));
                 var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
@@ -93,7 +113,7 @@ namespace Terracotta
                         var building_here = _data[i + j * _w];
                         var distance_to = _dist[i + j * _w];
 
-                        var distance = Get(distance_to, PlayerNumber);
+                        var distance = Get(distance_to, MyPlayerNumber);
 
                         bool occupied = building_here.direction > 0;
                         bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
@@ -121,7 +141,7 @@ namespace Terracotta
                         var unit_here = _data[i + j * _w];
                         var distance_to = _dist[i + j * _w];
 
-                        var distance = Get(distance_to, PlayerNumber);
+                        var distance = Get(distance_to, MyPlayerNumber);
 
                         bool occupied = unit_here.type > 0;
                         bool is_valid_source = unit_here.team == Team.None && unit_here.type == BuildingUserIsPlacing;
@@ -141,7 +161,7 @@ namespace Terracotta
                 {
                     Message_CanNotPlaceHere();
                 }
-                else if (!CanAffordBuilding(BuildingUserIsPlacing, PlayerNumber))
+                else if (!CanAffordBuilding(BuildingUserIsPlacing, MyPlayerNumber))
                 {
                     Message_InsufficientGold();
                 }
@@ -182,7 +202,7 @@ namespace Terracotta
 
             if (Input.LeftMouseDown)
             {
-                SpawnUnits(PlayerValue, TeamValue, UnitUserIsPlacing, UnitPlaceStyle);
+                SpawnUnits(GridMousePos, SelectSize, MyPlayerValue, MyTeamValue, UnitUserIsPlacing, UnitPlaceStyle);
             }
         }
 
@@ -378,71 +398,98 @@ namespace Terracotta
             SwapTempGeo(Anti);
         }
 
-        public void Fireball()
+        public bool Fireball()
         {
-            
+            return true;
         }
 
-        public void FireballApply(int PlayerNumber, vec2 GridCoord)
+        void SetEffectArea(vec2 Pos, vec2 Size, int PlayerNumber)
+        {
+            DataGroup.SelectInArea(Pos, Size, false, true, Player.Vals[PlayerNumber], false);
+        }
+
+        public void FireballApply(int PlayerNumber, int TeamNumber, vec2 GridCoord)
         {
             vec2 Pos = GridToWorldCood(GridCoord);
             vec2 Size = vec(30, 30) * CellSize;
 
             AddExplosion(Pos);
 
-            GameClass.Data.SelectInArea(Pos, Size, false, true, Player.Vals[PlayerNumber], false);
+            SetEffectArea(Pos, Size, PlayerNumber);
 
             Kill.Apply(DataGroup.SelectField, DataGroup.Magic, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
         }
 
-        public void RaiseSkeletons(vec2 area)
+        public bool RaiseSkeletons(vec2 area)
         {
             //CurUserMode = UserMode.Select;
             //SkipDeselect = true;
+
+            return true;
         }
 
-        public void RaiseSkeletonsApply(int PlayerNumber, vec2 Pos, vec2 area)
+        public void RaiseSkeletonsApply(int PlayerNumber, int TeamNumber, vec2 GridCoord, vec2 Area)
         {
-            AddSummonAreaEffect(area);
+            vec2 Pos = GridToWorldCood(GridCoord);
+            vec2 Size = vec(30, 30) * CellSize;
 
-            SpawnUnits(PlayerValue, TeamValue, UnitType.Skeleton, UnitDistribution.OnCorpses);
+            AddSummonAreaEffect(Pos, Area);
+
+            SetEffectArea(Pos, Size, PlayerNumber);
+
+            SpawnUnits(GridCoord, Area, Player.Vals[PlayerNumber], Team.Vals[TeamNumber], UnitType.Skeleton, UnitDistribution.OnCorpses);
         }
 
-        public void SummonTerracotta(vec2 area)
+        public bool SummonTerracotta(vec2 area)
         {
             //CurUserMode = UserMode.Select;
             //SkipDeselect = true;
+
+            return true;
         }
 
-        public void SummonTerracottaApply(int PlayerNumber, vec2 Pos, vec2 area)
+        public void SummonTerracottaApply(int PlayerNumber, int TeamNumber, vec2 GridCoord, vec2 Area)
         {
-            AddSummonAreaEffect(area);
+            vec2 Pos = GridToWorldCood(GridCoord);
+            vec2 Size = vec(30, 30) * CellSize;
 
-            SpawnUnits(PlayerValue, TeamValue, UnitType.ClaySoldier, UnitDistribution.EveryOther);
+            AddSummonAreaEffect(Pos, Area);
+
+            SetEffectArea(Pos, Size, PlayerNumber);
+
+            SpawnUnits(GridCoord, Area, Player.Vals[PlayerNumber], Team.Vals[TeamNumber], UnitType.ClaySoldier, UnitDistribution.EveryOther);
         }
 
-        public void SummonNecromancer()
+        public bool SummonNecromancer()
         {
+            if (!CanPlaceItem)
+            {
+                Message_CanNotPlaceHere();
+                return false;
+            }
+
             CurUserMode = UserMode.Select;
             SkipDeselect = true;
             SkipSelect = true;
+
+            return true;
         }
 
-        public void SummonNecromancerApply(int PlayerNumber, vec2 Pos)
+        public void SummonNecromancerApply(int PlayerNumber, int TeamNumber, vec2 GridCoord)
         {
-            AddSummonUnitEffect();
+            AddSummonUnitEffect(GridCoord);
 
-            PlaceUnit(UnitType.Necromancer);
+            PlaceUnit(UnitType.Necromancer, GridCoord, Player.Vals[PlayerNumber], Team.Vals[TeamNumber]);
         }
 
-        public void SpawnUnits(float player, float team, float type, float distribution, bool raising = true)
+        public void SpawnUnits(vec2 grid_coord, vec2 size, float player, float team, float type, float distribution, bool raising = true)
         {
             if (MapEditorActive) raising = false;
 
             if (distribution == UnitDistribution.Single)
             {
-                PlaceUnit(type);
+                PlaceUnit(type, grid_coord, player, team);
                 return;
             }
 
@@ -591,10 +638,11 @@ namespace Terracotta
 
         void CastSpell(Spell spell)
         {
-            CurSpell.Execute();
-
-            vec2 Pos = ScreenToGridCoord(Input.CurMousePos);
-            Networking.ToServer(new MessageCastSpell(Spells.SpellList.IndexOf(spell), Pos));
+            if (CurSpell.Execute())
+            {
+                vec2 Pos = ScreenToGridCoord(Input.CurMousePos);
+                Networking.ToServer(new MessageCastSpell(Spells.SpellList.IndexOf(spell), Pos));
+            }
         }
     }
 }

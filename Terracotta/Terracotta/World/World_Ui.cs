@@ -137,7 +137,7 @@ namespace Terracotta
             vec2 WorldCord = GridToWorldCood(new vec2((float)Math.Floor(GridCoord.x), (float)Math.Floor(GridCoord.y)));
             vec2 size = 3 * 1 / DataGroup.GridSize;
 
-            var building = SetBuildingQuad(WorldCord, size, BuildingUserIsPlacing, PlayerNumber);
+            var building = SetBuildingQuad(WorldCord, size, BuildingUserIsPlacing, MyPlayerNumber);
             building.SetColor(new color(1, 1, 1, .7f));
             building.Draw(GameClass.Graphics);
         }
@@ -229,21 +229,17 @@ namespace Terracotta
             Markers.Add(new Marker(this, Pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterUnits, alpha : 1));
         }
 
-        void AddSummonUnitEffect()
+        void AddSummonUnitEffect(vec2 GridCoord)
         {
             vec2 size = vec(1.266f, 1.35f) * 2 * CellWorldSize;
-
-            vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);
             vec2 pos = GridToWorldCood(floor(GridCoord)) + new vec2(CellWorldSize.x, -CellWorldSize.y) / 2;
 
             Markers.Add(new Marker(this, pos, size, Assets.MagicTexture, -1f, frames: 4, DrawOrder: DrawOrder.AfterTiles));
             Markers.Add(new Marker(this, pos, size, Assets.MagicTexture, -1f, frames: 4, DrawOrder: DrawOrder.AfterUnits, alpha: 1));
         }
 
-        void AddSummonAreaEffect(vec2 area)
+        void AddSummonAreaEffect(vec2 pos, vec2 area)
         {
-            vec2 pos = ScreenToWorldCoord(Input.CurMousePos);
-
             vec2 cell_size = 2 * (1 / DataGroup.GridSize);
             vec2 size = vec(1.266f, 1.35f) * area * cell_size;
 

@@ -31,7 +31,7 @@ namespace Terracotta
         public Message MakeFullMessage(PlayerAction Action)
         {
             var Message = new Message(MessageType.PlayerAction);
-            Message.Inner = new MessagePlayerAction(GameClass.World.SimStep, GameClass.World.PlayerNumber, GameClass.World.TeamNumber, Action);
+            Message.Inner = new MessagePlayerAction(GameClass.World.SimStep, GameClass.World.MyPlayerNumber, GameClass.World.MyTeamNumber, Action);
             Message.Inner.Inner = this;
 
             return Message;
@@ -108,11 +108,11 @@ namespace Terracotta
 
         public override void Do()
         {
-            if (Log.Do) Console.WriteLine("   Do cast spell at {0} : {1}", GameClass.World.SimStep, this);
+            if (Log.Do) Console.WriteLine("   Do cast spell at {0} for {2}/{3} : {1}", GameClass.World.SimStep, this, Action.PlayerNumber, Action.TeamNumber);
 
             var spell = Spells.SpellList[SpellIndex];
 
-            spell.Apply(Action.PlayerNumber, Pos);
+            spell.Apply(Action.PlayerNumber, Action.TeamNumber, Pos);
         }
     }
 
@@ -137,64 +137,6 @@ namespace Terracotta
         {
             if (Log.Do) Console.WriteLine("   Do select at {0}      : {1}", GameClass.World.SimStep, this);
             GameClass.Data.SelectAlongLine(v1, v2, size, deselect, true, Player.Vals[Action.PlayerNumber], true);
-        }
-    }
-
-    public class MessageStr
-    {
-        public string MyString = "";
-
-        public static char Seperator = ' ';
-        public static string s<T>(T v)
-        {
-            return v.ToString() + Seperator;
-        }
-
-        public MessageStr(string str)
-        {
-            MyString = str;
-        }
-
-        public static MessageStr operator |(MessageStr m, MessageType t)
-        {
-            return new MessageStr(m.MyString + s(t));
-        }
-
-        public static MessageStr operator |(MessageStr m, PlayerAction t)
-        {
-            return new MessageStr(m.MyString + s(t));
-        }
-
-        public static MessageStr operator |(MessageStr m, string str)
-        {
-            if (str == null) return m;
-
-            return new MessageStr(m.MyString + str);
-        }
-
-        public static MessageStr operator |(MessageStr m, vec2 v)
-        {
-            return new MessageStr(m.MyString + s(v));
-        }
-
-        public static MessageStr operator |(MessageStr m, int v)
-        {
-            return new MessageStr(m.MyString + s(v));
-        }
-
-        public static MessageStr operator |(MessageStr m, float v)
-        {
-            return new MessageStr(m.MyString + s(v));
-        }
-
-        public static MessageStr operator |(MessageStr m, bool v)
-        {
-            return new MessageStr(m.MyString + s(v));
-        }
-
-        public static implicit operator string(MessageStr m)
-        {
-            return m.MyString;
         }
     }
 }

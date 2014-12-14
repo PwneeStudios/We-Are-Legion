@@ -26,8 +26,8 @@ namespace Terracotta
 
         void Editor_SwitchPlayer(int player)
         {
-            PlayerValue = Fint(player);
-            TeamValue = Fint(player);
+            MyPlayerValue = Fint(player);
+            MyTeamValue = Fint(player);
         }
 
         void Editor_TogglePause()
