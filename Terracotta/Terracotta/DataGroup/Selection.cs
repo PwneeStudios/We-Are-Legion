@@ -35,7 +35,7 @@ namespace Terracotta
 
             if (Selecting)
             {
-                vec2 shift = CellSize.FlipY();
+                vec2 shift = CellSpacing.FlipY();
 
                 for (int i = 0; i <= 10; i++)
                 {

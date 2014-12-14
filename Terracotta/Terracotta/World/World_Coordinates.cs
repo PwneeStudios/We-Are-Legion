@@ -14,11 +14,26 @@ namespace Terracotta
             return grid_coord;
         }
 
+        public vec2 CellWorldSize
+        {
+            get
+            {
+                return 2 * DataGroup.CellSpacing;
+            }
+        }
+
         vec2 GridToWorldCood(vec2 pos)
         {
             pos = 2 * pos / DataGroup.GridSize - vec2.Ones;
             pos.y = -pos.y;
             return pos;
+        }
+
+        vec2 GridToWorldSize(vec2 size)
+        {
+            size = 2 * size / DataGroup.GridSize;
+
+            return size;
         }
 
         vec2 ScreenToWorldCoord(vec2 pos)

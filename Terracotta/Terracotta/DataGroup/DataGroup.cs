@@ -72,7 +72,7 @@ namespace Terracotta
     public partial class DataGroup : SimShader
     {
         public readonly int w, h;
-        public readonly vec2 GridSize, CellSize;
+        public readonly vec2 GridSize, CellSpacing;
 
         GraphicsDevice GraphicsDevice { get { return GameClass.Game.GraphicsDevice; } }
 
@@ -81,7 +81,7 @@ namespace Terracotta
             this.w = w;
             this.h = h;
             GridSize = new vec2(w, h);
-            CellSize = 1 / GridSize;
+            CellSpacing = 1 / GridSize;
 
             Initialize();
         }

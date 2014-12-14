@@ -221,24 +221,20 @@ namespace Terracotta
             Markers.Add(new Marker(this, pos, size, Assets.AttackMarker, -1f));
         }
 
-        void AddExplosion()
+        void AddExplosion(vec2 Pos)
         {
-            vec2 pos = ScreenToWorldCoord(Input.CurMousePos);
+            vec2 size = vec(1.266f, 1.35f) * 30 * CellWorldSize;
 
-            vec2 cell_size = 2 * (1 / DataGroup.GridSize);
-            vec2 size = vec(1.266f, 1.35f) * 30 * cell_size;
-
-            Markers.Add(new Marker(this, pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterTiles));
-            Markers.Add(new Marker(this, pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterUnits, alpha : 1));
+            Markers.Add(new Marker(this, Pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterTiles));
+            Markers.Add(new Marker(this, Pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterUnits, alpha : 1));
         }
 
         void AddSummonUnitEffect()
         {
-            vec2 cell_size = 2 * (1 / DataGroup.GridSize);
-            vec2 size = vec(1.266f, 1.35f) * 2 * cell_size;
+            vec2 size = vec(1.266f, 1.35f) * 2 * CellWorldSize;
 
             vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);
-            vec2 pos = GridToWorldCood(floor(GridCoord)) + new vec2(cell_size.x, -cell_size.y) / 2;
+            vec2 pos = GridToWorldCood(floor(GridCoord)) + new vec2(CellWorldSize.x, -CellWorldSize.y) / 2;
 
             Markers.Add(new Marker(this, pos, size, Assets.MagicTexture, -1f, frames: 4, DrawOrder: DrawOrder.AfterTiles));
             Markers.Add(new Marker(this, pos, size, Assets.MagicTexture, -1f, frames: 4, DrawOrder: DrawOrder.AfterUnits, alpha: 1));

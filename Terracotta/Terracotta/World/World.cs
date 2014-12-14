@@ -141,7 +141,7 @@ namespace Terracotta
         bool[] CanPlace = new bool[3 * 3];
 
         public vec2 GridSize { get { return DataGroup.GridSize; } }
-        public vec2 CellSize { get { return DataGroup.CellSize; } }
+        public vec2 CellSize { get { return DataGroup.CellSpacing; } }
         public vec2 Scaled { get { return vec2.Ones / CameraZoom; } }
 
         vec2 SelectSize

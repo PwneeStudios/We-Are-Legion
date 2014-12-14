@@ -383,11 +383,14 @@ namespace Terracotta
             
         }
 
-        public void FireballApply(int PlayerNumber, vec2 Pos)
+        public void FireballApply(int PlayerNumber, vec2 GridCoord)
         {
-            AddExplosion();
+            vec2 Pos = GridToWorldCood(GridCoord);
+            vec2 Size = vec(30, 30) * CellSize;
 
-            GameClass.Data.SelectInArea(Pos, vec(30, 30), false, true, Player.Vals[PlayerNumber], false);
+            AddExplosion(Pos);
+
+            GameClass.Data.SelectInArea(Pos, Size, false, true, Player.Vals[PlayerNumber], false);
 
             Kill.Apply(DataGroup.SelectField, DataGroup.Magic, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
@@ -590,7 +593,6 @@ namespace Terracotta
         {
             CurSpell.Execute();
 
-            //vec2 Pos = ScreenToWorldCoord(Input.CurMousePos);
             vec2 Pos = ScreenToGridCoord(Input.CurMousePos);
             Networking.ToServer(new MessageCastSpell(Spells.SpellList.IndexOf(spell), Pos));
         }
