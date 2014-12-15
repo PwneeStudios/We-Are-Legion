@@ -97,7 +97,11 @@ namespace FragSharpFramework
             Terracotta.DrawTerritoryPlayer.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/DrawTerritoryPlayer_player=0.01568628");
             Terracotta.DrawTerritoryColors.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawTerritoryColors");
             Terracotta.DrawBuildingsIcons.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawBuildingsIcons");
-            Terracotta.DrawBuildings.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawBuildings");
+            Terracotta.DrawBuildings.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/DrawBuildings_player=0");
+            Terracotta.DrawBuildings.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/DrawBuildings_player=0.003921569");
+            Terracotta.DrawBuildings.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/DrawBuildings_player=0.007843138");
+            Terracotta.DrawBuildings.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/DrawBuildings_player=0.01176471");
+            Terracotta.DrawBuildings.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/DrawBuildings_player=0.01568628");
             Terracotta.DrawCorpses.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawCorpses");
             Terracotta.DrawPrecomputation_Cur.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPrecomputation_Cur");
             Terracotta.DrawPrecomputation_Pre.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPrecomputation_Pre");
@@ -2613,40 +2617,58 @@ namespace Terracotta
 }
 
 
+
+
+
+
 namespace Terracotta
 {
     public partial class DrawBuildings
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_player_0;
+        public static Effect CompiledEffect_player_0p003921569;
+        public static Effect CompiledEffect_player_0p007843138;
+        public static Effect CompiledEffect_player_0p01176471;
+        public static Effect CompiledEffect_player_0p01568628;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float s, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float player, float s, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Buildings, Units, Texture, Explosion, s);
+            Using(cameraPos, cameraAspect, Buildings, Units, Texture, Explosion, player, s);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float s, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float player, float s, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Buildings, Units, Texture, Explosion, s);
+            Using(cameraPos, cameraAspect, Buildings, Units, Texture, Explosion, player, s);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float s, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float player, float s, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Buildings, Units, Texture, Explosion, s);
+            Using(cameraPos, cameraAspect, Buildings, Units, Texture, Explosion, player, s);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float s, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float player, float s, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Buildings, Units, Texture, Explosion, s);
+            Using(cameraPos, cameraAspect, Buildings, Units, Texture, Explosion, player, s);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float s)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float player, float s)
         {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
+            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
+            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
+            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
+            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
             CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
             CompiledEffect.Parameters["fs_param_Buildings_Texture"].SetValue(FragSharpMarshal.Marshal(Buildings));

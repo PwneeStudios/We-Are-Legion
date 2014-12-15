@@ -640,7 +640,9 @@ namespace Terracotta
             }
 
             // Buildings
-            DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSprite, ExsplosionSprite, PercentSimStepComplete);
+            DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSprite, ExsplosionSprite,
+                MyPlayerValue,
+                PercentSimStepComplete);
             GridHelper.DrawGrid();
 
             // Markers

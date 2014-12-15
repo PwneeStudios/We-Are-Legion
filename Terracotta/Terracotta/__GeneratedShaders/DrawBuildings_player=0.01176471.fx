@@ -145,16 +145,17 @@ float Terracotta__UnitType__BuildingIndex(float type)
     return type - 0.02352941;
 }
 
-float4 Terracotta__DrawBuildings__Sprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 Terracotta__DrawBuildings__Sprite(VertexToPixel psin, float player, float4 b, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    float selected_offset = Terracotta__SimShader__selected(u) ? 3 : 0;
-    pos += FragSharpFramework__FragSharpStd__Float(float2(u.g, u.a));
-    pos.x += FragSharpFramework__FragSharpStd__Float(d.g) * 3;
-    pos.y += selected_offset + 6 * FragSharpFramework__FragSharpStd__Float(Terracotta__UnitType__BuildingIndex(d.r));
+    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__selected(b);
+    float selected_offset = draw_selected ? 3 : 0;
+    pos += FragSharpFramework__FragSharpStd__Float(float2(b.g, b.a));
+    pos.x += FragSharpFramework__FragSharpStd__Float(u.g) * 3;
+    pos.y += selected_offset + 6 * FragSharpFramework__FragSharpStd__Float(Terracotta__UnitType__BuildingIndex(u.r));
     pos *= float2(1.0 / 15, 1.0 / 30);
     return tex2D(Texture, pos);
 }
@@ -197,7 +198,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         else
         {
             float frame = 0;
-            output += Terracotta__DrawBuildings__Sprite(psin, building_here, unit_here, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+            output += Terracotta__DrawBuildings__Sprite(psin, 0.01176471, building_here, unit_here, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
     }
     __FinalOutput.Color = output;

@@ -27,16 +27,17 @@ namespace Terracotta
 
     public partial class DrawBuildings : BaseShader
     {
-        protected color Sprite(building u, unit d, vec2 pos, float frame, PointSampler Texture)
+        protected color Sprite(float player, building b, unit u, vec2 pos, float frame, PointSampler Texture)
         {
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            float selected_offset = selected(u) ? 3 : 0;
+            bool draw_selected = u.player == player && selected(b);
+            float selected_offset = draw_selected ? 3 : 0;
 
-            pos += Float(vec(u.part_x, u.part_y));
-            pos.x += Float(d.player) * BuildingSpriteSheet.BuildingDimX;
-            pos.y += selected_offset + BuildingSpriteSheet.SubsheetDimY * Float(UnitType.BuildingIndex(d.type));
+            pos += Float(vec(b.part_x, b.part_y));
+            pos.x += Float(u.player) * BuildingSpriteSheet.BuildingDimX;
+            pos.y += selected_offset + BuildingSpriteSheet.SubsheetDimY * Float(UnitType.BuildingIndex(u.type));
             pos *= BuildingSpriteSheet.SpriteSize;
 
             return Texture[pos];
@@ -55,7 +56,9 @@ namespace Terracotta
         }
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<building> Buildings, Field<unit> Units, PointSampler Texture, PointSampler Explosion, float s)
+        color FragmentShader(VertexOut vertex, Field<building> Buildings, Field<unit> Units, PointSampler Texture, PointSampler Explosion,
+            [Player.Vals] float player,
+            float s)
         {
             color output = color.TransparentBlack;
 
@@ -79,7 +82,7 @@ namespace Terracotta
                 else
                 {
                     float frame = 0;
-                    output += Sprite(building_here, unit_here, subcell_pos, frame, Texture);
+                    output += Sprite(player, building_here, unit_here, subcell_pos, frame, Texture);
                 }
             }
 
