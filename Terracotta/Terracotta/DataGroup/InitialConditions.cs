@@ -71,7 +71,7 @@ namespace Terracotta
             for (int i = 0; i < w; i += 50)
             for (int j = 0; j < h; j += 50)
             {
-                Create.MakeBuilding(SimShader.UnitType.GoldMine, Player.None, Team.None, i, j, w, h, _unit, _data, _target);
+                Create.MakeBuilding(vec(i,j), SimShader.UnitType.GoldMine, Player.None, Team.None, i, j, w, h, _unit, _data, _target);
             }
 
             CurrentUnits.SetData(_unit);

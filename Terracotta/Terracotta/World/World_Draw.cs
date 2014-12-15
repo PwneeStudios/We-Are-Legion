@@ -224,7 +224,7 @@ namespace Terracotta
                             UnselectAll = false;
                         }
 
-                        PlaceBuilding();
+                        Update_BuildingPlacing();
                         break;
 
                     case UserMode.PlaceUnits:
@@ -234,7 +234,7 @@ namespace Terracotta
                             UnselectAll = false;
                         }
 
-                        PlaceUnits();
+                        Update_UnitPlacing();
                         break;
 
                     case UserMode.Select:

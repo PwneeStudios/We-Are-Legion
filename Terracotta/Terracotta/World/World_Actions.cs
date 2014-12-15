@@ -9,30 +9,33 @@ namespace Terracotta
 {
     public partial class World : SimShader
     {
+        public static void TryTillSuccess(Action a)
+        {
+            while (true)
+            {
+                try
+                {
+                    a();
+                    return;
+                }
+                catch
+                { 
+                    
+                }
+            }
+        }
+
         public void UpdateCellAvailability()
         {
-            CanPlaceItem = false;
-
-            if (!GameClass.HasFocus) return;
-
             vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);
 
-            Render.UnsetDevice();
-
-            CanPlaceItem = false;
-
-            var _data = DataGroup.CurrentData.GetData<data>(GridCoord, new vec2(1, 1));
-
-            color clr = color.TransparentBlack;
-            if (_data != null)
+            try
             {
-                CanPlaceItem = true;
-
-                var here = _data[0];
-
-                bool occupied = here.direction > 0;
-
-                CanPlaceItem = !occupied;
+                CanPlaceItem = CellAvailable_1x1(GridCoord);
+            }
+            catch
+            {
+                CanPlaceItem = false;
             }
         }
 
@@ -79,26 +82,57 @@ namespace Terracotta
             }
         }
  
-        void PlaceBuilding()
+        void Update_BuildingPlacing()
         {
-            CanPlaceItem = false;
-
-            if (!GameClass.HasFocus) return;
-
             vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos) - new vec2(1, 1);
 
+            try
+            {
+                CanPlaceItem = CheckBuildingAvailability(GridCoord, MyPlayerNumber, MyTeamNumber, BuildingUserIsPlacing, CanPlace);
+            }
+            catch
+            {
+                CanPlaceItem = false;
+            }
+
+            if (Input.LeftMousePressed)
+            {
+                if (!CanPlaceItem)
+                {
+                    Message_CanNotPlaceHere();
+                }
+                else if (!CanAffordBuilding(BuildingUserIsPlacing, MyPlayerNumber))
+                {
+                    Message_InsufficientGold();
+                }
+                else
+                {
+                    try
+                    {
+                        Networking.ToServer(new MessagePlaceBuilding(GridCoord, Int(BuildingUserIsPlacing)));
+                    }
+                    catch
+                    {
+                    }
+                }
+            }
+        }
+
+        bool[] TempCanPlace = new bool[3 * 3];
+        bool CheckBuildingAvailability(vec2 GridCoord, int PlayerNum, int TeamNum, float BuildingToPlace, bool[] CanPlace)
+        {
             int _w = 3, _h = 3;
 
             Render.UnsetDevice();
 
-            CanPlaceItem = false;
+            bool CanPlaceItem = false;
             for (int i = 0; i < _w; i++)
             for (int j = 0; j < _h; j++)
             {
                 CanPlace[i + j * _w] = false;
             }
 
-            if (BuildingUserIsPlacing == UnitType.Barracks && MyPlayerNumber > 0)
+            if (BuildingToPlace == UnitType.Barracks && PlayerNum > 0)
             {
                 var _data = DataGroup.CurrentData.GetData<building>(GridCoord, new vec2(_w, _h));
                 var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
@@ -113,7 +147,7 @@ namespace Terracotta
                         var building_here = _data[i + j * _w];
                         var distance_to = _dist[i + j * _w];
 
-                        var distance = Get(distance_to, MyPlayerNumber);
+                        var distance = Get(distance_to, PlayerNum);
 
                         bool occupied = building_here.direction > 0;
                         bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
@@ -126,7 +160,7 @@ namespace Terracotta
                 }
             }
 
-            if (BuildingUserIsPlacing == UnitType.GoldMine || BuildingUserIsPlacing == UnitType.JadeMine)
+            if (BuildingToPlace == UnitType.GoldMine || BuildingToPlace == UnitType.JadeMine)
             {
                 var _data = DataGroup.CurrentUnits.GetData<unit>(GridCoord, new vec2(_w, _h));
                 var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(_w, _h));
@@ -141,10 +175,10 @@ namespace Terracotta
                         var unit_here = _data[i + j * _w];
                         var distance_to = _dist[i + j * _w];
 
-                        var distance = Get(distance_to, MyPlayerNumber);
+                        var distance = Get(distance_to, PlayerNum);
 
                         bool occupied = unit_here.type > 0;
-                        bool is_valid_source = unit_here.team == Team.None && unit_here.type == BuildingUserIsPlacing;
+                        bool is_valid_source = unit_here.team == Team.None && unit_here.type == BuildingToPlace;
                         bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
 
                         bool can_place = (is_valid_source || MapEditorActive && !occupied) && (in_territory || MapEditorActive);
@@ -155,48 +189,27 @@ namespace Terracotta
                 }
             }
 
-            if (Input.LeftMousePressed)
-            {
-                if (!CanPlaceItem)
-                {
-                    Message_CanNotPlaceHere();
-                }
-                else if (!CanAffordBuilding(BuildingUserIsPlacing, MyPlayerNumber))
-                {
-                    Message_InsufficientGold();
-                }
-                else try
-                {
-                    Networking.ToServer(new MessagePlaceBuilding(GridCoord, BuildingUserIsPlacing));
-                }
-                catch
-                {
-                }
-            }
+            return CanPlaceItem;
         }
 
-        public void PlaceBuildingApply(int PlayerNum, int TeamNum, vec2 Pos, float Building)
+        public void PlaceBuildingApply(int PlayerNum, int TeamNum, vec2 Pos, int Building)
         {
-            while (true)
-            {
-                try
-                {
-                    Render.UnsetDevice();
-                    Create.PlaceBuilding(DataGroup, Pos, Building, Player.Vals[PlayerNum], Team.Vals[TeamNum]);
+            TryTillSuccess(() => PlaceBuilding(PlayerNum, TeamNum, Pos, _[Building]));
 
-                    SubtractGold(Params.BuildingCost(Building), PlayerNum);
-                    CanPlaceItem = false;
-
-                    return;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
-            }
+            SubtractGold(Params.BuildingCost(_[Building]), PlayerNum);
+            CanPlaceItem = false;
         }
 
-        void PlaceUnits()
+        public void PlaceBuilding(int PlayerNum, int TeamNum, vec2 GridCoord, float Building)
+        {
+            if (!CheckBuildingAvailability(GridCoord, PlayerNum, TeamNum, Building, TempCanPlace))
+                return;
+
+            Render.UnsetDevice();
+            Create.PlaceBuilding(DataGroup, GridCoord, Building, Player.Vals[PlayerNum], Team.Vals[TeamNum]);
+        }
+
+        void Update_UnitPlacing()
         {
             SelectionUpdate(SelectSize, EffectSelection: false, LineSelect: true);
 
@@ -480,7 +493,7 @@ namespace Terracotta
         {
             AddSummonUnitEffect(GridCoord);
 
-            PlaceUnit(UnitType.Necromancer, GridCoord, Player.Vals[PlayerNumber], Team.Vals[TeamNumber]);
+            TryTillSuccess(() => PlaceUnit(UnitType.Necromancer, GridCoord, Player.Vals[PlayerNumber], Team.Vals[TeamNumber]));
         }
 
         public void SpawnUnits(vec2 grid_coord, vec2 size, float player, float team, float type, float distribution, bool raising = true)

@@ -68,17 +68,17 @@ namespace Terracotta
         public vec2
             Pos;
 
-        public float
+        public int
             Building;
 
-        public MessagePlaceBuilding(vec2 Pos, float Building)
+        public MessagePlaceBuilding(vec2 Pos, int Building)
         {
             this.Pos = Pos;
             this.Building = Building;
         }
 
         public override MessageStr EncodeHead() { return _ | Pos | Building; }
-        public static MessagePlaceBuilding Parse(string s) { return new MessagePlaceBuilding(PopVec2(ref s), PopFloat(ref s)); }
+        public static MessagePlaceBuilding Parse(string s) { return new MessagePlaceBuilding(PopVec2(ref s), PopInt(ref s)); }
         public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.PlaceBuilding); }
 
         public override void Do()

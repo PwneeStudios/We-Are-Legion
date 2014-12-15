@@ -11,21 +11,23 @@ namespace Terracotta
     {
         public static Random rnd = new Random();
 
-        public static void MakeBuilding(float type, float player, float team, int i, int j, int GridWidth, int GridHeight, Color[] Units, Color[] Data, Color[] TargetData)
+        public static void MakeBuilding(vec2 coord, float type, float player, float team, int i, int j, int GridWidth, int GridHeight, Color[] Units, Color[] Data, Color[] TargetData)
         {
             for (int _i = i; _i < i + 3; _i++)
             for (int _j = j; _j < j + 3; _j++)
             {
                 Units[_i * GridHeight + _j] = (Color) new unit(type, player, team, 0);
                 Data[_i * GridHeight + _j]  = (Color) new data(Dir.Stationary, _[_j - j], 0, _[_i - i]);
-                
-                TargetData[_i * GridHeight + _j] = new Color(rnd.Next(0, 4), rnd.Next(0, 256), rnd.Next(0, 4), rnd.Next(0, 256));
+
+                vec4 packed_coord = pack_vec2(coord);
+                TargetData[_i * GridHeight + _j] = (Color)packed_coord;
+                //TargetData[_i * GridHeight + _j] = new Color(rnd.Next(0, 4), rnd.Next(0, 256), rnd.Next(0, 4), rnd.Next(0, 256));
             }
         }
 
         public static void PlaceBuilding(DataGroup d, vec2 coord, float building_type, float player, float team)
         {
-            MakeBuilding(building_type, player, team, 0, 0, 3, 3, _unit, _data, _target);
+            MakeBuilding(coord, building_type, player, team, 0, 0, 3, 3, _unit, _data, _target);
 
             vec2 size = new vec2(3, 3);
             d.CurrentUnits.SetData(coord, size, _unit);
