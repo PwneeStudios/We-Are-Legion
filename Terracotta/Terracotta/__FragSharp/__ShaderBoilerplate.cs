@@ -4798,33 +4798,33 @@ namespace Terracotta
         public static Effect CompiledEffect_player_0p01568628_solid_blend_flag_true;
         public static Effect CompiledEffect_player_0p01568628_solid_blend_flag_false;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D UnitTexture, Texture2D ShadowTexture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, player, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, UnitTexture, ShadowTexture, player, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D UnitTexture, Texture2D ShadowTexture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, player, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, UnitTexture, ShadowTexture, player, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D UnitTexture, Texture2D ShadowTexture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, player, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, UnitTexture, ShadowTexture, player, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D UnitTexture, Texture2D ShadowTexture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, Texture, player, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
+            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnits, PreviousUnits, UnitTexture, ShadowTexture, player, s, t, selection_blend, selection_size, solid_blend_flag, solid_blend);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D Texture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D UnitTexture, Texture2D ShadowTexture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
         {
             Effect CompiledEffect = null;
 
@@ -4855,9 +4855,12 @@ namespace Terracotta
             CompiledEffect.Parameters["fs_param_PreviousUnits_Texture"].SetValue(FragSharpMarshal.Marshal(PreviousUnits));
             CompiledEffect.Parameters["fs_param_PreviousUnits_size"].SetValue(FragSharpMarshal.Marshal(vec(PreviousUnits.Width, PreviousUnits.Height)));
             CompiledEffect.Parameters["fs_param_PreviousUnits_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousUnits.Width, PreviousUnits.Height)));
-            CompiledEffect.Parameters["fs_param_Texture_Texture"].SetValue(FragSharpMarshal.Marshal(Texture));
-            CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
-            CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
+            CompiledEffect.Parameters["fs_param_UnitTexture_Texture"].SetValue(FragSharpMarshal.Marshal(UnitTexture));
+            CompiledEffect.Parameters["fs_param_UnitTexture_size"].SetValue(FragSharpMarshal.Marshal(vec(UnitTexture.Width, UnitTexture.Height)));
+            CompiledEffect.Parameters["fs_param_UnitTexture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(UnitTexture.Width, UnitTexture.Height)));
+            CompiledEffect.Parameters["fs_param_ShadowTexture_Texture"].SetValue(FragSharpMarshal.Marshal(ShadowTexture));
+            CompiledEffect.Parameters["fs_param_ShadowTexture_size"].SetValue(FragSharpMarshal.Marshal(vec(ShadowTexture.Width, ShadowTexture.Height)));
+            CompiledEffect.Parameters["fs_param_ShadowTexture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(ShadowTexture.Width, ShadowTexture.Height)));
             CompiledEffect.Parameters["fs_param_s"].SetValue(FragSharpMarshal.Marshal(s));
             CompiledEffect.Parameters["fs_param_t"].SetValue(FragSharpMarshal.Marshal(t));
             CompiledEffect.Parameters["fs_param_selection_blend"].SetValue(FragSharpMarshal.Marshal(selection_blend));

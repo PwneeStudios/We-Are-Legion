@@ -19,7 +19,8 @@ namespace Terracotta
             BuildingTexture_1,
             ExplosionTexture_1, MagicTexture,
             UnitTexture_1, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
-            
+            ShadowTexture,
+
             TileSpriteSheet_1, TileSpriteSheet_2, TileSpriteSheet_4, TileSpriteSheet_8, TileSpriteSheet_16,
 
             Cursor, SelectCircle, SelectCircle_Data, SelectDot, AttackMarker,
@@ -52,6 +53,8 @@ namespace Terracotta
             UnitTexture_1       = LoadTexture("Soldier_1");
             UnitTexture_2       = LoadTexture("Soldier_2");
             UnitTexture_4       = LoadTexture("Soldier_4");
+
+            ShadowTexture       = LoadTexture("Shadow");
 
             TileSpriteSheet_1   = LoadTexture("TileSet_1");
             TileSpriteSheet_2   = LoadTexture("TileSet_2");

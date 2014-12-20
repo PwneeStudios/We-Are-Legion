@@ -384,6 +384,15 @@ namespace Terracotta
             return coords - vec(i, j);
         }
 
+        protected vec2 get_subcell_pos(VertexOut vertex, vec2 grid_size, vec2 grid_shift)
+        {
+            vec2 coords = vertex.TexCoords * grid_size + grid_shift;
+            float i = floor(coords.x);
+            float j = floor(coords.y);
+
+            return coords - vec(i, j);
+        }
+
         protected vec2 direction_to_vec(float direction)
         {
             float angle = (direction * 255 - 1) * (3.1415926f / 2.0f);

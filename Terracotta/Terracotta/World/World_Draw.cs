@@ -660,7 +660,8 @@ namespace Terracotta
                 float solid_blend = CoreMath.LogLerpRestrict(z / 7, 0, z / 2, 1, CameraZoom);
                 bool solid_blend_flag = solid_blend < 1;
 
-                DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSprite,
+                DrawUnits.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits,
+                    UnitsSprite, Assets.ShadowTexture,
                     MyPlayerValue,
                     PercentSimStepComplete, second,
                     selection_blend, selection_size,
