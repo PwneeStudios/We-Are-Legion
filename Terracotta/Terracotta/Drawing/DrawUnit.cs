@@ -63,11 +63,11 @@ namespace Terracotta
 
             var clr = Texture[pos];
 
-            if (draw_selected)
-            {
-                float a = clr.a * selection_blend;
-                clr = a * clr + (1 - a) * SelectedUnitColor.Get(u.player);
-            }
+            //if (draw_selected)
+            //{
+            //    float a = clr.a * selection_blend;
+            //    clr = a * clr + (1 - a) * SelectedUnitColor.Get(u.player);
+            //}
 
             if (solid_blend_flag)
             {
@@ -84,27 +84,27 @@ namespace Terracotta
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            //return new color(1f, 1f, 1f, 1f);
-
-            bool draw_selected = u.player == player && selected(d) && pos.y > selection_size;
-
-            //pos.x += floor(frame);
-            //pos.y += Dir.Num(d) + 4 * Player.Num(u) + 4 * 4 * UnitType.UnitIndex(u);
-            //pos *= UnitSpriteSheet.SpriteSize;
+            //bool draw_selected = u.player == player && selected(d) && pos.y > selection_size;
+            bool draw_selected = u.player == player && selected(d);
 
             var clr = Texture[pos];
-            return clr;
 
             if (draw_selected)
             {
-                float a = clr.a * selection_blend;
-                clr = a * clr + (1 - a) * SelectedUnitColor.Get(u.player);
+                if (clr.a > 0)
+                {
+                    float a = clr.a;
+                    clr =  SelectedUnitColor.Get(u.player);
+                    clr.a = a;
+                }
+                //float a = clr.a * selection_blend;
+                //clr = a * clr + (1 - a) * SelectedUnitColor.Get(u.player);
             }
 
-            if (solid_blend_flag)
-            {
-                clr = solid_blend * clr + (1 - solid_blend) * SolidColor(player, d, u);
-            }
+            //if (solid_blend_flag)
+            //{
+            //    clr = solid_blend * clr + (1 - solid_blend) * SolidColor(player, d, u);
+            //}
 
             return clr;
         }
