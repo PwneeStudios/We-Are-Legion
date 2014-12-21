@@ -58,7 +58,7 @@ sampler fs_param_Previous : register(s2) = sampler_state
 bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.5019608 - .001;
+    return val >= 0.3764706 - .001;
 }
 
 bool Terracotta__SimShader__Something(float4 u)
@@ -79,9 +79,9 @@ float FragSharpFramework__FragSharpStd__fint_round(float v)
 float Terracotta__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    if (val >= 0.5019608 - .001)
+    if (val >= 0.3764706 - .001)
     {
-        val -= 0.5019608;
+        val -= 0.3764706;
     }
     val = FragSharpFramework__FragSharpStd__fint_round(val);
     return val;

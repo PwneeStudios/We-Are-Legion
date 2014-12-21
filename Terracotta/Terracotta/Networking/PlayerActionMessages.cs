@@ -133,6 +133,11 @@ namespace Terracotta
         public static MessageSelect Parse(string s) { return new MessageSelect(PopVec2(ref s), PopBool(ref s), PopVec2(ref s), PopVec2(ref s)); }
         public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.Select); }
 
+        public override void Immediate()
+        {
+            GameClass.Data.SelectAlongLine(v1, v2, size, deselect, true, Player.Vals[Action.PlayerNumber], true, Fake: true);
+        }
+
         public override void Do()
         {
             if (Log.Do) Console.WriteLine("   Do select at {0}      : {1}", GameClass.World.SimStep, this);

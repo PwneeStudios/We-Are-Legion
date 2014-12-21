@@ -58,7 +58,7 @@ sampler fs_param_Previous : register(s2) = sampler_state
 bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.5019608 - .001;
+    return val >= 0.3764706 - .001;
 }
 
 bool Terracotta__SimShader__Something(float4 u)

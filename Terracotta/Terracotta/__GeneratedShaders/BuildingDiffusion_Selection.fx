@@ -75,22 +75,22 @@ float2 Terracotta__SimShader__center_dir(float4 b)
 float Terracotta__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    if (val >= 0.5019608 - .001)
+    if (val >= 0.3764706 - .001)
     {
-        val -= 0.5019608;
+        val -= 0.3764706;
     }
     return val;
 }
 
 void Terracotta__SimShader__set_selected(inout float4 u, bool selected)
 {
-    u.b = Terracotta__SimShader__prior_direction(u) + (selected ? 0.5019608 : 0.0);
+    u.b = Terracotta__SimShader__prior_direction(u) + (selected ? 0.3764706 : 0.0);
 }
 
 bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.5019608 - .001;
+    return val >= 0.3764706 - .001;
 }
 
 // Compiled vertex shader

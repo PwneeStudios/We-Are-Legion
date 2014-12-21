@@ -29,7 +29,7 @@ namespace Terracotta
             SelectedBound_BL = SimShader.unpack_vec2(bound_bl);
         }
 
-        public void SelectAlongLine(vec2 p1, vec2 p2, vec2 size, bool Deselect, bool Selecting, float Player, bool EffectSelection)
+        public void SelectAlongLine(vec2 p1, vec2 p2, vec2 size, bool Deselect, bool Selecting, float Player, bool EffectSelection, bool Fake = false)
         {
             DataDrawMouse.Using(Assets.SelectCircle_Data, Player, Output: SelectField, Clear: Color.Transparent);
 
@@ -47,11 +47,11 @@ namespace Terracotta
 
             if (EffectSelection)
             {
-                SelectUnits(Player, Deselect);
+                SelectUnits(Player, Deselect, Fake);
             }
         }
 
-        public void SelectInArea(vec2 pos, vec2 size, bool Deselect, bool Selecting, float Player, bool EffectSelection)
+        public void SelectInArea(vec2 pos, vec2 size, bool Deselect, bool Selecting, float Player, bool EffectSelection, bool Fake = false)
         {
             DataDrawMouse.Using(Assets.SelectCircle_Data, Player, Output: SelectField, Clear: Color.Transparent);
 
@@ -62,16 +62,16 @@ namespace Terracotta
 
             if (EffectSelection)
             {
-                SelectUnits(Player, Deselect);
+                SelectUnits(Player, Deselect, Fake);
             }
         }
 
-        private void SelectUnits(float Player, bool Deselect)
+        private void SelectUnits(float Player, bool Deselect, bool Fake = false)
         {
-            ActionSelect.Apply(CurrentData, CurrentUnits, SelectField, Player, Deselect, Output: Temp1);
+            ActionSelect.Apply(CurrentData, CurrentUnits, SelectField, Player, Deselect, Fake, Output: Temp1);
             Swap(ref Temp1, ref CurrentData);
 
-            ActionSelect.Apply(PreviousData, CurrentUnits, SelectField, Player, Deselect, Output: Temp1);
+            ActionSelect.Apply(PreviousData, CurrentUnits, SelectField, Player, Deselect, Fake, Output: Temp1);
             Swap(ref Temp1, ref PreviousData);
         }
 

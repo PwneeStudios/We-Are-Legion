@@ -128,10 +128,10 @@ bool Terracotta__SimShader__IsStationary(float4 d)
     return d.r >= 0.01960784 - .001;
 }
 
-bool Terracotta__SimShader__selected(float4 u)
+bool Terracotta__SimShader__show_selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.5019608 - .001;
+    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
 float4 Terracotta__SelectedUnitColor__Get(VertexToPixel psin, float player)
@@ -178,7 +178,7 @@ float4 Terracotta__UnitColor__Get(VertexToPixel psin, float player)
 
 float4 Terracotta__DrawUnits__SolidColor(VertexToPixel psin, float player, float4 data, float4 unit)
 {
-    return abs(unit.g - player) < .001 && Terracotta__SimShader__selected(data) ? Terracotta__SelectedUnitColor__Get(psin, unit.g) : Terracotta__UnitColor__Get(psin, unit.g);
+    return abs(unit.g - player) < .001 && Terracotta__SimShader__show_selected(data) ? Terracotta__SelectedUnitColor__Get(psin, unit.g) : Terracotta__UnitColor__Get(psin, unit.g);
 }
 
 float4 Terracotta__DrawUnits__Presence(VertexToPixel psin, float player, float4 data, float4 unit)

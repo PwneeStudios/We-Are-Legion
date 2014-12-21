@@ -127,7 +127,7 @@ float4 Terracotta__DrawBuildings__ExplosionSprite(VertexToPixel psin, float4 u, 
 bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.5019608 - .001;
+    return val >= 0.3764706 - .001;
 }
 
 float2 FragSharpFramework__FragSharpStd__Float(float2 v)

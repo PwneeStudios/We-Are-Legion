@@ -7,7 +7,8 @@ namespace Terracotta
         [FragmentShader]
         data FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, Field<unit> Select,
             [Player.Vals] float player,
-            bool deselect)
+            bool deselect,
+            [Vals.Bool] bool fake)
         {
             unit unit_here = Unit[Here];
             data data_here = Data[Here];
@@ -22,12 +23,16 @@ namespace Terracotta
             // If the player unit here matches the 
             if (select.type > 0 && (select.player == Player.None || unit_here.player == select.player) && !BlockingTileHere(unit_here))
             {
-                set_selected(ref data_here, true);
+                if (fake) set_selected_fake(ref data_here, true);
+                else      set_selected     (ref data_here, true);
             }
             else
             {
                 if (deselect)
-                    set_selected(ref data_here, false);
+                {
+                    if (fake) set_selected_fake(ref data_here, false);
+                    else      set_selected     (ref data_here, false);
+                }
             }
 
             return data_here;

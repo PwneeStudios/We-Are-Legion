@@ -159,10 +159,10 @@ bool Terracotta__SimShader__Something(float4 u)
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__selected(float4 u)
+bool Terracotta__SimShader__show_selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.5019608 - .001;
+    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
 float4 Terracotta__SelectedUnitColor__Get(VertexToPixel psin, float player)
@@ -192,7 +192,7 @@ float4 Terracotta__DrawUnits__ShadowSprite(VertexToPixel psin, float player, flo
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__selected(d);
+    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__show_selected(d);
     float4 clr = tex2D(Texture, pos);
     if (draw_selected)
     {
@@ -219,9 +219,9 @@ float FragSharpFramework__FragSharpStd__fint_round(float v)
 float Terracotta__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    if (val >= 0.5019608 - .001)
+    if (val >= 0.3764706 - .001)
     {
-        val -= 0.5019608;
+        val -= 0.3764706;
     }
     val = FragSharpFramework__FragSharpStd__fint_round(val);
     return val;
@@ -284,7 +284,7 @@ float4 Terracotta__UnitColor__Get(VertexToPixel psin, float player)
 
 float4 Terracotta__DrawUnits__SolidColor(VertexToPixel psin, float player, float4 data, float4 unit)
 {
-    return abs(unit.g - player) < .001 && Terracotta__SimShader__selected(data) ? Terracotta__SelectedUnitColor__Get(psin, unit.g) : Terracotta__UnitColor__Get(psin, unit.g);
+    return abs(unit.g - player) < .001 && Terracotta__SimShader__show_selected(data) ? Terracotta__SelectedUnitColor__Get(psin, unit.g) : Terracotta__UnitColor__Get(psin, unit.g);
 }
 
 float4 Terracotta__DrawUnits__Sprite(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
@@ -293,7 +293,7 @@ float4 Terracotta__DrawUnits__Sprite(VertexToPixel psin, float player, float4 d,
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__selected(d) && pos.y > selection_size + .001;
+    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__show_selected(d) && pos.y > selection_size + .001;
     pos.x += floor(frame);
     pos.y += Terracotta__Dir__Num(d) + 4 * Terracotta__Player__Num(u) + 4 * 4 * Terracotta__UnitType__UnitIndex(u);
     pos *= float2(1.0 / 32, 1.0 / 96);

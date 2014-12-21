@@ -58,11 +58,16 @@ namespace FragSharpFramework
             Terracotta.PaintTiles_UpdateUnits.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PaintTiles_UpdateUnits");
             Terracotta.PaintTiles_UpdateTiles.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PaintTiles_UpdateTiles");
             Terracotta.ActionDelete_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionDelete_Data");
-            Terracotta.ActionSelect.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0");
-            Terracotta.ActionSelect.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.003921569");
-            Terracotta.ActionSelect.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.007843138");
-            Terracotta.ActionSelect.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01176471");
-            Terracotta.ActionSelect.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01568628");
+            Terracotta.ActionSelect.CompiledEffect_player_0_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0_fake=true");
+            Terracotta.ActionSelect.CompiledEffect_player_0_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0_fake=false");
+            Terracotta.ActionSelect.CompiledEffect_player_0p003921569_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.003921569_fake=true");
+            Terracotta.ActionSelect.CompiledEffect_player_0p003921569_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.003921569_fake=false");
+            Terracotta.ActionSelect.CompiledEffect_player_0p007843138_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.007843138_fake=true");
+            Terracotta.ActionSelect.CompiledEffect_player_0p007843138_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.007843138_fake=false");
+            Terracotta.ActionSelect.CompiledEffect_player_0p01176471_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01176471_fake=true");
+            Terracotta.ActionSelect.CompiledEffect_player_0p01176471_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01176471_fake=false");
+            Terracotta.ActionSelect.CompiledEffect_player_0p01568628_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01568628_fake=true");
+            Terracotta.ActionSelect.CompiledEffect_player_0p01568628_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01568628_fake=false");
             Terracotta.DataDrawMouse.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DataDrawMouse");
             Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_1 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=1");
             Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_2 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=2");
@@ -1391,51 +1396,66 @@ namespace Terracotta
 
 
 
+
+
+
+
+
 namespace Terracotta
 {
     public partial class ActionSelect
     {
-        public static Effect CompiledEffect_player_0;
-        public static Effect CompiledEffect_player_0p003921569;
-        public static Effect CompiledEffect_player_0p007843138;
-        public static Effect CompiledEffect_player_0p01176471;
-        public static Effect CompiledEffect_player_0p01568628;
+        public static Effect CompiledEffect_player_0_fake_true;
+        public static Effect CompiledEffect_player_0_fake_false;
+        public static Effect CompiledEffect_player_0p003921569_fake_true;
+        public static Effect CompiledEffect_player_0p003921569_fake_false;
+        public static Effect CompiledEffect_player_0p007843138_fake_true;
+        public static Effect CompiledEffect_player_0p007843138_fake_false;
+        public static Effect CompiledEffect_player_0p01176471_fake_true;
+        public static Effect CompiledEffect_player_0p01176471_fake_false;
+        public static Effect CompiledEffect_player_0p01568628_fake_true;
+        public static Effect CompiledEffect_player_0p01568628_fake_false;
 
-        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, bool fake, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Unit, Select, player, deselect);
+            Using(Data, Unit, Select, player, deselect, fake);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, RenderTarget2D Output)
+        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, bool fake, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Unit, Select, player, deselect);
+            Using(Data, Unit, Select, player, deselect, fake);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, bool fake, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Unit, Select, player, deselect);
+            Using(Data, Unit, Select, player, deselect, fake);
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, RenderTarget2D Output)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, bool fake, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Unit, Select, player, deselect);
+            Using(Data, Unit, Select, player, deselect, fake);
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, bool fake)
         {
             Effect CompiledEffect = null;
 
-            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
-            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
-            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
-            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
-            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+            if (abs((float)(player - 0)) < .001 && fake == true) CompiledEffect = CompiledEffect_player_0_fake_true;
+            else if (abs((float)(player - 0)) < .001 && fake == false) CompiledEffect = CompiledEffect_player_0_fake_false;
+            else if (abs((float)(player - 0.003921569)) < .001 && fake == true) CompiledEffect = CompiledEffect_player_0p003921569_fake_true;
+            else if (abs((float)(player - 0.003921569)) < .001 && fake == false) CompiledEffect = CompiledEffect_player_0p003921569_fake_false;
+            else if (abs((float)(player - 0.007843138)) < .001 && fake == true) CompiledEffect = CompiledEffect_player_0p007843138_fake_true;
+            else if (abs((float)(player - 0.007843138)) < .001 && fake == false) CompiledEffect = CompiledEffect_player_0p007843138_fake_false;
+            else if (abs((float)(player - 0.01176471)) < .001 && fake == true) CompiledEffect = CompiledEffect_player_0p01176471_fake_true;
+            else if (abs((float)(player - 0.01176471)) < .001 && fake == false) CompiledEffect = CompiledEffect_player_0p01176471_fake_false;
+            else if (abs((float)(player - 0.01568628)) < .001 && fake == true) CompiledEffect = CompiledEffect_player_0p01568628_fake_true;
+            else if (abs((float)(player - 0.01568628)) < .001 && fake == false) CompiledEffect = CompiledEffect_player_0p01568628_fake_false;
 
             if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
 

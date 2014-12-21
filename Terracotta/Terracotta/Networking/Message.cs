@@ -67,6 +67,7 @@ namespace Terracotta
         }
 
         public abstract MessageStr EncodeHead();
+        public virtual void Immediate() { }
         public virtual void Do() { }
 
         public override string ToString()

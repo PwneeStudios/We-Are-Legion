@@ -309,24 +309,65 @@ namespace Terracotta
         }
 
 
-        const float select_offset = _128;
+
+        public static class SelectState
+        {
+            public const float
+                NotSelected_NoShow = 0 * Shift,
+                NotSelected_Show1 = 1 * Shift,
+                NotSelected_Show2 = 2 * Shift,
+                Selected_Show = 3 * Shift,
+                Selected_NoShow1 = 4 * Shift,
+                Selected_NoShow2 = 5 * Shift,
+
+                Selected = Selected_Show,
+                FirstShow = NotSelected_Show1,
+                LastShow = Selected_Show + Shift,
+
+                Shift = _32;
+        }
+
+        protected static bool show_selected(data u)
+        {
+            float val = u.prior_direction_and_select;
+            return SelectState.FirstShow <= val && val < SelectState.LastShow;
+        }
+
+        protected static void set_selected_fake(ref data u, bool fake_selected)
+        {
+            bool is_selected = selected(u);
+            float prior_dir = prior_direction(u);
+
+            float select_state;
+            if (fake_selected)
+            {
+                select_state = is_selected ? SelectState.Selected_Show : SelectState.NotSelected_Show2;
+            }
+            else
+            {
+                select_state = is_selected ? SelectState.Selected_NoShow2 : SelectState.NotSelected_NoShow;
+            }
+
+            u.prior_direction_and_select = prior_dir + select_state;
+        }
+
         protected static bool selected(data u)
         {
             float val = u.prior_direction_and_select;
-            return val >= select_offset;
+            return val >= SelectState.Selected;
         }
 
         protected static void set_selected(ref data u, bool selected)
         {
-            u.prior_direction_and_select = prior_direction(u) + (selected ? select_offset : _0);
+            u.prior_direction_and_select = prior_direction(u) + (selected ? SelectState.Selected : _0);
         }
 
         protected static float prior_direction(data u)
         {
             float val = u.prior_direction_and_select;
-            if (val >= select_offset) val -= select_offset;
+            if (val >= SelectState.Selected) val -= SelectState.Selected;
 
-            // Subtracting select_offset leads to some inaccuracies in the resulting fint value.
+            // Subtracting SelectState.Selected leads to some inaccuracies in the resulting fint value.
             // We fix this problem by rounding to the nearest fint.
             // An alternative solution may be to raise our epsilon tolerance in equality tests.
             val = fint_round(val);
@@ -336,30 +377,30 @@ namespace Terracotta
 
         protected static void set_prior_direction(ref data u, float dir)
         {
-            u.prior_direction_and_select = dir + (selected(u) ? select_offset : _0);
+            u.prior_direction_and_select = dir + (selected(u) ? SelectState.Selected : _0);
         }
 
         protected static bool selected(building u)
         {
             float val = u.prior_direction_and_select;
-            return val >= select_offset;
+            return val >= SelectState.Selected;
         }
 
         protected static void set_selected(ref building u, bool selected)
         {
-            u.prior_direction_and_select = prior_direction(u) + (selected ? select_offset : _0);
+            u.prior_direction_and_select = prior_direction(u) + (selected ? SelectState.Selected : _0);
         }
 
         protected static float prior_direction(building u)
         {
             float val = u.prior_direction_and_select;
-            if (val >= select_offset) val -= select_offset;
+            if (val >= SelectState.Selected) val -= SelectState.Selected;
             return val;
         }
 
         protected static void set_prior_direction(ref building u, float dir)
         {
-            u.prior_direction_and_select = dir + (selected(u) ? select_offset : _0);
+            u.prior_direction_and_select = dir + (selected(u) ? SelectState.Selected : _0);
         }
 
         protected static bool ValidDirward(dirward d)

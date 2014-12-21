@@ -82,7 +82,7 @@ float2 fs_param_Selection_Size_Inv;
 bool Terracotta__SimShader__selected(float4 u)
 {
     float val = u.b;
-    return val >= 0.5019608 - .001;
+    return val >= 0.3764706 - .001;
 }
 
 float2 Terracotta__SimShader__pack_val_2byte(float x)

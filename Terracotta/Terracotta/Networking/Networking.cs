@@ -22,6 +22,8 @@ namespace Terracotta
 
         public static void ToServer(Message message)
         {
+            message.Innermost.Immediate();
+
             //new Thread(() =>
             //{
             //    Thread.Sleep(100);
