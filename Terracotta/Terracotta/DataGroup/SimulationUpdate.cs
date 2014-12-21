@@ -26,6 +26,10 @@ namespace Terracotta
 
             Building_InfusionDiffusion();
 
+            // Update fake selection
+            UpdateFakeSelect.Apply(CurrentData, Output: Temp1);
+            Swap(ref CurrentData, ref Temp1);
+
             // Spawning
             SpawnUnits.Apply(CurrentUnits, CurrentData, PreviousData, RandomField, Magic, Output: Temp1);
             Swap(ref CurrentData, ref Temp1);

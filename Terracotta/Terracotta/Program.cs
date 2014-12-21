@@ -113,13 +113,17 @@ namespace Terracotta
 #if DEBUG
             if (args_.Length == 0)
             {
-                args_ = "--server                --port 13000 --p1 --t1 --n 1".Split(' ');
+                // Single player
+                //args_ = "--server                --port 13000 --p1 --t1 --n 1".Split(' ');
 
+                // Single player with client-server debug
                 //args_ = "--server                --port 13000 --p1 --t1 --n 1    --debug --double".Split(' ');
 
-                //args_ = "--client --ip 127.0.0.1 --port 13000 --p1 --t1 --n 2    --debug --double".Split(' ');
-                //Start("  --server                --port 13000 --p2 --t2 --n 2    --debug --double");
+                // Two player debug
+                args_ = "--client --ip 127.0.0.1 --port 13000 --p1 --t1 --n 2    --debug --double".Split(' ');
+                Start("  --server                --port 13000 --p2 --t2 --n 2    --debug --double");
 
+                // Four player debug
                 //args_ = "--server                --port 13000 --p1 --t1 --n 4   --debug --quad".Split(' ');
                 //Start("  --client --ip 127.0.0.1 --port 13000 --p2 --t2 --n 4   --debug --quad");
                 //Start("  --client --ip 127.0.0.1 --port 13000 --p3 --t3 --n 4   --debug --quad");

@@ -2,6 +2,26 @@ using FragSharpFramework;
 
 namespace Terracotta
 {
+    public partial class UpdateFakeSelect : SimShader
+    {
+        [FragmentShader]
+        data FragmentShader(VertexOut vertex, Field<data> Data)
+        {
+            data data_here = Data[Here];
+
+            float state = select_state(data_here);
+
+            if      (state == SelectState.NotSelected_Show2) state = SelectState.NotSelected_Show1;
+            else if (state == SelectState.NotSelected_Show1) state = SelectState.NotSelected_NoShow;
+            else if (state == SelectState.Selected_NoShow2) state = SelectState.Selected_NoShow1;
+            else if (state == SelectState.Selected_NoShow1) state = SelectState.Selected_Show;
+
+            set_select_state(ref data_here, state);
+
+            return data_here;
+        }
+    }
+
     public partial class ActionSelect : SimShader
     {
         [FragmentShader]
@@ -42,7 +62,7 @@ namespace Terracotta
     public partial class DataDrawMouse : SimShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, PointSampler data_texture, float player)
+        color FragmentShader(VertexOut vertex, PointSampler data_texture, [Player.Vals] float player)
         {
             unit d = unit.Nothing;
 

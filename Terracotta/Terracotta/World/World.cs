@@ -7,13 +7,6 @@ namespace Terracotta
 {
     public partial class World : SimShader
     {
-        //Migrate.Apply(World.DataGroup.CurrentUnits, Output: World.DataGroup.Temp1);
-        //CoreMath.Swap(ref World.DataGroup.Temp1, ref World.DataGroup.CurrentUnits);
-
-        //Migrate.Apply(World.DataGroup.PreviousUnits, Output: World.DataGroup.Temp1);
-        //CoreMath.Swap(ref World.DataGroup.Temp1, ref World.DataGroup.PreviousUnits);
-
-
         public World()
         {
             MyPlayerNumber = Program.StartupPlayerNumber;
@@ -43,8 +36,8 @@ namespace Terracotta
         }
 
         //const double DelayBetweenUpdates = .01;
-        //const double DelayBetweenUpdates = .3333;
-        const double DelayBetweenUpdates = 5;
+        const double DelayBetweenUpdates = .3333;
+        //const double DelayBetweenUpdates = 5;
 
         bool _MapEditor = false;
         public bool MapEditor

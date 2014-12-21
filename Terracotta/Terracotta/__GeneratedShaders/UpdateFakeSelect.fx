@@ -22,29 +22,14 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Current, using register location 1
-float2 fs_param_Current_size;
-float2 fs_param_Current_dxdy;
+// Texture Sampler for fs_param_Data, using register location 1
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
 
-Texture fs_param_Current_Texture;
-sampler fs_param_Current : register(s1) = sampler_state
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s1) = sampler_state
 {
-    texture   = <fs_param_Current_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-// Texture Sampler for fs_param_Previous, using register location 2
-float2 fs_param_Previous_size;
-float2 fs_param_Previous_dxdy;
-
-Texture fs_param_Previous_Texture;
-sampler fs_param_Previous : register(s2) = sampler_state
-{
-    texture   = <fs_param_Previous_Texture>;
+    texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -55,22 +40,6 @@ sampler fs_param_Previous : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__selected(float4 u)
-{
-    float val = u.b;
-    return val >= 0.3764706 - .001;
-}
-
-bool Terracotta__SimShader__Something(float4 u)
-{
-    return u.r > 0 + .001;
-}
-
-bool Terracotta__SimShader__IsValid(float direction)
-{
-    return direction > 0 + .001;
-}
-
 float FragSharpFramework__FragSharpStd__fint_round(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
@@ -84,10 +53,14 @@ float Terracotta__SimShader__prior_direction(float4 u)
     return val;
 }
 
-float2 Terracotta__SimShader__direction_to_vec(float direction)
+float Terracotta__SimShader__select_state(float4 u)
 {
-    float angle = (direction * 255 - 1) * (3.141593 / 2.0);
-    return Terracotta__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return u.b - Terracotta__SimShader__prior_direction(u);
+}
+
+void Terracotta__SimShader__set_select_state(inout float4 u, float state)
+{
+    u.b = Terracotta__SimShader__prior_direction(u) + state;
 }
 
 // Compiled vertex shader
@@ -104,35 +77,35 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 cur = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    float4 pre = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * fs_param_Previous_dxdy);
-    float selected_offset = Terracotta__SimShader__selected(cur) ? 0.01568628 : 0.0;
-    float anim = 0;
-    float2 vel = float2(0, 0);
-    if (Terracotta__SimShader__Something(cur) && abs(cur.g - 0.003921569) < .001)
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float state = Terracotta__SimShader__select_state(data_here);
+    if (abs(state - 0.2509804) < .001)
     {
-        anim = cur.r;
+        state = 0.1254902;
     }
     else
     {
-        if (Terracotta__SimShader__IsValid(cur.r))
+        if (abs(state - 0.1254902) < .001)
         {
-            anim = Terracotta__SimShader__prior_direction(cur);
-            vel = Terracotta__SimShader__direction_to_vec(Terracotta__SimShader__prior_direction(cur));
+            state = 0.0;
         }
         else
         {
-            __FinalOutput.Color = float4(0.0, 0.0, 0.0, 0.0);
-            return __FinalOutput;
+            if (abs(state - 0.627451) < .001)
+            {
+                state = 0.5019608;
+            }
+            else
+            {
+                if (abs(state - 0.5019608) < .001)
+                {
+                    state = 0.3764706;
+                }
+            }
         }
     }
-    float2 uv= (float2)0;
-    uv.x = 0;
-    uv.y = anim + selected_offset;
-    output.xy = uv;
-    output.zw = vel / 2 + float2(0.5, 0.5);
-    __FinalOutput.Color = output;
+    Terracotta__SimShader__set_select_state(data_here, state);
+    __FinalOutput.Color = data_here;
     return __FinalOutput;
 }
 

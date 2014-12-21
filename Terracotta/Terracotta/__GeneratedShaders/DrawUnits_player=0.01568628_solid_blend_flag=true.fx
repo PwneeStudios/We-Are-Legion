@@ -219,10 +219,7 @@ float FragSharpFramework__FragSharpStd__fint_round(float v)
 float Terracotta__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    if (val >= 0.3764706 - .001)
-    {
-        val -= 0.3764706;
-    }
+    val = fmod(val, 0.1254902);
     val = FragSharpFramework__FragSharpStd__fint_round(val);
     return val;
 }

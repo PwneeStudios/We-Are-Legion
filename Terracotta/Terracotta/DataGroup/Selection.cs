@@ -71,7 +71,7 @@ namespace Terracotta
             ActionSelect.Apply(CurrentData, CurrentUnits, SelectField, Player, Deselect, Fake, Output: Temp1);
             Swap(ref Temp1, ref CurrentData);
 
-            ActionSelect.Apply(PreviousData, CurrentUnits, SelectField, Player, Deselect, Fake, Output: Temp1);
+            ActionSelect.Apply(PreviousData, PreviousUnits, SelectField, Player, Deselect, Fake, Output: Temp1);
             Swap(ref Temp1, ref PreviousData);
         }
 

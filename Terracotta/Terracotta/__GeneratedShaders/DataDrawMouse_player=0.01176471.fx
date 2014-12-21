@@ -37,7 +37,6 @@ sampler fs_param_data_texture : register(s1) = sampler_state
     AddressV  = Wrap;
 };
 
-float fs_param_player;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
@@ -61,7 +60,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (tex2D(fs_param_data_texture, psin.TexCoords + (float2(0, 0)) * fs_param_data_texture_dxdy).a > 0 + .001)
     {
         d.r = 0.003921569;
-        d.g = fs_param_player;
+        d.g = 0.01176471;
         d.a = 1;
     }
     __FinalOutput.Color = d;

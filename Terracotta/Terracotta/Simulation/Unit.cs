@@ -359,13 +359,24 @@ namespace Terracotta
 
         protected static void set_selected(ref data u, bool selected)
         {
-            u.prior_direction_and_select = prior_direction(u) + (selected ? SelectState.Selected : _0);
+            float state = select_state(u);
+            if (selected)
+            {
+                state = show_selected(u) ? SelectState.Selected_Show : SelectState.Selected_NoShow2;
+            }
+            else
+            {
+                state = show_selected(u) ? SelectState.NotSelected_Show2 : SelectState.NotSelected_NoShow;
+            }
+
+            //u.prior_direction_and_select = prior_direction(u) + (selected ? SelectState.Selected : _0);
+            u.prior_direction_and_select = prior_direction(u) + state;
         }
 
         protected static float prior_direction(data u)
         {
             float val = u.prior_direction_and_select;
-            if (val >= SelectState.Selected) val -= SelectState.Selected;
+            val = fmod(val, SelectState.Shift);
 
             // Subtracting SelectState.Selected leads to some inaccuracies in the resulting fint value.
             // We fix this problem by rounding to the nearest fint.
@@ -375,10 +386,21 @@ namespace Terracotta
             return val;
         }
 
+        protected static float select_state(data u)
+        {
+            return u.prior_direction_and_select - prior_direction(u);
+        }
+
+        protected static void set_select_state(ref data u, float state)
+        {
+            u.prior_direction_and_select = prior_direction(u) + state;
+        }
+
         protected static void set_prior_direction(ref data u, float dir)
         {
-            u.prior_direction_and_select = dir + (selected(u) ? SelectState.Selected : _0);
+            u.prior_direction_and_select = select_state(u) + dir;
         }
+
 
         protected static bool selected(building u)
         {

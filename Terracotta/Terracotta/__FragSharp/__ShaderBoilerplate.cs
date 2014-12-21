@@ -58,6 +58,7 @@ namespace FragSharpFramework
             Terracotta.PaintTiles_UpdateUnits.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PaintTiles_UpdateUnits");
             Terracotta.PaintTiles_UpdateTiles.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PaintTiles_UpdateTiles");
             Terracotta.ActionDelete_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionDelete_Data");
+            Terracotta.UpdateFakeSelect.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UpdateFakeSelect");
             Terracotta.ActionSelect.CompiledEffect_player_0_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0_fake=true");
             Terracotta.ActionSelect.CompiledEffect_player_0_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0_fake=false");
             Terracotta.ActionSelect.CompiledEffect_player_0p003921569_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.003921569_fake=true");
@@ -68,7 +69,11 @@ namespace FragSharpFramework
             Terracotta.ActionSelect.CompiledEffect_player_0p01176471_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01176471_fake=false");
             Terracotta.ActionSelect.CompiledEffect_player_0p01568628_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01568628_fake=true");
             Terracotta.ActionSelect.CompiledEffect_player_0p01568628_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01568628_fake=false");
-            Terracotta.DataDrawMouse.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DataDrawMouse");
+            Terracotta.DataDrawMouse.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0");
+            Terracotta.DataDrawMouse.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0.003921569");
+            Terracotta.DataDrawMouse.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0.007843138");
+            Terracotta.DataDrawMouse.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0.01176471");
+            Terracotta.DataDrawMouse.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0.01568628");
             Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_1 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=1");
             Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_2 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=2");
             Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_3 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=3");
@@ -1392,6 +1397,49 @@ namespace Terracotta
 }
 
 
+namespace Terracotta
+{
+    public partial class UpdateFakeSelect
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D Data, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Data, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Data, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data);
+        }
+        public static void Using(Texture2D Data, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data);
+        }
+        public static void Using(Texture2D Data)
+        {
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
 
 
 
@@ -1475,11 +1523,19 @@ namespace Terracotta
 }
 
 
+
+
+
+
 namespace Terracotta
 {
     public partial class DataDrawMouse
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_player_0;
+        public static Effect CompiledEffect_player_0p003921569;
+        public static Effect CompiledEffect_player_0p007843138;
+        public static Effect CompiledEffect_player_0p01176471;
+        public static Effect CompiledEffect_player_0p01568628;
 
         public static void Apply(Texture2D data_texture, float player, RenderTarget2D Output, Color Clear)
         {
@@ -1509,10 +1565,19 @@ namespace Terracotta
         }
         public static void Using(Texture2D data_texture, float player)
         {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
+            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
+            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
+            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
+            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["fs_param_data_texture_Texture"].SetValue(FragSharpMarshal.Marshal(data_texture));
             CompiledEffect.Parameters["fs_param_data_texture_size"].SetValue(FragSharpMarshal.Marshal(vec(data_texture.Width, data_texture.Height)));
             CompiledEffect.Parameters["fs_param_data_texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(data_texture.Width, data_texture.Height)));
-            CompiledEffect.Parameters["fs_param_player"].SetValue(FragSharpMarshal.Marshal(player));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

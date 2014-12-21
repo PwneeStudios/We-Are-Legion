@@ -92,10 +92,7 @@ float FragSharpFramework__FragSharpStd__fint_round(float v)
 float Terracotta__SimShader__prior_direction(float4 u)
 {
     float val = u.b;
-    if (val >= 0.3764706 - .001)
-    {
-        val -= 0.3764706;
-    }
+    val = fmod(val, 0.1254902);
     val = FragSharpFramework__FragSharpStd__fint_round(val);
     return val;
 }
@@ -116,9 +113,29 @@ void Terracotta__SimShader__set_selected_fake(inout float4 u, bool fake_selected
     u.b = prior_dir + select_state;
 }
 
+float Terracotta__SimShader__select_state(float4 u)
+{
+    return u.b - Terracotta__SimShader__prior_direction(u);
+}
+
+bool Terracotta__SimShader__show_selected(float4 u)
+{
+    float val = u.b;
+    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
+}
+
 void Terracotta__SimShader__set_selected(inout float4 u, bool selected)
 {
-    u.b = Terracotta__SimShader__prior_direction(u) + (selected ? 0.3764706 : 0.0);
+    float state = Terracotta__SimShader__select_state(u);
+    if (selected)
+    {
+        state = Terracotta__SimShader__show_selected(u) ? 0.3764706 : 0.627451;
+    }
+    else
+    {
+        state = Terracotta__SimShader__show_selected(u) ? 0.2509804 : 0.0;
+    }
+    u.b = Terracotta__SimShader__prior_direction(u) + state;
 }
 
 // Compiled vertex shader
