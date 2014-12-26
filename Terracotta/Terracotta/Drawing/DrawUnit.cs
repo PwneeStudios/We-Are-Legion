@@ -45,7 +45,7 @@ namespace Terracotta
 
         protected color SolidColor(float player, data data, unit unit)
         {
-            return unit.player == player && show_selected(data) ? SelectedUnitColor.Get(unit.player) : UnitColor.Get(unit.player);           
+            return unit.player == player && fake_selected(data) ? SelectedUnitColor.Get(unit.player) : UnitColor.Get(unit.player);           
         }
 
         protected color Sprite(float player, data d, unit u, vec2 pos, float frame, PointSampler Texture,
@@ -55,7 +55,7 @@ namespace Terracotta
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            bool draw_selected = u.player == player && show_selected(d) && pos.y > selection_size;
+            bool draw_selected = u.player == player && fake_selected(d) && pos.y > selection_size;
 
             pos.x += floor(frame);
             pos.y += Dir.Num(d) + 4 * Player.Num(u) + 4 * 4 * UnitType.UnitIndex(u);
@@ -85,7 +85,7 @@ namespace Terracotta
                 return color.TransparentBlack;
 
             //bool draw_selected = u.player == player && show_selected(d) && pos.y > selection_size;
-            bool draw_selected = u.player == player && show_selected(d);
+            bool draw_selected = u.player == player && fake_selected(d);
 
             var clr = Texture[pos];
 

@@ -12,7 +12,10 @@ namespace Terracotta
             Swap(ref TargetData, ref Temp1);
         }
 
-        public void Building_SelectionSpread()
+        /// <summary>
+        /// Warning: This is not network synchronized. Should only affect local clients fake selection field.
+        /// </summary>
+        public void Building_FakeSelectionSpread()
         {
             BuildingInfusion_Selection.Apply(CurrentUnits, CurrentData, Output: Temp1);
             Swap(ref CurrentData, ref Temp1);

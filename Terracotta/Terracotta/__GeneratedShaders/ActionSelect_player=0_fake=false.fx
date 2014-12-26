@@ -118,7 +118,7 @@ float Terracotta__SimShader__select_state__Terracotta_data(float4 u)
     return u.b - Terracotta__SimShader__prior_direction__Terracotta_data(u);
 }
 
-bool Terracotta__SimShader__show_selected__Terracotta_data(float4 u)
+bool Terracotta__SimShader__fake_selected__Terracotta_data(float4 u)
 {
     float val = u.b;
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
@@ -129,11 +129,11 @@ void Terracotta__SimShader__set_selected__Terracotta_data__bool(inout float4 u, 
     float state = Terracotta__SimShader__select_state__Terracotta_data(u);
     if (selected)
     {
-        state = Terracotta__SimShader__show_selected__Terracotta_data(u) ? 0.3764706 : 0.627451;
+        state = Terracotta__SimShader__fake_selected__Terracotta_data(u) ? 0.3764706 : 0.627451;
     }
     else
     {
-        state = Terracotta__SimShader__show_selected__Terracotta_data(u) ? 0.2509804 : 0.0;
+        state = Terracotta__SimShader__fake_selected__Terracotta_data(u) ? 0.2509804 : 0.0;
     }
     u.b = Terracotta__SimShader__prior_direction__Terracotta_data(u) + state;
 }

@@ -159,7 +159,7 @@ bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__show_selected__Terracotta_data(float4 u)
+bool Terracotta__SimShader__fake_selected__Terracotta_data(float4 u)
 {
     float val = u.b;
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
@@ -192,7 +192,7 @@ float4 Terracotta__DrawUnits__ShadowSprite__float__Terracotta_data__Terracotta_u
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__show_selected__Terracotta_data(d);
+    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__fake_selected__Terracotta_data(d);
     float4 clr = tex2D(Texture, pos);
     if (draw_selected)
     {
@@ -281,7 +281,7 @@ float4 Terracotta__UnitColor__Get__float(VertexToPixel psin, float player)
 
 float4 Terracotta__DrawUnits__SolidColor__float__Terracotta_data__Terracotta_unit(VertexToPixel psin, float player, float4 data, float4 unit)
 {
-    return abs(unit.g - player) < .001 && Terracotta__SimShader__show_selected__Terracotta_data(data) ? Terracotta__SelectedUnitColor__Get__float(psin, unit.g) : Terracotta__UnitColor__Get__float(psin, unit.g);
+    return abs(unit.g - player) < .001 && Terracotta__SimShader__fake_selected__Terracotta_data(data) ? Terracotta__SelectedUnitColor__Get__float(psin, unit.g) : Terracotta__UnitColor__Get__float(psin, unit.g);
 }
 
 float4 Terracotta__DrawUnits__Sprite__float__Terracotta_data__Terracotta_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler__float__float__bool__float(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
@@ -290,7 +290,7 @@ float4 Terracotta__DrawUnits__Sprite__float__Terracotta_data__Terracotta_unit__F
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__show_selected__Terracotta_data(d) && pos.y > selection_size + .001;
+    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__fake_selected__Terracotta_data(d) && pos.y > selection_size + .001;
     pos.x += floor(frame);
     pos.y += Terracotta__Dir__Num__Terracotta_data(d) + 4 * Terracotta__Player__Num__Terracotta_unit(u) + 4 * 4 * Terracotta__UnitType__UnitIndex__Terracotta_unit(u);
     pos *= float2(1.0 / 32, 1.0 / 96);

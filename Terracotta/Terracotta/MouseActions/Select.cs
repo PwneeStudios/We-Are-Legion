@@ -40,7 +40,7 @@ namespace Terracotta
 
             unit select = Select[Here];
 
-            // If the player unit here matches the 
+            // If the player unit here matches the specified player.
             if (select.type > 0 && (select.player == Player.None || unit_here.player == select.player) && !BlockingTileHere(unit_here))
             {
                 if (fake) set_selected_fake(ref data_here, true);

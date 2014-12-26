@@ -61,7 +61,7 @@ namespace Terracotta
             {
                 unit unit_here = Units[Here];
                 
-                bool valid = (player == Player.None || unit_here.player == player) && (!only_selected || show_selected(data_here));
+                bool valid = (player == Player.None || unit_here.player == player) && (!only_selected || fake_selected(data_here));
 
                 if (IsUnit(unit_here) && valid)
                     output.xyz = pack_coord_3byte(1);

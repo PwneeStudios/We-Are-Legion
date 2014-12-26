@@ -50,19 +50,19 @@ namespace Terracotta
                     down_left = Building[DownLeft];
 
                 // Select this center if any part of the building is selected
-                if (!selected(building_here))
+                if (!fake_selected(building_here))
                 {
-                    bool is_selected =
-                        selected(right) ||
-                        selected(up) ||
-                        selected(left) ||
-                        selected(down) ||
-                        selected(up_right) ||
-                        selected(up_left) ||
-                        selected(down_right) ||
-                        selected(down_left);
+                    bool is_fake_selected =
+                        fake_selected(right) ||
+                        fake_selected(up) ||
+                        fake_selected(left) ||
+                        fake_selected(down) ||
+                        fake_selected(up_right) ||
+                        fake_selected(up_left) ||
+                        fake_selected(down_right) ||
+                        fake_selected(down_left);
 
-                    set_selected(ref building_here, is_selected);
+                    set_selected_fake(ref building_here, is_fake_selected);
                 }
             }
 
@@ -84,7 +84,7 @@ namespace Terracotta
 
                 if (!Something(center)) return building.Nothing;
 
-                set_selected(ref building_here, selected(center));
+                set_selected_fake(ref building_here, fake_selected(center));
             }
 
             return building_here;

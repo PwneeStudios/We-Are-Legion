@@ -136,6 +136,7 @@ namespace Terracotta
         public override void Immediate()
         {
             GameClass.Data.SelectAlongLine(v1, v2, size, deselect, true, Player.Vals[Action.PlayerNumber], true, Fake: true);
+            GameClass.Data.Building_FakeSelectionSpread();
         }
 
         public override void Do()

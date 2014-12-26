@@ -574,11 +574,6 @@ namespace Terracotta
 
             if (CurUserMode != UserMode.Select) return;
 
-            if (Input.LeftMouseDown)
-            {
-                DataGroup.Building_SelectionSpread();
-            }
-
             if (MapEditorActive)
             {
                 if (Keys.C.Down() || Keys.V.Down() || Keys.N.Down())

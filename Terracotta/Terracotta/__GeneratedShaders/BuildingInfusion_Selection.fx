@@ -70,15 +70,21 @@ bool Terracotta__SimShader__IsCenter__Terracotta_building(float4 b)
     return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
 }
 
+bool Terracotta__SimShader__fake_selected__Terracotta_data(float4 u)
+{
+    float val = u.b;
+    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
+}
+
+bool Terracotta__SimShader__fake_selected__Terracotta_building(float4 u)
+{
+    return Terracotta__SimShader__fake_selected__Terracotta_data(u);
+}
+
 bool Terracotta__SimShader__selected__Terracotta_data(float4 u)
 {
     float val = u.b;
     return val >= 0.3764706 - .001;
-}
-
-bool Terracotta__SimShader__selected__Terracotta_building(float4 u)
-{
-    return Terracotta__SimShader__selected__Terracotta_data(u);
 }
 
 float FragSharpFramework__FragSharpStd__fint_round__float(float v)
@@ -94,35 +100,26 @@ float Terracotta__SimShader__prior_direction__Terracotta_data(float4 u)
     return val;
 }
 
-float Terracotta__SimShader__select_state__Terracotta_data(float4 u)
+void Terracotta__SimShader__set_selected_fake__Terracotta_data__bool(inout float4 u, bool fake_selected)
 {
-    return u.b - Terracotta__SimShader__prior_direction__Terracotta_data(u);
-}
-
-bool Terracotta__SimShader__show_selected__Terracotta_data(float4 u)
-{
-    float val = u.b;
-    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
-}
-
-void Terracotta__SimShader__set_selected__Terracotta_data__bool(inout float4 u, bool selected)
-{
-    float state = Terracotta__SimShader__select_state__Terracotta_data(u);
-    if (selected)
+    bool is_selected = Terracotta__SimShader__selected__Terracotta_data(u);
+    float prior_dir = Terracotta__SimShader__prior_direction__Terracotta_data(u);
+    float select_state= (float)0;
+    if (fake_selected)
     {
-        state = Terracotta__SimShader__show_selected__Terracotta_data(u) ? 0.3764706 : 0.627451;
+        select_state = is_selected ? 0.3764706 : 0.2509804;
     }
     else
     {
-        state = Terracotta__SimShader__show_selected__Terracotta_data(u) ? 0.2509804 : 0.0;
+        select_state = is_selected ? 0.627451 : 0.0;
     }
-    u.b = Terracotta__SimShader__prior_direction__Terracotta_data(u) + state;
+    u.b = prior_dir + select_state;
 }
 
-void Terracotta__SimShader__set_selected__Terracotta_building__bool(inout float4 u, bool selected)
+void Terracotta__SimShader__set_selected_fake__Terracotta_building__bool(inout float4 u, bool selected)
 {
     float4 d = u;
-    Terracotta__SimShader__set_selected__Terracotta_data__bool(d, selected);
+    Terracotta__SimShader__set_selected_fake__Terracotta_data__bool(d, selected);
     u = d;
 }
 
@@ -145,10 +142,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (Terracotta__SimShader__Something__Terracotta_building(building_here) && Terracotta__SimShader__IsBuilding__Terracotta_unit(unit_here) && Terracotta__SimShader__IsCenter__Terracotta_building(building_here))
     {
         float4 right = tex2D(fs_param_Building, psin.TexCoords + (float2(1, 0)) * fs_param_Building_dxdy), up = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 1)) * fs_param_Building_dxdy), left = tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 0)) * fs_param_Building_dxdy), down = tex2D(fs_param_Building, psin.TexCoords + (float2(0, -(1))) * fs_param_Building_dxdy), up_right = tex2D(fs_param_Building, psin.TexCoords + (float2(1, 1)) * fs_param_Building_dxdy), up_left = tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 1)) * fs_param_Building_dxdy), down_right = tex2D(fs_param_Building, psin.TexCoords + (float2(1, -(1))) * fs_param_Building_dxdy), down_left = tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Building_dxdy);
-        if (!(Terracotta__SimShader__selected__Terracotta_building(building_here)))
+        if (!(Terracotta__SimShader__fake_selected__Terracotta_building(building_here)))
         {
-            bool is_selected = Terracotta__SimShader__selected__Terracotta_building(right) || Terracotta__SimShader__selected__Terracotta_building(up) || Terracotta__SimShader__selected__Terracotta_building(left) || Terracotta__SimShader__selected__Terracotta_building(down) || Terracotta__SimShader__selected__Terracotta_building(up_right) || Terracotta__SimShader__selected__Terracotta_building(up_left) || Terracotta__SimShader__selected__Terracotta_building(down_right) || Terracotta__SimShader__selected__Terracotta_building(down_left);
-            Terracotta__SimShader__set_selected__Terracotta_building__bool(building_here, is_selected);
+            bool is_fake_selected = Terracotta__SimShader__fake_selected__Terracotta_building(right) || Terracotta__SimShader__fake_selected__Terracotta_building(up) || Terracotta__SimShader__fake_selected__Terracotta_building(left) || Terracotta__SimShader__fake_selected__Terracotta_building(down) || Terracotta__SimShader__fake_selected__Terracotta_building(up_right) || Terracotta__SimShader__fake_selected__Terracotta_building(up_left) || Terracotta__SimShader__fake_selected__Terracotta_building(down_right) || Terracotta__SimShader__fake_selected__Terracotta_building(down_left);
+            Terracotta__SimShader__set_selected_fake__Terracotta_building__bool(building_here, is_fake_selected);
         }
     }
     __FinalOutput.Color = building_here;

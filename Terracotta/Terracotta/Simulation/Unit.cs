@@ -327,13 +327,14 @@ namespace Terracotta
                 Shift = _32;
         }
 
-        protected static bool show_selected(building u) { return show_selected((data)(vec4)u); }
-        protected static bool show_selected(data u)
+        protected static bool fake_selected(building u) { return fake_selected((data)(vec4)u); }
+        protected static bool fake_selected(data u)
         {
             float val = u.prior_direction_and_select;
             return SelectState.FirstShow <= val && val < SelectState.LastShow;
         }
 
+        protected static void set_selected_fake(ref building u, bool selected) { data d = (data)(vec4)u; set_selected_fake(ref d, selected); u = (building)(vec4)d; }
         protected static void set_selected_fake(ref data u, bool fake_selected)
         {
             bool is_selected = selected(u);
@@ -365,11 +366,11 @@ namespace Terracotta
             float state = select_state(u);
             if (selected)
             {
-                state = show_selected(u) ? SelectState.Selected_Show : SelectState.Selected_NoShow2;
+                state = fake_selected(u) ? SelectState.Selected_Show : SelectState.Selected_NoShow2;
             }
             else
             {
-                state = show_selected(u) ? SelectState.NotSelected_Show2 : SelectState.NotSelected_NoShow;
+                state = fake_selected(u) ? SelectState.NotSelected_Show2 : SelectState.NotSelected_NoShow;
             }
 
             u.prior_direction_and_select = prior_direction(u) + state;

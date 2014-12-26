@@ -72,6 +72,12 @@ float2 Terracotta__SimShader__center_dir__Terracotta_building(float4 b)
     return part;
 }
 
+bool Terracotta__SimShader__selected__Terracotta_data(float4 u)
+{
+    float val = u.b;
+    return val >= 0.3764706 - .001;
+}
+
 float FragSharpFramework__FragSharpStd__fint_round__float(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
@@ -85,47 +91,38 @@ float Terracotta__SimShader__prior_direction__Terracotta_data(float4 u)
     return val;
 }
 
-float Terracotta__SimShader__select_state__Terracotta_data(float4 u)
+void Terracotta__SimShader__set_selected_fake__Terracotta_data__bool(inout float4 u, bool fake_selected)
 {
-    return u.b - Terracotta__SimShader__prior_direction__Terracotta_data(u);
+    bool is_selected = Terracotta__SimShader__selected__Terracotta_data(u);
+    float prior_dir = Terracotta__SimShader__prior_direction__Terracotta_data(u);
+    float select_state= (float)0;
+    if (fake_selected)
+    {
+        select_state = is_selected ? 0.3764706 : 0.2509804;
+    }
+    else
+    {
+        select_state = is_selected ? 0.627451 : 0.0;
+    }
+    u.b = prior_dir + select_state;
 }
 
-bool Terracotta__SimShader__show_selected__Terracotta_data(float4 u)
+void Terracotta__SimShader__set_selected_fake__Terracotta_building__bool(inout float4 u, bool selected)
+{
+    float4 d = u;
+    Terracotta__SimShader__set_selected_fake__Terracotta_data__bool(d, selected);
+    u = d;
+}
+
+bool Terracotta__SimShader__fake_selected__Terracotta_data(float4 u)
 {
     float val = u.b;
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-void Terracotta__SimShader__set_selected__Terracotta_data__bool(inout float4 u, bool selected)
+bool Terracotta__SimShader__fake_selected__Terracotta_building(float4 u)
 {
-    float state = Terracotta__SimShader__select_state__Terracotta_data(u);
-    if (selected)
-    {
-        state = Terracotta__SimShader__show_selected__Terracotta_data(u) ? 0.3764706 : 0.627451;
-    }
-    else
-    {
-        state = Terracotta__SimShader__show_selected__Terracotta_data(u) ? 0.2509804 : 0.0;
-    }
-    u.b = Terracotta__SimShader__prior_direction__Terracotta_data(u) + state;
-}
-
-void Terracotta__SimShader__set_selected__Terracotta_building__bool(inout float4 u, bool selected)
-{
-    float4 d = u;
-    Terracotta__SimShader__set_selected__Terracotta_data__bool(d, selected);
-    u = d;
-}
-
-bool Terracotta__SimShader__selected__Terracotta_data(float4 u)
-{
-    float val = u.b;
-    return val >= 0.3764706 - .001;
-}
-
-bool Terracotta__SimShader__selected__Terracotta_building(float4 u)
-{
-    return Terracotta__SimShader__selected__Terracotta_data(u);
+    return Terracotta__SimShader__fake_selected__Terracotta_data(u);
 }
 
 // Compiled vertex shader
@@ -152,7 +149,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             __FinalOutput.Color = float4(0, 0, 0, 0);
             return __FinalOutput;
         }
-        Terracotta__SimShader__set_selected__Terracotta_building__bool(building_here, Terracotta__SimShader__selected__Terracotta_building(center));
+        Terracotta__SimShader__set_selected_fake__Terracotta_building__bool(building_here, Terracotta__SimShader__fake_selected__Terracotta_building(center));
     }
     __FinalOutput.Color = building_here;
     return __FinalOutput;

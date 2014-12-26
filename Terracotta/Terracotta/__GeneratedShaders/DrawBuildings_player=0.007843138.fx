@@ -124,15 +124,15 @@ float4 Terracotta__DrawBuildings__ExplosionSprite__Terracotta_building__Terracot
     return tex2D(Texture, pos);
 }
 
-bool Terracotta__SimShader__show_selected__Terracotta_data(float4 u)
+bool Terracotta__SimShader__fake_selected__Terracotta_data(float4 u)
 {
     float val = u.b;
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-bool Terracotta__SimShader__show_selected__Terracotta_building(float4 u)
+bool Terracotta__SimShader__fake_selected__Terracotta_building(float4 u)
 {
-    return Terracotta__SimShader__show_selected__Terracotta_data(u);
+    return Terracotta__SimShader__fake_selected__Terracotta_data(u);
 }
 
 float2 FragSharpFramework__FragSharpStd__Float__FragSharpFramework_vec2(float2 v)
@@ -156,7 +156,7 @@ float4 Terracotta__DrawBuildings__Sprite__float__Terracotta_building__Terracotta
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__show_selected__Terracotta_building(b);
+    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__fake_selected__Terracotta_building(b);
     float selected_offset = draw_selected ? 3 : 0;
     pos += FragSharpFramework__FragSharpStd__Float__FragSharpFramework_vec2(float2(b.g, b.a));
     pos.x += FragSharpFramework__FragSharpStd__Float__float(u.g) * 3;
