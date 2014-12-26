@@ -35,9 +35,9 @@ namespace Terracotta
             Minimap = new RenderTarget2D(GameClass.Game.GraphicsDevice, 256, 256);
         }
 
-        //const double DelayBetweenUpdates = .01;
-        const double DelayBetweenUpdates = .3333;
-        //const double DelayBetweenUpdates = 5;
+        //const double DelayBetweenUpdates = .01; // Super fast
+        //const double DelayBetweenUpdates = .3333; // Normal speed
+        const double DelayBetweenUpdates = 5; // Super slow
 
         bool _MapEditor = false;
         public bool MapEditor

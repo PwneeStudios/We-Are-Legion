@@ -43,6 +43,12 @@ namespace Terracotta
         }
     }
 
+    /// <summary>
+    /// Warning: If only counting selected unit this result is /not/ network consistent.
+    /// The counting of selected units depends on client-side only /fake/ selection state.
+    /// Any action taken with this number must have this number sent with it in the network message.
+    /// Note: Counting units without regard to selection /is/ network consistent.
+    /// </summary>
     public partial class CountUnits : SimShader
     {
         [FragmentShader]
@@ -55,7 +61,7 @@ namespace Terracotta
             {
                 unit unit_here = Units[Here];
                 
-                bool valid = (player == Player.None || unit_here.player == player) && (!only_selected || selected(data_here));
+                bool valid = (player == Player.None || unit_here.player == player) && (!only_selected || show_selected(data_here));
 
                 if (IsUnit(unit_here) && valid)
                     output.xyz = pack_coord_3byte(1);
