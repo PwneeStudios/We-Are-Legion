@@ -59,7 +59,7 @@ float fs_param_blend;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
+float2 Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -67,24 +67,24 @@ float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_
     return coords - float2(i, j);
 }
 
-bool Terracotta__SimShader__CorpsePresent(float4 u)
+bool Terracotta__SimShader__CorpsePresent__Terracotta_corpse(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-float FragSharpFramework__FragSharpStd__Float(float v)
+float FragSharpFramework__FragSharpStd__Float__float(float v)
 {
     return floor(255 * v + 0.5);
 }
 
-float4 Terracotta__DrawCorpses__Sprite(VertexToPixel psin, float4 c, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 Terracotta__DrawCorpses__Sprite__Terracotta_corpse__FragSharpFramework_vec2__FragSharpFramework_PointSampler(VertexToPixel psin, float4 c, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    pos.x += FragSharpFramework__FragSharpStd__Float(0.09411765);
-    pos.y += FragSharpFramework__FragSharpStd__Float(c.r) - 1;
+    pos.x += FragSharpFramework__FragSharpStd__Float__float(0.09411765);
+    pos.y += FragSharpFramework__FragSharpStd__Float__float(c.r) - 1;
     pos *= float2(1.0 / 32, 1.0 / 96);
     float4 clr = tex2D(Texture, pos);
     return clr;
@@ -108,10 +108,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 here = tex2D(fs_param_Corpses, psin.TexCoords + (float2(0, 0)) * fs_param_Corpses_dxdy);
-    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos(psin, fs_param_Corpses_size);
-    if (Terracotta__SimShader__CorpsePresent(here))
+    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_Corpses_size);
+    if (Terracotta__SimShader__CorpsePresent__Terracotta_corpse(here))
     {
-        output += Terracotta__DrawCorpses__Sprite(psin, here, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+        output += Terracotta__DrawCorpses__Sprite__Terracotta_corpse__FragSharpFramework_vec2__FragSharpFramework_PointSampler(psin, here, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         output *= fs_param_blend;
     }
     __FinalOutput.Color = output;

@@ -100,12 +100,12 @@ sampler fs_param_Necromancy : register(s5) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__CorpsePresent(float4 u)
+bool Terracotta__SimShader__CorpsePresent__Terracotta_corpse(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
@@ -130,7 +130,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 cur_data = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy), prev_data = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousData_dxdy);
     here.r = 0.0;
     here.g = 0.0;
-    if (Terracotta__SimShader__CorpsePresent(corpse_here) && !(Terracotta__SimShader__Something(cur_data)) && !(Terracotta__SimShader__Something(prev_data)))
+    if (Terracotta__SimShader__CorpsePresent__Terracotta_corpse(corpse_here) && !(Terracotta__SimShader__Something__Terracotta_data(cur_data)) && !(Terracotta__SimShader__Something__Terracotta_data(prev_data)))
     {
         float player = 0.0;
         float necro = 0.0;

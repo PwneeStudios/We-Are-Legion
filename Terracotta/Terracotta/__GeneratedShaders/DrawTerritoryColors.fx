@@ -58,12 +58,12 @@ sampler fs_param_FarColor : register(s2) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float FragSharpFramework__FragSharpStd__min(float a, float b, float c)
+float FragSharpFramework__FragSharpStd__min__float__float__float(float a, float b, float c)
 {
     return min(min(a, b), c);
 }
 
-float4 Terracotta__TerritoryColor__Get(VertexToPixel psin, float player)
+float4 Terracotta__TerritoryColor__Get__float(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
@@ -101,24 +101,24 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 dist = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 0)) * fs_param_Path_dxdy);
-    float4 enemy_dist = float4(FragSharpFramework__FragSharpStd__min(dist.y, dist.z, dist.w), FragSharpFramework__FragSharpStd__min(dist.x, dist.z, dist.w), FragSharpFramework__FragSharpStd__min(dist.x, dist.y, dist.w), FragSharpFramework__FragSharpStd__min(dist.x, dist.y, dist.z));
+    float4 enemy_dist = float4(FragSharpFramework__FragSharpStd__min__float__float__float(dist.y, dist.z, dist.w), FragSharpFramework__FragSharpStd__min__float__float__float(dist.x, dist.z, dist.w), FragSharpFramework__FragSharpStd__min__float__float__float(dist.x, dist.y, dist.w), FragSharpFramework__FragSharpStd__min__float__float__float(dist.x, dist.y, dist.z));
     float4 clr = float4(0.0, 0.0, 0.0, 0.0);
     float _blend = 1;
     if (dist.x < 0.02745098 - .001 && dist.x < enemy_dist.x - .001)
     {
-        clr = Terracotta__TerritoryColor__Get(psin, 0.003921569 + ((int)dist.x / 100));
+        clr = Terracotta__TerritoryColor__Get__float(psin, 0.003921569 + ((int)dist.x / 100));
     }
     if (dist.y < 0.02745098 - .001 && dist.y < enemy_dist.y - .001)
     {
-        clr = Terracotta__TerritoryColor__Get(psin, 0.007843138 + ((int)dist.x / 100));
+        clr = Terracotta__TerritoryColor__Get__float(psin, 0.007843138 + ((int)dist.x / 100));
     }
     if (dist.z < 0.02745098 - .001 && dist.z < enemy_dist.z - .001)
     {
-        clr = Terracotta__TerritoryColor__Get(psin, 0.01176471 + ((int)dist.x / 100));
+        clr = Terracotta__TerritoryColor__Get__float(psin, 0.01176471 + ((int)dist.x / 100));
     }
     if (dist.w < 0.02745098 - .001 && dist.w < enemy_dist.w - .001)
     {
-        clr = Terracotta__TerritoryColor__Get(psin, 0.01568628 + ((int)dist.x / 100));
+        clr = Terracotta__TerritoryColor__Get__float(psin, 0.01568628 + ((int)dist.x / 100));
     }
     clr *= _blend;
     clr.a *= fs_param_blend;

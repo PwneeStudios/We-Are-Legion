@@ -73,7 +73,7 @@ sampler fs_param_FarColor : register(s3) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
+float2 Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -81,17 +81,17 @@ float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_
     return coords - float2(i, j);
 }
 
-float FragSharpFramework__FragSharpStd__Float(float v)
+float FragSharpFramework__FragSharpStd__Float__float(float v)
 {
     return floor(255 * v + 0.5);
 }
 
-int FragSharpFramework__FragSharpStd__Int(float v)
+int FragSharpFramework__FragSharpStd__Int__float(float v)
 {
     return (int)floor(255 * v + 0.5);
 }
 
-float4 Terracotta__DrawTiles__Sprite(VertexToPixel psin, float4 c, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, bool solid_blend_flag, float solid_blend)
+float4 Terracotta__DrawTiles__Sprite__Terracotta_tile__FragSharpFramework_vec2__FragSharpFramework_PointSampler__bool__float(VertexToPixel psin, float4 c, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, bool solid_blend_flag, float solid_blend)
 {
     float4 clr = float4(0.0, 0.0, 0.0, 0.0);
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
@@ -99,13 +99,13 @@ float4 Terracotta__DrawTiles__Sprite(VertexToPixel psin, float4 c, float2 pos, s
         return clr;
     }
     pos = pos * 0.98 + float2(0.01, 0.01);
-    pos.x += FragSharpFramework__FragSharpStd__Float(c.g);
-    pos.y += FragSharpFramework__FragSharpStd__Float(c.b);
+    pos.x += FragSharpFramework__FragSharpStd__Float__float(c.g);
+    pos.y += FragSharpFramework__FragSharpStd__Float__float(c.b);
     pos *= float2(1.0 / 32, 1.0 / 32);
     clr = tex2D(Texture, pos);
     if (solid_blend_flag)
     {
-        float4 solid_clr = tex2D(fs_param_FarColor, float2(FragSharpFramework__FragSharpStd__Int(c.r)+.5,.5+ 6 + (int)(c.r)) * fs_param_FarColor_dxdy);
+        float4 solid_clr = tex2D(fs_param_FarColor, float2(FragSharpFramework__FragSharpStd__Int__float(c.r)+.5,.5+ 6 + (int)(c.r)) * fs_param_FarColor_dxdy);
         clr = solid_blend * clr + (1 - solid_blend) * solid_clr;
     }
     return clr;
@@ -128,12 +128,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos(psin, fs_param_Tiles_size);
+    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_Tiles_size);
     float4 here = float4(0, 0, 0, 0);
     here.g = 0.0;
     here.b = 0.09803922;
     here.r = 0.01960784;
-    output += Terracotta__DrawTiles__Sprite(psin, here, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, true, fs_param_solid_blend);
+    output += Terracotta__DrawTiles__Sprite__Terracotta_tile__FragSharpFramework_vec2__FragSharpFramework_PointSampler__bool__float(psin, here, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, true, fs_param_solid_blend);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

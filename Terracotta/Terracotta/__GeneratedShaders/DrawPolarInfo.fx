@@ -72,7 +72,7 @@ sampler fs_param_Texture : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
+float2 Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -80,7 +80,7 @@ float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_
     return coords - float2(i, j);
 }
 
-float4 Terracotta__DrawDebugInfo__DrawDebugInfoTile(VertexToPixel psin, float index_x, float index_y, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float2 SpriteSize)
+float4 Terracotta__DrawDebugInfo__DrawDebugInfoTile__float__float__FragSharpFramework_vec2__FragSharpFramework_PointSampler__FragSharpFramework_vec2(VertexToPixel psin, float index_x, float index_y, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float2 SpriteSize)
 {
     float4 clr = float4(0.0, 0.0, 0.0, 0.0);
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
@@ -95,12 +95,12 @@ float4 Terracotta__DrawDebugInfo__DrawDebugInfoTile(VertexToPixel psin, float in
     return clr;
 }
 
-float4 Terracotta__DrawDebugInfo__DrawDebugNum(VertexToPixel psin, float num, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 Terracotta__DrawDebugInfo__DrawDebugNum__float__FragSharpFramework_vec2__FragSharpFramework_PointSampler(VertexToPixel psin, float num, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
-    return Terracotta__DrawDebugInfo__DrawDebugInfoTile(psin, num, 0.0, pos, Texture, Texture_size, Texture_dxdy, float2(1.0 / 128, 1.0 / 4));
+    return Terracotta__DrawDebugInfo__DrawDebugInfoTile__float__float__FragSharpFramework_vec2__FragSharpFramework_PointSampler__FragSharpFramework_vec2(psin, num, 0.0, pos, Texture, Texture_size, Texture_dxdy, float2(1.0 / 128, 1.0 / 4));
 }
 
-float Terracotta__SimShader__unpack_val(float2 packed)
+float Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(float2 packed)
 {
     float coord = 0;
     packed = floor(255.0 * packed + float2(0.5, 0.5));
@@ -127,29 +127,29 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy);
     float dist = 0;
-    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos(psin, fs_param_Geo_size);
+    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_Geo_size);
     if (here.r > 0.0 + .001)
     {
         if (all(subcell_pos > float2(0.5, 0.5) + .001))
         {
-            float2 subcell_pos_1 = Terracotta__SimShader__get_subcell_pos(psin, fs_param_Geo_size * 2);
-            output += Terracotta__DrawDebugInfo__DrawDebugNum(psin, Terracotta__SimShader__unpack_val(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).xy), subcell_pos_1, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy) * float4(1, 0.5019608, 0.5019608, 1.0);
+            float2 subcell_pos_1 = Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_Geo_size * 2);
+            output += Terracotta__DrawDebugInfo__DrawDebugNum__float__FragSharpFramework_vec2__FragSharpFramework_PointSampler(psin, Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).xy), subcell_pos_1, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy) * float4(1, 0.5019608, 0.5019608, 1.0);
         }
         if (all(subcell_pos < float2(0.5, 0.5) - .001))
         {
-            float2 subcell_pos_2 = Terracotta__SimShader__get_subcell_pos(psin, fs_param_Geo_size * 2);
-            output += Terracotta__DrawDebugInfo__DrawDebugNum(psin, Terracotta__SimShader__unpack_val(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).zw), subcell_pos_2, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy) * float4(1, 0.5019608, 0.5019608, 1.0);
+            float2 subcell_pos_2 = Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_Geo_size * 2);
+            output += Terracotta__DrawDebugInfo__DrawDebugNum__float__FragSharpFramework_vec2__FragSharpFramework_PointSampler(psin, Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).zw), subcell_pos_2, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy) * float4(1, 0.5019608, 0.5019608, 1.0);
         }
         __FinalOutput.Color = output;
         return __FinalOutput;
     }
     if (subcell_pos.y > 0.5 + .001)
     {
-        dist = Terracotta__SimShader__unpack_val(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).xy);
+        dist = Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).xy);
     }
     else
     {
-        dist = Terracotta__SimShader__unpack_val(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).zw);
+        dist = Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).zw);
     }
     if (here.r > 0.0 + .001)
     {

@@ -101,7 +101,7 @@ sampler fs_param_ShiftedInfo : register(s5) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float Terracotta__SimShader__unpack_val(float2 packed)
+float Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(float2 packed)
 {
     float coord = 0;
     packed = floor(255.0 * packed + float2(0.5, 0.5));
@@ -135,7 +135,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         __FinalOutput.Color = tex2D(fs_param_Dirward, psin.TexCoords + (float2(0, 0)) * fs_param_Dirward_dxdy);
         return __FinalOutput;
     }
-    float dist_here = Terracotta__SimShader__unpack_val(info_here.xy), dist_shift = Terracotta__SimShader__unpack_val(info_shift.xy), circum = Terracotta__SimShader__unpack_val(info_here.zw);
+    float dist_here = Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(info_here.xy), dist_shift = Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(info_shift.xy), circum = Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(info_here.zw);
     float diff = dist_here - dist_shift;
     float clockwise = 0, counterclockwise = 0;
     if (diff > 0 + .001)

@@ -32,7 +32,7 @@ namespace Terracotta
             if (pos.x > 1 || pos.y > 1 || pos.x < 0 || pos.y < 0)
                 return color.TransparentBlack;
 
-            bool draw_selected = u.player == player && selected(b);
+            bool draw_selected = u.player == player && show_selected(b);
             float selected_offset = draw_selected ? 3 : 0;
 
             pos += Float(vec(b.part_x, b.part_y));

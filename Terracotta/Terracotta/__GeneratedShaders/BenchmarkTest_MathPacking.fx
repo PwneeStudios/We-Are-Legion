@@ -40,7 +40,7 @@ sampler fs_param_s : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float Terracotta__BenchmarkTest_MathPacking__MathPacking(float c)
+float Terracotta__BenchmarkTest_MathPacking__MathPacking__float(float c)
 {
     float x1 = floor(c / 4.0);
     float x2 = c - 3.2 * x1;
@@ -63,10 +63,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 right = tex2D(fs_param_s, psin.TexCoords + (float2(1, 0)) * fs_param_s_dxdy), up = tex2D(fs_param_s, psin.TexCoords + (float2(0, 1)) * fs_param_s_dxdy), left = tex2D(fs_param_s, psin.TexCoords + (float2(-(1), 0)) * fs_param_s_dxdy), down = tex2D(fs_param_s, psin.TexCoords + (float2(0, -(1))) * fs_param_s_dxdy);
-    output.r = Terracotta__BenchmarkTest_MathPacking__MathPacking(right.r) + Terracotta__BenchmarkTest_MathPacking__MathPacking(right.g) + Terracotta__BenchmarkTest_MathPacking__MathPacking(right.b) + Terracotta__BenchmarkTest_MathPacking__MathPacking(right.a);
-    output.g = Terracotta__BenchmarkTest_MathPacking__MathPacking(left.r) + Terracotta__BenchmarkTest_MathPacking__MathPacking(left.g) + Terracotta__BenchmarkTest_MathPacking__MathPacking(left.b) + Terracotta__BenchmarkTest_MathPacking__MathPacking(left.a);
-    output.b = Terracotta__BenchmarkTest_MathPacking__MathPacking(up.r) + Terracotta__BenchmarkTest_MathPacking__MathPacking(up.g) + Terracotta__BenchmarkTest_MathPacking__MathPacking(up.b) + Terracotta__BenchmarkTest_MathPacking__MathPacking(up.a);
-    output.a = Terracotta__BenchmarkTest_MathPacking__MathPacking(down.r) + Terracotta__BenchmarkTest_MathPacking__MathPacking(down.g) + Terracotta__BenchmarkTest_MathPacking__MathPacking(down.b) + Terracotta__BenchmarkTest_MathPacking__MathPacking(down.a);
+    output.r = Terracotta__BenchmarkTest_MathPacking__MathPacking__float(right.r) + Terracotta__BenchmarkTest_MathPacking__MathPacking__float(right.g) + Terracotta__BenchmarkTest_MathPacking__MathPacking__float(right.b) + Terracotta__BenchmarkTest_MathPacking__MathPacking__float(right.a);
+    output.g = Terracotta__BenchmarkTest_MathPacking__MathPacking__float(left.r) + Terracotta__BenchmarkTest_MathPacking__MathPacking__float(left.g) + Terracotta__BenchmarkTest_MathPacking__MathPacking__float(left.b) + Terracotta__BenchmarkTest_MathPacking__MathPacking__float(left.a);
+    output.b = Terracotta__BenchmarkTest_MathPacking__MathPacking__float(up.r) + Terracotta__BenchmarkTest_MathPacking__MathPacking__float(up.g) + Terracotta__BenchmarkTest_MathPacking__MathPacking__float(up.b) + Terracotta__BenchmarkTest_MathPacking__MathPacking__float(up.a);
+    output.a = Terracotta__BenchmarkTest_MathPacking__MathPacking__float(down.r) + Terracotta__BenchmarkTest_MathPacking__MathPacking__float(down.g) + Terracotta__BenchmarkTest_MathPacking__MathPacking__float(down.b) + Terracotta__BenchmarkTest_MathPacking__MathPacking__float(down.a);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

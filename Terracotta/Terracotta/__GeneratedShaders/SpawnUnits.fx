@@ -100,57 +100,57 @@ sampler fs_param_Magic : register(s5) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__IsValid(float direction)
+bool Terracotta__SimShader__IsValid__float(float direction)
 {
     return direction > 0 + .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_round(float v)
+float FragSharpFramework__FragSharpStd__fint_round__float(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Terracotta__SimShader__prior_direction(float4 u)
+float Terracotta__SimShader__prior_direction__Terracotta_data(float4 u)
 {
     float val = u.b;
     val = fmod(val, 0.1254902);
-    val = FragSharpFramework__FragSharpStd__fint_round(val);
+    val = FragSharpFramework__FragSharpStd__fint_round__float(val);
     return val;
 }
 
-float Terracotta__SimShader__select_state(float4 u)
+float Terracotta__SimShader__select_state__Terracotta_data(float4 u)
 {
-    return u.b - Terracotta__SimShader__prior_direction(u);
+    return u.b - Terracotta__SimShader__prior_direction__Terracotta_data(u);
 }
 
-bool Terracotta__SimShader__show_selected(float4 u)
+bool Terracotta__SimShader__show_selected__Terracotta_data(float4 u)
 {
     float val = u.b;
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-void Terracotta__SimShader__set_selected(inout float4 u, bool selected)
+void Terracotta__SimShader__set_selected__Terracotta_data__bool(inout float4 u, bool selected)
 {
-    float state = Terracotta__SimShader__select_state(u);
+    float state = Terracotta__SimShader__select_state__Terracotta_data(u);
     if (selected)
     {
-        state = Terracotta__SimShader__show_selected(u) ? 0.3764706 : 0.627451;
+        state = Terracotta__SimShader__show_selected__Terracotta_data(u) ? 0.3764706 : 0.627451;
     }
     else
     {
-        state = Terracotta__SimShader__show_selected(u) ? 0.2509804 : 0.0;
+        state = Terracotta__SimShader__show_selected__Terracotta_data(u) ? 0.2509804 : 0.0;
     }
-    u.b = Terracotta__SimShader__prior_direction(u) + state;
+    u.b = Terracotta__SimShader__prior_direction__Terracotta_data(u) + state;
 }
 
-void Terracotta__SimShader__set_prior_direction(inout float4 u, float dir)
+void Terracotta__SimShader__set_prior_direction__Terracotta_data__float(inout float4 u, float dir)
 {
-    u.b = Terracotta__SimShader__select_state(u) + dir;
+    u.b = Terracotta__SimShader__select_state__Terracotta_data(u) + dir;
 }
 
 // Compiled vertex shader
@@ -170,7 +170,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 cur_data = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy), prev_data = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousData_dxdy);
     float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
     float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy);
-    if (!(Terracotta__SimShader__Something(cur_data)) && !(Terracotta__SimShader__Something(prev_data)) && rnd.x > 0.93 + .001)
+    if (!(Terracotta__SimShader__Something__Terracotta_data(cur_data)) && !(Terracotta__SimShader__Something__Terracotta_data(prev_data)) && rnd.x > 0.93 + .001)
     {
         float4 unit_right = tex2D(fs_param_Unit, psin.TexCoords + (float2(1, 0)) * fs_param_Unit_dxdy), unit_up = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 1)) * fs_param_Unit_dxdy), unit_left = tex2D(fs_param_Unit, psin.TexCoords + (float2(-(1), 0)) * fs_param_Unit_dxdy), unit_down = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, -(1))) * fs_param_Unit_dxdy);
         float4 data_right = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousData_dxdy), data_up = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousData_dxdy), data_left = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(-(1), 0)) * fs_param_PreviousData_dxdy), data_down = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, -(1))) * fs_param_PreviousData_dxdy);
@@ -191,24 +191,24 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             spawn_dir = 0.007843138;
         }
-        if (Terracotta__SimShader__IsValid(spawn_dir))
+        if (Terracotta__SimShader__IsValid__float(spawn_dir))
         {
             cur_data.r = spawn_dir;
             cur_data.a = 0.01568628;
             cur_data.g = 0.003921569;
-            Terracotta__SimShader__set_selected(cur_data, false);
-            Terracotta__SimShader__set_prior_direction(cur_data, cur_data.r);
+            Terracotta__SimShader__set_selected__Terracotta_data__bool(cur_data, false);
+            Terracotta__SimShader__set_prior_direction__Terracotta_data__float(cur_data, cur_data.r);
         }
     }
     else
     {
-        if (!(Terracotta__SimShader__Something(cur_data)) && abs(magic_here.g - 0.0) > .001)
+        if (!(Terracotta__SimShader__Something__Terracotta_data(cur_data)) && abs(magic_here.g - 0.0) > .001)
         {
             cur_data.r = 0.003921569;
             cur_data.a = 0.01960784;
             cur_data.g = 0.003921569;
-            Terracotta__SimShader__set_selected(cur_data, false);
-            Terracotta__SimShader__set_prior_direction(cur_data, cur_data.r);
+            Terracotta__SimShader__set_selected__Terracotta_data__bool(cur_data, false);
+            Terracotta__SimShader__set_prior_direction__Terracotta_data__float(cur_data, cur_data.r);
         }
     }
     __FinalOutput.Color = cur_data;

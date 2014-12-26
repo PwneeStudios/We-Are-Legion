@@ -73,7 +73,7 @@ float2 fs_param_Destination;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__selected(float4 u)
+bool Terracotta__SimShader__selected__Terracotta_data(float4 u)
 {
     float val = u.b;
     return val >= 0.3764706 - .001;
@@ -96,7 +96,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 extra_here = tex2D(fs_param_Extra, psin.TexCoords + (float2(0, 0)) * fs_param_Extra_dxdy);
-    if (abs(0 - unit_here.g) < .001 && Terracotta__SimShader__selected(data_here))
+    if (abs(0 - unit_here.g) < .001 && Terracotta__SimShader__selected__Terracotta_data(data_here))
     {
         extra_here = float4(0, 0, 0, 0);
     }

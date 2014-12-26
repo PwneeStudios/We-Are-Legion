@@ -70,39 +70,39 @@ sampler fs_param_Unit : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__IsBuilding(float4 u)
+bool Terracotta__SimShader__IsBuilding__Terracotta_unit(float4 u)
 {
     return u.r >= 0.02352941 - .001 && u.r < 0.07843138 - .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_round(float v)
+float FragSharpFramework__FragSharpStd__fint_round__float(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Terracotta__SimShader__get_type(float4 u)
+float Terracotta__SimShader__get_type__Terracotta_BuildingDist(float4 u)
 {
-    return FragSharpFramework__FragSharpStd__fint_round(u.b / 16.0);
+    return FragSharpFramework__FragSharpStd__fint_round__float(u.b / 16.0);
 }
 
-float Terracotta__SimShader__get_player(float4 u)
+float Terracotta__SimShader__get_player__Terracotta_BuildingDist(float4 u)
 {
-    return u.b - Terracotta__SimShader__get_type(u) * 16.0;
+    return u.b - Terracotta__SimShader__get_type__Terracotta_BuildingDist(u) * 16.0;
 }
 
-void Terracotta__SimShader__set_type(inout float4 u, float type)
+void Terracotta__SimShader__set_type__Terracotta_BuildingDist__float(inout float4 u, float type)
 {
-    u.b = Terracotta__SimShader__get_player(u) + type * 16.0;
+    u.b = Terracotta__SimShader__get_player__Terracotta_BuildingDist(u) + type * 16.0;
 }
 
-void Terracotta__SimShader__set_player(inout float4 u, float player)
+void Terracotta__SimShader__set_player__Terracotta_BuildingDist__float(inout float4 u, float player)
 {
-    u.b = player + Terracotta__SimShader__get_type(u) * 16.0;
+    u.b = player + Terracotta__SimShader__get_type__Terracotta_BuildingDist(u) * 16.0;
 }
 
 // Compiled vertex shader
@@ -122,7 +122,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0, 0, 0, 0);
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (Terracotta__SimShader__Something(data_here) && (Terracotta__SimShader__IsBuilding(unit_here) || abs(unit_here.r - 0.007843138) < .001 || abs(unit_here.r - 0.01176471) < .001))
+    if (Terracotta__SimShader__Something__Terracotta_data(data_here) && (Terracotta__SimShader__IsBuilding__Terracotta_unit(unit_here) || abs(unit_here.r - 0.007843138) < .001 || abs(unit_here.r - 0.01176471) < .001))
     {
         float type = unit_here.r;
         if (abs(type - 0.007843138) < .001)
@@ -133,8 +133,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             type = 0.03921569;
         }
-        Terracotta__SimShader__set_type(output, type);
-        Terracotta__SimShader__set_player(output, unit_here.g);
+        Terracotta__SimShader__set_type__Terracotta_BuildingDist__float(output, type);
+        Terracotta__SimShader__set_player__Terracotta_BuildingDist__float(output, unit_here.g);
         output.rg = float2(0.1568628, 0.1568628);
         output.a = 0.0;
     }

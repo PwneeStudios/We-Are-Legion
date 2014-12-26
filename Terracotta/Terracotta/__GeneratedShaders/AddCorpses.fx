@@ -85,19 +85,19 @@ sampler fs_param_Magic : register(s4) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__IsUnit(float4 u)
+bool Terracotta__SimShader__IsUnit__Terracotta_unit(float4 u)
 {
     return u.r >= 0.003921569 - .001 && u.r < 0.02352941 - .001;
 }
 
-bool Terracotta__SimShader__LeavesCorpse(float4 u)
+bool Terracotta__SimShader__LeavesCorpse__Terracotta_unit(float4 u)
 {
-    return Terracotta__SimShader__IsUnit(u) && abs(u.r - 0.01568628) > .001;
+    return Terracotta__SimShader__IsUnit__Terracotta_unit(u) && abs(u.r - 0.01568628) > .001;
 }
 
 // Compiled vertex shader
@@ -122,7 +122,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         corpse_here = float4(0, 0, 0, 0);
     }
-    if (Terracotta__SimShader__Something(data_here) && abs(unit_here.a - 0.07058824) < .001 && Terracotta__SimShader__LeavesCorpse(unit_here))
+    if (Terracotta__SimShader__Something__Terracotta_data(data_here) && abs(unit_here.a - 0.07058824) < .001 && Terracotta__SimShader__LeavesCorpse__Terracotta_unit(unit_here))
     {
         corpse_here.r = data_here.r;
         corpse_here.g = unit_here.r;

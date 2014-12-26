@@ -86,17 +86,17 @@ sampler fs_param_Corpses : register(s4) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__CorpsePresent(float4 u)
+bool Terracotta__SimShader__CorpsePresent__Terracotta_corpse(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__UnitDistribution__Contains(VertexToPixel psin, float distribution, float2 v, sampler Corpses, float2 Corpses_size, float2 Corpses_dxdy)
+bool Terracotta__UnitDistribution__Contains__float__FragSharpFramework_vec2__FragSharpFramework_Field_Terracotta_corpse_(VertexToPixel psin, float distribution, float2 v, sampler Corpses, float2 Corpses_size, float2 Corpses_dxdy)
 {
     if (abs(distribution - 1.0) < .001)
     {
@@ -108,7 +108,7 @@ bool Terracotta__UnitDistribution__Contains(VertexToPixel psin, float distributi
     }
     if (abs(distribution - 3.0) < .001)
     {
-        return Terracotta__SimShader__CorpsePresent(tex2D(Corpses, psin.TexCoords + (float2(0, 0)) * Corpses_dxdy));
+        return Terracotta__SimShader__CorpsePresent__Terracotta_corpse(tex2D(Corpses, psin.TexCoords + (float2(0, 0)) * Corpses_dxdy));
     }
     return false;
 }
@@ -129,9 +129,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     float4 here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    if (Terracotta__SimShader__Something(select) && !(Terracotta__SimShader__Something(here)))
+    if (Terracotta__SimShader__Something__Terracotta_data(select) && !(Terracotta__SimShader__Something__Terracotta_data(here)))
     {
-        if (Terracotta__UnitDistribution__Contains(psin, 3, psin.TexCoords * fs_param_Select_size, fs_param_Corpses, fs_param_Corpses_size, fs_param_Corpses_dxdy))
+        if (Terracotta__UnitDistribution__Contains__float__FragSharpFramework_vec2__FragSharpFramework_Field_Terracotta_corpse_(psin, 3, psin.TexCoords * fs_param_Select_size, fs_param_Corpses, fs_param_Corpses_size, fs_param_Corpses_dxdy))
         {
             __FinalOutput.Color = select;
             return __FinalOutput;

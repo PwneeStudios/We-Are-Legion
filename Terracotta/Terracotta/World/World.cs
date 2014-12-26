@@ -36,8 +36,8 @@ namespace Terracotta
         }
 
         //const double DelayBetweenUpdates = .01; // Super fast
-        //const double DelayBetweenUpdates = .3333; // Normal speed
-        const double DelayBetweenUpdates = 5; // Super slow
+        const double DelayBetweenUpdates = .3333; // Normal speed
+        //const double DelayBetweenUpdates = 5; // Super slow
 
         bool _MapEditor = false;
         public bool MapEditor

@@ -58,17 +58,17 @@ float fs_param_action;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__IsUnit(float4 u)
+bool Terracotta__SimShader__IsUnit__Terracotta_unit(float4 u)
 {
     return u.r >= 0.003921569 - .001 && u.r < 0.02352941 - .001;
 }
 
-bool Terracotta__SimShader__selected(float4 u)
+bool Terracotta__SimShader__selected__Terracotta_data(float4 u)
 {
     float val = u.b;
     return val >= 0.3764706 - .001;
@@ -90,7 +90,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (abs(unit_here.g - 0.007843138) < .001 && Terracotta__SimShader__Something(data_here) && Terracotta__SimShader__IsUnit(unit_here) && Terracotta__SimShader__selected(data_here) && fs_param_action < 0.04705882 - .001)
+    if (abs(unit_here.g - 0.007843138) < .001 && Terracotta__SimShader__Something__Terracotta_data(data_here) && Terracotta__SimShader__IsUnit__Terracotta_unit(unit_here) && Terracotta__SimShader__selected__Terracotta_data(data_here) && fs_param_action < 0.04705882 - .001)
     {
         data_here.a = fs_param_action;
     }

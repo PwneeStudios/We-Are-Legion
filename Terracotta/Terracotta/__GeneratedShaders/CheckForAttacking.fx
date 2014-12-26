@@ -85,38 +85,38 @@ sampler fs_param_Magic : register(s4) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__IsUnit(float4 u)
+bool Terracotta__SimShader__IsUnit__Terracotta_unit(float4 u)
 {
     return u.r >= 0.003921569 - .001 && u.r < 0.02352941 - .001;
 }
 
-bool Terracotta__SimShader__IsStationary(float4 d)
+bool Terracotta__SimShader__IsStationary__Terracotta_data(float4 d)
 {
     return d.r >= 0.01960784 - .001;
 }
 
-bool Terracotta__SimShader__Stayed(float4 u)
+bool Terracotta__SimShader__Stayed__Terracotta_data(float4 u)
 {
-    return Terracotta__SimShader__IsStationary(u) || abs(u.g - 0.003921569) < .001;
+    return Terracotta__SimShader__IsStationary__Terracotta_data(u) || abs(u.g - 0.003921569) < .001;
 }
 
-bool Terracotta__SimShader__IsValid(float direction)
+bool Terracotta__SimShader__IsValid__float(float direction)
 {
     return direction > 0 + .001;
 }
 
-float2 Terracotta__SimShader__dir_to_vec(float direction)
+float2 Terracotta__SimShader__dir_to_vec__float(float direction)
 {
     float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
-    return Terracotta__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Terracotta__SimShader__IsValid__float(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__IsBuilding(float4 u)
+bool Terracotta__SimShader__IsBuilding__Terracotta_unit(float4 u)
 {
     return u.r >= 0.02352941 - .001 && u.r < 0.07843138 - .001;
 }
@@ -142,15 +142,15 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         DoRaiseAnim = true;
     }
-    if (Terracotta__SimShader__IsUnit(unit_here))
+    if (Terracotta__SimShader__IsUnit__Terracotta_unit(unit_here))
     {
         unit_here.a = 0.0;
     }
-    if (Terracotta__SimShader__Stayed(data_here) && abs(unit_here.b - 0.0) > .001)
+    if (Terracotta__SimShader__Stayed__Terracotta_data(data_here) && abs(unit_here.b - 0.0) > .001)
     {
-        if (Terracotta__SimShader__IsUnit(unit_here) && abs(data_here.a - 0.007843138) < .001)
+        if (Terracotta__SimShader__IsUnit__Terracotta_unit(unit_here) && abs(data_here.a - 0.007843138) < .001)
         {
-            float4 facing = tex2D(fs_param_Unit, psin.TexCoords + (Terracotta__SimShader__dir_to_vec(data_here.r)) * fs_param_Unit_dxdy);
+            float4 facing = tex2D(fs_param_Unit, psin.TexCoords + (Terracotta__SimShader__dir_to_vec__float(data_here.r)) * fs_param_Unit_dxdy);
             if (abs(facing.b - unit_here.b) > .001 && abs(facing.b - 0.0) > .001)
             {
                 unit_here.a = 0.04705882;
@@ -161,9 +161,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
         if (rnd.x > 0.7 + .001)
         {
-            if (Terracotta__SimShader__Something(data_right) && abs(unit_right.b - unit_here.b) > .001 && abs(unit_right.b - 0.0) > .001 && abs(data_right.r - 0.01176471) < .001 && abs(data_right.a - 0.007843138) < .001 && abs(data_right.g - 0.003921569) < .001 || Terracotta__SimShader__Something(data_left) && abs(unit_left.b - unit_here.b) > .001 && abs(unit_left.b - 0.0) > .001 && abs(data_left.r - 0.003921569) < .001 && abs(data_left.a - 0.007843138) < .001 && abs(data_left.g - 0.003921569) < .001 || Terracotta__SimShader__Something(data_up) && abs(unit_up.b - unit_here.b) > .001 && abs(unit_up.b - 0.0) > .001 && abs(data_up.r - 0.01568628) < .001 && abs(data_up.a - 0.007843138) < .001 && abs(data_up.g - 0.003921569) < .001 || Terracotta__SimShader__Something(data_down) && abs(unit_down.b - unit_here.b) > .001 && abs(unit_down.b - 0.0) > .001 && abs(data_down.r - 0.007843138) < .001 && abs(data_down.a - 0.007843138) < .001 && abs(data_down.g - 0.003921569) < .001)
+            if (Terracotta__SimShader__Something__Terracotta_data(data_right) && abs(unit_right.b - unit_here.b) > .001 && abs(unit_right.b - 0.0) > .001 && abs(data_right.r - 0.01176471) < .001 && abs(data_right.a - 0.007843138) < .001 && abs(data_right.g - 0.003921569) < .001 || Terracotta__SimShader__Something__Terracotta_data(data_left) && abs(unit_left.b - unit_here.b) > .001 && abs(unit_left.b - 0.0) > .001 && abs(data_left.r - 0.003921569) < .001 && abs(data_left.a - 0.007843138) < .001 && abs(data_left.g - 0.003921569) < .001 || Terracotta__SimShader__Something__Terracotta_data(data_up) && abs(unit_up.b - unit_here.b) > .001 && abs(unit_up.b - 0.0) > .001 && abs(data_up.r - 0.01568628) < .001 && abs(data_up.a - 0.007843138) < .001 && abs(data_up.g - 0.003921569) < .001 || Terracotta__SimShader__Something__Terracotta_data(data_down) && abs(unit_down.b - unit_here.b) > .001 && abs(unit_down.b - 0.0) > .001 && abs(data_down.r - 0.007843138) < .001 && abs(data_down.a - 0.007843138) < .001 && abs(data_down.g - 0.003921569) < .001)
             {
-                if (Terracotta__SimShader__IsBuilding(unit_here))
+                if (Terracotta__SimShader__IsBuilding__Terracotta_unit(unit_here))
                 {
                     unit_here.a += 0.003921569;
                 }
@@ -174,11 +174,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
         }
     }
-    if (Terracotta__SimShader__IsUnit(unit_here) && abs(tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy).r - 0.003921569) < .001)
+    if (Terracotta__SimShader__IsUnit__Terracotta_unit(unit_here) && abs(tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy).r - 0.003921569) < .001)
     {
         unit_here.a = 0.07058824;
     }
-    if (Terracotta__SimShader__IsUnit(unit_here) && DoRaiseAnim)
+    if (Terracotta__SimShader__IsUnit__Terracotta_unit(unit_here) && DoRaiseAnim)
     {
         unit_here.a = 0.2588235;
     }

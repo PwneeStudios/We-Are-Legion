@@ -70,7 +70,7 @@ sampler fs_param_Units : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float4 FragSharpFramework__FragSharpStd__max(float4 a, float4 b, float4 c, float4 d)
+float4 FragSharpFramework__FragSharpStd__max__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4(float4 a, float4 b, float4 c, float4 d)
 {
     return max(max(a, b), max(c, d));
 }
@@ -92,7 +92,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
     float4 right = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(1, 0)) * fs_param_Necromancy_dxdy), up = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(0, 1)) * fs_param_Necromancy_dxdy), left = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(-(1), 0)) * fs_param_Necromancy_dxdy), down = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(0, -(1))) * fs_param_Necromancy_dxdy);
-    float4 necromancy = FragSharpFramework__FragSharpStd__max(right, up, left, down) - float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
+    float4 necromancy = FragSharpFramework__FragSharpStd__max__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4(right, up, left, down) - float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
     if (abs(unit_here.r - 0.01176471) < .001)
     {
         if (abs(unit_here.g - 0.003921569) < .001)

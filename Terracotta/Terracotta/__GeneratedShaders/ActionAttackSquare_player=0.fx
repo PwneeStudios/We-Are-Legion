@@ -79,13 +79,13 @@ float2 fs_param_Selection_Size_Inv;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__selected(float4 u)
+bool Terracotta__SimShader__selected__Terracotta_data(float4 u)
 {
     float val = u.b;
     return val >= 0.3764706 - .001;
 }
 
-float2 Terracotta__SimShader__pack_val_2byte(float x)
+float2 Terracotta__SimShader__pack_val_2byte__float(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -93,10 +93,10 @@ float2 Terracotta__SimShader__pack_val_2byte(float x)
     return packed / 255.0;
 }
 
-float4 Terracotta__SimShader__pack_vec2(float2 v)
+float4 Terracotta__SimShader__pack_vec2__FragSharpFramework_vec2(float2 v)
 {
-    float2 packed_x = Terracotta__SimShader__pack_val_2byte(v.x);
-    float2 packed_y = Terracotta__SimShader__pack_val_2byte(v.y);
+    float2 packed_x = Terracotta__SimShader__pack_val_2byte__float(v.x);
+    float2 packed_y = Terracotta__SimShader__pack_val_2byte__float(v.y);
     return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 
@@ -117,13 +117,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 target = float4(0, 0, 0, 0);
-    if (abs(0 - unit_here.g) < .001 && Terracotta__SimShader__selected(data_here))
+    if (abs(0 - unit_here.g) < .001 && Terracotta__SimShader__selected__Terracotta_data(data_here))
     {
         float2 pos = psin.TexCoords * fs_param_Data_size;
         pos = (pos - fs_param_Selection_BL) * fs_param_Selection_Size_Inv;
         pos = pos * fs_param_Destination_Size + fs_param_Destination_BL;
         pos = round(pos);
-        target = Terracotta__SimShader__pack_vec2(pos);
+        target = Terracotta__SimShader__pack_vec2__FragSharpFramework_vec2(pos);
     }
     else
     {

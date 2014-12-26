@@ -327,6 +327,7 @@ namespace Terracotta
                 Shift = _32;
         }
 
+        protected static bool show_selected(building u) { return show_selected((data)(vec4)u); }
         protected static bool show_selected(data u)
         {
             float val = u.prior_direction_and_select;
@@ -351,12 +352,14 @@ namespace Terracotta
             u.prior_direction_and_select = prior_dir + select_state;
         }
 
+        protected static bool selected(building u) { return selected((data)(vec4)u); }
         protected static bool selected(data u)
         {
             float val = u.prior_direction_and_select;
             return val >= SelectState.Selected;
         }
 
+        protected static void set_selected(ref building u, bool selected) { data d = (data)(vec4)u; set_selected(ref d, selected); u = (building)(vec4)d; }
         protected static void set_selected(ref data u, bool selected)
         {
             float state = select_state(u);
@@ -369,10 +372,10 @@ namespace Terracotta
                 state = show_selected(u) ? SelectState.NotSelected_Show2 : SelectState.NotSelected_NoShow;
             }
 
-            //u.prior_direction_and_select = prior_direction(u) + (selected ? SelectState.Selected : _0);
             u.prior_direction_and_select = prior_direction(u) + state;
         }
 
+        protected static float prior_direction(building u) { return prior_direction((data)(vec4)u); }
         protected static float prior_direction(data u)
         {
             float val = u.prior_direction_and_select;
@@ -386,6 +389,7 @@ namespace Terracotta
             return val;
         }
 
+        protected static float select_state(building u) { return select_state((data)(vec4)u); }
         protected static float select_state(data u)
         {
             return u.prior_direction_and_select - prior_direction(u);
@@ -401,7 +405,7 @@ namespace Terracotta
             u.prior_direction_and_select = select_state(u) + dir;
         }
 
-
+        /*
         protected static bool selected(building u)
         {
             float val = u.prior_direction_and_select;
@@ -424,6 +428,7 @@ namespace Terracotta
         {
             u.prior_direction_and_select = dir + (selected(u) ? SelectState.Selected : _0);
         }
+        */
 
         protected static bool ValidDirward(dirward d)
         {

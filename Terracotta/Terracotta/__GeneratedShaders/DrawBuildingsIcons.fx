@@ -60,7 +60,7 @@ sampler fs_param_FarColor : register(s2) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
+float2 Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -68,34 +68,34 @@ float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_
     return coords - float2(i, j);
 }
 
-int FragSharpFramework__FragSharpStd__Int(float v)
+int FragSharpFramework__FragSharpStd__Int__float(float v)
 {
     return (int)floor(255 * v + 0.5);
 }
 
-float Terracotta__UnitType__BuildingIndex(float type)
+float Terracotta__UnitType__BuildingIndex__float(float type)
 {
     return type - 0.02352941;
 }
 
-float4 Terracotta__BuildingMarkerColors__Get(VertexToPixel psin, float player, float type)
+float4 Terracotta__BuildingMarkerColors__Get__float__float(VertexToPixel psin, float player, float type)
 {
-    return tex2D(fs_param_FarColor, float2(3 + FragSharpFramework__FragSharpStd__Int(Terracotta__UnitType__BuildingIndex(type))+.5,.5+ FragSharpFramework__FragSharpStd__Int(player)) * fs_param_FarColor_dxdy);
+    return tex2D(fs_param_FarColor, float2(3 + FragSharpFramework__FragSharpStd__Int__float(Terracotta__UnitType__BuildingIndex__float(type))+.5,.5+ FragSharpFramework__FragSharpStd__Int__float(player)) * fs_param_FarColor_dxdy);
 }
 
-float FragSharpFramework__FragSharpStd__fint_round(float v)
+float FragSharpFramework__FragSharpStd__fint_round__float(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Terracotta__SimShader__get_type(float4 u)
+float Terracotta__SimShader__get_type__Terracotta_BuildingDist(float4 u)
 {
-    return FragSharpFramework__FragSharpStd__fint_round(u.b / 16.0);
+    return FragSharpFramework__FragSharpStd__fint_round__float(u.b / 16.0);
 }
 
-float Terracotta__SimShader__get_player(float4 u)
+float Terracotta__SimShader__get_player__Terracotta_BuildingDist(float4 u)
 {
-    return u.b - Terracotta__SimShader__get_type(u) * 16.0;
+    return u.b - Terracotta__SimShader__get_type__Terracotta_BuildingDist(u) * 16.0;
 }
 
 // Compiled vertex shader
@@ -120,11 +120,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         __FinalOutput.Color = float4(0.0, 0.0, 0.0, 0.0);
         return __FinalOutput;
     }
-    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos(psin, fs_param_BuildingDistances_size);
+    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_BuildingDistances_size);
     float2 v = 255 * (info.rg - float2(0.1568628, 0.1568628)) - (subcell_pos - float2(0.5, 0.5));
     if (length(v) < fs_param_radius - .001)
     {
-        float4 clr = Terracotta__BuildingMarkerColors__Get(psin, Terracotta__SimShader__get_player(info), Terracotta__SimShader__get_type(info));
+        float4 clr = Terracotta__BuildingMarkerColors__Get__float__float(psin, Terracotta__SimShader__get_player__Terracotta_BuildingDist(info), Terracotta__SimShader__get_type__Terracotta_BuildingDist(info));
         __FinalOutput.Color = clr * fs_param_blend;
         return __FinalOutput;
     }

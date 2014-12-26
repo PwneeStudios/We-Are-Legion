@@ -40,13 +40,13 @@ sampler fs_param_Geo : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float FragSharpFramework__FragSharpStd__fint_floor(float v)
+float FragSharpFramework__FragSharpStd__fint_floor__float(float v)
 {
     v += 0.0005;
     return floor(255 * v) * 0.003921569;
 }
 
-float Terracotta__SimShader__unpack_val(float2 packed)
+float Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(float2 packed)
 {
     float coord = 0;
     packed = floor(255.0 * packed + float2(0.5, 0.5));
@@ -54,23 +54,23 @@ float Terracotta__SimShader__unpack_val(float2 packed)
     return coord;
 }
 
-float2 Terracotta__SimShader__unpack_vec2_3byte(float3 packed)
+float2 Terracotta__SimShader__unpack_vec2_3byte__FragSharpFramework_vec3(float3 packed)
 {
     float extra_bits = packed.z;
-    float extra_y = FragSharpFramework__FragSharpStd__fint_floor(extra_bits / 16);
-    float extra_x = FragSharpFramework__FragSharpStd__fint_floor(extra_bits - 16 * extra_y);
+    float extra_y = FragSharpFramework__FragSharpStd__fint_floor__float(extra_bits / 16);
+    float extra_x = FragSharpFramework__FragSharpStd__fint_floor__float(extra_bits - 16 * extra_y);
     float2 v = float2(0, 0);
-    v.x = Terracotta__SimShader__unpack_val(float2(extra_x, packed.x));
-    v.y = Terracotta__SimShader__unpack_val(float2(extra_y, packed.y));
+    v.x = Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(float2(extra_x, packed.x));
+    v.y = Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(float2(extra_y, packed.y));
     return v;
 }
 
-float2 Terracotta__SimShader__geo_pos_id(float4 g)
+float2 Terracotta__SimShader__geo_pos_id__Terracotta_geo(float4 g)
 {
-    return Terracotta__SimShader__unpack_vec2_3byte(g.gba);
+    return Terracotta__SimShader__unpack_vec2_3byte__FragSharpFramework_vec3(g.gba);
 }
 
-float Terracotta__Geodesic_ExtremityPropagation__flatten(float2 pos)
+float Terracotta__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(float2 pos)
 {
     return pos.x + 4096 * pos.y;
 }
@@ -95,8 +95,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         __FinalOutput.Color = here;
         return __FinalOutput;
     }
-    float2 extr_here = Terracotta__SimShader__geo_pos_id(here), extr_right = Terracotta__SimShader__geo_pos_id(right), extr_up = Terracotta__SimShader__geo_pos_id(up), extr_left = Terracotta__SimShader__geo_pos_id(left), extr_down = Terracotta__SimShader__geo_pos_id(down), extr_up_right = Terracotta__SimShader__geo_pos_id(up_right), extr_up_left = Terracotta__SimShader__geo_pos_id(up_left), extr_down_right = Terracotta__SimShader__geo_pos_id(down_right), extr_down_left = Terracotta__SimShader__geo_pos_id(down_left);
-    float val_here = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_here), val_right = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_right), val_up = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_up), val_left = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_left), val_down = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_down), val_up_right = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_up_right), val_up_left = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_up_left), val_down_right = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_down_right), val_down_left = Terracotta__Geodesic_ExtremityPropagation__flatten(extr_down_left);
+    float2 extr_here = Terracotta__SimShader__geo_pos_id__Terracotta_geo(here), extr_right = Terracotta__SimShader__geo_pos_id__Terracotta_geo(right), extr_up = Terracotta__SimShader__geo_pos_id__Terracotta_geo(up), extr_left = Terracotta__SimShader__geo_pos_id__Terracotta_geo(left), extr_down = Terracotta__SimShader__geo_pos_id__Terracotta_geo(down), extr_up_right = Terracotta__SimShader__geo_pos_id__Terracotta_geo(up_right), extr_up_left = Terracotta__SimShader__geo_pos_id__Terracotta_geo(up_left), extr_down_right = Terracotta__SimShader__geo_pos_id__Terracotta_geo(down_right), extr_down_left = Terracotta__SimShader__geo_pos_id__Terracotta_geo(down_left);
+    float val_here = Terracotta__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_here), val_right = Terracotta__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_right), val_up = Terracotta__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_up), val_left = Terracotta__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_left), val_down = Terracotta__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_down), val_up_right = Terracotta__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_up_right), val_up_left = Terracotta__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_up_left), val_down_right = Terracotta__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_down_right), val_down_left = Terracotta__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_down_left);
     if (val_here < val_right - .001)
     {
         here.gba = right.gba;

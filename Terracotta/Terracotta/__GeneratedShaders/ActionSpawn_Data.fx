@@ -55,32 +55,32 @@ sampler fs_param_Data : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_round(float v)
+float FragSharpFramework__FragSharpStd__fint_round__float(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Terracotta__SimShader__prior_direction(float4 u)
+float Terracotta__SimShader__prior_direction__Terracotta_data(float4 u)
 {
     float val = u.b;
     val = fmod(val, 0.1254902);
-    val = FragSharpFramework__FragSharpStd__fint_round(val);
+    val = FragSharpFramework__FragSharpStd__fint_round__float(val);
     return val;
 }
 
-float Terracotta__SimShader__select_state(float4 u)
+float Terracotta__SimShader__select_state__Terracotta_data(float4 u)
 {
-    return u.b - Terracotta__SimShader__prior_direction(u);
+    return u.b - Terracotta__SimShader__prior_direction__Terracotta_data(u);
 }
 
-void Terracotta__SimShader__set_prior_direction(inout float4 u, float dir)
+void Terracotta__SimShader__set_prior_direction__Terracotta_data__float(inout float4 u, float dir)
 {
-    u.b = Terracotta__SimShader__select_state(u) + dir;
+    u.b = Terracotta__SimShader__select_state__Terracotta_data(u) + dir;
 }
 
 // Compiled vertex shader
@@ -99,12 +99,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     float4 here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    if (Terracotta__SimShader__Something(select))
+    if (Terracotta__SimShader__Something__Terracotta_data(select))
     {
         here.r = 0.003921569;
         here.a = 0.01176471;
         here.g = 0.003921569;
-        Terracotta__SimShader__set_prior_direction(here, here.r);
+        Terracotta__SimShader__set_prior_direction__Terracotta_data__float(here, here.r);
     }
     __FinalOutput.Color = here;
     return __FinalOutput;

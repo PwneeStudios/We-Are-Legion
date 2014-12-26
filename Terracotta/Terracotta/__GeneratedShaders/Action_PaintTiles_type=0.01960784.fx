@@ -71,23 +71,23 @@ sampler fs_param_Random : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_floor(float v)
+float FragSharpFramework__FragSharpStd__fint_floor__float(float v)
 {
     v += 0.0005;
     return floor(255 * v) * 0.003921569;
 }
 
-float Terracotta__SimShader__RndFint(float rnd, float f1, float f2)
+float Terracotta__SimShader__RndFint__float__float__float(float rnd, float f1, float f2)
 {
     f2 += 0.003921569;
     f2 -= 0.0006;
     float val = rnd * (f2 - f1) + f1;
-    return FragSharpFramework__FragSharpStd__fint_floor(val);
+    return FragSharpFramework__FragSharpStd__fint_floor__float(val);
 }
 
 // Compiled vertex shader
@@ -108,19 +108,19 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     float4 rndv = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
     float rnd = rndv.x * rndv.x * rndv.x * rndv.x;
-    if (Terracotta__SimShader__Something(select))
+    if (Terracotta__SimShader__Something__Terracotta_data(select))
     {
         here.r = 0.01960784;
         if (abs(0.01960784 - 0.003921569) < .001)
         {
-            here.g = Terracotta__SimShader__RndFint(rnd, 0.0, 0.02352941);
+            here.g = Terracotta__SimShader__RndFint__float__float__float(rnd, 0.0, 0.02352941);
             here.b = 0.1215686;
         }
         else
         {
             if (abs(0.01960784 - 0.007843138) < .001)
             {
-                here.g = Terracotta__SimShader__RndFint(rnd, 0.0, 0.03529412);
+                here.g = Terracotta__SimShader__RndFint__float__float__float(rnd, 0.0, 0.03529412);
                 here.b = 0.1176471;
             }
             else

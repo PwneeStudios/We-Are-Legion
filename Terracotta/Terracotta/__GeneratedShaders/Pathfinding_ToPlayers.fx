@@ -70,12 +70,12 @@ sampler fs_param_CurData : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float4 FragSharpFramework__FragSharpStd__min(float4 a, float4 b, float4 c, float4 d)
+float4 FragSharpFramework__FragSharpStd__min__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4(float4 a, float4 b, float4 c, float4 d)
 {
     return min(min(a, b), min(c, d));
 }
 
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
@@ -97,8 +97,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 data = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 cur_data = tex2D(fs_param_CurData, psin.TexCoords + (float2(0, 0)) * fs_param_CurData_dxdy);
     float4 right = tex2D(fs_param_Path, psin.TexCoords + (float2(1, 0)) * fs_param_Path_dxdy), up = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 1)) * fs_param_Path_dxdy), left = tex2D(fs_param_Path, psin.TexCoords + (float2(-(1), 0)) * fs_param_Path_dxdy), down = tex2D(fs_param_Path, psin.TexCoords + (float2(0, -(1))) * fs_param_Path_dxdy);
-    float4 distance_to = FragSharpFramework__FragSharpStd__min(right, up, left, down) + float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
-    if (Terracotta__SimShader__Something(data))
+    float4 distance_to = FragSharpFramework__FragSharpStd__min__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4(right, up, left, down) + float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
+    if (Terracotta__SimShader__Something__Terracotta_data(data))
     {
         distance_to += 3 * float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
         if (abs(cur_data.g - 0.003921569) < .001)

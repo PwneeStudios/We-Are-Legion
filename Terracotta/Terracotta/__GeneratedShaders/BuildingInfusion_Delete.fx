@@ -55,17 +55,17 @@ sampler fs_param_Building : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_building(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__IsBuilding(float4 u)
+bool Terracotta__SimShader__IsBuilding__Terracotta_unit(float4 u)
 {
     return u.r >= 0.02352941 - .001 && u.r < 0.07843138 - .001;
 }
 
-bool Terracotta__SimShader__IsCenter(float4 b)
+bool Terracotta__SimShader__IsCenter__Terracotta_building(float4 b)
 {
     return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
 }
@@ -86,9 +86,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 0)) * fs_param_Building_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (Terracotta__SimShader__Something(building_here) && Terracotta__SimShader__IsBuilding(unit_here) && Terracotta__SimShader__IsCenter(building_here))
+    if (Terracotta__SimShader__Something__Terracotta_building(building_here) && Terracotta__SimShader__IsBuilding__Terracotta_unit(unit_here) && Terracotta__SimShader__IsCenter__Terracotta_building(building_here))
     {
-        if (!(Terracotta__SimShader__Something(tex2D(fs_param_Building, psin.TexCoords + (float2(1, 0)) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something(tex2D(fs_param_Building, psin.TexCoords + (float2(0, 1)) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 0)) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something(tex2D(fs_param_Building, psin.TexCoords + (float2(0, -(1))) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something(tex2D(fs_param_Building, psin.TexCoords + (float2(1, 1)) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 1)) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something(tex2D(fs_param_Building, psin.TexCoords + (float2(1, -(1))) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Building_dxdy))))
+        if (!(Terracotta__SimShader__Something__Terracotta_building(tex2D(fs_param_Building, psin.TexCoords + (float2(1, 0)) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something__Terracotta_building(tex2D(fs_param_Building, psin.TexCoords + (float2(0, 1)) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something__Terracotta_building(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 0)) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something__Terracotta_building(tex2D(fs_param_Building, psin.TexCoords + (float2(0, -(1))) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something__Terracotta_building(tex2D(fs_param_Building, psin.TexCoords + (float2(1, 1)) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something__Terracotta_building(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 1)) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something__Terracotta_building(tex2D(fs_param_Building, psin.TexCoords + (float2(1, -(1))) * fs_param_Building_dxdy))) || !(Terracotta__SimShader__Something__Terracotta_building(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Building_dxdy))))
         {
             __FinalOutput.Color = float4(0, 0, 0, 0);
             return __FinalOutput;

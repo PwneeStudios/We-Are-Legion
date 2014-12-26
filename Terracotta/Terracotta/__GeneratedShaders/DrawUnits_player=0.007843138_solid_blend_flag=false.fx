@@ -141,7 +141,7 @@ sampler fs_param_FarColor : register(s7) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size, float2 grid_shift)
+float2 Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size, float2 grid_shift)
 {
     float2 coords = vertex.TexCoords * grid_size + grid_shift;
     float i = floor(coords.x);
@@ -149,23 +149,23 @@ float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_
     return coords - float2(i, j);
 }
 
-bool Terracotta__SimShader__IsUnit(float4 u)
+bool Terracotta__SimShader__IsUnit__Terracotta_unit(float4 u)
 {
     return u.r >= 0.003921569 - .001 && u.r < 0.02352941 - .001;
 }
 
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__show_selected(float4 u)
+bool Terracotta__SimShader__show_selected__Terracotta_data(float4 u)
 {
     float val = u.b;
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-float4 Terracotta__SelectedUnitColor__Get(VertexToPixel psin, float player)
+float4 Terracotta__SelectedUnitColor__Get__float(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
@@ -186,51 +186,51 @@ float4 Terracotta__SelectedUnitColor__Get(VertexToPixel psin, float player)
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 Terracotta__DrawUnits__ShadowSprite(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
+float4 Terracotta__DrawUnits__ShadowSprite__float__Terracotta_data__Terracotta_unit__FragSharpFramework_vec2__FragSharpFramework_PointSampler__float__float__bool__float(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__show_selected(d);
+    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__show_selected__Terracotta_data(d);
     float4 clr = tex2D(Texture, pos);
     if (draw_selected)
     {
         if (clr.a > 0 + .001)
         {
             float a = clr.a;
-            clr = Terracotta__SelectedUnitColor__Get(psin, u.g);
+            clr = Terracotta__SelectedUnitColor__Get__float(psin, u.g);
             clr.a = a;
         }
     }
     return clr;
 }
 
-bool Terracotta__SimShader__IsValid(float direction)
+bool Terracotta__SimShader__IsValid__float(float direction)
 {
     return direction > 0 + .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_round(float v)
+float FragSharpFramework__FragSharpStd__fint_round__float(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Terracotta__SimShader__prior_direction(float4 u)
+float Terracotta__SimShader__prior_direction__Terracotta_data(float4 u)
 {
     float val = u.b;
     val = fmod(val, 0.1254902);
-    val = FragSharpFramework__FragSharpStd__fint_round(val);
+    val = FragSharpFramework__FragSharpStd__fint_round__float(val);
     return val;
 }
 
-float2 Terracotta__SimShader__direction_to_vec(float direction)
+float2 Terracotta__SimShader__direction_to_vec__float(float direction)
 {
     float angle = (direction * 255 - 1) * (3.141593 / 2.0);
-    return Terracotta__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Terracotta__SimShader__IsValid__float(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
-float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
+float2 Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -238,27 +238,27 @@ float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_
     return coords - float2(i, j);
 }
 
-float FragSharpFramework__FragSharpStd__Float(float v)
+float FragSharpFramework__FragSharpStd__Float__float(float v)
 {
     return floor(255 * v + 0.5);
 }
 
-float Terracotta__Dir__Num(float4 d)
+float Terracotta__Dir__Num__Terracotta_data(float4 d)
 {
-    return FragSharpFramework__FragSharpStd__Float(d.r) - 1;
+    return FragSharpFramework__FragSharpStd__Float__float(d.r) - 1;
 }
 
-float Terracotta__Player__Num(float4 u)
+float Terracotta__Player__Num__Terracotta_unit(float4 u)
 {
-    return FragSharpFramework__FragSharpStd__Float(u.g) - 1;
+    return FragSharpFramework__FragSharpStd__Float__float(u.g) - 1;
 }
 
-float Terracotta__UnitType__UnitIndex(float4 u)
+float Terracotta__UnitType__UnitIndex__Terracotta_unit(float4 u)
 {
-    return FragSharpFramework__FragSharpStd__Float(u.r - 0.003921569);
+    return FragSharpFramework__FragSharpStd__Float__float(u.r - 0.003921569);
 }
 
-float4 Terracotta__UnitColor__Get(VertexToPixel psin, float player)
+float4 Terracotta__UnitColor__Get__float(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
@@ -279,25 +279,25 @@ float4 Terracotta__UnitColor__Get(VertexToPixel psin, float player)
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 Terracotta__DrawUnits__SolidColor(VertexToPixel psin, float player, float4 data, float4 unit)
+float4 Terracotta__DrawUnits__SolidColor__float__Terracotta_data__Terracotta_unit(VertexToPixel psin, float player, float4 data, float4 unit)
 {
-    return abs(unit.g - player) < .001 && Terracotta__SimShader__show_selected(data) ? Terracotta__SelectedUnitColor__Get(psin, unit.g) : Terracotta__UnitColor__Get(psin, unit.g);
+    return abs(unit.g - player) < .001 && Terracotta__SimShader__show_selected__Terracotta_data(data) ? Terracotta__SelectedUnitColor__Get__float(psin, unit.g) : Terracotta__UnitColor__Get__float(psin, unit.g);
 }
 
-float4 Terracotta__DrawUnits__Sprite(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
+float4 Terracotta__DrawUnits__Sprite__float__Terracotta_data__Terracotta_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler__float__float__bool__float(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__show_selected(d) && pos.y > selection_size + .001;
+    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__show_selected__Terracotta_data(d) && pos.y > selection_size + .001;
     pos.x += floor(frame);
-    pos.y += Terracotta__Dir__Num(d) + 4 * Terracotta__Player__Num(u) + 4 * 4 * Terracotta__UnitType__UnitIndex(u);
+    pos.y += Terracotta__Dir__Num__Terracotta_data(d) + 4 * Terracotta__Player__Num__Terracotta_unit(u) + 4 * 4 * Terracotta__UnitType__UnitIndex__Terracotta_unit(u);
     pos *= float2(1.0 / 32, 1.0 / 96);
     float4 clr = tex2D(Texture, pos);
     if (solid_blend_flag)
     {
-        clr = solid_blend * clr + (1 - solid_blend) * Terracotta__DrawUnits__SolidColor(psin, player, d, u);
+        clr = solid_blend * clr + (1 - solid_blend) * Terracotta__DrawUnits__SolidColor__float__Terracotta_data__Terracotta_unit(psin, player, d, u);
     }
     return clr;
 }
@@ -319,46 +319,46 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 shadow = float4(0.0, 0.0, 0.0, 0.0);
-    float2 shadow_subcell_pos = Terracotta__SimShader__get_subcell_pos(psin, fs_param_CurrentData_size, float2(0.0, -(0.5)));
+    float2 shadow_subcell_pos = Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2__FragSharpFramework_vec2(psin, fs_param_CurrentData_size, float2(0.0, -(0.5)));
     float2 shadow_here = float2(0, 0) + float2(0, -(0.5));
     float4 shadow_cur = tex2D(fs_param_CurrentData, psin.TexCoords + (shadow_here) * fs_param_CurrentData_dxdy), shadow_pre = tex2D(fs_param_PreviousData, psin.TexCoords + (shadow_here) * fs_param_PreviousData_dxdy);
     float4 shadow_cur_unit = tex2D(fs_param_CurrentUnits, psin.TexCoords + (shadow_here) * fs_param_CurrentUnits_dxdy), shadow_pre_unit = tex2D(fs_param_PreviousUnits, psin.TexCoords + (shadow_here) * fs_param_PreviousUnits_dxdy);
-    if (Terracotta__SimShader__IsUnit(shadow_cur_unit) || Terracotta__SimShader__IsUnit(shadow_pre_unit))
+    if (Terracotta__SimShader__IsUnit__Terracotta_unit(shadow_cur_unit) || Terracotta__SimShader__IsUnit__Terracotta_unit(shadow_pre_unit))
     {
-        if (Terracotta__SimShader__Something(shadow_cur) && abs(shadow_cur.g - 0.003921569) < .001)
+        if (Terracotta__SimShader__Something__Terracotta_data(shadow_cur) && abs(shadow_cur.g - 0.003921569) < .001)
         {
             if (fs_param_s > 0.5 + .001)
             {
                 shadow_pre = shadow_cur;
             }
-            shadow += Terracotta__DrawUnits__ShadowSprite(psin, 0.007843138, shadow_pre, shadow_pre_unit, shadow_subcell_pos, fs_param_ShadowTexture, fs_param_ShadowTexture_size, fs_param_ShadowTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
+            shadow += Terracotta__DrawUnits__ShadowSprite__float__Terracotta_data__Terracotta_unit__FragSharpFramework_vec2__FragSharpFramework_PointSampler__float__float__bool__float(psin, 0.007843138, shadow_pre, shadow_pre_unit, shadow_subcell_pos, fs_param_ShadowTexture, fs_param_ShadowTexture_size, fs_param_ShadowTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
         }
         else
         {
-            if (Terracotta__SimShader__IsValid(shadow_cur.r))
+            if (Terracotta__SimShader__IsValid__float(shadow_cur.r))
             {
-                float prior_dir = Terracotta__SimShader__prior_direction(shadow_cur);
+                float prior_dir = Terracotta__SimShader__prior_direction__Terracotta_data(shadow_cur);
                 shadow_cur.r = prior_dir;
-                float2 offset = (1 - fs_param_s) * Terracotta__SimShader__direction_to_vec(prior_dir);
-                shadow += Terracotta__DrawUnits__ShadowSprite(psin, 0.007843138, shadow_cur, shadow_cur_unit, shadow_subcell_pos + offset, fs_param_ShadowTexture, fs_param_ShadowTexture_size, fs_param_ShadowTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
+                float2 offset = (1 - fs_param_s) * Terracotta__SimShader__direction_to_vec__float(prior_dir);
+                shadow += Terracotta__DrawUnits__ShadowSprite__float__Terracotta_data__Terracotta_unit__FragSharpFramework_vec2__FragSharpFramework_PointSampler__float__float__bool__float(psin, 0.007843138, shadow_cur, shadow_cur_unit, shadow_subcell_pos + offset, fs_param_ShadowTexture, fs_param_ShadowTexture_size, fs_param_ShadowTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
             }
-            if (Terracotta__SimShader__IsValid(shadow_pre.r) && shadow.a < 0.025 - .001)
+            if (Terracotta__SimShader__IsValid__float(shadow_pre.r) && shadow.a < 0.025 - .001)
             {
-                float2 offset = -(fs_param_s) * Terracotta__SimShader__direction_to_vec(shadow_pre.r);
-                shadow += Terracotta__DrawUnits__ShadowSprite(psin, 0.007843138, shadow_pre, shadow_pre_unit, shadow_subcell_pos + offset, fs_param_ShadowTexture, fs_param_ShadowTexture_size, fs_param_ShadowTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
+                float2 offset = -(fs_param_s) * Terracotta__SimShader__direction_to_vec__float(shadow_pre.r);
+                shadow += Terracotta__DrawUnits__ShadowSprite__float__Terracotta_data__Terracotta_unit__FragSharpFramework_vec2__FragSharpFramework_PointSampler__float__float__bool__float(psin, 0.007843138, shadow_pre, shadow_pre_unit, shadow_subcell_pos + offset, fs_param_ShadowTexture, fs_param_ShadowTexture_size, fs_param_ShadowTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
             }
         }
     }
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos(psin, fs_param_CurrentData_size);
+    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_CurrentData_size);
     float4 cur = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy), pre = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousData_dxdy);
     float4 cur_unit = tex2D(fs_param_CurrentUnits, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentUnits_dxdy), pre_unit = tex2D(fs_param_PreviousUnits, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousUnits_dxdy);
-    if (!(Terracotta__SimShader__IsUnit(cur_unit)) && !(Terracotta__SimShader__IsUnit(pre_unit)))
+    if (!(Terracotta__SimShader__IsUnit__Terracotta_unit(cur_unit)) && !(Terracotta__SimShader__IsUnit__Terracotta_unit(pre_unit)))
     {
         __FinalOutput.Color = shadow;
         return __FinalOutput;
     }
-    if (Terracotta__SimShader__Something(cur) && abs(cur.g - 0.003921569) < .001)
+    if (Terracotta__SimShader__Something__Terracotta_data(cur) && abs(cur.g - 0.003921569) < .001)
     {
         if (fs_param_s > 0.5 + .001)
         {
@@ -370,23 +370,23 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             cur_unit.a = 0.07058824;
             _s = 1.0 - _s;
         }
-        float frame = _s * 6 + FragSharpFramework__FragSharpStd__Float(cur_unit.a);
-        output += Terracotta__DrawUnits__Sprite(psin, 0.007843138, pre, pre_unit, subcell_pos, frame, fs_param_UnitTexture, fs_param_UnitTexture_size, fs_param_UnitTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
+        float frame = _s * 6 + FragSharpFramework__FragSharpStd__Float__float(cur_unit.a);
+        output += Terracotta__DrawUnits__Sprite__float__Terracotta_data__Terracotta_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler__float__float__bool__float(psin, 0.007843138, pre, pre_unit, subcell_pos, frame, fs_param_UnitTexture, fs_param_UnitTexture_size, fs_param_UnitTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
     }
     else
     {
-        float frame = fs_param_s * 6 + FragSharpFramework__FragSharpStd__Float(0.02352941);
-        if (Terracotta__SimShader__IsValid(cur.r))
+        float frame = fs_param_s * 6 + FragSharpFramework__FragSharpStd__Float__float(0.02352941);
+        if (Terracotta__SimShader__IsValid__float(cur.r))
         {
-            float prior_dir = Terracotta__SimShader__prior_direction(cur);
+            float prior_dir = Terracotta__SimShader__prior_direction__Terracotta_data(cur);
             cur.r = prior_dir;
-            float2 offset = (1 - fs_param_s) * Terracotta__SimShader__direction_to_vec(prior_dir);
-            output += Terracotta__DrawUnits__Sprite(psin, 0.007843138, cur, cur_unit, subcell_pos + offset, frame, fs_param_UnitTexture, fs_param_UnitTexture_size, fs_param_UnitTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
+            float2 offset = (1 - fs_param_s) * Terracotta__SimShader__direction_to_vec__float(prior_dir);
+            output += Terracotta__DrawUnits__Sprite__float__Terracotta_data__Terracotta_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler__float__float__bool__float(psin, 0.007843138, cur, cur_unit, subcell_pos + offset, frame, fs_param_UnitTexture, fs_param_UnitTexture_size, fs_param_UnitTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
         }
-        if (Terracotta__SimShader__IsValid(pre.r) && output.a < 0.025 - .001)
+        if (Terracotta__SimShader__IsValid__float(pre.r) && output.a < 0.025 - .001)
         {
-            float2 offset = -(fs_param_s) * Terracotta__SimShader__direction_to_vec(pre.r);
-            output += Terracotta__DrawUnits__Sprite(psin, 0.007843138, pre, pre_unit, subcell_pos + offset, frame, fs_param_UnitTexture, fs_param_UnitTexture_size, fs_param_UnitTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
+            float2 offset = -(fs_param_s) * Terracotta__SimShader__direction_to_vec__float(pre.r);
+            output += Terracotta__DrawUnits__Sprite__float__Terracotta_data__Terracotta_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler__float__float__bool__float(psin, 0.007843138, pre, pre_unit, subcell_pos + offset, frame, fs_param_UnitTexture, fs_param_UnitTexture_size, fs_param_UnitTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, false, fs_param_solid_blend);
         }
     }
     if (output.a < 0.025 - .001)

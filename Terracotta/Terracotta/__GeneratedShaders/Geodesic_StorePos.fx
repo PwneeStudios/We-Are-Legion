@@ -40,7 +40,7 @@ sampler fs_param_Geo : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 Terracotta__SimShader__pack_val_2byte(float x)
+float2 Terracotta__SimShader__pack_val_2byte__float(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -48,16 +48,16 @@ float2 Terracotta__SimShader__pack_val_2byte(float x)
     return packed / 255.0;
 }
 
-float3 Terracotta__SimShader__pack_vec2_3byte(float2 v)
+float3 Terracotta__SimShader__pack_vec2_3byte__FragSharpFramework_vec2(float2 v)
 {
-    float2 packed_x = Terracotta__SimShader__pack_val_2byte(v.x);
-    float2 packed_y = Terracotta__SimShader__pack_val_2byte(v.y);
+    float2 packed_x = Terracotta__SimShader__pack_val_2byte__float(v.x);
+    float2 packed_y = Terracotta__SimShader__pack_val_2byte__float(v.y);
     return float3(packed_x.y, packed_y.y, packed_x.x + 16 * packed_y.x);
 }
 
-void Terracotta__SimShader__set_geo_pos_id(inout float4 g, float2 pos)
+void Terracotta__SimShader__set_geo_pos_id__Terracotta_geo__FragSharpFramework_vec2(inout float4 g, float2 pos)
 {
-    g.gba = Terracotta__SimShader__pack_vec2_3byte(pos);
+    g.gba = Terracotta__SimShader__pack_vec2_3byte__FragSharpFramework_vec2(pos);
 }
 
 // Compiled vertex shader
@@ -81,7 +81,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         return __FinalOutput;
     }
     float2 pos = psin.TexCoords * fs_param_Geo_size;
-    Terracotta__SimShader__set_geo_pos_id(here, pos);
+    Terracotta__SimShader__set_geo_pos_id__Terracotta_geo__FragSharpFramework_vec2(here, pos);
     __FinalOutput.Color = here;
     return __FinalOutput;
 }

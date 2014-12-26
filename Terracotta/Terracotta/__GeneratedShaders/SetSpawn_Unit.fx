@@ -70,23 +70,23 @@ sampler fs_param_Magic : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__IsValid(float direction)
+bool Terracotta__SimShader__IsValid__float(float direction)
 {
     return direction > 0 + .001;
 }
 
-float2 Terracotta__SimShader__dir_to_vec(float direction)
+float2 Terracotta__SimShader__dir_to_vec__float(float direction)
 {
     float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
-    return Terracotta__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Terracotta__SimShader__IsValid__float(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
-float Terracotta__SimShader__Reverse(float dir)
+float Terracotta__SimShader__Reverse__float(float dir)
 {
     dir += 2 * 0.003921569;
     if (dir > 0.01568628 + .001)
@@ -113,15 +113,15 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy);
-    if (Terracotta__SimShader__Something(data_here) && abs(data_here.a - 0.01568628) < .001)
+    if (Terracotta__SimShader__Something__Terracotta_data(data_here) && abs(data_here.a - 0.01568628) < .001)
     {
-        float4 barracks = tex2D(fs_param_Unit, psin.TexCoords + (Terracotta__SimShader__dir_to_vec(Terracotta__SimShader__Reverse(data_here.r))) * fs_param_Unit_dxdy);
+        float4 barracks = tex2D(fs_param_Unit, psin.TexCoords + (Terracotta__SimShader__dir_to_vec__float(Terracotta__SimShader__Reverse__float(data_here.r))) * fs_param_Unit_dxdy);
         unit_here.g = barracks.g;
         unit_here.b = barracks.b;
         unit_here.r = 0.003921569;
         unit_here.a = 0.0;
     }
-    if (Terracotta__SimShader__Something(data_here) && abs(data_here.a - 0.01960784) < .001)
+    if (Terracotta__SimShader__Something__Terracotta_data(data_here) && abs(data_here.a - 0.01960784) < .001)
     {
         unit_here.g = magic_here.g;
         unit_here.b = magic_here.g;

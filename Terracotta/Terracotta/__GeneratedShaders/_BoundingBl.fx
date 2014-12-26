@@ -40,7 +40,7 @@ sampler fs_param_PreviousLevel : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float Terracotta__SimShader__unpack_val(float2 packed)
+float Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(float2 packed)
 {
     float coord = 0;
     packed = floor(255.0 * packed + float2(0.5, 0.5));
@@ -48,15 +48,15 @@ float Terracotta__SimShader__unpack_val(float2 packed)
     return coord;
 }
 
-float2 Terracotta__SimShader__unpack_vec2(float4 packed)
+float2 Terracotta__SimShader__unpack_vec2__FragSharpFramework_vec4(float4 packed)
 {
     float2 v = float2(0, 0);
-    v.x = Terracotta__SimShader__unpack_val(packed.rg);
-    v.y = Terracotta__SimShader__unpack_val(packed.ba);
+    v.x = Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(packed.rg);
+    v.y = Terracotta__SimShader__unpack_val__FragSharpFramework_vec2(packed.ba);
     return v;
 }
 
-float2 Terracotta__SimShader__pack_val_2byte(float x)
+float2 Terracotta__SimShader__pack_val_2byte__float(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -64,14 +64,14 @@ float2 Terracotta__SimShader__pack_val_2byte(float x)
     return packed / 255.0;
 }
 
-float4 Terracotta__SimShader__pack_vec2(float2 v)
+float4 Terracotta__SimShader__pack_vec2__FragSharpFramework_vec2(float2 v)
 {
-    float2 packed_x = Terracotta__SimShader__pack_val_2byte(v.x);
-    float2 packed_y = Terracotta__SimShader__pack_val_2byte(v.y);
+    float2 packed_x = Terracotta__SimShader__pack_val_2byte__float(v.x);
+    float2 packed_y = Terracotta__SimShader__pack_val_2byte__float(v.y);
     return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 
-float2 FragSharpFramework__FragSharpStd__min(float2 a, float2 b, float2 c, float2 d)
+float2 FragSharpFramework__FragSharpStd__min__FragSharpFramework_vec2__FragSharpFramework_vec2__FragSharpFramework_vec2__FragSharpFramework_vec2(float2 a, float2 b, float2 c, float2 d)
 {
     return min(min(a, b), min(c, d));
 }
@@ -90,8 +90,8 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float2 TL = Terracotta__SimShader__unpack_vec2(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy)), TR = Terracotta__SimShader__unpack_vec2(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy)), BL = Terracotta__SimShader__unpack_vec2(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy)), BR = Terracotta__SimShader__unpack_vec2(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy));
-    __FinalOutput.Color = Terracotta__SimShader__pack_vec2(FragSharpFramework__FragSharpStd__min(TL, TR, BL, BR));
+    float2 TL = Terracotta__SimShader__unpack_vec2__FragSharpFramework_vec4(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy)), TR = Terracotta__SimShader__unpack_vec2__FragSharpFramework_vec4(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy)), BL = Terracotta__SimShader__unpack_vec2__FragSharpFramework_vec4(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy)), BR = Terracotta__SimShader__unpack_vec2__FragSharpFramework_vec4(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy));
+    __FinalOutput.Color = Terracotta__SimShader__pack_vec2__FragSharpFramework_vec2(FragSharpFramework__FragSharpStd__min__FragSharpFramework_vec2__FragSharpFramework_vec2__FragSharpFramework_vec2__FragSharpFramework_vec2(TL, TR, BL, BR));
     return __FinalOutput;
 }
 

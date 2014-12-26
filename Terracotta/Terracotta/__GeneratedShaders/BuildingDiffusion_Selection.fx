@@ -55,42 +55,77 @@ sampler fs_param_Building : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_building(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__IsBuilding(float4 u)
+bool Terracotta__SimShader__IsBuilding__Terracotta_unit(float4 u)
 {
     return u.r >= 0.02352941 - .001 && u.r < 0.07843138 - .001;
 }
 
-float2 Terracotta__SimShader__center_dir(float4 b)
+float2 Terracotta__SimShader__center_dir__Terracotta_building(float4 b)
 {
     float2 part = float2(b.g, b.a);
     part = -(255) * (part - float2(0.003921569, 0.003921569));
     return part;
 }
 
-float Terracotta__SimShader__prior_direction(float4 u)
+float FragSharpFramework__FragSharpStd__fint_round__float(float v)
+{
+    return floor(255 * v + 0.5) * 0.003921569;
+}
+
+float Terracotta__SimShader__prior_direction__Terracotta_data(float4 u)
 {
     float val = u.b;
-    if (val >= 0.3764706 - .001)
-    {
-        val -= 0.3764706;
-    }
+    val = fmod(val, 0.1254902);
+    val = FragSharpFramework__FragSharpStd__fint_round__float(val);
     return val;
 }
 
-void Terracotta__SimShader__set_selected(inout float4 u, bool selected)
+float Terracotta__SimShader__select_state__Terracotta_data(float4 u)
 {
-    u.b = Terracotta__SimShader__prior_direction(u) + (selected ? 0.3764706 : 0.0);
+    return u.b - Terracotta__SimShader__prior_direction__Terracotta_data(u);
 }
 
-bool Terracotta__SimShader__selected(float4 u)
+bool Terracotta__SimShader__show_selected__Terracotta_data(float4 u)
+{
+    float val = u.b;
+    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
+}
+
+void Terracotta__SimShader__set_selected__Terracotta_data__bool(inout float4 u, bool selected)
+{
+    float state = Terracotta__SimShader__select_state__Terracotta_data(u);
+    if (selected)
+    {
+        state = Terracotta__SimShader__show_selected__Terracotta_data(u) ? 0.3764706 : 0.627451;
+    }
+    else
+    {
+        state = Terracotta__SimShader__show_selected__Terracotta_data(u) ? 0.2509804 : 0.0;
+    }
+    u.b = Terracotta__SimShader__prior_direction__Terracotta_data(u) + state;
+}
+
+void Terracotta__SimShader__set_selected__Terracotta_building__bool(inout float4 u, bool selected)
+{
+    float4 d = u;
+    Terracotta__SimShader__set_selected__Terracotta_data__bool(d, selected);
+    u = d;
+}
+
+bool Terracotta__SimShader__selected__Terracotta_data(float4 u)
 {
     float val = u.b;
     return val >= 0.3764706 - .001;
+}
+
+bool Terracotta__SimShader__selected__Terracotta_building(float4 u)
+{
+    return Terracotta__SimShader__selected__Terracotta_data(u);
 }
 
 // Compiled vertex shader
@@ -109,15 +144,15 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 0)) * fs_param_Building_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (Terracotta__SimShader__Something(building_here) && Terracotta__SimShader__IsBuilding(unit_here))
+    if (Terracotta__SimShader__Something__Terracotta_building(building_here) && Terracotta__SimShader__IsBuilding__Terracotta_unit(unit_here))
     {
-        float4 center = tex2D(fs_param_Building, psin.TexCoords + (Terracotta__SimShader__center_dir(building_here)) * fs_param_Building_dxdy);
-        if (!(Terracotta__SimShader__Something(center)))
+        float4 center = tex2D(fs_param_Building, psin.TexCoords + (Terracotta__SimShader__center_dir__Terracotta_building(building_here)) * fs_param_Building_dxdy);
+        if (!(Terracotta__SimShader__Something__Terracotta_building(center)))
         {
             __FinalOutput.Color = float4(0, 0, 0, 0);
             return __FinalOutput;
         }
-        Terracotta__SimShader__set_selected(building_here, Terracotta__SimShader__selected(center));
+        Terracotta__SimShader__set_selected__Terracotta_building__bool(building_here, Terracotta__SimShader__selected__Terracotta_building(center));
     }
     __FinalOutput.Color = building_here;
     return __FinalOutput;

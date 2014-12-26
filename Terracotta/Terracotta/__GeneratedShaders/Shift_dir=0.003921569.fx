@@ -41,15 +41,15 @@ sampler fs_param_Random : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__IsValid(float direction)
+bool Terracotta__SimShader__IsValid__float(float direction)
 {
     return direction > 0 + .001;
 }
 
-float2 Terracotta__SimShader__dir_to_vec(float direction)
+float2 Terracotta__SimShader__dir_to_vec__float(float direction)
 {
     float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
-    return Terracotta__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Terracotta__SimShader__IsValid__float(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
 // Compiled vertex shader
@@ -66,7 +66,7 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    __FinalOutput.Color = tex2D(fs_param_Random, psin.TexCoords + (Terracotta__SimShader__dir_to_vec(0.003921569)) * fs_param_Random_dxdy);
+    __FinalOutput.Color = tex2D(fs_param_Random, psin.TexCoords + (Terracotta__SimShader__dir_to_vec__float(0.003921569)) * fs_param_Random_dxdy);
     return __FinalOutput;
 }
 

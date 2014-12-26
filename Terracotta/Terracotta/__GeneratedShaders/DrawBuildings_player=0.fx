@@ -89,12 +89,12 @@ float fs_param_s;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__IsBuilding(float4 u)
+bool Terracotta__SimShader__IsBuilding__Terracotta_unit(float4 u)
 {
     return u.r >= 0.02352941 - .001 && u.r < 0.07843138 - .001;
 }
 
-float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_size)
+float2 Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -102,17 +102,17 @@ float2 Terracotta__SimShader__get_subcell_pos(VertexToPixel vertex, float2 grid_
     return coords - float2(i, j);
 }
 
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_building(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-float Terracotta__ExplosionSpriteSheet__ExplosionFrame(float s, float4 building_here)
+float Terracotta__ExplosionSpriteSheet__ExplosionFrame__float__Terracotta_building(float s, float4 building_here)
 {
     return (s + 255 * (building_here.r - 0.02745098)) * 6;
 }
 
-float4 Terracotta__DrawBuildings__ExplosionSprite(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 Terracotta__DrawBuildings__ExplosionSprite__Terracotta_building__Terracotta_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
@@ -124,38 +124,43 @@ float4 Terracotta__DrawBuildings__ExplosionSprite(VertexToPixel psin, float4 u, 
     return tex2D(Texture, pos);
 }
 
-bool Terracotta__SimShader__selected(float4 u)
+bool Terracotta__SimShader__show_selected__Terracotta_data(float4 u)
 {
     float val = u.b;
-    return val >= 0.3764706 - .001;
+    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-float2 FragSharpFramework__FragSharpStd__Float(float2 v)
+bool Terracotta__SimShader__show_selected__Terracotta_building(float4 u)
+{
+    return Terracotta__SimShader__show_selected__Terracotta_data(u);
+}
+
+float2 FragSharpFramework__FragSharpStd__Float__FragSharpFramework_vec2(float2 v)
 {
     return floor(255 * v + float2(0.5, 0.5));
 }
 
-float FragSharpFramework__FragSharpStd__Float(float v)
+float FragSharpFramework__FragSharpStd__Float__float(float v)
 {
     return floor(255 * v + 0.5);
 }
 
-float Terracotta__UnitType__BuildingIndex(float type)
+float Terracotta__UnitType__BuildingIndex__float(float type)
 {
     return type - 0.02352941;
 }
 
-float4 Terracotta__DrawBuildings__Sprite(VertexToPixel psin, float player, float4 b, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 Terracotta__DrawBuildings__Sprite__float__Terracotta_building__Terracotta_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler(VertexToPixel psin, float player, float4 b, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__selected(b);
+    bool draw_selected = abs(u.g - player) < .001 && Terracotta__SimShader__show_selected__Terracotta_building(b);
     float selected_offset = draw_selected ? 3 : 0;
-    pos += FragSharpFramework__FragSharpStd__Float(float2(b.g, b.a));
-    pos.x += FragSharpFramework__FragSharpStd__Float(u.g) * 3;
-    pos.y += selected_offset + 6 * FragSharpFramework__FragSharpStd__Float(Terracotta__UnitType__BuildingIndex(u.r));
+    pos += FragSharpFramework__FragSharpStd__Float__FragSharpFramework_vec2(float2(b.g, b.a));
+    pos.x += FragSharpFramework__FragSharpStd__Float__float(u.g) * 3;
+    pos.y += selected_offset + 6 * FragSharpFramework__FragSharpStd__Float__float(Terracotta__UnitType__BuildingIndex__float(u.r));
     pos *= float2(1.0 / 15, 1.0 / 30);
     return tex2D(Texture, pos);
 }
@@ -179,26 +184,26 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 building_here = tex2D(fs_param_Buildings, psin.TexCoords + (float2(0, 0)) * fs_param_Buildings_dxdy);
     float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    if (!(Terracotta__SimShader__IsBuilding(unit_here)))
+    if (!(Terracotta__SimShader__IsBuilding__Terracotta_unit(unit_here)))
     {
         __FinalOutput.Color = output;
         return __FinalOutput;
     }
-    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos(psin, fs_param_Buildings_size);
-    if (Terracotta__SimShader__Something(building_here))
+    float2 subcell_pos = Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_Buildings_size);
+    if (Terracotta__SimShader__Something__Terracotta_building(building_here))
     {
         if (building_here.r >= 0.02745098 - .001)
         {
-            float frame = Terracotta__ExplosionSpriteSheet__ExplosionFrame(fs_param_s, building_here);
+            float frame = Terracotta__ExplosionSpriteSheet__ExplosionFrame__float__Terracotta_building(fs_param_s, building_here);
             if (frame < 16 - .001)
             {
-                output += Terracotta__DrawBuildings__ExplosionSprite(psin, building_here, unit_here, subcell_pos, frame, fs_param_Explosion, fs_param_Explosion_size, fs_param_Explosion_dxdy);
+                output += Terracotta__DrawBuildings__ExplosionSprite__Terracotta_building__Terracotta_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler(psin, building_here, unit_here, subcell_pos, frame, fs_param_Explosion, fs_param_Explosion_size, fs_param_Explosion_dxdy);
             }
         }
         else
         {
             float frame = 0;
-            output += Terracotta__DrawBuildings__Sprite(psin, 0, building_here, unit_here, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+            output += Terracotta__DrawBuildings__Sprite__float__Terracotta_building__Terracotta_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler(psin, 0, building_here, unit_here, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
     }
     __FinalOutput.Color = output;

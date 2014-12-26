@@ -55,39 +55,39 @@ sampler fs_param_Previous : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Terracotta__SimShader__selected(float4 u)
+bool Terracotta__SimShader__selected__Terracotta_data(float4 u)
 {
     float val = u.b;
     return val >= 0.3764706 - .001;
 }
 
-bool Terracotta__SimShader__Something(float4 u)
+bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__IsValid(float direction)
+bool Terracotta__SimShader__IsValid__float(float direction)
 {
     return direction > 0 + .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_round(float v)
+float FragSharpFramework__FragSharpStd__fint_round__float(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Terracotta__SimShader__prior_direction(float4 u)
+float Terracotta__SimShader__prior_direction__Terracotta_data(float4 u)
 {
     float val = u.b;
     val = fmod(val, 0.1254902);
-    val = FragSharpFramework__FragSharpStd__fint_round(val);
+    val = FragSharpFramework__FragSharpStd__fint_round__float(val);
     return val;
 }
 
-float2 Terracotta__SimShader__direction_to_vec(float direction)
+float2 Terracotta__SimShader__direction_to_vec__float(float direction)
 {
     float angle = (direction * 255 - 1) * (3.141593 / 2.0);
-    return Terracotta__SimShader__IsValid(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Terracotta__SimShader__IsValid__float(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
 // Compiled vertex shader
@@ -107,19 +107,19 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 cur = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 pre = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * fs_param_Previous_dxdy);
-    float selected_offset = Terracotta__SimShader__selected(cur) ? 0.01568628 : 0.0;
+    float selected_offset = Terracotta__SimShader__selected__Terracotta_data(cur) ? 0.01568628 : 0.0;
     float anim = 0;
     float2 vel = float2(0, 0);
-    if (Terracotta__SimShader__Something(cur) && abs(cur.g - 0.003921569) < .001)
+    if (Terracotta__SimShader__Something__Terracotta_data(cur) && abs(cur.g - 0.003921569) < .001)
     {
         anim = cur.r;
     }
     else
     {
-        if (Terracotta__SimShader__IsValid(cur.r))
+        if (Terracotta__SimShader__IsValid__float(cur.r))
         {
-            anim = Terracotta__SimShader__prior_direction(cur);
-            vel = Terracotta__SimShader__direction_to_vec(Terracotta__SimShader__prior_direction(cur));
+            anim = Terracotta__SimShader__prior_direction__Terracotta_data(cur);
+            vel = Terracotta__SimShader__direction_to_vec__float(Terracotta__SimShader__prior_direction__Terracotta_data(cur));
         }
         else
         {
