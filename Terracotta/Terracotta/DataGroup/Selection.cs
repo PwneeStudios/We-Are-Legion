@@ -29,6 +29,15 @@ namespace Terracotta
             SelectedBound_BL = SimShader.unpack_vec2(bound_bl);
         }
 
+        public void SelectInBox(vec2 bl, vec2 tr, bool Deselect, float Player, bool Fake = false)
+        {
+            ActionSelectInBox.Apply(CurrentData, CurrentUnits, bl, tr, Player, Deselect, Fake, Output: Temp1);
+            Swap(ref Temp1, ref CurrentData);
+
+            ActionSelectInBox.Apply(PreviousData, PreviousUnits, bl, tr, Player, Deselect, Fake, Output: Temp1);
+            Swap(ref Temp1, ref PreviousData);
+        }
+
         public void SelectAlongLine(vec2 p1, vec2 p2, vec2 size, bool Deselect, bool Selecting, float Player, bool EffectSelection, bool Fake = false)
         {
             DataDrawMouse.Using(Assets.SelectCircle_Data, Player, Output: SelectField, Clear: Color.Transparent);

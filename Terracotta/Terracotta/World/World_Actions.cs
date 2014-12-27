@@ -546,10 +546,14 @@ namespace Terracotta
             vec2 WorldCoord = ScreenToWorldCoord(Input.CurMousePos);
             vec2 WorldCoordPrev = ScreenToWorldCoord(Input.PrevMousePos);
 
-            bool Deselect = Input.LeftMousePressed && !Keys.LeftShift.Down() && !Keys.RightShift.Down()
+            bool Deselect =
+                (LineSelect && Input.LeftMouseDown || !LineSelect && Input.LeftMouseReleased)
+                && !Keys.LeftShift.Down() && !Keys.RightShift.Down()
                 || CurUserMode != UserMode.Select
                 || Keys.Back.Down() || Keys.Escape.Down();
-            bool Selecting = Input.LeftMouseDown && (CurUserMode == UserMode.Select || CurUserMode == UserMode.CastSpell || CurUserMode == UserMode.PlaceUnits);
+            bool Selecting =
+                (LineSelect && Input.LeftMouseDown || !LineSelect && Input.LeftMouseReleased)
+                && (CurUserMode == UserMode.Select || CurUserMode == UserMode.CastSpell || CurUserMode == UserMode.PlaceUnits);
 
             if (SkipDeselect)
             {
@@ -565,11 +569,25 @@ namespace Terracotta
 
             if (LineSelect)
             {
-                if (Input.LeftMousePressed && Selecting && EffectSelection) Networking.ToServer(new MessageSelect(Size, Deselect, WorldCoord, WorldCoordPrev));
+                // Continuouse selection
+                //if (Input.LeftMouseDown && Selecting && EffectSelection) Networking.ToServer(new MessageSelect(Size, Deselect, WorldCoord, WorldCoordPrev));
+
+                // Discrete selection
+                if (Input.LeftMousePressed && Selecting && EffectSelection) Networking.ToServer(new MessageSelectAlongLine(Size, Deselect, WorldCoord, WorldCoordPrev));
+
+                // Single area select, no sweep
+                //DataGroup.SelectInArea(WorldCoord, Size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
             }
             else
             {
-                DataGroup.SelectInArea(WorldCoord, Size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
+                if (Selecting && EffectSelection && BoxSelecting)
+                {
+                    BoxSelecting = false;
+                    vec2 bl = floor(min(BoxSelectGridStart, BoxSelectGridEnd) - vec(1f, 1f));
+                    vec2 tr = ceiling(max(BoxSelectGridStart, BoxSelectGridEnd));
+                    
+                    Networking.ToServer(new MessageSelectInBox(Deselect, bl, tr));
+                }
             }
 
             if (CurUserMode != UserMode.Select) return;
@@ -622,7 +640,7 @@ namespace Terracotta
             if (DataGroup.SelectedUnits == 0 && DataGroup.SelectedBarracks == 0) return;
 
             vec2 Pos = ScreenToGridCoord(Input.CurMousePos);
-
+            
             vec2 Selected_BL = DataGroup.SelectedBound_BL;
             vec2 Selected_Size = DataGroup.SelectedBound_TR - DataGroup.SelectedBound_BL;
             if (Selected_Size.x < 1) Selected_Size.x = 1;

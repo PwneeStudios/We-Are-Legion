@@ -116,12 +116,12 @@ namespace Terracotta
         }
     }
 
-    public class MessageSelect : MessagePlayerActionTail
+    public class MessageSelectAlongLine : MessagePlayerActionTail
     {
         public vec2 size, v1, v2;
         public bool deselect;
 
-        public MessageSelect(vec2 size, bool deselect, vec2 v1, vec2 v2)
+        public MessageSelectAlongLine(vec2 size, bool deselect, vec2 v1, vec2 v2)
         {
             this.size = size;
             this.deselect = deselect;
@@ -130,8 +130,8 @@ namespace Terracotta
         }
 
         public override MessageStr EncodeHead() { return _ | size | deselect | v1 | v2; }
-        public static MessageSelect Parse(string s) { return new MessageSelect(PopVec2(ref s), PopBool(ref s), PopVec2(ref s), PopVec2(ref s)); }
-        public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.Select); }
+        public static MessageSelectAlongLine Parse(string s) { return new MessageSelectAlongLine(PopVec2(ref s), PopBool(ref s), PopVec2(ref s), PopVec2(ref s)); }
+        public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.SelectAlongLine); }
 
         public override void Immediate()
         {
@@ -143,6 +143,35 @@ namespace Terracotta
         {
             if (Log.Do) Console.WriteLine("   Do select at {0}      : {1}", GameClass.World.SimStep, this);
             GameClass.Data.SelectAlongLine(v1, v2, size, deselect, true, Player.Vals[Action.PlayerNumber], true);
+        }
+    }
+
+    public class MessageSelectInBox : MessagePlayerActionTail
+    {
+        public bool deselect;
+        public vec2 bl, tr;
+
+        public MessageSelectInBox(bool deselect, vec2 bl, vec2 tr)
+        {
+            this.deselect = deselect;
+            this.bl = bl;
+            this.tr = tr;
+        }
+
+        public override MessageStr EncodeHead() { return _ | deselect | bl | tr; }
+        public static MessageSelectInBox Parse(string s) { return new MessageSelectInBox(PopBool(ref s), PopVec2(ref s), PopVec2(ref s)); }
+        public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.SelectInBox); }
+
+        public override void Immediate()
+        {
+            GameClass.Data.SelectInBox(bl, tr, deselect, Player.Vals[Action.PlayerNumber], Fake: true);
+            GameClass.Data.Building_FakeSelectionSpread();
+        }
+
+        public override void Do()
+        {
+            if (Log.Do) Console.WriteLine("   Do select in box at {0}      : {1}", GameClass.World.SimStep, this);
+            GameClass.Data.SelectInBox(bl, tr, deselect, Player.Vals[Action.PlayerNumber]);
         }
     }
 }

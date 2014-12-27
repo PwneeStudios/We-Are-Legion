@@ -59,6 +59,45 @@ namespace Terracotta
         }
     }
 
+    public partial class ActionSelectInBox : SimShader
+    {
+        [FragmentShader]
+        data FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit,
+            vec2 bl, vec2 tr,
+            [Player.Vals] float player,
+            bool deselect,
+            [Vals.Bool] bool fake)
+        {
+            unit unit_here = Unit[Here];
+            data data_here = Data[Here];
+
+            if (unit_here.player != player || BlockingTileHere(unit_here))
+            {
+                return data_here;
+            }
+
+            vec2 pos = vertex.TexCoords * Data.Size;
+            bool select = bl < pos && pos < tr;
+
+            // If the player unit here matches the specified player.
+            if (select)
+            {
+                if (fake) set_selected_fake(ref data_here, true);
+                else set_selected(ref data_here, true);
+            }
+            else
+            {
+                if (deselect)
+                {
+                    if (fake) set_selected_fake(ref data_here, false);
+                    else set_selected(ref data_here, false);
+                }
+            }
+
+            return data_here;
+        }
+    }
+
     public partial class DataDrawMouse : SimShader
     {
         [FragmentShader]

@@ -190,6 +190,7 @@ namespace Terracotta
             RectangleQuad.Draw(GameClass.Graphics, WorldCord, Size, Angle);
         }
 
+        bool LineSelect = false;
         public void DrawCircleCursor()
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
@@ -198,6 +199,32 @@ namespace Terracotta
 
             DrawTextureSmooth.Using(camvec, CameraAspect, Assets.SelectDot);
             RectangleQuad.Draw(GameClass.Graphics, WorldCord, .0075f * vec2.Ones / CameraZoom);
+        }
+
+        vec2 BoxSelectStart = vec2.Zero, BoxSelectEnd = vec2.Zero;
+        vec2 BoxSelectGridStart = vec2.Zero, BoxSelectGridEnd = vec2.Zero;
+        bool BoxSelecting = false;
+        public void DrawBoxSelect()
+        {
+            DrawArrowCursor();
+
+            if (!Input.LeftMouseDown) return;
+
+            BoxSelecting = true;
+            vec2 pos = ScreenToWorldCoord(Input.CurMousePos);
+            vec2 grid_pos = ScreenToGridCoord(Input.CurMousePos);
+
+            if (Input.LeftMousePressed)
+            {
+                BoxSelectStart = pos; BoxSelectEnd = pos; BoxSelectGridStart = grid_pos; BoxSelectGridEnd = grid_pos;
+            }
+            else
+            {
+                BoxSelectEnd = pos; BoxSelectGridEnd = grid_pos;
+            }
+
+            DrawSolid.Using(camvec, CameraAspect, new color(.6f, .6f, .6f, .5f));
+            DrawBox(BoxSelectEnd, BoxSelectStart, 2f / (GameClass.Screen.x * CameraZoom));
         }
 
         public void DrawArrowCursor()

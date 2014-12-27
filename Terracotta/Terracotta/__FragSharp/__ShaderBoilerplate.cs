@@ -69,6 +69,16 @@ namespace FragSharpFramework
             Terracotta.ActionSelect.CompiledEffect_player_0p01176471_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01176471_fake=false");
             Terracotta.ActionSelect.CompiledEffect_player_0p01568628_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01568628_fake=true");
             Terracotta.ActionSelect.CompiledEffect_player_0p01568628_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelect_player=0.01568628_fake=false");
+            Terracotta.ActionSelectInBox.CompiledEffect_player_0_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelectInBox_player=0_fake=true");
+            Terracotta.ActionSelectInBox.CompiledEffect_player_0_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelectInBox_player=0_fake=false");
+            Terracotta.ActionSelectInBox.CompiledEffect_player_0p003921569_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelectInBox_player=0.003921569_fake=true");
+            Terracotta.ActionSelectInBox.CompiledEffect_player_0p003921569_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelectInBox_player=0.003921569_fake=false");
+            Terracotta.ActionSelectInBox.CompiledEffect_player_0p007843138_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelectInBox_player=0.007843138_fake=true");
+            Terracotta.ActionSelectInBox.CompiledEffect_player_0p007843138_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelectInBox_player=0.007843138_fake=false");
+            Terracotta.ActionSelectInBox.CompiledEffect_player_0p01176471_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelectInBox_player=0.01176471_fake=true");
+            Terracotta.ActionSelectInBox.CompiledEffect_player_0p01176471_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelectInBox_player=0.01176471_fake=false");
+            Terracotta.ActionSelectInBox.CompiledEffect_player_0p01568628_fake_true = Content.Load<Effect>("FragSharpShaders/ActionSelectInBox_player=0.01568628_fake=true");
+            Terracotta.ActionSelectInBox.CompiledEffect_player_0p01568628_fake_false = Content.Load<Effect>("FragSharpShaders/ActionSelectInBox_player=0.01568628_fake=false");
             Terracotta.DataDrawMouse.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0");
             Terracotta.DataDrawMouse.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0.003921569");
             Terracotta.DataDrawMouse.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0.007843138");
@@ -1516,6 +1526,88 @@ namespace Terracotta
             CompiledEffect.Parameters["fs_param_Select_Texture"].SetValue(FragSharpMarshal.Marshal(Select));
             CompiledEffect.Parameters["fs_param_Select_size"].SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
             CompiledEffect.Parameters["fs_param_Select_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Select.Width, Select.Height)));
+            CompiledEffect.Parameters["fs_param_deselect"].SetValue(FragSharpMarshal.Marshal(deselect));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+namespace Terracotta
+{
+    public partial class ActionSelectInBox
+    {
+        public static Effect CompiledEffect_player_0_fake_true;
+        public static Effect CompiledEffect_player_0_fake_false;
+        public static Effect CompiledEffect_player_0p003921569_fake_true;
+        public static Effect CompiledEffect_player_0p003921569_fake_false;
+        public static Effect CompiledEffect_player_0p007843138_fake_true;
+        public static Effect CompiledEffect_player_0p007843138_fake_false;
+        public static Effect CompiledEffect_player_0p01176471_fake_true;
+        public static Effect CompiledEffect_player_0p01176471_fake_false;
+        public static Effect CompiledEffect_player_0p01568628_fake_true;
+        public static Effect CompiledEffect_player_0p01568628_fake_false;
+
+        public static void Apply(Texture2D Data, Texture2D Unit, vec2 bl, vec2 tr, float player, bool deselect, bool fake, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Unit, bl, tr, player, deselect, fake);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Data, Texture2D Unit, vec2 bl, vec2 tr, float player, bool deselect, bool fake, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Unit, bl, tr, player, deselect, fake);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Data, Texture2D Unit, vec2 bl, vec2 tr, float player, bool deselect, bool fake, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Unit, bl, tr, player, deselect, fake);
+        }
+        public static void Using(Texture2D Data, Texture2D Unit, vec2 bl, vec2 tr, float player, bool deselect, bool fake, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Unit, bl, tr, player, deselect, fake);
+        }
+        public static void Using(Texture2D Data, Texture2D Unit, vec2 bl, vec2 tr, float player, bool deselect, bool fake)
+        {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0)) < .001 && fake == true) CompiledEffect = CompiledEffect_player_0_fake_true;
+            else if (abs((float)(player - 0)) < .001 && fake == false) CompiledEffect = CompiledEffect_player_0_fake_false;
+            else if (abs((float)(player - 0.003921569)) < .001 && fake == true) CompiledEffect = CompiledEffect_player_0p003921569_fake_true;
+            else if (abs((float)(player - 0.003921569)) < .001 && fake == false) CompiledEffect = CompiledEffect_player_0p003921569_fake_false;
+            else if (abs((float)(player - 0.007843138)) < .001 && fake == true) CompiledEffect = CompiledEffect_player_0p007843138_fake_true;
+            else if (abs((float)(player - 0.007843138)) < .001 && fake == false) CompiledEffect = CompiledEffect_player_0p007843138_fake_false;
+            else if (abs((float)(player - 0.01176471)) < .001 && fake == true) CompiledEffect = CompiledEffect_player_0p01176471_fake_true;
+            else if (abs((float)(player - 0.01176471)) < .001 && fake == false) CompiledEffect = CompiledEffect_player_0p01176471_fake_false;
+            else if (abs((float)(player - 0.01568628)) < .001 && fake == true) CompiledEffect = CompiledEffect_player_0p01568628_fake_true;
+            else if (abs((float)(player - 0.01568628)) < .001 && fake == false) CompiledEffect = CompiledEffect_player_0p01568628_fake_false;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Unit_Texture"].SetValue(FragSharpMarshal.Marshal(Unit));
+            CompiledEffect.Parameters["fs_param_Unit_size"].SetValue(FragSharpMarshal.Marshal(vec(Unit.Width, Unit.Height)));
+            CompiledEffect.Parameters["fs_param_Unit_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Unit.Width, Unit.Height)));
+            CompiledEffect.Parameters["fs_param_bl"].SetValue(FragSharpMarshal.Marshal(bl));
+            CompiledEffect.Parameters["fs_param_tr"].SetValue(FragSharpMarshal.Marshal(tr));
             CompiledEffect.Parameters["fs_param_deselect"].SetValue(FragSharpMarshal.Marshal(deselect));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }

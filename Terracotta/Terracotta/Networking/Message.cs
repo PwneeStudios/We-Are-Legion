@@ -20,7 +20,7 @@ namespace Terracotta
     }
 
     public enum PlayerAction {
-        Select, AttackMove, PlaceBuilding, CastSpell
+        SelectAlongLine, SelectInBox, AttackMove, PlaceBuilding, CastSpell
     }
 
     public abstract class GenericMessage : SimShader
@@ -271,7 +271,8 @@ namespace Terracotta
 
             switch (message.Action)
             {
-                case PlayerAction.Select: message.Inner = MessageSelect.Parse(s); break;
+                case PlayerAction.SelectAlongLine: message.Inner = MessageSelectAlongLine.Parse(s); break;
+                case PlayerAction.SelectInBox: message.Inner = MessageSelectInBox.Parse(s); break;
                 case PlayerAction.AttackMove: message.Inner = MessageAttackMove.Parse(s); break;
                 case PlayerAction.PlaceBuilding: message.Inner = MessagePlaceBuilding.Parse(s); break;
                 case PlayerAction.CastSpell: message.Inner = MessageCastSpell.Parse(s); break;

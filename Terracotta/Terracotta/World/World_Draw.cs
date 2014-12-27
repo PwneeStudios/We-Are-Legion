@@ -243,7 +243,7 @@ namespace Terracotta
                         DataGroup.SelectedUnits = selected.Item1;
                         DataGroup.SelectedBarracks = selected.Item2;
 
-                        SelectionUpdate(SelectSize);
+                        SelectionUpdate(SelectSize, LineSelect: LineSelect);
                         break;
 
                     case UserMode.CastSpell:
@@ -571,7 +571,10 @@ namespace Terracotta
                         break;
 
                     case UserMode.Select:
-                        DrawCircleCursor();
+                        if (LineSelect)
+                            DrawCircleCursor();
+                        else
+                            DrawBoxSelect();
                         break;
 
                     case UserMode.CastSpell:
