@@ -5,7 +5,7 @@ namespace Terracotta
     public partial class DrawBuildingsIcons : BaseShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<BuildingDist> BuildingDistances, float blend, float radius)
+        color FragmentShader(VertexOut vertex, Field<BuildingDist> BuildingDistances, Field<building> Data, float blend, float radius)
         {
             BuildingDist info = BuildingDistances[Here];
 
@@ -13,12 +13,38 @@ namespace Terracotta
 
             vec2 subcell_pos = get_subcell_pos(vertex, BuildingDistances.Size);
 
-            var v = 255 * (info.diff - Pathfinding_ToBuildings.CenterOffset) - (subcell_pos - vec(.5f, .5f));
-            if (length(v) < radius)
-            {
-                color clr = BuildingMarkerColors.Get(get_player(info), get_type(info));
+            // Get the building data by following the offset
+            vec2 offset = Float(info.diff - Pathfinding_ToBuildings.CenterOffset);
+            var index = new RelativeIndex(offset.x, offset.y);
+            building b = Data[index];
 
-                return clr * blend;
+            // Get the distance from here to the building center
+            float l = length(255 * (info.diff - Pathfinding_ToBuildings.CenterOffset) - (subcell_pos - vec(.5f, .5f)));
+            
+            // Draw pixel
+            if (fake_selected(b))
+            {
+                if (l > .8f * radius && l < radius * 1.15f)
+                {
+                    color clr = SelectedUnitColor.Get(get_player(info)) * .75f;
+                    clr.a = 1;
+                    return clr * blend;
+                }
+                
+                if (l < radius)
+                {
+                    color clr = BuildingMarkerColors.Get(get_player(info), get_type(info)) * 1f;
+                    clr.a = 1;
+                    return clr * blend;
+                }
+            }
+            else
+            {
+                if (l < radius)
+                {
+                    color clr = BuildingMarkerColors.Get(get_player(info), get_type(info));
+                    return clr * blend;
+                }
             }
 
             return color.TransparentBlack;

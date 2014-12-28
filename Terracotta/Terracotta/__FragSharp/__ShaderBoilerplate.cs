@@ -2750,39 +2750,42 @@ namespace Terracotta
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, float blend, float radius, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, float blend, float radius, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, BuildingDistances, blend, radius);
+            Using(cameraPos, cameraAspect, BuildingDistances, Data, blend, radius);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, float blend, float radius, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, float blend, float radius, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, BuildingDistances, blend, radius);
+            Using(cameraPos, cameraAspect, BuildingDistances, Data, blend, radius);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, float blend, float radius, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, float blend, float radius, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, BuildingDistances, blend, radius);
+            Using(cameraPos, cameraAspect, BuildingDistances, Data, blend, radius);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, float blend, float radius, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, float blend, float radius, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, BuildingDistances, blend, radius);
+            Using(cameraPos, cameraAspect, BuildingDistances, Data, blend, radius);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, float blend, float radius)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, float blend, float radius)
         {
             CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
             CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
             CompiledEffect.Parameters["fs_param_BuildingDistances_Texture"].SetValue(FragSharpMarshal.Marshal(BuildingDistances));
             CompiledEffect.Parameters["fs_param_BuildingDistances_size"].SetValue(FragSharpMarshal.Marshal(vec(BuildingDistances.Width, BuildingDistances.Height)));
             CompiledEffect.Parameters["fs_param_BuildingDistances_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(BuildingDistances.Width, BuildingDistances.Height)));
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
             CompiledEffect.Parameters["fs_param_blend"].SetValue(FragSharpMarshal.Marshal(blend));
             CompiledEffect.Parameters["fs_param_radius"].SetValue(FragSharpMarshal.Marshal(radius));
             CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));

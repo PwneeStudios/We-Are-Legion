@@ -85,6 +85,9 @@ namespace Terracotta
             // Random field
             UpdateRandomField.Apply(RandomField, Output: Temp1);
             Swap(ref RandomField, ref Temp1);
+
+            // Building icon gradient
+            for (int i = 0; i < 7; i++) UpdateGradient_ToBuildings();
         }
     }
 }

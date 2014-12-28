@@ -190,7 +190,7 @@ namespace Terracotta
             RectangleQuad.Draw(GameClass.Graphics, WorldCord, Size, Angle);
         }
 
-        bool LineSelect = false;
+        bool LineSelect = true;
         public void DrawCircleCursor()
         {
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
