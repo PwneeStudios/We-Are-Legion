@@ -72,7 +72,7 @@ namespace Terracotta
     public partial class SetSpawn_Unit : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> Unit, Field<data> Data, Field<magic> Magic)
+        unit FragmentShader(VertexOut vertex, Field<unit> Unit, Field<data> Data, Field<magic> Magic, PlayerTuple Teams)
         {
             data data_here = Data[Here];
             unit unit_here = Unit[Here];
@@ -90,7 +90,7 @@ namespace Terracotta
             if (Something(data_here) && data_here.action == UnitAction.Raising)
             {
                 unit_here.player = magic_here.raising_player;
-                unit_here.team = magic_here.raising_player;
+                unit_here.team = Get(Teams, magic_here.raising_player);
                 unit_here.type = UnitType.Skeleton;
                 unit_here.anim = Anim.StartRaise;
             }

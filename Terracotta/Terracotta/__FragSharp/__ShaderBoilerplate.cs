@@ -102,6 +102,7 @@ namespace FragSharpFramework
             Terracotta.Shift.CompiledEffect_dir_0p007843138 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.007843138");
             Terracotta.Shift.CompiledEffect_dir_0p01176471 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.01176471");
             Terracotta.Shift.CompiledEffect_dir_0p01568628 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.01568628");
+            Terracotta.SetTeams.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SetTeams");
             Terracotta.UnitMigrate.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UnitMigrate");
             Terracotta.BenchmarkTest_TextureLookup4x4.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup4x4");
             Terracotta.BenchmarkTest_TextureLookup1x1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup1x1");
@@ -2281,6 +2282,50 @@ namespace Terracotta
 
 namespace Terracotta
 {
+    public partial class SetTeams
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D Units, PlayerTuple Teams, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Units, Teams);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Units, PlayerTuple Teams, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Units, Teams);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Units, PlayerTuple Teams, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Units, Teams);
+        }
+        public static void Using(Texture2D Units, PlayerTuple Teams, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Units, Teams);
+        }
+        public static void Using(Texture2D Units, PlayerTuple Teams)
+        {
+            CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
+            CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Teams"].SetValue(FragSharpMarshal.Marshal(Teams));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace Terracotta
+{
     public partial class UnitMigrate
     {
         public static Effect CompiledEffect;
@@ -3708,33 +3753,33 @@ namespace Terracotta
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(Texture2D Unit, Texture2D Data, Texture2D Magic, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Unit, Texture2D Data, Texture2D Magic, PlayerTuple Teams, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Unit, Data, Magic);
+            Using(Unit, Data, Magic, Teams);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Unit, Texture2D Data, Texture2D Magic, RenderTarget2D Output)
+        public static void Apply(Texture2D Unit, Texture2D Data, Texture2D Magic, PlayerTuple Teams, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Unit, Data, Magic);
+            Using(Unit, Data, Magic, Teams);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Unit, Texture2D Data, Texture2D Magic, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Unit, Texture2D Data, Texture2D Magic, PlayerTuple Teams, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Unit, Data, Magic);
+            Using(Unit, Data, Magic, Teams);
         }
-        public static void Using(Texture2D Unit, Texture2D Data, Texture2D Magic, RenderTarget2D Output)
+        public static void Using(Texture2D Unit, Texture2D Data, Texture2D Magic, PlayerTuple Teams, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Unit, Data, Magic);
+            Using(Unit, Data, Magic, Teams);
         }
-        public static void Using(Texture2D Unit, Texture2D Data, Texture2D Magic)
+        public static void Using(Texture2D Unit, Texture2D Data, Texture2D Magic, PlayerTuple Teams)
         {
             CompiledEffect.Parameters["fs_param_Unit_Texture"].SetValue(FragSharpMarshal.Marshal(Unit));
             CompiledEffect.Parameters["fs_param_Unit_size"].SetValue(FragSharpMarshal.Marshal(vec(Unit.Width, Unit.Height)));
@@ -3745,6 +3790,7 @@ namespace Terracotta
             CompiledEffect.Parameters["fs_param_Magic_Texture"].SetValue(FragSharpMarshal.Marshal(Magic));
             CompiledEffect.Parameters["fs_param_Magic_size"].SetValue(FragSharpMarshal.Marshal(vec(Magic.Width, Magic.Height)));
             CompiledEffect.Parameters["fs_param_Magic_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Magic.Width, Magic.Height)));
+            CompiledEffect.Parameters["fs_param_Teams"].SetValue(FragSharpMarshal.Marshal(Teams));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

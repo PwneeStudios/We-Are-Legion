@@ -10,7 +10,9 @@ namespace Terracotta
         public World()
         {
             MyPlayerNumber = Program.StartupPlayerNumber;
-            MyTeamNumber = Program.StartupTeamNumber;
+            PlayerTeams = Program.Teams;
+            PlayerTeamVals = vec(Team.Vals[PlayerTeams[1]], Team.Vals[PlayerTeams[2]], Team.Vals[PlayerTeams[3]], Team.Vals[PlayerTeams[4]]);
+            MyTeamNumber = PlayerTeams[MyPlayerNumber];
 
             CameraAspect = GameClass.ScreenAspect;
 
@@ -104,6 +106,11 @@ namespace Terracotta
         float PercentSimStepComplete = 0;
 
         int DrawCount = 0;
+
+        public int[]
+            PlayerTeams = new int[] { -1, 1, 2, 3, 4 };
+
+        public PlayerTuple PlayerTeamVals;
 
         public float MyPlayerValue = Player.One;
         public int MyPlayerNumber

@@ -82,11 +82,13 @@ namespace Terracotta
         public static int
             NumPlayers = 1,
             StartupPlayerNumber = 1,
-            StartupTeamNumber = 1,
             Width = -1,
             Height = -1,
             PosX = -1,
             PosY = -1;
+
+        public static int[]
+            Teams = new int[] { -1,  1, 2, 3, 4 };
 
         public static bool
             GameStarted = false,
@@ -114,34 +116,34 @@ namespace Terracotta
             if (args_.Length == 0)
             {
                 // Single player
-                args_ = "--server                --port 13000 --p2 --t1 --n 1".Split(' ');
+                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1".Split(' ');
 
                 // Single player with client-server debug
-                //args_ = "--server                --port 13000 --p1 --t1 --n 1    --debug --double".Split(' ');
+                args_ = "--server                --port 13000 --p 2 --t 1234 --n 1    --debug --double".Split(' ');
 
                 // Two player debug
-                //args_ = "--client --ip 127.0.0.1 --port 13000 --p1 --t1 --n 2    --debug --double".Split(' ');
-                //Start("  --server                --port 13000 --p2 --t2 --n 2    --debug --double");
+                //args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2    --debug --double".Split(' ');
+                //Start("  --server                --port 13000 --p 2 --t 1234 --n 2    --debug --double");
 
                 // Four player debug
-                //args_ = "--server                --port 13000 --p1 --t1 --n 4   --debug --quad".Split(' ');
-                //Start("  --client --ip 127.0.0.1 --port 13000 --p2 --t2 --n 4   --debug --quad");
-                //Start("  --client --ip 127.0.0.1 --port 13000 --p3 --t3 --n 4   --debug --quad");
-                //Start("  --client --ip 127.0.0.1 --port 13000 --p4 --t4 --n 4   --debug --quad");
+                //args_ = "--server                --port 13000 --p 1 --t 1234 --n 4   --debug --quad".Split(' ');
+                //Start("  --client --ip 127.0.0.1 --port 13000 --p 2 --t 1234 --n 4   --debug --quad");
+                //Start("  --client --ip 127.0.0.1 --port 13000 --p 3 --t 1234 --n 4   --debug --quad");
+                //Start("  --client --ip 127.0.0.1 --port 13000 --p 4 --t 1234 --n 4   --debug --quad");
             }
 #endif
 
             List<string> args = new List<string>(args_);
 
-            if (args.Contains("--p1")) StartupPlayerNumber = 1;
-            if (args.Contains("--p2")) StartupPlayerNumber = 2;
-            if (args.Contains("--p3")) StartupPlayerNumber = 3;
-            if (args.Contains("--p4")) StartupPlayerNumber = 4;
+            if (args.Contains("--p")) { int i = args.IndexOf("--p"); StartupPlayerNumber = int.Parse(args[i + 1]); }
 
-            if (args.Contains("--t1")) StartupTeamNumber = 1;
-            if (args.Contains("--t2")) StartupTeamNumber = 2;
-            if (args.Contains("--t3")) StartupTeamNumber = 3;
-            if (args.Contains("--t4")) StartupTeamNumber = 4;
+            if (args.Contains("--t"))
+            {
+                string teams = args[args.IndexOf("--t") + 1];
+
+                for (int i = 0; i < 4; i++)
+                    Teams[i + 1] = int.Parse(teams[i].ToString());
+            }
 
             if (args.Contains("--n")) { int i = args.IndexOf("--n"); NumPlayers = int.Parse(args[i + 1]); }
 
@@ -167,8 +169,8 @@ namespace Terracotta
             Console.WriteLine("ip set to {0}", IpAddress);
             Console.WriteLine("port set to {0}", Port);
 
-            if (Server) Console.WriteLine("Terracotta Server. Player {0}, Team {1}", StartupPlayerNumber, StartupTeamNumber);
-            if (Client) Console.WriteLine("Terracotta Client. Player {0}, Team {1}", StartupPlayerNumber, StartupTeamNumber);
+            if (Server) Console.WriteLine("Terracotta Server. Player {0}", StartupPlayerNumber);
+            if (Client) Console.WriteLine("Terracotta Client. Player {0}", StartupPlayerNumber);
 
             if (LogHash) Console.WriteLine("Logging hashes enabled");
             if (Headless) Console.WriteLine("Headless enabled");

@@ -190,6 +190,7 @@ namespace Terracotta
             reader.Close();
             stream.Close();
 
+            Startup();
             //Migrate();
         }
 

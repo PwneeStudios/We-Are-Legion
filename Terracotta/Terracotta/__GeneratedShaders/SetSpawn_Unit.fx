@@ -67,6 +67,8 @@ sampler fs_param_Magic : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
+float4 fs_param_Teams;
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
@@ -94,6 +96,27 @@ float Terracotta__SimShader__Reverse__float(float dir)
         dir -= 4 * 0.003921569;
     }
     return dir;
+}
+
+float Terracotta__SimShader__Get__Terracotta_PlayerTuple__float(float4 tuple, float player)
+{
+    if (abs(player - 0.003921569) < .001)
+    {
+        return tuple.r;
+    }
+    if (abs(player - 0.007843138) < .001)
+    {
+        return tuple.g;
+    }
+    if (abs(player - 0.01176471) < .001)
+    {
+        return tuple.b;
+    }
+    if (abs(player - 0.01568628) < .001)
+    {
+        return tuple.a;
+    }
+    return 0;
 }
 
 // Compiled vertex shader
@@ -124,7 +147,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (Terracotta__SimShader__Something__Terracotta_data(data_here) && abs(data_here.a - 0.01960784) < .001)
     {
         unit_here.g = magic_here.g;
-        unit_here.b = magic_here.g;
+        unit_here.b = Terracotta__SimShader__Get__Terracotta_PlayerTuple__float(fs_param_Teams, magic_here.g);
         unit_here.r = 0.01568628;
         unit_here.a = 0.2352941;
     }

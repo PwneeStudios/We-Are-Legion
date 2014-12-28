@@ -33,7 +33,7 @@ namespace Terracotta
             // Spawning
             SpawnUnits.Apply(CurrentUnits, CurrentData, PreviousData, RandomField, Magic, Output: Temp1);
             Swap(ref CurrentData, ref Temp1);
-            SetSpawn_Unit.Apply(CurrentUnits, CurrentData, Magic, Output: Temp1);
+            SetSpawn_Unit.Apply(CurrentUnits, CurrentData, Magic, GameClass.World.PlayerTeamVals, Output: Temp1);
             Swap(ref CurrentUnits, ref Temp1);
             SetSpawn_Target.Apply(TargetData, CurrentData, RandomField, Magic, Output: Temp1);
             Swap(ref TargetData, ref Temp1);
