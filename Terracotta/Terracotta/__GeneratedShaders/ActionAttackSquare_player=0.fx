@@ -69,11 +69,9 @@ sampler fs_param_TargetData : register(s3) = sampler_state
 
 float2 fs_param_Destination_BL;
 
-float2 fs_param_Destination_Size;
-
 float2 fs_param_Selection_BL;
 
-float2 fs_param_Selection_Size_Inv;
+float2 fs_param_ConversionRatio;
 
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
@@ -120,8 +118,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (abs(0 - unit_here.g) < .001 && Terracotta__SimShader__selected__Terracotta_data(data_here))
     {
         float2 pos = psin.TexCoords * fs_param_Data_size;
-        pos = (pos - fs_param_Selection_BL) * fs_param_Selection_Size_Inv;
-        pos = pos * fs_param_Destination_Size + fs_param_Destination_BL;
+        pos = (pos - fs_param_Selection_BL);
+        pos = pos * fs_param_ConversionRatio + fs_param_Destination_BL;
         pos = round(pos);
         target = Terracotta__SimShader__pack_vec2__FragSharpFramework_vec2(pos);
     }
