@@ -114,7 +114,7 @@ namespace Terracotta
             if (args_.Length == 0)
             {
                 // Single player
-                args_ = "--server                --port 13000 --p1 --t1 --n 1".Split(' ');
+                args_ = "--server                --port 13000 --p2 --t1 --n 1".Split(' ');
 
                 // Single player with client-server debug
                 //args_ = "--server                --port 13000 --p1 --t1 --n 1    --debug --double".Split(' ');

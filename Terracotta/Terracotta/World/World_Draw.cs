@@ -464,7 +464,7 @@ namespace Terracotta
         {
             // Top Ui
             Ui.ActiveUi = TopUi_Player1;
-            DrawPlayerInfo(1);
+            DrawPlayerInfo(MyPlayerNumber);
             //Ui.ActiveUi = TopUi_Player2;
             //DrawPlayerInfo(2);
 
