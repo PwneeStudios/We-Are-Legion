@@ -253,7 +253,14 @@ namespace Terracotta
                     case UserMode.CastSpell:
                         if (Input.LeftMousePressed)
                         {
-                            CastSpell(CurSpell);
+                            if (CanAffordSpell(CurSpell, MyPlayerNumber))
+                            {
+                                CastSpell(CurSpell);
+                            }
+                            else
+                            {
+                                Message_InsufficientJade();
+                            }
                         }
 
                         break;
@@ -508,11 +515,11 @@ namespace Terracotta
             Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
 
             Ui.Element("[Text] Jade mines");
-            s = string.Format("{0:#,##0}", 0);
+            s = string.Format("{0:#,##0}", PlayerInfo[player].JadeMines);
             Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
 
             Ui.Element("[Text] Jade");
-            s = string.Format("{0:#,##0}", 100000);
+            s = string.Format("{0:#,##0}", PlayerInfo[player].Jade);
             Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
         }
 

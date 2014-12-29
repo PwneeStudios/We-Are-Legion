@@ -529,6 +529,9 @@ namespace Terracotta
 
         public static class UnitType
         {
+            [FragSharpFramework.Vals(Barracks, GoldMine, JadeMine)]
+                public class BuildingsAttribute : Attribute { }
+
             public const float
                 FirstUnitType = Footman,
                 FirstBuildingType = Barracks,

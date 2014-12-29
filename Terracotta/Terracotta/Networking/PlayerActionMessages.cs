@@ -112,6 +112,7 @@ namespace Terracotta
 
             var spell = Spells.SpellList[SpellIndex];
 
+            GameClass.World.SubtractJade(spell.JadeCost, Action.PlayerNumber);
             spell.Apply(Action.PlayerNumber, Action.TeamNumber, Pos);
         }
     }

@@ -13,12 +13,13 @@ namespace Terracotta
         public readonly int id;
         public readonly string Name;
 
-        public Action Selecting;
         public Action DrawCursor;
         public Func<bool> Execute;
 
         public delegate void SpellExecution(int PlayerNumer, int TeamNumber, vec2 Pos);
         public SpellExecution Apply;
+
+        public int JadeCost = 0;
 
         static int next_id = 0;
         public Spell(string Name)
@@ -54,28 +55,28 @@ namespace Terracotta
             Spell spell;
 
             Flamefield = spell = new Spell("Flamefield");
-            spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = FlameCursor;
             spell.Execute = () => W.Fireball();
             spell.Apply = (p, t, v) => W.FireballApply(p, t, v);
+            spell.JadeCost = 1000;
 
             SkeletonArmy = spell = new Spell("Skeleton Army");
-            spell.Selecting = () => W.SelectionUpdate(RaiseRadius * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = SkeletonCursor;
             spell.Execute = () => W.RaiseSkeletons(RaiseR);
             spell.Apply = (p, t, v) => W.RaiseSkeletonsApply(p, t, v, RaiseR);
+            spell.JadeCost = 1000;
 
             Necromancer = spell = new Spell("Necromancer");
-            spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = NecroCursor;
             spell.Execute = () => W.SummonNecromancer();
             spell.Apply = (p, t, v) => W.SummonNecromancerApply(p, t, v);
+            spell.JadeCost = 1000;
 
             TerracottaArmy = spell = new Spell("Terracotta Army");
-            spell.Selecting = () => W.SelectionUpdate(TerracottaRadius * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = TerracottaCursor;
             spell.Execute = () => W.SummonTerracotta(TerracottaR);
             spell.Apply = (p, t, v) => W.SummonTerracottaApply(p, t, v, TerracottaR);
+            spell.JadeCost = 1000;
         }
 
         static void SkeletonCursor()

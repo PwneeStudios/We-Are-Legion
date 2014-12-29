@@ -22,27 +22,12 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Necromancy, using register location 1
-float2 fs_param_Necromancy_size;
-float2 fs_param_Necromancy_dxdy;
-
-Texture fs_param_Necromancy_Texture;
-sampler fs_param_Necromancy : register(s1) = sampler_state
-{
-    texture   = <fs_param_Necromancy_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-// Texture Sampler for fs_param_Data, using register location 2
+// Texture Sampler for fs_param_Data, using register location 1
 float2 fs_param_Data_size;
 float2 fs_param_Data_dxdy;
 
 Texture fs_param_Data_Texture;
-sampler fs_param_Data : register(s2) = sampler_state
+sampler fs_param_Data : register(s1) = sampler_state
 {
     texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
@@ -52,12 +37,12 @@ sampler fs_param_Data : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Units, using register location 3
+// Texture Sampler for fs_param_Units, using register location 2
 float2 fs_param_Units_size;
 float2 fs_param_Units_dxdy;
 
 Texture fs_param_Units_Texture;
-sampler fs_param_Units : register(s3) = sampler_state
+sampler fs_param_Units : register(s2) = sampler_state
 {
     texture   = <fs_param_Units_Texture>;
     MipFilter = Point;
@@ -67,12 +52,18 @@ sampler fs_param_Units : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float4 FragSharpFramework__FragSharpStd__max__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4(float4 a, float4 b, float4 c, float4 d)
+bool Terracotta__SimShader__Something__Terracotta_building(float4 u)
 {
-    return max(max(a, b), max(c, d));
+    return u.r > 0 + .001;
+}
+
+bool Terracotta__SimShader__IsCenter__Terracotta_building(float4 b)
+{
+    return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
 }
 
 // Compiled vertex shader
@@ -90,29 +81,31 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    float4 right = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(1, 0)) * fs_param_Necromancy_dxdy), up = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(0, 1)) * fs_param_Necromancy_dxdy), left = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(-(1), 0)) * fs_param_Necromancy_dxdy), down = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(0, -(1))) * fs_param_Necromancy_dxdy);
-    float4 necromancy = FragSharpFramework__FragSharpStd__max__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4(right, up, left, down) - float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
-    if (abs(unit_here.r - 0.01176471) < .001)
+    float4 output = float4(0, 0, 0, 0);
+    if (Terracotta__SimShader__Something__Terracotta_building(data_here))
     {
-        if (abs(unit_here.g - 0.003921569) < .001)
+        float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
+        if (abs(unit_here.r - 0.02745098) < .001 && Terracotta__SimShader__IsCenter__Terracotta_building(data_here))
         {
-            necromancy.r = 0.07843138;
-        }
-        if (abs(unit_here.g - 0.007843138) < .001)
-        {
-            necromancy.g = 0.07843138;
-        }
-        if (abs(unit_here.g - 0.01176471) < .001)
-        {
-            necromancy.b = 0.07843138;
-        }
-        if (abs(unit_here.g - 0.01568628) < .001)
-        {
-            necromancy.a = 0.07843138;
+            if (abs(unit_here.g - 0.003921569) < .001)
+            {
+                output.x = 0.003921569;
+            }
+            if (abs(unit_here.g - 0.007843138) < .001)
+            {
+                output.y = 0.003921569;
+            }
+            if (abs(unit_here.g - 0.01176471) < .001)
+            {
+                output.z = 0.003921569;
+            }
+            if (abs(unit_here.g - 0.01568628) < .001)
+            {
+                output.w = 0.003921569;
+            }
         }
     }
-    __FinalOutput.Color = necromancy;
+    __FinalOutput.Color = output;
     return __FinalOutput;
 }
 

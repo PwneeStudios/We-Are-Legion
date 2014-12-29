@@ -166,7 +166,9 @@ namespace FragSharpFramework
             Terracotta.DoUnitSummary_2.CompiledEffect_player_0p01176471_only_selected_false = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0.01176471_only_selected=false");
             Terracotta.DoUnitSummary_2.CompiledEffect_player_0p01568628_only_selected_true = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0.01568628_only_selected=true");
             Terracotta.DoUnitSummary_2.CompiledEffect_player_0p01568628_only_selected_false = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0.01568628_only_selected=false");
-            Terracotta.CountGoldMines.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountGoldMines");
+            Terracotta.CountBuildings.CompiledEffect_type_0p02352941 = Content.Load<Effect>("FragSharpShaders/CountBuildings_type=0.02352941");
+            Terracotta.CountBuildings.CompiledEffect_type_0p02745098 = Content.Load<Effect>("FragSharpShaders/CountBuildings_type=0.02745098");
+            Terracotta.CountBuildings.CompiledEffect_type_0p03137255 = Content.Load<Effect>("FragSharpShaders/CountBuildings_type=0.03137255");
             Terracotta.CountReduce_4x1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_4x1byte");
             Terracotta.CountUnits.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0");
             Terracotta.CountUnits.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.003921569");
@@ -4168,40 +4170,52 @@ namespace Terracotta
 }
 
 
+
+
 namespace Terracotta
 {
-    public partial class CountGoldMines
+    public partial class CountBuildings
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_type_0p02352941;
+        public static Effect CompiledEffect_type_0p02745098;
+        public static Effect CompiledEffect_type_0p03137255;
 
-        public static void Apply(Texture2D Data, Texture2D Units, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Data, Texture2D Units, float type, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Units);
+            Using(Data, Units, type);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Data, Texture2D Units, RenderTarget2D Output)
+        public static void Apply(Texture2D Data, Texture2D Units, float type, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Units);
+            Using(Data, Units, type);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Data, Texture2D Units, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Data, Texture2D Units, float type, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Units);
+            Using(Data, Units, type);
         }
-        public static void Using(Texture2D Data, Texture2D Units, RenderTarget2D Output)
+        public static void Using(Texture2D Data, Texture2D Units, float type, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Units);
+            Using(Data, Units, type);
         }
-        public static void Using(Texture2D Data, Texture2D Units)
+        public static void Using(Texture2D Data, Texture2D Units, float type)
         {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(type - 0.02352941)) < .001) CompiledEffect = CompiledEffect_type_0p02352941;
+            else if (abs((float)(type - 0.02745098)) < .001) CompiledEffect = CompiledEffect_type_0p02745098;
+            else if (abs((float)(type - 0.03137255)) < .001) CompiledEffect = CompiledEffect_type_0p03137255;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
             CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
             CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));

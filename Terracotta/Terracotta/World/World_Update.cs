@@ -210,7 +210,10 @@ namespace Terracotta
         void SimulationUpdate()
         {
             DataGroup.DoGoldMineCount(PlayerInfo);
+            DataGroup.DoJadeMineCount(PlayerInfo);
+
             DoGoldUpdate();
+            DoJadeUpdate();
 
             DataGroup.SimulationUpdate();
 
@@ -228,6 +231,20 @@ namespace Terracotta
                 if (PlayerInfo[player].Gold < 0)
                 {
                     PlayerInfo[player].Gold = 0;
+                }
+            }
+        }
+
+        void DoJadeUpdate()
+        {
+            for (int player = 1; player <= 4; player++)
+            {
+                PlayerInfo[player].Jade +=
+                    PlayerInfo[player].JadeMines * Params.JadePerMinePerTick;
+
+                if (PlayerInfo[player].Jade < 0)
+                {
+                    PlayerInfo[player].Jade = 0;
                 }
             }
         }

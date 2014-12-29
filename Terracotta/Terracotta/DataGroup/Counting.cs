@@ -13,7 +13,7 @@ namespace Terracotta
 
         public void DoGoldMineCount(PlayerInfo[] PlayerInfo)
         {
-            CountGoldMines.Apply(CurrentData, CurrentUnits, Output: Multigrid[0]);
+            CountBuildings.Apply(CurrentData, CurrentUnits, UnitType.GoldMine, Output: Multigrid[0]);
 
             var count = (PlayerTuple)MultigridReduce(CountReduce_4x1byte.Apply);
 
@@ -21,6 +21,18 @@ namespace Terracotta
             PlayerInfo[2].GoldMines = Int(count.PlayerTwo);
             PlayerInfo[3].GoldMines = Int(count.PlayerThree);
             PlayerInfo[4].GoldMines = Int(count.PlayerFour);
+        }
+
+        public void DoJadeMineCount(PlayerInfo[] PlayerInfo)
+        {
+            CountBuildings.Apply(CurrentData, CurrentUnits, UnitType.JadeMine, Output: Multigrid[0]);
+
+            var count = (PlayerTuple)MultigridReduce(CountReduce_4x1byte.Apply);
+
+            PlayerInfo[1].JadeMines = Int(count.PlayerOne);
+            PlayerInfo[2].JadeMines = Int(count.PlayerTwo);
+            PlayerInfo[3].JadeMines = Int(count.PlayerThree);
+            PlayerInfo[4].JadeMines = Int(count.PlayerFour);
         }
 
         public bool[] UnitSummary = new bool[Int(UnitType.Last)];

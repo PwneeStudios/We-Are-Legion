@@ -52,6 +52,7 @@ sampler fs_param_Units : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
@@ -84,7 +85,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (Terracotta__SimShader__Something__Terracotta_building(data_here))
     {
         float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-        if (abs(unit_here.r - 0.02745098) < .001 && Terracotta__SimShader__IsCenter__Terracotta_building(data_here))
+        if (abs(unit_here.r - 0.02352941) < .001 && Terracotta__SimShader__IsCenter__Terracotta_building(data_here))
         {
             if (abs(unit_here.g - 0.003921569) < .001)
             {

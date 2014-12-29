@@ -9,8 +9,10 @@ namespace Terracotta
 
             GoldPerBarracksPerTick = 0,
             GoldPerMinePerTick = 3,
+            StartGold = 750,
 
-            StartGold = 750;
+            JadePerMinePerTick = 3,
+            StartJade = 10000;
 
         public int BuildingCost(float type)
         {

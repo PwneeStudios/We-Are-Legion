@@ -40,10 +40,10 @@ namespace Terracotta
         }
     }
 
-    public partial class CountGoldMines : SimShader
+    public partial class CountBuildings : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<building> Data, Field<unit> Units)
+        vec4 FragmentShader(VertexOut vertex, Field<building> Data, Field<unit> Units, [UnitType.Buildings] float type)
         {
             building data_here = Data[Here];
 
@@ -52,7 +52,7 @@ namespace Terracotta
             {
                 unit unit_here = Units[Here];
 
-                if (unit_here.type == UnitType.GoldMine && IsCenter(data_here))
+                if (unit_here.type == type && IsCenter(data_here))
                 {
                     if (unit_here.player == Player.One)   output.x = _1;
                     if (unit_here.player == Player.Two)   output.y = _1;
