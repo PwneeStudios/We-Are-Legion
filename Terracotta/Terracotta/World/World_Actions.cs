@@ -424,9 +424,9 @@ namespace Terracotta
         public void FireballApply(int PlayerNumber, int TeamNumber, vec2 GridCoord)
         {
             vec2 Pos = GridToWorldCood(GridCoord);
-            vec2 Size = vec(30, 30) * CellSize;
+            vec2 Size = Spells.FlameR * CellSize;
 
-            AddExplosion(Pos);
+            AddExplosion(Pos, Spells.FlameR);
 
             SetEffectArea(Pos, Size, PlayerNumber);
 
@@ -445,7 +445,7 @@ namespace Terracotta
         public void RaiseSkeletonsApply(int PlayerNumber, int TeamNumber, vec2 GridCoord, vec2 Area)
         {
             vec2 Pos = GridToWorldCood(GridCoord);
-            vec2 Size = vec(30, 30) * CellSize;
+            vec2 Size = Spells.RaiseR * CellSize;
 
             AddSummonAreaEffect(Pos, Area);
 
@@ -465,7 +465,7 @@ namespace Terracotta
         public void SummonTerracottaApply(int PlayerNumber, int TeamNumber, vec2 GridCoord, vec2 Area)
         {
             vec2 Pos = GridToWorldCood(GridCoord);
-            vec2 Size = vec(30, 30) * CellSize;
+            vec2 Size = Spells.TerracottaR * CellSize;
 
             AddSummonAreaEffect(Pos, Area);
 

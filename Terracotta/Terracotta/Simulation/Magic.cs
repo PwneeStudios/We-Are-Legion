@@ -58,6 +58,8 @@ namespace Terracotta
     /// </summary>
     public partial class PropagateNecromancyAuro : SimShader
     {
+        const float NecromancyRange = _20;
+
         [FragmentShader]
         PlayerTuple FragmentShader(VertexOut vertex, Field<PlayerTuple> Necromancy, Field<data> Data, Field<unit> Units)
         {
@@ -74,10 +76,10 @@ namespace Terracotta
 
             if (unit_here.type == UnitType.Necromancer)
             {
-                if (unit_here.player == Player.One)   necromancy.PlayerOne   = _255;
-                if (unit_here.player == Player.Two)   necromancy.PlayerTwo   = _255;
-                if (unit_here.player == Player.Three) necromancy.PlayerThree = _255;
-                if (unit_here.player == Player.Four)  necromancy.PlayerFour  = _255;
+                if (unit_here.player == Player.One)   necromancy.PlayerOne   = NecromancyRange;
+                if (unit_here.player == Player.Two)   necromancy.PlayerTwo   = NecromancyRange;
+                if (unit_here.player == Player.Three) necromancy.PlayerThree = NecromancyRange;
+                if (unit_here.player == Player.Four)  necromancy.PlayerFour  = NecromancyRange;
             }
 
             return necromancy;

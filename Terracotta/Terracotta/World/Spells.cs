@@ -40,6 +40,15 @@ namespace Terracotta
         //enum Spell { None, Fireball, RaiseSkeletons, SummonNecromancer, RaiseTerracotta, Convert, Flamewall, Resurrect, CorpseExplode, }
         public static Spell Flamefield, SkeletonArmy, TerracottaArmy, Necromancer;
 
+        public const int FlameRadius = 30;
+        public static vec2 FlameR = vec(FlameRadius, FlameRadius);
+
+        public const int RaiseRadius = 85;
+        public static vec2 RaiseR = vec(RaiseRadius, RaiseRadius);
+
+        public const int TerracottaRadius = 50;
+        public static vec2 TerracottaR = vec(TerracottaRadius, TerracottaRadius);
+
         public static void Initialize()
         { 
             Spell spell;
@@ -51,10 +60,10 @@ namespace Terracotta
             spell.Apply = (p, t, v) => W.FireballApply(p, t, v);
 
             SkeletonArmy = spell = new Spell("Skeleton Army");
-            spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
+            spell.Selecting = () => W.SelectionUpdate(RaiseRadius * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = SkeletonCursor;
-            spell.Execute = () => W.RaiseSkeletons(vec(30, 30));
-            spell.Apply = (p, t, v) => W.RaiseSkeletonsApply(p, t, v, vec(30, 30));
+            spell.Execute = () => W.RaiseSkeletons(RaiseR);
+            spell.Apply = (p, t, v) => W.RaiseSkeletonsApply(p, t, v, RaiseR);
 
             Necromancer = spell = new Spell("Necromancer");
             spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
@@ -63,26 +72,26 @@ namespace Terracotta
             spell.Apply = (p, t, v) => W.SummonNecromancerApply(p, t, v);
 
             TerracottaArmy = spell = new Spell("Terracotta Army");
-            spell.Selecting = () => W.SelectionUpdate(30 * W.CellSize, EffectSelection: false, LineSelect: false);
+            spell.Selecting = () => W.SelectionUpdate(TerracottaRadius * W.CellSize, EffectSelection: false, LineSelect: false);
             spell.DrawCursor = TerracottaCursor;
-            spell.Execute = () => W.SummonTerracotta(vec(30, 30));
-            spell.Apply = (p, t, v) => W.SummonTerracottaApply(p, t, v, vec(30, 30));
+            spell.Execute = () => W.SummonTerracotta(TerracottaR);
+            spell.Apply = (p, t, v) => W.SummonTerracottaApply(p, t, v, TerracottaR);
         }
 
         static void SkeletonCursor()
         {
-            float size = 30 + .5f * cos(2f * W.T);
+            float size = RaiseRadius + .5f * cos(2f * W.T);
             float angle = 0;
             W.DrawCursor(Assets.AoE_Skeleton, size * W.CellSize, angle);
         }
 
         static void TerracottaCursor()
         {
-            float size_1 = 30 + .5f * sin(2f * W.T);
+            float size_1 = TerracottaRadius + .5f * sin(2f * W.T);
             float angle_1 = 3.5f * W.T;
             W.DrawCursor(Assets.AoE_Terra, size_1 * W.CellSize, angle_1);
 
-            float size_2 = 4.5f + 30 + .5f * sin(-2f * W.T);
+            float size_2 = 4.5f + TerracottaRadius + .5f * sin(-2f * W.T);
             float angle_2 = -3.5f * W.T;
             W.DrawCursor(Assets.AoE_Terra, size_2 * W.CellSize, angle_2);
         }
@@ -97,7 +106,7 @@ namespace Terracotta
 
         static void FlameCursor()
         {
-            float size = 30 + .5f * cos(2f * W.T);
+            float size = FlameRadius + .5f * cos(2f * W.T);
             float angle = 0;
             W.DrawCursor(Assets.AoE_Fire, size * W.CellSize, angle);
         }

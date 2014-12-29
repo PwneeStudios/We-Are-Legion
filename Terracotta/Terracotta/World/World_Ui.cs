@@ -221,9 +221,9 @@ namespace Terracotta
             Markers.Add(new Marker(this, pos, size, Assets.AttackMarker, -1f));
         }
 
-        void AddExplosion(vec2 Pos)
+        void AddExplosion(vec2 Pos, vec2 Size)
         {
-            vec2 size = vec(1.266f, 1.35f) * 30 * CellWorldSize;
+            vec2 size = vec(1.266f, 1.35f) * Size * CellWorldSize;
 
             Markers.Add(new Marker(this, Pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterTiles));
             Markers.Add(new Marker(this, Pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterUnits, alpha : 1));
