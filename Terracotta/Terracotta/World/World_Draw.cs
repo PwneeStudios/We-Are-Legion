@@ -239,9 +239,13 @@ namespace Terracotta
 
                     case UserMode.Select:
                         // Count the selected units for the player. Must be done at least before every attack command.
+                        DataGroup.DoUnitSummary(MyPlayerValue, true);
+
                         var selected = DataGroup.DoUnitCount(PlayerOrNeutral, true);
                         DataGroup.SelectedUnits = selected.Item1;
                         DataGroup.SelectedBarracks = selected.Item2;
+
+                        DataGroup.UnitCountUi = DataGroup.SelectedUnits;
 
                         SelectionUpdate(SelectSize, LineSelect: LineSelect);
                         break;

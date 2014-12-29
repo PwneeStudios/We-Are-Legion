@@ -564,7 +564,10 @@ namespace Terracotta
                 DragonLordIcon  = _9,
                 NecromancerIcon = _10,
 
-                BlockingTile = _20;
+                BlockingTile = _20,
+                
+                Last = JadeMine,
+                Count = Last;
 
             public static string Name(float unit)
             {
@@ -596,7 +599,12 @@ namespace Terracotta
 
         protected static bool IsBuilding(unit u)
         {
-            return u.type >= UnitType.FirstBuildingType && u.type < UnitType.FirstBlockingTileType;
+            return IsBuilding(u.type);
+        }
+
+        protected static bool IsBuilding(float type)
+        {
+            return type >= UnitType.FirstBuildingType && type < UnitType.FirstBlockingTileType;
         }
 
         protected static bool BlockingTileHere(unit u)

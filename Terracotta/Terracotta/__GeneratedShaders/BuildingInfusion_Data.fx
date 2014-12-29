@@ -60,9 +60,14 @@ bool Terracotta__SimShader__Something__Terracotta_building(float4 u)
     return u.r > 0 + .001;
 }
 
+bool Terracotta__SimShader__IsBuilding__float(float type)
+{
+    return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
+}
+
 bool Terracotta__SimShader__IsBuilding__Terracotta_unit(float4 u)
 {
-    return u.r >= 0.02352941 - .001 && u.r < 0.07843138 - .001;
+    return Terracotta__SimShader__IsBuilding__float(u.r);
 }
 
 bool Terracotta__SimShader__IsCenter__Terracotta_building(float4 b)

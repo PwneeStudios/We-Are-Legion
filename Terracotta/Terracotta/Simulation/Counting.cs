@@ -2,6 +2,44 @@ using FragSharpFramework;
 
 namespace Terracotta
 {
+    public partial class DoUnitSummary_1 : SimShader
+    {
+        [FragmentShader]
+        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Units, [Player.Vals] float player, [Vals.Bool] bool only_selected)
+        {
+            data data_here = Data[Here];
+            unit unit_here = Units[Here];
+
+            if (only_selected && !fake_selected(data_here)) return vec4.Zero;
+
+            return vec(
+                unit_here.type == UnitType.Footman ? 1f : 0,
+                unit_here.type == UnitType.DragonLord ? 1f : 0,
+                unit_here.type == UnitType.Necromancer ? 1f : 0,
+                unit_here.type == UnitType.Skeleton ? 1f : 0
+                );
+        }
+    }
+
+    public partial class DoUnitSummary_2 : SimShader
+    {
+        [FragmentShader]
+        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Units, [Player.Vals] float player, [Vals.Bool] bool only_selected)
+        {
+            data data_here = Data[Here];
+            unit unit_here = Units[Here];
+
+            if (only_selected && !fake_selected(data_here)) return vec4.Zero;
+
+            return vec(
+                unit_here.type == UnitType.ClaySoldier ? 1f : 0,
+                unit_here.type == UnitType.Barracks ? 1f : 0,
+                unit_here.type == UnitType.GoldMine ? 1f : 0,
+                unit_here.type == UnitType.JadeMine ? 1f : 0
+                );
+        }
+    }
+
     public partial class CountGoldMines : SimShader
     {
         [FragmentShader]

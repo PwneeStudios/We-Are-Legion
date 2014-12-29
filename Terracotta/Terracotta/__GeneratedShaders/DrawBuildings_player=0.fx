@@ -89,9 +89,14 @@ float fs_param_s;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
+bool Terracotta__SimShader__IsBuilding__float(float type)
+{
+    return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
+}
+
 bool Terracotta__SimShader__IsBuilding__Terracotta_unit(float4 u)
 {
-    return u.r >= 0.02352941 - .001 && u.r < 0.07843138 - .001;
+    return Terracotta__SimShader__IsBuilding__float(u.r);
 }
 
 float2 Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size)

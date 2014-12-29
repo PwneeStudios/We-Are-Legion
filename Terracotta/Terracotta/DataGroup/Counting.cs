@@ -9,7 +9,7 @@ namespace Terracotta
     {
         public int[] UnitCount = new int[] { 0, 0, 0, 0, 0 };
         public int[] BarracksCount = new int[] { 0, 0, 0, 0, 0 };
-        public int SelectedUnits = 0, SelectedBarracks = 0;
+        public int SelectedUnits = 0, SelectedBarracks = 0, UnitCountUi = 0;
 
         public void DoGoldMineCount(PlayerInfo[] PlayerInfo)
         {
@@ -21,6 +21,22 @@ namespace Terracotta
             PlayerInfo[2].GoldMines = Int(count.PlayerTwo);
             PlayerInfo[3].GoldMines = Int(count.PlayerThree);
             PlayerInfo[4].GoldMines = Int(count.PlayerFour);
+        }
+
+        public bool[] UnitSummary = new bool[Int(UnitType.Last)];
+        public void DoUnitSummary(float player, bool only_selected)
+        {
+            DoUnitSummary_1.Apply(CurrentData, CurrentUnits, player, only_selected, Output: Multigrid[0]);
+            CopySummary(0);
+
+            DoUnitSummary_2.Apply(CurrentData, CurrentUnits, player, only_selected, Output: Multigrid[0]);
+            CopySummary(4);
+        }
+
+        void CopySummary(int offset)
+        {
+            vec4 count = MultigridReduce(CountReduce_4x1byte.Apply);
+            for (int i = 0; i < 4; i++) UnitSummary[i + offset] = (count[i] > 0);
         }
 
         public Tuple<int, int> DoUnitCount(float player, bool only_selected)

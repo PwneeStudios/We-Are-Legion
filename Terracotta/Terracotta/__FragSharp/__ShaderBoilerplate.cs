@@ -146,6 +146,26 @@ namespace FragSharpFramework
             Terracotta.SetSpawn_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SetSpawn_Data");
             Terracotta.AddCorpses.CompiledEffect = Content.Load<Effect>("FragSharpShaders/AddCorpses");
             Terracotta.UpdateRandomField.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UpdateRandomField");
+            Terracotta.DoUnitSummary_1.CompiledEffect_player_0_only_selected_true = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_1_player=0_only_selected=true");
+            Terracotta.DoUnitSummary_1.CompiledEffect_player_0_only_selected_false = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_1_player=0_only_selected=false");
+            Terracotta.DoUnitSummary_1.CompiledEffect_player_0p003921569_only_selected_true = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_1_player=0.003921569_only_selected=true");
+            Terracotta.DoUnitSummary_1.CompiledEffect_player_0p003921569_only_selected_false = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_1_player=0.003921569_only_selected=false");
+            Terracotta.DoUnitSummary_1.CompiledEffect_player_0p007843138_only_selected_true = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_1_player=0.007843138_only_selected=true");
+            Terracotta.DoUnitSummary_1.CompiledEffect_player_0p007843138_only_selected_false = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_1_player=0.007843138_only_selected=false");
+            Terracotta.DoUnitSummary_1.CompiledEffect_player_0p01176471_only_selected_true = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_1_player=0.01176471_only_selected=true");
+            Terracotta.DoUnitSummary_1.CompiledEffect_player_0p01176471_only_selected_false = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_1_player=0.01176471_only_selected=false");
+            Terracotta.DoUnitSummary_1.CompiledEffect_player_0p01568628_only_selected_true = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_1_player=0.01568628_only_selected=true");
+            Terracotta.DoUnitSummary_1.CompiledEffect_player_0p01568628_only_selected_false = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_1_player=0.01568628_only_selected=false");
+            Terracotta.DoUnitSummary_2.CompiledEffect_player_0_only_selected_true = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0_only_selected=true");
+            Terracotta.DoUnitSummary_2.CompiledEffect_player_0_only_selected_false = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0_only_selected=false");
+            Terracotta.DoUnitSummary_2.CompiledEffect_player_0p003921569_only_selected_true = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0.003921569_only_selected=true");
+            Terracotta.DoUnitSummary_2.CompiledEffect_player_0p003921569_only_selected_false = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0.003921569_only_selected=false");
+            Terracotta.DoUnitSummary_2.CompiledEffect_player_0p007843138_only_selected_true = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0.007843138_only_selected=true");
+            Terracotta.DoUnitSummary_2.CompiledEffect_player_0p007843138_only_selected_false = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0.007843138_only_selected=false");
+            Terracotta.DoUnitSummary_2.CompiledEffect_player_0p01176471_only_selected_true = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0.01176471_only_selected=true");
+            Terracotta.DoUnitSummary_2.CompiledEffect_player_0p01176471_only_selected_false = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0.01176471_only_selected=false");
+            Terracotta.DoUnitSummary_2.CompiledEffect_player_0p01568628_only_selected_true = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0.01568628_only_selected=true");
+            Terracotta.DoUnitSummary_2.CompiledEffect_player_0p01568628_only_selected_false = Content.Load<Effect>("FragSharpShaders/DoUnitSummary_2_player=0.01568628_only_selected=false");
             Terracotta.CountGoldMines.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountGoldMines");
             Terracotta.CountReduce_4x1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_4x1byte");
             Terracotta.CountUnits.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0");
@@ -3984,6 +4004,164 @@ namespace Terracotta
             CompiledEffect.Parameters["fs_param_Random_Texture"].SetValue(FragSharpMarshal.Marshal(Random));
             CompiledEffect.Parameters["fs_param_Random_size"].SetValue(FragSharpMarshal.Marshal(vec(Random.Width, Random.Height)));
             CompiledEffect.Parameters["fs_param_Random_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Random.Width, Random.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+namespace Terracotta
+{
+    public partial class DoUnitSummary_1
+    {
+        public static Effect CompiledEffect_player_0_only_selected_true;
+        public static Effect CompiledEffect_player_0_only_selected_false;
+        public static Effect CompiledEffect_player_0p003921569_only_selected_true;
+        public static Effect CompiledEffect_player_0p003921569_only_selected_false;
+        public static Effect CompiledEffect_player_0p007843138_only_selected_true;
+        public static Effect CompiledEffect_player_0p007843138_only_selected_false;
+        public static Effect CompiledEffect_player_0p01176471_only_selected_true;
+        public static Effect CompiledEffect_player_0p01176471_only_selected_false;
+        public static Effect CompiledEffect_player_0p01568628_only_selected_true;
+        public static Effect CompiledEffect_player_0p01568628_only_selected_false;
+
+        public static void Apply(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Units, player, only_selected);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Units, player, only_selected);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Units, player, only_selected);
+        }
+        public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Units, player, only_selected);
+        }
+        public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected)
+        {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0)) < .001 && only_selected == true) CompiledEffect = CompiledEffect_player_0_only_selected_true;
+            else if (abs((float)(player - 0)) < .001 && only_selected == false) CompiledEffect = CompiledEffect_player_0_only_selected_false;
+            else if (abs((float)(player - 0.003921569)) < .001 && only_selected == true) CompiledEffect = CompiledEffect_player_0p003921569_only_selected_true;
+            else if (abs((float)(player - 0.003921569)) < .001 && only_selected == false) CompiledEffect = CompiledEffect_player_0p003921569_only_selected_false;
+            else if (abs((float)(player - 0.007843138)) < .001 && only_selected == true) CompiledEffect = CompiledEffect_player_0p007843138_only_selected_true;
+            else if (abs((float)(player - 0.007843138)) < .001 && only_selected == false) CompiledEffect = CompiledEffect_player_0p007843138_only_selected_false;
+            else if (abs((float)(player - 0.01176471)) < .001 && only_selected == true) CompiledEffect = CompiledEffect_player_0p01176471_only_selected_true;
+            else if (abs((float)(player - 0.01176471)) < .001 && only_selected == false) CompiledEffect = CompiledEffect_player_0p01176471_only_selected_false;
+            else if (abs((float)(player - 0.01568628)) < .001 && only_selected == true) CompiledEffect = CompiledEffect_player_0p01568628_only_selected_true;
+            else if (abs((float)(player - 0.01568628)) < .001 && only_selected == false) CompiledEffect = CompiledEffect_player_0p01568628_only_selected_false;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
+            CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+namespace Terracotta
+{
+    public partial class DoUnitSummary_2
+    {
+        public static Effect CompiledEffect_player_0_only_selected_true;
+        public static Effect CompiledEffect_player_0_only_selected_false;
+        public static Effect CompiledEffect_player_0p003921569_only_selected_true;
+        public static Effect CompiledEffect_player_0p003921569_only_selected_false;
+        public static Effect CompiledEffect_player_0p007843138_only_selected_true;
+        public static Effect CompiledEffect_player_0p007843138_only_selected_false;
+        public static Effect CompiledEffect_player_0p01176471_only_selected_true;
+        public static Effect CompiledEffect_player_0p01176471_only_selected_false;
+        public static Effect CompiledEffect_player_0p01568628_only_selected_true;
+        public static Effect CompiledEffect_player_0p01568628_only_selected_false;
+
+        public static void Apply(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Units, player, only_selected);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Units, player, only_selected);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Units, player, only_selected);
+        }
+        public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Units, player, only_selected);
+        }
+        public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected)
+        {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0)) < .001 && only_selected == true) CompiledEffect = CompiledEffect_player_0_only_selected_true;
+            else if (abs((float)(player - 0)) < .001 && only_selected == false) CompiledEffect = CompiledEffect_player_0_only_selected_false;
+            else if (abs((float)(player - 0.003921569)) < .001 && only_selected == true) CompiledEffect = CompiledEffect_player_0p003921569_only_selected_true;
+            else if (abs((float)(player - 0.003921569)) < .001 && only_selected == false) CompiledEffect = CompiledEffect_player_0p003921569_only_selected_false;
+            else if (abs((float)(player - 0.007843138)) < .001 && only_selected == true) CompiledEffect = CompiledEffect_player_0p007843138_only_selected_true;
+            else if (abs((float)(player - 0.007843138)) < .001 && only_selected == false) CompiledEffect = CompiledEffect_player_0p007843138_only_selected_false;
+            else if (abs((float)(player - 0.01176471)) < .001 && only_selected == true) CompiledEffect = CompiledEffect_player_0p01176471_only_selected_true;
+            else if (abs((float)(player - 0.01176471)) < .001 && only_selected == false) CompiledEffect = CompiledEffect_player_0p01176471_only_selected_false;
+            else if (abs((float)(player - 0.01568628)) < .001 && only_selected == true) CompiledEffect = CompiledEffect_player_0p01568628_only_selected_true;
+            else if (abs((float)(player - 0.01568628)) < .001 && only_selected == false) CompiledEffect = CompiledEffect_player_0p01568628_only_selected_false;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
+            CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
