@@ -98,7 +98,7 @@ float Terracotta__SimShader__Reverse__float(float dir)
     return dir;
 }
 
-float Terracotta__SimShader__Get__Terracotta_PlayerTuple__float(float4 tuple, float player)
+float Terracotta__SimShader__GetPlayerVal__Terracotta_PlayerTuple__float(float4 tuple, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
@@ -147,7 +147,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (Terracotta__SimShader__Something__Terracotta_data(data_here) && abs(data_here.a - 0.01960784) < .001)
     {
         unit_here.g = magic_here.g;
-        unit_here.b = Terracotta__SimShader__Get__Terracotta_PlayerTuple__float(fs_param_Teams, magic_here.g);
+        unit_here.b = Terracotta__SimShader__GetPlayerVal__Terracotta_PlayerTuple__float(fs_param_Teams, magic_here.g);
         unit_here.r = 0.01568628;
         unit_here.a = 0.2352941;
     }

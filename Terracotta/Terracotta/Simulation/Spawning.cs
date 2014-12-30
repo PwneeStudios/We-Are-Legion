@@ -90,7 +90,7 @@ namespace Terracotta
             if (Something(data_here) && data_here.action == UnitAction.Raising)
             {
                 unit_here.player = magic_here.raising_player;
-                unit_here.team = Get(Teams, magic_here.raising_player);
+                unit_here.team = GetPlayerVal(Teams, magic_here.raising_player);
                 unit_here.type = UnitType.Skeleton;
                 unit_here.anim = Anim.StartRaise;
             }

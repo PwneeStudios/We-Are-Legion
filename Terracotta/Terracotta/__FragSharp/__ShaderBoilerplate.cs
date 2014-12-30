@@ -196,7 +196,7 @@ namespace FragSharpFramework
             Terracotta.ActionAttack2.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.007843138");
             Terracotta.ActionAttack2.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01176471");
             Terracotta.ActionAttack2.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01568628");
-            Terracotta.Pathfinding_ToBuildings.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToBuildings");
+            Terracotta.Pathfinding_ToSpecial.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToSpecial");
             Terracotta.Pathfinding_ToPlayers.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToPlayers");
             Terracotta.Pathfinding_ToOtherTeams.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToOtherTeams");
             Terracotta.Movement_Phase1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Movement_Phase1");
@@ -4652,7 +4652,7 @@ namespace Terracotta
 
 namespace Terracotta
 {
-    public partial class Pathfinding_ToBuildings
+    public partial class Pathfinding_ToSpecial
     {
         public static Effect CompiledEffect;
 
@@ -4705,43 +4705,43 @@ namespace Terracotta
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(Texture2D Path, Texture2D Current, Texture2D CurData, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Path, Texture2D Data, Texture2D Units, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Path, Current, CurData);
+            Using(Path, Data, Units);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Path, Texture2D Current, Texture2D CurData, RenderTarget2D Output)
+        public static void Apply(Texture2D Path, Texture2D Data, Texture2D Units, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Path, Current, CurData);
+            Using(Path, Data, Units);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Path, Texture2D Current, Texture2D CurData, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Path, Texture2D Data, Texture2D Units, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Path, Current, CurData);
+            Using(Path, Data, Units);
         }
-        public static void Using(Texture2D Path, Texture2D Current, Texture2D CurData, RenderTarget2D Output)
+        public static void Using(Texture2D Path, Texture2D Data, Texture2D Units, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Path, Current, CurData);
+            Using(Path, Data, Units);
         }
-        public static void Using(Texture2D Path, Texture2D Current, Texture2D CurData)
+        public static void Using(Texture2D Path, Texture2D Data, Texture2D Units)
         {
             CompiledEffect.Parameters["fs_param_Path_Texture"].SetValue(FragSharpMarshal.Marshal(Path));
             CompiledEffect.Parameters["fs_param_Path_size"].SetValue(FragSharpMarshal.Marshal(vec(Path.Width, Path.Height)));
             CompiledEffect.Parameters["fs_param_Path_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Path.Width, Path.Height)));
-            CompiledEffect.Parameters["fs_param_Current_Texture"].SetValue(FragSharpMarshal.Marshal(Current));
-            CompiledEffect.Parameters["fs_param_Current_size"].SetValue(FragSharpMarshal.Marshal(vec(Current.Width, Current.Height)));
-            CompiledEffect.Parameters["fs_param_Current_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Current.Width, Current.Height)));
-            CompiledEffect.Parameters["fs_param_CurData_Texture"].SetValue(FragSharpMarshal.Marshal(CurData));
-            CompiledEffect.Parameters["fs_param_CurData_size"].SetValue(FragSharpMarshal.Marshal(vec(CurData.Width, CurData.Height)));
-            CompiledEffect.Parameters["fs_param_CurData_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurData.Width, CurData.Height)));
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
+            CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

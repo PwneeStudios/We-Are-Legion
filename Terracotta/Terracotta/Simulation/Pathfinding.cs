@@ -3,10 +3,10 @@ using FragSharpFramework;
 namespace Terracotta
 {
     /// <summary>
-    /// Propagates the path to units of each player. Stores the result for Player 1 in .x, of Player 2 in .y, etc.
+    /// Propagates the path to special units (buildings, necromancers, and dragon lords). Stores the result for Player 1 in .x, of Player 2 in .y, etc.
     /// Four players maximum.
     /// </summary>
-    public partial class Pathfinding_ToBuildings : SimShader
+    public partial class Pathfinding_ToSpecial : SimShader
     {
         public static readonly vec2 CenterOffset = vec(_40, _40);
 
@@ -56,7 +56,6 @@ namespace Terracotta
         }
     }
 
-
     /// <summary>
     /// Propagates the path to units of each player. Stores the result for Player 1 in .x, of Player 2 in .y, etc.
     /// Four players maximum.
@@ -64,10 +63,10 @@ namespace Terracotta
     public partial class Pathfinding_ToPlayers : SimShader
     {
         [FragmentShader]
-        PlayerTuple FragmentShader(VertexOut vertex, Field<PlayerTuple> Path, Field<data> Current, Field<unit> CurData)
+        PlayerTuple FragmentShader(VertexOut vertex, Field<PlayerTuple> Path, Field<data> Data, Field<unit> Units)
         {
-            data data = Current[Here];
-            unit cur_data = CurData[Here];
+            data data_here = Data[Here];
+            unit unit_here = Units[Here];
 
             PlayerTuple
                 right = Path[RightOne],
@@ -77,15 +76,7 @@ namespace Terracotta
 
             PlayerTuple distance_to = min(right, up, left, down) + vec(_1, _1, _1, _1);
 
-            if (Something(data))
-            {
-                distance_to += 3 * PlayerTuple(_1, _1, _1, _1);
-
-                if (cur_data.player == Team.One)   distance_to.PlayerOne   = _0;
-                if (cur_data.player == Team.Two)   distance_to.PlayerTwo   = _0;
-                if (cur_data.player == Team.Three) distance_to.PlayerThree = _0;
-                if (cur_data.player == Team.Four)  distance_to.PlayerFour  = _0;
-            }
+            if (Something(data_here)) SetPlayerVal(ref distance_to, unit_here.player, _0);
 
             return distance_to;
         }

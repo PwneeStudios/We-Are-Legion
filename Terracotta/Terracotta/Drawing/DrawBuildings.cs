@@ -14,12 +14,12 @@ namespace Terracotta
             vec2 subcell_pos = get_subcell_pos(vertex, BuildingDistances.Size);
 
             // Get the building data by following the offset
-            vec2 offset = Float(info.diff - Pathfinding_ToBuildings.CenterOffset);
+            vec2 offset = Float(info.diff - Pathfinding_ToSpecial.CenterOffset);
             var index = new RelativeIndex(offset.x, offset.y);
             building b = Data[index];
 
             // Get the distance from here to the building center
-            float l = length(255 * (info.diff - Pathfinding_ToBuildings.CenterOffset) - (subcell_pos - vec(.5f, .5f)));
+            float l = length(255 * (info.diff - Pathfinding_ToSpecial.CenterOffset) - (subcell_pos - vec(.5f, .5f)));
             
             // Draw pixel
             if (fake_selected(b))

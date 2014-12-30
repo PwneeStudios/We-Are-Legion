@@ -218,11 +218,21 @@ namespace Terracotta
         }
     }
 
+    public class BadTeamNumberException : Exception
+    {
+        float team;
+        public BadTeamNumberException(float team)
+            : base(string.Format("Incorrect team number {0}", team))
+        {
+            this.team = team;
+        }
+    }
+
     public partial class SimShader : GridComputation
     {
         public const float _true = _1, _false = _0;
 
-        public static float Get(PlayerTuple tuple, float player)
+        public static float GetPlayerVal(PlayerTuple tuple, float player)
         {
             if (player == Player.One) return tuple.PlayerOne;
             if (player == Player.Two) return tuple.PlayerTwo;
@@ -233,7 +243,7 @@ namespace Terracotta
             return 0;
         }
 
-        public static float Get(PlayerTuple tuple, int player)
+        public static float GetPlayerVal(PlayerTuple tuple, int player)
         {
             if (player == 1) return tuple.PlayerOne;
             if (player == 2) return tuple.PlayerTwo;
@@ -242,6 +252,68 @@ namespace Terracotta
 
             //throw new BadPlayerNumberException(player);
             return 0;
+        }
+
+        public static void SetPlayerVal(ref PlayerTuple tuple, float player, float value)
+        {
+            if (player == Player.One) tuple.PlayerOne = value;
+            if (player == Player.Two) tuple.PlayerTwo = value;
+            if (player == Player.Three) tuple.PlayerThree = value;
+            if (player == Player.Four) tuple.PlayerFour = value;
+
+            throw new BadPlayerNumberException(player);
+        }
+
+        public static void SetPlayerVal(ref PlayerTuple tuple, int player, float value)
+        {
+            if (player == 1) tuple.PlayerOne = value;
+            if (player == 2) tuple.PlayerTwo = value;
+            if (player == 3) tuple.PlayerThree = value;
+            if (player == 4) tuple.PlayerFour = value;
+
+            throw new BadPlayerNumberException(player);
+        }
+
+        public static float GetTeamVal(TeamTuple tuple, float team)
+        {
+            if (team == Team.One) return tuple.TeamOne;
+            if (team == Team.Two) return tuple.TeamTwo;
+            if (team == Team.Three) return tuple.TeamThree;
+            if (team == Team.Four) return tuple.TeamFour;
+
+            throw new BadTeamNumberException(team);
+            return 0;
+        }
+
+        public static float GetTeamVal(TeamTuple tuple, int team)
+        {
+            if (team == 1) return tuple.TeamOne;
+            if (team == 2) return tuple.TeamTwo;
+            if (team == 3) return tuple.TeamThree;
+            if (team == 4) return tuple.TeamFour;
+
+            //throw new BadTeamNumberException(team);
+            return 0;
+        }
+
+        public static void SetTeamVal(ref TeamTuple tuple, float team, float value)
+        {
+            if (team == Team.One) tuple.TeamOne = value;
+            if (team == Team.Two) tuple.TeamTwo = value;
+            if (team == Team.Three) tuple.TeamThree = value;
+            if (team == Team.Four) tuple.TeamFour = value;
+
+            throw new BadTeamNumberException(team);
+        }
+
+        public static void SetTeamVal(ref TeamTuple tuple, int team, float value)
+        {
+            if (team == 1) tuple.TeamOne = value;
+            if (team == 2) tuple.TeamTwo = value;
+            if (team == 3) tuple.TeamThree = value;
+            if (team == 4) tuple.TeamFour = value;
+
+            throw new BadTeamNumberException(team);
         }
 
         [Hlsl("float4")]

@@ -11,7 +11,7 @@ namespace Terracotta
 
             if (unit_here.player == Player.None) return unit_here;
 
-            unit_here.team = Get(Teams, unit_here.player);
+            unit_here.team = GetPlayerVal(Teams, unit_here.player);
 
             return unit_here;
         }

@@ -21,7 +21,7 @@ namespace Terracotta
 
             vec4 here = Path[Here];
 
-            float dist = Get(here, player);
+            float dist = GetPlayerVal(here, player);
             bool controlled = dist < TerritoryCutoff;
 
             color clr = controlled ? Controlled : Uncontrolled;

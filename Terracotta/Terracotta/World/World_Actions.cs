@@ -147,7 +147,7 @@ namespace Terracotta
                         var building_here = _data[i + j * _w];
                         var distance_to = _dist[i + j * _w];
 
-                        var distance = Get(distance_to, PlayerNum);
+                        var distance = GetPlayerVal(distance_to, PlayerNum);
 
                         bool occupied = building_here.direction > 0;
                         bool in_territory = distance < DrawTerritoryPlayer.TerritoryCutoff;
@@ -175,7 +175,7 @@ namespace Terracotta
                         var unit_here = _data[i + j * _w];
                         var distance_to = _dist[i + j * _w];
 
-                        var distance = Get(distance_to, PlayerNum);
+                        var distance = GetPlayerVal(distance_to, PlayerNum);
 
                         bool occupied = unit_here.type > 0;
                         bool is_valid_source = unit_here.team == Team.None && unit_here.type == BuildingToPlace;
