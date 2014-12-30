@@ -25,13 +25,13 @@ namespace Terracotta
             }
         }
 
-        public void UpdateCellAvailability()
+        public void UpdateCellAvailability(float TerritoryRange = float.MaxValue)
         {
             vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);
 
             try
             {
-                CanPlaceItem = CellAvailable_1x1(GridCoord);
+                CanPlaceItem = CellAvailable_1x1(GridCoord, TerritoryRange);
             }
             catch
             {
@@ -39,10 +39,8 @@ namespace Terracotta
             }
         }
 
-        public bool CellAvailable_1x1(vec2 GridCoord)
+        public bool CellAvailable_1x1(vec2 GridCoord, float TerritoryRange = float.MaxValue)
         {
-            //if (!GameClass.HasFocus) return false;
-
             Render.UnsetDevice();
 
             bool Available = false;
@@ -61,14 +59,24 @@ namespace Terracotta
                 Available = !occupied;
             }
 
+            if (Available && TerritoryRange < float.MaxValue)
+            {
+                var _dist = DataGroup.DistanceToPlayers.GetData<PlayerTuple>(GridCoord, new vec2(1, 1));
+                var distance_to = _dist[0];
+                var distance = GetPlayerVal(distance_to, MyPlayerNumber);
+                bool in_territory = distance < TerritoryRange;
+
+                Available = in_territory;
+            }
+
             return Available;
         }
 
-        public void PlaceUnit(float unit_tpe, vec2 GridCoord, float PlayerValue, float TeamValue)
+        public void PlaceUnit(float unit_tpe, vec2 GridCoord, float PlayerValue, float TeamValue, float TerritoryRange = float.MaxValue)
         {
             Render.UnsetDevice();
 
-            if (CellAvailable_1x1(GridCoord))
+            if (CellAvailable_1x1(GridCoord, TerritoryRange))
             {
                 try
                 {

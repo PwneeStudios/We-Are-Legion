@@ -74,15 +74,36 @@ namespace Terracotta
 
             PlayerTuple necromancy = max(right, up, left, down) - vec(_1, _1, _1, _1);
 
-            if (unit_here.type == UnitType.Necromancer)
-            {
-                if (unit_here.player == Player.One)   necromancy.PlayerOne   = NecromancyRange;
-                if (unit_here.player == Player.Two)   necromancy.PlayerTwo   = NecromancyRange;
-                if (unit_here.player == Player.Three) necromancy.PlayerThree = NecromancyRange;
-                if (unit_here.player == Player.Four)  necromancy.PlayerFour  = NecromancyRange;
-            }
+            if (unit_here.type == UnitType.Necromancer) SetPlayerVal(ref necromancy, unit_here.player, NecromancyRange);
 
             return necromancy;
+        }
+    }
+
+    /// <summary>
+    /// Propagates anti-magic aura per player.
+    /// </summary>
+    public partial class PropagateAntiMagicAuro : SimShader
+    {
+        const float AntiMagicRange = _20;
+
+        [FragmentShader]
+        PlayerTuple FragmentShader(VertexOut vertex, Field<PlayerTuple> AntiMagic, Field<data> Data, Field<unit> Units)
+        {
+            data data_here = Data[Here];
+            unit unit_here = Units[Here];
+
+            PlayerTuple
+                right = AntiMagic[RightOne],
+                up = AntiMagic[UpOne],
+                left = AntiMagic[LeftOne],
+                down = AntiMagic[DownOne];
+
+            PlayerTuple antimagic = max(right, up, left, down) - vec(_1, _1, _1, _1);
+
+            if (unit_here.type == UnitType.DragonLord) SetPlayerVal(ref antimagic, unit_here.player, AntiMagicRange);
+
+            return antimagic;
         }
     }
 }

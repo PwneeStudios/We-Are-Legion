@@ -97,6 +97,7 @@ namespace FragSharpFramework
             Terracotta.UpdateMagic.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UpdateMagic");
             Terracotta.Kill.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Kill");
             Terracotta.PropagateNecromancyAuro.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PropagateNecromancyAuro");
+            Terracotta.PropagateAntiMagicAuro.CompiledEffect = Content.Load<Effect>("FragSharpShaders/PropagateAntiMagicAuro");
             Terracotta.Identity.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Identity");
             Terracotta.Shift.CompiledEffect_dir_0p003921569 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.003921569");
             Terracotta.Shift.CompiledEffect_dir_0p007843138 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.007843138");
@@ -2203,6 +2204,55 @@ namespace Terracotta
 
 namespace Terracotta
 {
+    public partial class PropagateAntiMagicAuro
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D AntiMagic, Texture2D Data, Texture2D Units, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(AntiMagic, Data, Units);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D AntiMagic, Texture2D Data, Texture2D Units, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(AntiMagic, Data, Units);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D AntiMagic, Texture2D Data, Texture2D Units, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(AntiMagic, Data, Units);
+        }
+        public static void Using(Texture2D AntiMagic, Texture2D Data, Texture2D Units, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(AntiMagic, Data, Units);
+        }
+        public static void Using(Texture2D AntiMagic, Texture2D Data, Texture2D Units)
+        {
+            CompiledEffect.Parameters["fs_param_AntiMagic_Texture"].SetValue(FragSharpMarshal.Marshal(AntiMagic));
+            CompiledEffect.Parameters["fs_param_AntiMagic_size"].SetValue(FragSharpMarshal.Marshal(vec(AntiMagic.Width, AntiMagic.Height)));
+            CompiledEffect.Parameters["fs_param_AntiMagic_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
+            CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace Terracotta
+{
     public partial class Identity
     {
         public static Effect CompiledEffect;
@@ -2713,33 +2763,33 @@ namespace Terracotta
         public static Effect CompiledEffect_player_0p01176471;
         public static Effect CompiledEffect_player_0p01568628;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, float cutoff, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Path, player);
+            Using(cameraPos, cameraAspect, Path, player, cutoff);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, float cutoff, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Path, player);
+            Using(cameraPos, cameraAspect, Path, player, cutoff);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, float cutoff, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, Path, player);
+            Using(cameraPos, cameraAspect, Path, player, cutoff);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, float cutoff, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, Path, player);
+            Using(cameraPos, cameraAspect, Path, player, cutoff);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path, float player)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, float cutoff)
         {
             Effect CompiledEffect = null;
 
@@ -2756,6 +2806,7 @@ namespace Terracotta
             CompiledEffect.Parameters["fs_param_Path_Texture"].SetValue(FragSharpMarshal.Marshal(Path));
             CompiledEffect.Parameters["fs_param_Path_size"].SetValue(FragSharpMarshal.Marshal(vec(Path.Width, Path.Height)));
             CompiledEffect.Parameters["fs_param_Path_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Path.Width, Path.Height)));
+            CompiledEffect.Parameters["fs_param_cutoff"].SetValue(FragSharpMarshal.Marshal(cutoff));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

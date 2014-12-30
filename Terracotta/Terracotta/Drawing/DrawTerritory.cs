@@ -4,7 +4,8 @@ namespace Terracotta
 {
     public partial class DrawTerritoryPlayer : BaseShader
     {
-        public const float TerritoryCutoff = _16;
+        public const float
+            TerritoryCutoff = _16;
 
         public static readonly color
             Available = new color(.2f, .7f, .2f, .8f),
@@ -15,14 +16,14 @@ namespace Terracotta
             Uncontrolled = new color(0f, 0f, 0f, .65f);
 
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<vec4> Path, [Player.Vals] float player)
+        color FragmentShader(VertexOut vertex, Field<vec4> Path, [Player.Vals] float player, float cutoff)
         {
             color output = color.TransparentBlack;
 
             vec4 here = Path[Here];
 
             float dist = GetPlayerVal(here, player);
-            bool controlled = dist < TerritoryCutoff;
+            bool controlled = dist < cutoff;
 
             color clr = controlled ? Controlled : Uncontrolled;
 

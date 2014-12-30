@@ -39,6 +39,7 @@ sampler fs_param_Path : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
+float fs_param_cutoff;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
@@ -83,7 +84,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 here = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 0)) * fs_param_Path_dxdy);
     float dist = Terracotta__SimShader__GetPlayerVal__Terracotta_PlayerTuple__float(here, 0);
-    bool controlled = dist < 0.0627451 - .001;
+    bool controlled = dist < fs_param_cutoff - .001;
     float4 clr = controlled ? float4(0.0, 0.0, 0.0, 0.0) : float4(0.0, 0.0, 0.0, 0.65);
     clr.rgb *= clr.a;
     __FinalOutput.Color = clr;

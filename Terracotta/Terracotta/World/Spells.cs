@@ -20,6 +20,7 @@ namespace Terracotta
         public SpellExecution Apply;
 
         public int JadeCost = 0;
+        public float TerritoryRange = float.MaxValue;
 
         static int next_id = 0;
         public Spell(string Name)
@@ -67,10 +68,11 @@ namespace Terracotta
             spell.JadeCost = 1000;
 
             Necromancer = spell = new Spell("Necromancer");
-            spell.DrawCursor = NecroCursor;
+            spell.DrawCursor = () => NecroCursor(Necromancer.TerritoryRange);
             spell.Execute = () => W.SummonNecromancer();
             spell.Apply = (p, t, v) => W.SummonNecromancerApply(p, t, v);
             spell.JadeCost = 1000;
+            spell.TerritoryRange = _64;
 
             TerracottaArmy = spell = new Spell("Terracotta Army");
             spell.DrawCursor = TerracottaCursor;
@@ -97,9 +99,9 @@ namespace Terracotta
             W.DrawCursor(Assets.AoE_Terra, size_2 * W.CellSize, angle_2);
         }
 
-        static void NecroCursor()
+        static void NecroCursor(float TerritoryRange)
         {
-            W.UpdateCellAvailability();
+            W.UpdateCellAvailability(TerritoryRange);
 
             W.DrawGridCell();
             W.DrawArrowCursor();

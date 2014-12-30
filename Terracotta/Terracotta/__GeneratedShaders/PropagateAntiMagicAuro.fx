@@ -22,14 +22,14 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Necromancy, using register location 1
-float2 fs_param_Necromancy_size;
-float2 fs_param_Necromancy_dxdy;
+// Texture Sampler for fs_param_AntiMagic, using register location 1
+float2 fs_param_AntiMagic_size;
+float2 fs_param_AntiMagic_dxdy;
 
-Texture fs_param_Necromancy_Texture;
-sampler fs_param_Necromancy : register(s1) = sampler_state
+Texture fs_param_AntiMagic_Texture;
+sampler fs_param_AntiMagic : register(s1) = sampler_state
 {
-    texture   = <fs_param_Necromancy_Texture>;
+    texture   = <fs_param_AntiMagic_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -111,13 +111,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    float4 right = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(1, 0)) * fs_param_Necromancy_dxdy), up = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(0, 1)) * fs_param_Necromancy_dxdy), left = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(-(1), 0)) * fs_param_Necromancy_dxdy), down = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(0, -(1))) * fs_param_Necromancy_dxdy);
-    float4 necromancy = FragSharpFramework__FragSharpStd__max__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4(right, up, left, down) - float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
-    if (abs(unit_here.r - 0.01176471) < .001)
+    float4 right = tex2D(fs_param_AntiMagic, psin.TexCoords + (float2(1, 0)) * fs_param_AntiMagic_dxdy), up = tex2D(fs_param_AntiMagic, psin.TexCoords + (float2(0, 1)) * fs_param_AntiMagic_dxdy), left = tex2D(fs_param_AntiMagic, psin.TexCoords + (float2(-(1), 0)) * fs_param_AntiMagic_dxdy), down = tex2D(fs_param_AntiMagic, psin.TexCoords + (float2(0, -(1))) * fs_param_AntiMagic_dxdy);
+    float4 antimagic = FragSharpFramework__FragSharpStd__max__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4(right, up, left, down) - float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
+    if (abs(unit_here.r - 0.007843138) < .001)
     {
-        Terracotta__SimShader__SetPlayerVal__Terracotta_PlayerTuple__float__float(necromancy, unit_here.g, 0.07843138);
+        Terracotta__SimShader__SetPlayerVal__Terracotta_PlayerTuple__float__float(antimagic, unit_here.g, 0.07843138);
     }
-    __FinalOutput.Color = necromancy;
+    __FinalOutput.Color = antimagic;
     return __FinalOutput;
 }
 

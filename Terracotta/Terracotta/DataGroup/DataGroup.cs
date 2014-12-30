@@ -100,7 +100,7 @@ namespace Terracotta
             Temp1, Temp2,
             PreviousUnits, CurrentUnits, PreviousData, CurrentData, Extra, TargetData,
             RandomField,
-            Tiles, Corpses, Magic, Necromancy,
+            Tiles, Corpses, Magic, Necromancy, AntiMagic,
             SelectField,
 
             Paths_Right, Paths_Left, Paths_Up, Paths_Down,
@@ -140,6 +140,7 @@ namespace Terracotta
             Corpses = MakeTarget(w, h);
             Magic = MakeTarget(w, h);
             Necromancy = MakeTarget(w, h);
+            AntiMagic = MakeTarget(w, h);
 
             SelectField = MakeTarget(w, h);
 

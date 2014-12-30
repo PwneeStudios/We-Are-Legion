@@ -82,6 +82,9 @@ namespace Terracotta
             PropagateNecromancyAuro.Apply(Necromancy, CurrentData, CurrentUnits, Output: Temp1);
             CoreMath.Swap(ref Temp1, ref Necromancy);
 
+            PropagateAntiMagicAuro.Apply(AntiMagic, CurrentData, CurrentUnits, Output: Temp1);
+            CoreMath.Swap(ref Temp1, ref AntiMagic);
+
             // Random field
             UpdateRandomField.Apply(RandomField, Output: Temp1);
             Swap(ref RandomField, ref Temp1);
