@@ -57,10 +57,17 @@ namespace Terracotta
     public partial class ActionSpawn_Filter : SimShader
     {
         [FragmentShader]
-        data FragmentShader(VertexOut vertex, Field<data> Select, Field<data> Data, Field<unit> Units, Field<corpse> Corpses, [UnitDistribution.Vals] float distribution)
+        data FragmentShader(VertexOut vertex, Field<data> Select, Field<data> Data, Field<unit> Units, Field<corpse> Corpses, Field<TeamTuple> AntiMagic,
+            [UnitDistribution.Vals] float distribution, [Team.Vals] float AntiMagicTeam)
         {
             data select = Select[Here];
             data here = Data[Here];
+            
+            TeamTuple antimagic = AntiMagic[Here];
+            if (antimagic.TeamOne > _0 && AntiMagicTeam != Team.One)     return data.Nothing;
+            if (antimagic.TeamTwo > _0 && AntiMagicTeam != Team.Two)     return data.Nothing;
+            if (antimagic.TeamThree > _0 && AntiMagicTeam != Team.Three) return data.Nothing;
+            if (antimagic.TeamFour > _0 && AntiMagicTeam != Team.Four)   return data.Nothing;
 
             if (Something(select) && !Something(here))
             {

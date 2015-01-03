@@ -695,6 +695,13 @@ namespace Terracotta
             }
             GridHelper.DrawGrid();
 
+            // Antimagic
+            if (CurUserMode == UserMode.CastSpell)
+            {
+                DrawAntiMagic.Using(camvec, CameraAspect, DataGroup.AntiMagic, MyTeamValue);
+                GridHelper.DrawGrid();
+            }
+
             // Markers
             Markers.Draw(DrawOrder.AfterUnits);
 

@@ -438,7 +438,7 @@ namespace Terracotta
 
             SetEffectArea(Pos, Size, PlayerNumber);
 
-            Kill.Apply(DataGroup.SelectField, DataGroup.Magic, Output: DataGroup.Temp1);
+            Kill.Apply(DataGroup.SelectField, DataGroup.Magic, DataGroup.AntiMagic, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
         }
 
@@ -514,7 +514,7 @@ namespace Terracotta
                 return;
             }
 
-            ActionSpawn_Filter.Apply(DataGroup.SelectField, DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.Corpses, distribution, Output: DataGroup.Temp2);
+            ActionSpawn_Filter.Apply(DataGroup.SelectField, DataGroup.CurrentData, DataGroup.CurrentUnits, DataGroup.Corpses, DataGroup.AntiMagic, distribution, team, Output: DataGroup.Temp2);
             var Filter = DataGroup.Temp2;
 
             ActionSpawn_Unit.Apply(Filter, DataGroup.CurrentUnits, player, team, type, raising, Output: DataGroup.Temp1);

@@ -39,14 +39,20 @@ namespace Terracotta
     public partial class Kill : SimShader
     {
         [FragmentShader]
-        magic FragmentShader(VertexOut vertex, Field<data> Select, Field<magic> Magic)
+        magic FragmentShader(VertexOut vertex, Field<data> Select, Field<magic> Magic, Field<TeamTuple> AntiMagic)
         {
             magic here  = Magic[Here];
             data select = Select[Here];
-
+            
             if (Something(select))
             {
-                here.kill = _true;
+                TeamTuple antimagic = AntiMagic[Here];
+                bool block_kill = antimagic.TeamOne > _0 || antimagic.TeamTwo > _0 || antimagic.TeamThree > _0 || antimagic.TeamFour > _0;
+
+                if (!block_kill)
+                {
+                    here.kill = _true;
+                }
             }
 
             return here;
@@ -85,23 +91,23 @@ namespace Terracotta
     /// </summary>
     public partial class PropagateAntiMagicAuro : SimShader
     {
-        const float AntiMagicRange = _20;
+        const float AntiMagicRange = _30;
 
         [FragmentShader]
-        PlayerTuple FragmentShader(VertexOut vertex, Field<PlayerTuple> AntiMagic, Field<data> Data, Field<unit> Units)
+        TeamTuple FragmentShader(VertexOut vertex, Field<TeamTuple> AntiMagic, Field<data> Data, Field<unit> Units)
         {
             data data_here = Data[Here];
             unit unit_here = Units[Here];
 
-            PlayerTuple
+            TeamTuple
                 right = AntiMagic[RightOne],
-                up = AntiMagic[UpOne],
-                left = AntiMagic[LeftOne],
-                down = AntiMagic[DownOne];
+                up    = AntiMagic[UpOne],
+                left  = AntiMagic[LeftOne],
+                down  = AntiMagic[DownOne];
 
-            PlayerTuple antimagic = max(right, up, left, down) - vec(_1, _1, _1, _1);
+            TeamTuple antimagic = max(right, up, left, down) - vec(_1, _1, _1, _1);
 
-            if (unit_here.type == UnitType.DragonLord) SetPlayerVal(ref antimagic, unit_here.player, AntiMagicRange);
+            if (unit_here.type == UnitType.DragonLord) SetTeamVal(ref antimagic, unit_here.team, AntiMagicRange);
 
             return antimagic;
         }

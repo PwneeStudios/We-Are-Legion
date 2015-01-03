@@ -75,21 +75,21 @@ float4 FragSharpFramework__FragSharpStd__max__FragSharpFramework_vec4__FragSharp
     return max(max(a, b), max(c, d));
 }
 
-void Terracotta__SimShader__SetPlayerVal__Terracotta_PlayerTuple__float__float(inout float4 tuple, float player, float value)
+void Terracotta__SimShader__SetTeamVal__Terracotta_TeamTuple__float__float(inout float4 tuple, float team, float value)
 {
-    if (abs(player - 0.003921569) < .001)
+    if (abs(team - 0.003921569) < .001)
     {
         tuple.r = value;
     }
-    if (abs(player - 0.007843138) < .001)
+    if (abs(team - 0.007843138) < .001)
     {
         tuple.g = value;
     }
-    if (abs(player - 0.01176471) < .001)
+    if (abs(team - 0.01176471) < .001)
     {
         tuple.b = value;
     }
-    if (abs(player - 0.01568628) < .001)
+    if (abs(team - 0.01568628) < .001)
     {
         tuple.a = value;
     }
@@ -115,7 +115,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 antimagic = FragSharpFramework__FragSharpStd__max__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4(right, up, left, down) - float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
     if (abs(unit_here.r - 0.007843138) < .001)
     {
-        Terracotta__SimShader__SetPlayerVal__Terracotta_PlayerTuple__float__float(antimagic, unit_here.g, 0.07843138);
+        Terracotta__SimShader__SetTeamVal__Terracotta_TeamTuple__float__float(antimagic, unit_here.b, 0.1176471);
     }
     __FinalOutput.Color = antimagic;
     return __FinalOutput;

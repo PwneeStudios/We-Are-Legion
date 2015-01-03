@@ -82,6 +82,21 @@ sampler fs_param_Corpses : register(s4) = sampler_state
     AddressV  = Clamp;
 };
 
+// Texture Sampler for fs_param_AntiMagic, using register location 5
+float2 fs_param_AntiMagic_size;
+float2 fs_param_AntiMagic_dxdy;
+
+Texture fs_param_AntiMagic_Texture;
+sampler fs_param_AntiMagic : register(s5) = sampler_state
+{
+    texture   = <fs_param_AntiMagic_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
@@ -129,9 +144,30 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
     float4 here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float4 antimagic = tex2D(fs_param_AntiMagic, psin.TexCoords + (float2(0, 0)) * fs_param_AntiMagic_dxdy);
+    if (antimagic.r > 0.0 + .001 && abs(0 - 0.003921569) > .001)
+    {
+        __FinalOutput.Color = float4(0, 0, 0, 0);
+        return __FinalOutput;
+    }
+    if (antimagic.g > 0.0 + .001 && abs(0 - 0.007843138) > .001)
+    {
+        __FinalOutput.Color = float4(0, 0, 0, 0);
+        return __FinalOutput;
+    }
+    if (antimagic.b > 0.0 + .001 && abs(0 - 0.01176471) > .001)
+    {
+        __FinalOutput.Color = float4(0, 0, 0, 0);
+        return __FinalOutput;
+    }
+    if (antimagic.a > 0.0 + .001 && abs(0 - 0.01568628) > .001)
+    {
+        __FinalOutput.Color = float4(0, 0, 0, 0);
+        return __FinalOutput;
+    }
     if (Terracotta__SimShader__Something__Terracotta_data(select) && !(Terracotta__SimShader__Something__Terracotta_data(here)))
     {
-        if (Terracotta__UnitDistribution__Contains__float__FragSharpFramework_vec2__FragSharpFramework_Field_Terracotta_corpse_(psin, 3, psin.TexCoords * fs_param_Select_size, fs_param_Corpses, fs_param_Corpses_size, fs_param_Corpses_dxdy))
+        if (Terracotta__UnitDistribution__Contains__float__FragSharpFramework_vec2__FragSharpFramework_Field_Terracotta_corpse_(psin, 1, psin.TexCoords * fs_param_Select_size, fs_param_Corpses, fs_param_Corpses_size, fs_param_Corpses_dxdy))
         {
             __FinalOutput.Color = select;
             return __FinalOutput;

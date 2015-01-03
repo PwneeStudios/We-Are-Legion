@@ -20,6 +20,11 @@ namespace FragSharpFramework
         {
             FragSharp.Content = Content;
             FragSharp.GraphicsDevice = GraphicsDevice;
+            Terracotta.DrawAntiMagic.CompiledEffect_casting_team_0 = Content.Load<Effect>("FragSharpShaders/DrawAntiMagic_casting_team=0");
+            Terracotta.DrawAntiMagic.CompiledEffect_casting_team_0p003921569 = Content.Load<Effect>("FragSharpShaders/DrawAntiMagic_casting_team=0.003921569");
+            Terracotta.DrawAntiMagic.CompiledEffect_casting_team_0p007843138 = Content.Load<Effect>("FragSharpShaders/DrawAntiMagic_casting_team=0.007843138");
+            Terracotta.DrawAntiMagic.CompiledEffect_casting_team_0p01176471 = Content.Load<Effect>("FragSharpShaders/DrawAntiMagic_casting_team=0.01176471");
+            Terracotta.DrawAntiMagic.CompiledEffect_casting_team_0p01568628 = Content.Load<Effect>("FragSharpShaders/DrawAntiMagic_casting_team=0.01568628");
             Terracotta.DrawGeoInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawGeoInfo");
             Terracotta.DrawDirwardInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawDirwardInfo");
             Terracotta.DrawPolarInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPolarInfo");
@@ -84,9 +89,21 @@ namespace FragSharpFramework
             Terracotta.DataDrawMouse.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0.007843138");
             Terracotta.DataDrawMouse.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0.01176471");
             Terracotta.DataDrawMouse.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0.01568628");
-            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_1 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=1");
-            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_2 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=2");
-            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_3 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=3");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_1_AntiMagicTeam_0 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=1_AntiMagicTeam=0");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_1_AntiMagicTeam_0p003921569 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=1_AntiMagicTeam=0.003921569");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_1_AntiMagicTeam_0p007843138 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=1_AntiMagicTeam=0.007843138");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_1_AntiMagicTeam_0p01176471 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=1_AntiMagicTeam=0.01176471");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_1_AntiMagicTeam_0p01568628 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=1_AntiMagicTeam=0.01568628");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_2_AntiMagicTeam_0 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=2_AntiMagicTeam=0");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_2_AntiMagicTeam_0p003921569 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=2_AntiMagicTeam=0.003921569");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_2_AntiMagicTeam_0p007843138 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=2_AntiMagicTeam=0.007843138");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_2_AntiMagicTeam_0p01176471 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=2_AntiMagicTeam=0.01176471");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_2_AntiMagicTeam_0p01568628 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=2_AntiMagicTeam=0.01568628");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_3_AntiMagicTeam_0 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=3_AntiMagicTeam=0");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_3_AntiMagicTeam_0p003921569 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=3_AntiMagicTeam=0.003921569");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_3_AntiMagicTeam_0p007843138 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=3_AntiMagicTeam=0.007843138");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_3_AntiMagicTeam_0p01176471 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=3_AntiMagicTeam=0.01176471");
+            Terracotta.ActionSpawn_Filter.CompiledEffect_distribution_3_AntiMagicTeam_0p01568628 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=3_AntiMagicTeam=0.01568628");
             Terracotta.ActionSpawn_Data.CompiledEffect = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Data");
             Terracotta.ActionSpawn_Unit.CompiledEffect_raising_true = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Unit_raising=true");
             Terracotta.ActionSpawn_Unit.CompiledEffect_raising_false = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Unit_raising=false");
@@ -230,6 +247,69 @@ namespace FragSharpFramework
         }
     }
 }
+
+
+
+
+
+namespace Terracotta
+{
+    public partial class DrawAntiMagic
+    {
+        public static Effect CompiledEffect_casting_team_0;
+        public static Effect CompiledEffect_casting_team_0p003921569;
+        public static Effect CompiledEffect_casting_team_0p007843138;
+        public static Effect CompiledEffect_casting_team_0p01176471;
+        public static Effect CompiledEffect_casting_team_0p01568628;
+
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D AntiMagic, float casting_team, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(cameraPos, cameraAspect, AntiMagic, casting_team);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D AntiMagic, float casting_team, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(cameraPos, cameraAspect, AntiMagic, casting_team);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D AntiMagic, float casting_team, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(cameraPos, cameraAspect, AntiMagic, casting_team);
+        }
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D AntiMagic, float casting_team, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(cameraPos, cameraAspect, AntiMagic, casting_team);
+        }
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D AntiMagic, float casting_team)
+        {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(casting_team - 0)) < .001) CompiledEffect = CompiledEffect_casting_team_0;
+            else if (abs((float)(casting_team - 0.003921569)) < .001) CompiledEffect = CompiledEffect_casting_team_0p003921569;
+            else if (abs((float)(casting_team - 0.007843138)) < .001) CompiledEffect = CompiledEffect_casting_team_0p007843138;
+            else if (abs((float)(casting_team - 0.01176471)) < .001) CompiledEffect = CompiledEffect_casting_team_0p01176471;
+            else if (abs((float)(casting_team - 0.01568628)) < .001) CompiledEffect = CompiledEffect_casting_team_0p01568628;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
+            CompiledEffect.Parameters["vs_param_cameraPos"].SetValue(FragSharpMarshal.Marshal(cameraPos));
+            CompiledEffect.Parameters["vs_param_cameraAspect"].SetValue(FragSharpMarshal.Marshal(cameraAspect));
+            CompiledEffect.Parameters["fs_param_AntiMagic_Texture"].SetValue(FragSharpMarshal.Marshal(AntiMagic));
+            CompiledEffect.Parameters["fs_param_AntiMagic_size"].SetValue(FragSharpMarshal.Marshal(vec(AntiMagic.Width, AntiMagic.Height)));
+            CompiledEffect.Parameters["fs_param_AntiMagic_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
 
 namespace Terracotta
 {
@@ -1708,47 +1788,83 @@ namespace Terracotta
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 namespace Terracotta
 {
     public partial class ActionSpawn_Filter
     {
-        public static Effect CompiledEffect_distribution_1;
-        public static Effect CompiledEffect_distribution_2;
-        public static Effect CompiledEffect_distribution_3;
+        public static Effect CompiledEffect_distribution_1_AntiMagicTeam_0;
+        public static Effect CompiledEffect_distribution_1_AntiMagicTeam_0p003921569;
+        public static Effect CompiledEffect_distribution_1_AntiMagicTeam_0p007843138;
+        public static Effect CompiledEffect_distribution_1_AntiMagicTeam_0p01176471;
+        public static Effect CompiledEffect_distribution_1_AntiMagicTeam_0p01568628;
+        public static Effect CompiledEffect_distribution_2_AntiMagicTeam_0;
+        public static Effect CompiledEffect_distribution_2_AntiMagicTeam_0p003921569;
+        public static Effect CompiledEffect_distribution_2_AntiMagicTeam_0p007843138;
+        public static Effect CompiledEffect_distribution_2_AntiMagicTeam_0p01176471;
+        public static Effect CompiledEffect_distribution_2_AntiMagicTeam_0p01568628;
+        public static Effect CompiledEffect_distribution_3_AntiMagicTeam_0;
+        public static Effect CompiledEffect_distribution_3_AntiMagicTeam_0p003921569;
+        public static Effect CompiledEffect_distribution_3_AntiMagicTeam_0p007843138;
+        public static Effect CompiledEffect_distribution_3_AntiMagicTeam_0p01176471;
+        public static Effect CompiledEffect_distribution_3_AntiMagicTeam_0p01568628;
 
-        public static void Apply(Texture2D Select, Texture2D Data, Texture2D Units, Texture2D Corpses, float distribution, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Select, Texture2D Data, Texture2D Units, Texture2D Corpses, Texture2D AntiMagic, float distribution, float AntiMagicTeam, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Select, Data, Units, Corpses, distribution);
+            Using(Select, Data, Units, Corpses, AntiMagic, distribution, AntiMagicTeam);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Select, Texture2D Data, Texture2D Units, Texture2D Corpses, float distribution, RenderTarget2D Output)
+        public static void Apply(Texture2D Select, Texture2D Data, Texture2D Units, Texture2D Corpses, Texture2D AntiMagic, float distribution, float AntiMagicTeam, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Select, Data, Units, Corpses, distribution);
+            Using(Select, Data, Units, Corpses, AntiMagic, distribution, AntiMagicTeam);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Select, Texture2D Data, Texture2D Units, Texture2D Corpses, float distribution, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Select, Texture2D Data, Texture2D Units, Texture2D Corpses, Texture2D AntiMagic, float distribution, float AntiMagicTeam, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Select, Data, Units, Corpses, distribution);
+            Using(Select, Data, Units, Corpses, AntiMagic, distribution, AntiMagicTeam);
         }
-        public static void Using(Texture2D Select, Texture2D Data, Texture2D Units, Texture2D Corpses, float distribution, RenderTarget2D Output)
+        public static void Using(Texture2D Select, Texture2D Data, Texture2D Units, Texture2D Corpses, Texture2D AntiMagic, float distribution, float AntiMagicTeam, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Select, Data, Units, Corpses, distribution);
+            Using(Select, Data, Units, Corpses, AntiMagic, distribution, AntiMagicTeam);
         }
-        public static void Using(Texture2D Select, Texture2D Data, Texture2D Units, Texture2D Corpses, float distribution)
+        public static void Using(Texture2D Select, Texture2D Data, Texture2D Units, Texture2D Corpses, Texture2D AntiMagic, float distribution, float AntiMagicTeam)
         {
             Effect CompiledEffect = null;
 
-            if (abs((float)(distribution - 1)) < .001) CompiledEffect = CompiledEffect_distribution_1;
-            else if (abs((float)(distribution - 2)) < .001) CompiledEffect = CompiledEffect_distribution_2;
-            else if (abs((float)(distribution - 3)) < .001) CompiledEffect = CompiledEffect_distribution_3;
+            if (abs((float)(distribution - 1)) < .001 && abs((float)(AntiMagicTeam - 0)) < .001) CompiledEffect = CompiledEffect_distribution_1_AntiMagicTeam_0;
+            else if (abs((float)(distribution - 1)) < .001 && abs((float)(AntiMagicTeam - 0.003921569)) < .001) CompiledEffect = CompiledEffect_distribution_1_AntiMagicTeam_0p003921569;
+            else if (abs((float)(distribution - 1)) < .001 && abs((float)(AntiMagicTeam - 0.007843138)) < .001) CompiledEffect = CompiledEffect_distribution_1_AntiMagicTeam_0p007843138;
+            else if (abs((float)(distribution - 1)) < .001 && abs((float)(AntiMagicTeam - 0.01176471)) < .001) CompiledEffect = CompiledEffect_distribution_1_AntiMagicTeam_0p01176471;
+            else if (abs((float)(distribution - 1)) < .001 && abs((float)(AntiMagicTeam - 0.01568628)) < .001) CompiledEffect = CompiledEffect_distribution_1_AntiMagicTeam_0p01568628;
+            else if (abs((float)(distribution - 2)) < .001 && abs((float)(AntiMagicTeam - 0)) < .001) CompiledEffect = CompiledEffect_distribution_2_AntiMagicTeam_0;
+            else if (abs((float)(distribution - 2)) < .001 && abs((float)(AntiMagicTeam - 0.003921569)) < .001) CompiledEffect = CompiledEffect_distribution_2_AntiMagicTeam_0p003921569;
+            else if (abs((float)(distribution - 2)) < .001 && abs((float)(AntiMagicTeam - 0.007843138)) < .001) CompiledEffect = CompiledEffect_distribution_2_AntiMagicTeam_0p007843138;
+            else if (abs((float)(distribution - 2)) < .001 && abs((float)(AntiMagicTeam - 0.01176471)) < .001) CompiledEffect = CompiledEffect_distribution_2_AntiMagicTeam_0p01176471;
+            else if (abs((float)(distribution - 2)) < .001 && abs((float)(AntiMagicTeam - 0.01568628)) < .001) CompiledEffect = CompiledEffect_distribution_2_AntiMagicTeam_0p01568628;
+            else if (abs((float)(distribution - 3)) < .001 && abs((float)(AntiMagicTeam - 0)) < .001) CompiledEffect = CompiledEffect_distribution_3_AntiMagicTeam_0;
+            else if (abs((float)(distribution - 3)) < .001 && abs((float)(AntiMagicTeam - 0.003921569)) < .001) CompiledEffect = CompiledEffect_distribution_3_AntiMagicTeam_0p003921569;
+            else if (abs((float)(distribution - 3)) < .001 && abs((float)(AntiMagicTeam - 0.007843138)) < .001) CompiledEffect = CompiledEffect_distribution_3_AntiMagicTeam_0p007843138;
+            else if (abs((float)(distribution - 3)) < .001 && abs((float)(AntiMagicTeam - 0.01176471)) < .001) CompiledEffect = CompiledEffect_distribution_3_AntiMagicTeam_0p01176471;
+            else if (abs((float)(distribution - 3)) < .001 && abs((float)(AntiMagicTeam - 0.01568628)) < .001) CompiledEffect = CompiledEffect_distribution_3_AntiMagicTeam_0p01568628;
 
             if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
 
@@ -1764,6 +1880,9 @@ namespace Terracotta
             CompiledEffect.Parameters["fs_param_Corpses_Texture"].SetValue(FragSharpMarshal.Marshal(Corpses));
             CompiledEffect.Parameters["fs_param_Corpses_size"].SetValue(FragSharpMarshal.Marshal(vec(Corpses.Width, Corpses.Height)));
             CompiledEffect.Parameters["fs_param_Corpses_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Corpses.Width, Corpses.Height)));
+            CompiledEffect.Parameters["fs_param_AntiMagic_Texture"].SetValue(FragSharpMarshal.Marshal(AntiMagic));
+            CompiledEffect.Parameters["fs_param_AntiMagic_size"].SetValue(FragSharpMarshal.Marshal(vec(AntiMagic.Width, AntiMagic.Height)));
+            CompiledEffect.Parameters["fs_param_AntiMagic_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
@@ -2119,33 +2238,33 @@ namespace Terracotta
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(Texture2D Select, Texture2D Magic, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Select, Texture2D Magic, Texture2D AntiMagic, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Select, Magic);
+            Using(Select, Magic, AntiMagic);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Select, Texture2D Magic, RenderTarget2D Output)
+        public static void Apply(Texture2D Select, Texture2D Magic, Texture2D AntiMagic, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Select, Magic);
+            Using(Select, Magic, AntiMagic);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Select, Texture2D Magic, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Select, Texture2D Magic, Texture2D AntiMagic, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Select, Magic);
+            Using(Select, Magic, AntiMagic);
         }
-        public static void Using(Texture2D Select, Texture2D Magic, RenderTarget2D Output)
+        public static void Using(Texture2D Select, Texture2D Magic, Texture2D AntiMagic, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Select, Magic);
+            Using(Select, Magic, AntiMagic);
         }
-        public static void Using(Texture2D Select, Texture2D Magic)
+        public static void Using(Texture2D Select, Texture2D Magic, Texture2D AntiMagic)
         {
             CompiledEffect.Parameters["fs_param_Select_Texture"].SetValue(FragSharpMarshal.Marshal(Select));
             CompiledEffect.Parameters["fs_param_Select_size"].SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -2153,6 +2272,9 @@ namespace Terracotta
             CompiledEffect.Parameters["fs_param_Magic_Texture"].SetValue(FragSharpMarshal.Marshal(Magic));
             CompiledEffect.Parameters["fs_param_Magic_size"].SetValue(FragSharpMarshal.Marshal(vec(Magic.Width, Magic.Height)));
             CompiledEffect.Parameters["fs_param_Magic_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Magic.Width, Magic.Height)));
+            CompiledEffect.Parameters["fs_param_AntiMagic_Texture"].SetValue(FragSharpMarshal.Marshal(AntiMagic));
+            CompiledEffect.Parameters["fs_param_AntiMagic_size"].SetValue(FragSharpMarshal.Marshal(vec(AntiMagic.Width, AntiMagic.Height)));
+            CompiledEffect.Parameters["fs_param_AntiMagic_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

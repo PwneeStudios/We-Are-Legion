@@ -559,6 +559,9 @@ namespace Terracotta
 
         public static class Team
         {
+            [FragSharpFramework.Vals(None, One, Two, Three, Four)]
+                public class ValsAttribute : Attribute { }
+
             public static readonly float[] Vals = new float[] { None, One, Two, Three, Four };
 
             public static float Get(int index)
