@@ -10,7 +10,7 @@ namespace Terracotta
             data data_here = Data[Here];
             unit unit_here = Units[Here];
 
-            if (only_selected && !fake_selected(data_here)) return vec4.Zero;
+            if (player != Player.None && unit_here.player != player || only_selected && !fake_selected(data_here)) return vec4.Zero;
 
             return vec(
                 unit_here.type == UnitType.Footman ? 1f : 0,
@@ -29,7 +29,7 @@ namespace Terracotta
             data data_here = Data[Here];
             unit unit_here = Units[Here];
 
-            if (only_selected && !fake_selected(data_here)) return vec4.Zero;
+            if (player != Player.None && unit_here.player != player || only_selected && !fake_selected(data_here)) return vec4.Zero;
 
             return vec(
                 unit_here.type == UnitType.ClaySoldier ? 1f : 0,

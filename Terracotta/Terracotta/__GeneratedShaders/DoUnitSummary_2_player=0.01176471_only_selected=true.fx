@@ -78,7 +78,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    if (true && !(Terracotta__SimShader__fake_selected__Terracotta_data(data_here)))
+    if (abs(0.01176471 - 0.0) > .001 && abs(unit_here.g - 0.01176471) > .001 || true && !(Terracotta__SimShader__fake_selected__Terracotta_data(data_here)))
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;
