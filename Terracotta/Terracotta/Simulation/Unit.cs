@@ -604,6 +604,9 @@ namespace Terracotta
             [FragSharpFramework.Vals(Barracks, GoldMine, JadeMine)]
                 public class BuildingsAttribute : Attribute { }
 
+            [FragSharpFramework.Vals(Footman, DragonLord, Necromancer, Skeleton, ClaySoldier, Barracks, GoldMine, JadeMine)]
+                public class ValsAttribute : Attribute { }
+
             public const float
                 FirstUnitType = Footman,
                 FirstBuildingType = Barracks,
@@ -644,6 +647,10 @@ namespace Terracotta
                 Last = JadeMine,
                 Count = Last;
 
+            public static readonly float[] Vals = new float[] {
+                Footman, DragonLord, Necromancer, Skeleton, ClaySoldier, Barracks, GoldMine, JadeMine,
+            };
+
             public static string Name(float unit)
             {
                 if (unit == None) return "None";
@@ -669,7 +676,12 @@ namespace Terracotta
 
         protected static bool IsUnit(unit u)
         {
-            return u.type >= UnitType.FirstUnitType && u.type < UnitType.FirstBuildingType;
+            return IsUnit(u.type);
+        }
+
+        protected static bool IsUnit(float type)
+        {
+            return type >= UnitType.FirstUnitType && type < UnitType.FirstBuildingType;
         }
 
         protected static bool IsBuilding(unit u)

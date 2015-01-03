@@ -68,9 +68,14 @@ bool Terracotta__SimShader__fake_selected__Terracotta_data(float4 u)
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
+bool Terracotta__SimShader__IsUnit__float(float type)
+{
+    return type >= 0.003921569 - .001 && type < 0.02352941 - .001;
+}
+
 bool Terracotta__SimShader__IsUnit__Terracotta_unit(float4 u)
 {
-    return u.r >= 0.003921569 - .001 && u.r < 0.02352941 - .001;
+    return Terracotta__SimShader__IsUnit__float(u.r);
 }
 
 float3 Terracotta__SimShader__pack_coord_3byte__float(float x)

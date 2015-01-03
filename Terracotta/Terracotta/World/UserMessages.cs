@@ -10,6 +10,7 @@ namespace Terracotta
         public void Message_InsufficientGold() { AddUserMessage("Insufficient gold."); }
         public void Message_InsufficientJade() { AddUserMessage("Insufficient jade."); }
         public void Message_CanNotPlaceHere() { AddUserMessage("Can't place here."); }
+        public void Message_PlayerDefeated(int PlayerNum) { AddUserMessage("Player {0} has been defeated!", PlayerNum); }
     }
 
     public class UserMessageList

@@ -40,19 +40,19 @@ namespace Terracotta
         }
     }
 
-    public partial class CountBuildings : SimShader
+    public partial class CountUnitTypeForAllPlayers : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<building> Data, Field<unit> Units, [UnitType.Buildings] float type)
+        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Units, [UnitType.Vals] float type)
         {
-            building data_here = Data[Here];
+            data data_here = Data[Here];
 
             vec4 output = vec4.Zero;
             if (Something(data_here))
             {
                 unit unit_here = Units[Here];
 
-                if (unit_here.type == type && IsCenter(data_here))
+                if (unit_here.type == type && !(IsUnit(type) && unit_here.anim == Anim.Die) && !(IsBuilding(type) && !IsCenter((building)(vec4)data_here)))
                 {
                     if (unit_here.player == Player.One)   output.x = _1;
                     if (unit_here.player == Player.Two)   output.y = _1;

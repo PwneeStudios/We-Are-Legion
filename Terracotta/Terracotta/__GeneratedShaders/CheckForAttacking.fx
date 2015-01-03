@@ -85,9 +85,14 @@ sampler fs_param_Magic : register(s4) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
+bool Terracotta__SimShader__IsUnit__float(float type)
+{
+    return type >= 0.003921569 - .001 && type < 0.02352941 - .001;
+}
+
 bool Terracotta__SimShader__IsUnit__Terracotta_unit(float4 u)
 {
-    return u.r >= 0.003921569 - .001 && u.r < 0.02352941 - .001;
+    return Terracotta__SimShader__IsUnit__float(u.r);
 }
 
 bool Terracotta__SimShader__IsStationary__Terracotta_data(float4 d)

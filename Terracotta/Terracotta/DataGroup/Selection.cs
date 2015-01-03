@@ -16,6 +16,15 @@ namespace Terracotta
 {
     public partial class DataGroup : SimShader
     {
+        public vec2 DragonLordDeathGridCoord()
+        {
+            DyingDragonLordGridCoord.Apply(CurrentUnits, Output: Multigrid[0]);
+            color packed = MultigridReduce(_BoundingTr.Apply);
+            vec2 pos = SimShader.unpack_vec2(packed);
+            
+            return pos;
+        }
+
         public vec2 SelectedBound_BL, SelectedBound_TR;
         public void SelectedUnitsBounds()
         {

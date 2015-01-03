@@ -22,27 +22,12 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Unit, using register location 1
-float2 fs_param_Unit_size;
-float2 fs_param_Unit_dxdy;
-
-Texture fs_param_Unit_Texture;
-sampler fs_param_Unit : register(s1) = sampler_state
-{
-    texture   = <fs_param_Unit_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-// Texture Sampler for fs_param_Data, using register location 2
+// Texture Sampler for fs_param_Data, using register location 1
 float2 fs_param_Data_size;
 float2 fs_param_Data_dxdy;
 
 Texture fs_param_Data_Texture;
-sampler fs_param_Data : register(s2) = sampler_state
+sampler fs_param_Data : register(s1) = sampler_state
 {
     texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
@@ -52,14 +37,14 @@ sampler fs_param_Data : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Corpses, using register location 3
-float2 fs_param_Corpses_size;
-float2 fs_param_Corpses_dxdy;
+// Texture Sampler for fs_param_Units, using register location 2
+float2 fs_param_Units_size;
+float2 fs_param_Units_dxdy;
 
-Texture fs_param_Corpses_Texture;
-sampler fs_param_Corpses : register(s3) = sampler_state
+Texture fs_param_Units_Texture;
+sampler fs_param_Units : register(s2) = sampler_state
 {
-    texture   = <fs_param_Corpses_Texture>;
+    texture   = <fs_param_Units_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -67,20 +52,6 @@ sampler fs_param_Corpses : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_Magic, using register location 4
-float2 fs_param_Magic_size;
-float2 fs_param_Magic_dxdy;
-
-Texture fs_param_Magic_Texture;
-sampler fs_param_Magic : register(s4) = sampler_state
-{
-    texture   = <fs_param_Magic_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
@@ -95,14 +66,14 @@ bool Terracotta__SimShader__IsUnit__float(float type)
     return type >= 0.003921569 - .001 && type < 0.02352941 - .001;
 }
 
-bool Terracotta__SimShader__IsUnit__Terracotta_unit(float4 u)
+bool Terracotta__SimShader__IsBuilding__float(float type)
 {
-    return Terracotta__SimShader__IsUnit__float(u.r);
+    return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
 }
 
-bool Terracotta__SimShader__LeavesCorpse__Terracotta_unit(float4 u)
+bool Terracotta__SimShader__IsCenter__Terracotta_building(float4 b)
 {
-    return Terracotta__SimShader__IsUnit__Terracotta_unit(u) && abs(u.r - 0.01568628) > .001;
+    return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
 }
 
 // Compiled vertex shader
@@ -119,21 +90,32 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 corpse_here = tex2D(fs_param_Corpses, psin.TexCoords + (float2(0, 0)) * fs_param_Corpses_dxdy);
-    float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy);
-    if (abs(magic_here.g - 0.0) > .001 && abs(unit_here.a - 0.2352941) < .001)
+    float4 output = float4(0, 0, 0, 0);
+    if (Terracotta__SimShader__Something__Terracotta_data(data_here))
     {
-        corpse_here = float4(0, 0, 0, 0);
+        float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
+        if (abs(unit_here.r - 0.03137255) < .001 && !((Terracotta__SimShader__IsUnit__float(0.03137255) && abs(unit_here.a - 0.07058824) < .001)) && !((Terracotta__SimShader__IsBuilding__float(0.03137255) && !(Terracotta__SimShader__IsCenter__Terracotta_building(data_here)))))
+        {
+            if (abs(unit_here.g - 0.003921569) < .001)
+            {
+                output.x = 0.003921569;
+            }
+            if (abs(unit_here.g - 0.007843138) < .001)
+            {
+                output.y = 0.003921569;
+            }
+            if (abs(unit_here.g - 0.01176471) < .001)
+            {
+                output.z = 0.003921569;
+            }
+            if (abs(unit_here.g - 0.01568628) < .001)
+            {
+                output.w = 0.003921569;
+            }
+        }
     }
-    if (Terracotta__SimShader__Something__Terracotta_data(data_here) && abs(unit_here.a - 0.07058824) < .001 && Terracotta__SimShader__LeavesCorpse__Terracotta_unit(unit_here))
-    {
-        corpse_here.r = data_here.r;
-        corpse_here.g = unit_here.r;
-        corpse_here.b = unit_here.g;
-    }
-    __FinalOutput.Color = corpse_here;
+    __FinalOutput.Color = output;
     return __FinalOutput;
 }
 

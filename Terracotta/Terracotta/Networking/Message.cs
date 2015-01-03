@@ -20,7 +20,7 @@ namespace Terracotta
     }
 
     public enum PlayerAction {
-        SelectAlongLine, SelectInBox, AttackMove, PlaceBuilding, CastSpell
+        SelectAlongLine, SelectInBox, AttackMove, PlaceBuilding, CastSpell, DragonLordDeath,
     }
 
     public abstract class GenericMessage : SimShader

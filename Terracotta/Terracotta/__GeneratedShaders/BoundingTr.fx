@@ -22,14 +22,14 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Units, using register location 1
-float2 fs_param_Units_size;
-float2 fs_param_Units_dxdy;
+// Texture Sampler for fs_param_Data, using register location 1
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
 
-Texture fs_param_Units_Texture;
-sampler fs_param_Units : register(s1) = sampler_state
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s1) = sampler_state
 {
-    texture   = <fs_param_Units_Texture>;
+    texture   = <fs_param_Data_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -85,8 +85,8 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float2 uv = psin.TexCoords * fs_param_Units_size;
-    __FinalOutput.Color = Terracotta__SimShader__SomethingSelected__Terracotta_data(tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy)) ? Terracotta__SimShader__pack_vec2__FragSharpFramework_vec2(uv) : float4(0, 0, 0, 0);
+    float2 uv = psin.TexCoords * fs_param_Data_size;
+    __FinalOutput.Color = Terracotta__SimShader__SomethingSelected__Terracotta_data(tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy)) ? Terracotta__SimShader__pack_vec2__FragSharpFramework_vec2(uv) : float4(0, 0, 0, 0);
     return __FinalOutput;
 }
 

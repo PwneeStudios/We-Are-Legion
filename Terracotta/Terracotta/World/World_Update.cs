@@ -217,7 +217,33 @@ namespace Terracotta
 
             DataGroup.SimulationUpdate();
 
+            DataGroup.DoDragonLordCount(PlayerInfo); // This should happen soon after CurrentUnit.anim is updated, so it can catch the death switch with low latency.
+            DragonLordDeathCheck();
+
             SimStep++;
+        }
+
+        void DragonLordDeathCheck()
+        {
+            for (int p = 1; p <= 4; p++)
+            {
+                if (PlayerInfo[p].DragonLordAlive)
+                {
+                    if (PlayerInfo[p].DragonLords == 0)
+                    {
+                        PlayerInfo[p].DragonLordAlive = false;
+                        vec2 grid_coord = DataGroup.DragonLordDeathGridCoord();
+                        DragonLordDeath(grid_coord, p);
+                    }
+                }
+                else
+                {
+                    if (PlayerInfo[p].DragonLords > 0)
+                    {
+                        PlayerInfo[p].DragonLordAlive = true;
+                    }                    
+                }
+            }
         }
 
         void DoGoldUpdate()
