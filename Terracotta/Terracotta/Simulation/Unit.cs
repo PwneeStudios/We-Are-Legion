@@ -914,6 +914,11 @@ namespace Terracotta
             return !IsStationary(u) && u.change == Change.Moved;
         }
 
+        protected static bool SomethingFakeSelected(data u)
+        {
+            return Something(u) && fake_selected(u);
+        }
+
         protected static bool SomethingSelected(data u)
         {
             return Something(u) && selected(u);

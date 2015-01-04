@@ -26,6 +26,9 @@ namespace Terracotta
         }
 
         public vec2 SelectedBound_BL, SelectedBound_TR;
+        /// <summary>
+        /// Warning: This is not network synchronized. Should only affect local clients fake selection field or the information should be communicated over the network.
+        /// </summary>
         public void SelectedUnitsBounds()
         {
             BoundingTr.Apply(CurrentData, Output: Multigrid[0]);

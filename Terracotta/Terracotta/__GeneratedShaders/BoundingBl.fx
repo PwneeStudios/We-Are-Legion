@@ -45,15 +45,15 @@ bool Terracotta__SimShader__Something__Terracotta_data(float4 u)
     return u.r > 0 + .001;
 }
 
-bool Terracotta__SimShader__selected__Terracotta_data(float4 u)
+bool Terracotta__SimShader__fake_selected__Terracotta_data(float4 u)
 {
     float val = u.b;
-    return val >= 0.3764706 - .001;
+    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-bool Terracotta__SimShader__SomethingSelected__Terracotta_data(float4 u)
+bool Terracotta__SimShader__SomethingFakeSelected__Terracotta_data(float4 u)
 {
-    return Terracotta__SimShader__Something__Terracotta_data(u) && Terracotta__SimShader__selected__Terracotta_data(u);
+    return Terracotta__SimShader__Something__Terracotta_data(u) && Terracotta__SimShader__fake_selected__Terracotta_data(u);
 }
 
 float2 Terracotta__SimShader__pack_val_2byte__float(float x)
@@ -86,7 +86,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float2 uv = psin.TexCoords * fs_param_Data_size;
-    __FinalOutput.Color = Terracotta__SimShader__SomethingSelected__Terracotta_data(tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy)) ? Terracotta__SimShader__pack_vec2__FragSharpFramework_vec2(uv) : float4(1, 1, 1, 1);
+    __FinalOutput.Color = Terracotta__SimShader__SomethingFakeSelected__Terracotta_data(tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy)) ? Terracotta__SimShader__pack_vec2__FragSharpFramework_vec2(uv) : float4(1, 1, 1, 1);
     return __FinalOutput;
 }
 

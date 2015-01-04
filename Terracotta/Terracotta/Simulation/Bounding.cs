@@ -21,6 +21,9 @@ namespace Terracotta
         }
     }
 
+    /// <summary>
+    /// Warning: This is not network synchronized. Should only affect local clients fake selection field or the information should be communicated over the network.
+    /// </summary>
     public partial class BoundingTr : SimShader
     {
         [FragmentShader]
@@ -28,10 +31,13 @@ namespace Terracotta
         {
             vec2 uv = vertex.TexCoords * Data.Size;
 
-            return SomethingSelected(Data[Here]) ? pack_vec2(uv) : vec(0, 0, 0, 0);
+            return SomethingFakeSelected(Data[Here]) ? pack_vec2(uv) : vec(0, 0, 0, 0);
         }
     }
 
+    /// <summary>
+    /// Warning: This is not network synchronized. Should only affect local clients fake selection field or the information should be communicated over the network.
+    /// </summary>
     public partial class BoundingBl : SimShader
     {
         [FragmentShader]
@@ -39,7 +45,7 @@ namespace Terracotta
         {
             vec2 uv = vertex.TexCoords * Data.Size;
 
-            return SomethingSelected(Data[Here]) ? pack_vec2(uv) : vec(1, 1, 1, 1);
+            return SomethingFakeSelected(Data[Here]) ? pack_vec2(uv) : vec(1, 1, 1, 1);
         }
     }
 

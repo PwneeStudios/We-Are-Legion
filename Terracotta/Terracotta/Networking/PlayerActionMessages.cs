@@ -56,6 +56,10 @@ namespace Terracotta
         public static MessageAttackMove Parse(string s) { return new MessageAttackMove(PopVec2(ref s), PopVec2(ref s), PopVec2(ref s), PopVec2(ref s), PopVec2(ref s)); }
         public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.AttackMove); }
 
+        public override void Immediate()
+        {
+        }
+
         public override void Do()
         {
             if (Log.Do) Console.WriteLine("   Do attack move at {0} : {1}", GameClass.World.SimStep, this);
