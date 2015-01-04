@@ -334,9 +334,9 @@ namespace Terracotta
 
         private void DrawWorld()
         {
-            DataGroup.UpdateGradient_ToBuildings();
+            if (!MinimapInitialized) UpdateMinimap();
+            GridHelper.GraphicsDevice.SetRenderTarget(null);
 
-            DrawMinimapTexture();
             DrawGrids();
 
             DrawMinimap();
@@ -351,8 +351,11 @@ namespace Terracotta
             Render.EndText();
         }
 
-        void DrawMinimapTexture()
+        bool MinimapInitialized = false;
+        void UpdateMinimap()
         {
+            MinimapInitialized = true;
+
             var hold_CameraAspect = CameraAspect;
             var hold_CameraPos = CameraPos;
             var hold_CameraZoom = CameraZoom;
@@ -363,7 +366,6 @@ namespace Terracotta
 
             GridHelper.GraphicsDevice.SetRenderTarget(Minimap);
             DrawGrids();
-            GridHelper.GraphicsDevice.SetRenderTarget(null);
 
             CameraAspect = hold_CameraAspect;
             CameraPos = hold_CameraPos;

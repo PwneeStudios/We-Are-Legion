@@ -99,23 +99,23 @@ bool Terracotta__SimShader__fake_selected__Terracotta_building(float4 u)
     return Terracotta__SimShader__fake_selected__Terracotta_data(u);
 }
 
-float4 Terracotta__SelectedUnitColor__Get__float(float player)
+float4 Terracotta__SelectedUnitColor__Get__float(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.007843138) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01176471) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01568628) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
@@ -181,7 +181,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         if (l > 0.8 * fs_param_radius + .001 && l < fs_param_radius * 1.15 - .001)
         {
-            float4 clr = Terracotta__SelectedUnitColor__Get__float(Terracotta__SimShader__get_player__Terracotta_BuildingDist(info)) * 0.75;
+            float4 clr = Terracotta__SelectedUnitColor__Get__float(psin, Terracotta__SimShader__get_player__Terracotta_BuildingDist(info)) * 0.75;
             clr.a = 1;
             __FinalOutput.Color = clr * fs_param_blend;
             return __FinalOutput;

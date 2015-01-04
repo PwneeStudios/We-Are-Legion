@@ -17,19 +17,6 @@ namespace Terracotta
 
         public void SimulationUpdate()
         {
-            UpdateGradient_ToOtherTeams();
-            UpdateGradient_ToOtherTeams();
-
-            UpdateGradient_ToPlayers();
-            UpdateGradient_ToPlayers();
-
-
-            Building_InfusionDiffusion();
-
-            // Update fake selection
-            UpdateFakeSelect.Apply(CurrentData, Output: Temp1);
-            Swap(ref CurrentData, ref Temp1);
-
             // Spawning
             SpawnUnits.Apply(CurrentUnits, CurrentData, PreviousData, RandomField, Magic, Output: Temp1);
             Swap(ref CurrentData, ref Temp1);
@@ -74,23 +61,53 @@ namespace Terracotta
             // Attacking
             CheckForAttacking.Apply(CurrentUnits, CurrentData, RandomField, Magic, Output: Temp1);
             Swap(ref CurrentUnits, ref Temp1);
+        }
 
-            // Magic
+        public void UpdateSelect()
+        {
+            // Building data spread
+            Building_InfusionDiffusion();
+
+            // Update fake selection
+            UpdateFakeSelect.Apply(CurrentData, Output: Temp1);
+            Swap(ref CurrentData, ref Temp1);
+
+            UpdateIcons();
+        }
+
+        public void UpdateIcons()
+        {
+            for (int i = 0; i < 5; i++) UpdateGradient_ToBuildings();
+        }
+
+        public void UpdateRnd()
+        {
+            UpdateRandomField.Apply(RandomField, Output: Temp1);
+            Swap(ref RandomField, ref Temp1);
+        }
+
+        public void UpdateMagicFields()
+        {
             UpdateMagic.Apply(Magic, CurrentData, PreviousData, Corpses, Necromancy, Output: Temp1);
             CoreMath.Swap(ref Temp1, ref Magic);
+        }
 
+        public void UpdateMagicAuras()
+        {
             PropagateNecromancyAuro.Apply(Necromancy, CurrentData, CurrentUnits, Output: Temp1);
             CoreMath.Swap(ref Temp1, ref Necromancy);
 
             PropagateAntiMagicAuro.Apply(AntiMagic, CurrentData, CurrentUnits, Output: Temp1);
             CoreMath.Swap(ref Temp1, ref AntiMagic);
+        }
 
-            // Random field
-            UpdateRandomField.Apply(RandomField, Output: Temp1);
-            Swap(ref RandomField, ref Temp1);
+        public void UpdateGradients()
+        {
+            UpdateGradient_ToOtherTeams();
+            UpdateGradient_ToOtherTeams();
 
-            // Building icon gradient
-            for (int i = 0; i < 7; i++) UpdateGradient_ToBuildings();
+            UpdateGradient_ToPlayers();
+            UpdateGradient_ToPlayers();
         }
     }
 }

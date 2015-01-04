@@ -280,7 +280,7 @@ namespace Terracotta
         
 #if DEBUG
         //GameState State = Program.MultiDebug ? GameState.ToTest : GameState.ToEditor;
-        GameState State = GameState.ToTest;
+        GameState State = GameState.TitleScreen;
 #else
         GameState State = GameState.TitleScreen;
 #endif
