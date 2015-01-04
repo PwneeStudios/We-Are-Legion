@@ -242,7 +242,7 @@ namespace Terracotta
                     case UserMode.CastSpell:
                         if (Input.LeftMousePressed)
                         {
-                            if (CanAffordSpell(CurSpell, MyPlayerNumber))
+                            if (MyPlayerInfo.CanAffordSpell(CurSpell))
                             {
                                 CastSpell(CurSpell);
                             }
@@ -276,35 +276,35 @@ namespace Terracotta
                 // Check if we need to do a simulation update
                 if (GameClass.UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates || SimStep + 2 < ServerSimStep)
                 {
-                    if (SimStep < ServerSimStep && !(Program.Server && MinClientSimStep + 2 < ServerSimStep) && PostUpdateFinished)
+                    if (SimStep < ServerSimStep && !(Program.Server && MinClientSimStep + 2 < ServerSimStep))
                     {
-                        SecondsSinceLastUpdate -= DelayBetweenUpdates;
-                        if (SecondsSinceLastUpdate < 0) SecondsSinceLastUpdate = 0;
-
-                        DeququeActions(SimStep + 1);
-                        SimulationUpdate();
-
-                        if (Program.LogHash)
+                        if (!PostUpdateFinished)
                         {
-                            string curdata_hash = DataGroup.DoHash(DataGroup.CurrentData);
-                            string prevdata_hash = DataGroup.DoHash(DataGroup.PreviousData);
-                            string curunit_hash = DataGroup.DoHash(DataGroup.CurrentUnits);
-                            string prevunit_hash = DataGroup.DoHash(DataGroup.PreviousUnits);
-                            string target_hash = DataGroup.DoHash(DataGroup.TargetData);
-                            string extra_hash = DataGroup.DoHash(DataGroup.Extra);
-                            Console.WriteLine("Hash = {0} {1} {2} {3} {4} {5}", curdata_hash, prevdata_hash, curunit_hash, prevunit_hash, target_hash, extra_hash, target_hash, extra_hash);
+                            PostSimulationUpdate(); // If we are behind do another post-sim update to help catchup.
                         }
+                        else
+                        {
+                            SecondsSinceLastUpdate -= DelayBetweenUpdates;
+                            if (SecondsSinceLastUpdate < 0) SecondsSinceLastUpdate = 0;
 
-                        SentBookend = false;
-                        Networking.ToServer(new MessageStartingStep(SimStep));
+                            HashCheck();
 
-                        if (Log.UpdateSim)
-                            Console.WriteLine("Just updated sim # {0}/{1} : {2}      min={3}", SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates, MinClientSimStep);
+                            DeququeActions(SimStep + 1);
+
+                            HashCheck();
+
+                            SimulationUpdate();
+                            
+                            HashCheck();
+                            
+                            SentBookend = false;
+                            Networking.ToServer(new MessageStartingStep(SimStep));
+
+                            if (Log.UpdateSim) Console.WriteLine("Just updated sim # {0}/{1} : {2}      min={3}", SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates, MinClientSimStep);
+                        }
                     }
                     else
                     {
-                        PostSimulationUpdate(); // If we are behind do another post-sim update to help catchup.
-
                         if (Log.Delays) Console.WriteLine("-Reverting from # {0}/{1} : {2}", SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates);
                         SecondsSinceLastUpdate = DelayBetweenUpdates;
                         T -= (float)GameClass.ElapsedSeconds;
@@ -506,7 +506,7 @@ namespace Terracotta
             Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
 
             Ui.Element("[Text] Gold mines");
-            s = string.Format("{0:#,##0}", PlayerInfo[player].GoldMines);
+            s = string.Format("{0:#,##0}", PlayerInfo[player][UnitType.GoldMine].Count);
             Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
 
             Ui.Element("[Text] Gold");
@@ -514,7 +514,7 @@ namespace Terracotta
             Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
 
             Ui.Element("[Text] Jade mines");
-            s = string.Format("{0:#,##0}", PlayerInfo[player].JadeMines);
+            s = string.Format("{0:#,##0}", PlayerInfo[player][UnitType.JadeMine].Count);
             Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
 
             Ui.Element("[Text] Jade");
@@ -721,8 +721,12 @@ namespace Terracotta
             int i = SimStep % 4 + 1;
             float player = Player.Get(i);
             var count = DataGroup.DoUnitCount(player, false);
+            
             DataGroup.UnitCount[i] = count.Item1;
             DataGroup.BarracksCount[i] = count.Item2;
+
+            PlayerInfo[i].Units = count.Item2;
+            PlayerInfo[i][UnitType.Barracks].Count = count.Item2;
         }
     }
 }

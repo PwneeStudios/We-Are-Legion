@@ -17,10 +17,10 @@ namespace Terracotta
 
             var count = (PlayerTuple)MultigridReduce(CountReduce_4x1byte.Apply);
 
-            PlayerInfo[1].GoldMines = Int(count.PlayerOne);
-            PlayerInfo[2].GoldMines = Int(count.PlayerTwo);
-            PlayerInfo[3].GoldMines = Int(count.PlayerThree);
-            PlayerInfo[4].GoldMines = Int(count.PlayerFour);
+            PlayerInfo[1][UnitType.GoldMine].Count = Int(count.PlayerOne);
+            PlayerInfo[2][UnitType.GoldMine].Count = Int(count.PlayerTwo);
+            PlayerInfo[3][UnitType.GoldMine].Count = Int(count.PlayerThree);
+            PlayerInfo[4][UnitType.GoldMine].Count = Int(count.PlayerFour);
         }
 
         public void DoJadeMineCount(PlayerInfo[] PlayerInfo)
@@ -29,10 +29,10 @@ namespace Terracotta
 
             var count = (PlayerTuple)MultigridReduce(CountReduce_4x1byte.Apply);
 
-            PlayerInfo[1].JadeMines = Int(count.PlayerOne);
-            PlayerInfo[2].JadeMines = Int(count.PlayerTwo);
-            PlayerInfo[3].JadeMines = Int(count.PlayerThree);
-            PlayerInfo[4].JadeMines = Int(count.PlayerFour);
+            PlayerInfo[1][UnitType.JadeMine].Count = Int(count.PlayerOne);
+            PlayerInfo[2][UnitType.JadeMine].Count = Int(count.PlayerTwo);
+            PlayerInfo[3][UnitType.JadeMine].Count = Int(count.PlayerThree);
+            PlayerInfo[4][UnitType.JadeMine].Count = Int(count.PlayerFour);
         }
 
         public void DoDragonLordCount(PlayerInfo[] PlayerInfo)
@@ -84,9 +84,11 @@ namespace Terracotta
             return new Tuple<int,int>(unit_count, barracks_count);
         }
 
-        public string DoHash(RenderTarget2D input)
+        public delegate void HashFunc(Texture2D F, Texture2D Noise, RenderTarget2D Output);
+        public string DoHash(RenderTarget2D input) { return DoHash(input, Hash.Apply); }
+        public string DoHash(RenderTarget2D input, HashFunc hash_func)
         {
-            Hash.Apply(input, HashField, Output: Multigrid[0]);
+            hash_func(input, HashField, Output: Multigrid[0]);
 
             vec4 hash = MultigridReduce((tx, rt) => HashReduce.Apply(tx, HashField, rt));
 

@@ -29,4 +29,21 @@ namespace Terracotta
             return Noise[Noise[f.xy + n.xy].xy + f.zw];
         }
     }
+
+    public partial class DataHash : SimShader
+    {
+        [FragmentShader]
+        vec4 FragmentShader(VertexOut vertex, Field<data> Data, PeriodicField<vec4> Noise)
+        {
+            data d = Data[Here];
+            if (selected(d)) set_select_state(ref d, SelectState.Selected_Show);
+            else set_select_state(ref d, SelectState.NotSelected_NoShow);
+            //d.prior_direction_and_select = 0;
+            //d = data.Nothing;
+
+            vec4 n = Noise[Here];
+
+            return Noise[Noise[d.xy + n.xy].xy + d.zw];
+        }
+    }
 }

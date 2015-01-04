@@ -17,8 +17,8 @@ namespace Terracotta
             Outbox = false,
             Processing = false,
             Do = true,
-            UpdateSim = false,
-            Delays = true,
+            UpdateSim = true,
+            Delays = false,
             Draws = false,
             DoUpdates = false;
     }
@@ -99,7 +99,8 @@ namespace Terracotta
 
             AlwaysActive = false,
             DisableScreenEdge = false,
-            LogHash = false,
+            LogShortHash = false,
+            LogLongHash = false,
             Headless = false,
             MaxFps = false,
             HasConsole = false;
@@ -122,11 +123,11 @@ namespace Terracotta
                 //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n".Split(' ');
 
                 // Single player with client-server debug
-                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double".Split(' ');
+                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double --logshorthash".Split(' ');
 
                 // Two player debug
-                args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double --loghash".Split(' ');
-                Start("  --server                --port 13000 --p 2 --t 1234 --n 2 --map Beset.m3n   --debug --double --loghash");
+                args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double --loglonghash".Split(' ');
+                Start("  --server                --port 13000 --p 2 --t 1234 --n 2 --map Beset.m3n   --debug --double --loglonghash");
 
                 // Four player debug
                 //args_ = "--server                --port 13000 --p 1 --t 1234 --n 4 --map Beset.m3n   --debug --quad".Split(' ');
@@ -163,7 +164,8 @@ namespace Terracotta
 
             if (args.Contains("--always-active")) { AlwaysActive = true; }
             if (args.Contains("--disable-edge")) { DisableScreenEdge = true; }
-            if (args.Contains("--loghash")) { LogHash = true; }
+            if (args.Contains("--logshorthash")) { LogShortHash = true; }
+            if (args.Contains("--loglonghash")) { LogLongHash = true; }
             if (args.Contains("--headless")) { Headless = true; }
             if (args.Contains("--maxfps")) { MaxFps = true; }
             if (args.Contains("--console")) { HasConsole = true; }
@@ -180,7 +182,8 @@ namespace Terracotta
             if (Server) Console.WriteLine("Terracotta Server. Player {0}", StartupPlayerNumber);
             if (Client) Console.WriteLine("Terracotta Client. Player {0}", StartupPlayerNumber);
 
-            if (LogHash) Console.WriteLine("Logging hashes enabled");
+            if (LogShortHash) Console.WriteLine("Logging short hashes enabled");
+            if (LogLongHash) Console.WriteLine("Logging long hashes enabled");
             if (Headless) Console.WriteLine("Headless enabled");
             if (MaxFps) Console.WriteLine("Max fps enabled");
             if (HasConsole) { Console.WriteLine("Console enabled"); ConsoleHelper.CreateConsole(); }

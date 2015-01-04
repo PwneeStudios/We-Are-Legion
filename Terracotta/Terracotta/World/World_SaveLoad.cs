@@ -130,11 +130,7 @@ namespace Terracotta
             writer.Write(CameraPos.x);
             writer.Write(CameraPos.y);
             writer.Write(CameraZoom);
-            for (int i = 1; i <= 4; i++)
-            {
-                writer.Write(PlayerInfo[i].Gold);
-                writer.Write(PlayerInfo[i].GoldMines);
-            }
+            for (int i = 1; i <= 4; i++) PlayerInfo[i].Write(writer);
         }
 
         public void LoadFromBuffer()
@@ -216,11 +212,7 @@ namespace Terracotta
             CameraPos.x = reader.ReadSingle();
             CameraPos.y = reader.ReadSingle();
             CameraZoom = reader.ReadSingle();
-            for (int i = 1; i <= 4; i++)
-            {
-                PlayerInfo[i].Gold = reader.ReadInt32();
-                PlayerInfo[i].GoldMines = reader.ReadInt32();
-            }
+            for (int i = 1; i <= 4; i++) PlayerInfo[i].Read(reader);
         }
     }
 }

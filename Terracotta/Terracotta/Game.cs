@@ -42,6 +42,7 @@ namespace Terracotta
 
         public static World World;
         public static DataGroup Data { get { return World.DataGroup; } }
+        public static PlayerInfo[] PlayerInfo { get { return World.PlayerInfo; } }
 
         bool FullScreen = false;
         bool AutoSaveOnTab = false;

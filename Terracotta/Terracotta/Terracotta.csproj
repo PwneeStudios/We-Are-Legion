@@ -144,7 +144,6 @@
     <Compile Include="World\WorldStartup.cs" />
     <Compile Include="World\Spells.cs" />
     <Compile Include="World\Migrate.cs" />
-    <Compile Include="World\World_Util.cs" />
     <Compile Include="World\World_Update.cs" />
     <Compile Include="World\World_Draw.cs" />
     <Compile Include="World\World_Actions.cs" />

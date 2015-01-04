@@ -278,11 +278,37 @@ namespace Terracotta
                     break;
 
                 default:
+                    //HashCheck();
                     PostUpdateFinished = true;
                     break;
             }
 
             PostUpdateStep++;
+        }
+
+        private void HashCheck()
+        {
+            if (Program.LogShortHash || Program.LogLongHash)
+            {
+                string curdata_hash = DataGroup.DoHash(DataGroup.CurrentData, DataHash.Apply);
+                string prevdata_hash = DataGroup.DoHash(DataGroup.PreviousData, DataHash.Apply);
+                string curunit_hash = DataGroup.DoHash(DataGroup.CurrentUnits);
+                string prevunit_hash = DataGroup.DoHash(DataGroup.PreviousUnits);
+                string target_hash = DataGroup.DoHash(DataGroup.TargetData);
+                string extra_hash = DataGroup.DoHash(DataGroup.Extra);
+
+                if (Program.LogLongHash)
+                {
+                    Console.WriteLine("Hash = {0} {1} {2} {3} {4} {5}", curdata_hash, prevdata_hash, curunit_hash, prevunit_hash, target_hash, extra_hash, target_hash, extra_hash);
+                }
+                else
+                {
+                    var short_hash = (curdata_hash + prevdata_hash + curunit_hash + prevunit_hash + target_hash + extra_hash);
+                    for (int i = 1; i <= 4; i++) short_hash += PlayerInfo[i].ToString();
+                    Console.WriteLine(short_hash);
+                    Console.WriteLine("Hash = {0}", short_hash.GetHashCode());
+                }
+            }
         }
 
         void DragonLordDeathCheck()
@@ -310,31 +336,12 @@ namespace Terracotta
 
         void DoGoldUpdate()
         {
-            for (int player = 1; player <= 4; player++)
-            {
-                PlayerInfo[player].Gold +=
-                    PlayerInfo[player].GoldMines * Params.GoldPerMinePerTick +
-                    DataGroup.BarracksCount[player] * Params.GoldPerBarracksPerTick;
-
-                if (PlayerInfo[player].Gold < 0)
-                {
-                    PlayerInfo[player].Gold = 0;
-                }
-            }
+            for (int player = 1; player <= 4; player++) PlayerInfo[player].GoldUpdate();
         }
 
         void DoJadeUpdate()
         {
-            for (int player = 1; player <= 4; player++)
-            {
-                PlayerInfo[player].Jade +=
-                    PlayerInfo[player].JadeMines * Params.JadePerMinePerTick;
-
-                if (PlayerInfo[player].Jade < 0)
-                {
-                    PlayerInfo[player].Jade = 0;
-                }
-            }
+            for (int player = 1; player <= 4; player++) PlayerInfo[player].JadeUpdate();
         }
     }
 }
