@@ -87,6 +87,9 @@ namespace Terracotta
             PosX = -1,
             PosY = -1;
 
+        public static string
+            StartupMap = null;
+
         public static int[]
             Teams = new int[] { -1,  1, 2, 3, 4 };
 
@@ -116,23 +119,24 @@ namespace Terracotta
             if (args_.Length == 0)
             {
                 // Single player
-                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1".Split(' ');
+                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n".Split(' ');
 
                 // Single player with client-server debug
-                args_ = "--server                --port 13000 --p 2 --t 1234 --n 1    --debug --double".Split(' ');
+                args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double".Split(' ');
 
                 // Two player debug
-                //args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2    --debug --double".Split(' ');
-                //Start("  --server                --port 13000 --p 2 --t 1234 --n 2    --debug --double");
+                //args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double".Split(' ');
+                //Start("  --server                --port 13000 --p 2 --t 1234 --n 2 --map Beset.m3n   --debug --double");
 
                 // Four player debug
-                //args_ = "--server                --port 13000 --p 1 --t 1234 --n 4   --debug --quad".Split(' ');
-                //Start("  --client --ip 127.0.0.1 --port 13000 --p 2 --t 1234 --n 4   --debug --quad");
-                //Start("  --client --ip 127.0.0.1 --port 13000 --p 3 --t 1234 --n 4   --debug --quad");
-                //Start("  --client --ip 127.0.0.1 --port 13000 --p 4 --t 1234 --n 4   --debug --quad");
+                //args_ = "--server                --port 13000 --p 1 --t 1234 --n 4 --map Beset.m3n   --debug --quad".Split(' ');
+                //Start("  --client --ip 127.0.0.1 --port 13000 --p 2 --t 1234 --n 4 --map Beset.m3n   --debug --quad");
+                //Start("  --client --ip 127.0.0.1 --port 13000 --p 3 --t 1234 --n 4 --map Beset.m3n   --debug --quad");
+                //Start("  --client --ip 127.0.0.1 --port 13000 --p 4 --t 1234 --n 4 --map Beset.m3n   --debug --quad");
             }
 #else
-            args_ = "--server                --port 13000 --p 1 --t 1234 --n 1".Split(' ');
+            args_ = "--server                --port 13000 --p 1 --t 1234 --n 1 --map Beset.m3n".Split(' ');
+            //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double".Split(' ');
 #endif
 
             List<string> args = new List<string>(args_);
@@ -148,6 +152,8 @@ namespace Terracotta
             }
 
             if (args.Contains("--n")) { int i = args.IndexOf("--n"); NumPlayers = int.Parse(args[i + 1]); }
+
+            if (args.Contains("--map")) { int i = args.IndexOf("--map"); StartupMap = args[i + 1]; }
 
             if      (args.Contains("--server")) Server = true;
             else if (args.Contains("--client")) Client = true;

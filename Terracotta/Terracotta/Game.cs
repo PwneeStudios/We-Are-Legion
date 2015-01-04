@@ -89,6 +89,11 @@ namespace Terracotta
             {
                 FakeFullscreen();
             }
+
+            if (Program.StartupMap != null)
+            {
+                State = GameState.ToMap;
+            }
         }
 
         protected override void Initialize()
@@ -271,7 +276,7 @@ namespace Terracotta
 
         int DrawCount = 0;
 
-        enum GameState { TitleScreen, Spells, Instructions, ScenarioMenu, Loading, Game,       ToEditor, ToTest }
+        enum GameState { TitleScreen, Spells, Instructions, ScenarioMenu, Loading, Game,       ToEditor, ToMap }
         
 #if DEBUG
         //GameState State = Program.MultiDebug ? GameState.ToTest : GameState.ToEditor;
@@ -342,11 +347,11 @@ namespace Terracotta
 
                     break;
 
-                case GameState.ToTest:
+                case GameState.ToMap:
                     Render.StandardRenderSetup();
                     DrawFullScreen(Assets.ScreenLoading);
 
-                    SetScenarioToLoad("Beset.m3n");
+                    SetScenarioToLoad(Program.StartupMap);
 
                     break;
 

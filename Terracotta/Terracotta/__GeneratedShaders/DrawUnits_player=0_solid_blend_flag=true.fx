@@ -125,20 +125,6 @@ float fs_param_selection_size;
 float fs_param_solid_blend;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
-// Texture Sampler for fs_param_FarColor, using register location 7
-float2 fs_param_FarColor_size;
-float2 fs_param_FarColor_dxdy;
-
-Texture fs_param_FarColor_Texture;
-sampler fs_param_FarColor : register(s7) = sampler_state
-{
-    texture   = <fs_param_FarColor_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
 
 // The following methods are included because they are referenced by the fragment shader.
 float2 Terracotta__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size, float2 grid_shift)
@@ -170,23 +156,23 @@ bool Terracotta__SimShader__fake_selected__Terracotta_data(float4 u)
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-float4 Terracotta__SelectedUnitColor__Get__float(VertexToPixel psin, float player)
+float4 Terracotta__SelectedUnitColor__Get__float(float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
-        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
+        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
     }
     if (abs(player - 0.007843138) < .001)
     {
-        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
+        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
     }
     if (abs(player - 0.01176471) < .001)
     {
-        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
+        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
     }
     if (abs(player - 0.01568628) < .001)
     {
-        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
+        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
@@ -204,7 +190,7 @@ float4 Terracotta__DrawUnits__ShadowSprite__float__Terracotta_data__Terracotta_u
         if (clr.a > 0 + .001)
         {
             float a = clr.a;
-            clr = Terracotta__SelectedUnitColor__Get__float(psin, u.g);
+            clr = Terracotta__SelectedUnitColor__Get__float(u.g);
             clr.a = a;
         }
     }
@@ -263,30 +249,30 @@ float Terracotta__UnitType__UnitIndex__Terracotta_unit(float4 u)
     return FragSharpFramework__FragSharpStd__Float__float(u.r - 0.003921569);
 }
 
-float4 Terracotta__UnitColor__Get__float(VertexToPixel psin, float player)
+float4 Terracotta__UnitColor__Get__float(float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
-        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
+        return float4(0.4392157, 0.4078431, 0.6117647, 1.0);
     }
     if (abs(player - 0.007843138) < .001)
     {
-        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
+        return float4(0.572549, 0.2588235, 0.2235294, 1.0);
     }
     if (abs(player - 0.01176471) < .001)
     {
-        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
+        return float4(0.3803922, 0.6117647, 0.7058824, 1.0);
     }
     if (abs(player - 0.01568628) < .001)
     {
-        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
+        return float4(0.9647059, 0.6431373, 0.6980392, 1.0);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 Terracotta__DrawUnits__SolidColor__float__Terracotta_data__Terracotta_unit(VertexToPixel psin, float player, float4 data, float4 unit)
+float4 Terracotta__DrawUnits__SolidColor__float__Terracotta_data__Terracotta_unit(float player, float4 data, float4 unit)
 {
-    return abs(unit.g - player) < .001 && Terracotta__SimShader__fake_selected__Terracotta_data(data) ? Terracotta__SelectedUnitColor__Get__float(psin, unit.g) : Terracotta__UnitColor__Get__float(psin, unit.g);
+    return abs(unit.g - player) < .001 && Terracotta__SimShader__fake_selected__Terracotta_data(data) ? Terracotta__SelectedUnitColor__Get__float(unit.g) : Terracotta__UnitColor__Get__float(unit.g);
 }
 
 float4 Terracotta__DrawUnits__Sprite__float__Terracotta_data__Terracotta_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler__float__float__bool__float(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
@@ -302,7 +288,7 @@ float4 Terracotta__DrawUnits__Sprite__float__Terracotta_data__Terracotta_unit__F
     float4 clr = tex2D(Texture, pos);
     if (solid_blend_flag)
     {
-        clr = solid_blend * clr + (1 - solid_blend) * Terracotta__DrawUnits__SolidColor__float__Terracotta_data__Terracotta_unit(psin, player, d, u);
+        clr = solid_blend * clr + (1 - solid_blend) * Terracotta__DrawUnits__SolidColor__float__Terracotta_data__Terracotta_unit(player, d, u);
     }
     return clr;
 }

@@ -42,20 +42,6 @@ sampler fs_param_Path : register(s1) = sampler_state
 float fs_param_blend;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
-// Texture Sampler for fs_param_FarColor, using register location 2
-float2 fs_param_FarColor_size;
-float2 fs_param_FarColor_dxdy;
-
-Texture fs_param_FarColor_Texture;
-sampler fs_param_FarColor : register(s2) = sampler_state
-{
-    texture   = <fs_param_FarColor_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
 
 // The following methods are included because they are referenced by the fragment shader.
 float FragSharpFramework__FragSharpStd__min__float__float__float(float a, float b, float c)
@@ -63,25 +49,24 @@ float FragSharpFramework__FragSharpStd__min__float__float__float(float a, float 
     return min(min(a, b), c);
 }
 
-float4 Terracotta__TerritoryColor__Get__float(VertexToPixel psin, float player)
+float4 Terracotta__TerritoryColor__Player1()
 {
-    if (abs(player - 0.003921569) < .001)
-    {
-        return tex2D(fs_param_FarColor, float2(2+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
-    }
-    if (abs(player - 0.007843138) < .001)
-    {
-        return tex2D(fs_param_FarColor, float2(2+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
-    }
-    if (abs(player - 0.01176471) < .001)
-    {
-        return tex2D(fs_param_FarColor, float2(2+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
-    }
-    if (abs(player - 0.01568628) < .001)
-    {
-        return tex2D(fs_param_FarColor, float2(2+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
-    }
-    return float4(0.0, 0.0, 0.0, 0.0);
+    return float4(0.2705882, 0.2078431, 0.6431373, 1.0);
+}
+
+float4 Terracotta__TerritoryColor__Player2()
+{
+    return float4(0.4784314, 0.172549, 0.1372549, 1.0);
+}
+
+float4 Terracotta__TerritoryColor__Player3()
+{
+    return float4(0.2470588, 0.5058824, 0.6117647, 1.0);
+}
+
+float4 Terracotta__TerritoryColor__Player4()
+{
+    return float4(0.8823529, 0.3803922, 0.4705882, 1.0);
 }
 
 // Compiled vertex shader
@@ -106,19 +91,19 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float _blend = 1;
     if (dist.x < 0.02745098 - .001 && dist.x < enemy_dist.x - .001)
     {
-        clr = Terracotta__TerritoryColor__Get__float(psin, 0.003921569 + ((int)dist.x / 100));
+        clr = Terracotta__TerritoryColor__Player1();
     }
     if (dist.y < 0.02745098 - .001 && dist.y < enemy_dist.y - .001)
     {
-        clr = Terracotta__TerritoryColor__Get__float(psin, 0.007843138 + ((int)dist.x / 100));
+        clr = Terracotta__TerritoryColor__Player2();
     }
     if (dist.z < 0.02745098 - .001 && dist.z < enemy_dist.z - .001)
     {
-        clr = Terracotta__TerritoryColor__Get__float(psin, 0.01176471 + ((int)dist.x / 100));
+        clr = Terracotta__TerritoryColor__Player3();
     }
     if (dist.w < 0.02745098 - .001 && dist.w < enemy_dist.w - .001)
     {
-        clr = Terracotta__TerritoryColor__Get__float(psin, 0.01568628 + ((int)dist.x / 100));
+        clr = Terracotta__TerritoryColor__Player4();
     }
     clr *= _blend;
     clr.a *= fs_param_blend;
