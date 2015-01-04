@@ -238,16 +238,13 @@ namespace Terracotta
                     break;
 
                 case 1:
-                    break;
-
-                case 2:
                     DataGroup.UpdateIcons();
                     DataGroup.DoDragonLordCount(PlayerInfo); // This should happen soon after CurrentUnit.anim is updated, so it can catch the death switch with low latency.
                     DragonLordDeathCheck();
 
                     break;
 
-                case 3:
+                case 2:
                     if (SimStep % 2 == 0)
                         DataGroup.DoGoldMineCount(PlayerInfo);
                     else
@@ -258,25 +255,25 @@ namespace Terracotta
 
                     break;
 
-                case 4:
+                case 3:
                     UpdateAllPlayerUnitCounts();
                     break;
 
-                case 5:
+                case 4:
                     DataGroup.UpdateGradients();
                     break;
 
-                case 6:
+                case 5:
                     DataGroup.UpdateMagicFields();
                     DataGroup.UpdateMagicAuras();
                     break;
 
-                case 7:
+                case 6:
                     DataGroup.UpdateRnd();
                     DataGroup.UpdateMagicAuras(); // 2nd auro update
                     break;
 
-                case 8:
+                case 7:
                     UpdateMinimap();
                     break;
 
