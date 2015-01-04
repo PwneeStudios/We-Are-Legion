@@ -54,17 +54,33 @@ sampler fs_param_Data : register(s2) = sampler_state
     AddressV  = Clamp;
 };
 
+// Texture Sampler for fs_param_Unit, using register location 3
+float2 fs_param_Unit_size;
+float2 fs_param_Unit_dxdy;
+
+Texture fs_param_Unit_Texture;
+sampler fs_param_Unit : register(s3) = sampler_state
+{
+    texture   = <fs_param_Unit_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 float fs_param_blend;
 
 float fs_param_radius;
 
+
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
-// Texture Sampler for fs_param_FarColor, using register location 3
+// Texture Sampler for fs_param_FarColor, using register location 4
 float2 fs_param_FarColor_size;
 float2 fs_param_FarColor_dxdy;
 
 Texture fs_param_FarColor_Texture;
-sampler fs_param_FarColor : register(s3) = sampler_state
+sampler fs_param_FarColor : register(s4) = sampler_state
 {
     texture   = <fs_param_FarColor_Texture>;
     MipFilter = Point;
@@ -176,8 +192,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 offset = FragSharpFramework__FragSharpStd__Float__FragSharpFramework_vec2(info.rg - float2(0.1568628, 0.1568628));
     float2 index = float2(offset.x, offset.y);
     float4 b = tex2D(fs_param_Data, psin.TexCoords + (index) * fs_param_Data_dxdy);
+    float4 u = tex2D(fs_param_Unit, psin.TexCoords + (index) * fs_param_Unit_dxdy);
     float l = length(255 * (info.rg - float2(0.1568628, 0.1568628)) - (subcell_pos - float2(0.5, 0.5)));
-    if (Terracotta__SimShader__fake_selected__Terracotta_building(b))
+    if (Terracotta__SimShader__fake_selected__Terracotta_building(b) && abs(u.g - 0.01176471) < .001)
     {
         if (l > 0.8 * fs_param_radius + .001 && l < fs_param_radius * 1.15 - .001)
         {

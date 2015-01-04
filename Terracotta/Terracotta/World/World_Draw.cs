@@ -710,7 +710,7 @@ namespace Terracotta
                 float blend = CoreMath.LogLerpRestrict(z / 4, 0, z / 8, 1, CameraZoom);
                 float radius = 5.5f / CameraZoom;
 
-                DrawBuildingsIcons.Using(camvec, CameraAspect, DataGroup.DistanceToBuildings, DataGroup.CurrentData, blend, radius);
+                DrawBuildingsIcons.Using(camvec, CameraAspect, DataGroup.DistanceToBuildings, DataGroup.CurrentData, DataGroup.CurrentUnits, blend, radius, MyPlayerValue);
                 GridHelper.DrawGrid();
             }
         }

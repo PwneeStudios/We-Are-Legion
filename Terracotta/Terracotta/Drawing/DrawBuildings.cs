@@ -5,7 +5,7 @@ namespace Terracotta
     public partial class DrawBuildingsIcons : BaseShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<BuildingDist> BuildingDistances, Field<building> Data, float blend, float radius)
+        color FragmentShader(VertexOut vertex, Field<BuildingDist> BuildingDistances, Field<building> Data, Field<unit> Unit, float blend, float radius, [Player.Vals] float player)
         {
             BuildingDist info = BuildingDistances[Here];
 
@@ -17,12 +17,13 @@ namespace Terracotta
             vec2 offset = Float(info.diff - Pathfinding_ToSpecial.CenterOffset);
             var index = new RelativeIndex(offset.x, offset.y);
             building b = Data[index];
+            unit u = Unit[index];
 
             // Get the distance from here to the building center
             float l = length(255 * (info.diff - Pathfinding_ToSpecial.CenterOffset) - (subcell_pos - vec(.5f, .5f)));
             
             // Draw pixel
-            if (fake_selected(b))
+            if (fake_selected(b) && u.player == player)
             {
                 if (l > .8f * radius && l < radius * 1.15f)
                 {
