@@ -212,8 +212,6 @@ namespace Terracotta
                     DataGroup.PausedSimulationUpdate();
                 }
 
-                UpdateAllPlayerUnitCounts();
-
                 if (GameClass.HasFocus)
                 switch (CurUserMode)
                 {
@@ -238,15 +236,6 @@ namespace Terracotta
                         break;
 
                     case UserMode.Select:
-                        // Count the selected units for the player. Must be done at least before every attack command.
-                        DataGroup.DoUnitSummary(MyPlayerValue, true);
-
-                        var selected = DataGroup.DoUnitCount(PlayerOrNeutral, true);
-                        DataGroup.SelectedUnits = selected.Item1;
-                        DataGroup.SelectedBarracks = selected.Item2;
-
-                        DataGroup.UnitCountUi = DataGroup.SelectedUnits;
-
                         SelectionUpdate(SelectSize, LineSelect: LineSelect);
                         break;
 
@@ -278,10 +267,16 @@ namespace Terracotta
                     }
                 }
 
+                // Check if post-upate calculation still need to be done
+                if (!PostUpdateFinished)
+                {
+                    PostSimulationUpdate();
+                }
+
                 // Check if we need to do a simulation update
                 if (GameClass.UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates || SimStep + 2 < ServerSimStep)
                 {
-                    if (SimStep < ServerSimStep && !(Program.Server && MinClientSimStep + 2 < ServerSimStep))
+                    if (SimStep < ServerSimStep && !(Program.Server && MinClientSimStep + 2 < ServerSimStep) && PostUpdateFinished)
                     {
                         SecondsSinceLastUpdate -= DelayBetweenUpdates;
                         if (SecondsSinceLastUpdate < 0) SecondsSinceLastUpdate = 0;
@@ -308,6 +303,8 @@ namespace Terracotta
                     }
                     else
                     {
+                        PostSimulationUpdate(); // If we are behind do another post-sim update to help catchup.
+
                         if (Log.Delays) Console.WriteLine("-Reverting from # {0}/{1} : {2}", SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates);
                         SecondsSinceLastUpdate = DelayBetweenUpdates;
                         T -= (float)GameClass.ElapsedSeconds;
@@ -719,7 +716,7 @@ namespace Terracotta
         private void UpdateAllPlayerUnitCounts()
         {
             // Alternate between counting units for each player, to spread out the computational load
-            int i = DrawCount % 4 + 1;
+            int i = SimStep % 4 + 1;
             float player = Player.Get(i);
             var count = DataGroup.DoUnitCount(player, false);
             DataGroup.UnitCount[i] = count.Item1;

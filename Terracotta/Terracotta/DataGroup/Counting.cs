@@ -59,6 +59,11 @@ namespace Terracotta
 
             DoUnitSummary_2.Apply(CurrentData, CurrentUnits, player, only_selected, Output: Multigrid[0]);
             CopySummary(4);
+
+            var selected = DoUnitCount(player, true);
+            SelectedUnits = selected.Item1;
+            SelectedBarracks = selected.Item2;
+            UnitCountUi = SelectedUnits;
         }
 
         void CopySummary(int offset)

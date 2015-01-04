@@ -255,6 +255,8 @@ namespace Terracotta
         public int TeamNumber;
         public PlayerAction Action;
 
+        public float PlayerValue { get { return Player.Vals[PlayerNumber]; } }
+
         public MessagePlayerAction(int SimStep, int PlayerNumber, int TeamNumber, PlayerAction Action)
         {
             this.SimStep = SimStep;

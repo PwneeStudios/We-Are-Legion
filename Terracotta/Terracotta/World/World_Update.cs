@@ -207,20 +207,58 @@ namespace Terracotta
             /// The minimum simulation step of any client/server.
             MinClientSimStep = 0;
 
+        /// <summary>
+        /// After the simulation updates there are additional updates that must occur.
+        /// These are broken into phases. This variable trackes which phase we are currently in.
+        /// </summary>
+        int PostUpdateStep;
+
+        /// <summary>
+        /// After the simulation updates there are additional updates that must occur.
+        /// This flag is true once these additional updates have finished.
+        /// </summary>
+        bool PostUpdateFinished;
+
         void SimulationUpdate()
         {
-            DataGroup.DoGoldMineCount(PlayerInfo);
-            DataGroup.DoJadeMineCount(PlayerInfo);
-
-            DoGoldUpdate();
-            DoJadeUpdate();
-
             DataGroup.SimulationUpdate();
-
-            DataGroup.DoDragonLordCount(PlayerInfo); // This should happen soon after CurrentUnit.anim is updated, so it can catch the death switch with low latency.
-            DragonLordDeathCheck();
-
+            
             SimStep++;
+            PostUpdateFinished = false;
+            PostUpdateStep = 0;
+        }
+
+        void PostSimulationUpdate()
+        {
+            switch (PostUpdateStep)
+            { 
+                case 0:
+                    DataGroup.DoDragonLordCount(PlayerInfo); // This should happen soon after CurrentUnit.anim is updated, so it can catch the death switch with low latency.
+                    DragonLordDeathCheck();
+
+                    break;
+
+                case 1:
+                    if (SimStep % 2 == 0)
+                        DataGroup.DoGoldMineCount(PlayerInfo);
+                    else
+                        DataGroup.DoJadeMineCount(PlayerInfo);
+
+                    DoGoldUpdate();
+                    DoJadeUpdate();
+
+                    break;
+
+                case 3:
+                    UpdateAllPlayerUnitCounts();
+                    break;
+
+                default:
+                    PostUpdateFinished = true;
+                    break;
+            }
+
+            PostUpdateStep++;
         }
 
         void DragonLordDeathCheck()

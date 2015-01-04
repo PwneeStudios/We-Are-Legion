@@ -152,11 +152,7 @@ namespace Terracotta
 
         public void Load(string FileName)
         {
-#if DEBUG
             if (true)
-#else
-            if (Program.MultiDebug)
-#endif
             {
                 while (true)
                 {
@@ -167,6 +163,7 @@ namespace Terracotta
                     }
                     catch (IOException e)
                     {
+                        System.Console.WriteLine(e);
                     }
 
                     System.Threading.Thread.Sleep(100);

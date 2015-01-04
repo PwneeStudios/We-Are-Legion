@@ -116,10 +116,10 @@ namespace Terracotta
             if (args_.Length == 0)
             {
                 // Single player
-                args_ = "--server                --port 13000 --p 2 --t 1234 --n 1".Split(' ');
+                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1".Split(' ');
 
                 // Single player with client-server debug
-                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1    --debug --double".Split(' ');
+                args_ = "--server                --port 13000 --p 2 --t 1234 --n 1    --debug --double".Split(' ');
 
                 // Two player debug
                 //args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2    --debug --double".Split(' ');
@@ -131,6 +131,8 @@ namespace Terracotta
                 //Start("  --client --ip 127.0.0.1 --port 13000 --p 3 --t 1234 --n 4   --debug --quad");
                 //Start("  --client --ip 127.0.0.1 --port 13000 --p 4 --t 1234 --n 4   --debug --quad");
             }
+#else
+            args_ = "--server                --port 13000 --p 1 --t 1234 --n 1".Split(' ');
 #endif
 
             List<string> args = new List<string>(args_);

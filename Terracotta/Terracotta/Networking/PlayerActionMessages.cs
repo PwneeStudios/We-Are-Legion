@@ -144,6 +144,7 @@ namespace Terracotta
         {
             if (Log.Do) Console.WriteLine("   Do select at {0}      : {1}", GameClass.World.SimStep, this);
             GameClass.Data.SelectAlongLine(v1, v2, size, deselect, true, Player.Vals[Action.PlayerNumber], true);
+            GameClass.Data.DoUnitSummary(Action.PlayerValue, true);
         }
     }
 
@@ -167,6 +168,7 @@ namespace Terracotta
         {
             GameClass.Data.SelectInBox(bl, tr, deselect, Player.Vals[Action.PlayerNumber], Fake: true);
             GameClass.Data.Building_FakeSelectionSpread();
+            GameClass.Data.DoUnitSummary(Action.PlayerValue, true);
         }
 
         public override void Do()
