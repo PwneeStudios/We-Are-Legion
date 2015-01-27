@@ -63,14 +63,19 @@ namespace Terracotta
             return WorldCord;
         }
 
+        vec2 UiSizeToScreenSize(vec2 size)
+        {
+            return size / GameClass.Screen * vec(GameClass.ScreenAspect, 1);
+        }
+
         vec2 ScreenToUiCoord(vec2 pos)
         {
             var screen = GameClass.Screen;
             var ScreenCord = (2 * pos - screen) / screen;
-            vec2 WorldCord;
-            WorldCord.x = CameraAspect * ScreenCord.x;
-            WorldCord.y = -ScreenCord.y;
-            return WorldCord;
+            vec2 UiCoord;
+            UiCoord.x = CameraAspect * ScreenCord.x;
+            UiCoord.y = -ScreenCord.y;
+            return UiCoord;
         }
 
         vec2 GetShiftedCamera(vec2 pos, vec4 prev_camvec, vec2 prev_worldcoord)

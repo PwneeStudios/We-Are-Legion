@@ -76,6 +76,16 @@ namespace Terracotta
             MySpriteBatch.End();
         }
 
+        public static vec2 MeasureString(string text, float scale)
+        {
+            return MeasureString(Font2, text, scale);
+        }
+
+        public static vec2 MeasureString(SpriteFont font, string text, float scale)
+        {
+            return (vec2)font.MeasureString(text);// *scale;
+        }
+
         public static void DrawText(string text, vec2 pos, float scale, Alignment align = Alignment.LeftJusitfy)
         {
             DrawText(Font2, text, pos, scale, align, new color(1f, 1f, 1f, 1f));
@@ -88,7 +98,7 @@ namespace Terracotta
 
         public static void DrawText(SpriteFont font, string text, vec2 pos, float scale, Alignment align, color clr)
         {
-            vec2 size = (vec2)font.MeasureString(text);// *scale;
+            vec2 size = MeasureString(font, text, scale);
             vec2 origin = size * 0.5f;
 
             if (align.HasFlag(Alignment.Left))

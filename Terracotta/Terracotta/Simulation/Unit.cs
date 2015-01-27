@@ -712,6 +712,10 @@ namespace Terracotta
                 Footman, DragonLord, Necromancer, Skeleton, ClaySoldier, Barracks, GoldMine, JadeMine,
             };
 
+            public static readonly float[] BuildingVals = new float[] {
+                Barracks, GoldMine, JadeMine,
+            };
+
             public static string Name(float unit)
             {
                 if (unit == None) return "None";

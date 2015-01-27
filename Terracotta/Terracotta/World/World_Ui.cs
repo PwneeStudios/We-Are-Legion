@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.Xna.Framework.Graphics;
 
@@ -10,8 +12,14 @@ namespace Terracotta
     public partial class World : SimShader
     {
         RectangleQuad q = new RectangleQuad();
-        string count_text = "";
+        string unit_count = "";
         vec2 count_text_pos;
+
+        int NumUnitTypesSelected()
+        {
+            return DataGroup.UnitSummary.Count(b => b);
+        }
+
         void DrawSelectedInfo()
         {
             switch (CurUserMode)
@@ -19,14 +27,25 @@ namespace Terracotta
                 case UserMode.Select:
                     color clr = rgba(0x888888c, .5f).Premultiplied;
 
-                    vec2 start = vec(CameraAspect, -1) + vec(-.1f, .06f);
-                    vec2 size = vec(.1f, .1f);
-                    vec2 shift = vec(-size.x, 0);
-                    vec2 cur_pos = start;
+                    bool building_selected = UnitType.BuildingVals.Any(type => DataGroup.UnitSummary[Int(type) - 1]);
 
-                    vec2 box_size = vec(.3f, .1f);
+                    vec2 size = vec(.1f, .1f);
+                    float building_scale = 1.4f;
+                    float building_shift = building_selected ? (building_scale - 1) * 2 * size.x : 0;
+                    vec2 shift = vec(-size.x, 0);
+                    vec2 start = vec(CameraAspect, -1) + vec(-.1f, .06f);
+                    vec2 cur_pos = start - vec(building_shift, 0);
+
+                    unit_count = string.Format("{0:#,##0}", DataGroup.UnitCountUi);
+                    float text_width = Render.MeasureString(unit_count, .83f).x * .83f;
+
+                    float count = NumUnitTypesSelected();
+                    if (count > 0) count += .5f;
+                    float ui_box_width = .1f * count / 2 + UiSizeToScreenSize(vec(text_width, 0)).x + size.x * .7f + building_shift / 2;
+
+                    vec2 box_size = vec(ui_box_width, .1f);
                     DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, clr);
-                    RectangleQuad.Draw(GameClass.Graphics, start - box_size.FlipY(), box_size);
+                    RectangleQuad.Draw(GameClass.Graphics, start - box_size.FlipY() + vec(.008f, 0), box_size);
 
                     for (int i = Int(UnitType.Count) - 1; i>= 0 ; i--)
                     {
@@ -39,7 +58,8 @@ namespace Terracotta
                             vec2 s = size;
                             if (IsBuilding(type))
                             {
-                                s *= 1.5f;
+                                s *= building_scale;
+                                pos.y += s.y * .2f;
                             }
 
                             SetUnitQuad(pos, s, type, MyPlayerNumber, (GameClass.World.DrawCount / 7) % UnitSpriteSheet.AnimLength, Dir.Left, q);
@@ -54,7 +74,7 @@ namespace Terracotta
                         }
                     }
 
-                    count_text_pos = cur_pos + shift + vec(0, 0);
+                    count_text_pos = cur_pos + shift + vec(-.023f, -0.0225f);
 
                     break;
             }
@@ -63,8 +83,6 @@ namespace Terracotta
         void DrawUi_CursorText()
         {
             if (CurUserMode != UserMode.Select) return;
-
-            string unit_count = string.Format("{0:#,##0}", DataGroup.UnitCountUi);
 
             Render.DrawText(unit_count, ToBatchCoord(count_text_pos), .83f, Alignment.Right | Alignment.Bottom);
         }
