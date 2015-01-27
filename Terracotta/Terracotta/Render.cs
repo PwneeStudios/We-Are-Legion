@@ -99,6 +99,7 @@ namespace Terracotta
         public static void DrawText(SpriteFont font, string text, vec2 pos, float scale, Alignment align, color clr)
         {
             vec2 size = MeasureString(font, text, scale);
+            scale *= GameClass.Screen.y / 1080;
             vec2 origin = size * 0.5f;
 
             if (align.HasFlag(Alignment.Left))

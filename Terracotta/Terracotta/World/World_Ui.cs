@@ -37,7 +37,7 @@ namespace Terracotta
                     vec2 cur_pos = start - vec(building_shift, 0);
 
                     unit_count = string.Format("{0:#,##0}", DataGroup.UnitCountUi);
-                    float text_width = Render.MeasureString(unit_count, .83f).x * .83f;
+                    float text_width = Render.MeasureString(unit_count, 1f).x * 1f;
 
                     float count = NumUnitTypesSelected();
                     if (count > 0) count += .5f;
@@ -87,7 +87,7 @@ namespace Terracotta
         {
             if (CurUserMode != UserMode.Select) return;
 
-            Render.DrawText(unit_count, ToBatchCoord(count_text_pos), .83f, Alignment.Right | Alignment.Bottom);
+            Render.DrawText(unit_count, ToBatchCoord(count_text_pos), 1f, Alignment.Right | Alignment.Bottom);
         }
 
         public void DrawGridCell()
