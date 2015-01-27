@@ -45,7 +45,7 @@ namespace Terracotta
 
                     vec2 box_size = vec(ui_box_width, .1f);
                     DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, clr);
-                    RectangleQuad.Draw(GameClass.Graphics, start - box_size.FlipY() + vec(.008f, 0), box_size);
+                    RectangleQuad.Draw(GameClass.Graphics, start - box_size.FlipY() + vec(.008f, -.008f), box_size);
 
                     for (int i = Int(UnitType.Count) - 1; i>= 0 ; i--)
                     {
@@ -74,7 +74,10 @@ namespace Terracotta
                         }
                     }
 
-                    count_text_pos = cur_pos + shift + vec(-.023f, -0.0225f);
+                    if (DataGroup.UnitCountUi > 0)
+                        cur_pos += shift;
+
+                    count_text_pos = cur_pos + vec(-.023f, -0.0225f);
 
                     break;
             }
