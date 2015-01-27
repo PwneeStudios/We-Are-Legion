@@ -7,6 +7,18 @@ namespace Terracotta
     {
         public int
             Count = 0, Bought = 0;
+
+        public void Write(BinaryWriter writer)
+        {
+            writer.Write(Count);
+            writer.Write(Bought);
+        }
+
+        public void Read(BinaryReader reader)
+        {
+            Count = reader.ReadInt32();
+            Bought = reader.ReadInt32();
+        }
     }
 
     public class PlayerInfo : SimShader
@@ -117,13 +129,27 @@ namespace Terracotta
         public void Write(BinaryWriter writer)
         {
             writer.Write(Gold);
-            writer.Write(this[UnitType.GoldMine].Count);
+            writer.Write(Jade);
+            writer.Write(Units);
+            writer.Write(DragonLords);
+            writer.Write(DragonLordAlive);
+
+            GoldMine.Write(writer);
+            JadeMine.Write(writer);
+            Barracks.Write(writer);
         }
 
         public void Read(BinaryReader reader)
         {
             Gold = reader.ReadInt32();
-            this[UnitType.GoldMine].Count = reader.ReadInt32();
+            Jade = reader.ReadInt32();
+            Units = reader.ReadInt32();
+            DragonLords = reader.ReadInt32();
+            DragonLordAlive = reader.ReadBoolean();
+
+            GoldMine.Read(reader);
+            JadeMine.Read(reader);
+            Barracks.Read(reader);            
         }
 
         public override string ToString()

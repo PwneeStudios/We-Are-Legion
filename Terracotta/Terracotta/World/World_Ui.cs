@@ -25,7 +25,7 @@ namespace Terracotta
             switch (CurUserMode)
             {
                 case UserMode.Select:
-                    color clr = rgba(0x888888c, .5f).Premultiplied;
+                    color clr = rgba(0x888888, .5f).Premultiplied;
 
                     bool building_selected = UnitType.BuildingVals.Any(type => DataGroup.UnitSummary[Int(type) - 1]);
 

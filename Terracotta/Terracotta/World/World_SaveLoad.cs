@@ -118,6 +118,7 @@ namespace Terracotta
             writer.Write(DataGroup.Corpses);
             writer.Write(DataGroup.Magic);
             writer.Write(DataGroup.Necromancy);
+            writer.Write(DataGroup.AntiMagic);
             writer.Write(DataGroup.DistanceToOtherTeams);
 
             writer.Write(DataGroup.RandomField);
@@ -200,6 +201,7 @@ namespace Terracotta
             DataGroup.Corpses.SetData(reader.ReadTexture2D().GetData());
             DataGroup.Magic.SetData(reader.ReadTexture2D().GetData());
             DataGroup.Necromancy.SetData(reader.ReadTexture2D().GetData());
+            DataGroup.AntiMagic.SetData(reader.ReadTexture2D().GetData());
             DataGroup.DistanceToOtherTeams.SetData(reader.ReadTexture2D().GetData());
 
             DataGroup.RandomField.SetData(reader.ReadTexture2D().GetData());
