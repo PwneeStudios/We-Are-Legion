@@ -74,8 +74,9 @@ namespace Terracotta
             {
                 try
                 {
+                    //Program.IpAddress = "2604:2000:efc0:103:f878:6e49:e62d:74b0";
                     IPAddress server_addr = IPAddress.Parse(Program.IpAddress);
-
+                    //client = new TcpClient(server_addr.AddressFamily);
                     client = new TcpClient();
 
                     Console.Write("Waiting to connect... " + (i > 0 ? "(attempt {0})" : ""), i);

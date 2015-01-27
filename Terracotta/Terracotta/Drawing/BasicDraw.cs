@@ -26,6 +26,21 @@ namespace Terracotta
         }
     }
 
+    public partial class DrawColoredTexture : BaseShader
+    {
+        [FragmentShader]
+        color FragmentShader(VertexOut vertex, PointSampler Texture, color clr)
+        {
+            color output;
+
+            output = Texture[vertex.TexCoords];
+            output *= vertex.Color * clr;
+            output.rgb *= vertex.Color.a;
+
+            return output;
+        }
+    }
+
     public partial class DrawTextureSmooth : BaseShader
     {
         [FragmentShader]

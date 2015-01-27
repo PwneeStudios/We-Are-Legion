@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
 using FragSharpFramework;
 
 namespace Terracotta
@@ -230,6 +233,11 @@ namespace Terracotta
 
     public partial class SimShader : GridComputation
     {
+        public static int[] IntArray(params float[] vals)
+        {
+            return vals.Select(v => Int(v)).ToArray();
+        }
+
         public const float _true = _1, _false = _0;
 
         public static float GetPlayerVal(PlayerTuple tuple, float player)

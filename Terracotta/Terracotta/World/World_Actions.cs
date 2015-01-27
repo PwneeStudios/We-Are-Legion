@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 using Microsoft.Xna.Framework.Input;
 
@@ -638,7 +640,73 @@ namespace Terracotta
                 {
                     AttackMove();
                 }
+
+                if (Deselect)
+                {
+                    CurSelectionFilter = SelectionFilter.All;
+                }
+
+                if (Keys.Tab.Pressed())
+                {
+                    // Cycle through and find the next selection filter that results in something different than the current filter.
+                    // Skip filters that result in nothing selected.
+                    // Keep the same filter if no other valid filter can be found.
+                    SelectionFilter PrevSelectionFilter = CurSelectionFilter;
+                    bool[] PreviousFilteredSummary = FilteredSummary(PrevSelectionFilter);
+                    
+                    do
+                        ChangeSelectionFilter();
+                    while ((PreviousFilteredSummary.SequenceEqual(FilteredSummary(CurSelectionFilter)) || !FilteredSummary(CurSelectionFilter).Contains(true)) &&
+                           CurSelectionFilter != PrevSelectionFilter);
+                }
             }
+        }
+
+        bool[] FilteredSummary(SelectionFilter filter)
+        {
+            return DataGroup.UnitSummary.Select((b, i) => b && FilterHasUnit(filter, i+1)).ToArray();
+        }
+
+        void ChangeSelectionFilter()
+        {
+            CurSelectionFilter++;
+            if (CurSelectionFilter >= SelectionFilter.Count) CurSelectionFilter = 0;
+        }
+
+        bool FilterHasUnit(SelectionFilter filter, int unit_type)
+        {
+            switch (filter)
+            {
+                case SelectionFilter.All:
+                    return true;
+
+                case SelectionFilter.Units:
+                    return IntArray(UnitType.Footman, UnitType.Skeleton, UnitType.ClaySoldier, UnitType.Necromancer, UnitType.DragonLord).Contains(unit_type);
+
+                case SelectionFilter.Buildings:
+                    return IntArray(UnitType.Barracks, UnitType.GoldMine, UnitType.JadeMine).Contains(unit_type);
+
+                case SelectionFilter.Special:
+                    return IntArray(UnitType.Necromancer, UnitType.DragonLord).Contains(unit_type);
+
+                case SelectionFilter.Soldiers:
+                    return IntArray(UnitType.Footman).Contains(unit_type);
+
+                default:
+                    throw new Exception("Unsupported selection fitler.");
+            }
+        }
+
+        bool SelectionFilterEmtpy(SelectionFilter filter)
+        {
+            for (int i = 0; i < Int(UnitType.Count); i++)
+            {
+                int type = i + 1;
+                if (DataGroup.UnitSummary[i] && FilterHasUnit(filter, type)) return false;
+            }
+
+            return true;
+            //return !IntArray(UnitType.Vals).Any(unit_type => FilterHasUnit(filter, unit_type));
         }
 
         void AttackMove()

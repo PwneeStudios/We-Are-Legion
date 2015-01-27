@@ -343,7 +343,7 @@ namespace Terracotta
             DrawTopUi();
 
             DrawMouseUi();
-            DrawCursorInfo();
+            DrawSelectedInfo();
 
             Render.StartText();
                 DrawUiText();

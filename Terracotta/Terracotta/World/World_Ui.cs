@@ -12,7 +12,7 @@ namespace Terracotta
         RectangleQuad q = new RectangleQuad();
         string count_text = "";
         vec2 count_text_pos;
-        void DrawCursorInfo()
+        void DrawSelectedInfo()
         {
             switch (CurUserMode)
             {
@@ -44,7 +44,10 @@ namespace Terracotta
 
                             SetUnitQuad(pos, s, type, MyPlayerNumber, (GameClass.World.DrawCount / 7) % UnitSpriteSheet.AnimLength, Dir.Left, q);
 
-                            DrawTexture.Using(vec(0, 0, 1, 1), CameraAspect, q.Texture);
+                            bool FilteredOut = FilterHasUnit(CurSelectionFilter, i + 1);
+                            color Shade = FilteredOut ? rgb(0xffffff) : rgb(0x000000);
+
+                            DrawColoredTexture.Using(vec(0, 0, 1, 1), CameraAspect, q.Texture, Shade);
                             q.Draw(GameClass.Graphics);
 
                             cur_pos += shift;

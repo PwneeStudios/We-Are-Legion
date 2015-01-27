@@ -119,6 +119,18 @@ namespace Terracotta
 #if DEBUG
             if (args_.Length == 0)
             {
+                // Client
+                //args_ = "--client --ip 173.174.83.72 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --w 1280 --h 720 --debug".Split(' ');
+
+                // Local client
+                //args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double".Split(' ');
+
+                // Single player windowed
+                args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --w 1280 --h 720".Split(' ');
+
+                // Single player debug
+                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double".Split(' ');
+
                 // Single player
                 //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n".Split(' ');
 
@@ -126,8 +138,8 @@ namespace Terracotta
                 //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double --logshorthash".Split(' ');
 
                 // Two player debug
-                args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double --loglonghash".Split(' ');
-                Start("  --server                --port 13000 --p 2 --t 1234 --n 2 --map Beset.m3n   --debug --double --loglonghash");
+                //args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double --loglonghash".Split(' ');
+                //Start("  --server                --port 13000 --p 2 --t 1234 --n 2 --map Beset.m3n   --debug --double --loglonghash");
 
                 // Four player debug
                 //args_ = "--server                --port 13000 --p 1 --t 1234 --n 4 --map Beset.m3n   --debug --quad".Split(' ');

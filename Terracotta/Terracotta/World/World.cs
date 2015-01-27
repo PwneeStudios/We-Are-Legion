@@ -38,8 +38,8 @@ namespace Terracotta
         }
 
         //const double DelayBetweenUpdates = .01; // Super fast
-        //const double DelayBetweenUpdates = .3333; // Normal speed
-        const double DelayBetweenUpdates = 3; // Super slow
+        const double DelayBetweenUpdates = .3333; // Normal speed
+        //const double DelayBetweenUpdates = 3; // Super slow
 
         bool _MapEditor = false;
         public bool MapEditor
@@ -150,6 +150,8 @@ namespace Terracotta
 
         enum UserMode { PlaceBuilding, PlaceUnits, Select, CastSpell, };
         UserMode CurUserMode = UserMode.Select;
+        enum SelectionFilter { All, Units, Buildings, Soldiers, Special, Count };
+        SelectionFilter CurSelectionFilter = SelectionFilter.All;
         float BuildingUserIsPlacing = UnitType.GoldMine;
         float UnitUserIsPlacing = UnitType.Footman;
         float UnitPlaceStyle = UnitDistribution.EveryOther;
