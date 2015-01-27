@@ -288,7 +288,7 @@ namespace Terracotta
 
         private void HashCheck()
         {
-            if (Program.LogShortHash || Program.LogLongHash)
+            if (SimStep % Program.LogPeriod == 0 && (Program.LogShortHash || Program.LogLongHash))
             {
                 string curdata_hash = DataGroup.DoHash(DataGroup.CurrentData, DataHash.Apply);
                 string prevdata_hash = DataGroup.DoHash(DataGroup.PreviousData, DataHash.Apply);

@@ -17,7 +17,7 @@ namespace Terracotta
             Outbox = false,
             Processing = false,
             Do = true,
-            UpdateSim = true,
+            UpdateSim = false,
             Delays = false,
             Draws = false,
             DoUpdates = false;
@@ -105,6 +105,9 @@ namespace Terracotta
             MaxFps = false,
             HasConsole = false;
 
+        public static int
+            LogPeriod = 1;
+
         static void Start(string options)
         {
             var dir = Directory.GetCurrentDirectory();
@@ -126,7 +129,7 @@ namespace Terracotta
                 //args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double".Split(' ');
 
                 // Single player windowed
-                args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --w 1280 --h 720".Split(' ');
+                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --w 1280 --h 720".Split(' ');
 
                 // Single player debug
                 //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double".Split(' ');
@@ -138,8 +141,8 @@ namespace Terracotta
                 //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double --logshorthash".Split(' ');
 
                 // Two player debug
-                //args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double --loglonghash".Split(' ');
-                //Start("  --server                --port 13000 --p 2 --t 1234 --n 2 --map Beset.m3n   --debug --double --loglonghash");
+                args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10".Split(' ');
+                Start("  --server                --port 13000 --p 2 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10");
 
                 // Four player debug
                 //args_ = "--server                --port 13000 --p 1 --t 1234 --n 4 --map Beset.m3n   --debug --quad".Split(' ');
@@ -181,6 +184,8 @@ namespace Terracotta
             if (args.Contains("--headless")) { Headless = true; }
             if (args.Contains("--maxfps")) { MaxFps = true; }
             if (args.Contains("--console")) { HasConsole = true; }
+            
+            if (args.Contains("--logperiod")) { int i = args.IndexOf("--logperiod"); LogPeriod = int.Parse(args[i + 1]); }
 
             if (args.Contains("--w")) { int i = args.IndexOf("--w"); Width = int.Parse(args[i + 1]); }
             if (args.Contains("--h")) { int i = args.IndexOf("--h"); Height = int.Parse(args[i + 1]); }
