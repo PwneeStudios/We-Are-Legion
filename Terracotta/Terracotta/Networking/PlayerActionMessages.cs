@@ -42,18 +42,21 @@ namespace Terracotta
     {
         public vec2
             Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size;
+        public float
+            Filter;
 
-        public MessageAttackMove(vec2 Pos, vec2 Selected_BL, vec2 Selected_Size, vec2 Destination_BL, vec2 Destination_Size)
+        public MessageAttackMove(vec2 Pos, vec2 Selected_BL, vec2 Selected_Size, vec2 Destination_BL, vec2 Destination_Size, float Filter)
         {
             this.Pos = Pos;
             this.Selected_BL = Selected_BL;
             this.Selected_Size = Selected_Size;
             this.Destination_BL = Destination_BL;
             this.Destination_Size = Destination_Size;
+            this.Filter = Filter;
         }
 
-        public override MessageStr EncodeHead() { return _ | Pos | Selected_BL | Selected_Size | Destination_BL | Destination_Size; }
-        public static MessageAttackMove Parse(string s) { return new MessageAttackMove(PopVec2(ref s), PopVec2(ref s), PopVec2(ref s), PopVec2(ref s), PopVec2(ref s)); }
+        public override MessageStr EncodeHead() { return _ | Pos | Selected_BL | Selected_Size | Destination_BL | Destination_Size | Filter; }
+        public static MessageAttackMove Parse(string s) { return new MessageAttackMove(PopVec2(ref s), PopVec2(ref s), PopVec2(ref s), PopVec2(ref s), PopVec2(ref s), PopFloat(ref s)); }
         public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.AttackMove); }
 
         public override void Immediate()
@@ -63,7 +66,7 @@ namespace Terracotta
         public override void Do()
         {
             if (Log.Do) Console.WriteLine("   Do attack move at {0} : {1}", GameClass.World.SimStep, this);
-            GameClass.Data.AttackMoveApply(Player.Vals[Action.PlayerNumber], Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size);
+            GameClass.Data.AttackMoveApply(Player.Vals[Action.PlayerNumber], Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size, Filter);
         }
     }
 

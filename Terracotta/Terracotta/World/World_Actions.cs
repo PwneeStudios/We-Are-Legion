@@ -651,7 +651,7 @@ namespace Terracotta
                     // Cycle through and find the next selection filter that results in something different than the current filter.
                     // Skip filters that result in nothing selected.
                     // Keep the same filter if no other valid filter can be found.
-                    SelectionFilter PrevSelectionFilter = CurSelectionFilter;
+                    float PrevSelectionFilter = CurSelectionFilter;
                     bool[] PreviousFilteredSummary = FilteredSummary(PrevSelectionFilter);
                     
                     do
@@ -662,51 +662,15 @@ namespace Terracotta
             }
         }
 
-        bool[] FilteredSummary(SelectionFilter filter)
+        bool[] FilteredSummary(float filter)
         {
-            return DataGroup.UnitSummary.Select((b, i) => b && FilterHasUnit(filter, i+1)).ToArray();
+            return DataGroup.UnitSummary.Select((b, i) => b && SelectionFilter.FilterHasUnit(filter, _[i+1])).ToArray();
         }
 
         void ChangeSelectionFilter()
         {
             CurSelectionFilter++;
-            if (CurSelectionFilter >= SelectionFilter.Count) CurSelectionFilter = 0;
-        }
-
-        bool FilterHasUnit(SelectionFilter filter, int unit_type)
-        {
-            switch (filter)
-            {
-                case SelectionFilter.All:
-                    return true;
-
-                case SelectionFilter.Units:
-                    return IntArray(UnitType.Footman, UnitType.Skeleton, UnitType.ClaySoldier, UnitType.Necromancer, UnitType.DragonLord).Contains(unit_type);
-
-                case SelectionFilter.Buildings:
-                    return IntArray(UnitType.Barracks, UnitType.GoldMine, UnitType.JadeMine).Contains(unit_type);
-
-                case SelectionFilter.Special:
-                    return IntArray(UnitType.Necromancer, UnitType.DragonLord).Contains(unit_type);
-
-                case SelectionFilter.Soldiers:
-                    return IntArray(UnitType.Footman).Contains(unit_type);
-
-                default:
-                    throw new Exception("Unsupported selection fitler.");
-            }
-        }
-
-        bool SelectionFilterEmtpy(SelectionFilter filter)
-        {
-            for (int i = 0; i < Int(UnitType.Count); i++)
-            {
-                int type = i + 1;
-                if (DataGroup.UnitSummary[i] && FilterHasUnit(filter, type)) return false;
-            }
-
-            return true;
-            //return !IntArray(UnitType.Vals).Any(unit_type => FilterHasUnit(filter, unit_type));
+            if (CurSelectionFilter >= SelectionFilter.Count - eps) CurSelectionFilter = SelectionFilter.First;
         }
 
         void AttackMove()
@@ -733,7 +697,7 @@ namespace Terracotta
             Destination_BL = floor(Destination_BL);
             Destination_BL = max(Destination_BL, vec2.Zero);
 
-            Networking.ToServer(new MessageAttackMove(Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size));
+            Networking.ToServer(new MessageAttackMove(Pos, Selected_BL, Selected_Size, Destination_BL, Destination_Size, CurSelectionFilter));
 
             AddAttackMarker();
         }

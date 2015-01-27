@@ -44,7 +44,7 @@ namespace Terracotta
 
                             SetUnitQuad(pos, s, type, MyPlayerNumber, (GameClass.World.DrawCount / 7) % UnitSpriteSheet.AnimLength, Dir.Left, q);
 
-                            bool FilteredOut = FilterHasUnit(CurSelectionFilter, i + 1);
+                            bool FilteredOut = SelectionFilter.FilterHasUnit(CurSelectionFilter, type);
                             color Shade = FilteredOut ? rgb(0xffffff) : rgb(0x000000);
 
                             DrawColoredTexture.Using(vec(0, 0, 1, 1), CameraAspect, q.Texture, Shade);

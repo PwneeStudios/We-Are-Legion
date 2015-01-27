@@ -211,21 +211,81 @@ namespace FragSharpFramework
             Terracotta.SetSelectedAction.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/SetSelectedAction_player=0.007843138");
             Terracotta.SetSelectedAction.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/SetSelectedAction_player=0.01176471");
             Terracotta.SetSelectedAction.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/SetSelectedAction_player=0.01568628");
-            Terracotta.ActionAttackSquare.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0");
-            Terracotta.ActionAttackSquare.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.003921569");
-            Terracotta.ActionAttackSquare.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.007843138");
-            Terracotta.ActionAttackSquare.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.01176471");
-            Terracotta.ActionAttackSquare.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.01568628");
-            Terracotta.ActionAttackPoint.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0");
-            Terracotta.ActionAttackPoint.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.003921569");
-            Terracotta.ActionAttackPoint.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.007843138");
-            Terracotta.ActionAttackPoint.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.01176471");
-            Terracotta.ActionAttackPoint.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.01568628");
-            Terracotta.ActionAttack2.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0");
-            Terracotta.ActionAttack2.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.003921569");
-            Terracotta.ActionAttack2.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.007843138");
-            Terracotta.ActionAttack2.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01176471");
-            Terracotta.ActionAttack2.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01568628");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0_filter=0");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0_filter=1");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0_filter=2");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0_filter=3");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0_filter=4");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p003921569_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.003921569_filter=0");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p003921569_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.003921569_filter=1");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p003921569_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.003921569_filter=2");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p003921569_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.003921569_filter=3");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p003921569_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.003921569_filter=4");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p007843138_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.007843138_filter=0");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p007843138_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.007843138_filter=1");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p007843138_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.007843138_filter=2");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p007843138_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.007843138_filter=3");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p007843138_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.007843138_filter=4");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p01176471_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.01176471_filter=0");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p01176471_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.01176471_filter=1");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p01176471_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.01176471_filter=2");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p01176471_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.01176471_filter=3");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p01176471_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.01176471_filter=4");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p01568628_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.01568628_filter=0");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p01568628_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.01568628_filter=1");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p01568628_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.01568628_filter=2");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p01568628_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.01568628_filter=3");
+            Terracotta.ActionAttackSquare.CompiledEffect_player_0p01568628_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttackSquare_player=0.01568628_filter=4");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0_filter=0");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0_filter=1");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0_filter=2");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0_filter=3");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0_filter=4");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p003921569_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.003921569_filter=0");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p003921569_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.003921569_filter=1");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p003921569_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.003921569_filter=2");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p003921569_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.003921569_filter=3");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p003921569_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.003921569_filter=4");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p007843138_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.007843138_filter=0");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p007843138_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.007843138_filter=1");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p007843138_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.007843138_filter=2");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p007843138_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.007843138_filter=3");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p007843138_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.007843138_filter=4");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p01176471_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.01176471_filter=0");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p01176471_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.01176471_filter=1");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p01176471_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.01176471_filter=2");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p01176471_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.01176471_filter=3");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p01176471_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.01176471_filter=4");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p01568628_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.01568628_filter=0");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p01568628_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.01568628_filter=1");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p01568628_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.01568628_filter=2");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p01568628_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.01568628_filter=3");
+            Terracotta.ActionAttackPoint.CompiledEffect_player_0p01568628_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttackPoint_player=0.01568628_filter=4");
+            Terracotta.ActionAttack2.CompiledEffect_player_0_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0_filter=0");
+            Terracotta.ActionAttack2.CompiledEffect_player_0_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0_filter=1");
+            Terracotta.ActionAttack2.CompiledEffect_player_0_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0_filter=2");
+            Terracotta.ActionAttack2.CompiledEffect_player_0_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0_filter=3");
+            Terracotta.ActionAttack2.CompiledEffect_player_0_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0_filter=4");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p003921569_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.003921569_filter=0");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p003921569_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.003921569_filter=1");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p003921569_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.003921569_filter=2");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p003921569_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.003921569_filter=3");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p003921569_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.003921569_filter=4");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p007843138_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.007843138_filter=0");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p007843138_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.007843138_filter=1");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p007843138_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.007843138_filter=2");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p007843138_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.007843138_filter=3");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p007843138_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.007843138_filter=4");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p01176471_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01176471_filter=0");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p01176471_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01176471_filter=1");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p01176471_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01176471_filter=2");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p01176471_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01176471_filter=3");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p01176471_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01176471_filter=4");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p01568628_filter_0 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01568628_filter=0");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p01568628_filter_1 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01568628_filter=1");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p01568628_filter_2 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01568628_filter=2");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p01568628_filter_3 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01568628_filter=3");
+            Terracotta.ActionAttack2.CompiledEffect_player_0p01568628_filter_4 = Content.Load<Effect>("FragSharpShaders/ActionAttack2_player=0.01568628_filter=4");
             Terracotta.Pathfinding_ToSpecial.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToSpecial");
             Terracotta.Pathfinding_ToPlayers.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToPlayers");
             Terracotta.Pathfinding_ToOtherTeams.CompiledEffect = Content.Load<Effect>("FragSharpShaders/Pathfinding_ToOtherTeams");
@@ -4804,51 +4864,111 @@ namespace Terracotta
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 namespace Terracotta
 {
     public partial class ActionAttackSquare
     {
-        public static Effect CompiledEffect_player_0;
-        public static Effect CompiledEffect_player_0p003921569;
-        public static Effect CompiledEffect_player_0p007843138;
-        public static Effect CompiledEffect_player_0p01176471;
-        public static Effect CompiledEffect_player_0p01568628;
+        public static Effect CompiledEffect_player_0_filter_0;
+        public static Effect CompiledEffect_player_0_filter_1;
+        public static Effect CompiledEffect_player_0_filter_2;
+        public static Effect CompiledEffect_player_0_filter_3;
+        public static Effect CompiledEffect_player_0_filter_4;
+        public static Effect CompiledEffect_player_0p003921569_filter_0;
+        public static Effect CompiledEffect_player_0p003921569_filter_1;
+        public static Effect CompiledEffect_player_0p003921569_filter_2;
+        public static Effect CompiledEffect_player_0p003921569_filter_3;
+        public static Effect CompiledEffect_player_0p003921569_filter_4;
+        public static Effect CompiledEffect_player_0p007843138_filter_0;
+        public static Effect CompiledEffect_player_0p007843138_filter_1;
+        public static Effect CompiledEffect_player_0p007843138_filter_2;
+        public static Effect CompiledEffect_player_0p007843138_filter_3;
+        public static Effect CompiledEffect_player_0p007843138_filter_4;
+        public static Effect CompiledEffect_player_0p01176471_filter_0;
+        public static Effect CompiledEffect_player_0p01176471_filter_1;
+        public static Effect CompiledEffect_player_0p01176471_filter_2;
+        public static Effect CompiledEffect_player_0p01176471_filter_3;
+        public static Effect CompiledEffect_player_0p01176471_filter_4;
+        public static Effect CompiledEffect_player_0p01568628_filter_0;
+        public static Effect CompiledEffect_player_0p01568628_filter_1;
+        public static Effect CompiledEffect_player_0p01568628_filter_2;
+        public static Effect CompiledEffect_player_0p01568628_filter_3;
+        public static Effect CompiledEffect_player_0p01568628_filter_4;
 
-        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, float player, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, float player, float filter, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Unit, TargetData, Destination_BL, Selection_BL, ConversionRatio, player);
+            Using(Data, Unit, TargetData, Destination_BL, Selection_BL, ConversionRatio, player, filter);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, float player, RenderTarget2D Output)
+        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, float player, float filter, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Unit, TargetData, Destination_BL, Selection_BL, ConversionRatio, player);
+            Using(Data, Unit, TargetData, Destination_BL, Selection_BL, ConversionRatio, player, filter);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, float player, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, float player, float filter, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Unit, TargetData, Destination_BL, Selection_BL, ConversionRatio, player);
+            Using(Data, Unit, TargetData, Destination_BL, Selection_BL, ConversionRatio, player, filter);
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, float player, RenderTarget2D Output)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, float player, float filter, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Unit, TargetData, Destination_BL, Selection_BL, ConversionRatio, player);
+            Using(Data, Unit, TargetData, Destination_BL, Selection_BL, ConversionRatio, player, filter);
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, float player)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, float player, float filter)
         {
             Effect CompiledEffect = null;
 
-            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
-            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
-            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
-            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
-            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+            if (abs((float)(player - 0)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0_filter_0;
+            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0_filter_1;
+            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0_filter_2;
+            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0_filter_3;
+            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0_filter_4;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_0;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_1;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_2;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_3;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_4;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_0;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_1;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_2;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_3;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_4;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_0;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_1;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_2;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_3;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_4;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_0;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_1;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_2;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_3;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_4;
 
             if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
 
@@ -4874,51 +4994,111 @@ namespace Terracotta
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 namespace Terracotta
 {
     public partial class ActionAttackPoint
     {
-        public static Effect CompiledEffect_player_0;
-        public static Effect CompiledEffect_player_0p003921569;
-        public static Effect CompiledEffect_player_0p007843138;
-        public static Effect CompiledEffect_player_0p01176471;
-        public static Effect CompiledEffect_player_0p01568628;
+        public static Effect CompiledEffect_player_0_filter_0;
+        public static Effect CompiledEffect_player_0_filter_1;
+        public static Effect CompiledEffect_player_0_filter_2;
+        public static Effect CompiledEffect_player_0_filter_3;
+        public static Effect CompiledEffect_player_0_filter_4;
+        public static Effect CompiledEffect_player_0p003921569_filter_0;
+        public static Effect CompiledEffect_player_0p003921569_filter_1;
+        public static Effect CompiledEffect_player_0p003921569_filter_2;
+        public static Effect CompiledEffect_player_0p003921569_filter_3;
+        public static Effect CompiledEffect_player_0p003921569_filter_4;
+        public static Effect CompiledEffect_player_0p007843138_filter_0;
+        public static Effect CompiledEffect_player_0p007843138_filter_1;
+        public static Effect CompiledEffect_player_0p007843138_filter_2;
+        public static Effect CompiledEffect_player_0p007843138_filter_3;
+        public static Effect CompiledEffect_player_0p007843138_filter_4;
+        public static Effect CompiledEffect_player_0p01176471_filter_0;
+        public static Effect CompiledEffect_player_0p01176471_filter_1;
+        public static Effect CompiledEffect_player_0p01176471_filter_2;
+        public static Effect CompiledEffect_player_0p01176471_filter_3;
+        public static Effect CompiledEffect_player_0p01176471_filter_4;
+        public static Effect CompiledEffect_player_0p01568628_filter_0;
+        public static Effect CompiledEffect_player_0p01568628_filter_1;
+        public static Effect CompiledEffect_player_0p01568628_filter_2;
+        public static Effect CompiledEffect_player_0p01568628_filter_3;
+        public static Effect CompiledEffect_player_0p01568628_filter_4;
 
-        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination, float player, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination, float player, float filter, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Unit, TargetData, Destination, player);
+            Using(Data, Unit, TargetData, Destination, player, filter);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination, float player, RenderTarget2D Output)
+        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination, float player, float filter, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Unit, TargetData, Destination, player);
+            Using(Data, Unit, TargetData, Destination, player, filter);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination, float player, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination, float player, float filter, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Unit, TargetData, Destination, player);
+            Using(Data, Unit, TargetData, Destination, player, filter);
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination, float player, RenderTarget2D Output)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination, float player, float filter, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Unit, TargetData, Destination, player);
+            Using(Data, Unit, TargetData, Destination, player, filter);
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination, float player)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination, float player, float filter)
         {
             Effect CompiledEffect = null;
 
-            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
-            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
-            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
-            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
-            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+            if (abs((float)(player - 0)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0_filter_0;
+            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0_filter_1;
+            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0_filter_2;
+            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0_filter_3;
+            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0_filter_4;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_0;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_1;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_2;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_3;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_4;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_0;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_1;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_2;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_3;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_4;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_0;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_1;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_2;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_3;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_4;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_0;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_1;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_2;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_3;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_4;
 
             if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
 
@@ -4942,51 +5122,111 @@ namespace Terracotta
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 namespace Terracotta
 {
     public partial class ActionAttack2
     {
-        public static Effect CompiledEffect_player_0;
-        public static Effect CompiledEffect_player_0p003921569;
-        public static Effect CompiledEffect_player_0p007843138;
-        public static Effect CompiledEffect_player_0p01176471;
-        public static Effect CompiledEffect_player_0p01568628;
+        public static Effect CompiledEffect_player_0_filter_0;
+        public static Effect CompiledEffect_player_0_filter_1;
+        public static Effect CompiledEffect_player_0_filter_2;
+        public static Effect CompiledEffect_player_0_filter_3;
+        public static Effect CompiledEffect_player_0_filter_4;
+        public static Effect CompiledEffect_player_0p003921569_filter_0;
+        public static Effect CompiledEffect_player_0p003921569_filter_1;
+        public static Effect CompiledEffect_player_0p003921569_filter_2;
+        public static Effect CompiledEffect_player_0p003921569_filter_3;
+        public static Effect CompiledEffect_player_0p003921569_filter_4;
+        public static Effect CompiledEffect_player_0p007843138_filter_0;
+        public static Effect CompiledEffect_player_0p007843138_filter_1;
+        public static Effect CompiledEffect_player_0p007843138_filter_2;
+        public static Effect CompiledEffect_player_0p007843138_filter_3;
+        public static Effect CompiledEffect_player_0p007843138_filter_4;
+        public static Effect CompiledEffect_player_0p01176471_filter_0;
+        public static Effect CompiledEffect_player_0p01176471_filter_1;
+        public static Effect CompiledEffect_player_0p01176471_filter_2;
+        public static Effect CompiledEffect_player_0p01176471_filter_3;
+        public static Effect CompiledEffect_player_0p01176471_filter_4;
+        public static Effect CompiledEffect_player_0p01568628_filter_0;
+        public static Effect CompiledEffect_player_0p01568628_filter_1;
+        public static Effect CompiledEffect_player_0p01568628_filter_2;
+        public static Effect CompiledEffect_player_0p01568628_filter_3;
+        public static Effect CompiledEffect_player_0p01568628_filter_4;
 
-        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D Extra, vec2 Destination, float player, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D Extra, vec2 Destination, float player, float filter, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Unit, Extra, Destination, player);
+            Using(Data, Unit, Extra, Destination, player, filter);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D Extra, vec2 Destination, float player, RenderTarget2D Output)
+        public static void Apply(Texture2D Data, Texture2D Unit, Texture2D Extra, vec2 Destination, float player, float filter, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Unit, Extra, Destination, player);
+            Using(Data, Unit, Extra, Destination, player, filter);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Extra, vec2 Destination, float player, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Extra, vec2 Destination, float player, float filter, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data, Unit, Extra, Destination, player);
+            Using(Data, Unit, Extra, Destination, player, filter);
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Extra, vec2 Destination, float player, RenderTarget2D Output)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Extra, vec2 Destination, float player, float filter, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data, Unit, Extra, Destination, player);
+            Using(Data, Unit, Extra, Destination, player, filter);
         }
-        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Extra, vec2 Destination, float player)
+        public static void Using(Texture2D Data, Texture2D Unit, Texture2D Extra, vec2 Destination, float player, float filter)
         {
             Effect CompiledEffect = null;
 
-            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
-            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
-            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
-            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
-            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+            if (abs((float)(player - 0)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0_filter_0;
+            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0_filter_1;
+            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0_filter_2;
+            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0_filter_3;
+            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0_filter_4;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_0;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_1;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_2;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_3;
+            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0p003921569_filter_4;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_0;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_1;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_2;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_3;
+            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0p007843138_filter_4;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_0;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_1;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_2;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_3;
+            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0p01176471_filter_4;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 0)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_0;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 1)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_1;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 2)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_2;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 3)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_3;
+            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 4)) < .001) CompiledEffect = CompiledEffect_player_0p01568628_filter_4;
 
             if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
 

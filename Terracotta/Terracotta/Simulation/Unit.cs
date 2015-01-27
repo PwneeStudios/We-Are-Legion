@@ -238,6 +238,8 @@ namespace Terracotta
             return vals.Select(v => Int(v)).ToArray();
         }
 
+        public const float eps = .001f;
+
         public const float _true = _1, _false = _0;
 
         public static float GetPlayerVal(PlayerTuple tuple, float player)
@@ -610,6 +612,54 @@ namespace Terracotta
                 Four = _4;
         }
 
+        public class SelectionFilter : BaseShader
+        {
+            [FragSharpFramework.Vals(All, Units, Buildings, Soldiers, Special)]
+            public class ValsAttribute : Attribute { }
+
+            public static readonly float[] Vals = new float[] { All, Units, Buildings, Soldiers, Special };
+
+            public const float
+                All = 0,
+                Units = 1,
+                Buildings = 2,
+                Soldiers = 3,
+                Special = 4,
+
+                Count = 5,
+                First = All;
+
+            public static bool FilterHasUnit(float filter, float type)
+            {
+                if (filter == All)
+                {
+                    return true;
+                }
+
+                if (filter == Units)
+                {
+                    return IsUnit(type);
+                }
+
+                if (filter == Buildings)
+                {
+                    return IsBuilding(type);
+                }
+
+                if (filter == Soldiers)
+                {
+                    return IsSoldierUnit(type);
+                }
+
+                if (filter == Special)
+                {
+                    return IsSpecialUnit(type);
+                }
+
+                return false;
+            }
+        }
+
         public static class UnitType
         {
             [FragSharpFramework.Vals(Barracks, GoldMine, JadeMine)]
@@ -683,6 +733,16 @@ namespace Terracotta
         protected static bool LeavesCorpse(unit u)
         {
             return IsUnit(u) && u.type != UnitType.Skeleton;
+        }
+
+        protected static bool IsSpecialUnit(float type)
+        {
+            return type == UnitType.DragonLord || type == UnitType.Necromancer;
+        }
+
+        protected static bool IsSoldierUnit(float type)
+        {
+            return IsUnit(type) && !IsSpecialUnit(type);
         }
 
         protected static bool IsUnit(unit u)

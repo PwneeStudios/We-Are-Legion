@@ -22,13 +22,13 @@ namespace Terracotta
     public partial class ActionAttackSquare : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, Field<data> TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, [Player.Vals] float player)
+        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, Field<data> TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, [Player.Vals] float player, [SelectionFilter.Vals] float filter)
         {
             data data_here = Data[Here];
             unit unit_here = Unit[Here];
             vec4 target = vec4.Zero;
 
-            if (player == unit_here.player && selected(data_here))
+            if (player == unit_here.player && selected(data_here) && SelectionFilter.FilterHasUnit(filter, unit_here.type))
             {
                 vec2 pos = vertex.TexCoords * Data.Size;
 
@@ -50,13 +50,13 @@ namespace Terracotta
     public partial class ActionAttackPoint : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, Field<data> TargetData, vec2 Destination, [Player.Vals] float player)
+        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, Field<data> TargetData, vec2 Destination, [Player.Vals] float player, [SelectionFilter.Vals] float filter)
         {
             data data_here = Data[Here];
             unit unit_here = Unit[Here];
             vec4 target = vec4.Zero;
 
-            if (player == unit_here.player && selected(data_here))
+            if (player == unit_here.player && selected(data_here) && SelectionFilter.FilterHasUnit(filter, unit_here.type))
             {
                 vec2 dest = Destination;
 
@@ -74,13 +74,13 @@ namespace Terracotta
     public partial class ActionAttack2 : SimShader
     {
         [FragmentShader]
-        extra FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, Field<extra> Extra, vec2 Destination, [Player.Vals] float player)
+        extra FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Unit, Field<extra> Extra, vec2 Destination, [Player.Vals] float player, [SelectionFilter.Vals] float filter)
         {
             data  data_here  = Data[Here];
             unit  unit_here  = Unit[Here];
             extra extra_here = Extra[Here];
 
-            if (player == unit_here.player && selected(data_here))
+            if (player == unit_here.player && selected(data_here) && SelectionFilter.FilterHasUnit(filter, unit_here.type))
             {
                 extra_here = extra.Nothing;
             }

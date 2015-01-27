@@ -150,8 +150,7 @@ namespace Terracotta
 
         enum UserMode { PlaceBuilding, PlaceUnits, Select, CastSpell, };
         UserMode CurUserMode = UserMode.Select;
-        enum SelectionFilter { All, Units, Buildings, Soldiers, Special, Count };
-        SelectionFilter CurSelectionFilter = SelectionFilter.All;
+        float CurSelectionFilter = SelectionFilter.All;
         float BuildingUserIsPlacing = UnitType.GoldMine;
         float UnitUserIsPlacing = UnitType.Footman;
         float UnitPlaceStyle = UnitDistribution.EveryOther;
