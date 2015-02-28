@@ -111,7 +111,7 @@ namespace Terracotta
                 {
                     Message_CanNotPlaceHere();
                 }
-                else if (!MyPlayerInfo.CanAffordBuilding(BuildingUserIsPlacing))
+                else if (!MapEditorActive && !MyPlayerInfo.CanAffordBuilding(BuildingUserIsPlacing))
                 {
                     Message_InsufficientGold();
                 }
@@ -206,7 +206,7 @@ namespace Terracotta
         {
             TryTillSuccess(() => PlaceBuilding(PlayerNum, TeamNum, Pos, _[Building]));
 
-            PlayerInfo[PlayerNum].BuyBuilding(Building);
+            if (!MapEditorActive) PlayerInfo[PlayerNum].BuyBuilding(Building);
             CanPlaceItem = false;
         }
 

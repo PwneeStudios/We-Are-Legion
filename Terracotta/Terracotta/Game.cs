@@ -93,8 +93,8 @@ namespace Terracotta
 
             if (Program.StartupMap != null)
             {
-                State = GameState.ToMap;
-                //State = GameState.ToEditor;
+                //State = GameState.ToMap;
+                State = GameState.ToEditor;
             }
         }
 
@@ -339,7 +339,7 @@ namespace Terracotta
                     World = new World();
                     
                     //World.Load("TestSave.m3n");
-                    World.Load(Path.Combine("Content", Path.Combine("Maps", "Beset.m3n")));
+                    //World.Load(Path.Combine("Content", Path.Combine("Maps", "Beset.m3n")));
                     //World.Load(Path.Combine("Content", Path.Combine("Maps", "Gilgamesh.m3n")));
                     //World.Load(Path.Combine("Content", Path.Combine("Maps", "Nice.m3n")));
 

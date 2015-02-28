@@ -170,7 +170,6 @@ namespace Terracotta
                 if (message.Type == MessageType.PlayerActionAck)
                 {
                     message.Inner.Do();
-                    //message.Innermost.Do();
                 }
             }
         }
@@ -210,6 +209,17 @@ namespace Terracotta
                 else
                 {
                     DataGroup.PausedSimulationUpdate();
+
+                    if (MapEditorActive)
+                    {
+                        SecondsSinceLastUpdate += DelayBetweenUpdates;
+                        T += (float)DelayBetweenUpdates;
+                    }
+                    //DeququeActions(SimStep + 1);
+                    //FullUpdate();
+                    //SentBookend = false;
+                    //Networking.ToServer(new MessageStartingStep(SimStep));
+                    //PostSimulationUpdate();
                 }
 
                 if (GameClass.HasFocus)
@@ -344,6 +354,8 @@ namespace Terracotta
 
             DrawMouseUi();
             DrawSelectedInfo();
+
+            if (MyPlayerNumber == 0) return;
 
             Render.StartText();
                 DrawUiText();
@@ -508,7 +520,7 @@ namespace Terracotta
             Ui.Element("[Text] Gold mines");
             s = string.Format("{0:#,##0}", PlayerInfo[player][UnitType.GoldMine].Count);
             Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
-
+            
             Ui.Element("[Text] Gold");
             s = string.Format("{0:#,##0}", PlayerInfo[player].Gold);
             Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
@@ -600,7 +612,10 @@ namespace Terracotta
             //GameClass.Graphics.SetRenderTarget(null);
             GameClass.Graphics.Clear(Color.Black);
 
-            PercentSimStepComplete = (float)(SecondsSinceLastUpdate / DelayBetweenUpdates);
+            if (MapEditorActive)
+                PercentSimStepComplete = .9f;
+            else
+                PercentSimStepComplete = (float)(SecondsSinceLastUpdate / DelayBetweenUpdates);
 
             float z = 14;
 
@@ -672,7 +687,7 @@ namespace Terracotta
             if (CameraZoom > z / 8)
             {
                 float second = (DrawCount % 60) / 60f;
-
+                
                 float selection_blend = CoreMath.LogLerpRestrict(60.0f, 1, 1.25f, 0, CameraZoom);
                 float selection_size = CoreMath.LogLerpRestrict(6.0f, .6f, z / 4, 0, CameraZoom);
 

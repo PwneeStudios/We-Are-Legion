@@ -43,6 +43,11 @@ namespace Terracotta
         void Editor_ToggleMapEditor()
         {
             MapEditorActive = !MapEditorActive;
+
+            if (MapEditorActive && MyPlayerNumber == 0)
+            {
+                MyPlayerNumber = 1;
+            }
         }
 
         public static float StaticMaxZoomOut = 1;
@@ -228,13 +233,28 @@ namespace Terracotta
             PostSimulationUpdate();
         }
 
+        void FullUpdate()
+        {
+            SimStep++;
+            PostUpdateFinished = false;
+            PostUpdateStep = 0;
+
+            while (!PostUpdateFinished)
+                PostSimulationUpdate();
+        }
+
         void PostSimulationUpdate()
         {
             switch (PostUpdateStep)
             {
                 case 0:
                     DataGroup.UpdateSelect();
-                    DataGroup.SimulationUpdate();
+
+                    if (MapEditorActive)
+                        DataGroup.PausedSimulationUpdate();
+                    else
+                        DataGroup.SimulationUpdate();
+
                     break;
 
                 case 1:
@@ -320,8 +340,12 @@ namespace Terracotta
                     if (PlayerInfo[p].DragonLords == 0)
                     {
                         PlayerInfo[p].DragonLordAlive = false;
-                        vec2 grid_coord = DataGroup.DragonLordDeathGridCoord();
-                        DragonLordDeath(grid_coord, p);
+
+                        if (!MapEditorActive)
+                        {
+                            vec2 grid_coord = DataGroup.DragonLordDeathGridCoord();
+                            DragonLordDeath(grid_coord, p);
+                        }
                     }
                 }
                 else
@@ -336,11 +360,15 @@ namespace Terracotta
 
         void DoGoldUpdate()
         {
+            if (MapEditorActive) return;
+
             for (int player = 1; player <= 4; player++) PlayerInfo[player].GoldUpdate();
         }
 
         void DoJadeUpdate()
         {
+            if (MapEditorActive) return;
+
             for (int player = 1; player <= 4; player++) PlayerInfo[player].JadeUpdate();
         }
     }
