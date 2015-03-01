@@ -219,13 +219,17 @@ namespace Terracotta
             Create.PlaceBuilding(DataGroup, GridCoord, Building, Player.Vals[PlayerNum], Team.Vals[TeamNum]);
         }
 
-        void Update_UnitPlacing()
+        void Update_Painting()
         {
             SelectionUpdate(SelectSize, EffectSelection: false, LineSelect: true);
 
             if (Input.LeftMouseDown)
             {
-                SpawnUnits(GridMousePos, SelectSize, MyPlayerValue, MyTeamValue, UnitUserIsPlacing, UnitPlaceStyle);
+                if (UnitUserIsPlacing != UnitType.None)
+                    SpawnUnits(GridMousePos, SelectSize, MyPlayerValue, MyTeamValue, UnitUserIsPlacing, UnitPlaceStyle);
+
+                if (MapEditorActive && TileUserIsPlacing != TileType.None)
+                    PaintTiles();
             }
         }
 
@@ -245,11 +249,7 @@ namespace Terracotta
 
         void PaintTiles()
         {
-            float tile = TileType.None;
-
-            if (Keys.C.Down()) { tile = TileType.Dirt; }
-            if (Keys.V.Down()) { tile = TileType.Grass; }
-            if (Keys.N.Down()) { tile = TileType.Trees; }
+            float tile = TileUserIsPlacing;
 
             Action_PaintTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, DataGroup.RandomField, tile, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
@@ -563,7 +563,7 @@ namespace Terracotta
                 || Keys.Back.Down() || Keys.Escape.Down();
             bool Selecting =
                 (LineSelect && Input.LeftMouseDown || !LineSelect && Input.LeftMouseReleased)
-                && (CurUserMode == UserMode.Select || CurUserMode == UserMode.CastSpell || CurUserMode == UserMode.PlaceUnits);
+                && (CurUserMode == UserMode.Select || CurUserMode == UserMode.CastSpell || CurUserMode == UserMode.Painting);
 
             if (SkipDeselect)
             {
@@ -579,14 +579,19 @@ namespace Terracotta
 
             if (LineSelect)
             {
-                // Continuouse selection
-                //if (Input.LeftMouseDown && Selecting && EffectSelection) Networking.ToServer(new MessageSelect(Size, Deselect, WorldCoord, WorldCoordPrev));
+                bool DoSelect = false;
+                if (MapEditorActive && CurUserMode == UserMode.Painting)
+                {
+                    // Continuous selection
+                    DoSelect = Input.LeftMouseDown && Selecting && EffectSelection;
+                }
+                else
+                {
+                    // Discrete selection
+                    DoSelect = Input.LeftMousePressed && Selecting && EffectSelection;
+                }
 
-                // Discrete selection
-                if (Input.LeftMousePressed && Selecting && EffectSelection) Networking.ToServer(new MessageSelectAlongLine(Size, Deselect, WorldCoord, WorldCoordPrev));
-
-                // Single area select, no sweep
-                //DataGroup.SelectInArea(WorldCoord, Size, Deselect, Selecting, PlayerOrNeutral, EffectSelection);
+                if (DoSelect) Networking.ToServer(new MessageSelectAlongLine(Size, Deselect, WorldCoord, WorldCoordPrev));
             }
             else
             {
@@ -604,11 +609,6 @@ namespace Terracotta
 
             if (MapEditorActive)
             {
-                if (Keys.C.Down() || Keys.V.Down() || Keys.N.Down())
-                {
-                    PaintTiles();
-                }
-
                 if (Keys.D5.Pressed())
                 {
                     foreach (bool polarity in Vals.Bool)
@@ -677,7 +677,7 @@ namespace Terracotta
         {
             DataGroup.SelectedUnitsBounds();
 
-            if (DataGroup.SelectedUnits == 0 && DataGroup.SelectedBarracks == 0) return;
+            if (DataGroup.SelectedUnits == 0) return;
 
             vec2 Pos = ScreenToGridCoord(Input.CurMousePos);
             

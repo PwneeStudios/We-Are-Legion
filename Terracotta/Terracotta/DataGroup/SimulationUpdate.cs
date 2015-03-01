@@ -2,6 +2,15 @@ namespace Terracotta
 {
     public partial class DataGroup : SimShader
     {
+        public void EditorSimulationUpdate()
+        {
+            // Pathfinding
+            Movement_UpdateDirection_RemoveDead.Apply(TargetData, CurrentUnits, Extra, CurrentData, PreviousData, DistanceToOtherTeams, RandomField, Magic,
+                                                      Geo, AntiGeo, Dirward[Dir.Right], Dirward[Dir.Left], Dirward[Dir.Up], Dirward[Dir.Down],
+                                                      Output: Temp1);
+            Swap(ref CurrentData, ref Temp1);
+        }
+
         public void PausedSimulationUpdate()
         {
             UpdateGradient_ToOtherTeams();

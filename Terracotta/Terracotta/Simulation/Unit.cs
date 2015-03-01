@@ -338,6 +338,11 @@ namespace Terracotta
             return vec(x, y, z, w);
         }
 
+        protected static building to_building(data d)
+        {
+            return (building)(vec4)d;
+        }
+
         protected static float polar_dist(geo_info info)
         {
             return unpack_val(info.polar_dist);
@@ -565,6 +570,19 @@ namespace Terracotta
                 Water = _3,
                 Rocks = _4,
                 Trees = _5;
+
+            public static string Name(float tile)
+            {
+                if (tile == None) return "None";
+
+                if (tile == Grass) return "Grass";
+                if (tile == Dirt) return "Dirt";
+                if (tile == Water) return "Water";
+                if (tile == Rocks) return "Rocks";
+                if (tile == Trees) return "Trees";
+
+                return "Invalid Tile Type";
+            }
         }
 
         public static class Team

@@ -235,14 +235,14 @@ namespace Terracotta
                         Update_BuildingPlacing();
                         break;
 
-                    case UserMode.PlaceUnits:
-                        if (UnselectAll)
+                    case UserMode.Painting:
+                        if (UnselectAll || MapEditorActive)
                         {
                             SelectionUpdate(SelectSize);
                             UnselectAll = false;
                         }
 
-                        Update_UnitPlacing();
+                        Update_Painting();
                         break;
 
                     case UserMode.Select:
@@ -550,9 +550,13 @@ namespace Terracotta
                 if (MapEditorActive)
                 {
                     string s = "Map Editor, Paused\nPlayer " + MyPlayerNumber;
-                    if (CurUserMode == UserMode.PlaceUnits)
+                    if (CurUserMode == UserMode.Painting)
                     {
-                        s += "\nUnit: " + UnitType.Name(UnitUserIsPlacing) + ", " + UnitDistribution.Name(UnitPlaceStyle);
+                        if (TileUserIsPlacing != TileType.None)
+                            s += "\nTile: " + TileType.Name(TileUserIsPlacing);
+
+                        if (UnitUserIsPlacing != UnitType.None)
+                            s += "\nUnit: " + UnitType.Name(UnitUserIsPlacing) + ", " + UnitDistribution.Name(UnitPlaceStyle);
                     }
                     
                     Render.DrawText(s, vec(0, 0), 1);
@@ -577,7 +581,7 @@ namespace Terracotta
                         DrawArrowCursor();
                         break;
 
-                    case UserMode.PlaceUnits:
+                    case UserMode.Painting:
                         if (UnitPlaceStyle == UnitDistribution.Single)
                         {
                             UpdateCellAvailability();
@@ -673,16 +677,6 @@ namespace Terracotta
                 }
             }
 
-            // Buildings
-            DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSprite, ExsplosionSprite,
-                MyPlayerValue,
-                PercentSimStepComplete);
-            GridHelper.DrawGrid();
-
-            // Markers
-            Markers.Update();
-            Markers.Draw(DrawOrder.AfterTiles);
-
             // Units
             if (CameraZoom > z / 8)
             {
@@ -708,6 +702,16 @@ namespace Terracotta
                     PercentSimStepComplete);
             }
             GridHelper.DrawGrid();
+
+            // Buildings
+            DrawBuildings.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, BuildingsSprite, ExsplosionSprite,
+                MyPlayerValue,
+                PercentSimStepComplete);
+            GridHelper.DrawGrid();
+
+            // Markers
+            Markers.Update();
+            Markers.Draw(DrawOrder.AfterTiles);
 
             // Antimagic
             if (CurUserMode == UserMode.CastSpell)

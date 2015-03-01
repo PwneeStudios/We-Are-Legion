@@ -9,7 +9,7 @@ namespace Terracotta
     {
         public int[] UnitCount = new int[] { 0, 0, 0, 0, 0 };
         public int[] BarracksCount = new int[] { 0, 0, 0, 0, 0 };
-        public int SelectedUnits = 0, SelectedBarracks = 0, UnitCountUi = 0;
+        public int SelectedUnits = 0, UnitCountUi = 0;
 
         public void DoGoldMineCount(PlayerInfo[] PlayerInfo)
         {
@@ -60,9 +60,8 @@ namespace Terracotta
             DoUnitSummary_2.Apply(CurrentData, CurrentUnits, player, only_selected, Output: Multigrid[0]);
             CopySummary(4);
 
-            var selected = DoUnitCount(player, true);
-            SelectedUnits = selected.Item1;
-            SelectedBarracks = selected.Item2;
+            var selected = DoTotalUnitCount(player, true);
+            SelectedUnits = selected;
             UnitCountUi = SelectedUnits;
         }
 
@@ -82,6 +81,15 @@ namespace Terracotta
             int barracks_count = Int(count.w);
             
             return new Tuple<int,int>(unit_count, barracks_count);
+        }
+
+        public int DoTotalUnitCount(float player, bool only_selected)
+        {
+            CountAllUnits.Apply(CurrentData, CurrentUnits, player, only_selected, Output: Multigrid[0]);
+
+            color count = MultigridReduce(CountReduce_3byte1byte.Apply);
+
+            return (int)(SimShader.unpack_val(count.xyz) + .5f);
         }
 
         public delegate void HashFunc(Texture2D F, Texture2D Noise, RenderTarget2D Output);

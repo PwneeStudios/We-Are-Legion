@@ -148,11 +148,12 @@ namespace Terracotta
             }
         }
 
-        enum UserMode { PlaceBuilding, PlaceUnits, Select, CastSpell, };
+        enum UserMode { PlaceBuilding, Painting, Select, CastSpell };
         UserMode CurUserMode = UserMode.Select;
         float CurSelectionFilter = SelectionFilter.All;
         float BuildingUserIsPlacing = UnitType.GoldMine;
         float UnitUserIsPlacing = UnitType.Footman;
+        float TileUserIsPlacing = TileType.Grass;
         float UnitPlaceStyle = UnitDistribution.EveryOther;
         bool UnselectAll = false;
 

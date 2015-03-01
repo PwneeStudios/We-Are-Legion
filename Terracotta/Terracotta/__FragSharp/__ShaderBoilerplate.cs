@@ -205,6 +205,11 @@ namespace FragSharpFramework
             Terracotta.CountUnits.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.007843138");
             Terracotta.CountUnits.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.01176471");
             Terracotta.CountUnits.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/CountUnits_player=0.01568628");
+            Terracotta.CountAllUnits.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/CountAllUnits_player=0");
+            Terracotta.CountAllUnits.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/CountAllUnits_player=0.003921569");
+            Terracotta.CountAllUnits.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/CountAllUnits_player=0.007843138");
+            Terracotta.CountAllUnits.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/CountAllUnits_player=0.01176471");
+            Terracotta.CountAllUnits.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/CountAllUnits_player=0.01568628");
             Terracotta.CountReduce_3byte1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_3byte1byte");
             Terracotta.SetSelectedAction.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/SetSelectedAction_player=0");
             Terracotta.SetSelectedAction.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/SetSelectedAction_player=0.003921569");
@@ -4694,6 +4699,71 @@ namespace Terracotta
 namespace Terracotta
 {
     public partial class CountUnits
+    {
+        public static Effect CompiledEffect_player_0;
+        public static Effect CompiledEffect_player_0p003921569;
+        public static Effect CompiledEffect_player_0p007843138;
+        public static Effect CompiledEffect_player_0p01176471;
+        public static Effect CompiledEffect_player_0p01568628;
+
+        public static void Apply(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Units, player, only_selected);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Units, player, only_selected);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Units, player, only_selected);
+        }
+        public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Units, player, only_selected);
+        }
+        public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected)
+        {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
+            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
+            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
+            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
+            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
+            CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_only_selected"].SetValue(FragSharpMarshal.Marshal(only_selected));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+
+
+
+
+namespace Terracotta
+{
+    public partial class CountAllUnits
     {
         public static Effect CompiledEffect_player_0;
         public static Effect CompiledEffect_player_0p003921569;

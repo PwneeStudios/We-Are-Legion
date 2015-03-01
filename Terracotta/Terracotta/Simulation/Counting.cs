@@ -112,6 +112,28 @@ namespace Terracotta
         }
     }
 
+    public partial class CountAllUnits : SimShader
+    {
+        [FragmentShader]
+        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Units, [Player.Vals] float player, bool only_selected)
+        {
+            data data_here = Data[Here];
+
+            vec4 output = vec4.Zero;
+            if (Something(data_here))
+            {
+                unit unit_here = Units[Here];
+
+                bool valid = (player == Player.None || unit_here.player == player) && (!only_selected || fake_selected(data_here));
+
+                if ((IsUnit(unit_here) || IsBuilding(unit_here) && IsCenter(to_building(data_here))) && valid)
+                    output.xyz = pack_coord_3byte(1);
+            }
+
+            return output;
+        }
+    }
+
     public partial class CountReduce_3byte1byte : SimShader
     {
         [FragmentShader]

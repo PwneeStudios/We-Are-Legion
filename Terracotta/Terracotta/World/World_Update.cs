@@ -188,11 +188,15 @@ namespace Terracotta
             // Switch to unit placement (editor only)
             if (MapEditorActive)
             {
-                if (Keys.R.Down()) { UnitUserIsPlacing = UnitType.Footman;     CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
-                if (Keys.T.Down()) { UnitUserIsPlacing = UnitType.DragonLord;  CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
-                if (Keys.Y.Down()) { UnitUserIsPlacing = UnitType.Necromancer; CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
-                if (Keys.U.Down()) { UnitUserIsPlacing = UnitType.Skeleton;    CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
-                if (Keys.I.Down()) { UnitUserIsPlacing = UnitType.ClaySoldier; CurUserMode = UserMode.PlaceUnits; UnselectAll = true; }
+                if (Keys.R.Down()) { TileUserIsPlacing = TileType.None; UnitUserIsPlacing = UnitType.Footman; CurUserMode = UserMode.Painting; UnselectAll = true; }
+                if (Keys.T.Down()) { TileUserIsPlacing = TileType.None; UnitUserIsPlacing = UnitType.DragonLord; CurUserMode = UserMode.Painting; UnselectAll = true; }
+                if (Keys.Y.Down()) { TileUserIsPlacing = TileType.None; UnitUserIsPlacing = UnitType.Necromancer; CurUserMode = UserMode.Painting; UnselectAll = true; }
+                if (Keys.U.Down()) { TileUserIsPlacing = TileType.None; UnitUserIsPlacing = UnitType.Skeleton; CurUserMode = UserMode.Painting; UnselectAll = true; }
+                if (Keys.I.Down()) { TileUserIsPlacing = TileType.None; UnitUserIsPlacing = UnitType.ClaySoldier; CurUserMode = UserMode.Painting; UnselectAll = true; }
+
+                if (Keys.C.Down()) { UnitUserIsPlacing = UnitType.None; TileUserIsPlacing = TileType.Dirt; CurUserMode = UserMode.Painting; UnselectAll = true; }
+                if (Keys.V.Down()) { UnitUserIsPlacing = UnitType.None; TileUserIsPlacing = TileType.Grass; CurUserMode = UserMode.Painting; UnselectAll = true; }
+                if (Keys.N.Down()) { UnitUserIsPlacing = UnitType.None; TileUserIsPlacing = TileType.Trees; CurUserMode = UserMode.Painting; UnselectAll = true; }
 
                 if (Keys.Tab.Pressed())
                 {
@@ -251,7 +255,7 @@ namespace Terracotta
                     DataGroup.UpdateSelect();
 
                     if (MapEditorActive)
-                        DataGroup.PausedSimulationUpdate();
+                        DataGroup.EditorSimulationUpdate();
                     else
                         DataGroup.SimulationUpdate();
 
