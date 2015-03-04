@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{711F2A20-F9EE-463A-936E-6B683079B831}</ProjectGuid>
+    <ProjectTypeGuids>{6D335F3A-9D43-41b4-9D22-F6F17C4BE596};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Game</RootNamespace>
+    <AssemblyName>WeAreLegion</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <XnaFrameworkVersion>v4.0</XnaFrameworkVersion>
+    <XnaPlatform>Windows</XnaPlatform>
+    <XnaProfile>HiDef</XnaProfile>
+    <XnaCrossPlatformGroupID>3e4684b8-177a-42de-8271-e2c4253391a4</XnaCrossPlatformGroupID>
+    <XnaOutputType>Game</XnaOutputType>
+    <ApplicationIcon>Game.ico</ApplicationIcon>
+    <Thumbnail>GameThumbnail.png</Thumbnail>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputType>Exe</OutputType>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\x86\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>false</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputType>WinExe</OutputType>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\x86\Release</OutputPath>
+    <DefineConstants>TRACE;WINDOWS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>true</NoStdLib>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <PlatformTarget>x86</PlatformTarget>
+    <XnaCompressContent>true</XnaCompressContent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FragSharpFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Projects\FragSharp\FragSharpFramework\bin\x86\Release\FragSharpFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Game, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Graphics, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.GamerServices, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Xact, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Video, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Avatar, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Net, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Storage, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="mscorlib">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Net">
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Assets.cs" />
+    <Compile Include="Drawing\DrawAntiMagic.cs" />
+    <Compile Include="Networking\PlayerActionMessages.cs" />
+    <Compile Include="Networking\Server.cs" />
+    <Compile Include="Networking\Client.cs" />
+    <Compile Include="Networking\Message.cs" />
+    <Compile Include="Networking\Networking.cs" />
+    <Compile Include="Drawing\DrawDebugInfo.cs" />
+    <Compile Include="Drawing\DrawTiles.cs" />
+    <Compile Include="Geodesics\Geodesics.cs" />
+    <Compile Include="MouseActions\TileSet.cs" />
+    <Compile Include="MouseActions\DeleteUnits.cs" />
+    <Compile Include="MouseActions\Select.cs" />
+    <Compile Include="MouseActions\SpawnUnits.cs" />
+    <Compile Include="Render.cs" />
+    <Compile Include="DataGroup\BuildingUpdate.cs" />
+    <Compile Include="Drawing\GameColors.cs" />
+    <Compile Include="Simulation\Hash.cs" />
+    <Compile Include="Simulation\Magic.cs" />
+    <Compile Include="Util\ShaderUtil.cs" />
+    <Compile Include="Util\Ui.cs" />
+    <Compile Include="World\WorldStartup.cs" />
+    <Compile Include="World\Spells.cs" />
+    <Compile Include="World\Migrate.cs" />
+    <Compile Include="World\World_Update.cs" />
+    <Compile Include="World\World_Draw.cs" />
+    <Compile Include="World\World_Actions.cs" />
+    <Compile Include="World\World_Coordinates.cs" />
+    <Compile Include="World\World_Ui.cs" />
+    <Compile Include="World\UserMessages.cs" />
+    <Compile Include="World\World_SaveLoad.cs" />
+    <Compile Include="DataGroup\Gradients.cs" />
+    <Compile Include="DataGroup\SimulationUpdate.cs" />
+    <Compile Include="DataGroup\Selection.cs" />
+    <Compile Include="DataGroup\Counting.cs" />
+    <Compile Include="DataGroup\Util.cs" />
+    <Compile Include="DataGroup\InitialConditions.cs" />
+    <Compile Include="Util\BenchmarkTesting.cs" />
+    <Compile Include="Util\MathHelper.cs" />
+    <Compile Include="Drawing\DrawTerritory.cs" />
+    <Compile Include="Util\ExtensionClasses.cs" />
+    <Compile Include="DataGroup\DataGroup.cs" />
+    <Compile Include="Drawing\DrawBuildings.cs" />
+    <Compile Include="Drawing\DrawCorpses.cs" />
+    <Compile Include="Util\PerfTimer.cs" />
+    <Compile Include="Drawing\BaseShader.cs" />
+    <Compile Include="Drawing\PreDraw.cs" />
+    <Compile Include="Drawing\BasicDraw.cs" />
+    <Compile Include="Simulation\Bounding.cs" />
+    <Compile Include="Simulation\Attacking.cs" />
+    <Compile Include="Simulation\BuildingDiffusion.cs" />
+    <Compile Include="Simulation\Spawning.cs" />
+    <Compile Include="Simulation\Dying.cs" />
+    <Compile Include="Simulation\Random.cs" />
+    <Compile Include="Simulation\Counting.cs" />
+    <Compile Include="MouseActions\Attack.cs" />
+    <Compile Include="Simulation\Pathfinding.cs" />
+    <Compile Include="Simulation\Movement.cs" />
+    <Compile Include="Drawing\DrawUnit.cs" />
+    <Compile Include="Simulation\Unit.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="World\World.cs" />
+    <Compile Include="World\Marker.cs" />
+    <Compile Include="World\PlayerInfo.cs" />
+    <Compile Include="World\GameParameters.cs" />
+    <Compile Include="__FragSharp\__ExtensionBoilerplate.cs" />
+    <Compile Include="__FragSharp\__ShaderBoilerplate.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Game.ico" />
+    <Content Include="GameThumbnail.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\content\Content.contentproj">
+      <Name>Content</Name>
+      <XnaReferenceType>Content</XnaReferenceType>
+      <Project>{3B7C433E-A48C-4456-ACAE-C63EC83E631C}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Xna.Framework.4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft XNA Framework Redistributable 4.0</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>ECHO ON
+DIR
+ECHO Running PngToCsData
+$(SolutionDir)PngToCsData\PngToCsData\bin\Release\PngToCsData.exe $(ProjectDir)Drawing/GameColors.cs $(SolutionDir)Content/Art/FarColors.png
+ECHO Running FragSharp via the following command line invocation:
+ECHO "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\x86\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)
+"C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\x86\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)</PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+  <!--
+      To modify your build process, add your task inside one of the targets below and uncomment it. 
+      Other similar extension points exist, see Microsoft.Common.targets.
+      <Target Name="BeforeBuild">
+      </Target>
+      <Target Name="AfterBuild">
+      </Target>
+    -->
+</Project>
