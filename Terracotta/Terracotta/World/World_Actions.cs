@@ -552,6 +552,7 @@ namespace Terracotta
         public void SelectionUpdate(vec2 Size, bool EffectSelection = true, bool LineSelect = true)
         {
             if (!GameClass.HasFocus) return;
+            if (SkipNextSelectionUpdate) return;
 
             vec2 WorldCoord = ScreenToWorldCoord(Input.CurMousePos);
             vec2 WorldCoordPrev = ScreenToWorldCoord(Input.PrevMousePos);

@@ -264,6 +264,8 @@ namespace Terracotta
 
                         break;
                 }
+                
+                SkipNextSelectionUpdate = false;
 
                 if (Program.Server)
                 {

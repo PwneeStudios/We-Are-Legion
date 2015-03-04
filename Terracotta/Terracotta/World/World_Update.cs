@@ -181,6 +181,9 @@ namespace Terracotta
             // Switch to standard select
             if (Keys.Escape.Down() || Keys.Back.Down() || Input.RightMousePressed)
             {
+                if (CurUserMode == UserMode.PlaceBuilding)
+                    SkipNextSelectionUpdate = true;
+
                 CurUserMode = UserMode.Select;
                 SkipDeselect = true;
             }

@@ -156,6 +156,7 @@ namespace Terracotta
         float TileUserIsPlacing = TileType.Grass;
         float UnitPlaceStyle = UnitDistribution.EveryOther;
         bool UnselectAll = false;
+        bool SkipNextSelectionUpdate = false;
 
         Spell CurSpell = null;
 

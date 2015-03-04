@@ -122,6 +122,9 @@ namespace Terracotta
 #if DEBUG
             if (args_.Length == 0)
             {
+                // Demo
+                //args_ = "--server                --port 13000 --p 1 --t 1234 --n 1 --debug --w 1280 --h 720".Split(' ');
+
                 // Client
                 //args_ = "--client --ip 173.174.83.72 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --w 1280 --h 720 --debug".Split(' ');
 
