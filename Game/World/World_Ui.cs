@@ -258,8 +258,8 @@ namespace Game
         {
             vec2 size = vec(1.266f, 1.35f) * Size * CellWorldSize;
 
-            Markers.Add(new Marker(this, Pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterTiles));
-            Markers.Add(new Marker(this, Pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterUnits, alpha : 1));
+            Markers.Add(new Marker(this, Pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterTiles, frame_length : .066f));
+            Markers.Add(new Marker(this, Pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterUnits, frame_length : .066f, alpha : 1));
         }
 
         void AddSummonUnitEffect(vec2 GridCoord)

@@ -101,7 +101,8 @@ namespace Game
         protected override void Initialize()
         {
 #if DEBUG
-            if (Assets.HotSwap && !Program.Server && !Program.Client)
+            //if (Assets.HotSwap && !Program.Server && !Program.Client)
+            if (Assets.HotSwap)
                 SetupHotswap();
 #endif
 
@@ -137,9 +138,15 @@ namespace Game
             // On the dev machine copy actual art folder to hot swap, and then work from art folder directly
             if (cwd.Contains(ProjDir))
             {
-                HotSwapDir = "C:/Users/Jordan/Desktop/Dir/Pwnee/Games/WAL/Soure/Game/bin/x86/Debug/Content/HotSwap/";
-
-                Directory.Delete(HotSwapDir, true);
+                HotSwapDir = "C:/Users/Jordan/Desktop/Dir/Pwnee/Games/WAL/Source/Game/bin/x86/Debug/Content/HotSwap/";
+                try
+                {
+                    Directory.Delete(HotSwapDir, true);
+                }
+                catch
+                { 
+                    
+                }
 
                 var source_art = Directory.EnumerateFiles(ArtSrcDir, "*", SearchOption.AllDirectories);
 
