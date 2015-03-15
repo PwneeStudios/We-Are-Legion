@@ -421,8 +421,17 @@ namespace Game
             SwapTempGeo(Anti);
         }
 
+        void EndSpellMode()
+        {
+            CurUserMode = UserMode.Select;
+            SkipDeselect = true;
+            SkipSelect = true;
+        }
+
         public bool Fireball()
         {
+            EndSpellMode();
+
             return true;
         }
 
@@ -446,8 +455,7 @@ namespace Game
 
         public bool RaiseSkeletons(vec2 area)
         {
-            //CurUserMode = UserMode.Select;
-            //SkipDeselect = true;
+            EndSpellMode();
 
             return true;
         }
@@ -466,8 +474,7 @@ namespace Game
 
         public bool SummonTerracotta(vec2 area)
         {
-            //CurUserMode = UserMode.Select;
-            //SkipDeselect = true;
+            EndSpellMode();
 
             return true;
         }
@@ -492,9 +499,7 @@ namespace Game
                 return false;
             }
 
-            CurUserMode = UserMode.Select;
-            SkipDeselect = true;
-            SkipSelect = true;
+            EndSpellMode();
 
             return true;
         }
