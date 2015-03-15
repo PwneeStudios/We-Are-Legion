@@ -207,7 +207,14 @@ namespace Game
 
             if (!Input.LeftMouseDown) return;
 
-            BoxSelecting = true;
+            if (!BoxSelecting && Input.LeftMousePressed && MouseInGame)
+            {
+                BoxSelecting = true;
+            }
+
+            //BoxSelecting = true;
+            if (!BoxSelecting) return;
+
             vec2 pos = ScreenToWorldCoord(Input.CurMousePos);
             vec2 grid_pos = ScreenToGridCoord(Input.CurMousePos);
 

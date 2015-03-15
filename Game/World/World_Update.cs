@@ -109,11 +109,11 @@ namespace Game
             //    CameraPos += Input.DeltaMousPos / CameraZoom * MoveRate_ClickAndDrag * new vec2(-1, 1);
 
             // Move the camera via: Push Edge
-            if (GameClass.MouseEnabled && !Program.DisableScreenEdge)
+            if (GameClass.MouseEnabled && (!Program.DisableScreenEdge || BoxSelecting))
             {
                 float MoveRate_PushEdge = .075f * FpsRateModifier;
                 var push_dir = vec2.Zero;
-                float EdgeRatio = .1f;
+                float EdgeRatio = .005f;
                 push_dir.x += -CoreMath.Restrict(0, 1, (EdgeRatio * GameClass.Screen.x - Input.CurMousePos.x) / (EdgeRatio * GameClass.Screen.x));
                 push_dir.x += CoreMath.Restrict(0, 1, (Input.CurMousePos.x - (1 - EdgeRatio) * GameClass.Screen.x) / (EdgeRatio * GameClass.Screen.x));
                 push_dir.y -= -CoreMath.Restrict(0, 1, (EdgeRatio * GameClass.Screen.y - Input.CurMousePos.y) / (EdgeRatio * GameClass.Screen.y));
@@ -127,6 +127,12 @@ namespace Game
 
             float MoveRate_Keyboard = .07f * FpsRateModifier;
             CameraPos += dir / CameraZoom * MoveRate_Keyboard;
+
+            // Move the camera via: Minimap
+            if (Input.LeftMouseDown && !BoxSelecting && MouseOverMinimap)
+            {
+                CameraPos = (UiMousePos - MinimapQuad.pos) / MinimapQuad.size;
+            }
 
 
             // Make sure the camera doesn't go too far offscreen

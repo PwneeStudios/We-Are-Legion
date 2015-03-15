@@ -7,6 +7,14 @@ using FragSharpFramework;
 
 namespace Game
 {
+    public static class RectangleQuadExtension
+    {
+        public static bool Contains(this RectangleQuad quad, vec2 pos)
+        {
+            return pos > quad.Bl && pos < quad.Tr;
+        }
+    }
+
     public static class RenderTarget2DExtension
     {
         public static void Clear(this RenderTarget2D RenderTarget)

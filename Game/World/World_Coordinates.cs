@@ -53,6 +53,30 @@ namespace Game
             }
         }
 
+        vec2 UiMousePos
+        {
+            get
+            {
+                return ScreenToUiCoord(Input.CurMousePos);
+            }
+        }
+
+        bool MouseInGame
+        {
+            get
+            {
+                return !MouseOverMinimap;
+            }
+        }
+
+        bool MouseOverMinimap
+        {
+            get
+            {
+                return MinimapQuad.Contains(UiMousePos);
+            }
+        }
+
         vec2 ScreenToWorldCoord(vec2 pos)
         {
             var screen = GameClass.Screen;

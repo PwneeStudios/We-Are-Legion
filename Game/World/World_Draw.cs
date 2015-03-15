@@ -406,8 +406,11 @@ namespace Game
         {
             vec2 size = vec(.2f, .2f);
             vec2 center = vec(-CameraAspect, -1) + new vec2(size.x, size.y);
+            MinimapQuad.SetupVertices(center - size, center + size, vec(0, 0), vec(1, 1));
+
             DrawTextureSmooth.Using(vec(0, 0, 1, 1), CameraAspect, Minimap);
-            RectangleQuad.Draw(GameClass.Graphics, center, size);
+            MinimapQuad.Draw(GameClass.Graphics);
+            //RectangleQuad.Draw(GameClass.Graphics, center, size);
 
             vec2 cam = CameraPos * size;
             vec2 bl = center + cam - vec(CameraAspect, 1) * size / CameraZoom;

@@ -100,6 +100,7 @@ namespace Game
         RectangleQuad Ground;
 
         public RenderTarget2D Minimap;
+        public RectangleQuad MinimapQuad = new RectangleQuad();
 
         public float T = 0;
         double SecondsSinceLastUpdate = DelayBetweenUpdates;
