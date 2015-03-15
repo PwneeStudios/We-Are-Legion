@@ -1,0 +1,108 @@
+Ui.Element("Upper Ui");
+Ui.e.SetupPosition(vec(a - 1.87777777777778f,0.8962962962963f),vec(a - -0.04444444444444f,1f));
+
+Ui.Element("Upper Ui, Player 1");
+Ui.e.SetupPosition(vec(a - 1.87777777777778f,0.95f),vec(a - -0.04444444444444f,1f));
+
+Ui.Element("Bar");
+Ui.e.SetupPosition(vec(a - 1.60740740740741f,0.95f),vec(a - -0.04444444444444f,1f));
+
+Ui.Element("Tab");
+Ui.e.SetupPosition(vec(a - 1.87777777777778f,0.95f),vec(a - 1.60740740740741f,1f));
+
+Ui.Element("Divider 1");
+Ui.e.SetupPosition(vec(a - 1.07777777777778f,0.95f),vec(a - 1.07037037037037f,1f));
+
+Ui.Element("Divider 2");
+Ui.e.SetupPosition(vec(a - 0.54259259259259f,0.95f),vec(a - 0.53518518518519f,1f));
+
+Ui.Element("[Text] Jade");
+Ui.e.SetupPosition(vec(a - 0.21111111111111f,0.96111111111111f),vec(a - 0.06296296296296f,0.99259259259259f));
+
+Ui.Element("Jade");
+Ui.e.SetupPosition(vec(a - 0.26481481481481f,0.95555555555556f),vec(a - 0.22777777777778f,0.9962962962963f));
+
+Ui.Element("[Text] Jade mines");
+Ui.e.SetupPosition(vec(a - 0.4037037037037f,0.96296296296296f),vec(a - 0.33333333333333f,0.99444444444444f));
+
+Ui.Element("Jade mine");
+Ui.e.SetupPosition(vec(a - 0.49259259259259f,0.95f),vec(a - 0.42037037037037f,1f));
+
+Ui.Element("[Text] Gold");
+Ui.e.SetupPosition(vec(a - 0.7462962962963f,0.96111111111111f),vec(a - 0.59814814814815f,0.99259259259259f));
+
+Ui.Element("Gold");
+Ui.e.SetupPosition(vec(a - 0.8f,0.95185185185185f),vec(a - 0.76296296296296f,0.99814814814815f));
+
+Ui.Element("[Text] Gold mines");
+Ui.e.SetupPosition(vec(a - 0.93703703703704f,0.96296296296296f),vec(a - 0.86666666666667f,0.99444444444444f));
+
+Ui.Element("Gold mine");
+Ui.e.SetupPosition(vec(a - 1.02777777777778f,0.95f),vec(a - 0.9537037037037f,0.99814814814815f));
+
+Ui.Element("[Text] Units");
+Ui.e.SetupPosition(vec(a - 1.27037037037037f,0.96111111111111f),vec(a - 1.13888888888889f,0.99259259259259f));
+
+Ui.Element("Unit");
+Ui.e.SetupPosition(vec(a - 1.32592592592593f,0.95555555555556f),vec(a - 1.28518518518519f,0.9962962962963f));
+
+Ui.Element("[Text] Barrackses");
+Ui.e.SetupPosition(vec(a - 1.46851851851852f,0.96296296296296f),vec(a - 1.4f,0.99444444444444f));
+
+Ui.Element("Barracks");
+Ui.e.SetupPosition(vec(a - 1.55740740740741f,0.95f),vec(a - 1.48333333333333f,0.99814814814815f));
+
+Ui.Element("Upper Ui, Player 2");
+Ui.e.SetupPosition(vec(a - 1.65925925925926f,0.8962962962963f),vec(a - -0.04444444444444f,0.9462962962963f));
+
+Ui.Element("Bar");
+Ui.e.SetupPosition(vec(a - 1.60740740740741f,0.8962962962963f),vec(a - -0.04444444444444f,0.9462962962963f));
+
+Ui.Element("Tab");
+Ui.e.SetupPosition(vec(a - 1.65925925925926f,0.8962962962963f),vec(a - 1.60740740740741f,0.9462962962963f));
+
+Ui.Element("Divider 1");
+Ui.e.SetupPosition(vec(a - 1.07777777777778f,0.8962962962963f),vec(a - 1.07037037037037f,0.9462962962963f));
+
+Ui.Element("Divider 2");
+Ui.e.SetupPosition(vec(a - 0.54259259259259f,0.8962962962963f),vec(a - 0.53518518518519f,0.9462962962963f));
+
+Ui.Element("[Text] Jade");
+Ui.e.SetupPosition(vec(a - 0.21111111111111f,0.90740740740741f),vec(a - 0.06296296296296f,0.93888888888889f));
+
+Ui.Element("Jade");
+Ui.e.SetupPosition(vec(a - 0.26481481481481f,0.90185185185185f),vec(a - 0.22777777777778f,0.94259259259259f));
+
+Ui.Element("[Text] Jade mines");
+Ui.e.SetupPosition(vec(a - 0.4037037037037f,0.90925925925926f),vec(a - 0.33333333333333f,0.94074074074074f));
+
+Ui.Element("Jade mine");
+Ui.e.SetupPosition(vec(a - 0.49259259259259f,0.8962962962963f),vec(a - 0.42037037037037f,0.9462962962963f));
+
+Ui.Element("[Text] Gold");
+Ui.e.SetupPosition(vec(a - 0.7462962962963f,0.90740740740741f),vec(a - 0.59814814814815f,0.93888888888889f));
+
+Ui.Element("Gold");
+Ui.e.SetupPosition(vec(a - 0.8f,0.89814814814815f),vec(a - 0.76296296296296f,0.94444444444444f));
+
+Ui.Element("[Text] Gold mines");
+Ui.e.SetupPosition(vec(a - 0.93703703703704f,0.90925925925926f),vec(a - 0.86666666666667f,0.94074074074074f));
+
+Ui.Element("Gold mine");
+Ui.e.SetupPosition(vec(a - 1.02777777777778f,0.8962962962963f),vec(a - 0.9537037037037f,0.9462962962963f));
+
+Ui.Element("[Text] Units");
+Ui.e.SetupPosition(vec(a - 1.27037037037037f,0.90740740740741f),vec(a - 1.13888888888889f,0.93888888888889f));
+
+Ui.Element("Unit");
+Ui.e.SetupPosition(vec(a - 1.32407407407407f,0.90185185185185f),vec(a - 1.28518518518519f,0.94259259259259f));
+
+Ui.Element("[Text] Barrackses");
+Ui.e.SetupPosition(vec(a - 1.46851851851852f,0.90925925925926f),vec(a - 1.4f,0.94074074074074f));
+
+Ui.Element("Barracks");
+Ui.e.SetupPosition(vec(a - 1.55740740740741f,0.8962962962963f),vec(a - 1.48333333333333f,0.9462962962963f));
+
+Ui.Element("Hue/Saturation 1");
+Ui.e.SetupPosition(vec(a - 3.55555555555556f,-1f),vec(a - 0f,1f));
+
