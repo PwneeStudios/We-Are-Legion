@@ -355,6 +355,7 @@ namespace Game
             DrawTopUi();
 
             DrawMouseUi();
+            Markers.Draw(DrawOrder.AfterMouse);
             DrawSelectedInfo();
 
             if (MyPlayerNumber == 0) return;

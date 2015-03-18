@@ -269,13 +269,21 @@ namespace Game
             Markers.Add(new Marker(this, Pos, size, ExsplosionSprite, -1f, frames : ExplosionSpriteSheet.AnimLength, DrawOrder : DrawOrder.AfterUnits, frame_length : .066f, alpha : 1));
         }
 
+        void AddBuildBuildingEffect(vec2 GridCoord)
+        {
+            vec2 size = 6 * vec(1.266f, 1.35f) * CellWorldSize;
+            vec2 pos = GridToWorldCood(floor(GridCoord)) + new vec2(CellWorldSize.x, -CellWorldSize.y) / 2;
+
+            Markers.Add(new Marker(this, pos, size, Assets.SmokeTexture, -1f, frames: 4, DrawOrder: DrawOrder.AfterUnits, alpha: 1, dsize_dt: vec(.01f, .01f)));
+        }
+
         void AddSummonUnitEffect(vec2 GridCoord)
         {
             vec2 size = vec(1.266f, 1.35f) * 2 * CellWorldSize;
             vec2 pos = GridToWorldCood(floor(GridCoord)) + new vec2(CellWorldSize.x, -CellWorldSize.y) / 2;
 
-            Markers.Add(new Marker(this, pos, size, Assets.MagicTexture, -1f, frames: 4, DrawOrder: DrawOrder.AfterTiles));
-            Markers.Add(new Marker(this, pos, size, Assets.MagicTexture, -1f, frames: 4, DrawOrder: DrawOrder.AfterUnits, alpha: 1));
+            Markers.Add(new Marker(this, pos, size, Assets.MagicTexture, -1f, frames: 4, DrawOrder: DrawOrder.AfterTiles, dsize_dt: vec(.002f, .002f)));
+            Markers.Add(new Marker(this, pos, size, Assets.MagicTexture, -1f, frames: 4, DrawOrder: DrawOrder.AfterUnits, dsize_dt: vec(.002f, .002f), alpha: 1));
         }
 
         void AddSummonAreaEffect(vec2 pos, vec2 area)

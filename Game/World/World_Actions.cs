@@ -120,6 +120,11 @@ namespace Game
                     try
                     {
                         Networking.ToServer(new MessagePlaceBuilding(GridCoord, Int(BuildingUserIsPlacing)));
+                        
+                        if (!MapEditorActive)
+                        {
+                            EndPlaceMode();
+                        }
                     }
                     catch
                     {
@@ -217,6 +222,8 @@ namespace Game
 
             Render.UnsetDevice();
             Create.PlaceBuilding(DataGroup, GridCoord, Building, Player.Vals[PlayerNum], Team.Vals[TeamNum]);
+
+            AddBuildBuildingEffect(GridCoord + vec(1, 1));
         }
 
         void Update_Painting()
@@ -422,6 +429,13 @@ namespace Game
         }
 
         void EndSpellMode()
+        {
+            CurUserMode = UserMode.Select;
+            SkipDeselect = true;
+            SkipSelect = true;
+        }
+
+        void EndPlaceMode()
         {
             CurUserMode = UserMode.Select;
             SkipDeselect = true;

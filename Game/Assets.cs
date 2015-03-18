@@ -17,7 +17,7 @@ namespace Game
             DebugTexture_Arrows, DebugTexture_Num,
 
             BuildingTexture_1,
-            ExplosionTexture_1, MagicTexture,
+            ExplosionTexture_1, MagicTexture, SmokeTexture,
             UnitTexture_1, UnitTexture_2, UnitTexture_4, UnitTexture_8, UnitTexture_16,
             ShadowTexture,
 
@@ -49,6 +49,7 @@ namespace Game
             
             ExplosionTexture_1  = LoadTexture("BuildingExplosion_1");
             MagicTexture        = LoadTexture("MagicEffect");
+            SmokeTexture        = LoadTexture("SmokeEffect");
 
             UnitTexture_1       = LoadTexture("Soldier_1");
             UnitTexture_2       = LoadTexture("Soldier_2");

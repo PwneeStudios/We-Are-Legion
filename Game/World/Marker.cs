@@ -26,7 +26,7 @@ namespace Game
         }
     }
 
-    public enum DrawOrder { AfterTiles, AfterUnits }
+    public enum DrawOrder { AfterTiles, AfterUnits, AfterMouse }
 
     public class Marker : BaseShader
     {
