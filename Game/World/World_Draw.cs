@@ -353,7 +353,10 @@ namespace Game
 
             DrawMinimap();
             DrawTopUi();
+        }
 
+        public void DrawUi()
+        {
             DrawMouseUi();
             Markers.Draw(DrawOrder.AfterMouse);
             DrawSelectedInfo();

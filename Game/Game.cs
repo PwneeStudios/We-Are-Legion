@@ -11,15 +11,42 @@ using Microsoft.Xna.Framework.Input;
 using FragSharpHelper;
 using FragSharpFramework;
 
+using Awesomium.Core;
+using Awesomium.Core.Data;
+using AwesomiumXNA;
+
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 namespace Game
 {
+    public class SampleDataSource : DataSource
+    {
+        protected override void OnRequest(DataSourceRequest request)
+        {
+            Console.WriteLine("Request for: " + request.Path);
+
+            var response = new DataSourceResponse();
+            //var data = File.ReadAllBytes(Environment.CurrentDirectory + @"\..\..\..\html\" + request.Path);
+            var data = File.ReadAllBytes(Environment.CurrentDirectory + @"\..\..\..\html\" + request.Path);
+
+            IntPtr unmanagedPointer = Marshal.AllocHGlobal(data.Length);
+            Marshal.Copy(data, 0, unmanagedPointer, data.Length);
+
+            response.Buffer = unmanagedPointer;
+            response.MimeType = "text/html";
+            response.Size = (uint)data.Length;
+            SendResponse(request, response);
+
+            Marshal.FreeHGlobal(unmanagedPointer);
+        }
+    }
+
     public class GameClass : Microsoft.Xna.Framework.Game
     {
         public static bool GameActive { get { return GameClass.Game.IsActive || Program.AlwaysActive; } }
@@ -28,7 +55,7 @@ namespace Game
         public static GameTime Time;
         public static double ElapsedSeconds { get { return Time.ElapsedGameTime.TotalSeconds; } }
 
-        public const bool UnlimitedSpeed = false;
+        public const bool UnlimitedSpeed = true;
         public const bool MouseEnabled = true;
 
         public static GraphicsDeviceManager GraphicsManager { get { return Game.graphics; } }
@@ -39,6 +66,9 @@ namespace Game
         public static bool HasFocus { get { return Game.IsActive; } }
 
         GraphicsDeviceManager graphics;
+
+        JSObject xnaObj;
+        private AwesomiumComponent awesomium;
 
         public static World World;
         public static DataGroup Data { get { return World.DataGroup; } }
@@ -98,6 +128,74 @@ namespace Game
             }
         }
 
+        void AwesomiumInitialize()
+        {
+            awesomium = new AwesomiumComponent(this, GraphicsDevice.Viewport.Bounds);
+            Console.WriteLine("GraphicsDevice.Viewport.Bounds");
+            Console.WriteLine(GraphicsDevice.Viewport.Bounds);
+            Console.WriteLine(GraphicsDevice.Viewport.Bounds.Width);
+            //awesomium = new AwesomiumComponent(this, new Rectangle(0, 0, 1920, 1080));
+            awesomium.WebView.ParentWindow = Window.Handle;
+
+            // Don't forget to add the awesomium component to the game
+            Components.Add(awesomium);
+
+            // Add a data source that will simply act as a pass-through
+            awesomium.WebView.WebSession.AddDataSource("sample", new SampleDataSource());
+
+            // This will trap all console messages
+            awesomium.WebView.ConsoleMessage += WebView_ConsoleMessage;
+
+            // A document must be loaded in order for me to make a global JS object, but the presence of
+            // the global JS object affects the first page to be loaded, so give it an egg:
+            awesomium.WebView.LoadHTML("<html><head><title>Loading...</title></head><body></body></html>");
+            while (!awesomium.WebView.IsDocumentReady)
+            {
+                WebCore.Update();
+            }
+
+            // Trap log commands so that we can differentiate between log statements and JS errors
+            JSObject console = awesomium.WebView.CreateGlobalJavascriptObject("console");
+            console.Bind("log", WebView_ConsoleLog);
+            console.Bind("dir", WebView_ConsoleLog);
+
+            // Create an object that will allow JS inside Awesomium to communicate with XNA
+            xnaObj = awesomium.WebView.CreateGlobalJavascriptObject("xna");
+            xnaObj.Bind("exit", OnExit);
+
+            // Some stuff I wrote for mouse handling on the HUD vs the Game
+            xnaObj.Bind("OnMouseUp", OnMouseUp);
+            xnaObj.Bind("OnMouseDown", OnMouseDown);
+
+            xnaObj.Bind("btnUpPressed", btnUpPressed);
+            xnaObj.Bind("btnDownPressed", btnDownPressed);
+            xnaObj.Bind("btnLeftPressed", btnLeftPressed);
+            xnaObj.Bind("btnRightPressed", btnRightPressed);
+
+            awesomium.WebView.Source = @"asset://sample/index.html".ToUri();
+        }
+
+        JSValue WebView_ConsoleLog(object sender, JavascriptMethodEventArgs javascriptMethodEventArgs)
+        {
+            Console.WriteLine(javascriptMethodEventArgs.Arguments[0].ToString());
+            return JSValue.Null;
+        }
+
+        void WebView_ConsoleMessage(object sender, ConsoleMessageEventArgs e)
+        {
+            // All JS errors will come here
+            throw new Exception(String.Format("Awesomium JS Error: {0}, {1} on line {2}", e.Message, e.Source, e.LineNumber));
+        }
+
+        /// <summary>
+        /// On Exit callback from JavaScript from Awesomium
+        /// </summary>
+        public JSValue OnExit(object sender, JavascriptMethodEventArgs e)
+        {
+            Exit();
+            return JSValue.Null;
+        }
+
         protected override void Initialize()
         {
 #if DEBUG
@@ -122,6 +220,8 @@ namespace Game
             Spells.Initialize();
 
             Networking.Start();
+
+            AwesomiumInitialize();
 
             base.Initialize();
         }
@@ -493,6 +593,17 @@ namespace Game
 
                     DrawGame(gameTime);
 
+                    // Awesomium should be drawn after the game has been drawn, assuming it's acting as a HUD
+                    if (awesomium.WebViewTexture != null)
+                    {
+                        Render.StartText();
+                        Render.MySpriteBatch.Draw(awesomium.WebViewTexture, GraphicsDevice.Viewport.Bounds, Color.White);
+                        Render.EndText();
+                        //DrawFullScreen(awesomium.WebViewTexture);
+                    }
+
+                    World.DrawUi();
+
                     if (TimeSinceLoad < 1.5f)
                     {
                         BlackOverlay(1f - (float)(TimeSinceLoad - 1.3f) / .2f);
@@ -575,6 +686,49 @@ namespace Game
             }
 
             World.Draw();
+        }
+
+        protected JSValue OnMouseDown(object sender, JavascriptMethodEventArgs e)
+        {
+            bool mouseDownOverHUD = e.Arguments[0];
+            MouseButton mouseButton = (MouseButton)(int)e.Arguments[1];
+            return JSValue.Null;
+        }
+
+        protected JSValue OnMouseUp(object sender, JavascriptMethodEventArgs e)
+        {
+            bool mouseUpOverHUD = e.Arguments[0];
+            MouseButton mouseButton = (MouseButton)(int)e.Arguments[1];
+            bool clickHandled = mouseUpOverHUD;
+
+            Console.WriteLine("Click was " + (clickHandled ? "" : "not ") + "handled by the Web UI.");
+            //Rectangle stan = new Rectangle((int)stanPosition.X, (int)stanPosition.Y, stanTexture.Width, stanTexture.Height);
+            //if (stan.Contains(mouseState.X, mouseState.Y))
+            //{
+            //    Console.WriteLine(mouseButton.ToString() + " clicked on Stan, and it was " + (clickHandled ? "" : "not ") + "handled by the Web UI");
+            //}
+
+            return JSValue.Null;
+        }
+
+        protected JSValue btnUpPressed(object sender, JavascriptMethodEventArgs e)
+        {
+            return JSValue.Null;
+        }
+
+        protected JSValue btnDownPressed(object sender, JavascriptMethodEventArgs e)
+        {
+            return JSValue.Null;
+        }
+
+        protected JSValue btnLeftPressed(object sender, JavascriptMethodEventArgs e)
+        {
+            return JSValue.Null;
+        }
+
+        protected JSValue btnRightPressed(object sender, JavascriptMethodEventArgs e)
+        {
+            return JSValue.Null;
         }
     }
 }

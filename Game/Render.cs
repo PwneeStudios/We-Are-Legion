@@ -24,7 +24,7 @@ namespace Game
 
     public static class Render
     {
-        static SpriteBatch MySpriteBatch;
+        public static SpriteBatch MySpriteBatch;
         
         static SpriteFont Font1, Font2, Font3;
 

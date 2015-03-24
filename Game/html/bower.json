@@ -1,0 +1,27 @@
+{
+  "name": "game",
+  "version": "0.5.0",
+  "description": "Game2 front-end UI",
+  "main": "index.html",
+  "moduleType": [
+    "amd"
+  ],
+  "authors": [
+    "Pwnee Studios"
+  ],
+  "license": "MIT",
+  "homepage": "www.pwnee.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "require": "*",
+    "react": "~0.13.1",
+    "react-bootstrap": "~0.17.0"
+  }
+}
