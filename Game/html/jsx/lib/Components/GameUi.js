@@ -49,7 +49,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
             var width = this.props.width;
             var height = width * image.aspect;
             
-            var button = <button className="UiButton" style={{'background-image': 'url('+image.url+')'}} />;
+            var button = <button className="UiButton" style={{backgroundImage: 'url('+image.url+')'}} />;
             
             var body;
             if (this.props.overlay) {
@@ -62,14 +62,46 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
             }
             
             return (
-                <div style={{width:width+'%', height:0, 'padding-bottom':height+'%', position:'relative', 'float':'left'}}>
+                <div style={{width:width+'%', height:0, paddingBottom:height+'%', position:'relative', 'float':'left'}}>
+                    {body}
+                </div>
+            );
+        }
+    };
+
+    var UiImageMixin = {
+        render: function() {
+            var image = this.props.image;
+            image.aspect = image.height / image.width;
+            
+            var width = this.props.width;
+            var height = width * image.aspect;
+            
+            var button = <div className="UiImage" style={{backgroundImage: 'url('+image.url+')'}} />;
+            
+            var body;
+            if (this.props.overlay) {
+                body = 
+                    <OverlayTrigger placement="top" overlay={this.props.overlay} delayShow={300} delayHide={150}>
+                        {button}
+                    </OverlayTrigger>
+            } else {
+                body = button;
+            }
+            
+            return (
+                <div style={{width:width+'%', height:0, paddingBottom:height+'%', position:'relative', 'float':'left'}}>
                     {body}
                 </div>
             );
         }
     };
     
-    var UiButton = React.createClass({
+    var UiImage = React.createClass({
+        mixins: [UiButtonMixin],
+    });
+    
+    var ActionButton = React.createClass({
         mixins: [UiButtonMixin],
         
         getDefaultProps: function() {
@@ -80,6 +112,22 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                     width:160,
                     height:160,
                     url:'css/UiButton.png',
+                },
+            };
+        },
+    });
+
+    var UnitBar = React.createClass({
+        mixins: [UiImageMixin],
+        
+        getDefaultProps: function() {
+            return {
+                width: 100,
+                
+                image: {
+                    width:869,
+                    height:60,
+                    url:'css/UnitBar.png',
                 },
             };
         },
@@ -99,21 +147,25 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         
             return (
                 <Div pos={pos(15,0)}>
+                    <Div pos={pos(20,5)} size={width(50)}>
+                        <UnitBar />
+                    </Div>
+
                     <Div pos={pos(0,75)} size={width(50)}>
                         <Input type="text" addonBefore="All" />
                     </Div>
                     
                     <Div pos={pos(0,80)}>
-                        <UiButton overlay={tooltip}/>
-                        <UiButton />
-                        <UiButton />
-                        <UiButton />
+                        <ActionButton overlay={tooltip}/>
+                        <ActionButton />
+                        <ActionButton />
+                        <ActionButton />
                         
                         <Gap width='1' />
                         
-                        <UiButton />
-                        <UiButton />
-                        <UiButton />
+                        <ActionButton />
+                        <ActionButton />
+                        <ActionButton />
                     </Div>
                 </Div>
             );
