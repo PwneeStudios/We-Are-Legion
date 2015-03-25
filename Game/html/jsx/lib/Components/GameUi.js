@@ -104,7 +104,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         render: function() {
             return (
                 <div>
-                    <UiButton width={7} image={{width:160, height:160, url:'css/UiButton.png'}} />
+                    <UiButton width={7} image={{width:160, height:160, url:'css/UiButton.png'}} {...this.props} />
                 </div>
             );
         },
@@ -135,7 +135,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
     
     return React.createClass({
         render: function() {
-            var tooltip = <Popover style={{position:'absolute', left:100, top:100}} title="Fireball"><strong>FIRE!</strong> Check this info.</Popover>;
+            var tooltip = <Popover title="Fireball"><strong>FIRE!</strong> Check this info.</Popover>;
         
             return (
                 <div>

@@ -104,7 +104,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         render: function() {
             return (
                 React.createElement("div", null, 
-                    React.createElement(UiButton, {width: 7, image: {width:160, height:160, url:'css/UiButton.png'}})
+                    React.createElement(UiButton, React.__spread({width: 7, image: {width:160, height:160, url:'css/UiButton.png'}},  this.props))
                 )
             );
         },
@@ -135,7 +135,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
     
     return React.createClass({
         render: function() {
-            var tooltip = React.createElement(Popover, {style: {position:'absolute', left:100, top:100}, title: "Fireball"}, React.createElement("strong", null, "FIRE!"), " Check this info.");
+            var tooltip = React.createElement(Popover, {title: "Fireball"}, React.createElement("strong", null, "FIRE!"), " Check this info.");
         
             return (
                 React.createElement("div", null, 
