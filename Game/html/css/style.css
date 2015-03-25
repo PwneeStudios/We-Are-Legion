@@ -1,11 +1,30 @@
 @import '../js/lib/bootstrap/dist/css/bootstrap.min.css';
 
+@font-face {
+    font-family: Chunkfive;
+    src: url("Chunkfive.otf") format("opentype");
+}
+
+p {
+    font-family: Chunkfive;
+    font-size: 1.4%;
+    color:rgba(236,236,236,255)
+}
+
 body {
     background-color:rgba(0,0,0,0);
     overflow:hidden;
+
+    user-select: none;
+    -webkit-user-select: none;
 }
 
-* { margin: 0; padding: 0; }
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
 
 /* ------
    Button

@@ -16,10 +16,15 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         };
     };
 
-    var width = function(x) {
+    var size = function(x, y) {
         return {
             width: x + '%',
+            height: y + '%',
         };
+    };
+
+    var width = function(x) {
+        return size(x, 100);
     };
 
     var Div = React.createClass({displayName: "Div",
@@ -31,8 +36,6 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
             
             style = _.assign(style, this.props.pos, this.props.size);
         
-            console.log(style);
-        
             return (
                 React.createElement("div", {style: style}, 
                     this.props.children
@@ -41,7 +44,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         }
     });
 
-    var UiButtonMixin = {
+    var UiButton = React.createClass({displayName: "UiButton",
         render: function() {
             var image = this.props.image;
             image.aspect = image.height / image.width;
@@ -67,9 +70,9 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                 )
             );
         }
-    };
+    });
 
-    var UiImageMixin = {
+    var UiImage = React.createClass({displayName: "UiImage",
         render: function() {
             var image = this.props.image;
             image.aspect = image.height / image.width;
@@ -95,41 +98,30 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                 )
             );
         }
-    };
-    
-    var UiImage = React.createClass({displayName: "UiImage",
-        mixins: [UiButtonMixin],
     });
     
-    var ActionButton = React.createClass({displayName: "ActionButton",
-        mixins: [UiButtonMixin],
-        
-        getDefaultProps: function() {
-            return {
-                width: 7,
-                
-                image: {
-                    width:160,
-                    height:160,
-                    url:'css/UiButton.png',
-                },
-            };
+    var ActionButton = React.createClass({displayName: "ActionButton",        
+        render: function() {
+            return (
+                React.createElement("div", null, 
+                    React.createElement(UiButton, {width: 7, image: {width:160, height:160, url:'css/UiButton.png'}})
+                )
+            );
         },
     });
 
-    var UnitBar = React.createClass({displayName: "UnitBar",
-        mixins: [UiImageMixin],
-        
-        getDefaultProps: function() {
-            return {
-                width: 100,
-                
-                image: {
-                    width:869,
-                    height:60,
-                    url:'css/UnitBar.png',
-                },
-            };
+    var UnitBar = React.createClass({displayName: "UnitBar",        
+        render: function() {
+            return (
+                React.createElement("div", null, 
+                    React.createElement(UiImage, {width: 100, image: {width:869, height:60, url:'css/UnitBar.png'}}), 
+                    React.createElement(Div, {pos: pos(0,.92)}, 
+                        React.createElement(Div, {pos: pos(2,0)}, React.createElement("p", null, "100")), 
+                        React.createElement(Div, {pos: pos(16,0)}, React.createElement("p", null, "100")), 
+                        React.createElement(Div, {pos: pos(30,0)}, React.createElement("p", null, "100"))
+                    )
+                )
+            );
         },
     });
 
@@ -143,29 +135,31 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
     
     return React.createClass({
         render: function() {
-            var tooltip = React.createElement(Popover, {title: "Fireball"}, React.createElement("strong", null, "FIRE!"), " Check this info.");
+            var tooltip = React.createElement(Popover, {style: {position:'absolute', left:100, top:100}, title: "Fireball"}, React.createElement("strong", null, "FIRE!"), " Check this info.");
         
             return (
-                React.createElement(Div, {pos: pos(15,0)}, 
-                    React.createElement(Div, {pos: pos(20,5), size: width(50)}, 
+                React.createElement("div", null, 
+                    React.createElement(Div, {pos: pos(50.5,.4), size: width(50)}, 
                         React.createElement(UnitBar, null)
                     ), 
 
-                    React.createElement(Div, {pos: pos(0,75), size: width(50)}, 
-                        React.createElement(Input, {type: "text", addonBefore: "All"})
-                    ), 
-                    
-                    React.createElement(Div, {pos: pos(0,80)}, 
-                        React.createElement(ActionButton, {overlay: tooltip}), 
-                        React.createElement(ActionButton, null), 
-                        React.createElement(ActionButton, null), 
-                        React.createElement(ActionButton, null), 
+                    React.createElement(Div, {pos: pos(15,0)}, 
+                        React.createElement(Div, {pos: pos(.35,80), size: width(49)}, 
+                            React.createElement(Input, {type: "text", addonBefore: "All"})
+                        ), 
                         
-                        React.createElement(Gap, {width: "1"}), 
-                        
-                        React.createElement(ActionButton, null), 
-                        React.createElement(ActionButton, null), 
-                        React.createElement(ActionButton, null)
+                        React.createElement(Div, {pos: pos(0,85)}, 
+                            React.createElement(ActionButton, {overlay: tooltip}), 
+                            React.createElement(ActionButton, null), 
+                            React.createElement(ActionButton, null), 
+                            React.createElement(ActionButton, null), 
+                            
+                            React.createElement(Gap, {width: "1"}), 
+                            
+                            React.createElement(ActionButton, null), 
+                            React.createElement(ActionButton, null), 
+                            React.createElement(ActionButton, null)
+                        )
                     )
                 )
             );

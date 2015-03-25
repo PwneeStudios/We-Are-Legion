@@ -3,6 +3,15 @@
 <head>
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <script data-main="js/app" src="js/lib/requirejs/require.js"></script>
+
+    <script>
+        onresize = onload = function() {
+            document.body.style.fontSize = window.innerWidth + 'px';
+        }
+        onscroll = function() {
+            window.scrollTo(0, 0);
+        }
+    </script>
 </head>
 <body>
     <div id="main-div"></div>
