@@ -350,13 +350,13 @@ namespace Game
             GridHelper.GraphicsDevice.SetRenderTarget(null);
 
             DrawGrids();
-
-            DrawMinimap();
-            DrawTopUi();
         }
 
         public void DrawUi()
         {
+            //DrawTopUi();
+            DrawMinimap();
+
             DrawMouseUi();
             Markers.Draw(DrawOrder.AfterMouse);
             DrawSelectedInfo();
@@ -364,7 +364,7 @@ namespace Game
             if (MyPlayerNumber == 0) return;
 
             Render.StartText();
-                DrawUiText();
+                //DrawUiText();
                 MapEditorUiText();
             Render.EndText();
         }

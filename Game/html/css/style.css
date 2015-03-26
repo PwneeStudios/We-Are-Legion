@@ -26,6 +26,11 @@ body {
     -webkit-user-select: none;
 }
 
+input {
+    user-select: text;
+    -webkit-user-select: text;
+}
+
 /* ------
    Button
    ------ */

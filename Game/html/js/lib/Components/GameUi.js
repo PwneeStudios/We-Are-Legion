@@ -44,8 +44,24 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         }
     });
 
-    var UiButton = React.createClass({displayName: "UiButton",
+    var RenderAtMixin = {
         render: function() {
+            if (this.props.pos) {
+                return (
+                    React.createElement(Div, React.__spread({},  this.props), 
+                        this.renderAt()
+                    )
+                );
+            } else {
+                return this.renderAt();
+            }
+        }
+    };
+
+    var UiButton = React.createClass({displayName: "UiButton",
+        mixins: [RenderAtMixin],
+        
+        renderAt: function() {
             var image = this.props.image;
             image.aspect = image.height / image.width;
             
@@ -73,23 +89,28 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
     });
 
     var UiImage = React.createClass({displayName: "UiImage",
-        render: function() {
+        mixins: [RenderAtMixin],
+    
+        renderAt: function() {
             var image = this.props.image;
             image.aspect = image.height / image.width;
             
             var width = this.props.width;
             var height = width * image.aspect;
             
-            var button = React.createElement("div", {className: "UiImage", style: {backgroundImage: 'url('+image.url+')'}});
+            var style = {backgroundImage: 'url('+image.url+')'};
+            style = _.assign(style, this.props.style);
+            
+            var img = React.createElement("div", {className: "UiImage", style: style});
             
             var body;
             if (this.props.overlay) {
                 body = 
                     React.createElement(OverlayTrigger, {placement: "top", overlay: this.props.overlay, delayShow: 300, delayHide: 150}, 
-                        button
+                        img
                     )
             } else {
-                body = button;
+                body = img;
             }
             
             return (
@@ -100,8 +121,10 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         }
     });
     
-    var ActionButton = React.createClass({displayName: "ActionButton",        
-        render: function() {
+    var ActionButton = React.createClass({displayName: "ActionButton",
+        mixins: [RenderAtMixin],
+        
+        renderAt: function() {
             return (
                 React.createElement("div", null, 
                     React.createElement(UiButton, React.__spread({width: 7, image: {width:160, height:160, url:'css/UiButton.png'}},  this.props))
@@ -110,8 +133,10 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         },
     });
 
-    var UnitBar = React.createClass({displayName: "UnitBar",        
-        render: function() {
+    var UnitBar = React.createClass({displayName: "UnitBar",
+        mixins: [RenderAtMixin],
+        
+        renderAt: function() {
             return (
                 React.createElement("div", null, 
                     React.createElement(UiImage, {width: 100, image: {width:869, height:60, url:'css/UnitBar.png'}}), 
@@ -125,6 +150,41 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         },
     });
 
+    var Minimap = React.createClass({displayName: "Minimap",
+        mixins: [RenderAtMixin],
+        
+        renderAt: function() {
+            return (
+                React.createElement("div", null, 
+                    React.createElement(UiImage, {pos: pos(0,0), width: 100, image: {width:245, height:254, url:'css/Minimap.png'}}), 
+                    React.createElement(UiImage, {pos: pos(3.5,.35), width: 91, image: {width:245, height:254, url:'css/FakeMinimap.png'}, style: {position:'absolute',left:0,top:0,visibility:'hidden'}})
+                )
+            );
+        },
+    });
+
+    var ChatInput = React.createClass({displayName: "ChatInput",
+        mixins: [RenderAtMixin],
+        
+        getInitialState: function() {
+            return {
+                value: '',
+            }
+        },
+    
+        onTextChange: function() {
+            this.setState({
+                value:this.refs.input.getValue()
+            });
+        },
+
+        renderAt: function() {
+            return (
+                React.createElement(Input, {value: this.state.value, ref: "input", type: "text", addonBefore: "All", onChange: this.onTextChange})
+            );
+        },
+    });
+    
     var Gap = React.createClass({displayName: "Gap",
         render: function() {
             return (
@@ -133,20 +193,17 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         }
     });
     
-    return React.createClass({
+    return React.createClass({        
         render: function() {
             var tooltip = React.createElement(Popover, {title: "Fireball"}, React.createElement("strong", null, "FIRE!"), " Check this info.");
         
             return (
                 React.createElement("div", null, 
-                    React.createElement(Div, {pos: pos(50.5,.4), size: width(50)}, 
-                        React.createElement(UnitBar, null)
-                    ), 
+                    React.createElement(UnitBar, {pos: pos(50.5,.4), size: width(50)}), 
+                    React.createElement(Minimap, {pos: pos(.2,79), size: width(11)}), 
 
                     React.createElement(Div, {pos: pos(15,0)}, 
-                        React.createElement(Div, {pos: pos(.35,80), size: width(49)}, 
-                            React.createElement(Input, {type: "text", addonBefore: "All"})
-                        ), 
+                        React.createElement(ChatInput, {pos: pos(.35,80), size: width(49)}), 
                         
                         React.createElement(Div, {pos: pos(0,85)}, 
                             React.createElement(ActionButton, {overlay: tooltip}), 

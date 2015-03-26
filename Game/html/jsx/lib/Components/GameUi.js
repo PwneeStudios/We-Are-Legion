@@ -44,8 +44,24 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         }
     });
 
-    var UiButton = React.createClass({
+    var RenderAtMixin = {
         render: function() {
+            if (this.props.pos) {
+                return (
+                    <Div {...this.props}>
+                        {this.renderAt()}
+                    </Div>
+                );
+            } else {
+                return this.renderAt();
+            }
+        }
+    };
+
+    var UiButton = React.createClass({
+        mixins: [RenderAtMixin],
+        
+        renderAt: function() {
             var image = this.props.image;
             image.aspect = image.height / image.width;
             
@@ -73,23 +89,28 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
     });
 
     var UiImage = React.createClass({
-        render: function() {
+        mixins: [RenderAtMixin],
+    
+        renderAt: function() {
             var image = this.props.image;
             image.aspect = image.height / image.width;
             
             var width = this.props.width;
             var height = width * image.aspect;
             
-            var button = <div className="UiImage" style={{backgroundImage: 'url('+image.url+')'}} />;
+            var style = {backgroundImage: 'url('+image.url+')'};
+            style = _.assign(style, this.props.style);
+            
+            var img = <div className="UiImage" style={style} />;
             
             var body;
             if (this.props.overlay) {
                 body = 
                     <OverlayTrigger placement="top" overlay={this.props.overlay} delayShow={300} delayHide={150}>
-                        {button}
+                        {img}
                     </OverlayTrigger>
             } else {
-                body = button;
+                body = img;
             }
             
             return (
@@ -100,8 +121,10 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         }
     });
     
-    var ActionButton = React.createClass({        
-        render: function() {
+    var ActionButton = React.createClass({
+        mixins: [RenderAtMixin],
+        
+        renderAt: function() {
             return (
                 <div>
                     <UiButton width={7} image={{width:160, height:160, url:'css/UiButton.png'}} {...this.props} />
@@ -110,8 +133,10 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         },
     });
 
-    var UnitBar = React.createClass({        
-        render: function() {
+    var UnitBar = React.createClass({
+        mixins: [RenderAtMixin],
+        
+        renderAt: function() {
             return (
                 <div>
                     <UiImage width={100} image={{width:869, height:60, url:'css/UnitBar.png'}} />
@@ -125,6 +150,41 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         },
     });
 
+    var Minimap = React.createClass({
+        mixins: [RenderAtMixin],
+        
+        renderAt: function() {
+            return (
+                <div>
+                    <UiImage pos={pos(0,0)} width={100} image={{width:245, height:254, url:'css/Minimap.png'}} />
+                    <UiImage pos={pos(3.5,.35)} width={91} image={{width:245, height:254, url:'css/FakeMinimap.png'}} style={{position:'absolute',left:0,top:0,visibility:'hidden'}}/>
+                </div>
+            );
+        },
+    });
+
+    var ChatInput = React.createClass({
+        mixins: [RenderAtMixin],
+        
+        getInitialState: function() {
+            return {
+                value: '',
+            }
+        },
+    
+        onTextChange: function() {
+            this.setState({
+                value:this.refs.input.getValue()
+            });
+        },
+
+        renderAt: function() {
+            return (
+                <Input value={this.state.value} ref="input" type="text" addonBefore="All" onChange={this.onTextChange} />
+            );
+        },
+    });
+    
     var Gap = React.createClass({
         render: function() {
             return (
@@ -133,20 +193,17 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         }
     });
     
-    return React.createClass({
+    return React.createClass({        
         render: function() {
             var tooltip = <Popover title="Fireball"><strong>FIRE!</strong> Check this info.</Popover>;
         
             return (
                 <div>
-                    <Div pos={pos(50.5,.4)} size={width(50)}>
-                        <UnitBar />
-                    </Div>
+                    <UnitBar pos={pos(50.5,.4)} size={width(50)} />
+                    <Minimap pos={pos(.2,79)} size={width(11)} />
 
                     <Div pos={pos(15,0)}>
-                        <Div pos={pos(.35,80)} size={width(49)}>
-                            <Input type="text" addonBefore="All" />
-                        </Div>
+                        <ChatInput pos={pos(.35,80)} size={width(49)} />
                         
                         <Div pos={pos(0,85)}>
                             <ActionButton overlay={tooltip}/>

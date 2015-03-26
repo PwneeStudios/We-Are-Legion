@@ -198,7 +198,20 @@ namespace AwesomiumXNA
                 case WindowsMessage.KeyDown:
                 case WindowsMessage.KeyUp:
                 case WindowsMessage.Char:
-                    WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam, 0));
+                    //if (lParam.WParam.ToInt32() == 8)
+                    //{
+                    //    Console.WriteLine("Skip key event.");
+                    //    break;
+                    //}
+                    //else
+                    //{
+                    //    Console.WriteLine("Do key event: {0}, {1}, {2}", lParam.Msg, lParam.WParam, lParam.LParam);
+                    //    WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam, 0));
+                    //}
+
+                    if (WebView.FocusedElementType == FocusedElementType.TextInput)
+                        WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam, 0));
+
                     break;
 
                 case WindowsMessage.MouseMove:

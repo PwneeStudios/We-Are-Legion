@@ -131,6 +131,7 @@ namespace Game
         void AwesomiumInitialize()
         {
             awesomium = new AwesomiumComponent(this, GraphicsDevice.Viewport.Bounds);
+            
             Console.WriteLine("GraphicsDevice.Viewport.Bounds");
             Console.WriteLine(GraphicsDevice.Viewport.Bounds);
             Console.WriteLine(GraphicsDevice.Viewport.Bounds.Width);
