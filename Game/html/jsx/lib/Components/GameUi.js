@@ -192,6 +192,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
             return (
                 <div>
                     <UiImage pos={pos(0,0)} width={100} image={{width:502, height:157, url:'css/UnitBox.png'}} />
+                    <Div pos={pos(-6,5)}><p style={{fontSize: '3.3%', textAlign: 'right'}}>162,581</p></Div>
                 </div>
             );
         },
@@ -215,7 +216,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                     <Minimap pos={pos(.2,79)} size={width(11)} />
 
                     <Div pos={pos(15,0)}>
-                        <ChatInput pos={pos(.35,80)} size={width(49)} />
+                        {/*<ChatInput pos={pos(.35,80)} size={width(49)} />*/}
                         
                         <Div pos={pos(0,85)}>
                             <ActionButton overlay={tooltip}/>
@@ -230,7 +231,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                             <ActionButton />
                         </Div>
                         
-                        <UnitBox pos={pos(60,85)} size={width(23)} />
+                        <UnitBox pos={pos(58,85)} size={width(25)} />
                     </Div>
                 </div>
             );

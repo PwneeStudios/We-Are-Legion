@@ -357,6 +357,8 @@ namespace Game
 
         public void DrawUi()
         {
+            Render.StandardRenderSetup();
+
             //DrawTopUi();
             DrawMinimap();
             DrawSelectedInfo();

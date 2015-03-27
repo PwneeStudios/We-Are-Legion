@@ -29,7 +29,7 @@ namespace Game
     public partial class DrawColoredTexture : BaseShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, PointSampler Texture, color clr)
+        color FragmentShader(VertexOut vertex, TextureSampler<Clamp, Point> Texture, color clr)
         {
             color output;
 

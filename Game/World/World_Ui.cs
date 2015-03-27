@@ -29,11 +29,11 @@ namespace Game
 
                     bool building_selected = UnitType.BuildingVals.Any(type => DataGroup.UnitSummary[Int(type) - 1]);
 
-                    vec2 size = vec(.1f, .1f);
+                    vec2 size = vec(.145f, .145f);
                     float building_scale = 1.4f;
                     float building_shift = building_selected ? (building_scale - 1) * 2 * size.x : 0;
                     vec2 shift = vec(-size.x, 0);
-                    vec2 start = vec(CameraAspect, -1) + vec(-.1f, .06f);
+                    vec2 start = vec(CameraAspect, -1) + vec(-.1f, .21f);
                     vec2 cur_pos = start - vec(building_shift, 0);
 
                     //unit_count = string.Format("{0:#,##0}", DataGroup.UnitCountUi);
@@ -150,7 +150,7 @@ namespace Game
                 quad = new RectangleQuad();
             }
 
-            quad.SetupVertices(pos, pos + 2 * new vec2(size.x, -size.y), new vec2(0, uv_size.y) + uv_offset, new vec2(uv_size.x, 0) + uv_offset);
+            quad.SetupVertices(pos, pos + 2 * new vec2(size.x, -size.y), new vec2(0, uv_size.y) + uv_offset, new vec2(uv_size.x, 0.005f * uv_size.y) + uv_offset);
             quad.Texture = Assets.UnitTexture_1;
 
             return quad;

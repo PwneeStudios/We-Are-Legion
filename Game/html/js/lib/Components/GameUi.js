@@ -191,7 +191,8 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         renderAt: function() {
             return (
                 React.createElement("div", null, 
-                    React.createElement(UiImage, {pos: pos(0,0), width: 100, image: {width:502, height:157, url:'css/UnitBox.png'}})
+                    React.createElement(UiImage, {pos: pos(0,0), width: 100, image: {width:502, height:157, url:'css/UnitBox.png'}}), 
+                    React.createElement(Div, {pos: pos(-6,5)}, React.createElement("p", {style: {fontSize: '3.3%', textAlign: 'right'}}, "162,581"))
                 )
             );
         },
@@ -215,7 +216,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                     React.createElement(Minimap, {pos: pos(.2,79), size: width(11)}), 
 
                     React.createElement(Div, {pos: pos(15,0)}, 
-                        React.createElement(ChatInput, {pos: pos(.35,80), size: width(49)}), 
+                        /*<ChatInput pos={pos(.35,80)} size={width(49)} />*/
                         
                         React.createElement(Div, {pos: pos(0,85)}, 
                             React.createElement(ActionButton, {overlay: tooltip}), 
@@ -230,7 +231,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                             React.createElement(ActionButton, null)
                         ), 
                         
-                        React.createElement(UnitBox, {pos: pos(60,85), size: width(23)})
+                        React.createElement(UnitBox, {pos: pos(58,85), size: width(25)})
                     )
                 )
             );

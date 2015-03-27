@@ -35,8 +35,8 @@ sampler fs_param_Texture : register(s1) = sampler_state
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 float4 fs_param_clr;
