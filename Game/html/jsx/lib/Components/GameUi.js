@@ -184,7 +184,19 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
             );
         },
     });
-    
+
+    var UnitBox = React.createClass({
+        mixins: [RenderAtMixin],
+        
+        renderAt: function() {
+            return (
+                <div>
+                    <UiImage pos={pos(0,0)} width={100} image={{width:502, height:157, url:'css/UnitBox.png'}} />
+                </div>
+            );
+        },
+    });
+
     var Gap = React.createClass({
         render: function() {
             return (
@@ -217,6 +229,8 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                             <ActionButton />
                             <ActionButton />
                         </Div>
+                        
+                        <UnitBox pos={pos(60,85)} size={width(23)} />
                     </Div>
                 </div>
             );

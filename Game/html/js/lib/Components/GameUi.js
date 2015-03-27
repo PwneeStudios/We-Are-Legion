@@ -184,7 +184,19 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
             );
         },
     });
-    
+
+    var UnitBox = React.createClass({displayName: "UnitBox",
+        mixins: [RenderAtMixin],
+        
+        renderAt: function() {
+            return (
+                React.createElement("div", null, 
+                    React.createElement(UiImage, {pos: pos(0,0), width: 100, image: {width:502, height:157, url:'css/UnitBox.png'}})
+                )
+            );
+        },
+    });
+
     var Gap = React.createClass({displayName: "Gap",
         render: function() {
             return (
@@ -216,7 +228,9 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                             React.createElement(ActionButton, null), 
                             React.createElement(ActionButton, null), 
                             React.createElement(ActionButton, null)
-                        )
+                        ), 
+                        
+                        React.createElement(UnitBox, {pos: pos(60,85), size: width(23)})
                     )
                 )
             );

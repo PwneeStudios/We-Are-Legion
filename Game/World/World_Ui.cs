@@ -22,9 +22,9 @@ namespace Game
 
         void DrawSelectedInfo()
         {
-            switch (CurUserMode)
-            {
-                case UserMode.Select:
+            //switch (CurUserMode)
+            //{
+            //    case UserMode.Select:
                     color clr = rgba(0x888888, .5f).Premultiplied;
 
                     bool building_selected = UnitType.BuildingVals.Any(type => DataGroup.UnitSummary[Int(type) - 1]);
@@ -36,16 +36,14 @@ namespace Game
                     vec2 start = vec(CameraAspect, -1) + vec(-.1f, .06f);
                     vec2 cur_pos = start - vec(building_shift, 0);
 
-                    unit_count = string.Format("{0:#,##0}", DataGroup.UnitCountUi);
-                    float text_width = Render.MeasureString(unit_count, 1f).x * 1f;
-
-                    float count = NumUnitTypesSelected();
-                    if (count > 0) count += .5f;
-                    float ui_box_width = .1f * count / 2 + UiSizeToScreenSize(vec(text_width, 0)).x + size.x * .7f + building_shift / 2;
-
-                    vec2 box_size = vec(ui_box_width, .1f);
-                    DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, clr);
-                    RectangleQuad.Draw(GameClass.Graphics, start - box_size.FlipY() + vec(.008f, -.008f), box_size);
+                    //unit_count = string.Format("{0:#,##0}", DataGroup.UnitCountUi);
+                    //float text_width = Render.MeasureString(unit_count, 1f).x * 1f;
+                    //float count = NumUnitTypesSelected();
+                    //if (count > 0) count += .5f;
+                    //float ui_box_width = .1f * count / 2 + UiSizeToScreenSize(vec(text_width, 0)).x + size.x * .7f + building_shift / 2;
+                    //vec2 box_size = vec(ui_box_width, .1f);
+                    //DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, clr);
+                    //RectangleQuad.Draw(GameClass.Graphics, start - box_size.FlipY() + vec(.008f, -.008f), box_size);
 
                     for (int i = Int(UnitType.Count) - 1; i>= 0 ; i--)
                     {
@@ -74,13 +72,12 @@ namespace Game
                         }
                     }
 
-                    if (DataGroup.UnitCountUi > 0)
-                        cur_pos += shift;
+                    //if (DataGroup.UnitCountUi > 0)
+                    //    cur_pos += shift;
+                    //count_text_pos = cur_pos + vec(-.023f, -0.0225f);
 
-                    count_text_pos = cur_pos + vec(-.023f, -0.0225f);
-
-                    break;
-            }
+            //        break;
+            //}
         }
 
         void DrawUi_CursorText()

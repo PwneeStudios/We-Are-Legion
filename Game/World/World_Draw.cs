@@ -350,21 +350,22 @@ namespace Game
             GridHelper.GraphicsDevice.SetRenderTarget(null);
 
             DrawGrids();
+            
+            DrawMouseUi(AfterUi: false);
+            Markers.Draw(DrawOrder.AfterMouse);
         }
 
         public void DrawUi()
         {
             //DrawTopUi();
             DrawMinimap();
-
-            DrawMouseUi();
-            Markers.Draw(DrawOrder.AfterMouse);
             DrawSelectedInfo();
+            DrawMouseUi(AfterUi: true);
 
             if (MyPlayerNumber == 0) return;
 
             Render.StartText();
-                //DrawUiText();
+                DrawUiText();
                 MapEditorUiText();
             Render.EndText();
         }
@@ -494,18 +495,18 @@ namespace Game
         void DrawUiText()
         {
             // Top Ui
-            Ui.ActiveUi = TopUi_Player1;
-            DrawPlayerInfo(MyPlayerNumber);
+            //Ui.ActiveUi = TopUi_Player1;
+            //DrawPlayerInfo(MyPlayerNumber);
             //Ui.ActiveUi = TopUi_Player2;
             //DrawPlayerInfo(2);
 
             //// Ui Text
             //DrawUi_TopInfo();
             //DrawUi_PlayerGrid();
-            DrawUi_CursorText();
+            //DrawUi_CursorText();
 
             // Spell
-            DrawUi_SpellText();
+            //DrawUi_SpellText();
 
             // User Messages
             UserMessages.Update();
@@ -577,7 +578,7 @@ namespace Game
             }
         }
 
-        void DrawMouseUi()
+        void DrawMouseUi(bool AfterUi)
         {
             CanPlaceItem = false;
             if (GameClass.MouseEnabled)
@@ -585,12 +586,17 @@ namespace Game
                 switch (CurUserMode)
                 { 
                     case UserMode.PlaceBuilding:
+                        if (AfterUi) break;
+
                         DrawAvailabilityGrid();
                         DrawPotentialBuilding();
                         DrawArrowCursor();
+
                         break;
 
                     case UserMode.Painting:
+                        if (AfterUi) break;
+
                         if (UnitPlaceStyle == UnitDistribution.Single)
                         {
                             UpdateCellAvailability();
@@ -606,6 +612,8 @@ namespace Game
                         break;
 
                     case UserMode.Select:
+                        if (!AfterUi) break;
+
                         if (LineSelect)
                             DrawCircleCursor();
                         else
@@ -613,6 +621,8 @@ namespace Game
                         break;
 
                     case UserMode.CastSpell:
+                        if (AfterUi) break;
+
                         CurSpell.DrawCursor();
                         break;
                 }
