@@ -206,10 +206,59 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         }
     });
     
+    var Tooltips = {
+        'Fireball': {
+            tooltip:
+                <Popover title="Fireball">
+                    <strong>FIRE!</strong> Everything will <em>burrrrnnn</em>. Ahhh-hahaha.
+                    Um. Except dragonlords. They have anti-magic and stuff. Also, anything near a dragonlord. Again... uh, anti-magic. But, <em>everything else</em>... burrrrnnns. Including your own soldiers, so be careful. For real.
+                </Popover>,
+        },
+        'Skeletons': {
+            tooltip:
+                <Popover title="Raise Skeletal Army">
+                    <strong>Command the dead!</strong> Raise an army of the dead. All corpses not being stomped on will rise up and fight for your cause in the area you select.
+                </Popover>,
+        },
+        'Necromancer': {
+            tooltip:
+                <Popover title="Summon Necromancer">
+                    <strong>Have <em>someone else</em> command the dead!</strong> Summon forth a single, skillful necromancer at a given location.
+                    This lord of death will raise any corpse near them into a skeletal warrior ready to thirst for blood and brains.
+                </Popover>,
+        },
+        'Terracotta': {
+            tooltip:
+                <Popover title="Raise Terracotta Army">
+                    <strong>Clay soldiers! YESSSS.</strong> Mother Earth says: take my earth-warrior-children things! Use them to slay the filthy humans and/or animals!
+                    Kill everything! Mother Earth AAANGRRY.
+                    Seriously. In a given <strong>open</strong> area you select, summon forth an army of clay warriors to do your worst biddings.
+                </Popover>,
+        },
+        
+        'Barracks': {
+            tooltip:
+                <Popover title="Build Barracks">
+                    <strong>The engine of war.</strong> This building that dudes hang out in and train for battle and stuff. Also where new 'recruits' magically appear, ready for battle.
+                </Popover>,
+        },
+        'Goldmine': {
+            tooltip:
+                <Popover title="Gold Mine">
+                    <strong>Gooooolllld.</strong> Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign.
+                </Popover>,
+        },
+        'Jademine': {
+            tooltip:
+                <Popover title="Jade Mine">
+                    <strong>Green is the color of... MAGIC.</strong> From Jade flows all magic, both real and imaginary. Place this jade mine on a jade source on the map.
+                    Once built the mine will continuously generate jade for you to use in super sweet <strong>Dragonlord spells</strong>.
+                </Popover>,
+        },
+    };
+    
     return React.createClass({        
         render: function() {
-            var tooltip = <Popover title="Fireball"><strong>FIRE!</strong> Check this info.</Popover>;
-        
             return (
                 <div>
                     <UnitBar pos={pos(50.5,.4)} size={width(50)} />
@@ -219,16 +268,16 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                         {/*<ChatInput pos={pos(.35,80)} size={width(49)} />*/}
                         
                         <Div pos={pos(0,85)}>
-                            <ActionButton overlay={tooltip}/>
-                            <ActionButton />
-                            <ActionButton />
-                            <ActionButton />
+                            <ActionButton overlay={Tooltips.Fireball.tooltip} />
+                            <ActionButton overlay={Tooltips.Skeletons.tooltip} />
+                            <ActionButton overlay={Tooltips.Necromancer.tooltip} />
+                            <ActionButton overlay={Tooltips.Terracotta.tooltip} />
                             
                             <Gap width='1' />
                             
-                            <ActionButton />
-                            <ActionButton />
-                            <ActionButton />
+                            <ActionButton overlay={Tooltips.Barracks.tooltip} />
+                            <ActionButton overlay={Tooltips.Goldmine.tooltip} />
+                            <ActionButton overlay={Tooltips.Jademine.tooltip} />
                         </Div>
                         
                         <UnitBox pos={pos(58,85)} size={width(25)} />

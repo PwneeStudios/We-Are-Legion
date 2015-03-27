@@ -40,7 +40,7 @@ namespace Game
         static World W { get { return GameClass.World; } }
 
         //enum Spell { None, Fireball, RaiseSkeletons, SummonNecromancer, RaiseTerracotta, Convert, Flamewall, Resurrect, CorpseExplode, }
-        public static Spell Flamefield, SkeletonArmy, TerracottaArmy, Necromancer;
+        public static Spell Fireball, SkeletonArmy, TerracottaArmy, Necromancer;
 
         public const int FlameRadius = 30;
         public static vec2 FlameR = vec(FlameRadius, FlameRadius);
@@ -55,13 +55,13 @@ namespace Game
         { 
             Spell spell;
 
-            Flamefield = spell = new Spell("Flamefield");
+            Fireball = spell = new Spell("Fireball");
             spell.DrawCursor = FlameCursor;
             spell.Execute = () => W.Fireball();
             spell.Apply = (p, t, v) => W.FireballApply(p, t, v);
             spell.JadeCost = 1000;
 
-            SkeletonArmy = spell = new Spell("Skeleton Army");
+            SkeletonArmy = spell = new Spell("Skeletons");
             spell.DrawCursor = SkeletonCursor;
             spell.Execute = () => W.RaiseSkeletons(RaiseR);
             spell.Apply = (p, t, v) => W.RaiseSkeletonsApply(p, t, v, RaiseR);
@@ -74,7 +74,7 @@ namespace Game
             spell.JadeCost = 1000;
             spell.TerritoryRange = _64;
 
-            TerracottaArmy = spell = new Spell("Terracotta Army");
+            TerracottaArmy = spell = new Spell("Terracotta");
             spell.DrawCursor = TerracottaCursor;
             spell.Execute = () => W.SummonTerracotta(TerracottaR);
             spell.Apply = (p, t, v) => W.SummonTerracottaApply(p, t, v, TerracottaR);
