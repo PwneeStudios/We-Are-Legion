@@ -31,6 +31,22 @@ input {
     -webkit-user-select: text;
 }
 
+.popover {
+    font-size: 100%;
+}
+
+.popover-title {
+    font-size: 2.135%;
+}
+
+.popover-content {
+    font-size: .95%;
+}
+
+.popover {
+    max-width: 27.5%;
+}
+
 /* ------
    Button
    ------ */

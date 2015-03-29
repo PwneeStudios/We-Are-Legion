@@ -205,11 +205,12 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
             );
         }
     });
-    
+
     var Tooltips = {
         'Fireball': {
             tooltip:
-                <Popover title="Fireball">
+                <Popover className='UiButton' title="Fireball">
+                    <p>This is a p test.</p>
                     <strong>FIRE!</strong> Everything will <em>burrrrnnn</em>. Ahhh-hahaha.
                     Um. Except dragonlords. They have anti-magic and stuff. Also, anything near a dragonlord. Again... uh, anti-magic. But, <em>everything else</em>... burrrrnnns. Including your own soldiers, so be careful. For real.
                 </Popover>,
@@ -244,13 +245,13 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         },
         'Goldmine': {
             tooltip:
-                <Popover title="Gold Mine">
+                <Popover title="Build Gold Mine">
                     <strong>Gooooolllld.</strong> Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign.
                 </Popover>,
         },
         'Jademine': {
             tooltip:
-                <Popover title="Jade Mine">
+                <Popover title="Build Jade Mine">
                     <strong>Green is the color of... MAGIC.</strong> From Jade flows all magic, both real and imaginary. Place this jade mine on a jade source on the map.
                     Once built the mine will continuously generate jade for you to use in super sweet <strong>Dragonlord spells</strong>.
                 </Popover>,

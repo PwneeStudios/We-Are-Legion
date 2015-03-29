@@ -205,11 +205,12 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
             );
         }
     });
-    
+
     var Tooltips = {
         'Fireball': {
             tooltip:
-                React.createElement(Popover, {title: "Fireball"}, 
+                React.createElement(Popover, {className: "UiButton", title: "Fireball"}, 
+                    React.createElement("p", null, "This is a p test."), 
                     React.createElement("strong", null, "FIRE!"), " Everything will ", React.createElement("em", null, "burrrrnnn"), ". Ahhh-hahaha." + ' ' +
                     "Um. Except dragonlords. They have anti-magic and stuff. Also, anything near a dragonlord. Again... uh, anti-magic. But, ", React.createElement("em", null, "everything else"), "... burrrrnnns. Including your own soldiers, so be careful. For real."
                 ),
@@ -244,13 +245,13 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         },
         'Goldmine': {
             tooltip:
-                React.createElement(Popover, {title: "Gold Mine"}, 
+                React.createElement(Popover, {title: "Build Gold Mine"}, 
                     React.createElement("strong", null, "Gooooolllld."), " Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign."
                 ),
         },
         'Jademine': {
             tooltip:
-                React.createElement(Popover, {title: "Jade Mine"}, 
+                React.createElement(Popover, {title: "Build Jade Mine"}, 
                     React.createElement("strong", null, "Green is the color of... MAGIC."), " From Jade flows all magic, both real and imaginary. Place this jade mine on a jade source on the map." + ' ' +
                     "Once built the mine will continuously generate jade for you to use in super sweet ", React.createElement("strong", null, "Dragonlord spells"), "."
                 ),
