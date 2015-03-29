@@ -113,5 +113,14 @@ namespace Game
 
             return shifted_cam;
         }
+
+        vec2 GetShiftedCameraMinimap(vec2 pos, vec4 prev_camvec, vec2 prev_worldcoord)
+        {
+            vec2 shifted_cam;
+            shifted_cam.x = prev_worldcoord.x - pos.x / prev_camvec.z;
+            shifted_cam.y = prev_worldcoord.y + pos.y / prev_camvec.w;
+
+            return shifted_cam;
+        }
     }
 }

@@ -430,7 +430,7 @@ namespace Game
             bl = max(bl, center - size);
             tr = min(tr, center + size);
             DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, new color(.6f, .6f, .6f, .5f));
-            DrawBox(bl, tr, .001f);
+            DrawBox(bl, tr, 2f / GameClass.Screen.x);
         }
 
         Ui TopUi, TopUi_Player1, TopUi_Player2;

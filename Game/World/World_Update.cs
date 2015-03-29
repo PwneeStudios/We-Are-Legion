@@ -99,8 +99,20 @@ namespace Game
 
             if (GameClass.MouseEnabled && !(Buttons.A.Pressed() || Buttons.X.Pressed()))
             {
-                var shifted = GetShiftedCamera(Input.CurMousePos, camvec, world_mouse_pos);
-                CameraPos = shifted;
+                if (MouseOverMinimap)
+                {
+                    //var zoom_center = (UiMousePos - MinimapQuad.pos) / MinimapQuad.size;
+
+                    //var shifted = GetShiftedCameraMinimap(Input.CurMousePos, camvec, zoom_center);
+                    //CameraPos = shifted;
+                }
+                else
+                {
+                    vec2 zoom_center = world_mouse_pos;
+
+                    var shifted = GetShiftedCamera(Input.CurMousePos, camvec, zoom_center);
+                    CameraPos = shifted;
+                }
             }
 
             // Move the camera via: Click And Drag
@@ -129,7 +141,7 @@ namespace Game
             CameraPos += dir / CameraZoom * MoveRate_Keyboard;
 
             // Move the camera via: Minimap
-            if (Input.LeftMouseDown && !BoxSelecting && MouseOverMinimap)
+            if ((Input.LeftMouseDown || Input.DeltaMouseScroll != 0) && !BoxSelecting && MouseOverMinimap)
             {
                 CameraPos = (UiMousePos - MinimapQuad.pos) / MinimapQuad.size;
             }

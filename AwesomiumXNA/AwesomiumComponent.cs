@@ -287,7 +287,7 @@ namespace AwesomiumXNA
 
         public override void Draw(GameTime gameTime)
         {
-            if (WebCore.IsInitialized && WebCore.IsRunning)
+            if (WebCore.IsInitialized)
             if (WebView.Surface != null && ((BitmapSurface)WebView.Surface).IsDirty)
             {
                 BitmapSurface renderBuffer = ((BitmapSurface)WebView.Surface);
