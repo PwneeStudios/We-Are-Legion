@@ -25,8 +25,8 @@ namespace Game
 
             Cursor, SelectCircle, SelectCircle_Data, SelectDot, AttackMarker,
             AoE_Fire, AoE_Skeleton, AoE_Terra,
-            
-            TopUi;
+
+            TopUi, Minimap;
 
         public static ContentManager Content { get { return GameClass.Game.Content; } }
 
@@ -73,6 +73,7 @@ namespace Game
             AoE_Terra    = LoadTexture("AoE_Terra");
 
             TopUi = LoadTexture("TopUi");
+            Minimap = LoadTexture("Minimap");
         }
 
 #if DEBUG

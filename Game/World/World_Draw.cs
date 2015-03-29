@@ -353,6 +353,8 @@ namespace Game
             
             DrawMouseUi(AfterUi: false);
             Markers.Draw(DrawOrder.AfterMouse);
+
+            DrawMinimap();
         }
 
         public void DrawUi()
@@ -360,7 +362,6 @@ namespace Game
             Render.StandardRenderSetup();
 
             //DrawTopUi();
-            DrawMinimap();
             DrawSelectedInfo();
             DrawMouseUi(AfterUi: true);
 
@@ -412,12 +413,16 @@ namespace Game
         private void DrawMinimap()
         {
             vec2 size = vec(.2f, .2f);
-            vec2 center = vec(-CameraAspect, -1) + new vec2(size.x, size.y);
+            vec2 center = vec(-CameraAspect, -1) + new vec2(size.x, size.y) * vec(1.1f, 1.15f);
             MinimapQuad.SetupVertices(center - size, center + size, vec(0, 0), vec(1, 1));
+
+            vec2 _size = size * vec(1, 254f / 245f) * 1.12f;
+            vec2 _center = center + _size * vec(.03f, -.06f);
+            DrawTextureSmooth.Using(vec(0, 0, 1, 1), CameraAspect, Assets.Minimap);
+            RectangleQuad.Draw(GameClass.Graphics, _center, _size);
 
             DrawTextureSmooth.Using(vec(0, 0, 1, 1), CameraAspect, Minimap);
             MinimapQuad.Draw(GameClass.Graphics);
-            //RectangleQuad.Draw(GameClass.Graphics, center, size);
 
             vec2 cam = CameraPos * size;
             vec2 bl = center + cam - vec(CameraAspect, 1) * size / CameraZoom;

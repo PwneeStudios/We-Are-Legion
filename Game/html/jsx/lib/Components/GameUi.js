@@ -269,7 +269,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
             return (
                 <div>
                     <UnitBar pos={pos(50.5,.4)} size={width(50)} />
-                    <Minimap pos={pos(.2,79)} size={width(11)} />
+                    {/*<Minimap pos={pos(.2,79)} size={width(11)} />*/}
 
                     <Div pos={pos(15,0)}>
                         {/*<ChatInput pos={pos(.35,80)} size={width(49)} />*/}
