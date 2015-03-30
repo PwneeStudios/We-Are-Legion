@@ -34,7 +34,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
                 height:'100%',
             };
             
-            style = _.assign(style, this.props.pos, this.props.size);
+            style = _.assign(style, this.props.pos, this.props.size, this.props.style);
         
             return (
                 React.createElement("div", {style: style}, 
@@ -151,13 +151,22 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
                 xna.ActionButtonPressed(this.props.name);
             }
         },
-        
+
         renderAt: function() {
+            var noBlockingStyle = {'pointer-events':'none'};
+            var pStyle = _.assign({}, noBlockingStyle, {fontSize: '90%', textAlign: 'right'});
+            
             return (
-                React.createElement("div", null, 
-                    React.createElement(UiButton, React.__spread({width: 7, image: {width:160, height:160, url:'css/UiButton.png'}},  this.props, 
-                    {onClick: this.onClick, 
-                    overlay: Actions[this.props.name].tooltip}))
+                React.createElement(Div, {pos: pos(0,0,'relative'), size: size(7,100), style: {'float':'left','display':'inline-block'}}, 
+                    React.createElement(UiButton, {width: 100, image: {width:160, height:160, url:'css/UiButton.png'}, 
+                     onClick: this.onClick, 
+                     overlay: Actions[this.props.name].tooltip}), 
+                    
+                    React.createElement(Div, {pos: pos(0,0), style: noBlockingStyle}, 
+                        React.createElement(UiImage, {pos: pos(4,-.5), width: 90, image: {width:300, height:300, url:'css/SpellIcons.png'}})
+                    ), 
+
+                    React.createElement(Div, {pos: pos(-16,8.5), size: width(100), style: pStyle}, React.createElement("p", null, "100"))
                 )
             );
         },
