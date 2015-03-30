@@ -37,6 +37,8 @@ namespace Game
     public class Spells : BaseShader
     {
         public static List<Spell> SpellList = new List<Spell>();
+        public static Dictionary<string, Spell> Lookup = new Dictionary<string, Spell>();
+
         static World W { get { return GameClass.World; } }
 
         //enum Spell { None, Fireball, RaiseSkeletons, SummonNecromancer, RaiseTerracotta, Convert, Flamewall, Resurrect, CorpseExplode, }
@@ -117,6 +119,7 @@ namespace Game
         public static void Add(Spell spell)
         {
             SpellList.Add(spell);
+            Lookup.Add(spell.Name, spell);
         }
     }
 }

@@ -1,5 +1,4 @@
-/*
-define(['jquery'], function($) {
+define(['jquery', 'lodash'], function($, _) {
     function InXna()
     {
         return typeof xna !== 'undefined';
@@ -8,8 +7,7 @@ define(['jquery'], function($) {
     var mouseDownOverHUD = false;
     function docMouseDown(event)
     {
-        if(InXna())
-        {
+        if (InXna()) {
             xna.OnMouseDown(mouseDownOverHUD, event.which - 1);
         }
         mouseDownOverHUD = false;
@@ -47,8 +45,14 @@ define(['jquery'], function($) {
             mouseUpOverHUD = true;
         });
     });
-    
+      
     return {
-        InXna: InXna,
-    }
-});*/
+        InXna: function() {
+            return InXna();
+        },
+        
+        xna: function() {
+            return xna;
+        },
+    };
+});

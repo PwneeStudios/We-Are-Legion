@@ -162,39 +162,16 @@ namespace Game
             // Switch to spells (must be playing, not in editor)
             if (!SimulationPaused)
             {
-                if (Keys.D1.Pressed() || Keys.D2.Pressed() || Keys.D3.Pressed() || Keys.D4.Pressed())
-                {
-                    if (Keys.D1.Pressed()) CurSpell = Spells.Fireball;
-                    if (Keys.D2.Pressed()) CurSpell = Spells.SkeletonArmy;
-                    if (Keys.D3.Pressed()) CurSpell = Spells.Necromancer;
-                    if (Keys.D4.Pressed()) CurSpell = Spells.TerracottaArmy;
-
-                    CurUserMode = UserMode.CastSpell;
-                    UnselectAll = false;
-                }
+                if (Keys.D1.Pressed()) StartSpell(Spells.Fireball);
+                if (Keys.D2.Pressed()) StartSpell(Spells.SkeletonArmy);
+                if (Keys.D3.Pressed()) StartSpell(Spells.Necromancer);
+                if (Keys.D4.Pressed()) StartSpell(Spells.TerracottaArmy);
             }
 
             // Switch to building placement
-            if (Keys.B.Down())
-            {
-                CurUserMode = UserMode.PlaceBuilding;
-                UnselectAll = true; 
-                BuildingUserIsPlacing = UnitType.Barracks;
-            }
-
-            if (Keys.G.Down())
-            {
-                CurUserMode = UserMode.PlaceBuilding;
-                UnselectAll = true;
-                BuildingUserIsPlacing = UnitType.GoldMine;
-            }
-
-            if (Keys.J.Down())
-            {
-                CurUserMode = UserMode.PlaceBuilding;
-                UnselectAll = true;
-                BuildingUserIsPlacing = UnitType.JadeMine;
-            }
+            if (Keys.B.Down()) StartPlacingBuilding(UnitType.Barracks);
+            if (Keys.G.Down()) StartPlacingBuilding(UnitType.GoldMine);
+            if (Keys.J.Down()) StartPlacingBuilding(UnitType.JadeMine);
 
             // Switch to standard select
             if (Keys.Escape.Down() || Keys.Back.Down() || Input.RightMousePressed)
@@ -225,6 +202,36 @@ namespace Game
                     if (UnitPlaceStyle >= UnitDistribution.Last) UnitPlaceStyle = UnitDistribution.First;
                 }
             }
+        }
+
+        public void Start(string name)
+        {
+            StartPlacingBuilding(name);
+            StartSpell(name);
+        }
+
+        public void StartPlacingBuilding(string name)
+        {
+            if (!Params.Buildings.ContainsKey(name)) return;
+            StartPlacingBuilding(Params.Buildings[name].UnitType);
+        }
+        public void StartPlacingBuilding(float building)
+        {
+            CurUserMode = UserMode.PlaceBuilding;
+            UnselectAll = true;
+            BuildingUserIsPlacing = building;
+        }
+
+        public void StartSpell(string name)
+        {
+            if (!Spells.Lookup.ContainsKey(name)) return;
+            StartSpell(Spells.Lookup[name]);
+        }
+        public void StartSpell(Spell spell)
+        {
+            CurSpell = spell;
+            CurUserMode = UserMode.CastSpell;
+            UnselectAll = false;
         }
 
         public int

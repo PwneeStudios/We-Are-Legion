@@ -55,7 +55,7 @@ namespace Game
         public static GameTime Time;
         public static double ElapsedSeconds { get { return Time.ElapsedGameTime.TotalSeconds; } }
 
-        public const bool UnlimitedSpeed = true;
+        public const bool UnlimitedSpeed = false;
         public const bool MouseEnabled = true;
 
         public static GraphicsDeviceManager GraphicsManager { get { return Game.graphics; } }
@@ -162,16 +162,10 @@ namespace Game
 
             // Create an object that will allow JS inside Awesomium to communicate with XNA
             xnaObj = awesomium.WebView.CreateGlobalJavascriptObject("xna");
-            xnaObj.Bind("exit", OnExit);
-
-            // Some stuff I wrote for mouse handling on the HUD vs the Game
             xnaObj.Bind("OnMouseUp", OnMouseUp);
             xnaObj.Bind("OnMouseDown", OnMouseDown);
 
-            xnaObj.Bind("btnUpPressed", btnUpPressed);
-            xnaObj.Bind("btnDownPressed", btnDownPressed);
-            xnaObj.Bind("btnLeftPressed", btnLeftPressed);
-            xnaObj.Bind("btnRightPressed", btnRightPressed);
+            xnaObj.Bind("ActionButtonPressed", ActionButtonPressed);
 
             awesomium.WebView.Source = @"asset://sample/index.html".ToUri();
         }
@@ -703,32 +697,31 @@ namespace Game
             bool clickHandled = mouseUpOverHUD;
 
             Console.WriteLine("Click was " + (clickHandled ? "" : "not ") + "handled by the Web UI.");
-            //Rectangle stan = new Rectangle((int)stanPosition.X, (int)stanPosition.Y, stanTexture.Width, stanTexture.Height);
-            //if (stan.Contains(mouseState.X, mouseState.Y))
-            //{
-            //    Console.WriteLine(mouseButton.ToString() + " clicked on Stan, and it was " + (clickHandled ? "" : "not ") + "handled by the Web UI");
-            //}
 
             return JSValue.Null;
         }
 
-        protected JSValue btnUpPressed(object sender, JavascriptMethodEventArgs e)
+        protected JSValue ActionButtonPressed(object sender, JavascriptMethodEventArgs e)
         {
-            return JSValue.Null;
-        }
+            try
+            {
+                string action = (string)e.Arguments[0];
+                Console.WriteLine(action);
 
-        protected JSValue btnDownPressed(object sender, JavascriptMethodEventArgs e)
-        {
-            return JSValue.Null;
-        }
+                try
+                {
+                    World.Start(action);
+                }
+                catch
+                {
+                    Console.WriteLine("Unrecognized action {0}", action);
+                }
+            }
+            catch
+            {
+                Console.WriteLine("Action did not specify a name:string.");
+            }
 
-        protected JSValue btnLeftPressed(object sender, JavascriptMethodEventArgs e)
-        {
-            return JSValue.Null;
-        }
-
-        protected JSValue btnRightPressed(object sender, JavascriptMethodEventArgs e)
-        {
             return JSValue.Null;
         }
     }

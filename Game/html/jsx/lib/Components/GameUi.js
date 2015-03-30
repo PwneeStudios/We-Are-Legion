@@ -1,4 +1,4 @@
-define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap) {
+define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, ReactBootstrap, interop) {
     var Input = ReactBootstrap.Input;
     var OverlayTrigger = ReactBootstrap.OverlayTrigger;
     var Popover = ReactBootstrap.Popover;
@@ -61,19 +61,41 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
     var UiButton = React.createClass({
         mixins: [RenderAtMixin],
         
-        renderAt: function() {
+        getInitialState: function() {
+            return {
+                preventTooltip: false,
+            };
+        },
+        
+        onClick: function() {
+            if (this.props.onClick) {
+                this.props.onClick();
+            }
+            
+            this.setState({
+                preventTooltip: true,
+            });
+        },
+
+        onMouseOut: function() {
+            this.setState({
+                preventTooltip: false,
+            });
+        },
+        
+        renderAt: function() {            
             var image = this.props.image;
             image.aspect = image.height / image.width;
             
             var width = this.props.width;
             var height = width * image.aspect;
             
-            var button = <button className="UiButton" style={{backgroundImage: 'url('+image.url+')'}} />;
+            var button = <button className="UiButton" style={{backgroundImage: 'url('+image.url+')'}} onClick={this.onClick} />;
             
             var body;
-            if (this.props.overlay) {
+            if (this.props.overlay && !this.state.preventTooltip) {
                 body = 
-                    <OverlayTrigger placement="top" overlay={this.props.overlay} delayShow={300} delayHide={150}>
+                    <OverlayTrigger placement="top" overlay={this.props.overlay} delayShow={420} delayHide={50}>
                         {button}
                     </OverlayTrigger>
             } else {
@@ -81,7 +103,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
             }
             
             return (
-                <div style={{width:width+'%', height:0, paddingBottom:height+'%', position:'relative', 'float':'left'}}>
+                <div style={{width:width+'%', height:0, paddingBottom:height+'%', position:'relative', 'float':'left'}} onMouseOut={this.onMouseOut} >
                     {body}
                 </div>
             );
@@ -123,11 +145,19 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
     
     var ActionButton = React.createClass({
         mixins: [RenderAtMixin],
+
+        onClick: function() {
+            if (interop.InXna()) {
+                xna.ActionButtonPressed(this.props.name);
+            }
+        },
         
         renderAt: function() {
             return (
                 <div>
-                    <UiButton width={7} image={{width:160, height:160, url:'css/UiButton.png'}} {...this.props} />
+                    <UiButton width={7} image={{width:160, height:160, url:'css/UiButton.png'}} {...this.props}
+                    onClick={this.onClick}
+                    overlay={Actions[this.props.name].tooltip} />
                 </div>
             );
         },
@@ -249,13 +279,13 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                     <strong>The engine of war.</strong> This building that dudes hang out in and train for battle and stuff. Also where new 'recruits' magically appear, ready for battle.
                 </Popover>,
         },
-        'Goldmine': {
+        'GoldMine': {
             tooltip:
                 <Popover title={makeTooltip('Build Gold Mine')}>
                     <strong>Gooooolllld.</strong> Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign.
                 </Popover>,
         },
-        'Jademine': {
+        'JadeMine': {
             tooltip:
                 <Popover title={makeTooltip('Build Jade Mine')}>
                     <strong>Green is the color of... MAGIC.</strong> From Jade flows all magic, both real and imaginary. Place this jade mine on a jade source on the map.
@@ -275,16 +305,16 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                         {/*<ChatInput pos={pos(.35,80)} size={width(49)} />*/}
                         
                         <Div pos={pos(0,85)}>
-                            <ActionButton overlay={Actions.Fireball.tooltip} />
-                            <ActionButton overlay={Actions.Skeletons.tooltip} />
-                            <ActionButton overlay={Actions.Necromancer.tooltip} />
-                            <ActionButton overlay={Actions.Terracotta.tooltip} />
+                            <ActionButton name='Fireball' />
+                            <ActionButton name='Skeletons' />
+                            <ActionButton name='Necromancer' />
+                            <ActionButton name='Terracotta' />
                             
                             <Gap width='1' />
                             
-                            <ActionButton overlay={Actions.Barracks.tooltip} />
-                            <ActionButton overlay={Actions.Goldmine.tooltip} />
-                            <ActionButton overlay={Actions.Jademine.tooltip} />
+                            <ActionButton name='Barracks' />
+                            <ActionButton name='GoldMine' />
+                            <ActionButton name='JadeMine' />
                         </Div>
                         
                         <UnitBox pos={pos(58,85)} size={width(25)} />

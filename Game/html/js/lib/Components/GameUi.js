@@ -1,4 +1,4 @@
-define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap) {
+define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, ReactBootstrap, interop) {
     var Input = ReactBootstrap.Input;
     var OverlayTrigger = ReactBootstrap.OverlayTrigger;
     var Popover = ReactBootstrap.Popover;
@@ -61,19 +61,41 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
     var UiButton = React.createClass({displayName: "UiButton",
         mixins: [RenderAtMixin],
         
-        renderAt: function() {
+        getInitialState: function() {
+            return {
+                preventTooltip: false,
+            };
+        },
+        
+        onClick: function() {
+            if (this.props.onClick) {
+                this.props.onClick();
+            }
+            
+            this.setState({
+                preventTooltip: true,
+            });
+        },
+
+        onMouseOut: function() {
+            this.setState({
+                preventTooltip: false,
+            });
+        },
+        
+        renderAt: function() {            
             var image = this.props.image;
             image.aspect = image.height / image.width;
             
             var width = this.props.width;
             var height = width * image.aspect;
             
-            var button = React.createElement("button", {className: "UiButton", style: {backgroundImage: 'url('+image.url+')'}});
+            var button = React.createElement("button", {className: "UiButton", style: {backgroundImage: 'url('+image.url+')'}, onClick: this.onClick});
             
             var body;
-            if (this.props.overlay) {
+            if (this.props.overlay && !this.state.preventTooltip) {
                 body = 
-                    React.createElement(OverlayTrigger, {placement: "top", overlay: this.props.overlay, delayShow: 300, delayHide: 150}, 
+                    React.createElement(OverlayTrigger, {placement: "top", overlay: this.props.overlay, delayShow: 420, delayHide: 50}, 
                         button
                     )
             } else {
@@ -81,7 +103,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
             }
             
             return (
-                React.createElement("div", {style: {width:width+'%', height:0, paddingBottom:height+'%', position:'relative', 'float':'left'}}, 
+                React.createElement("div", {style: {width:width+'%', height:0, paddingBottom:height+'%', position:'relative', 'float':'left'}, onMouseOut: this.onMouseOut}, 
                     body
                 )
             );
@@ -123,11 +145,19 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
     
     var ActionButton = React.createClass({displayName: "ActionButton",
         mixins: [RenderAtMixin],
+
+        onClick: function() {
+            if (interop.InXna()) {
+                xna.ActionButtonPressed(this.props.name);
+            }
+        },
         
         renderAt: function() {
             return (
                 React.createElement("div", null, 
-                    React.createElement(UiButton, React.__spread({width: 7, image: {width:160, height:160, url:'css/UiButton.png'}},  this.props))
+                    React.createElement(UiButton, React.__spread({width: 7, image: {width:160, height:160, url:'css/UiButton.png'}},  this.props, 
+                    {onClick: this.onClick, 
+                    overlay: Actions[this.props.name].tooltip}))
                 )
             );
         },
@@ -249,13 +279,13 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                     React.createElement("strong", null, "The engine of war."), " This building that dudes hang out in and train for battle and stuff. Also where new 'recruits' magically appear, ready for battle."
                 ),
         },
-        'Goldmine': {
+        'GoldMine': {
             tooltip:
                 React.createElement(Popover, {title: makeTooltip('Build Gold Mine')}, 
                     React.createElement("strong", null, "Gooooolllld."), " Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign."
                 ),
         },
-        'Jademine': {
+        'JadeMine': {
             tooltip:
                 React.createElement(Popover, {title: makeTooltip('Build Jade Mine')}, 
                     React.createElement("strong", null, "Green is the color of... MAGIC."), " From Jade flows all magic, both real and imaginary. Place this jade mine on a jade source on the map." + ' ' +
@@ -275,16 +305,16 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                         /*<ChatInput pos={pos(.35,80)} size={width(49)} />*/
                         
                         React.createElement(Div, {pos: pos(0,85)}, 
-                            React.createElement(ActionButton, {overlay: Actions.Fireball.tooltip}), 
-                            React.createElement(ActionButton, {overlay: Actions.Skeletons.tooltip}), 
-                            React.createElement(ActionButton, {overlay: Actions.Necromancer.tooltip}), 
-                            React.createElement(ActionButton, {overlay: Actions.Terracotta.tooltip}), 
+                            React.createElement(ActionButton, {name: "Fireball"}), 
+                            React.createElement(ActionButton, {name: "Skeletons"}), 
+                            React.createElement(ActionButton, {name: "Necromancer"}), 
+                            React.createElement(ActionButton, {name: "Terracotta"}), 
                             
                             React.createElement(Gap, {width: "1"}), 
                             
-                            React.createElement(ActionButton, {overlay: Actions.Barracks.tooltip}), 
-                            React.createElement(ActionButton, {overlay: Actions.Goldmine.tooltip}), 
-                            React.createElement(ActionButton, {overlay: Actions.Jademine.tooltip})
+                            React.createElement(ActionButton, {name: "Barracks"}), 
+                            React.createElement(ActionButton, {name: "GoldMine"}), 
+                            React.createElement(ActionButton, {name: "JadeMine"})
                         ), 
                         
                         React.createElement(UnitBox, {pos: pos(58,85), size: width(25)})
