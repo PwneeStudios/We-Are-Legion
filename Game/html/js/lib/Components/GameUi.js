@@ -117,10 +117,24 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
             var image = this.props.image;
             image.aspect = image.height / image.width;
             
+            var offset = image.offset || this.props.offset;            
             var width = this.props.width;
             var height = width * image.aspect;
+                        
+            var background_x = 0, background_y = 0;
+            if (offset) {
+                background_x = image.dim[0] <= 1 ? 0 : 100 * offset[0] / (image.dim[0] - 1);
+                background_y = image.dim[1] <= 1 ? 0 : 100 * offset[1] / (image.dim[1] - 1);
+            }
             
-            var style = {backgroundImage: 'url('+image.url+')'};
+            var backgroundPos = background_x + '%' + ' ' + background_y + '%';
+
+            var background_x = 0, background_y = 0;
+            background_size_x = image.dim && image.dim[0] >= 1 ? 100 * image.dim[0] : 100;
+            background_size_y = image.dim && image.dim[1] >= 1 ? 100 * image.dim[1] : 100;
+            var backgroundSize = background_size_x + '%' + ' ' + background_size_y + '%';
+            
+            var style = {backgroundImage: 'url('+image.url+')', backgroundPosition:backgroundPos, backgroundSize:backgroundSize};
             style = _.assign(style, this.props.style);
             
             var img = React.createElement("div", {className: "UiImage", style: style});
@@ -153,6 +167,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
         },
 
         renderAt: function() {
+            var action = Actions[this.props.name];
+            
             var noBlockingStyle = {'pointer-events':'none'};
             var pStyle = _.assign({}, noBlockingStyle, {fontSize: '90%', textAlign: 'right'});
             
@@ -160,10 +176,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
                 React.createElement(Div, {pos: pos(0,0,'relative'), size: size(7,100), style: {'float':'left','display':'inline-block'}}, 
                     React.createElement(UiButton, {width: 100, image: {width:160, height:160, url:'css/UiButton.png'}, 
                      onClick: this.onClick, 
-                     overlay: Actions[this.props.name].tooltip}), 
+                     overlay: action.tooltip}), 
                     
                     React.createElement(Div, {pos: pos(0,0), style: noBlockingStyle}, 
-                        React.createElement(UiImage, {pos: pos(4,-.5), width: 90, image: {width:300, height:300, url:'css/SpellIcons.png'}})
+                        React.createElement(UiImage, {pos: pos(-1 + (100-90*action.scale)/2,-.5), width: 90*action.scale, offset: action.offset, image: action.image})
                     ), 
 
                     React.createElement(Div, {pos: pos(-16,8.5), size: width(100), style: pStyle}, React.createElement("p", null, "100"))
@@ -248,9 +264,16 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     var makeTooltip = function(name) {
         return React.createElement("span", null, name, React.createElement("span", {style: {'float':'right'}}, "250"))
     };
+   
+    var Spells = {width:300, height:300, dim:[1,4], url:'css/SpellIcons.png'};
+    var Buildings = {width:96, height:96, dim:[5,10], url:'css/Buildings_1.png'};
+    var buildingScale = .85;
     
     var Actions = {
         'Fireball': {
+            offset:[0,0],
+            image:Spells,
+            scale:1,
             tooltip:
                 React.createElement(Popover, {title: makeTooltip('Fireball')}, 
                     React.createElement("div", null, 
@@ -261,12 +284,18 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
                 ),
         },
         'Skeletons': {
+            offset:[0,1],
+            image:Spells,
+            scale:1,
             tooltip:
                 React.createElement(Popover, {title: makeTooltip('Raise Skeletal Army')}, 
                     React.createElement("strong", null, "Command the dead!"), " Raise an army of the dead. All corpses not being stomped on will rise up and fight for your cause in the area you select."
                 ),
         },
         'Necromancer': {
+            offset:[0,2],
+            image:Spells,
+            scale:1,
             tooltip:
                 React.createElement(Popover, {title: makeTooltip('Summon Necromancer')}, 
                     React.createElement("strong", null, "Have ", React.createElement("em", null, "someone else"), " command the dead!"), " Summon forth a single, skillful necromancer at a given location." + ' ' +
@@ -274,6 +303,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
                 ),
         },
         'Terracotta': {
+            offset:[0,3],
+            image:Spells,
+            scale:1,
             tooltip:
                 React.createElement(Popover, {title: makeTooltip('Raise Terracotta Army')}, 
                     React.createElement("strong", null, "Clay soldiers! YESSSS."), " Mother Earth says: take my earth-warrior-children things! Use them to slay the filthy humans and/or animals!" + ' ' +
@@ -283,18 +315,27 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
         },
         
         'Barracks': {
+            offset:[1,1],
+            image:Buildings,
+            scale:buildingScale,
             tooltip:
                 React.createElement(Popover, {title: makeTooltip('Build Barracks')}, 
                     React.createElement("strong", null, "The engine of war."), " This building that dudes hang out in and train for battle and stuff. Also where new 'recruits' magically appear, ready for battle."
                 ),
         },
         'GoldMine': {
+            offset:[1,3],
+            image:Buildings,
+            scale:buildingScale,
             tooltip:
                 React.createElement(Popover, {title: makeTooltip('Build Gold Mine')}, 
                     React.createElement("strong", null, "Gooooolllld."), " Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign."
                 ),
         },
         'JadeMine': {
+            offset:[1,5],
+            image:Buildings,
+            scale:buildingScale,
             tooltip:
                 React.createElement(Popover, {title: makeTooltip('Build Jade Mine')}, 
                     React.createElement("strong", null, "Green is the color of... MAGIC."), " From Jade flows all magic, both real and imaginary. Place this jade mine on a jade source on the map." + ' ' +
