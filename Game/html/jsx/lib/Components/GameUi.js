@@ -201,7 +201,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
                      overlay={action.tooltip} />
                     
                     <Div pos={pos(0,0)} style={noBlockingStyle}>
-                        <UiImage pos={pos(-1 + (100-90*action.scale)/2,-.5)} width={90*action.scale} offset={action.offset} image={action.image} />
+                        <UiImage pos={pos(-1 + (100-90*action.scale)/2,-.5)} width={90*action.scale} image={action.image} />
                     </Div>
 
                     <Div pos={pos(-16,8.5)} size={width(100)} style={pStyle}><p>100</p></Div>
@@ -335,15 +335,34 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     var makeTooltip = function(name) {
         return <span>{name}<span style={{'float':'right'}}>250</span></span>
     };
-   
-    var Spells = {width:300, height:300, dim:[1,4], url:'css/SpellIcons.png'};
-    var Buildings = {width:96, height:96, dim:[5,10], url:'css/Buildings_1.png'};
-    var buildingScale = .85;
+
+    var subImage = function(image, offset) {
+        var sub = _.assign({}, image);
+        sub.offset = offset;
+        return sub;
+    };
+
+    var SpellsSpritesheet = {width:300, height:300, dim:[1,4], url:'css/SpellIcons.png'};
+    var BuildingsSpritesheet = {width:96, height:96, dim:[5,10], url:'css/Buildings_1.png'};
     
+    var Spells = {
+        Fireball: subImage(SpellsSpritesheet, [0,0]),
+        Skeletons: subImage(SpellsSpritesheet, [0,1]),
+        Necromancer: subImage(SpellsSpritesheet, [0,2]),
+        Terracotta: subImage(SpellsSpritesheet, [0,3]),
+    };
+    
+    var Buildings = {
+        Barracks: subImage(BuildingsSpritesheet, [1,1]),
+        GoldMine: subImage(BuildingsSpritesheet, [1,3]),
+        JadeMine: subImage(BuildingsSpritesheet, [1,5]),
+    };
+    
+    
+    var buildingScale = .85;
     var Actions = {
-        'Fireball': {
-            offset:[0,0],
-            image:Spells,
+        Fireball: {
+            image: Spells.Fireball,
             scale:1,
             tooltip:
                 <Popover title={makeTooltip('Fireball')}>
@@ -354,18 +373,16 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
                     </div>
                 </Popover>,
         },
-        'Skeletons': {
-            offset:[0,1],
-            image:Spells,
+        Skeletons: {
+            image:Spells.Skeletons,
             scale:1,
             tooltip:
                 <Popover title={makeTooltip('Raise Skeletal Army')}>
                     <strong>Command the dead!</strong> Raise an army of the dead. All corpses not being stomped on will rise up and fight for your cause in the area you select.
                 </Popover>,
         },
-        'Necromancer': {
-            offset:[0,2],
-            image:Spells,
+        Necromancer: {
+            image:Spells.Necromancer,
             scale:1,
             tooltip:
                 <Popover title={makeTooltip('Summon Necromancer')}>
@@ -373,9 +390,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
                     This lord of death will raise any corpse near them into a skeletal warrior ready to thirst for blood and brains.
                 </Popover>,
         },
-        'Terracotta': {
-            offset:[0,3],
-            image:Spells,
+        Terracotta: {
+            image:Spells.Terracotta,
             scale:1,
             tooltip:
                 <Popover title={makeTooltip('Raise Terracotta Army')}>
@@ -385,27 +401,24 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
                 </Popover>,
         },
         
-        'Barracks': {
-            offset:[1,1],
-            image:Buildings,
+        Barracks: {
+            image:Buildings.Barracks,
             scale:buildingScale,
             tooltip:
                 <Popover title={makeTooltip('Build Barracks')}>
                     <strong>The engine of war.</strong> This building that dudes hang out in and train for battle and stuff. Also where new 'recruits' magically appear, ready for battle.
                 </Popover>,
         },
-        'GoldMine': {
-            offset:[1,3],
-            image:Buildings,
+        GoldMine: {
+            image:Buildings.GoldMine,
             scale:buildingScale,
             tooltip:
                 <Popover title={makeTooltip('Build Gold Mine')}>
                     <strong>Gooooolllld.</strong> Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign.
                 </Popover>,
         },
-        'JadeMine': {
-            offset:[1,5],
-            image:Buildings,
+        JadeMine: {
+            image:Buildings.JadeMine,
             scale:buildingScale,
             tooltip:
                 <Popover title={makeTooltip('Build Jade Mine')}>
