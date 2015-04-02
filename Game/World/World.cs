@@ -141,7 +141,7 @@ namespace Game
             }
         }
 
-        PlayerInfo MyPlayerInfo
+        public PlayerInfo MyPlayerInfo
         {
             get
             {

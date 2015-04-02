@@ -678,9 +678,23 @@ namespace Game
                 }
 
                 World.Update();
+                UpdateJsData();
             }
 
             World.Draw();
+        }
+
+        System.Web.Script.Serialization.JavaScriptSerializer jsonify = new System.Web.Script.Serialization.JavaScriptSerializer();
+        StringBuilder sb = new StringBuilder(10000);
+        Dictionary<string, object> obj = new Dictionary<string, object>(100);
+        void UpdateJsData()
+        {
+            obj["UnitCount"] = World.DataGroup.UnitCountUi;
+            obj["MyPlayerInfo"] = World.MyPlayerInfo;
+            var json = jsonify.Serialize(obj);
+
+            awesomium.WebView.ExecuteJavascript("update(" + json + ");");
+            //awesomium.WebView.ExecuteJavascript("update(0);");
         }
 
         protected JSValue OnMouseDown(object sender, JavascriptMethodEventArgs e)

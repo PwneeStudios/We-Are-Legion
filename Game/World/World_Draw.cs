@@ -770,7 +770,7 @@ namespace Game
             DataGroup.UnitCount[i] = count.Item1;
             DataGroup.BarracksCount[i] = count.Item2;
 
-            PlayerInfo[i].Units = count.Item2;
+            PlayerInfo[i].Units = count.Item1;
             PlayerInfo[i][UnitType.Barracks].Count = count.Item2;
         }
     }

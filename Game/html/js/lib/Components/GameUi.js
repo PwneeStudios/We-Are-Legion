@@ -4,6 +4,28 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     var Popover = ReactBootstrap.Popover;
     var Button = ReactBootstrap.Button;
 
+    var updateEvent = [];
+    window.update = function(values) {
+        // if (values.unitCount && window.values.unitCount && values.unitCount !== window.values.unitCount)
+            // console.log(values.unitCount);
+            
+        window.values = values;
+        
+        _.each(updateEvent, function(item) {
+            item.update(values);
+        });
+    };
+
+    var UpdateMixin = {
+        componentDidMount: function() {
+            updateEvent.push(this);
+        },
+        
+        componentWillUnmount: function() {
+            _.remove(updateEvent, function(e) { e === this; });
+        },
+    };
+
     var pos = function(x, y, type) {
         if (typeof type === 'undefined') {
             type = 'absolute';
@@ -187,18 +209,55 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
             );
         },
     });
-
+    
+    var UnitBarItem = React.createClass({displayName: "UnitBarItem",
+        render: function() {
+            return (
+                React.createElement(Div, {pos: pos(2+this.props.index * 14,0)}, React.createElement("p", null, this.props.data))
+            );
+        },
+    });
+    
     var UnitBar = React.createClass({displayName: "UnitBar",
-        mixins: [RenderAtMixin],
+        mixins: [RenderAtMixin, UpdateMixin],
+                
+        update: function(values) {
+            this.setState({
+                info: values.MyPlayerInfo,
+            });
+        },
+                
+        getInitialState: function() {
+            return {
+                info: null,
+            };
+        },
+        
+        item: function(pos, data) {
+            return (
+                React.createElement(Div, {pos: pos}, 
+                    React.createElement("p", null, 
+                        data
+                    )
+                )
+            );
+        },
         
         renderAt: function() {
+            var x = 2;
+            var incr = 14;
+        
             return (
                 React.createElement("div", null, 
                     React.createElement(UiImage, {width: 100, image: {width:869, height:60, url:'css/UnitBar.png'}}), 
                     React.createElement(Div, {pos: pos(0,.92)}, 
-                        React.createElement(Div, {pos: pos(2,0)}, React.createElement("p", null, "100")), 
-                        React.createElement(Div, {pos: pos(16,0)}, React.createElement("p", null, "100")), 
-                        React.createElement(Div, {pos: pos(30,0)}, React.createElement("p", null, "100"))
+                        this.item(pos(x,0), this.state.info ? this.state.info.Barracks.Count : 0), 
+                        this.item(pos(x+=incr,0), this.state.info ? this.state.info.Units : 0), 
+                        this.item(pos(x+=incr,0), this.state.info ? this.state.info.GoldMine.Count : 0), 
+                        this.item(pos(x+=incr,0), this.state.info ? this.state.info.Gold : 0), 
+                        this.item(pos(x+=incr,0), this.state.info ? this.state.info.JadeMine.Count : 0), 
+                        this.item(pos(x+=incr,0), this.state.info ? this.state.info.Jade : 0)
+
                     )
                 )
             );
@@ -224,7 +283,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
         getInitialState: function() {
             return {
                 value: '',
-            }
+            };
         },
     
         onTextChange: function() {
@@ -241,13 +300,25 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     });
 
     var UnitBox = React.createClass({displayName: "UnitBox",
-        mixins: [RenderAtMixin],
+        mixins: [RenderAtMixin, UpdateMixin],
+
+        update: function(values) {
+            this.setState({
+                value: values.UnitCount,
+            });
+        },
+
+        getInitialState: function() {
+            return {
+                value: 0,
+            };
+        },
         
         renderAt: function() {
             return (
                 React.createElement("div", null, 
                     React.createElement(UiImage, {pos: pos(0,0), width: 100, image: {width:502, height:157, url:'css/UnitBox.png'}}), 
-                    React.createElement(Div, {pos: pos(-6,5)}, React.createElement("p", {style: {fontSize: '3.3%', textAlign: 'right'}}, "162,581"))
+                    React.createElement(Div, {pos: pos(-6,5)}, React.createElement("p", {style: {fontSize: '3.3%', textAlign: 'right'}}, this.state.value))
                 )
             );
         },
