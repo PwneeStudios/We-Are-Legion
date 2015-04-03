@@ -233,10 +233,11 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
             };
         },
         
-        item: function(pos, data) {
+        item: function(p, image, scale, image_pos, data) {
             return (
-                <Div pos={pos}>
-                    <p>
+                <Div pos={p}>
+                    <UiImage pos={image_pos} width={4.2*scale} image={image} />
+                    <p style={{paddingLeft:'5%'}}>
                         {data}
                     </p>
                 </Div>
@@ -245,18 +246,18 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
         
         renderAt: function() {
             var x = 2;
-            var incr = 14;
+            var small = 13.2, big = 17.2;
         
             return (
                 <div>
                     <UiImage width={100} image={{width:869, height:60, url:'css/UnitBar.png'}} />
                     <Div pos={pos(0,.92)}>
-                        {this.item(pos(x,0), this.state.info ? this.state.info.Barracks.Count : 0)}
-                        {this.item(pos(x+=incr,0), this.state.info ? this.state.info.Units : 0)}
-                        {this.item(pos(x+=incr,0), this.state.info ? this.state.info.GoldMine.Count : 0)}
-                        {this.item(pos(x+=incr,0), this.state.info ? this.state.info.Gold : 0)}
-                        {this.item(pos(x+=incr,0), this.state.info ? this.state.info.JadeMine.Count : 0)}
-                        {this.item(pos(x+=incr,0), this.state.info ? this.state.info.Jade : 0)}
+                        {this.item(pos(x,0),        Buildings.Barracks, 1, pos(0,0), this.state.info ? this.state.info.Barracks.Count : 0)}
+                        {this.item(pos(x+=small,0), Units.Soldier,    .85, pos(.4,0), this.state.info ? this.state.info.Units : 0)}
+                        {this.item(pos(x+=big,0),   Buildings.GoldMine, 1, pos(0,0), this.state.info ? this.state.info.GoldMine.Count : 0)}
+                        {this.item(pos(x+=small,0), GoldImage,         .67, pos(1.2,.5), this.state.info ? this.state.info.Gold : 0)}
+                        {this.item(pos(x+=big,0),   Buildings.JadeMine, 1, pos(0,0), this.state.info ? this.state.info.JadeMine.Count : 0)}
+                        {this.item(pos(x+=small,0), JadeImage,         .67, pos(1.2,.5), this.state.info ? this.state.info.Jade : 0)}
 
                     </Div>
                 </div>
@@ -344,6 +345,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
 
     var SpellsSpritesheet = {width:300, height:300, dim:[1,4], url:'css/SpellIcons.png'};
     var BuildingsSpritesheet = {width:96, height:96, dim:[5,10], url:'css/Buildings_1.png'};
+    var UnitSpritesheet = {width:32, height:32, dim:[32,96], url:'css/Soldier_1.png'};
     
     var Spells = {
         Fireball: subImage(SpellsSpritesheet, [0,0]),
@@ -358,6 +360,12 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
         JadeMine: subImage(BuildingsSpritesheet, [1,5]),
     };
     
+    var Units = {
+        Soldier: subImage(UnitSpritesheet, [0,0]),
+    };
+    
+    var GoldImage = {width:20, height:22, url:'css/Gold.png'};
+    var JadeImage = {width:20, height:22, url:'css/Jade.png'};
     
     var buildingScale = .85;
     var Actions = {
