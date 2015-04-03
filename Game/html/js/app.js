@@ -4,6 +4,7 @@ require.config({
         require: 'requirejs/require',
         jquery: 'jquery/dist/jquery.min',
         react: 'react/react.min',
+        'react-addons': 'react/react-with-addons.min',
         'react-bootstrap': 'react-bootstrap/react-bootstrap.min',
         lodash: 'lodash/lodash.min',
         main: '../main',

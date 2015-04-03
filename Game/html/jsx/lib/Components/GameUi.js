@@ -1,19 +1,18 @@
-define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, ReactBootstrap, interop) {
+define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], function(_, React, ReactAddons, ReactBootstrap, interop) {
     var Input = ReactBootstrap.Input;
     var OverlayTrigger = ReactBootstrap.OverlayTrigger;
     var Popover = ReactBootstrap.Popover;
     var Button = ReactBootstrap.Button;
+    var PureRenderMixin = ReactAddons.PureRenderMixin;
 
     var updateEvent = [];
+    window.values = {};
     window.update = function(values) {
-        // if (values.unitCount && window.values.unitCount && values.unitCount !== window.values.unitCount)
-            // console.log(values.unitCount);
-            
         window.values = values;
         
         _.each(updateEvent, function(item) {
             item.update(values);
-        });
+        });        
     };
 
     var UpdateMixin = {
@@ -26,6 +25,123 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
         },
     };
 
+    var subImage = function(image, offset) {
+        var sub = _.assign({}, image);
+        sub.offset = offset;
+        return sub;
+    };
+
+    var setGlobalImages = function() {
+        window.SpellsSpritesheet = {width:300, height:300, dim:[1,4], url:'css/SpellIcons.png'};
+        window.BuildingsSpritesheet = {width:96, height:96, dim:[5,10], url:'css/Buildings_1.png'};
+        window.UnitSpritesheet = {width:32, height:32, dim:[32,96], url:'css/Soldier_1.png'};
+
+        window.Spells = {
+            Fireball: subImage(SpellsSpritesheet, [0,0]),
+            Skeletons: subImage(SpellsSpritesheet, [0,1]),
+            Necromancer: subImage(SpellsSpritesheet, [0,2]),
+            Terracotta: subImage(SpellsSpritesheet, [0,3]),
+        };
+
+        window.GoldImage = {width:20, height:22, url:'css/Gold.png'};
+        window.JadeImage = {width:20, height:22, url:'css/Jade.png'};    
+    };
+
+    var setPlayerImages = function(player) {
+        var i = player - 1;
+            
+        window.Buildings = {
+            Barracks: subImage(BuildingsSpritesheet, [i+1,1]),
+            GoldMine: subImage(BuildingsSpritesheet, [i+1,3]),
+            JadeMine: subImage(BuildingsSpritesheet, [i+1,5]),
+        };
+        
+        window.Units = {
+            Soldier: subImage(UnitSpritesheet, [0,4*i]),
+        };
+        
+        setActions();
+    };
+
+    var makeTooltip = function(name) {
+        return <span>{name}<span style={{'float':'right'}}>250</span></span>
+    };
+
+    var setActions = function() {
+        var buildingScale = .85;
+        window.Actions = {
+            Fireball: {
+                image:Spells.Fireball,
+                scale:1,
+                tooltip:
+                    <Popover title={makeTooltip('Fireball')}>
+                        <div>
+                            <p>This is a p test.</p>
+                            <strong>FIRE!</strong> Everything will <em>burrrrnnn</em>. Ahhh-hahaha.
+                            Um. Except dragonlords. They have anti-magic and stuff. Also, anything near a dragonlord. Again... uh, anti-magic. But, <em>everything else</em>... burrrrnnns. Including your own soldiers, so be careful. For real.
+                        </div>
+                    </Popover>,
+            },
+            Skeletons: {
+                image:Spells.Skeletons,
+                scale:1,
+                tooltip:
+                    <Popover title={makeTooltip('Raise Skeletal Army')}>
+                        <strong>Command the dead!</strong> Raise an army of the dead. All corpses not being stomped on will rise up and fight for your cause in the area you select.
+                    </Popover>,
+            },
+            Necromancer: {
+                image:Spells.Necromancer,
+                scale:1,
+                tooltip:
+                    <Popover title={makeTooltip('Summon Necromancer')}>
+                        <strong>Have <em>someone else</em> command the dead!</strong> Summon forth a single, skillful necromancer at a given location.
+                        This lord of death will raise any corpse near them into a skeletal warrior ready to thirst for blood and brains.
+                    </Popover>,
+            },
+            Terracotta: {
+                image:Spells.Terracotta,
+                scale:1,
+                tooltip:
+                    <Popover title={makeTooltip('Raise Terracotta Army')}>
+                        <strong>Clay soldiers! YESSSS.</strong> Mother Earth says: take my earth-warrior-children things! Use them to slay the filthy humans and/or animals!
+                        Kill everything! Mother Earth AAANGRRY.
+                        Seriously. In a given <strong>open</strong> area you select, summon forth an army of clay warriors to do your worst biddings.
+                    </Popover>,
+            },
+            
+            Barracks: {
+                image:Buildings.Barracks,
+                scale:buildingScale,
+                tooltip:
+                    <Popover title={makeTooltip('Build Barracks')}>
+                        <strong>The engine of war.</strong> This building that dudes hang out in and train for battle and stuff. Also where new 'recruits' magically appear, ready for battle.
+                    </Popover>,
+            },
+            GoldMine: {
+                image:Buildings.GoldMine,
+                scale:buildingScale,
+                tooltip:
+                    <Popover title={makeTooltip('Build Gold Mine')}>
+                        <strong>Gooooolllld.</strong> Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign.
+                    </Popover>,
+            },
+            JadeMine: {
+                image:Buildings.JadeMine,
+                scale:buildingScale,
+                tooltip:
+                    <Popover title={makeTooltip('Build Jade Mine')}>
+                        <strong>Green is the color of... MAGIC.</strong> From Jade flows all magic, both real and imaginary. Place this jade mine on a jade source on the map.
+                        Once built the mine will continuously generate jade for you to use in super sweet <strong>Dragonlord spells</strong>.
+                    </Popover>,
+            },
+        };
+    };
+    
+    setGlobalImages();
+    setPlayerImages(1);
+    
+    
     var pos = function(x, y, type) {
         if (typeof type === 'undefined') {
             type = 'absolute';
@@ -332,112 +448,29 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
             );
         }
     });
-
-    var makeTooltip = function(name) {
-        return <span>{name}<span style={{'float':'right'}}>250</span></span>
-    };
-
-    var subImage = function(image, offset) {
-        var sub = _.assign({}, image);
-        sub.offset = offset;
-        return sub;
-    };
-
-    var SpellsSpritesheet = {width:300, height:300, dim:[1,4], url:'css/SpellIcons.png'};
-    var BuildingsSpritesheet = {width:96, height:96, dim:[5,10], url:'css/Buildings_1.png'};
-    var UnitSpritesheet = {width:32, height:32, dim:[32,96], url:'css/Soldier_1.png'};
     
-    var Spells = {
-        Fireball: subImage(SpellsSpritesheet, [0,0]),
-        Skeletons: subImage(SpellsSpritesheet, [0,1]),
-        Necromancer: subImage(SpellsSpritesheet, [0,2]),
-        Terracotta: subImage(SpellsSpritesheet, [0,3]),
-    };
-    
-    var Buildings = {
-        Barracks: subImage(BuildingsSpritesheet, [1,1]),
-        GoldMine: subImage(BuildingsSpritesheet, [1,3]),
-        JadeMine: subImage(BuildingsSpritesheet, [1,5]),
-    };
-    
-    var Units = {
-        Soldier: subImage(UnitSpritesheet, [0,0]),
-    };
-    
-    var GoldImage = {width:20, height:22, url:'css/Gold.png'};
-    var JadeImage = {width:20, height:22, url:'css/Jade.png'};
-    
-    var buildingScale = .85;
-    var Actions = {
-        Fireball: {
-            image: Spells.Fireball,
-            scale:1,
-            tooltip:
-                <Popover title={makeTooltip('Fireball')}>
-                    <div>
-                        <p>This is a p test.</p>
-                        <strong>FIRE!</strong> Everything will <em>burrrrnnn</em>. Ahhh-hahaha.
-                        Um. Except dragonlords. They have anti-magic and stuff. Also, anything near a dragonlord. Again... uh, anti-magic. But, <em>everything else</em>... burrrrnnns. Including your own soldiers, so be careful. For real.
-                    </div>
-                </Popover>,
+    return React.createClass({
+        mixins: [PureRenderMixin, UpdateMixin],
+                
+        update: function(values) {
+            if (this.state.MyPlayerNumber === values.MyPlayerNumber) return;
+            
+            this.setState({
+                MyPlayerNumber: values.MyPlayerNumber,
+            });
         },
-        Skeletons: {
-            image:Spells.Skeletons,
-            scale:1,
-            tooltip:
-                <Popover title={makeTooltip('Raise Skeletal Army')}>
-                    <strong>Command the dead!</strong> Raise an army of the dead. All corpses not being stomped on will rise up and fight for your cause in the area you select.
-                </Popover>,
-        },
-        Necromancer: {
-            image:Spells.Necromancer,
-            scale:1,
-            tooltip:
-                <Popover title={makeTooltip('Summon Necromancer')}>
-                    <strong>Have <em>someone else</em> command the dead!</strong> Summon forth a single, skillful necromancer at a given location.
-                    This lord of death will raise any corpse near them into a skeletal warrior ready to thirst for blood and brains.
-                </Popover>,
-        },
-        Terracotta: {
-            image:Spells.Terracotta,
-            scale:1,
-            tooltip:
-                <Popover title={makeTooltip('Raise Terracotta Army')}>
-                    <strong>Clay soldiers! YESSSS.</strong> Mother Earth says: take my earth-warrior-children things! Use them to slay the filthy humans and/or animals!
-                    Kill everything! Mother Earth AAANGRRY.
-                    Seriously. In a given <strong>open</strong> area you select, summon forth an army of clay warriors to do your worst biddings.
-                </Popover>,
+
+        getInitialState: function() {
+            return {
+                MyPlayerNumber: 1,
+            };
         },
         
-        Barracks: {
-            image:Buildings.Barracks,
-            scale:buildingScale,
-            tooltip:
-                <Popover title={makeTooltip('Build Barracks')}>
-                    <strong>The engine of war.</strong> This building that dudes hang out in and train for battle and stuff. Also where new 'recruits' magically appear, ready for battle.
-                </Popover>,
-        },
-        GoldMine: {
-            image:Buildings.GoldMine,
-            scale:buildingScale,
-            tooltip:
-                <Popover title={makeTooltip('Build Gold Mine')}>
-                    <strong>Gooooolllld.</strong> Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign.
-                </Popover>,
-        },
-        JadeMine: {
-            image:Buildings.JadeMine,
-            scale:buildingScale,
-            tooltip:
-                <Popover title={makeTooltip('Build Jade Mine')}>
-                    <strong>Green is the color of... MAGIC.</strong> From Jade flows all magic, both real and imaginary. Place this jade mine on a jade source on the map.
-                    Once built the mine will continuously generate jade for you to use in super sweet <strong>Dragonlord spells</strong>.
-                </Popover>,
-        },
-    };
-    
-    return React.createClass({        
         render: function() {
+            console.log('render, lets set');
+            setPlayerImages(this.state.MyPlayerNumber);
+            console.log('done setting!');
+        
             return (
                 <div>
                     <UnitBar pos={pos(50.5,.4)} size={width(50)} />

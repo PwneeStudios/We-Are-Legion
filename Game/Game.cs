@@ -691,6 +691,7 @@ namespace Game
         {
             obj["UnitCount"] = World.DataGroup.UnitCountUi;
             obj["MyPlayerInfo"] = World.MyPlayerInfo;
+            obj["MyPlayerNumber"] = World.MyPlayerNumber;
             var json = jsonify.Serialize(obj);
 
             awesomium.WebView.ExecuteJavascript("update(" + json + ");");
