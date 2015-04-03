@@ -47,22 +47,22 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         window.JadeImage = {width:20, height:22, url:'css/Jade.png'};    
     };
 
-    var setPlayerImages = function(player) {
+    var getPlayerImages = function(player) {
         var i = player - 1;
+        
+        return {        
+            Buildings: {
+                Barracks: subImage(BuildingsSpritesheet, [i+1,1]),
+                GoldMine: subImage(BuildingsSpritesheet, [i+1,3]),
+                JadeMine: subImage(BuildingsSpritesheet, [i+1,5]),
+            },
             
-        window.Buildings = {
-            Barracks: subImage(BuildingsSpritesheet, [i+1,1]),
-            GoldMine: subImage(BuildingsSpritesheet, [i+1,3]),
-            JadeMine: subImage(BuildingsSpritesheet, [i+1,5]),
+            Units: {
+                Soldier: subImage(UnitSpritesheet, [0,4*i]),
+            },
         };
-        
-        window.Units = {
-            Soldier: subImage(UnitSpritesheet, [0,4*i]),
-        };
-        
-        setActions();
     };
-
+    
     var makeTooltip = function(name) {
         return <span>{name}<span style={{'float':'right'}}>250</span></span>
     };
@@ -78,7 +78,9 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
                         <div>
                             <p>This is a p test.</p>
                             <strong>FIRE!</strong> Everything will <em>burrrrnnn</em>. Ahhh-hahaha.
-                            Um. Except dragonlords. They have anti-magic and stuff. Also, anything near a dragonlord. Again... uh, anti-magic. But, <em>everything else</em>... burrrrnnns. Including your own soldiers, so be careful. For real.
+                            Except dragonlords. They have anti-magic. Also, anything near a dragonlord. Again... uh, anti-magic. But, <em>everything else</em>... burrrrnnns.
+                            <br /><br />
+                            That includes your own soldiers, so be careful. For real.
                         </div>
                     </Popover>,
             },
@@ -138,9 +140,20 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         };
     };
     
-    setGlobalImages();
-    setPlayerImages(1);
+    var setPlayerImages = function() {
+        window.playerImages = _.map(_.range(5), function(player) { return getPlayerImages(player); });
+    };
     
+    var setPlayer = function(player) {
+        _.assign(window, window.playerImages[player]);
+        setActions();
+    };
+    
+    setGlobalImages();
+    setPlayerImages();
+    setPlayer(1);
+    
+
     
     var pos = function(x, y, type) {
         if (typeof type === 'undefined') {
@@ -363,6 +376,10 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         renderAt: function() {
             var x = 2;
             var small = 13.2, big = 17.2;
+            
+            var Images = playerImages[this.props.MyPlayerNumber];
+            var Buildings = Images.Buildings;
+            var Units = Images.Units;
         
             return (
                 <div>
@@ -455,6 +472,8 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         update: function(values) {
             if (this.state.MyPlayerNumber === values.MyPlayerNumber) return;
             
+            setPlayer(values.MyPlayerNumber);
+           
             this.setState({
                 MyPlayerNumber: values.MyPlayerNumber,
             });
@@ -467,13 +486,14 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         },
         
         render: function() {
-            console.log('render, lets set');
-            setPlayerImages(this.state.MyPlayerNumber);
-            console.log('done setting!');
-        
             return (
                 <div>
-                    <UnitBar pos={pos(50.5,.4)} size={width(50)} />
+                    <div>
+                        {_.map(_.range(1,5), function(player) {
+                            return <UnitBar MyPlayerNumber={player} pos={pos(50.5,.4 + (player-1)*4.2)} size={width(50)} />;
+                        })}
+                    </div>
+                                        
                     {/*<Minimap pos={pos(.2,79)} size={width(11)} />*/}
 
                     <Div pos={pos(15,0)}>

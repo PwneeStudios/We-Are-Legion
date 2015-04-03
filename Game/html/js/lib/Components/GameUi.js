@@ -47,22 +47,22 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         window.JadeImage = {width:20, height:22, url:'css/Jade.png'};    
     };
 
-    var setPlayerImages = function(player) {
+    var getPlayerImages = function(player) {
         var i = player - 1;
+        
+        return {        
+            Buildings: {
+                Barracks: subImage(BuildingsSpritesheet, [i+1,1]),
+                GoldMine: subImage(BuildingsSpritesheet, [i+1,3]),
+                JadeMine: subImage(BuildingsSpritesheet, [i+1,5]),
+            },
             
-        window.Buildings = {
-            Barracks: subImage(BuildingsSpritesheet, [i+1,1]),
-            GoldMine: subImage(BuildingsSpritesheet, [i+1,3]),
-            JadeMine: subImage(BuildingsSpritesheet, [i+1,5]),
+            Units: {
+                Soldier: subImage(UnitSpritesheet, [0,4*i]),
+            },
         };
-        
-        window.Units = {
-            Soldier: subImage(UnitSpritesheet, [0,4*i]),
-        };
-        
-        setActions();
     };
-
+    
     var makeTooltip = function(name) {
         return React.createElement("span", null, name, React.createElement("span", {style: {'float':'right'}}, "250"))
     };
@@ -78,7 +78,9 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
                         React.createElement("div", null, 
                             React.createElement("p", null, "This is a p test."), 
                             React.createElement("strong", null, "FIRE!"), " Everything will ", React.createElement("em", null, "burrrrnnn"), ". Ahhh-hahaha." + ' ' +
-                            "Um. Except dragonlords. They have anti-magic and stuff. Also, anything near a dragonlord. Again... uh, anti-magic. But, ", React.createElement("em", null, "everything else"), "... burrrrnnns. Including your own soldiers, so be careful. For real."
+                            "Except dragonlords. They have anti-magic. Also, anything near a dragonlord. Again... uh, anti-magic. But, ", React.createElement("em", null, "everything else"), "... burrrrnnns.", 
+                            React.createElement("br", null), React.createElement("br", null), 
+                            "That includes your own soldiers, so be careful. For real."
                         )
                     ),
             },
@@ -138,9 +140,20 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         };
     };
     
-    setGlobalImages();
-    setPlayerImages(1);
+    var setPlayerImages = function() {
+        window.playerImages = _.map(_.range(5), function(player) { return getPlayerImages(player); });
+    };
     
+    var setPlayer = function(player) {
+        _.assign(window, window.playerImages[player]);
+        setActions();
+    };
+    
+    setGlobalImages();
+    setPlayerImages();
+    setPlayer(1);
+    
+
     
     var pos = function(x, y, type) {
         if (typeof type === 'undefined') {
@@ -363,6 +376,10 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         renderAt: function() {
             var x = 2;
             var small = 13.2, big = 17.2;
+            
+            var Images = playerImages[this.props.MyPlayerNumber];
+            var Buildings = Images.Buildings;
+            var Units = Images.Units;
         
             return (
                 React.createElement("div", null, 
@@ -455,6 +472,8 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         update: function(values) {
             if (this.state.MyPlayerNumber === values.MyPlayerNumber) return;
             
+            setPlayer(values.MyPlayerNumber);
+           
             this.setState({
                 MyPlayerNumber: values.MyPlayerNumber,
             });
@@ -467,13 +486,14 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         },
         
         render: function() {
-            console.log('render, lets set');
-            setPlayerImages(this.state.MyPlayerNumber);
-            console.log('done setting!');
-        
             return (
                 React.createElement("div", null, 
-                    React.createElement(UnitBar, {pos: pos(50.5,.4), size: width(50)}), 
+                    React.createElement("div", null, 
+                        _.map(_.range(1,5), function(player) {
+                            return React.createElement(UnitBar, {MyPlayerNumber: player, pos: pos(50.5,.4 + (player-1)*4.2), size: width(50)});
+                        })
+                    ), 
+                                        
                     /*<Minimap pos={pos(.2,79)} size={width(11)} />*/
 
                     React.createElement(Div, {pos: pos(15,0)}, 
