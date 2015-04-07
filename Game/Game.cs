@@ -687,15 +687,39 @@ namespace Game
         System.Web.Script.Serialization.JavaScriptSerializer jsonify = new System.Web.Script.Serialization.JavaScriptSerializer();
         StringBuilder sb = new StringBuilder(10000);
         Dictionary<string, object> obj = new Dictionary<string, object>(100);
+        public bool ShowChat = false;
+        public void ToggleChat()
+        {
+            ShowChat = !ShowChat;
+            UpdateJsData();
+        }
+
+        public bool ShowAllPlayers = false;
+        public void ToggleAllPlayers()
+        {
+            ShowAllPlayers = !ShowAllPlayers;
+            UpdateJsData();
+        }
+
         void UpdateJsData()
         {
             obj["UnitCount"] = World.DataGroup.UnitCountUi;
             obj["MyPlayerInfo"] = World.MyPlayerInfo;
             obj["MyPlayerNumber"] = World.MyPlayerNumber;
+            //obj["ShowChat"] = ShowChat;
+            //obj["ShowAllPlayers"] = ShowAllPlayers;
+            //obj["PlayerInfo"] = ShowAllPlayers ? World.PlayerInfo : null;
+
             var json = jsonify.Serialize(obj);
 
-            awesomium.WebView.ExecuteJavascript("update(" + json + ");");
-            //awesomium.WebView.ExecuteJavascript("update(0);");
+            try
+            {
+                awesomium.WebView.ExecuteJavascript("update(" + json + ");");
+            }
+            catch
+            {
+                Console.WriteLine("still fubar");
+            }
         }
 
         protected JSValue OnMouseDown(object sender, JavascriptMethodEventArgs e)

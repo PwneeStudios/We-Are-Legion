@@ -9,6 +9,8 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
     window.values = {};
     window.update = function(values) {
         window.values = values;
+
+        //values.PlayerInfo[1].Barracks.Count;
         
         _.each(updateEvent, function(item) {
             item.update(values);
@@ -470,7 +472,12 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         mixins: [PureRenderMixin, UpdateMixin],
                 
         update: function(values) {
-            if (this.state.MyPlayerNumber === values.MyPlayerNumber) return;
+            if (this.state.MyPlayerNumber === values.MyPlayerNumber ||
+                this.state.ShowChat == values.ShowChat ||
+                this.state.ShowAllPlayers == vales.ShowAllPlayers) {
+                
+                return;
+            }
             
             setPlayer(values.MyPlayerNumber);
            
@@ -480,24 +487,40 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         },
 
         getInitialState: function() {
+            /* Test PureRenderMixin
+            var self = this;
+            setInterval(function() {
+                var player = self.state.MyPlayerNumber + 1;
+                if (player > 4) player = 1;
+                player = 1;
+                
+                self.setState({MyPlayerNumber: player});
+            }, 200);*/
+        
             return {
                 MyPlayerNumber: 1,
+                ShowChat: true,
+                ShowAllPlayers: false,
             };
         },
         
         render: function() {
+            var players = this.state.ShowAllPlayers ? _.range(1,5) : [this.state.MyPlayerNumber];
+
+            console.log('render ' + this.state.MyPlayerNumber);
+            
             return (
                 React.createElement("div", null, 
                     React.createElement("div", null, 
-                        _.map(_.range(1,5), function(player) {
-                            return React.createElement(UnitBar, {MyPlayerNumber: player, pos: pos(50.5,.4 + (player-1)*4.2), size: width(50)});
+                        _.map(players, function(player, index) {
+                            return React.createElement(UnitBar, {MyPlayerNumber: player, pos: pos(50.5,.4 + index*4.2), size: width(50)});
                         })
                     ), 
                                         
                     /*<Minimap pos={pos(.2,79)} size={width(11)} />*/
 
                     React.createElement(Div, {pos: pos(15,0)}, 
-                        /*<ChatInput pos={pos(.35,80)} size={width(49)} />*/
+                        this.state.ShowChat ? React.createElement(ChatInput, {pos: pos(.35,80), size: width(49)}) : null, 
                         
                         React.createElement(Div, {pos: pos(0,85)}, 
                             React.createElement(ActionButton, {name: "Fireball"}), 
