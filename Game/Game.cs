@@ -164,8 +164,8 @@ namespace Game
             xnaObj = awesomium.WebView.CreateGlobalJavascriptObject("xna");
             xnaObj.Bind("OnMouseUp", OnMouseUp);
             xnaObj.Bind("OnMouseDown", OnMouseDown);
-
             xnaObj.Bind("ActionButtonPressed", ActionButtonPressed);
+            xnaObj.Bind("OnChatEnter", OnChatEnter);
 
             awesomium.WebView.Source = @"asset://sample/index.html".ToUri();
         }
@@ -761,6 +761,13 @@ namespace Game
                 Console.WriteLine("Action did not specify a name:string.");
             }
 
+            return JSValue.Null;
+        }
+
+        protected JSValue OnChatEnter(object sender, JavascriptMethodEventArgs e)
+        {
+            string message = e.Arguments[0];
+            Console.WriteLine("message: " + message);
             return JSValue.Null;
         }
     }

@@ -436,9 +436,19 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
             this.focus();
         },
         
+        onKeyDown: function(e) {
+            var keyCode = e.which || e.keyCode;
+            if (keyCode == '13') {
+                if (interop.InXna()) {
+                    var message = this.refs.input.getInputDOMNode().value;
+                    xna.OnChatEnter(message);
+                }
+            }
+        },
+        
         renderAt: function() {
             return (
-                React.createElement(Input, {value: this.state.value, ref: "input", type: "text", addonBefore: "All", onChange: this.onTextChange})
+                React.createElement(Input, {value: this.state.value, ref: "input", type: "text", addonBefore: "All", onChange: this.onTextChange, onKeyDown: this.onKeyDown})
             );
         },
     });
@@ -519,7 +529,7 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         render: function() {
             var players = this.state.ShowAllPlayers ? _.range(1,5) : [this.state.MyPlayerNumber];
 
-            console.log('render ' + this.state.MyPlayerNumber);
+            //console.log('render ' + this.state.MyPlayerNumber);
             
             return (
                 React.createElement("div", null, 

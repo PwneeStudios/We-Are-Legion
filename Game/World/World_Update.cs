@@ -161,8 +161,7 @@ namespace Game
 
 
             // Switch to chat
-            //if (!GameClass.Game.ShowChat && Keys.Enter.Pressed())
-            if (Keys.Enter.Down())
+            if (Keys.Enter.Pressed())
             {
                 GameClass.Game.ToggleChat();
             }
