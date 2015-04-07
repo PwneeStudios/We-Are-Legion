@@ -265,7 +265,15 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
 
     var UiImage = React.createClass({
         mixins: [RenderAtMixin],
-    
+
+        onEnter: function() {
+            console.log('hi')
+        },
+
+        onLeave: function() {
+            console.log('leave')
+        },
+
         renderAt: function() {
             var image = this.props.image;
             image.aspect = image.height / image.width;
@@ -290,7 +298,7 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
             var style = {backgroundImage: 'url('+image.url+')', backgroundPosition:backgroundPos, backgroundSize:backgroundSize};
             style = _.assign(style, this.props.style);
             
-            var img = <div className="UiImage" style={style} />;
+            var img = <div className="UiImage" style={style} onMouseEnter={this.onEnter} onMouseLeave={this.onLeave} />;
             
             var body;
             if (this.props.overlay) {
@@ -453,6 +461,32 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         },
     });
 
+    var ChatBox = React.createClass({
+        mixins: [RenderAtMixin],
+        
+        getInitialState: function() {
+            return {
+                value: 'Why hello there my friend it has been a very long time since ive seen you why dont you come in and rest your feet and shit.',
+            };
+        },
+    
+        renderAt: function() {
+            var style = {
+                'pointer-events': 'none',
+                fontSize: '1.1%',
+                'background-color':'rgba(0,0,0,.45)',
+                '-webkit-text-stroke': '0.3px',
+            };
+        
+            return (
+                <p className='chat' style={style}>
+                    <span style={{color:'rgba(180,180,255,255)'}}>goodntonic: </span>
+                    {this.state.value}
+                </p>
+            );
+        },
+    });
+
     var UnitBox = React.createClass({
         mixins: [RenderAtMixin, UpdateMixin],
 
@@ -543,6 +577,8 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
 
                     <Div pos={pos(15,0)}>
                         {this.state.ShowChat ? <ChatInput pos={pos(.35,80)} size={width(49)} /> : null}
+
+                        <ChatBox pos={pos(.38, 60)} size={width(38)}/>
                         
                         <Div pos={pos(0,85)}>
                             <ActionButton name='Fireball' />

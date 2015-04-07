@@ -159,7 +159,7 @@ namespace Game
             if (BL.x < -x_edge) CameraPos = new vec2(CameraPos.x - (BL.x + x_edge), CameraPos.y);
             if (BL.y < -1) CameraPos = new vec2(CameraPos.x, CameraPos.y - (BL.y + 1));
 
-
+            
             // Switch to chat
             if (!GameClass.Game.ShowChat && Keys.Enter.Pressed())
             {

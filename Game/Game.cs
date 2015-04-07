@@ -722,10 +722,12 @@ namespace Game
             }
         }
 
+        public bool mouseDownOverHUD = false;
         protected JSValue OnMouseDown(object sender, JavascriptMethodEventArgs e)
         {
-            bool mouseDownOverHUD = e.Arguments[0];
+            mouseDownOverHUD = e.Arguments[0];
             MouseButton mouseButton = (MouseButton)(int)e.Arguments[1];
+            Console.WriteLine("value is " + mouseDownOverHUD);
             return JSValue.Null;
         }
 

@@ -204,7 +204,7 @@ namespace Game
 
             if (!Input.LeftMouseDown) return;
 
-            if (!BoxSelecting && Input.LeftMousePressed && MouseInGame)
+            if (!BoxSelecting && Input.LeftMousePressed && MouseInGame && !GameClass.Game.mouseDownOverHUD)
             {
                 BoxSelecting = true;
             }
