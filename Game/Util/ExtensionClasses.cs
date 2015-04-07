@@ -7,6 +7,23 @@ using FragSharpFramework;
 
 namespace Game
 {
+    public enum Toggle { Off, On, Flip };
+    public static class ToggleExtension
+    {
+        public static bool ToBool(this Toggle value)
+        {
+            if (value == Toggle.On) return true;
+            if (value == Toggle.Off) return false;
+
+            throw new Exception("Cannot cast value [" + value + "] to boolean; not true or false.");
+        }
+        public static bool Apply(this Toggle toggle, ref bool value)
+        {
+            value = toggle == Toggle.Flip ? !value : toggle.ToBool();
+            return value;
+        }
+    }
+
     public static class RectangleQuadExtension
     {
         public static bool Contains(this RectangleQuad quad, vec2 pos)

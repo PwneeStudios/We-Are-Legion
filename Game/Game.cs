@@ -688,16 +688,16 @@ namespace Game
         StringBuilder sb = new StringBuilder(10000);
         Dictionary<string, object> obj = new Dictionary<string, object>(100);
         public bool ShowChat = false;
-        public void ToggleChat()
+        public void ToggleChat(Toggle value = Toggle.Flip)
         {
-            ShowChat = !ShowChat;
+            value.Apply(ref ShowChat);
             UpdateJsData();
         }
 
         public bool ShowAllPlayers = false;
-        public void ToggleAllPlayers()
+        public void ToggleAllPlayers(Toggle value = Toggle.Flip)
         {
-            ShowAllPlayers = !ShowAllPlayers;
+            value.Apply(ref ShowAllPlayers);
             UpdateJsData();
         }
 
@@ -768,6 +768,9 @@ namespace Game
         {
             string message = e.Arguments[0];
             Console.WriteLine("message: " + message);
+
+            ToggleChat(Toggle.Off);
+
             return JSValue.Null;
         }
     }
