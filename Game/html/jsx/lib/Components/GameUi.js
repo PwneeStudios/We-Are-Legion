@@ -427,7 +427,15 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
                 value:this.refs.input.getValue()
             });
         },
+        
+        focus: function() {
+            this.refs.input.getInputDOMNode().focus();
+        },
 
+        componentDidMount: function() {
+            this.focus();
+        },
+        
         renderAt: function() {
             return (
                 <Input value={this.state.value} ref="input" type="text" addonBefore="All" onChange={this.onTextChange} />
@@ -472,17 +480,21 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         mixins: [PureRenderMixin, UpdateMixin],
                 
         update: function(values) {
-            if (this.state.MyPlayerNumber === values.MyPlayerNumber ||
-                this.state.ShowChat == values.ShowChat ||
-                this.state.ShowAllPlayers == vales.ShowAllPlayers) {
+            if (this.state.MyPlayerNumber === values.MyPlayerNumber &&
+                this.state.ShowChat === values.ShowChat &&
+                this.state.ShowAllPlayers === values.ShowAllPlayers) {
                 
                 return;
             }
             
-            setPlayer(values.MyPlayerNumber);
-           
+            if (this.state.MyPlayerNumber !== values.MyPlayerNumber) {
+                setPlayer(values.MyPlayerNumber);
+            }
+            
             this.setState({
                 MyPlayerNumber: values.MyPlayerNumber,
+                ShowChat: values.ShowChat,
+                ShowAllPlayers: values.ShowAllPlayers,
             });
         },
 

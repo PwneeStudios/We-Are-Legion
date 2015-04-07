@@ -706,9 +706,9 @@ namespace Game
             obj["UnitCount"] = World.DataGroup.UnitCountUi;
             obj["MyPlayerInfo"] = World.MyPlayerInfo;
             obj["MyPlayerNumber"] = World.MyPlayerNumber;
-            //obj["ShowChat"] = ShowChat;
-            //obj["ShowAllPlayers"] = ShowAllPlayers;
-            //obj["PlayerInfo"] = ShowAllPlayers ? World.PlayerInfo : null;
+            obj["ShowChat"] = ShowChat;
+            obj["ShowAllPlayers"] = ShowAllPlayers;
+            obj["PlayerInfo"] = ShowAllPlayers ? World.PlayerInfo : null;
 
             var json = jsonify.Serialize(obj);
 

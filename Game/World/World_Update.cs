@@ -76,7 +76,7 @@ namespace Game
             }
             MaxZoomOut = 1f;
             // Zoom all the way out
-            if (Keys.Space.Down())
+            if (!GameClass.Game.ShowChat && Keys.Space.Down())
                 CameraZoom = MaxZoomOut;
 
             // Zoom in/out, into the location of the cursor
@@ -91,8 +91,8 @@ namespace Game
             }
 
             float KeyZoomRate = 1.125f * FpsRateModifier;
-            if (Buttons.X.Down() || Keys.X.Down() || Keys.E.Down())      CameraZoom /= KeyZoomRate;
-            else if (Buttons.A.Down() || Keys.Z.Down() || Keys.Q.Down()) CameraZoom *= KeyZoomRate;
+            if (!GameClass.Game.ShowChat && (Buttons.X.Down() || Keys.X.Down() || Keys.E.Down())) CameraZoom /= KeyZoomRate;
+            else if (!GameClass.Game.ShowChat && (Buttons.A.Down() || Keys.Z.Down() || Keys.Q.Down())) CameraZoom *= KeyZoomRate;
 
             if (CameraZoom < MaxZoomOut) CameraZoom = MaxZoomOut;
             if (CameraZoom > MaxZoomIn) CameraZoom = MaxZoomIn;
@@ -135,10 +135,13 @@ namespace Game
             }
 
             // Move the camera via: Keyboard or Gamepad
-            var dir = Input.Direction();
+            if (!GameClass.Game.ShowChat)
+            {
+                var dir = Input.Direction();
 
-            float MoveRate_Keyboard = .07f * FpsRateModifier;
-            CameraPos += dir / CameraZoom * MoveRate_Keyboard;
+                float MoveRate_Keyboard = .07f * FpsRateModifier;
+                CameraPos += dir / CameraZoom * MoveRate_Keyboard;                
+            }
 
             // Move the camera via: Minimap
             if ((Input.LeftMouseDown || Input.DeltaMouseScroll != 0) && !BoxSelecting && MouseOverMinimap)
@@ -156,6 +159,14 @@ namespace Game
             if (BL.x < -x_edge) CameraPos = new vec2(CameraPos.x - (BL.x + x_edge), CameraPos.y);
             if (BL.y < -1) CameraPos = new vec2(CameraPos.x, CameraPos.y - (BL.y + 1));
 
+
+            // Switch to chat
+            //if (!GameClass.Game.ShowChat && Keys.Enter.Pressed())
+            if (Keys.Enter.Down())
+            {
+                GameClass.Game.ToggleChat();
+            }
+            if (GameClass.Game.ShowChat) return;
 
             // Switch input modes
 
