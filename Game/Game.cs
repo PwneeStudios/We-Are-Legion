@@ -131,7 +131,7 @@ namespace Game
         void AwesomiumInitialize()
         {
             awesomium = new AwesomiumComponent(this, GraphicsDevice.Viewport.Bounds);
-            
+
             Console.WriteLine("GraphicsDevice.Viewport.Bounds");
             Console.WriteLine(GraphicsDevice.Viewport.Bounds);
             Console.WriteLine(GraphicsDevice.Viewport.Bounds.Width);
@@ -162,11 +162,11 @@ namespace Game
 
             // Create an object that will allow JS inside Awesomium to communicate with XNA
             xnaObj = awesomium.WebView.CreateGlobalJavascriptObject("xna");
-            xnaObj.Bind("OnMouseUp", OnMouseUp);
-            xnaObj.Bind("OnMouseDown", OnMouseDown);
+            xnaObj.Bind("OnMouseOver", OnMouseOver);
+            xnaObj.Bind("OnMouseLeave", OnMouseLeave);
             xnaObj.Bind("ActionButtonPressed", ActionButtonPressed);
             xnaObj.Bind("OnChatEnter", OnChatEnter);
-            
+
             awesomium.WebView.Source = @"asset://sample/index.html".ToUri();
         }
 
@@ -239,8 +239,8 @@ namespace Game
                     Directory.Delete(HotSwapDir, true);
                 }
                 catch
-                { 
-                    
+                {
+
                 }
 
                 var source_art = Directory.EnumerateFiles(ArtSrcDir, "*", SearchOption.AllDirectories);
@@ -265,7 +265,7 @@ namespace Game
             watcher.Changed += new FileSystemEventHandler(OnHotSwapChanged);
             watcher.Created += new FileSystemEventHandler(OnHotSwapChanged);
             watcher.Deleted += new FileSystemEventHandler(OnHotSwapChanged);
-            
+
             // Start watching
             watcher.EnableRaisingEvents = true;
         }
@@ -380,8 +380,8 @@ namespace Game
 
         int DrawCount = 0;
 
-        enum GameState { TitleScreen, Spells, Instructions, ScenarioMenu, Loading, Game,       ToEditor, ToMap }
-        
+        enum GameState { TitleScreen, Spells, Instructions, ScenarioMenu, Loading, Game, ToEditor, ToMap }
+
 #if DEBUG
         //GameState State = Program.MultiDebug ? GameState.ToTest : GameState.ToEditor;
         GameState State = GameState.TitleScreen;
@@ -439,7 +439,7 @@ namespace Game
             {
                 case GameState.ToEditor:
                     World = new World();
-                    
+
                     //World.Load("TestSave.m3n");
                     //World.Load(Path.Combine("Content", Path.Combine("Maps", "Beset.m3n")));
                     //World.Load(Path.Combine("Content", Path.Combine("Maps", "Gilgamesh.m3n")));
@@ -503,7 +503,7 @@ namespace Game
                     {
                         State = GameState.ScenarioMenu;
                     }
-                    
+
                     break;
 
                 case GameState.ScenarioMenu:
@@ -553,10 +553,10 @@ namespace Game
                     {
                         World = new World();
                         World.Load(Path.Combine("Content", Path.Combine("Maps", ScenarioToLoad)));
-                        
+
                         Program.WorldLoaded = true;
                         Networking.ToServer(new Message(MessageType.DoneLoading));
-                        
+
                         ScenarioToLoad = null;
                         TimeSinceLoad = 0;
                         DrawFullScreen(Assets.ScreenLoading);
@@ -701,7 +701,7 @@ namespace Game
                 awesomium.AllowMouseEvents = true;
             }
 
-            if (!Input.LeftMouseDown)
+            if (!Input.LeftMouseDown || !MouseOverHud)
             {
                 MouseDownOverUi = false;
             }
@@ -716,7 +716,7 @@ namespace Game
                 {
                     MouseDownOverUi = false;
                 }
-            }        
+            }
         }
 
         System.Web.Script.Serialization.JavaScriptSerializer jsonify = new System.Web.Script.Serialization.JavaScriptSerializer();
@@ -757,23 +757,18 @@ namespace Game
             }
         }
 
-        public bool mouseDownOverHUD = false;
-        protected JSValue OnMouseDown(object sender, JavascriptMethodEventArgs e)
+        public bool MouseOverHud = false;
+        protected JSValue OnMouseLeave(object sender, JavascriptMethodEventArgs e)
         {
-            mouseDownOverHUD = e.Arguments[0];
-            MouseButton mouseButton = (MouseButton)(int)e.Arguments[1];
-            Console.WriteLine("value is " + mouseDownOverHUD);
+            MouseOverHud = false;
+            Console.WriteLine(MouseOverHud);
             return JSValue.Null;
         }
 
-        protected JSValue OnMouseUp(object sender, JavascriptMethodEventArgs e)
+        protected JSValue OnMouseOver(object sender, JavascriptMethodEventArgs e)
         {
-            bool mouseUpOverHUD = e.Arguments[0];
-            MouseButton mouseButton = (MouseButton)(int)e.Arguments[1];
-            bool clickHandled = mouseUpOverHUD;
-
-            Console.WriteLine("Click was " + (clickHandled ? "" : "not ") + "handled by the Web UI.");
-
+            MouseOverHud = true;
+            Console.WriteLine(MouseOverHud);
             return JSValue.Null;
         }
 

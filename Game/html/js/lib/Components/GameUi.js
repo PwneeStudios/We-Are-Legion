@@ -5,22 +5,6 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
     var Button = ReactBootstrap.Button;
     var PureRenderMixin = ReactAddons.PureRenderMixin;
 
-    var onOver = function() {
-        console.log('hi')
-        
-        if (interop.InXna()) {
-            xna.OnMouseOver();
-        }
-    };
-
-    var onLeave = function() {
-        console.log('leave')
-        
-        if (interop.InXna()) {
-            xna.OnMouseLeave();
-        }
-    };
-
     var updateEvent = [];
     window.values = {};
     window.update = function(values) {
@@ -267,7 +251,7 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
             var height = width * image.aspect;
             
             var button = React.createElement("button", {className: "UiButton", style: {backgroundImage: 'url('+image.url+')'}, onClick: this.onClick, 
-                          onMouseEnter: onOver, onMouseLeave: onLeave});
+                          onMouseEnter: interop.onOver, onMouseLeave: interop.onLeave});
             
             var body;
             if (this.props.overlay && !this.state.preventTooltip) {
@@ -348,7 +332,7 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
             }
 
             return (
-                React.createElement("div", {style: divStyle, onMouseOver: this.props.nonBlocking ? null : onOver, onMouseLeave: this.props.nonBlocking ? null : onLeave}, 
+                React.createElement("div", {style: divStyle, onMouseOver: this.props.nonBlocking ? null : interop.onOver, onMouseLeave: this.props.nonBlocking ? null : interop.onLeave}, 
                     body
                 )
             );
@@ -494,7 +478,7 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
                 React.createElement(Input, {value: this.state.value, ref: "input", type: "text", addonBefore: "All", 
                  style: {'pointer-events':'auto'}, 
                  onChange: this.onTextChange, onKeyDown: this.onKeyDown, 
-                 onMouseOver: onOver, onMouseLeave: onLeave})
+                 onMouseOver: interop.onOver, onMouseLeave: interop.onLeave})
             );
         },
     });
