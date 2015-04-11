@@ -26,7 +26,35 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
             _.remove(updateEvent, function(e) { e === this; });
         },
     };
+    
 
+
+
+
+    
+    var chatMessageEvent = [];
+    window.chatMessages = ['Hello', 'Hi there!', 'Hello', 'Hi there!', 'Hello', 'Hi there!'];
+    
+    window.addChatMessage = function(message) {
+        window.chatMessages.push(message.message);
+
+        _.each(chatMessageEvent, function(item) {
+            item.onChatMessage(message);
+        });
+    };
+
+    var OnChatMessageMixin = {
+        componentDidMount: function() {
+            chatMessageEvent.push(this);
+        },
+        
+        componentWillUnmount: function() {
+            _.remove(chatMessageEvent, function(e) { e === this; });
+        },
+    };
+
+    
+    
     var subImage = function(image, offset) {
         var sub = _.assign({}, image);
         sub.offset = offset;
@@ -484,7 +512,11 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
     });
 
     var ChatBox = React.createClass({displayName: "ChatBox",
-        mixins: [RenderAtMixin],
+        mixins: [RenderAtMixin, OnChatMessageMixin],
+        
+        onChatMessage: function(message) {
+            this.forceUpdate();
+        },
         
         getInitialState: function() {
             return {
@@ -498,12 +530,26 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
                 fontSize: '1.1%',
                 'background-color':'rgba(0,0,0,.45)',
                 '-webkit-text-stroke': '0.3px',
+                'float':'bottom',
             };
-        
+
+            var messages = _.map(chatMessages, function(message) {
+                return (
+                    React.createElement("span", null, 
+                        React.createElement("span", {style: {color:'rgba(180,180,255,255)'}}, "goodntonic: "), 
+                        React.createElement("span", null, message), 
+                        React.createElement("br", null)
+                    )
+                );
+            });
+
             return (
-                React.createElement("p", {className: "chat", style: style}, 
-                    React.createElement("span", {style: {color:'rgba(180,180,255,255)'}}, "goodntonic: "), 
-                    this.state.value
+                React.createElement("div", {style: {'position':'relative'}}, 
+                    React.createElement("div", {style: {'position':'absolute','bottom':'0'}}, 
+                        React.createElement("p", {className: "chat", style: style}, 
+                            messages
+                        )
+                    )
                 )
             );
         },
@@ -600,7 +646,8 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
                     React.createElement(Div, {pos: pos(15,0)}, 
                         this.state.ShowChat ? React.createElement(ChatInput, {pos: pos(.35,80), size: width(49)}) : null, 
 
-                        React.createElement(ChatBox, {pos: pos(.38, 60), size: width(38)}), 
+                        /*<ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/
+                        React.createElement(ChatBox, {pos: pos(.38, 80), size: width(38)}), 
                         
                         React.createElement(Div, {pos: pos(0,85)}, 
                             React.createElement(ActionButton, {name: "Fireball"}), 

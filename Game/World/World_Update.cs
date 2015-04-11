@@ -68,6 +68,7 @@ namespace Game
 
         public static float StaticMaxZoomOut = 1;
         float x_edge;
+        int ChatInhibitor = 0;
         public void Update()
         {
             EditorUpdate();
@@ -177,11 +178,12 @@ namespace Game
 
             
             // Switch to chat
-            if (!GameClass.Game.ShowChat && Keys.Enter.Pressed())
+            if (!GameClass.Game.ShowChat && Keys.Enter.Pressed() && ChatInhibitor <= 0)
             {
                 GameClass.Game.ToggleChat();
             }
-            if (GameClass.Game.ShowChat) return;
+            if (GameClass.Game.ShowChat) { ChatInhibitor = 5; return; }
+            if (ChatInhibitor > 0 && !Keys.Enter.Down()) ChatInhibitor--;
 
             // Switch input modes
 

@@ -753,8 +753,25 @@ namespace Game
             }
             catch
             {
-                Console.WriteLine("still fubar");
+                Console.WriteLine("Could not communicate with Awesomium");
             }
+        }
+
+        public void AddChatMessage(int player, string message)
+        {
+            try
+            {
+                var obj = new Dictionary<string, object>();
+                obj["message"] = message;
+                obj["player"] = player;
+                var str = jsonify.Serialize(obj);
+                awesomium.WebView.ExecuteJavascript("addChatMessage(" + str + ");");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Could not communicate with Awesomium");
+                Console.WriteLine(e);
+            }            
         }
 
         public bool MouseOverHud = false;
@@ -799,7 +816,12 @@ namespace Game
         protected JSValue OnChatEnter(object sender, JavascriptMethodEventArgs e)
         {
             string message = e.Arguments[0];
-            Console.WriteLine("message: " + message);
+
+            if (message != null && message.Length > 0)
+            {
+                Console.WriteLine("ui chat message: " + message);
+                Networking.ToServer(new MessageChat(message));
+            }
 
             ToggleChat(Toggle.Off);
 

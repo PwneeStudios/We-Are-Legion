@@ -206,7 +206,7 @@ namespace AwesomiumXNA
                     if ((uint)lParam.WParam == 18)
                         alt = true;
 
-                    Console.WriteLine(lParam.WParam);
+                    //Console.WriteLine(lParam.WParam);
                     if (WebView.FocusedElementType == FocusedElementType.TextInput)
                         WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam,
                             (shift ? Modifiers.ShiftKey : 0) | (ctrl ? Modifiers.ControlKey : 0) | (alt ? Modifiers.AltKey : 0)));
@@ -221,7 +221,7 @@ namespace AwesomiumXNA
                     if ((uint)lParam.WParam == 18)
                         alt = false;
 
-                    Console.WriteLine(lParam.WParam);
+                    //Console.WriteLine(lParam.WParam);
                     if (WebView.FocusedElementType == FocusedElementType.TextInput)
                         WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam,
                             (shift ? Modifiers.ShiftKey : 0) | (ctrl ? Modifiers.ControlKey : 0) | (alt ? Modifiers.AltKey : 0)));
@@ -229,7 +229,7 @@ namespace AwesomiumXNA
                         break;
 
                 case WindowsMessage.Char:
-                    Console.WriteLine(lParam.WParam);
+                    //Console.WriteLine(lParam.WParam);
                     if (WebView.FocusedElementType == FocusedElementType.TextInput)
                         WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam,
                             (shift ? Modifiers.ShiftKey : 0) | (ctrl ? Modifiers.ControlKey : 0) | (alt ? Modifiers.AltKey : 0)));

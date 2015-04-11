@@ -20,6 +20,7 @@ namespace Game
     }
 
     public enum PlayerAction {
+        ChatMessage,
         SelectAlongLine, SelectInBox, AttackMove, PlaceBuilding, CastSpell, DragonLordDeath,
     }
 

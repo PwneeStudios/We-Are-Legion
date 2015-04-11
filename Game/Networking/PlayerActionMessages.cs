@@ -38,6 +38,30 @@ namespace Game
         }
     }
 
+    public class MessageChat : MessagePlayerActionTail
+    {
+        public string ChatMessage;
+
+        public MessageChat(string ChatMessage)
+        {
+            this.ChatMessage = ChatMessage;
+        }
+
+        public override MessageStr EncodeHead() { return _ | ChatMessage; }
+        public static MessageChat Parse(string s) { return new MessageChat(Pop(ref s)); }
+        public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.ChatMessage); }
+
+        public override void Immediate()
+        {
+        }
+
+        public override void Do()
+        {
+            if (Log.Do) Console.WriteLine("   Do message chat at {0} : {1}", GameClass.World.SimStep, this);
+            GameClass.Game.AddChatMessage(((MessagePlayerAction)Outer).PlayerNumber, ChatMessage);
+        }
+    }
+
     public class MessageAttackMove : MessagePlayerActionTail
     {
         public vec2
