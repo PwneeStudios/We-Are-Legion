@@ -602,10 +602,10 @@ namespace Game
                         break;
 
                     case UserMode.Painting:
-                        if (AfterUi) break;
-
                         if (UnitPlaceStyle == UnitDistribution.Single)
                         {
+                            if (AfterUi) break;
+
                             UpdateCellAvailability();
 
                             DrawGridCell();
@@ -613,18 +613,16 @@ namespace Game
                         }
                         else
                         {
-                            DrawCircleCursor();
+                            DrawCircleCursor(AfterUi);
                         }
 
                         break;
 
                     case UserMode.Select:
-                        if (!AfterUi) break;
-
                         if (LineSelect)
-                            DrawCircleCursor();
+                            DrawCircleCursor(AfterUi);
                         else
-                            DrawBoxSelect();
+                            DrawBoxSelect(AfterUi);
                         break;
 
                     case UserMode.CastSpell:

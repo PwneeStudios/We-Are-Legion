@@ -185,8 +185,10 @@ namespace Game
         }
 
         bool LineSelect = false;
-        public void DrawCircleCursor()
+        public void DrawCircleCursor(bool AfterUi)
         {
+            if (AfterUi) return;
+
             vec2 WorldCord = ScreenToWorldCoord(Input.CurMousePos);
             DrawTextureSmooth.Using(camvec, CameraAspect, Assets.SelectCircle);
             RectangleQuad.Draw(GameClass.Graphics, WorldCord, SelectSize);
@@ -198,11 +200,19 @@ namespace Game
         vec2 BoxSelectStart = vec2.Zero, BoxSelectEnd = vec2.Zero;
         vec2 BoxSelectGridStart = vec2.Zero, BoxSelectGridEnd = vec2.Zero;
         public bool BoxSelecting = false;
-        public void DrawBoxSelect()
+        public void DrawBoxSelect(bool AfterUi)
         {
-            DrawArrowCursor();
+            if (AfterUi)
+            {
+                DrawArrowCursor();
+                return;
+            }
 
-            if (!LeftMouseDown) return;
+            if (!LeftMouseDown)
+            {
+                BoxSelecting = false;
+                return;
+            }
 
             if (!BoxSelecting && LeftMousePressed && MouseInGame)
             {
