@@ -56,16 +56,27 @@ body {
     /* text-shadow: 0px 0px 2px rgba(255, 255, 255, 0.4); */
     -webkit-text-stroke: 0.4px;
     /* text-shadow:rgba(236,236,236,255) 0 1px .3px,rgba(236,236,236,255) 0 -1px .3px; */
-    
-    visibility:visible;
-    opacity:1;
-    transition: opacity 2s linear;
+        
+    pointer-events: none;
+    font-size: 1.1%;
+    background-color:rgba(0,0,0,.45);
+    -webkit-text-stroke: 0.3px;
+    float:bottom;
+    margin:0;
 }
 
-.hidden {
-    visibility:hidden;
-    opacity:0;
-    transition:visibility 0s 2s, opacity 2s linear;
+.chatMessage-enter {
+    opacity:0.01;
+    transition: opacity .5s ease-in;
+}
+
+.chatMessage-leave {
+    opacity:0.01;
+    transition: opacity .5s ease-in;
+}
+
+.chatMessage-enter.chatMessage-enter-active {
+    opacity:1;
 }
 
 input {

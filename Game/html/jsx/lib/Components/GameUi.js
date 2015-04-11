@@ -1,17 +1,16 @@
-define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], function(_, React, ReactAddons, ReactBootstrap, interop) {
+define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, ReactBootstrap, interop) {
     var Input = ReactBootstrap.Input;
     var OverlayTrigger = ReactBootstrap.OverlayTrigger;
     var Popover = ReactBootstrap.Popover;
     var Button = ReactBootstrap.Button;
-    var PureRenderMixin = ReactAddons.PureRenderMixin;
+    var PureRenderMixin = React.addons.PureRenderMixin;
+    var CSSTransitionGroup = React.addons.CSSTransitionGroup;
 
     var updateEvent = [];
     window.values = {};
     window.update = function(values) {
         window.values = values;
 
-        //values.PlayerInfo[1].Barracks.Count;
-        
         _.each(updateEvent, function(item) {
             item.update(values);
         });        
@@ -33,11 +32,8 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
 
     
     var chatMessageEvent = [];
-    window.chatMessages = ['Hello', 'Hi there!', 'Hello', 'Hi there!', 'Hello', 'Hi there!'];
     
     window.addChatMessage = function(message) {
-        window.chatMessages.push(message.message);
-
         _.each(chatMessageEvent, function(item) {
             item.onChatMessage(message);
         });
@@ -515,40 +511,55 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         mixins: [RenderAtMixin, OnChatMessageMixin],
         
         onChatMessage: function(message) {
-            this.forceUpdate();
+            var self = this;
+            
+            message.index = this.state.counter++;
+            
+            self.state.messages.push(message);
+            self.setState({messages: self.state.messages});
+            
+            setTimeout(function() {
+                _.remove(self.state.messages, function(e) {
+                    return e.index === message.index;
+                });
+                self.setState({messages: self.state.messages});
+            }, 4500);
         },
         
         getInitialState: function() {
             return {
-                value: 'Why hello there my friend it has been a very long time since ive seen you why dont you come in and rest your feet and shit.',
+                //messages: [{index:1, message:'hello there'}, {index:2, message:'hello there again'}, {index:3, message:'hello there etc'}],
+                messages: [],
+                counter: 0,
             };
         },
     
+        componentDidMount: function() {
+            var self = this;
+            
+            // setInterval(function() {
+                // self.onChatMessage({message:'hello there again ' + self.state.counter});
+            // }, 1000);
+        },
+    
         renderAt: function() {
-            var style = {
-                'pointer-events': 'none',
-                fontSize: '1.1%',
-                'background-color':'rgba(0,0,0,.45)',
-                '-webkit-text-stroke': '0.3px',
-                'float':'bottom',
-            };
-
-            var messages = _.map(chatMessages, function(message) {
+            //var messages = _.map(chatMessages, function(message) {
+            var messages = _.map(this.state.messages, function(message) {
                 return (
-                    <span>
+                    <p key={message.index} className='chat'>
                         <span style={{color:'rgba(180,180,255,255)'}}>goodntonic: </span>
-                        <span>{message}</span>
+                        <span>{message.message}</span>
                         <br />
-                    </span>
+                    </p>
                 );
             });
 
             return (
                 <div style={{'position':'relative'}}>
                     <div style={{'position':'absolute','bottom':'0'}}>
-                        <p className=this.state.show?'chat':'hidden' style={style}>
+                        {/*<CSSTransitionGroup transitionName='chatMessage'>*/}
                             {messages}
-                        </p>
+                        {/*</CSSTransitionGroup>*/}
                     </div>
                 </div>
             );
@@ -631,8 +642,6 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         render: function() {
             var players = this.state.ShowAllPlayers ? _.range(1,5) : [this.state.MyPlayerNumber];
 
-            //console.log('render ' + this.state.MyPlayerNumber);
-            
             return (
                 <div>
                     <Div pos={pos(0,0)}>
@@ -647,7 +656,7 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
                         {this.state.ShowChat ? <ChatInput pos={pos(.35,80)} size={width(49)} /> : null}
 
                         {/*<ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/}
-                        <ChatBox pos={pos(.38, 80)} size={width(38)}/>
+                        <ChatBox pos={pos(.38, 78)} size={width(38)}/>
                         
                         <Div pos={pos(0,85)}>
                             <ActionButton name='Fireball' />
