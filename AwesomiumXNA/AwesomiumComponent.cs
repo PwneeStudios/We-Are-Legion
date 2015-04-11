@@ -189,6 +189,7 @@ namespace AwesomiumXNA
             }
         }
 
+        static bool shift = false, ctrl = false, alt = false;
         private Int32 ProcessMessages(Int32 code, Int32 wParam, ref Message lParam)
         {
             if (code == 0 && wParam == 1)
@@ -196,10 +197,40 @@ namespace AwesomiumXNA
                 switch ((WindowsMessage)lParam.Msg)
                 {
                 case WindowsMessage.KeyDown:
-                case WindowsMessage.KeyUp:
-                case WindowsMessage.Char:
+                    if ((uint)lParam.WParam == 16)
+                        shift = true;
+                    if ((uint)lParam.WParam == 17)
+                        ctrl = true;
+                    if ((uint)lParam.WParam == 18)
+                        alt = true;
+
+                    Console.WriteLine(lParam.WParam);
                     if (WebView.FocusedElementType == FocusedElementType.TextInput)
-                        WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam, 0));
+                        WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam,
+                            (shift ? Modifiers.ShiftKey : 0) | (ctrl ? Modifiers.ControlKey : 0) | (alt ? Modifiers.AltKey : 0)));
+
+                    break;
+
+                case WindowsMessage.KeyUp:
+                    if ((uint)lParam.WParam == 16)
+                        shift = false;
+                    if ((uint)lParam.WParam == 17)
+                        ctrl = false;
+                    if ((uint)lParam.WParam == 18)
+                        alt = false;
+
+                    Console.WriteLine(lParam.WParam);
+                    if (WebView.FocusedElementType == FocusedElementType.TextInput)
+                        WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam,
+                            (shift ? Modifiers.ShiftKey : 0) | (ctrl ? Modifiers.ControlKey : 0) | (alt ? Modifiers.AltKey : 0)));
+
+                        break;
+
+                case WindowsMessage.Char:
+                    Console.WriteLine(lParam.WParam);
+                    if (WebView.FocusedElementType == FocusedElementType.TextInput)
+                        WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam,
+                            (shift ? Modifiers.ShiftKey : 0) | (ctrl ? Modifiers.ControlKey : 0) | (alt ? Modifiers.AltKey : 0)));
 
                     break;
 

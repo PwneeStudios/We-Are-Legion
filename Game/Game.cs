@@ -166,7 +166,7 @@ namespace Game
             xnaObj.Bind("OnMouseDown", OnMouseDown);
             xnaObj.Bind("ActionButtonPressed", ActionButtonPressed);
             xnaObj.Bind("OnChatEnter", OnChatEnter);
-
+            
             awesomium.WebView.Source = @"asset://sample/index.html".ToUri();
         }
 
