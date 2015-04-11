@@ -5,7 +5,7 @@ namespace Game
     public partial class DrawUnitsZoomedOutBlur : DrawUnits
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnit, Field<unit> PreviousUnit, PointSampler Texture,
+        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnit, Field<unit> PreviousUnit, TextureSampler Texture,
             [Player.Vals] float player,
             float PercentSimStepComplete)
         {
@@ -48,7 +48,7 @@ namespace Game
             return unit.player == player && fake_selected(data) ? SelectedUnitColor.Get(unit.player) : UnitColor.Get(unit.player);           
         }
 
-        protected color Sprite(float player, data d, unit u, vec2 pos, float frame, PointSampler Texture,
+        protected color Sprite(float player, data d, unit u, vec2 pos, float frame, TextureSampler Texture,
             float selection_blend, float selection_size,
             bool solid_blend_flag, float solid_blend)
         {
@@ -77,7 +77,7 @@ namespace Game
             return clr;
         }
 
-        protected color ShadowSprite(float player, data d, unit u, vec2 pos, PointSampler Texture,
+        protected color ShadowSprite(float player, data d, unit u, vec2 pos, TextureSampler Texture,
             float selection_blend, float selection_size,
             bool solid_blend_flag, float solid_blend)
         {
@@ -112,7 +112,7 @@ namespace Game
         //RelativeIndex ShiftedHere = Here + new RelativeIndex(0f, .3f);
         [FragmentShader]
         color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnits, Field<unit> PreviousUnits,
-            PointSampler UnitTexture, PointSampler ShadowTexture,
+            TextureSampler UnitTexture, TextureSampler ShadowTexture,
             [Player.Vals] float player,
             float s, float t,
             float selection_blend, float selection_size,

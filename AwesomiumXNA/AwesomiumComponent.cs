@@ -189,6 +189,8 @@ namespace AwesomiumXNA
             }
         }
 
+        public bool AllowMouseEvents = true;
+
         static bool shift = false, ctrl = false, alt = false;
         private Int32 ProcessMessages(Int32 code, Int32 wParam, ref Message lParam)
         {
@@ -235,29 +237,53 @@ namespace AwesomiumXNA
                     break;
 
                 case WindowsMessage.MouseMove:
+                    //if (!AllowMouseEvents) break;
+
                     var mouse = Mouse.GetState();
                     WebView.InjectMouseMove(mouse.X - area.X, mouse.Y - area.Y);
                     break;
 
                 case WindowsMessage.LeftButtonDown:
+                    if (!AllowMouseEvents) break;
                     WebView.InjectMouseDown(MouseButton.Left);
                     break;
                 case WindowsMessage.LeftButtonUp:
+                    //if (!AllowMouseEvents) break;
                     WebView.InjectMouseUp(MouseButton.Left);
                     break;
                 case WindowsMessage.LeftButtonDoubleClick:
+                    if (!AllowMouseEvents) break;
                     WebView.InjectMouseDown(MouseButton.Left);
                     break;
 
-                case WindowsMessage.RightButtonDown: WebView.InjectMouseDown(MouseButton.Right); break;
-                case WindowsMessage.RightButtonUp: WebView.InjectMouseUp(MouseButton.Right); break;
-                case WindowsMessage.RightButtonDoubleClick: WebView.InjectMouseDown(MouseButton.Right); break;
+                case WindowsMessage.RightButtonDown:
+                    if (!AllowMouseEvents) break;
+                    WebView.InjectMouseDown(MouseButton.Right);
+                    break;
+                case WindowsMessage.RightButtonUp:
+                    if (!AllowMouseEvents) break;
+                    WebView.InjectMouseUp(MouseButton.Right);
+                    break;
+                case WindowsMessage.RightButtonDoubleClick:
+                    if (!AllowMouseEvents) break;
+                    WebView.InjectMouseDown(MouseButton.Right);
+                    break;
 
-                case WindowsMessage.MiddleButtonDown: WebView.InjectMouseDown(MouseButton.Middle); break;
-                case WindowsMessage.MiddleButtonUp: WebView.InjectMouseUp(MouseButton.Middle); break;
-                case WindowsMessage.MiddleButtonDoubleClick: WebView.InjectMouseDown(MouseButton.Middle); break;
+                case WindowsMessage.MiddleButtonDown:
+                    if (!AllowMouseEvents) break;
+                    WebView.InjectMouseDown(MouseButton.Middle);
+                    break;
+                case WindowsMessage.MiddleButtonUp:
+                    if (!AllowMouseEvents) break;
+                    WebView.InjectMouseUp(MouseButton.Middle);
+                    break;
+                case WindowsMessage.MiddleButtonDoubleClick:
+                    if (!AllowMouseEvents) break;
+                    WebView.InjectMouseDown(MouseButton.Middle);
+                    break;
 
                 case WindowsMessage.MouseWheel:
+                    //if (!AllowMouseEvents) break;
                     var delta = (((Int32)lParam.WParam) >> 16);
                     WebView.InjectMouseWheel(delta / SystemMetrics.MouseWheelScrollDelta * 16 * SystemMetrics.MouseWheelScrollLines, 0);
                     break;

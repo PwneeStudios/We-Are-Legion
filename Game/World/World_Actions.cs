@@ -105,7 +105,7 @@ namespace Game
                 CanPlaceItem = false;
             }
 
-            if (Input.LeftMousePressed)
+            if (LeftMousePressed)
             {
                 if (!CanPlaceItem)
                 {
@@ -230,7 +230,7 @@ namespace Game
         {
             SelectionUpdate(SelectSize, EffectSelection: false, LineSelect: true);
 
-            if (Input.LeftMouseDown)
+            if (LeftMouseDown)
             {
                 if (UnitUserIsPlacing != UnitType.None)
                     SpawnUnits(GridMousePos, SelectSize, MyPlayerValue, MyTeamValue, UnitUserIsPlacing, UnitPlaceStyle);
@@ -577,12 +577,12 @@ namespace Game
             vec2 WorldCoordPrev = ScreenToWorldCoord(Input.PrevMousePos);
 
             bool Deselect =
-                (LineSelect && Input.LeftMouseDown || !LineSelect && Input.LeftMouseReleased)
+                (LineSelect && LeftMouseDown || !LineSelect && Input.LeftMouseReleased)
                 && !Keys.LeftShift.Down() && !Keys.RightShift.Down()
                 || CurUserMode != UserMode.Select
                 || Keys.Back.Down() || Keys.Escape.Down();
             bool Selecting =
-                (LineSelect && Input.LeftMouseDown || !LineSelect && Input.LeftMouseReleased)
+                (LineSelect && LeftMouseDown || !LineSelect && Input.LeftMouseReleased)
                 && (CurUserMode == UserMode.Select || CurUserMode == UserMode.CastSpell || CurUserMode == UserMode.Painting);
 
             if (SkipDeselect)
@@ -594,7 +594,7 @@ namespace Game
             if (SkipSelect)
             {
                 Selecting = false;
-                if (CurUserMode != UserMode.Select || !Input.LeftMouseDown) SkipSelect = false;
+                if (CurUserMode != UserMode.Select || !LeftMouseDown) SkipSelect = false;
             }
 
             if (LineSelect)
@@ -603,12 +603,12 @@ namespace Game
                 if (MapEditorActive && CurUserMode == UserMode.Painting)
                 {
                     // Continuous selection
-                    DoSelect = Input.LeftMouseDown && Selecting && EffectSelection;
+                    DoSelect = LeftMouseDown && Selecting && EffectSelection;
                 }
                 else
                 {
                     // Discrete selection
-                    DoSelect = Input.LeftMousePressed && Selecting && EffectSelection;
+                    DoSelect = LeftMousePressed && Selecting && EffectSelection;
                 }
 
                 if (DoSelect) Networking.ToServer(new MessageSelectAlongLine(Size, Deselect, WorldCoord, WorldCoordPrev));

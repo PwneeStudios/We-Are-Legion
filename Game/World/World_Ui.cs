@@ -197,14 +197,14 @@ namespace Game
 
         vec2 BoxSelectStart = vec2.Zero, BoxSelectEnd = vec2.Zero;
         vec2 BoxSelectGridStart = vec2.Zero, BoxSelectGridEnd = vec2.Zero;
-        bool BoxSelecting = false;
+        public bool BoxSelecting = false;
         public void DrawBoxSelect()
         {
             DrawArrowCursor();
 
-            if (!Input.LeftMouseDown) return;
+            if (!LeftMouseDown) return;
 
-            if (!BoxSelecting && Input.LeftMousePressed && MouseInGame && !GameClass.Game.mouseDownOverHUD)
+            if (!BoxSelecting && LeftMousePressed && MouseInGame)
             {
                 BoxSelecting = true;
             }
@@ -215,7 +215,7 @@ namespace Game
             vec2 pos = ScreenToWorldCoord(Input.CurMousePos);
             vec2 grid_pos = ScreenToGridCoord(Input.CurMousePos);
 
-            if (Input.LeftMousePressed)
+            if (LeftMousePressed)
             {
                 BoxSelectStart = pos; BoxSelectEnd = pos; BoxSelectGridStart = grid_pos; BoxSelectGridEnd = grid_pos;
             }

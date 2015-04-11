@@ -250,7 +250,7 @@ namespace Game
                         break;
 
                     case UserMode.CastSpell:
-                        if (Input.LeftMousePressed)
+                        if (LeftMousePressed)
                         {
                             if (MyPlayerInfo.CanAffordSpell(CurSpell))
                             {

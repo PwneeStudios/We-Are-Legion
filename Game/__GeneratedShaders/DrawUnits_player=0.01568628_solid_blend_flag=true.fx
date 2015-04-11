@@ -92,9 +92,9 @@ Texture fs_param_UnitTexture_Texture;
 sampler fs_param_UnitTexture : register(s5) = sampler_state
 {
     texture   = <fs_param_UnitTexture_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
+    MipFilter = Linear;
+    MagFilter = Linear;
+    MinFilter = Linear;
     AddressU  = Wrap;
     AddressV  = Wrap;
 };
@@ -107,9 +107,9 @@ Texture fs_param_ShadowTexture_Texture;
 sampler fs_param_ShadowTexture : register(s6) = sampler_state
 {
     texture   = <fs_param_ShadowTexture_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
+    MipFilter = Linear;
+    MagFilter = Linear;
+    MinFilter = Linear;
     AddressU  = Wrap;
     AddressV  = Wrap;
 };
@@ -191,7 +191,7 @@ float4 Game__SelectedUnitColor__Get__float(VertexToPixel psin, float player)
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 Game__DrawUnits__ShadowSprite__float__Game_data__Game_unit__FragSharpFramework_vec2__FragSharpFramework_PointSampler__float__float__bool__float(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
+float4 Game__DrawUnits__ShadowSprite__float__Game_data__Game_unit__FragSharpFramework_vec2__FragSharpFramework_TextureSampler__float__float__bool__float(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
@@ -289,7 +289,7 @@ float4 Game__DrawUnits__SolidColor__float__Game_data__Game_unit(VertexToPixel ps
     return abs(unit.g - player) < .001 && Game__SimShader__fake_selected__Game_data(data) ? Game__SelectedUnitColor__Get__float(psin, unit.g) : Game__UnitColor__Get__float(psin, unit.g);
 }
 
-float4 Game__DrawUnits__Sprite__float__Game_data__Game_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler__float__float__bool__float(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
+float4 Game__DrawUnits__Sprite__float__Game_data__Game_unit__FragSharpFramework_vec2__float__FragSharpFramework_TextureSampler__float__float__bool__float(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
@@ -336,7 +336,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             {
                 shadow_pre = shadow_cur;
             }
-            shadow += Game__DrawUnits__ShadowSprite__float__Game_data__Game_unit__FragSharpFramework_vec2__FragSharpFramework_PointSampler__float__float__bool__float(psin, 0.01568628, shadow_pre, shadow_pre_unit, shadow_subcell_pos, fs_param_ShadowTexture, fs_param_ShadowTexture_size, fs_param_ShadowTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
+            shadow += Game__DrawUnits__ShadowSprite__float__Game_data__Game_unit__FragSharpFramework_vec2__FragSharpFramework_TextureSampler__float__float__bool__float(psin, 0.01568628, shadow_pre, shadow_pre_unit, shadow_subcell_pos, fs_param_ShadowTexture, fs_param_ShadowTexture_size, fs_param_ShadowTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
         }
         else
         {
@@ -345,12 +345,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 float prior_dir = Game__SimShader__prior_direction__Game_data(shadow_cur);
                 shadow_cur.r = prior_dir;
                 float2 offset = (1 - fs_param_s) * Game__SimShader__direction_to_vec__float(prior_dir);
-                shadow += Game__DrawUnits__ShadowSprite__float__Game_data__Game_unit__FragSharpFramework_vec2__FragSharpFramework_PointSampler__float__float__bool__float(psin, 0.01568628, shadow_cur, shadow_cur_unit, shadow_subcell_pos + offset, fs_param_ShadowTexture, fs_param_ShadowTexture_size, fs_param_ShadowTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
+                shadow += Game__DrawUnits__ShadowSprite__float__Game_data__Game_unit__FragSharpFramework_vec2__FragSharpFramework_TextureSampler__float__float__bool__float(psin, 0.01568628, shadow_cur, shadow_cur_unit, shadow_subcell_pos + offset, fs_param_ShadowTexture, fs_param_ShadowTexture_size, fs_param_ShadowTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
             }
             if (Game__SimShader__IsValid__float(shadow_pre.r) && shadow.a < 0.025 - .001)
             {
                 float2 offset = -(fs_param_s) * Game__SimShader__direction_to_vec__float(shadow_pre.r);
-                shadow += Game__DrawUnits__ShadowSprite__float__Game_data__Game_unit__FragSharpFramework_vec2__FragSharpFramework_PointSampler__float__float__bool__float(psin, 0.01568628, shadow_pre, shadow_pre_unit, shadow_subcell_pos + offset, fs_param_ShadowTexture, fs_param_ShadowTexture_size, fs_param_ShadowTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
+                shadow += Game__DrawUnits__ShadowSprite__float__Game_data__Game_unit__FragSharpFramework_vec2__FragSharpFramework_TextureSampler__float__float__bool__float(psin, 0.01568628, shadow_pre, shadow_pre_unit, shadow_subcell_pos + offset, fs_param_ShadowTexture, fs_param_ShadowTexture_size, fs_param_ShadowTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
             }
         }
     }
@@ -376,7 +376,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             _s = 1.0 - _s;
         }
         float frame = _s * 6 + FragSharpFramework__FragSharpStd__Float__float(cur_unit.a);
-        output += Game__DrawUnits__Sprite__float__Game_data__Game_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler__float__float__bool__float(psin, 0.01568628, pre, pre_unit, subcell_pos, frame, fs_param_UnitTexture, fs_param_UnitTexture_size, fs_param_UnitTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
+        output += Game__DrawUnits__Sprite__float__Game_data__Game_unit__FragSharpFramework_vec2__float__FragSharpFramework_TextureSampler__float__float__bool__float(psin, 0.01568628, pre, pre_unit, subcell_pos, frame, fs_param_UnitTexture, fs_param_UnitTexture_size, fs_param_UnitTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
     }
     else
     {
@@ -386,12 +386,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             float prior_dir = Game__SimShader__prior_direction__Game_data(cur);
             cur.r = prior_dir;
             float2 offset = (1 - fs_param_s) * Game__SimShader__direction_to_vec__float(prior_dir);
-            output += Game__DrawUnits__Sprite__float__Game_data__Game_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler__float__float__bool__float(psin, 0.01568628, cur, cur_unit, subcell_pos + offset, frame, fs_param_UnitTexture, fs_param_UnitTexture_size, fs_param_UnitTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
+            output += Game__DrawUnits__Sprite__float__Game_data__Game_unit__FragSharpFramework_vec2__float__FragSharpFramework_TextureSampler__float__float__bool__float(psin, 0.01568628, cur, cur_unit, subcell_pos + offset, frame, fs_param_UnitTexture, fs_param_UnitTexture_size, fs_param_UnitTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
         }
         if (Game__SimShader__IsValid__float(pre.r) && output.a < 0.025 - .001)
         {
             float2 offset = -(fs_param_s) * Game__SimShader__direction_to_vec__float(pre.r);
-            output += Game__DrawUnits__Sprite__float__Game_data__Game_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler__float__float__bool__float(psin, 0.01568628, pre, pre_unit, subcell_pos + offset, frame, fs_param_UnitTexture, fs_param_UnitTexture_size, fs_param_UnitTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
+            output += Game__DrawUnits__Sprite__float__Game_data__Game_unit__FragSharpFramework_vec2__float__FragSharpFramework_TextureSampler__float__float__bool__float(psin, 0.01568628, pre, pre_unit, subcell_pos + offset, frame, fs_param_UnitTexture, fs_param_UnitTexture_size, fs_param_UnitTexture_dxdy, fs_param_selection_blend, fs_param_selection_size, true, fs_param_solid_blend);
         }
     }
     if (output.a < 0.025 - .001)

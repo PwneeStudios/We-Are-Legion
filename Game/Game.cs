@@ -67,8 +67,8 @@ namespace Game
 
         GraphicsDeviceManager graphics;
 
-        JSObject xnaObj;
-        private AwesomiumComponent awesomium;
+        public JSObject xnaObj;
+        public AwesomiumComponent awesomium;
 
         public static World World;
         public static DataGroup Data { get { return World.DataGroup; } }
@@ -586,6 +586,11 @@ namespace Game
                         State = GameState.ScenarioMenu;
                     }
 
+                    if (awesomium.WebViewTexture != null)
+                    {
+                        CalculateMouseDownOverUi();
+                    }
+
                     DrawGame(gameTime);
 
                     // Awesomium should be drawn after the game has been drawn, assuming it's acting as a HUD
@@ -682,6 +687,36 @@ namespace Game
             }
 
             World.Draw();
+        }
+
+        public bool MouseDownOverUi = false;
+        public void CalculateMouseDownOverUi()
+        {
+            if (World != null && World.BoxSelecting)
+            {
+                awesomium.AllowMouseEvents = false;
+            }
+            else
+            {
+                awesomium.AllowMouseEvents = true;
+            }
+
+            if (!Input.LeftMouseDown)
+            {
+                MouseDownOverUi = false;
+            }
+            else
+            {
+                try
+                {
+                    Render.UnsetDevice();
+                    MouseDownOverUi = awesomium.WebViewTexture.GetData(Input.CurMousePos).A > 20;
+                }
+                catch
+                {
+                    MouseDownOverUi = false;
+                }
+            }        
         }
 
         System.Web.Script.Serialization.JavaScriptSerializer jsonify = new System.Web.Script.Serialization.JavaScriptSerializer();

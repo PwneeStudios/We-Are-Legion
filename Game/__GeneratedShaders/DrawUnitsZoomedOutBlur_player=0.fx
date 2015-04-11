@@ -92,9 +92,9 @@ Texture fs_param_Texture_Texture;
 sampler fs_param_Texture : register(s5) = sampler_state
 {
     texture   = <fs_param_Texture_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
+    MipFilter = Linear;
+    MagFilter = Linear;
+    MinFilter = Linear;
     AddressU  = Wrap;
     AddressV  = Wrap;
 };

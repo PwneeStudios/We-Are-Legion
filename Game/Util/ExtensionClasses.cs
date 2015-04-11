@@ -92,9 +92,10 @@ namespace Game
             return data;
         }
 
-        public static Color[] GetData(this Texture2D RenderTarget, vec2 coord)
+        public static Color GetData(this Texture2D RenderTarget, vec2 coord)
         {
-            return RenderTarget.GetData(coord, new vec2(1, 1));
+            var array = RenderTarget.GetData(coord, new vec2(1, 1));
+            return array[0];
         }
 
         public static Color[] GetData(this Texture2D RenderTarget, vec2 coord, vec2 size)

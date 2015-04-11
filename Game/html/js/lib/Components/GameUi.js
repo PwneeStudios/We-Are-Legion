@@ -5,6 +5,22 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
     var Button = ReactBootstrap.Button;
     var PureRenderMixin = ReactAddons.PureRenderMixin;
 
+    var onOver = function() {
+        console.log('hi')
+        
+        if (interop.InXna()) {
+            xna.OnMouseOver();
+        }
+    };
+
+    var onLeave = function() {
+        console.log('leave')
+        
+        if (interop.InXna()) {
+            xna.OnMouseLeave();
+        }
+    };
+
     var updateEvent = [];
     window.values = {};
     window.update = function(values) {
@@ -185,10 +201,17 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
             var style = {
                 width:'100%',
                 height:'100%',
+                'pointer-events':'none',
             };
             
             style = _.assign(style, this.props.pos, this.props.size, this.props.style);
-        
+
+            if (this.props.nonBlocking) {
+                style['pointer-events'] = 'none';
+            } else if (this.props.blocking) {
+                style['pointer-events'] = 'auto';
+            }
+            
             return (
                 React.createElement("div", {style: style}, 
                     this.props.children
@@ -230,7 +253,7 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
             });
         },
 
-        onMouseOut: function() {
+        onMouseLeave: function() {
             this.setState({
                 preventTooltip: false,
             });
@@ -243,7 +266,8 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
             var width = this.props.width;
             var height = width * image.aspect;
             
-            var button = React.createElement("button", {className: "UiButton", style: {backgroundImage: 'url('+image.url+')'}, onClick: this.onClick});
+            var button = React.createElement("button", {className: "UiButton", style: {backgroundImage: 'url('+image.url+')'}, onClick: this.onClick, 
+                          onMouseEnter: onOver, onMouseLeave: onLeave});
             
             var body;
             if (this.props.overlay && !this.state.preventTooltip) {
@@ -255,8 +279,16 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
                 body = button;
             }
             
+            var divStyle = {
+                width:width+'%',
+                height:0,
+                paddingBottom:height+'%',
+                position:'relative', 'float':'left',
+                'pointer-events':'auto',
+            };
+            
             return (
-                React.createElement("div", {style: {width:width+'%', height:0, paddingBottom:height+'%', position:'relative', 'float':'left'}, onMouseOut: this.onMouseOut}, 
+                React.createElement("div", {style: divStyle, onMouseLeave: this.onMouseLeave}, 
                     body
                 )
             );
@@ -265,14 +297,6 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
 
     var UiImage = React.createClass({displayName: "UiImage",
         mixins: [RenderAtMixin],
-
-        onEnter: function() {
-            console.log('hi')
-        },
-
-        onLeave: function() {
-            console.log('leave')
-        },
 
         renderAt: function() {
             var image = this.props.image;
@@ -298,7 +322,7 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
             var style = {backgroundImage: 'url('+image.url+')', backgroundPosition:backgroundPos, backgroundSize:backgroundSize};
             style = _.assign(style, this.props.style);
             
-            var img = React.createElement("div", {className: "UiImage", style: style, onMouseEnter: this.onEnter, onMouseLeave: this.onLeave});
+            var img = React.createElement("div", {className: "UiImage", style: style});
             
             var body;
             if (this.props.overlay) {
@@ -310,8 +334,21 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
                 body = img;
             }
             
+            var divStyle = {
+                'pointer-events':'auto',
+                width:width+'%',
+                height:0,
+                paddingBottom:height+'%',
+                position:'relative',
+                'float':'left',
+            };
+            
+            if (this.props.nonBlocking) {
+                divStyle['pointer-events'] = 'none';
+            }
+
             return (
-                React.createElement("div", {style: {width:width+'%', height:0, paddingBottom:height+'%', position:'relative', 'float':'left'}}, 
+                React.createElement("div", {style: divStyle, onMouseOver: this.props.nonBlocking ? null : onOver, onMouseLeave: this.props.nonBlocking ? null : onLeave}, 
                     body
                 )
             );
@@ -330,8 +367,7 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         renderAt: function() {
             var action = Actions[this.props.name];
             
-            var noBlockingStyle = {'pointer-events':'none'};
-            var pStyle = _.assign({}, noBlockingStyle, {fontSize: '90%', textAlign: 'right'});
+            var pStyle = {fontSize: '90%', textAlign: 'right'};
             
             return (
                 React.createElement(Div, {pos: pos(0,0,'relative'), size: size(7,100), style: {'float':'left','display':'inline-block'}}, 
@@ -339,11 +375,11 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
                      onClick: this.onClick, 
                      overlay: action.tooltip}), 
                     
-                    React.createElement(Div, {pos: pos(0,0), style: noBlockingStyle}, 
-                        React.createElement(UiImage, {pos: pos(-1 + (100-90*action.scale)/2,-.5), width: 90*action.scale, image: action.image})
+                    React.createElement(Div, {nonBlocking: true, pos: pos(0,0)}, 
+                        React.createElement(UiImage, {nonBlocking: true, pos: pos(-1 + (100-90*action.scale)/2,-.5), width: 90*action.scale, image: action.image})
                     ), 
 
-                    React.createElement(Div, {pos: pos(-16,8.5), size: width(100), style: pStyle}, React.createElement("p", null, "100"))
+                    React.createElement(Div, {nonBlocking: true, pos: pos(-16,8.5), size: width(100), style: pStyle}, React.createElement("p", null, "100"))
                 )
             );
         },
@@ -374,9 +410,9 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         
         item: function(p, image, scale, image_pos, data) {
             return (
-                React.createElement(Div, {pos: p}, 
-                    React.createElement(UiImage, {pos: image_pos, width: 4.2*scale, image: image}), 
-                    React.createElement("p", {style: {paddingLeft:'5%'}}, 
+                React.createElement(Div, {nonBlocking: true, pos: p}, 
+                    React.createElement(UiImage, {nonBlocking: true, pos: image_pos, width: 4.2*scale, image: image}), 
+                    React.createElement("p", {style: {paddingLeft:'5%', 'pointer-events': 'none'}}, 
                         data
                     )
                 )
@@ -394,14 +430,13 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
             return (
                 React.createElement("div", null, 
                     React.createElement(UiImage, {width: 100, image: {width:869, height:60, url:'css/UnitBar.png'}}), 
-                    React.createElement(Div, {pos: pos(0,.92)}, 
+                    React.createElement(Div, {nonBlocking: true, pos: pos(0,.92)}, 
                         this.item(pos(x,0),        Buildings.Barracks, 1, pos(0,0), this.state.info ? this.state.info.Barracks.Count : 0), 
                         this.item(pos(x+=small,0), Units.Soldier,    .85, pos(.4,0), this.state.info ? this.state.info.Units : 0), 
                         this.item(pos(x+=big,0),   Buildings.GoldMine, 1, pos(0,0), this.state.info ? this.state.info.GoldMine.Count : 0), 
                         this.item(pos(x+=small,0), GoldImage,         .67, pos(1.2,.5), this.state.info ? this.state.info.Gold : 0), 
                         this.item(pos(x+=big,0),   Buildings.JadeMine, 1, pos(0,0), this.state.info ? this.state.info.JadeMine.Count : 0), 
                         this.item(pos(x+=small,0), JadeImage,         .67, pos(1.2,.5), this.state.info ? this.state.info.Jade : 0)
-
                     )
                 )
             );
@@ -456,7 +491,10 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
         
         renderAt: function() {
             return (
-                React.createElement(Input, {value: this.state.value, ref: "input", type: "text", addonBefore: "All", onChange: this.onTextChange, onKeyDown: this.onKeyDown})
+                React.createElement(Input, {value: this.state.value, ref: "input", type: "text", addonBefore: "All", 
+                 style: {'pointer-events':'auto'}, 
+                 onChange: this.onTextChange, onKeyDown: this.onKeyDown, 
+                 onMouseOver: onOver, onMouseLeave: onLeave})
             );
         },
     });
@@ -506,7 +544,7 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
             return (
                 React.createElement("div", null, 
                     React.createElement(UiImage, {pos: pos(0,0), width: 100, image: {width:502, height:157, url:'css/UnitBox.png'}}), 
-                    React.createElement(Div, {pos: pos(-6,5)}, React.createElement("p", {style: {fontSize: '3.3%', textAlign: 'right'}}, this.state.value))
+                    React.createElement(Div, {nonBlocking: true, pos: pos(-6,5)}, React.createElement("p", {style: {fontSize: '3.3%', textAlign: 'right'}}, this.state.value))
                 )
             );
         },
@@ -567,7 +605,7 @@ define(['lodash', 'react', 'react-addons', 'react-bootstrap', 'interop'], functi
             
             return (
                 React.createElement("div", null, 
-                    React.createElement("div", null, 
+                    React.createElement(Div, {pos: pos(0,0)}, 
                         _.map(players, function(player, index) {
                             return React.createElement(UnitBar, {MyPlayerNumber: player, pos: pos(50.5,.4 + index*4.2), size: width(50)});
                         })

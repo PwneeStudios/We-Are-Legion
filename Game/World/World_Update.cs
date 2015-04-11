@@ -50,6 +50,22 @@ namespace Game
             }
         }
 
+        bool LeftMouseDown
+        {
+            get
+            {
+                return Input.LeftMouseDown && (!GameClass.Game.MouseDownOverUi || BoxSelecting);
+            }
+        }
+
+        bool LeftMousePressed
+        {
+            get
+            {
+                return Input.LeftMousePressed && !GameClass.Game.MouseDownOverUi;
+            }
+        }
+
         public static float StaticMaxZoomOut = 1;
         float x_edge;
         public void Update()
@@ -144,7 +160,7 @@ namespace Game
             }
 
             // Move the camera via: Minimap
-            if ((Input.LeftMouseDown || Input.DeltaMouseScroll != 0) && !BoxSelecting && MouseOverMinimap)
+            if ((LeftMouseDown || Input.DeltaMouseScroll != 0) && !BoxSelecting && MouseOverMinimap)
             {
                 CameraPos = (UiMousePos - MinimapQuad.pos) / MinimapQuad.size;
             }
