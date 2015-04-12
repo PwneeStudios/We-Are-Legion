@@ -23,6 +23,9 @@ namespace Game
 
     public class PlayerInfo : SimShader
     {
+        public string Name;
+        public int Number;
+
         public PlayerUnitInfo
             GoldMine = new PlayerUnitInfo(),
             JadeMine = new PlayerUnitInfo(),
@@ -37,8 +40,11 @@ namespace Game
         public bool DragonLordAlive = false;
 
         GameParameters Params;
-        public PlayerInfo(GameParameters Params)
+        public PlayerInfo(int Number, GameParameters Params)
         {
+            this.Name = "Player " + Number.ToString();
+            this.Number = Number;
+
             this.Params = Params;
 
             Gold = Params.StartGold;

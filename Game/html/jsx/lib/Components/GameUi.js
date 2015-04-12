@@ -550,7 +550,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
             
             return (
                 <p className='chat' style={{opacity:1}}>
-                    <span style={{color:'rgba(180,180,255,255)'}}>goodntonic: </span>
+                    <span style={{color:'rgba(180,180,255,255)'}}>{message.name}: </span>
                     <span>{message.message}</span>
                     <br />
                 </p>
@@ -589,7 +589,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
             var self = this;
             return;
             setInterval(function() {
-                self.onChatMessage({message:'hello there again ' + self.state.counter});
+                self.onChatMessage({name:'player 1', message:'hello there again ' + self.state.counter});
             }, 1000);
         },
     

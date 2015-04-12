@@ -764,6 +764,7 @@ namespace Game
                 var obj = new Dictionary<string, object>();
                 obj["message"] = message;
                 obj["player"] = player;
+                obj["name"] = PlayerInfo[player].Name;
                 var str = jsonify.Serialize(obj);
                 awesomium.WebView.ExecuteJavascript("addChatMessage(" + str + ");");
             }

@@ -28,7 +28,7 @@ namespace Game
             PlayerInfo = new PlayerInfo[5];
             for (int i = 1; i <= 4; i++)
             {
-                PlayerInfo[i] = new PlayerInfo(Params);
+                PlayerInfo[i] = new PlayerInfo(i, Params);
             }
 
             Markers = new MarkerList();
