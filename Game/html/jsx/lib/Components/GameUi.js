@@ -503,7 +503,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
                 <Input value={this.state.value} ref="input" type="text" addonBefore="All"
                  style={{'pointer-events':'auto'}}
                  onChange={this.onTextChange} onKeyDown={this.onKeyDown}
-                 onMouseOver={interop.onOver} onMouseLeave={interop.onLeave} />
+                 onMouseOver={interop.onOver} onMouseLeave={interop.onLeave}
+                 onBlur={this.focus}/>
             );
         },
     });
