@@ -63,6 +63,7 @@ body {
     -webkit-text-stroke: 0.3px;
     float:bottom;
     margin:0;
+    width: 100%;
 }
 
 .chatMessage-enter {

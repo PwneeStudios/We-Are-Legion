@@ -3,8 +3,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     var OverlayTrigger = ReactBootstrap.OverlayTrigger;
     var Popover = ReactBootstrap.Popover;
     var Button = ReactBootstrap.Button;
-    var PureRenderMixin = React.addons.PureRenderMixin;
-    var CSSTransitionGroup = React.addons.CSSTransitionGroup;
+    //var PureRenderMixin = React.addons.PureRenderMixin;
+    //var CSSTransitionGroup = React.addons.CSSTransitionGroup;
+    var PureRenderMixin, CSSTransitionGroup;
 
     var updateEvent = [];
     window.values = {};
@@ -507,6 +508,55 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
         },
     });
 
+    var ChatLine = React.createClass({
+        componentDidMount: function() {
+            var self = this;
+            
+            //this.alpha = 0;
+            //this.fadeIn();
+            
+            this.alpha = 1;
+            setTimeout(function() {
+                //self.props.remove(self.props.message);
+                self.fadeOut();
+            }, 4500);
+        },
+        
+        fadeIn: function() {
+            this.alpha += .05;
+            if (this.alpha > 1) {
+                this.alpha = 1;
+            } else {
+                setTimeout(this.fadeIn, 16);
+            }
+            
+            this.getDOMNode().style.opacity = this.alpha;
+        },
+
+        fadeOut: function() {
+            this.alpha -= .05;
+            if (this.alpha < 0) {
+                this.alpha = 0;
+                this.props.remove(this.props.message);
+            } else {
+                this.getDOMNode().style.opacity = this.alpha;
+                setTimeout(this.fadeOut, 16);
+            }
+        },
+
+        render: function() {
+            var message = this.props.message;
+            
+            return (
+                <p className='chat' style={{opacity:1}}>
+                    <span style={{color:'rgba(180,180,255,255)'}}>goodntonic: </span>
+                    <span>{message.message}</span>
+                    <br />
+                </p>
+            );
+        },
+    });
+    
     var ChatBox = React.createClass({
         mixins: [RenderAtMixin, OnChatMessageMixin],
         
@@ -517,13 +567,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
             
             self.state.messages.push(message);
             self.setState({messages: self.state.messages});
-            
-            setTimeout(function() {
-                _.remove(self.state.messages, function(e) {
-                    return e.index === message.index;
-                });
-                self.setState({messages: self.state.messages});
-            }, 4500);
+        },
+        
+        remove: function(message) {
+            _.remove(this.state.messages, function(e) {
+                return e.index === message.index;
+            });
+            this.setState({messages: this.state.messages});
         },
         
         getInitialState: function() {
@@ -536,30 +586,30 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     
         componentDidMount: function() {
             var self = this;
-            
-            // setInterval(function() {
-                // self.onChatMessage({message:'hello there again ' + self.state.counter});
-            // }, 1000);
+            return;
+            setInterval(function() {
+                self.onChatMessage({message:'hello there again ' + self.state.counter});
+            }, 1000);
         },
     
         renderAt: function() {
-            //var messages = _.map(chatMessages, function(message) {
+            var self = this;
+
             var messages = _.map(this.state.messages, function(message) {
                 return (
-                    <p key={message.index} className='chat'>
-                        <span style={{color:'rgba(180,180,255,255)'}}>goodntonic: </span>
-                        <span>{message.message}</span>
-                        <br />
-                    </p>
+                    <ChatLine key={message.index} message={message} remove={self.remove} />
                 );
             });
 
+            // Using transitions
+            // <CSSTransitionGroup transitionName='chatMessage'>
+                // {messages}
+            // </CSSTransitionGroup>
+
             return (
-                <div style={{'position':'relative'}}>
-                    <div style={{'position':'absolute','bottom':'0'}}>
-                        {/*<CSSTransitionGroup transitionName='chatMessage'>*/}
-                            {messages}
-                        {/*</CSSTransitionGroup>*/}
+                <div style={{'position':'relative','width':'100%'}}>
+                    <div style={{'position':'absolute','bottom':'0','width':'100%'}}>
+                        {messages}
                     </div>
                 </div>
             );
