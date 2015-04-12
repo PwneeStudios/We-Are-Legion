@@ -505,8 +505,10 @@ namespace Game
             SpawnUnits(GridCoord, Area, Player.Vals[PlayerNumber], Team.Vals[TeamNumber], UnitType.ClaySoldier, UnitDistribution.EveryOther);
         }
 
-        public bool SummonNecromancer()
+        public bool SummonNecromancer(float TerritoryRange)
         {
+            UpdateCellAvailability(TerritoryRange);
+
             if (!CanPlaceItem)
             {
                 Message_CanNotPlaceHere();

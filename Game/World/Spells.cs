@@ -71,7 +71,7 @@ namespace Game
 
             Necromancer = spell = new Spell("Necromancer");
             spell.DrawCursor = () => NecroCursor(Necromancer.TerritoryRange);
-            spell.Execute = () => W.SummonNecromancer();
+            spell.Execute = () => W.SummonNecromancer(Necromancer.TerritoryRange);
             spell.Apply = (p, t, v) => W.SummonNecromancerApply(p, t, v);
             spell.JadeCost = 1000;
             spell.TerritoryRange = _64;
