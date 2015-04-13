@@ -1,31 +1,15 @@
-define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, ReactBootstrap, interop) {
+define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], function(_, React, ReactBootstrap, interop, events, ui) {
     var Input = ReactBootstrap.Input;
-    var OverlayTrigger = ReactBootstrap.OverlayTrigger;
     var Popover = ReactBootstrap.Popover;
-    var Button = ReactBootstrap.Button;
-
-    var makeEventMixin = function(triggerName, eventName) {
-        var callbacks = [];
-        
-        window[triggerName] = function(json) {
-            _.each(callbacks, function(item) {
-                item[eventName](json);
-            });
-        };
-        
-        return {
-            componentDidMount: function() {
-                callbacks.push(this);
-            },
-            
-            componentWillUnmount: function() {
-                _.remove(callbacks, function(e) { e === this; });
-            },
-        };
-    };
     
-    var UpdateMixin = makeEventMixin('update', 'onUpdate');
-    var OnChatMixin = makeEventMixin('addChatMessage', 'onChatMessage');
+    var Div = ui.Div;
+    var UiImage = ui.UiImage;
+    var UiButton = ui.UiButton;
+    var RenderAtMixin = ui.RenderAtMixin;
+    
+    var pos = ui.pos;
+    var size = ui.size;
+    var width = ui.width;
 
     var subImage = function(image, offset) {
         var sub = _.assign({}, image);
@@ -155,189 +139,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     setPlayerImages();
     setPlayer(1);
     
-
     
-    var pos = function(x, y, type) {
-        if (typeof type === 'undefined') {
-            type = 'absolute';
-        }
-    
-        return {
-            position:type,
-            left: x + '%',
-            top: y + '%',
-        };
-    };
-
-    var size = function(x, y) {
-        return {
-            width: x + '%',
-            height: y + '%',
-        };
-    };
-
-    var width = function(x) {
-        return size(x, 100);
-    };
-
-    var Div = React.createClass({displayName: "Div",
-        render: function() {
-            var style = {
-                width:'100%',
-                height:'100%',
-                'pointer-events':'none',
-            };
-            
-            style = _.assign(style, this.props.pos, this.props.size, this.props.style);
-
-            if (this.props.nonBlocking) {
-                style['pointer-events'] = 'none';
-            } else if (this.props.blocking) {
-                style['pointer-events'] = 'auto';
-            }
-            
-            return (
-                React.createElement("div", {style: style}, 
-                    this.props.children
-                )
-            );
-        }
-    });
-
-    var RenderAtMixin = {
-        render: function() {
-            if (this.props.pos) {
-                return (
-                    React.createElement(Div, React.__spread({},  this.props), 
-                        this.renderAt()
-                    )
-                );
-            } else {
-                return this.renderAt();
-            }
-        }
-    };
-
-    var UiButton = React.createClass({displayName: "UiButton",
-        mixins: [RenderAtMixin],
-        
-        getInitialState: function() {
-            return {
-                preventTooltip: false,
-            };
-        },
-        
-        onClick: function() {
-            if (this.props.onClick) {
-                this.props.onClick();
-            }
-            
-            this.setState({
-                preventTooltip: true,
-            });
-        },
-
-        onMouseLeave: function() {
-            this.setState({
-                preventTooltip: false,
-            });
-        },
-        
-        renderAt: function() {            
-            var image = this.props.image;
-            image.aspect = image.height / image.width;
-            
-            var width = this.props.width;
-            var height = width * image.aspect;
-            
-            var button = React.createElement("button", {className: "UiButton", style: {backgroundImage: 'url('+image.url+')'}, onClick: this.onClick, 
-                          onMouseEnter: interop.onOver, onMouseLeave: interop.onLeave});
-            
-            var body;
-            if (this.props.overlay && !this.state.preventTooltip) {
-                body = 
-                    React.createElement(OverlayTrigger, {placement: "top", overlay: this.props.overlay, delayShow: 420, delayHide: 50}, 
-                        button
-                    )
-            } else {
-                body = button;
-            }
-            
-            var divStyle = {
-                width:width+'%',
-                height:0,
-                paddingBottom:height+'%',
-                position:'relative', 'float':'left',
-                'pointer-events':'auto',
-            };
-            
-            return (
-                React.createElement("div", {style: divStyle, onMouseLeave: this.onMouseLeave}, 
-                    body
-                )
-            );
-        }
-    });
-
-    var UiImage = React.createClass({displayName: "UiImage",
-        mixins: [RenderAtMixin],
-
-        renderAt: function() {
-            var image = this.props.image;
-            image.aspect = image.height / image.width;
-            
-            var offset = image.offset || this.props.offset;            
-            var width = this.props.width;
-            var height = width * image.aspect;
-                        
-            var background_x = 0, background_y = 0;
-            if (offset) {
-                background_x = image.dim[0] <= 1 ? 0 : 100 * offset[0] / (image.dim[0] - 1);
-                background_y = image.dim[1] <= 1 ? 0 : 100 * offset[1] / (image.dim[1] - 1);
-            }
-            
-            var backgroundPos = background_x + '%' + ' ' + background_y + '%';
-
-            var background_x = 0, background_y = 0;
-            background_size_x = image.dim && image.dim[0] >= 1 ? 100 * image.dim[0] : 100;
-            background_size_y = image.dim && image.dim[1] >= 1 ? 100 * image.dim[1] : 100;
-            var backgroundSize = background_size_x + '%' + ' ' + background_size_y + '%';
-            
-            var style = {backgroundImage: 'url('+image.url+')', backgroundPosition:backgroundPos, backgroundSize:backgroundSize};
-            style = _.assign(style, this.props.style);
-            
-            var img = React.createElement("div", {className: "UiImage", style: style});
-            
-            var body;
-            if (this.props.overlay) {
-                body = 
-                    React.createElement(OverlayTrigger, {placement: "top", overlay: this.props.overlay, delayShow: 300, delayHide: 150}, 
-                        img
-                    )
-            } else {
-                body = img;
-            }
-            
-            var divStyle = {
-                'pointer-events':'auto',
-                width:width+'%',
-                height:0,
-                paddingBottom:height+'%',
-                position:'relative',
-                'float':'left',
-            };
-            
-            if (this.props.nonBlocking) {
-                divStyle['pointer-events'] = 'none';
-            }
-
-            return (
-                React.createElement("div", {style: divStyle, onMouseOver: this.props.nonBlocking ? null : interop.onOver, onMouseLeave: this.props.nonBlocking ? null : interop.onLeave}, 
-                    body
-                )
-            );
-        }
-    });
     
     var ActionButton = React.createClass({displayName: "ActionButton",
         mixins: [RenderAtMixin],
@@ -378,7 +180,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     });
     
     var UnitBar = React.createClass({displayName: "UnitBar",
-        mixins: [RenderAtMixin, UpdateMixin],
+        mixins: [RenderAtMixin, events.UpdateMixin],
                 
         onUpdate: function(values) {
             this.setState({
@@ -534,7 +336,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     });
     
     var ChatBox = React.createClass({displayName: "ChatBox",
-        mixins: [RenderAtMixin, OnChatMixin],
+        mixins: [RenderAtMixin, events.OnChatMixin],
         
         onChatMessage: function(message) {
             var self = this;
@@ -588,7 +390,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     });
 
     var UnitBox = React.createClass({displayName: "UnitBox",
-        mixins: [RenderAtMixin, UpdateMixin],
+        mixins: [RenderAtMixin, events.UpdateMixin],
 
         onUpdate: function(values) {
             this.setState({
@@ -621,7 +423,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     });
     
     return React.createClass({
-        mixins: [UpdateMixin],
+        mixins: [events.UpdateMixin],
                 
         onUpdate: function(values) {
             if (this.state.MyPlayerNumber === values.MyPlayerNumber &&
