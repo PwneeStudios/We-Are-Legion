@@ -243,8 +243,14 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
     });
 
     var ChatInput = React.createClass({
-        mixins: [RenderAtMixin],
-        
+        mixins: [RenderAtMixin, events.ShowUpdateMixin],
+                
+        onShowUpdate: function(values) {
+            this.setState({
+                ShowChat: values.ShowChat,
+            });
+        },
+
         getInitialState: function() {
             return {
                 value: '',
@@ -258,10 +264,17 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
         },
         
         focus: function() {
-            this.refs.input.getInputDOMNode().focus();
+            var input = this.refs.input;
+            if (input) {
+                input.getInputDOMNode().focus();
+            }
         },
 
         componentDidMount: function() {
+            this.focus();
+        },
+        
+        componentDidUpdate: function() {
             this.focus();
         },
         
@@ -271,18 +284,31 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                 if (interop.InXna()) {
                     var message = this.refs.input.getInputDOMNode().value;
                     xna.OnChatEnter(message);
+                    
+                    this.setState({
+                        value:'',
+                    });
                 }
             }
         },
         
         renderAt: function() {
-            return (
-                <Input value={this.state.value} ref="input" type="text" addonBefore="All"
-                 style={{'pointer-events':'auto'}}
-                 onChange={this.onTextChange} onKeyDown={this.onKeyDown}
-                 onMouseOver={interop.onOver} onMouseLeave={interop.onLeave}
-                 onBlur={this.focus}/>
-            );
+            if (this.state.ShowChat) {
+                return (
+                    <div>
+                        <Input value={this.state.value} ref="input" type="text" addonBefore="All"
+                         style={{'pointer-events':'auto'}}
+                         onChange={this.onTextChange} onKeyDown={this.onKeyDown}
+                         onMouseOver={interop.onOver} onMouseLeave={interop.onLeave}
+                         onBlur={this.focus}/>
+                     </div>
+                );
+            } else {
+                return (
+                    <div>
+                    </div>
+                )
+            }
         },
     });
 
@@ -337,7 +363,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
     
     var ChatBox = React.createClass({
         mixins: [RenderAtMixin, events.OnChatMixin],
-        
+
         onChatMessage: function(message) {
             var self = this;
             
@@ -423,13 +449,23 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
     });
     
     return React.createClass({
-        mixins: [events.UpdateMixin],
+        mixins: [events.UpdateMixin, events.ShowUpdateMixin],
                 
-        onUpdate: function(values) {
-            if (this.state.MyPlayerNumber === values.MyPlayerNumber &&
-                this.state.ShowChat === values.ShowChat &&
+        onShowUpdate: function(values) {
+            if (this.state.ShowChat === values.ShowChat &&
                 this.state.ShowAllPlayers === values.ShowAllPlayers) {
-                
+
+                return;
+            }
+            
+            this.setState({
+                ShowChat: values.ShowChat,
+                ShowAllPlayers: values.ShowAllPlayers,
+            });
+        },
+        
+        onUpdate: function(values) {
+            if (this.state.MyPlayerNumber === values.MyPlayerNumber) {                
                 return;
             }
             
@@ -439,8 +475,6 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
             
             this.setState({
                 MyPlayerNumber: values.MyPlayerNumber,
-                ShowChat: values.ShowChat,
-                ShowAllPlayers: values.ShowAllPlayers,
             });
         },
 
@@ -466,7 +500,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                     {/*<Minimap pos={pos(.2,79)} size={width(11)} />*/}
 
                     <Div pos={pos(15,0)}>
-                        {this.state.ShowChat ? <ChatInput pos={pos(.35,80)} size={width(49)} /> : null}
+                        <ChatInput pos={pos(.35,80)} size={width(49)} />
 
                         {/*<ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/}
                         <ChatBox pos={pos(.38, 78)} size={width(38)}/>

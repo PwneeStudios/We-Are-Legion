@@ -168,6 +168,11 @@ namespace Game
             xnaObj.Bind("OnChatEnter", OnChatEnter);
 
             awesomium.WebView.Source = @"asset://sample/index.html".ToUri();
+            while (!awesomium.WebView.IsDocumentReady)
+            {
+                WebCore.Update();
+            }
+            //UpdateShow();
         }
 
         JSValue WebView_ConsoleLog(object sender, JavascriptMethodEventArgs javascriptMethodEventArgs)
@@ -726,30 +731,23 @@ namespace Game
         public void ToggleChat(Toggle value = Toggle.Flip)
         {
             value.Apply(ref ShowChat);
-            UpdateJsData();
+            UpdateShow();
         }
 
         public bool ShowAllPlayers = false;
         public void ToggleAllPlayers(Toggle value = Toggle.Flip)
         {
             value.Apply(ref ShowAllPlayers);
-            UpdateJsData();
+            UpdateShow();
         }
 
-        void UpdateJsData()
+        void SendDict(Dictionary<string, object> dict, string function)
         {
-            obj["UnitCount"] = World.DataGroup.UnitCountUi;
-            obj["MyPlayerInfo"] = World.MyPlayerInfo;
-            obj["MyPlayerNumber"] = World.MyPlayerNumber;
-            obj["ShowChat"] = ShowChat;
-            obj["ShowAllPlayers"] = ShowAllPlayers;
-            obj["PlayerInfo"] = ShowAllPlayers ? World.PlayerInfo : null;
-
-            var json = jsonify.Serialize(obj);
+            var json = jsonify.Serialize(dict);
 
             try
             {
-                awesomium.WebView.ExecuteJavascript("update(" + json + ");");
+                awesomium.WebView.ExecuteJavascript(function + "(" + json + ");");
             }
             catch
             {
@@ -757,22 +755,33 @@ namespace Game
             }
         }
 
+        void UpdateJsData()
+        {
+            obj["UnitCount"] = World.DataGroup.UnitCountUi;
+            obj["MyPlayerInfo"] = World.MyPlayerInfo;
+            obj["MyPlayerNumber"] = World.MyPlayerNumber;
+            obj["PlayerInfo"] = ShowAllPlayers ? World.PlayerInfo : null;
+
+            SendDict(obj, "update");
+        }
+
+        void UpdateShow()
+        {
+            var obj = new Dictionary<string, object>();
+            obj["ShowChat"] = ShowChat;
+            obj["ShowAllPlayers"] = ShowAllPlayers;
+
+            SendDict(obj, "show");            
+        }
+
         public void AddChatMessage(int player, string message)
         {
-            try
-            {
-                var obj = new Dictionary<string, object>();
-                obj["message"] = message;
-                obj["player"] = player;
-                obj["name"] = PlayerInfo[player].Name;
-                var str = jsonify.Serialize(obj);
-                awesomium.WebView.ExecuteJavascript("addChatMessage(" + str + ");");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Could not communicate with Awesomium");
-                Console.WriteLine(e);
-            }            
+            var obj = new Dictionary<string, object>();
+            obj["message"] = message;
+            obj["player"] = player;
+            obj["name"] = PlayerInfo[player].Name;
+
+            SendDict(obj, "addChatMessage");
         }
 
         public bool MouseOverHud = false;

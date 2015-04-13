@@ -22,5 +22,6 @@ define(['lodash'], function(_) {
     return {
         UpdateMixin: makeEventMixin('update', 'onUpdate'),
         OnChatMixin: makeEventMixin('addChatMessage', 'onChatMessage'),
+        ShowUpdateMixin: makeEventMixin('show', 'onShowUpdate'),
     };
 });
