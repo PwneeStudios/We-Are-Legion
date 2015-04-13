@@ -3,55 +3,30 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     var OverlayTrigger = ReactBootstrap.OverlayTrigger;
     var Popover = ReactBootstrap.Popover;
     var Button = ReactBootstrap.Button;
-    //var PureRenderMixin = React.addons.PureRenderMixin;
-    //var CSSTransitionGroup = React.addons.CSSTransitionGroup;
-    var PureRenderMixin, CSSTransitionGroup;
 
-    var updateEvent = [];
-    window.values = {};
-    window.update = function(values) {
-        window.values = values;
-
-        _.each(updateEvent, function(item) {
-            item.update(values);
-        });        
-    };
-
-    var UpdateMixin = {
-        componentDidMount: function() {
-            updateEvent.push(this);
-        },
+    var makeEventMixin = function(triggerName, eventName) {
+        var callbacks = [];
         
-        componentWillUnmount: function() {
-            _.remove(updateEvent, function(e) { e === this; });
-        },
-    };
-    
-
-
-
-
-    
-    var chatMessageEvent = [];
-    
-    window.addChatMessage = function(message) {
-        _.each(chatMessageEvent, function(item) {
-            item.onChatMessage(message);
-        });
-    };
-
-    var OnChatMessageMixin = {
-        componentDidMount: function() {
-            chatMessageEvent.push(this);
-        },
+        window[triggerName] = function(json) {
+            _.each(callbacks, function(item) {
+                item[eventName](json);
+            });
+        };
         
-        componentWillUnmount: function() {
-            _.remove(chatMessageEvent, function(e) { e === this; });
-        },
+        return {
+            componentDidMount: function() {
+                callbacks.push(this);
+            },
+            
+            componentWillUnmount: function() {
+                _.remove(callbacks, function(e) { e === this; });
+            },
+        };
     };
+    
+    var UpdateMixin = makeEventMixin('update', 'onUpdate');
+    var OnChatMixin = makeEventMixin('addChatMessage', 'onChatMessage');
 
-    
-    
     var subImage = function(image, offset) {
         var sub = _.assign({}, image);
         sub.offset = offset;
@@ -405,7 +380,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     var UnitBar = React.createClass({
         mixins: [RenderAtMixin, UpdateMixin],
                 
-        update: function(values) {
+        onUpdate: function(values) {
             this.setState({
                 info: values.MyPlayerInfo,
             });
@@ -559,7 +534,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     });
     
     var ChatBox = React.createClass({
-        mixins: [RenderAtMixin, OnChatMessageMixin],
+        mixins: [RenderAtMixin, OnChatMixin],
         
         onChatMessage: function(message) {
             var self = this;
@@ -602,11 +577,6 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
                 );
             });
 
-            // Using transitions
-            // <CSSTransitionGroup transitionName='chatMessage'>
-                // {messages}
-            // </CSSTransitionGroup>
-
             return (
                 <div style={{'position':'relative','width':'100%'}}>
                     <div style={{'position':'absolute','bottom':'0','width':'100%'}}>
@@ -620,7 +590,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     var UnitBox = React.createClass({
         mixins: [RenderAtMixin, UpdateMixin],
 
-        update: function(values) {
+        onUpdate: function(values) {
             this.setState({
                 value: values.UnitCount,
             });
@@ -651,9 +621,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
     });
     
     return React.createClass({
-        mixins: [PureRenderMixin, UpdateMixin],
+        mixins: [UpdateMixin],
                 
-        update: function(values) {
+        onUpdate: function(values) {
             if (this.state.MyPlayerNumber === values.MyPlayerNumber &&
                 this.state.ShowChat === values.ShowChat &&
                 this.state.ShowAllPlayers === values.ShowAllPlayers) {
@@ -673,16 +643,6 @@ define(['lodash', 'react', 'react-bootstrap', 'interop'], function(_, React, Rea
         },
 
         getInitialState: function() {
-            /* Test PureRenderMixin
-            var self = this;
-            setInterval(function() {
-                var player = self.state.MyPlayerNumber + 1;
-                if (player > 4) player = 1;
-                player = 1;
-                
-                self.setState({MyPlayerNumber: player});
-            }, 200);*/
-        
             return {
                 MyPlayerNumber: 1,
                 ShowChat: true,
