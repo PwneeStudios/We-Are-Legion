@@ -55,60 +55,60 @@ sampler fs_param_Building : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_building(float4 u)
+bool Game__SimShader__Something__building(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__IsBuilding__float(float type)
+bool Game__SimShader__IsBuilding__Single(float type)
 {
     return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
 }
 
-bool Game__SimShader__IsBuilding__Game_unit(float4 u)
+bool Game__SimShader__IsBuilding__unit(float4 u)
 {
-    return Game__SimShader__IsBuilding__float(u.r);
+    return Game__SimShader__IsBuilding__Single(u.r);
 }
 
-bool Game__SimShader__IsCenter__Game_building(float4 b)
+bool Game__SimShader__IsCenter__building(float4 b)
 {
     return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
 }
 
-bool Game__SimShader__fake_selected__Game_data(float4 u)
+bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-bool Game__SimShader__fake_selected__Game_building(float4 u)
+bool Game__SimShader__fake_selected__building(float4 u)
 {
-    return Game__SimShader__fake_selected__Game_data(u);
+    return Game__SimShader__fake_selected__data(u);
 }
 
-bool Game__SimShader__selected__Game_data(float4 u)
+bool Game__SimShader__selected__data(float4 u)
 {
     float val = u.b;
     return val >= 0.3764706 - .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_round__float(float v)
+float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Game__SimShader__prior_direction__Game_data(float4 u)
+float Game__SimShader__prior_direction__data(float4 u)
 {
     float val = u.b;
     val = fmod(val, 0.1254902);
-    val = FragSharpFramework__FragSharpStd__fint_round__float(val);
+    val = FragSharpFramework__FragSharpStd__fint_round__Single(val);
     return val;
 }
 
-void Game__SimShader__set_selected_fake__Game_data__bool(inout float4 u, bool fake_selected)
+void Game__SimShader__set_selected_fake__data__Boolean(inout float4 u, bool fake_selected)
 {
-    bool is_selected = Game__SimShader__selected__Game_data(u);
-    float prior_dir = Game__SimShader__prior_direction__Game_data(u);
+    bool is_selected = Game__SimShader__selected__data(u);
+    float prior_dir = Game__SimShader__prior_direction__data(u);
     float select_state= (float)0;
     if (fake_selected)
     {
@@ -121,10 +121,10 @@ void Game__SimShader__set_selected_fake__Game_data__bool(inout float4 u, bool fa
     u.b = prior_dir + select_state;
 }
 
-void Game__SimShader__set_selected_fake__Game_building__bool(inout float4 u, bool selected)
+void Game__SimShader__set_selected_fake__building__Boolean(inout float4 u, bool selected)
 {
     float4 d = u;
-    Game__SimShader__set_selected_fake__Game_data__bool(d, selected);
+    Game__SimShader__set_selected_fake__data__Boolean(d, selected);
     u = d;
 }
 
@@ -144,13 +144,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 0)) * fs_param_Building_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (Game__SimShader__Something__Game_building(building_here) && Game__SimShader__IsBuilding__Game_unit(unit_here) && Game__SimShader__IsCenter__Game_building(building_here))
+    if (Game__SimShader__Something__building(building_here) && Game__SimShader__IsBuilding__unit(unit_here) && Game__SimShader__IsCenter__building(building_here))
     {
         float4 right = tex2D(fs_param_Building, psin.TexCoords + (float2(1, 0)) * fs_param_Building_dxdy), up = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 1)) * fs_param_Building_dxdy), left = tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 0)) * fs_param_Building_dxdy), down = tex2D(fs_param_Building, psin.TexCoords + (float2(0, -(1))) * fs_param_Building_dxdy), up_right = tex2D(fs_param_Building, psin.TexCoords + (float2(1, 1)) * fs_param_Building_dxdy), up_left = tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 1)) * fs_param_Building_dxdy), down_right = tex2D(fs_param_Building, psin.TexCoords + (float2(1, -(1))) * fs_param_Building_dxdy), down_left = tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Building_dxdy);
-        if (!(Game__SimShader__fake_selected__Game_building(building_here)))
+        if (!(Game__SimShader__fake_selected__building(building_here)))
         {
-            bool is_fake_selected = Game__SimShader__fake_selected__Game_building(right) || Game__SimShader__fake_selected__Game_building(up) || Game__SimShader__fake_selected__Game_building(left) || Game__SimShader__fake_selected__Game_building(down) || Game__SimShader__fake_selected__Game_building(up_right) || Game__SimShader__fake_selected__Game_building(up_left) || Game__SimShader__fake_selected__Game_building(down_right) || Game__SimShader__fake_selected__Game_building(down_left);
-            Game__SimShader__set_selected_fake__Game_building__bool(building_here, is_fake_selected);
+            bool is_fake_selected = Game__SimShader__fake_selected__building(right) || Game__SimShader__fake_selected__building(up) || Game__SimShader__fake_selected__building(left) || Game__SimShader__fake_selected__building(down) || Game__SimShader__fake_selected__building(up_right) || Game__SimShader__fake_selected__building(up_left) || Game__SimShader__fake_selected__building(down_right) || Game__SimShader__fake_selected__building(down_left);
+            Game__SimShader__set_selected_fake__building__Boolean(building_here, is_fake_selected);
         }
     }
     __FinalOutput.Color = building_here;

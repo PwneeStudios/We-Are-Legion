@@ -73,33 +73,33 @@ float2 fs_param_Destination;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__selected__Game_data(float4 u)
+bool Game__SimShader__selected__data(float4 u)
 {
     float val = u.b;
     return val >= 0.3764706 - .001;
 }
 
-bool Game__SimShader__IsUnit__float(float type)
+bool Game__SimShader__IsUnit__Single(float type)
 {
     return type >= 0.003921569 - .001 && type < 0.02352941 - .001;
 }
 
-bool Game__SimShader__IsBuilding__float(float type)
+bool Game__SimShader__IsBuilding__Single(float type)
 {
     return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
 }
 
-bool Game__SimShader__IsSpecialUnit__float(float type)
+bool Game__SimShader__IsSpecialUnit__Single(float type)
 {
     return abs(type - 0.007843138) < .001 || abs(type - 0.01176471) < .001;
 }
 
-bool Game__SimShader__IsSoldierUnit__float(float type)
+bool Game__SimShader__IsSoldierUnit__Single(float type)
 {
-    return Game__SimShader__IsUnit__float(type) && !(Game__SimShader__IsSpecialUnit__float(type));
+    return Game__SimShader__IsUnit__Single(type) && !(Game__SimShader__IsSpecialUnit__Single(type));
 }
 
-bool Game__SelectionFilter__FilterHasUnit__float__float(float filter, float type)
+bool Game__SelectionFilter__FilterHasUnit__Single__Single(float filter, float type)
 {
     if (abs(filter - 0.0) < .001)
     {
@@ -107,24 +107,24 @@ bool Game__SelectionFilter__FilterHasUnit__float__float(float filter, float type
     }
     if (abs(filter - 1.0) < .001)
     {
-        return Game__SimShader__IsUnit__float(type);
+        return Game__SimShader__IsUnit__Single(type);
     }
     if (abs(filter - 2.0) < .001)
     {
-        return Game__SimShader__IsBuilding__float(type);
+        return Game__SimShader__IsBuilding__Single(type);
     }
     if (abs(filter - 3.0) < .001)
     {
-        return Game__SimShader__IsSoldierUnit__float(type);
+        return Game__SimShader__IsSoldierUnit__Single(type);
     }
     if (abs(filter - 4.0) < .001)
     {
-        return Game__SimShader__IsSpecialUnit__float(type);
+        return Game__SimShader__IsSpecialUnit__Single(type);
     }
     return false;
 }
 
-float2 Game__SimShader__pack_val_2byte__float(float x)
+float2 Game__SimShader__pack_val_2byte__Single(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -132,10 +132,10 @@ float2 Game__SimShader__pack_val_2byte__float(float x)
     return packed / 255.0;
 }
 
-float4 Game__SimShader__pack_vec2__FragSharpFramework_vec2(float2 v)
+float4 Game__SimShader__pack_vec2__vec2(float2 v)
 {
-    float2 packed_x = Game__SimShader__pack_val_2byte__float(v.x);
-    float2 packed_y = Game__SimShader__pack_val_2byte__float(v.y);
+    float2 packed_x = Game__SimShader__pack_val_2byte__Single(v.x);
+    float2 packed_y = Game__SimShader__pack_val_2byte__Single(v.y);
     return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 
@@ -156,10 +156,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 target = float4(0, 0, 0, 0);
-    if (abs(0.01176471 - unit_here.g) < .001 && Game__SimShader__selected__Game_data(data_here) && Game__SelectionFilter__FilterHasUnit__float__float(4, unit_here.r))
+    if (abs(0.01176471 - unit_here.g) < .001 && Game__SimShader__selected__data(data_here) && Game__SelectionFilter__FilterHasUnit__Single__Single(4, unit_here.r))
     {
         float2 dest = fs_param_Destination;
-        target = Game__SimShader__pack_vec2__FragSharpFramework_vec2(dest);
+        target = Game__SimShader__pack_vec2__vec2(dest);
     }
     else
     {

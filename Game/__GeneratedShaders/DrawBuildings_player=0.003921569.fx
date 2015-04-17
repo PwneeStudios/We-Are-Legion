@@ -89,17 +89,17 @@ float fs_param_s;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__IsBuilding__float(float type)
+bool Game__SimShader__IsBuilding__Single(float type)
 {
     return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
 }
 
-bool Game__SimShader__IsBuilding__Game_unit(float4 u)
+bool Game__SimShader__IsBuilding__unit(float4 u)
 {
-    return Game__SimShader__IsBuilding__float(u.r);
+    return Game__SimShader__IsBuilding__Single(u.r);
 }
 
-float2 Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size)
+float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -107,17 +107,17 @@ float2 Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharp
     return coords - float2(i, j);
 }
 
-bool Game__SimShader__Something__Game_building(float4 u)
+bool Game__SimShader__Something__building(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-float Game__ExplosionSpriteSheet__ExplosionFrame__float__Game_building(float s, float4 building_here)
+float Game__ExplosionSpriteSheet__ExplosionFrame__Single__building(float s, float4 building_here)
 {
     return (s + 255 * (building_here.r - 0.02745098)) * 6;
 }
 
-float4 Game__DrawBuildings__ExplosionSprite__Game_building__Game_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 Game__DrawBuildings__ExplosionSprite__building__unit__vec2__Single__PointSampler(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
@@ -129,43 +129,43 @@ float4 Game__DrawBuildings__ExplosionSprite__Game_building__Game_unit__FragSharp
     return tex2D(Texture, pos);
 }
 
-bool Game__SimShader__fake_selected__Game_data(float4 u)
+bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-bool Game__SimShader__fake_selected__Game_building(float4 u)
+bool Game__SimShader__fake_selected__building(float4 u)
 {
-    return Game__SimShader__fake_selected__Game_data(u);
+    return Game__SimShader__fake_selected__data(u);
 }
 
-float2 FragSharpFramework__FragSharpStd__Float__FragSharpFramework_vec2(float2 v)
+float2 FragSharpFramework__FragSharpStd__Float__vec2(float2 v)
 {
     return floor(255 * v + float2(0.5, 0.5));
 }
 
-float FragSharpFramework__FragSharpStd__Float__float(float v)
+float FragSharpFramework__FragSharpStd__Float__Single(float v)
 {
     return floor(255 * v + 0.5);
 }
 
-float Game__UnitType__BuildingIndex__float(float type)
+float Game__UnitType__BuildingIndex__Single(float type)
 {
     return type - 0.02352941;
 }
 
-float4 Game__DrawBuildings__Sprite__float__Game_building__Game_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler(VertexToPixel psin, float player, float4 b, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 Game__DrawBuildings__Sprite__Single__building__unit__vec2__Single__PointSampler(VertexToPixel psin, float player, float4 b, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    bool draw_selected = abs(u.g - player) < .001 && Game__SimShader__fake_selected__Game_building(b);
+    bool draw_selected = abs(u.g - player) < .001 && Game__SimShader__fake_selected__building(b);
     float selected_offset = draw_selected ? 3 : 0;
-    pos += FragSharpFramework__FragSharpStd__Float__FragSharpFramework_vec2(float2(b.g, b.a));
-    pos.x += FragSharpFramework__FragSharpStd__Float__float(u.g) * 3;
-    pos.y += selected_offset + 6 * FragSharpFramework__FragSharpStd__Float__float(Game__UnitType__BuildingIndex__float(u.r));
+    pos += FragSharpFramework__FragSharpStd__Float__vec2(float2(b.g, b.a));
+    pos.x += FragSharpFramework__FragSharpStd__Float__Single(u.g) * 3;
+    pos.y += selected_offset + 6 * FragSharpFramework__FragSharpStd__Float__Single(Game__UnitType__BuildingIndex__Single(u.r));
     pos *= float2(1.0 / 15, 1.0 / 30);
     return tex2D(Texture, pos);
 }
@@ -189,26 +189,26 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 building_here = tex2D(fs_param_Buildings, psin.TexCoords + (float2(0, 0)) * fs_param_Buildings_dxdy);
     float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    if (!(Game__SimShader__IsBuilding__Game_unit(unit_here)))
+    if (!(Game__SimShader__IsBuilding__unit(unit_here)))
     {
         __FinalOutput.Color = output;
         return __FinalOutput;
     }
-    float2 subcell_pos = Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_Buildings_size);
-    if (Game__SimShader__Something__Game_building(building_here))
+    float2 subcell_pos = Game__SimShader__get_subcell_pos__VertexOut__vec2(psin, fs_param_Buildings_size);
+    if (Game__SimShader__Something__building(building_here))
     {
         if (building_here.r >= 0.02745098 - .001)
         {
-            float frame = Game__ExplosionSpriteSheet__ExplosionFrame__float__Game_building(fs_param_s, building_here);
+            float frame = Game__ExplosionSpriteSheet__ExplosionFrame__Single__building(fs_param_s, building_here);
             if (frame < 16 - .001)
             {
-                output += Game__DrawBuildings__ExplosionSprite__Game_building__Game_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler(psin, building_here, unit_here, subcell_pos, frame, fs_param_Explosion, fs_param_Explosion_size, fs_param_Explosion_dxdy);
+                output += Game__DrawBuildings__ExplosionSprite__building__unit__vec2__Single__PointSampler(psin, building_here, unit_here, subcell_pos, frame, fs_param_Explosion, fs_param_Explosion_size, fs_param_Explosion_dxdy);
             }
         }
         else
         {
             float frame = 0;
-            output += Game__DrawBuildings__Sprite__float__Game_building__Game_unit__FragSharpFramework_vec2__float__FragSharpFramework_PointSampler(psin, 0.003921569, building_here, unit_here, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+            output += Game__DrawBuildings__Sprite__Single__building__unit__vec2__Single__PointSampler(psin, 0.003921569, building_here, unit_here, subcell_pos, frame, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
         }
     }
     __FinalOutput.Color = output;

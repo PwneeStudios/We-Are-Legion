@@ -41,15 +41,15 @@ sampler fs_param_Random : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__IsValid__float(float direction)
+bool Game__SimShader__IsValid__Single(float direction)
 {
     return direction > 0 + .001;
 }
 
-float2 Game__SimShader__dir_to_vec__float(float direction)
+float2 Game__SimShader__dir_to_vec__Single(float direction)
 {
     float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
-    return Game__SimShader__IsValid__float(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Game__SimShader__IsValid__Single(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
 // Compiled vertex shader
@@ -66,7 +66,7 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    __FinalOutput.Color = tex2D(fs_param_Random, psin.TexCoords + (Game__SimShader__dir_to_vec__float(0.01176471)) * fs_param_Random_dxdy);
+    __FinalOutput.Color = tex2D(fs_param_Random, psin.TexCoords + (Game__SimShader__dir_to_vec__Single(0.01176471)) * fs_param_Random_dxdy);
     return __FinalOutput;
 }
 

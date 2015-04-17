@@ -100,12 +100,12 @@ sampler fs_param_Necromancy : register(s5) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__CorpsePresent__Game_corpse(float4 u)
+bool Game__SimShader__CorpsePresent__corpse(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
@@ -130,7 +130,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 cur_data = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy), prev_data = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousData_dxdy);
     here.r = 0.0;
     here.g = 0.0;
-    if (Game__SimShader__CorpsePresent__Game_corpse(corpse_here) && !(Game__SimShader__Something__Game_data(cur_data)) && !(Game__SimShader__Something__Game_data(prev_data)))
+    if (Game__SimShader__CorpsePresent__corpse(corpse_here) && !(Game__SimShader__Something__data(cur_data)) && !(Game__SimShader__Something__data(prev_data)))
     {
         float player = 0.0;
         float necro = 0.0;

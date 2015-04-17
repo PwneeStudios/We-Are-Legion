@@ -55,28 +55,28 @@ sampler fs_param_Random : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__IsStationary__Game_data(float4 d)
+bool Game__SimShader__IsStationary__data(float4 d)
 {
     return d.r >= 0.01960784 - .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_floor__float(float v)
+float FragSharpFramework__FragSharpStd__fint_floor__Single(float v)
 {
     v += 0.0005;
     return floor(255 * v) * 0.003921569;
 }
 
-float Game__SimShader__RndFint__float__float__float(float rnd, float f1, float f2)
+float Game__SimShader__RndFint__Single__Single__Single(float rnd, float f1, float f2)
 {
     f2 += 0.003921569;
     f2 -= 0.0006;
     float val = rnd * (f2 - f1) + f1;
-    return FragSharpFramework__FragSharpStd__fint_floor__float(val);
+    return FragSharpFramework__FragSharpStd__fint_floor__Single(val);
 }
 
 // Compiled vertex shader
@@ -94,10 +94,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy), output = float4(0, 0, 0, 0);
-    if (Game__SimShader__Something__Game_data(here))
+    if (Game__SimShader__Something__data(here))
     {
         output = here;
-        if (!(Game__SimShader__IsStationary__Game_data(here)))
+        if (!(Game__SimShader__IsStationary__data(here)))
         {
             output.g = 0.003921569;
         }
@@ -105,7 +105,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         return __FinalOutput;
     }
     float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy);
-    float rnd = Game__SimShader__RndFint__float__float__float(tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy).x, 0.0, 0.01176471);
+    float rnd = Game__SimShader__RndFint__Single__Single__Single(tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy).x, 0.0, 0.01176471);
     if (abs(rnd - 0.0) < .001)
     {
         if (abs(right.a - 0.0) > .001 && abs(right.a - 0.01176471) > .001 && abs(right.r - 0.01176471) < .001)
@@ -191,7 +191,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
         }
     }
-    if (Game__SimShader__Something__Game_data(output))
+    if (Game__SimShader__Something__data(output))
     {
         output.g = 0.0;
         __FinalOutput.Color = output;

@@ -85,23 +85,23 @@ sampler fs_param_Magic : register(s4) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__IsValid__float(float direction)
+bool Game__SimShader__IsValid__Single(float direction)
 {
     return direction > 0 + .001;
 }
 
-float2 Game__SimShader__dir_to_vec__float(float direction)
+float2 Game__SimShader__dir_to_vec__Single(float direction)
 {
     float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
-    return Game__SimShader__IsValid__float(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Game__SimShader__IsValid__Single(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
-float Game__SimShader__Reverse__float(float dir)
+float Game__SimShader__Reverse__Single(float dir)
 {
     dir += 2 * 0.003921569;
     if (dir > 0.01568628 + .001)
@@ -111,7 +111,7 @@ float Game__SimShader__Reverse__float(float dir)
     return dir;
 }
 
-float2 Game__SimShader__pack_val_2byte__float(float x)
+float2 Game__SimShader__pack_val_2byte__Single(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -119,10 +119,10 @@ float2 Game__SimShader__pack_val_2byte__float(float x)
     return packed / 255.0;
 }
 
-float4 Game__SimShader__pack_vec2__FragSharpFramework_vec2(float2 v)
+float4 Game__SimShader__pack_vec2__vec2(float2 v)
 {
-    float2 packed_x = Game__SimShader__pack_val_2byte__float(v.x);
-    float2 packed_y = Game__SimShader__pack_val_2byte__float(v.y);
+    float2 packed_x = Game__SimShader__pack_val_2byte__Single(v.x);
+    float2 packed_y = Game__SimShader__pack_val_2byte__Single(v.y);
     return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 
@@ -142,15 +142,15 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 target = tex2D(fs_param_Target, psin.TexCoords + (float2(0, 0)) * fs_param_Target_dxdy);
-    if (Game__SimShader__Something__Game_data(data_here) && abs(data_here.a - 0.01568628) < .001)
+    if (Game__SimShader__Something__data(data_here) && abs(data_here.a - 0.01568628) < .001)
     {
-        target = tex2D(fs_param_Target, psin.TexCoords + (Game__SimShader__dir_to_vec__float(Game__SimShader__Reverse__float(data_here.r))) * fs_param_Target_dxdy);
+        target = tex2D(fs_param_Target, psin.TexCoords + (Game__SimShader__dir_to_vec__Single(Game__SimShader__Reverse__Single(data_here.r))) * fs_param_Target_dxdy);
     }
-    if (Game__SimShader__Something__Game_data(data_here) && abs(data_here.a - 0.01960784) < .001)
+    if (Game__SimShader__Something__data(data_here) && abs(data_here.a - 0.01960784) < .001)
     {
         float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
         float2 pos = fs_param_Target_size * rnd.xy;
-        target = Game__SimShader__pack_vec2__FragSharpFramework_vec2(pos);
+        target = Game__SimShader__pack_vec2__vec2(pos);
     }
     __FinalOutput.Color = target;
     return __FinalOutput;

@@ -235,65 +235,65 @@ sampler fs_param_DirwardDown : register(s14) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__IsUnit__float(float type)
+bool Game__SimShader__IsUnit__Single(float type)
 {
     return type >= 0.003921569 - .001 && type < 0.02352941 - .001;
 }
 
-bool Game__SimShader__IsUnit__Game_unit(float4 u)
+bool Game__SimShader__IsUnit__unit(float4 u)
 {
-    return Game__SimShader__IsUnit__float(u.r);
+    return Game__SimShader__IsUnit__Single(u.r);
 }
 
-bool Game__SimShader__IsBuilding__float(float type)
+bool Game__SimShader__IsBuilding__Single(float type)
 {
     return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
 }
 
-bool Game__SimShader__IsBuilding__Game_unit(float4 u)
+bool Game__SimShader__IsBuilding__unit(float4 u)
 {
-    return Game__SimShader__IsBuilding__float(u.r);
+    return Game__SimShader__IsBuilding__Single(u.r);
 }
 
-float Game__ExplosionSpriteSheet__ExplosionFrame__float__Game_building(float s, float4 building_here)
+float Game__ExplosionSpriteSheet__ExplosionFrame__Single__building(float s, float4 building_here)
 {
     return (s + 255 * (building_here.r - 0.02745098)) * 6;
 }
 
-bool Game__SimShader__IsCenter__Game_building(float4 b)
+bool Game__SimShader__IsCenter__building(float4 b)
 {
     return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_round__float(float v)
+float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Game__SimShader__prior_direction__Game_data(float4 u)
+float Game__SimShader__prior_direction__data(float4 u)
 {
     float val = u.b;
     val = fmod(val, 0.1254902);
-    val = FragSharpFramework__FragSharpStd__fint_round__float(val);
+    val = FragSharpFramework__FragSharpStd__fint_round__Single(val);
     return val;
 }
 
-float Game__SimShader__select_state__Game_data(float4 u)
+float Game__SimShader__select_state__data(float4 u)
 {
-    return u.b - Game__SimShader__prior_direction__Game_data(u);
+    return u.b - Game__SimShader__prior_direction__data(u);
 }
 
-void Game__SimShader__set_prior_direction__Game_data__float(inout float4 u, float dir)
+void Game__SimShader__set_prior_direction__data__Single(inout float4 u, float dir)
 {
-    u.b = Game__SimShader__select_state__Game_data(u) + dir;
+    u.b = Game__SimShader__select_state__data(u) + dir;
 }
 
-float Game__SimShader__unpack_val__FragSharpFramework_vec2(float2 packed)
+float Game__SimShader__unpack_val__vec2(float2 packed)
 {
     float coord = 0;
     packed = floor(255.0 * packed + float2(0.5, 0.5));
@@ -301,20 +301,20 @@ float Game__SimShader__unpack_val__FragSharpFramework_vec2(float2 packed)
     return coord;
 }
 
-float2 Game__SimShader__unpack_vec2__FragSharpFramework_vec4(float4 packed)
+float2 Game__SimShader__unpack_vec2__vec4(float4 packed)
 {
     float2 v = float2(0, 0);
-    v.x = Game__SimShader__unpack_val__FragSharpFramework_vec2(packed.rg);
-    v.y = Game__SimShader__unpack_val__FragSharpFramework_vec2(packed.ba);
+    v.x = Game__SimShader__unpack_val__vec2(packed.rg);
+    v.y = Game__SimShader__unpack_val__vec2(packed.ba);
     return v;
 }
 
-float Game__Movement_UpdateDirection_RemoveDead__BuildingDirection__FragSharpFramework_VertexOut__FragSharpFramework_Field_FragSharpFramework_vec4___Game_building(VertexToPixel psin, VertexToPixel vertex, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, float4 here)
+float Game__Movement_UpdateDirection_RemoveDead__BuildingDirection__VertexOut__Field__building(VertexToPixel psin, VertexToPixel vertex, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, float4 here)
 {
     float dir = 0.003921569;
     float4 target = tex2D(TargetData, psin.TexCoords + (float2(0, 0)) * TargetData_dxdy);
     float2 CurPos = vertex.TexCoords * TargetData_size;
-    float2 Destination = Game__SimShader__unpack_vec2__FragSharpFramework_vec4(target);
+    float2 Destination = Game__SimShader__unpack_vec2__vec4(target);
     float2 diff = Destination - CurPos;
     float2 mag = abs(diff);
     if (mag.x > mag.y + .001 && diff.x > 0 + .001)
@@ -336,7 +336,7 @@ float Game__Movement_UpdateDirection_RemoveDead__BuildingDirection__FragSharpFra
     return dir;
 }
 
-void Game__SimShader__TurnAround__Game_data(inout float4 u)
+void Game__SimShader__TurnAround__data(inout float4 u)
 {
     u.r += 2 * 0.003921569;
     if (u.r > 0.01568628 + .001)
@@ -345,38 +345,38 @@ void Game__SimShader__TurnAround__Game_data(inout float4 u)
     }
 }
 
-float FragSharpFramework__FragSharpStd__Float__float(float v)
+float FragSharpFramework__FragSharpStd__Float__Single(float v)
 {
     return floor(255 * v + 0.5);
 }
 
-bool Game__Movement_UpdateDirection_RemoveDead__GetDirward__Game_dirward__float__FragSharpFramework_vec2__FragSharpFramework_vec2__FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward_(VertexToPixel psin, inout float4 dirward_here, float dir, inout float2 Destination, inout float2 pos_here, sampler DirwardRight, float2 DirwardRight_size, float2 DirwardRight_dxdy, sampler DirwardLeft, float2 DirwardLeft_size, float2 DirwardLeft_dxdy, sampler DirwardUp, float2 DirwardUp_size, float2 DirwardUp_dxdy, sampler DirwardDown, float2 DirwardDown_size, float2 DirwardDown_dxdy)
+bool Game__Movement_UpdateDirection_RemoveDead__GetDirward__dirward__Single__vec2__vec2__Field__Field__Field__Field(VertexToPixel psin, inout float4 dirward_here, float dir, inout float2 Destination, inout float2 pos_here, sampler DirwardRight, float2 DirwardRight_size, float2 DirwardRight_dxdy, sampler DirwardLeft, float2 DirwardLeft_size, float2 DirwardLeft_dxdy, sampler DirwardUp, float2 DirwardUp_size, float2 DirwardUp_dxdy, sampler DirwardDown, float2 DirwardDown_size, float2 DirwardDown_dxdy)
 {
     if (abs(dir - 0.003921569) < .001)
     {
         dirward_here = tex2D(DirwardRight, psin.TexCoords + (float2(0, 0)) * DirwardRight_dxdy);
-        return Destination.x > pos_here.x + FragSharpFramework__FragSharpStd__Float__float(dirward_here.b) + .001;
+        return Destination.x > pos_here.x + FragSharpFramework__FragSharpStd__Float__Single(dirward_here.b) + .001;
     }
     else
     {
         if (abs(dir - 0.01176471) < .001)
         {
             dirward_here = tex2D(DirwardLeft, psin.TexCoords + (float2(0, 0)) * DirwardLeft_dxdy);
-            return Destination.x < pos_here.x - FragSharpFramework__FragSharpStd__Float__float(dirward_here.b) - .001;
+            return Destination.x < pos_here.x - FragSharpFramework__FragSharpStd__Float__Single(dirward_here.b) - .001;
         }
         else
         {
             if (abs(dir - 0.007843138) < .001)
             {
                 dirward_here = tex2D(DirwardUp, psin.TexCoords + (float2(0, 0)) * DirwardUp_dxdy);
-                return Destination.y > pos_here.y + FragSharpFramework__FragSharpStd__Float__float(dirward_here.b) + .001;
+                return Destination.y > pos_here.y + FragSharpFramework__FragSharpStd__Float__Single(dirward_here.b) + .001;
             }
             else
             {
                 if (abs(dir - 0.01568628) < .001)
                 {
                     dirward_here = tex2D(DirwardDown, psin.TexCoords + (float2(0, 0)) * DirwardDown_dxdy);
-                    return Destination.y < pos_here.y - FragSharpFramework__FragSharpStd__Float__float(dirward_here.b) - .001;
+                    return Destination.y < pos_here.y - FragSharpFramework__FragSharpStd__Float__Single(dirward_here.b) - .001;
                 }
             }
         }
@@ -384,23 +384,23 @@ bool Game__Movement_UpdateDirection_RemoveDead__GetDirward__Game_dirward__float_
     return false;
 }
 
-bool Game__SimShader__ValidDirward__Game_dirward(float4 d)
+bool Game__SimShader__ValidDirward__dirward(float4 d)
 {
     return any(abs(d - float4(0, 0, 0, 0)) > .001);
 }
 
-bool Game__SimShader__IsValid__float(float direction)
+bool Game__SimShader__IsValid__Single(float direction)
 {
     return direction > 0 + .001;
 }
 
-float2 Game__SimShader__dir_to_vec__float(float direction)
+float2 Game__SimShader__dir_to_vec__Single(float direction)
 {
     float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
-    return Game__SimShader__IsValid__float(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Game__SimShader__IsValid__Single(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
-float Game__SimShader__RotateLeft__float(float dir)
+float Game__SimShader__RotateLeft__Single(float dir)
 {
     dir += 0.003921569;
     if (dir > 0.01568628 + .001)
@@ -410,7 +410,7 @@ float Game__SimShader__RotateLeft__float(float dir)
     return dir;
 }
 
-float Game__SimShader__RotateRight__float(float dir)
+float Game__SimShader__RotateRight__Single(float dir)
 {
     dir += -0.003921569;
     if (dir < 0.003921569 - .001)
@@ -420,26 +420,26 @@ float Game__SimShader__RotateRight__float(float dir)
     return dir;
 }
 
-float FragSharpFramework__FragSharpStd__fint_floor__float(float v)
+float FragSharpFramework__FragSharpStd__fint_floor__Single(float v)
 {
     v += 0.0005;
     return floor(255 * v) * 0.003921569;
 }
 
-float Game__SimShader__RndFint__float__float__float(float rnd, float f1, float f2)
+float Game__SimShader__RndFint__Single__Single__Single(float rnd, float f1, float f2)
 {
     f2 += 0.003921569;
     f2 -= 0.0006;
     float val = rnd * (f2 - f1) + f1;
-    return FragSharpFramework__FragSharpStd__fint_floor__float(val);
+    return FragSharpFramework__FragSharpStd__fint_floor__Single(val);
 }
 
-void Game__Movement_UpdateDirection_RemoveDead__NaivePathfind__FragSharpFramework_VertexOut__FragSharpFramework_Field_Game_data___FragSharpFramework_Field_Game_data___FragSharpFramework_Field_FragSharpFramework_vec4___FragSharpFramework_Field_Game_extra___FragSharpFramework_Field_FragSharpFramework_vec4___FragSharpFramework_Field_Game_geo___FragSharpFramework_Field_Game_geo___FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward___Game_unit__Game_data(VertexToPixel psin, VertexToPixel vertex, sampler Current, float2 Current_size, float2 Current_dxdy, sampler Previous, float2 Previous_size, float2 Previous_dxdy, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, sampler Extra, float2 Extra_size, float2 Extra_dxdy, sampler RandomField, float2 RandomField_size, float2 RandomField_dxdy, sampler Geo, float2 Geo_size, float2 Geo_dxdy, sampler AntiGeo, float2 AntiGeo_size, float2 AntiGeo_dxdy, sampler DirwardRight, float2 DirwardRight_size, float2 DirwardRight_dxdy, sampler DirwardLeft, float2 DirwardLeft_size, float2 DirwardLeft_dxdy, sampler DirwardUp, float2 DirwardUp_size, float2 DirwardUp_dxdy, sampler DirwardDown, float2 DirwardDown_size, float2 DirwardDown_dxdy, float4 data, inout float4 here)
+void Game__Movement_UpdateDirection_RemoveDead__NaivePathfind__VertexOut__Field__Field__Field__Field__Field__Field__Field__Field__Field__Field__Field__unit__data(VertexToPixel psin, VertexToPixel vertex, sampler Current, float2 Current_size, float2 Current_dxdy, sampler Previous, float2 Previous_size, float2 Previous_dxdy, sampler TargetData, float2 TargetData_size, float2 TargetData_dxdy, sampler Extra, float2 Extra_size, float2 Extra_dxdy, sampler RandomField, float2 RandomField_size, float2 RandomField_dxdy, sampler Geo, float2 Geo_size, float2 Geo_dxdy, sampler AntiGeo, float2 AntiGeo_size, float2 AntiGeo_dxdy, sampler DirwardRight, float2 DirwardRight_size, float2 DirwardRight_dxdy, sampler DirwardLeft, float2 DirwardLeft_size, float2 DirwardLeft_dxdy, sampler DirwardUp, float2 DirwardUp_size, float2 DirwardUp_dxdy, sampler DirwardDown, float2 DirwardDown_size, float2 DirwardDown_dxdy, float4 data, inout float4 here)
 {
     float4 geo_here = tex2D(Geo, psin.TexCoords + (float2(0, 0)) * Geo_dxdy), antigeo_here = tex2D(AntiGeo, psin.TexCoords + (float2(0, 0)) * AntiGeo_dxdy);
     float4 target = tex2D(TargetData, psin.TexCoords + (float2(0, 0)) * TargetData_dxdy);
     float2 CurPos = floor((vertex.TexCoords * TargetData_size + float2(0.5, 0.5)));
-    float2 Destination = floor(Game__SimShader__unpack_vec2__FragSharpFramework_vec4(target));
+    float2 Destination = floor(Game__SimShader__unpack_vec2__vec4(target));
     float4 right = tex2D(Current, psin.TexCoords + (float2(1, 0)) * Current_dxdy), up = tex2D(Current, psin.TexCoords + (float2(0, 1)) * Current_dxdy), left = tex2D(Current, psin.TexCoords + (float2(-(1), 0)) * Current_dxdy), down = tex2D(Current, psin.TexCoords + (float2(0, -(1))) * Current_dxdy);
     float4 prev_right = tex2D(Previous, psin.TexCoords + (float2(1, 0)) * Previous_dxdy), prev_up = tex2D(Previous, psin.TexCoords + (float2(0, 1)) * Previous_dxdy), prev_left = tex2D(Previous, psin.TexCoords + (float2(-(1), 0)) * Previous_dxdy), prev_down = tex2D(Previous, psin.TexCoords + (float2(0, -(1))) * Previous_dxdy);
     float4 extra_here = tex2D(Extra, psin.TexCoords + (float2(0, 0)) * Extra_dxdy);
@@ -467,22 +467,22 @@ void Game__Movement_UpdateDirection_RemoveDead__NaivePathfind__FragSharpFramewor
     if (mag.x > mag.y + .001 && Destination.x > CurPos.x + 1 + .001)
     {
         dir1 = 0.003921569;
-        blocked1 = Game__SimShader__Something__Game_data(right) || Game__SimShader__Something__Game_data(prev_right) && abs(prior_dir - 0.01176471) > .001;
+        blocked1 = Game__SimShader__Something__data(right) || Game__SimShader__Something__data(prev_right) && abs(prior_dir - 0.01176471) > .001;
     }
     if (mag.y > mag.x + .001 && Destination.y > CurPos.y + 1 + .001)
     {
         dir1 = 0.007843138;
-        blocked1 = Game__SimShader__Something__Game_data(up) || Game__SimShader__Something__Game_data(prev_up) && abs(prior_dir - 0.01568628) > .001;
+        blocked1 = Game__SimShader__Something__data(up) || Game__SimShader__Something__data(prev_up) && abs(prior_dir - 0.01568628) > .001;
     }
     if (mag.x > mag.y + .001 && Destination.x < CurPos.x - 1 - .001)
     {
         dir1 = 0.01176471;
-        blocked1 = Game__SimShader__Something__Game_data(left) || Game__SimShader__Something__Game_data(prev_left) && abs(prior_dir - 0.003921569) > .001;
+        blocked1 = Game__SimShader__Something__data(left) || Game__SimShader__Something__data(prev_left) && abs(prior_dir - 0.003921569) > .001;
     }
     if (mag.y > mag.x + .001 && Destination.y < CurPos.y - 1 - .001)
     {
         dir1 = 0.01568628;
-        blocked1 = Game__SimShader__Something__Game_data(down) || Game__SimShader__Something__Game_data(prev_down) && abs(prior_dir - 0.007843138) > .001;
+        blocked1 = Game__SimShader__Something__data(down) || Game__SimShader__Something__data(prev_down) && abs(prior_dir - 0.007843138) > .001;
     }
     bool blocked2 = false;
     if (abs(dir1 - 0.003921569) < .001 || abs(dir1 - 0.01176471) < .001)
@@ -490,14 +490,14 @@ void Game__Movement_UpdateDirection_RemoveDead__NaivePathfind__FragSharpFramewor
         if (Destination.y > CurPos.y + 0 + .001)
         {
             dir2 = 0.007843138;
-            blocked2 = Game__SimShader__Something__Game_data(up) || Game__SimShader__Something__Game_data(prev_up) && abs(prior_dir - 0.01568628) > .001;
+            blocked2 = Game__SimShader__Something__data(up) || Game__SimShader__Something__data(prev_up) && abs(prior_dir - 0.01568628) > .001;
         }
         else
         {
             if (Destination.y < CurPos.y - 0 - .001)
             {
                 dir2 = 0.01568628;
-                blocked2 = Game__SimShader__Something__Game_data(down) || Game__SimShader__Something__Game_data(prev_down) && abs(prior_dir - 0.007843138) > .001;
+                blocked2 = Game__SimShader__Something__data(down) || Game__SimShader__Something__data(prev_down) && abs(prior_dir - 0.007843138) > .001;
             }
         }
     }
@@ -506,22 +506,22 @@ void Game__Movement_UpdateDirection_RemoveDead__NaivePathfind__FragSharpFramewor
         if (Destination.x > CurPos.x + 0 + .001)
         {
             dir2 = 0.003921569;
-            blocked2 = Game__SimShader__Something__Game_data(right) || Game__SimShader__Something__Game_data(prev_right) && abs(prior_dir - 0.01176471) > .001;
+            blocked2 = Game__SimShader__Something__data(right) || Game__SimShader__Something__data(prev_right) && abs(prior_dir - 0.01176471) > .001;
         }
         else
         {
             if (Destination.x < CurPos.x - 0 - .001)
             {
                 dir2 = 0.01176471;
-                blocked2 = Game__SimShader__Something__Game_data(left) || Game__SimShader__Something__Game_data(prev_left) && abs(prior_dir - 0.003921569) > .001;
+                blocked2 = Game__SimShader__Something__data(left) || Game__SimShader__Something__data(prev_left) && abs(prior_dir - 0.003921569) > .001;
             }
         }
     }
     float2 pos_here = vertex.TexCoords * Geo_size;
     float4 dirward_here1 = float4(0, 0, 0, 0);
     float4 dirward_here2 = float4(0, 0, 0, 0);
-    bool other_side1 = Game__Movement_UpdateDirection_RemoveDead__GetDirward__Game_dirward__float__FragSharpFramework_vec2__FragSharpFramework_vec2__FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward_(psin, dirward_here1, dir1, Destination, pos_here, DirwardRight, DirwardRight_size, DirwardRight_dxdy, DirwardLeft, DirwardLeft_size, DirwardLeft_dxdy, DirwardUp, DirwardUp_size, DirwardUp_dxdy, DirwardDown, DirwardDown_size, DirwardDown_dxdy);
-    bool other_side2 = Game__Movement_UpdateDirection_RemoveDead__GetDirward__Game_dirward__float__FragSharpFramework_vec2__FragSharpFramework_vec2__FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward_(psin, dirward_here2, dir2, Destination, pos_here, DirwardRight, DirwardRight_size, DirwardRight_dxdy, DirwardLeft, DirwardLeft_size, DirwardLeft_dxdy, DirwardUp, DirwardUp_size, DirwardUp_dxdy, DirwardDown, DirwardDown_size, DirwardDown_dxdy);
+    bool other_side1 = Game__Movement_UpdateDirection_RemoveDead__GetDirward__dirward__Single__vec2__vec2__Field__Field__Field__Field(psin, dirward_here1, dir1, Destination, pos_here, DirwardRight, DirwardRight_size, DirwardRight_dxdy, DirwardLeft, DirwardLeft_size, DirwardLeft_dxdy, DirwardUp, DirwardUp_size, DirwardUp_dxdy, DirwardDown, DirwardDown_size, DirwardDown_dxdy);
+    bool other_side2 = Game__Movement_UpdateDirection_RemoveDead__GetDirward__dirward__Single__vec2__vec2__Field__Field__Field__Field(psin, dirward_here2, dir2, Destination, pos_here, DirwardRight, DirwardRight_size, DirwardRight_dxdy, DirwardLeft, DirwardLeft_size, DirwardLeft_dxdy, DirwardUp, DirwardUp_size, DirwardUp_dxdy, DirwardDown, DirwardDown_size, DirwardDown_dxdy);
     float polarity1 = dirward_here1.a, polarity2 = dirward_here2.a, chosen_polarity = -1.0;
     if (all(abs(extra_here.rg - geo_here.ba) < .001) && abs(extra_here.b - 0.003921569) < .001)
     {
@@ -531,59 +531,59 @@ void Game__Movement_UpdateDirection_RemoveDead__NaivePathfind__FragSharpFramewor
     float4 geo1 = abs(polarity1 - 1.0) < .001 ? antigeo_here : geo_here, geo2 = abs(polarity2 - 1.0) < .001 ? antigeo_here : geo_here;
     float2 geo_id = geo1.ba;
     bool use_simple_pathing = false;
-    if (geo1.r > 0 + .001 && Game__SimShader__ValidDirward__Game_dirward(dirward_here1) && other_side1 && all(abs(dirward_here1.rg - geo_id) < .001) && (blocked1 || abs(extra_here.b - 0.003921569) < .001 && all(abs(extra_here.rg - geo1.ba) < .001)))
+    if (geo1.r > 0 + .001 && Game__SimShader__ValidDirward__dirward(dirward_here1) && other_side1 && all(abs(dirward_here1.rg - geo_id) < .001) && (blocked1 || abs(extra_here.b - 0.003921569) < .001 && all(abs(extra_here.rg - geo1.ba) < .001)))
     {
         dir1 = geo1.r;
         chosen_polarity = polarity1;
     }
     else
     {
-        if (geo2.r > 0 + .001 && Game__SimShader__ValidDirward__Game_dirward(dirward_here2) && other_side2 && all(abs(dirward_here2.rg - geo_id) < .001) && (blocked2 || abs(extra_here.b - 0.003921569) < .001 && all(abs(extra_here.rg - geo2.ba) < .001)))
+        if (geo2.r > 0 + .001 && Game__SimShader__ValidDirward__dirward(dirward_here2) && other_side2 && all(abs(dirward_here2.rg - geo_id) < .001) && (blocked2 || abs(extra_here.b - 0.003921569) < .001 && all(abs(extra_here.rg - geo2.ba) < .001)))
         {
             dir1 = geo2.r;
-            chosen_polarity = other_side1 && Game__SimShader__ValidDirward__Game_dirward(dirward_here1) ? polarity1 : polarity2;
+            chosen_polarity = other_side1 && Game__SimShader__ValidDirward__dirward(dirward_here1) ? polarity1 : polarity2;
         }
         else
         {
             use_simple_pathing = true;
         }
     }
-    if (!(use_simple_pathing) && (Game__SimShader__Something__Game_data(tex2D(Current, psin.TexCoords + (Game__SimShader__dir_to_vec__float(dir1)) * Current_dxdy)) || geo1.g > 0.0 + .001) && geo1.g < 1 - .001)
+    if (!(use_simple_pathing) && (Game__SimShader__Something__data(tex2D(Current, psin.TexCoords + (Game__SimShader__dir_to_vec__Single(dir1)) * Current_dxdy)) || geo1.g > 0.0 + .001) && geo1.g < 1 - .001)
     {
         float alt_dir= (float)0;
         if (abs(chosen_polarity - 0.0) < .001)
         {
-            alt_dir = Game__SimShader__RotateLeft__float(dir1);
+            alt_dir = Game__SimShader__RotateLeft__Single(dir1);
         }
         else
         {
-            alt_dir = Game__SimShader__RotateRight__float(dir1);
+            alt_dir = Game__SimShader__RotateRight__Single(dir1);
         }
-        if (!(Game__SimShader__Something__Game_data(tex2D(Current, psin.TexCoords + (Game__SimShader__dir_to_vec__float(alt_dir)) * Current_dxdy))) && !(Game__SimShader__Something__Game_data(tex2D(Previous, psin.TexCoords + (Game__SimShader__dir_to_vec__float(alt_dir)) * Previous_dxdy))))
+        if (!(Game__SimShader__Something__data(tex2D(Current, psin.TexCoords + (Game__SimShader__dir_to_vec__Single(alt_dir)) * Current_dxdy))) && !(Game__SimShader__Something__data(tex2D(Previous, psin.TexCoords + (Game__SimShader__dir_to_vec__Single(alt_dir)) * Previous_dxdy))))
         {
             dir1 = alt_dir;
         }
     }
     if (use_simple_pathing)
     {
-        if ((mag.x > mag.y + .001 || diff.y > 0 + .001 && Game__SimShader__Something__Game_data(up) || diff.y < 0 - .001 && Game__SimShader__Something__Game_data(down)) && Destination.x > CurPos.x + 1 + .001 && !(Game__SimShader__Something__Game_data(right)))
+        if ((mag.x > mag.y + .001 || diff.y > 0 + .001 && Game__SimShader__Something__data(up) || diff.y < 0 - .001 && Game__SimShader__Something__data(down)) && Destination.x > CurPos.x + 1 + .001 && !(Game__SimShader__Something__data(right)))
         {
             dir1 = 0.003921569;
         }
-        if ((mag.y > mag.x + .001 || diff.x > 0 + .001 && Game__SimShader__Something__Game_data(right) || diff.x < 0 - .001 && Game__SimShader__Something__Game_data(left)) && Destination.y > CurPos.y + 1 + .001 && !(Game__SimShader__Something__Game_data(up)))
+        if ((mag.y > mag.x + .001 || diff.x > 0 + .001 && Game__SimShader__Something__data(right) || diff.x < 0 - .001 && Game__SimShader__Something__data(left)) && Destination.y > CurPos.y + 1 + .001 && !(Game__SimShader__Something__data(up)))
         {
             dir1 = 0.007843138;
         }
-        if ((mag.x > mag.y + .001 || diff.y > 0 + .001 && Game__SimShader__Something__Game_data(up) || diff.y < 0 - .001 && Game__SimShader__Something__Game_data(down)) && Destination.x < CurPos.x - 1 - .001 && !(Game__SimShader__Something__Game_data(left)))
+        if ((mag.x > mag.y + .001 || diff.y > 0 + .001 && Game__SimShader__Something__data(up) || diff.y < 0 - .001 && Game__SimShader__Something__data(down)) && Destination.x < CurPos.x - 1 - .001 && !(Game__SimShader__Something__data(left)))
         {
             dir1 = 0.01176471;
         }
-        if ((mag.y > mag.x + .001 || diff.x > 0 + .001 && Game__SimShader__Something__Game_data(right) || diff.x < 0 - .001 && Game__SimShader__Something__Game_data(left)) && Destination.y < CurPos.y - 1 - .001 && !(Game__SimShader__Something__Game_data(down)))
+        if ((mag.y > mag.x + .001 || diff.x > 0 + .001 && Game__SimShader__Something__data(right) || diff.x < 0 - .001 && Game__SimShader__Something__data(left)) && Destination.y < CurPos.y - 1 - .001 && !(Game__SimShader__Something__data(down)))
         {
             dir1 = 0.01568628;
         }
     }
-    if (Game__SimShader__IsValid__float(dir1) && Game__SimShader__Something__Game_data(tex2D(Current, psin.TexCoords + (Game__SimShader__dir_to_vec__float(dir1)) * Current_dxdy)))
+    if (Game__SimShader__IsValid__Single(dir1) && Game__SimShader__Something__data(tex2D(Current, psin.TexCoords + (Game__SimShader__dir_to_vec__Single(dir1)) * Current_dxdy)))
     {
         if (abs(chosen_polarity - -1.0) > .001 && !(use_simple_pathing))
         {
@@ -599,12 +599,12 @@ void Game__Movement_UpdateDirection_RemoveDead__NaivePathfind__FragSharpFramewor
             use_simple_pathing = false;
         }
         float4 rnd = tex2D(RandomField, psin.TexCoords + (float2(0, 0)) * RandomField_dxdy);
-        if (rnd.x < 0.1 - .001 && !((Game__SimShader__Something__Game_data(right) && Game__SimShader__Something__Game_data(left) && Game__SimShader__Something__Game_data(up) && Game__SimShader__Something__Game_data(down))))
+        if (rnd.x < 0.1 - .001 && !((Game__SimShader__Something__data(right) && Game__SimShader__Something__data(left) && Game__SimShader__Something__data(up) && Game__SimShader__Something__data(down))))
         {
-            dir1 = Game__SimShader__RndFint__float__float__float(rnd.y, 0.003921569, 0.01568628);
+            dir1 = Game__SimShader__RndFint__Single__Single__Single(rnd.y, 0.003921569, 0.01568628);
         }
     }
-    if (Game__SimShader__IsValid__float(dir1))
+    if (Game__SimShader__IsValid__Single(dir1))
     {
         here.r = dir1;
         if (abs(chosen_polarity - -1.0) > .001 && !(use_simple_pathing))
@@ -637,17 +637,17 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy);
-    if (Game__SimShader__Something__Game_data(data_here))
+    if (Game__SimShader__Something__data(data_here))
     {
         float4 path = float4(0, 0, 0, 0);
         float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-        if (abs(unit_here.a - 0.07058824) < .001 && Game__SimShader__IsUnit__Game_unit(unit_here))
+        if (abs(unit_here.a - 0.07058824) < .001 && Game__SimShader__IsUnit__unit(unit_here))
         {
             __FinalOutput.Color = float4(0, 0, 0, 0);
             return __FinalOutput;
         }
         float4 b = data_here;
-        if (Game__SimShader__IsBuilding__Game_unit(unit_here))
+        if (Game__SimShader__IsBuilding__unit(unit_here))
         {
             if (abs(data_here.r - 0.01960784) < .001)
             {
@@ -658,7 +658,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
             else
             {
-                float frame = Game__ExplosionSpriteSheet__ExplosionFrame__float__Game_building(0, b);
+                float frame = Game__ExplosionSpriteSheet__ExplosionFrame__Single__building(0, b);
                 if (frame >= 16 - .001)
                 {
                     __FinalOutput.Color = float4(0, 0, 0, 0);
@@ -666,21 +666,21 @@ PixelToFrame FragmentShader(VertexToPixel psin)
                 }
             }
         }
-        if (Game__SimShader__IsUnit__Game_unit(unit_here) && abs(unit_here.a - 0.2588235) < .001)
+        if (Game__SimShader__IsUnit__unit(unit_here) && abs(unit_here.a - 0.2588235) < .001)
         {
             data_here.a = 0.007843138;
         }
-        if (Game__SimShader__IsUnit__Game_unit(unit_here) && (abs(magic_here.r - 0.003921569) < .001 || abs(unit_here.a - 0.2352941) < .001))
+        if (Game__SimShader__IsUnit__unit(unit_here) && (abs(magic_here.r - 0.003921569) < .001 || abs(unit_here.a - 0.2352941) < .001))
         {
             data_here.a = 0.0;
             __FinalOutput.Color = data_here;
             return __FinalOutput;
         }
-        if (Game__SimShader__IsBuilding__Game_unit(unit_here))
+        if (Game__SimShader__IsBuilding__unit(unit_here))
         {
-            if (Game__SimShader__IsCenter__Game_building(data_here))
+            if (Game__SimShader__IsCenter__building(data_here))
             {
-                Game__SimShader__set_prior_direction__Game_data__float(data_here, Game__Movement_UpdateDirection_RemoveDead__BuildingDirection__FragSharpFramework_VertexOut__FragSharpFramework_Field_FragSharpFramework_vec4___Game_building(psin, psin, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, data_here));
+                Game__SimShader__set_prior_direction__data__Single(data_here, Game__Movement_UpdateDirection_RemoveDead__BuildingDirection__VertexOut__Field__building(psin, psin, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, data_here));
             }
             __FinalOutput.Color = data_here;
             return __FinalOutput;
@@ -766,7 +766,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             if (abs(unit_here.r - 0.01176471) < .001)
             {
-                Game__SimShader__TurnAround__Game_data(data_here);
+                Game__SimShader__TurnAround__data(data_here);
             }
         }
         if (min < auto_attack_cutoff - .001 && abs(data_here.a - 0.01176471) < .001)
@@ -775,7 +775,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
         if (min > auto_attack_cutoff + .001 && abs(data_here.a - 0.007843138) < .001 || abs(data_here.a - 0.003921569) < .001)
         {
-            Game__Movement_UpdateDirection_RemoveDead__NaivePathfind__FragSharpFramework_VertexOut__FragSharpFramework_Field_Game_data___FragSharpFramework_Field_Game_data___FragSharpFramework_Field_FragSharpFramework_vec4___FragSharpFramework_Field_Game_extra___FragSharpFramework_Field_FragSharpFramework_vec4___FragSharpFramework_Field_Game_geo___FragSharpFramework_Field_Game_geo___FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward___FragSharpFramework_Field_Game_dirward___Game_unit__Game_data(psin, psin, fs_param_Data, fs_param_Data_size, fs_param_Data_dxdy, fs_param_PrevData, fs_param_PrevData_size, fs_param_PrevData_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, fs_param_Extra, fs_param_Extra_size, fs_param_Extra_dxdy, fs_param_RandomField, fs_param_RandomField_size, fs_param_RandomField_dxdy, fs_param_Geo, fs_param_Geo_size, fs_param_Geo_dxdy, fs_param_AntiGeo, fs_param_AntiGeo_size, fs_param_AntiGeo_dxdy, fs_param_DirwardRight, fs_param_DirwardRight_size, fs_param_DirwardRight_dxdy, fs_param_DirwardLeft, fs_param_DirwardLeft_size, fs_param_DirwardLeft_dxdy, fs_param_DirwardUp, fs_param_DirwardUp_size, fs_param_DirwardUp_dxdy, fs_param_DirwardDown, fs_param_DirwardDown_size, fs_param_DirwardDown_dxdy, unit_here, data_here);
+            Game__Movement_UpdateDirection_RemoveDead__NaivePathfind__VertexOut__Field__Field__Field__Field__Field__Field__Field__Field__Field__Field__Field__unit__data(psin, psin, fs_param_Data, fs_param_Data_size, fs_param_Data_dxdy, fs_param_PrevData, fs_param_PrevData_size, fs_param_PrevData_dxdy, fs_param_TargetData, fs_param_TargetData_size, fs_param_TargetData_dxdy, fs_param_Extra, fs_param_Extra_size, fs_param_Extra_dxdy, fs_param_RandomField, fs_param_RandomField_size, fs_param_RandomField_dxdy, fs_param_Geo, fs_param_Geo_size, fs_param_Geo_dxdy, fs_param_AntiGeo, fs_param_AntiGeo_size, fs_param_AntiGeo_dxdy, fs_param_DirwardRight, fs_param_DirwardRight_size, fs_param_DirwardRight_dxdy, fs_param_DirwardLeft, fs_param_DirwardLeft_size, fs_param_DirwardLeft_dxdy, fs_param_DirwardUp, fs_param_DirwardUp_size, fs_param_DirwardUp_dxdy, fs_param_DirwardDown, fs_param_DirwardDown_size, fs_param_DirwardDown_dxdy, unit_here, data_here);
         }
     }
     __FinalOutput.Color = data_here;

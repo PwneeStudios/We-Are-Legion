@@ -40,27 +40,27 @@ sampler fs_param_Data : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float FragSharpFramework__FragSharpStd__fint_round__float(float v)
+float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Game__SimShader__prior_direction__Game_data(float4 u)
+float Game__SimShader__prior_direction__data(float4 u)
 {
     float val = u.b;
     val = fmod(val, 0.1254902);
-    val = FragSharpFramework__FragSharpStd__fint_round__float(val);
+    val = FragSharpFramework__FragSharpStd__fint_round__Single(val);
     return val;
 }
 
-float Game__SimShader__select_state__Game_data(float4 u)
+float Game__SimShader__select_state__data(float4 u)
 {
-    return u.b - Game__SimShader__prior_direction__Game_data(u);
+    return u.b - Game__SimShader__prior_direction__data(u);
 }
 
-void Game__SimShader__set_select_state__Game_data__float(inout float4 u, float state)
+void Game__SimShader__set_select_state__data__Single(inout float4 u, float state)
 {
-    u.b = Game__SimShader__prior_direction__Game_data(u) + state;
+    u.b = Game__SimShader__prior_direction__data(u) + state;
 }
 
 // Compiled vertex shader
@@ -78,7 +78,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float state = Game__SimShader__select_state__Game_data(data_here);
+    float state = Game__SimShader__select_state__data(data_here);
     if (abs(state - 0.2509804) < .001)
     {
         state = 0.1254902;
@@ -104,7 +104,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
         }
     }
-    Game__SimShader__set_select_state__Game_data__float(data_here, state);
+    Game__SimShader__set_select_state__data__Single(data_here, state);
     __FinalOutput.Color = data_here;
     return __FinalOutput;
 }

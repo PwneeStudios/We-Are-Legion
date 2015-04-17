@@ -55,22 +55,22 @@ sampler fs_param_Building : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_building(float4 u)
+bool Game__SimShader__Something__building(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__IsBuilding__float(float type)
+bool Game__SimShader__IsBuilding__Single(float type)
 {
     return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
 }
 
-bool Game__SimShader__IsBuilding__Game_unit(float4 u)
+bool Game__SimShader__IsBuilding__unit(float4 u)
 {
-    return Game__SimShader__IsBuilding__float(u.r);
+    return Game__SimShader__IsBuilding__Single(u.r);
 }
 
-bool Game__SimShader__IsCenter__Game_building(float4 b)
+bool Game__SimShader__IsCenter__building(float4 b)
 {
     return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
 }
@@ -91,9 +91,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 0)) * fs_param_Building_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (Game__SimShader__Something__Game_building(building_here) && Game__SimShader__IsBuilding__Game_unit(unit_here) && Game__SimShader__IsCenter__Game_building(building_here))
+    if (Game__SimShader__Something__building(building_here) && Game__SimShader__IsBuilding__unit(unit_here) && Game__SimShader__IsCenter__building(building_here))
     {
-        if (!(Game__SimShader__Something__Game_building(tex2D(fs_param_Building, psin.TexCoords + (float2(1, 0)) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__Game_building(tex2D(fs_param_Building, psin.TexCoords + (float2(0, 1)) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__Game_building(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 0)) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__Game_building(tex2D(fs_param_Building, psin.TexCoords + (float2(0, -(1))) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__Game_building(tex2D(fs_param_Building, psin.TexCoords + (float2(1, 1)) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__Game_building(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 1)) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__Game_building(tex2D(fs_param_Building, psin.TexCoords + (float2(1, -(1))) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__Game_building(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Building_dxdy))))
+        if (!(Game__SimShader__Something__building(tex2D(fs_param_Building, psin.TexCoords + (float2(1, 0)) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__building(tex2D(fs_param_Building, psin.TexCoords + (float2(0, 1)) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__building(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 0)) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__building(tex2D(fs_param_Building, psin.TexCoords + (float2(0, -(1))) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__building(tex2D(fs_param_Building, psin.TexCoords + (float2(1, 1)) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__building(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 1)) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__building(tex2D(fs_param_Building, psin.TexCoords + (float2(1, -(1))) * fs_param_Building_dxdy))) || !(Game__SimShader__Something__building(tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Building_dxdy))))
         {
             __FinalOutput.Color = float4(0, 0, 0, 0);
             return __FinalOutput;

@@ -77,7 +77,7 @@ namespace Game
         }
 
 #if DEBUG
-        public static bool HotSwap = true;
+        public static bool HotSwap = false;
 #endif
 
         static Texture2D LoadTexture(string FileName)

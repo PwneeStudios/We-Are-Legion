@@ -40,20 +40,20 @@ sampler fs_param_Data : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__selected__Game_data(float4 u)
+bool Game__SimShader__selected__data(float4 u)
 {
     float val = u.b;
     return val >= 0.3764706 - .001;
 }
 
-bool Game__SimShader__SomethingSelected__Game_data(float4 u)
+bool Game__SimShader__SomethingSelected__data(float4 u)
 {
-    return Game__SimShader__Something__Game_data(u) && Game__SimShader__selected__Game_data(u);
+    return Game__SimShader__Something__data(u) && Game__SimShader__selected__data(u);
 }
 
 // Compiled vertex shader
@@ -71,7 +71,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    if (Game__SimShader__SomethingSelected__Game_data(here))
+    if (Game__SimShader__SomethingSelected__data(here))
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;

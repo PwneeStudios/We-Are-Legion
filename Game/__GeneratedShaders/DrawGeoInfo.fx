@@ -57,7 +57,7 @@ sampler fs_param_Texture : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size)
+float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -65,12 +65,12 @@ float2 Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharp
     return coords - float2(i, j);
 }
 
-float2 FragSharpFramework__FragSharpStd__fmod__FragSharpFramework_vec2__float(float2 dividend, float divider)
+float2 FragSharpFramework__FragSharpStd__fmod__vec2__Single(float2 dividend, float divider)
 {
     return float2(fmod(dividend.x, divider), fmod(dividend.y, divider));
 }
 
-float4 Game__DrawDebugInfo__DrawDebugInfoTile__float__float__FragSharpFramework_vec2__FragSharpFramework_PointSampler__FragSharpFramework_vec2(VertexToPixel psin, float index_x, float index_y, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float2 SpriteSize)
+float4 Game__DrawDebugInfo__DrawDebugInfoTile__Single__Single__vec2__PointSampler__vec2(VertexToPixel psin, float index_x, float index_y, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float2 SpriteSize)
 {
     float4 clr = float4(0.0, 0.0, 0.0, 0.0);
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
@@ -85,14 +85,14 @@ float4 Game__DrawDebugInfo__DrawDebugInfoTile__float__float__FragSharpFramework_
     return clr;
 }
 
-float FragSharpFramework__FragSharpStd__Float__float(float v)
+float FragSharpFramework__FragSharpStd__Float__Single(float v)
 {
     return floor(255 * v + 0.5);
 }
 
-float4 Game__DrawDebugInfo__DrawDebugArrow__float__FragSharpFramework_vec2__FragSharpFramework_PointSampler(VertexToPixel psin, float dir, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
+float4 Game__DrawDebugInfo__DrawDebugArrow__Single__vec2__PointSampler(VertexToPixel psin, float dir, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
-    return Game__DrawDebugInfo__DrawDebugInfoTile__float__float__FragSharpFramework_vec2__FragSharpFramework_PointSampler__FragSharpFramework_vec2(psin, 0.0, FragSharpFramework__FragSharpStd__Float__float(dir - 0.003921569), pos, Texture, Texture_size, Texture_dxdy, float2(1.0 / 32, 1.0 / 4));
+    return Game__DrawDebugInfo__DrawDebugInfoTile__Single__Single__vec2__PointSampler__vec2(psin, 0.0, FragSharpFramework__FragSharpStd__Float__Single(dir - 0.003921569), pos, Texture, Texture_size, Texture_dxdy, float2(1.0 / 32, 1.0 / 4));
 }
 
 // Compiled vertex shader
@@ -113,15 +113,15 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy);
-    float2 subcell_pos = Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_Geo_size);
+    float2 subcell_pos = Game__SimShader__get_subcell_pos__VertexOut__vec2(psin, fs_param_Geo_size);
     if (here.r > 0.0 + .001)
     {
-        float2 guid = FragSharpFramework__FragSharpStd__fmod__FragSharpFramework_vec2__float(here.ba * 1293.418, 1.0);
+        float2 guid = FragSharpFramework__FragSharpStd__fmod__vec2__Single(here.ba * 1293.418, 1.0);
         output.r += guid.x;
         output.g += guid.y;
         output.a = 1.0;
         output.rgb *= output.a;
-        output *= Game__DrawDebugInfo__DrawDebugArrow__float__FragSharpFramework_vec2__FragSharpFramework_PointSampler(psin, here.r, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
+        output *= Game__DrawDebugInfo__DrawDebugArrow__Single__vec2__PointSampler(psin, here.r, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy);
     }
     __FinalOutput.Color = output;
     return __FinalOutput;

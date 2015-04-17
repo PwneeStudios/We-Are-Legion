@@ -42,7 +42,7 @@ float4 fs_param_Teams;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float Game__SimShader__GetPlayerVal__Game_PlayerTuple__float(float4 tuple, float player)
+float Game__SimShader__GetPlayerVal__PlayerTuple__Single(float4 tuple, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
@@ -83,7 +83,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         __FinalOutput.Color = unit_here;
         return __FinalOutput;
     }
-    unit_here.b = Game__SimShader__GetPlayerVal__Game_PlayerTuple__float(fs_param_Teams, unit_here.g);
+    unit_here.b = Game__SimShader__GetPlayerVal__PlayerTuple__Single(fs_param_Teams, unit_here.g);
     __FinalOutput.Color = unit_here;
     return __FinalOutput;
 }

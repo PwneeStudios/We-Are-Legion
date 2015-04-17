@@ -85,24 +85,24 @@ sampler fs_param_Magic : register(s4) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__IsUnit__float(float type)
+bool Game__SimShader__IsUnit__Single(float type)
 {
     return type >= 0.003921569 - .001 && type < 0.02352941 - .001;
 }
 
-bool Game__SimShader__IsUnit__Game_unit(float4 u)
+bool Game__SimShader__IsUnit__unit(float4 u)
 {
-    return Game__SimShader__IsUnit__float(u.r);
+    return Game__SimShader__IsUnit__Single(u.r);
 }
 
-bool Game__SimShader__LeavesCorpse__Game_unit(float4 u)
+bool Game__SimShader__LeavesCorpse__unit(float4 u)
 {
-    return Game__SimShader__IsUnit__Game_unit(u) && abs(u.r - 0.01568628) > .001;
+    return Game__SimShader__IsUnit__unit(u) && abs(u.r - 0.01568628) > .001;
 }
 
 // Compiled vertex shader
@@ -127,7 +127,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         corpse_here = float4(0, 0, 0, 0);
     }
-    if (Game__SimShader__Something__Game_data(data_here) && abs(unit_here.a - 0.07058824) < .001 && Game__SimShader__LeavesCorpse__Game_unit(unit_here))
+    if (Game__SimShader__Something__data(data_here) && abs(unit_here.a - 0.07058824) < .001 && Game__SimShader__LeavesCorpse__unit(unit_here))
     {
         corpse_here.r = data_here.r;
         corpse_here.g = unit_here.r;

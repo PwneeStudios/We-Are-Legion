@@ -43,7 +43,7 @@ sampler fs_param_AntiMagic : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float FragSharpFramework__FragSharpStd__max__float__float__float__float(float a, float b, float c, float d)
+float FragSharpFramework__FragSharpStd__max__Single__Single__Single__Single(float a, float b, float c, float d)
 {
     return max(max(a, b), max(c, d));
 }
@@ -66,7 +66,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 here = tex2D(fs_param_AntiMagic, psin.TexCoords + (float2(0, 0)) * fs_param_AntiMagic_dxdy);
-    float max_val = FragSharpFramework__FragSharpStd__max__float__float__float__float(here.r, here.g, here.b, here.a);
+    float max_val = FragSharpFramework__FragSharpStd__max__Single__Single__Single__Single(here.r, here.g, here.b, here.a);
     __FinalOutput.Color = max_val > 0.0 + .001 ? float4(0.3, 0.3, 0.3, 0.3) : float4(0.0, 0.0, 0.0, 0.0);
     return __FinalOutput;
 }

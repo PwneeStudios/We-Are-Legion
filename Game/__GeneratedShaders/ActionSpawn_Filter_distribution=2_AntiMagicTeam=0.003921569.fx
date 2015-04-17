@@ -101,17 +101,17 @@ sampler fs_param_AntiMagic : register(s5) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__CorpsePresent__Game_corpse(float4 u)
+bool Game__SimShader__CorpsePresent__corpse(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__UnitDistribution__Contains__float__FragSharpFramework_vec2__FragSharpFramework_Field_Game_corpse_(VertexToPixel psin, float distribution, float2 v, sampler Corpses, float2 Corpses_size, float2 Corpses_dxdy)
+bool Game__UnitDistribution__Contains__Single__vec2__Field(VertexToPixel psin, float distribution, float2 v, sampler Corpses, float2 Corpses_size, float2 Corpses_dxdy)
 {
     if (abs(distribution - 1.0) < .001)
     {
@@ -123,7 +123,7 @@ bool Game__UnitDistribution__Contains__float__FragSharpFramework_vec2__FragSharp
     }
     if (abs(distribution - 3.0) < .001)
     {
-        return Game__SimShader__CorpsePresent__Game_corpse(tex2D(Corpses, psin.TexCoords + (float2(0, 0)) * Corpses_dxdy));
+        return Game__SimShader__CorpsePresent__corpse(tex2D(Corpses, psin.TexCoords + (float2(0, 0)) * Corpses_dxdy));
     }
     return false;
 }
@@ -165,9 +165,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;
     }
-    if (Game__SimShader__Something__Game_data(select) && !(Game__SimShader__Something__Game_data(here)))
+    if (Game__SimShader__Something__data(select) && !(Game__SimShader__Something__data(here)))
     {
-        if (Game__UnitDistribution__Contains__float__FragSharpFramework_vec2__FragSharpFramework_Field_Game_corpse_(psin, 2, psin.TexCoords * fs_param_Select_size, fs_param_Corpses, fs_param_Corpses_size, fs_param_Corpses_dxdy))
+        if (Game__UnitDistribution__Contains__Single__vec2__Field(psin, 2, psin.TexCoords * fs_param_Select_size, fs_param_Corpses, fs_param_Corpses_size, fs_param_Corpses_dxdy))
         {
             __FinalOutput.Color = select;
             return __FinalOutput;

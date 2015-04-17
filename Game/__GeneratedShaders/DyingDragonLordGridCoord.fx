@@ -40,7 +40,7 @@ sampler fs_param_CurrentUnits : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 Game__SimShader__pack_val_2byte__float(float x)
+float2 Game__SimShader__pack_val_2byte__Single(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -48,10 +48,10 @@ float2 Game__SimShader__pack_val_2byte__float(float x)
     return packed / 255.0;
 }
 
-float4 Game__SimShader__pack_vec2__FragSharpFramework_vec2(float2 v)
+float4 Game__SimShader__pack_vec2__vec2(float2 v)
 {
-    float2 packed_x = Game__SimShader__pack_val_2byte__float(v.x);
-    float2 packed_y = Game__SimShader__pack_val_2byte__float(v.y);
+    float2 packed_x = Game__SimShader__pack_val_2byte__Single(v.x);
+    float2 packed_y = Game__SimShader__pack_val_2byte__Single(v.y);
     return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 
@@ -73,7 +73,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 here = tex2D(fs_param_CurrentUnits, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentUnits_dxdy);
     if (abs(here.a - 0.07058824) < .001 && abs(here.r - 0.007843138) < .001)
     {
-        __FinalOutput.Color = Game__SimShader__pack_vec2__FragSharpFramework_vec2(uv);
+        __FinalOutput.Color = Game__SimShader__pack_vec2__vec2(uv);
         return __FinalOutput;
     }
     else

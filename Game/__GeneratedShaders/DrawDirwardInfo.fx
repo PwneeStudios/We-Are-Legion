@@ -57,7 +57,7 @@ sampler fs_param_Texture : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size)
+float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -65,12 +65,12 @@ float2 Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharp
     return coords - float2(i, j);
 }
 
-bool Game__SimShader__ValidDirward__Game_dirward(float4 d)
+bool Game__SimShader__ValidDirward__dirward(float4 d)
 {
     return any(abs(d - float4(0, 0, 0, 0)) > .001);
 }
 
-float2 FragSharpFramework__FragSharpStd__fmod__FragSharpFramework_vec2__float(float2 dividend, float divider)
+float2 FragSharpFramework__FragSharpStd__fmod__vec2__Single(float2 dividend, float divider)
 {
     return float2(fmod(dividend.x, divider), fmod(dividend.y, divider));
 }
@@ -93,18 +93,18 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 here = tex2D(fs_param_Dirward, psin.TexCoords + (float2(0, 0)) * fs_param_Dirward_dxdy);
-    float2 subcell_pos = Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_Dirward_size);
-    if (Game__SimShader__ValidDirward__Game_dirward(here))
+    float2 subcell_pos = Game__SimShader__get_subcell_pos__VertexOut__vec2(psin, fs_param_Dirward_size);
+    if (Game__SimShader__ValidDirward__dirward(here))
     {
-        float2 guid = FragSharpFramework__FragSharpStd__fmod__FragSharpFramework_vec2__float(here.rg * 1293.418, 1.0);
+        float2 guid = FragSharpFramework__FragSharpStd__fmod__vec2__Single(here.rg * 1293.418, 1.0);
         output.r += guid.x;
         output.g += guid.y;
         output.a = 1.0;
         output.rgb *= output.a;
     }
-    if (Game__SimShader__ValidDirward__Game_dirward(here))
+    if (Game__SimShader__ValidDirward__dirward(here))
     {
-        __FinalOutput.Color = here.a > 0.5 + .001 ? float4(1, 0, 0, 1) : float4(0, 1, 0, 1);
+        __FinalOutput.Color = (float4)(here.a > 0.5 + .001 ? float4(1, 0, 0, 1) : float4(0, 1, 0, 1));
         return __FinalOutput;
     }
     __FinalOutput.Color = output;

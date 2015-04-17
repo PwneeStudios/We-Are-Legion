@@ -73,7 +73,7 @@ sampler fs_param_FarColor : register(s3) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size)
+float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -81,17 +81,17 @@ float2 Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharp
     return coords - float2(i, j);
 }
 
-float FragSharpFramework__FragSharpStd__Float__float(float v)
+float FragSharpFramework__FragSharpStd__Float__Single(float v)
 {
     return floor(255 * v + 0.5);
 }
 
-int FragSharpFramework__FragSharpStd__Int__float(float v)
+int FragSharpFramework__FragSharpStd__Int__Single(float v)
 {
     return (int)floor(255 * v + 0.5);
 }
 
-float4 Game__DrawTiles__Sprite__Game_tile__FragSharpFramework_vec2__FragSharpFramework_PointSampler__bool__float(VertexToPixel psin, float4 c, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, bool solid_blend_flag, float solid_blend)
+float4 Game__DrawTiles__Sprite__tile__vec2__PointSampler__Boolean__Single(VertexToPixel psin, float4 c, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, bool solid_blend_flag, float solid_blend)
 {
     float4 clr = float4(0.0, 0.0, 0.0, 0.0);
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
@@ -99,19 +99,19 @@ float4 Game__DrawTiles__Sprite__Game_tile__FragSharpFramework_vec2__FragSharpFra
         return clr;
     }
     pos = pos * 0.98 + float2(0.01, 0.01);
-    pos.x += FragSharpFramework__FragSharpStd__Float__float(c.g);
-    pos.y += FragSharpFramework__FragSharpStd__Float__float(c.b);
+    pos.x += FragSharpFramework__FragSharpStd__Float__Single(c.g);
+    pos.y += FragSharpFramework__FragSharpStd__Float__Single(c.b);
     pos *= float2(1.0 / 32, 1.0 / 32);
     clr = tex2D(Texture, pos);
     if (solid_blend_flag)
     {
-        float4 solid_clr = tex2D(fs_param_FarColor, float2(FragSharpFramework__FragSharpStd__Int__float(c.r)+.5,.5+ 6 + (int)(c.r)) * fs_param_FarColor_dxdy);
+        float4 solid_clr = tex2D(fs_param_FarColor, float2(FragSharpFramework__FragSharpStd__Int__Single(c.r)+.5,.5+ 6 + (int)(c.r)) * fs_param_FarColor_dxdy);
         clr = solid_blend * clr + (1 - solid_blend) * solid_clr;
     }
     return clr;
 }
 
-float4 Game__DrawTiles__GridLines__FragSharpFramework_vec2(float2 pos)
+float4 Game__DrawTiles__GridLines__vec2(float2 pos)
 {
     if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
     {
@@ -142,13 +142,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 here = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 0)) * fs_param_Tiles_dxdy);
-    float2 subcell_pos = Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_Tiles_size);
+    float2 subcell_pos = Game__SimShader__get_subcell_pos__VertexOut__vec2(psin, fs_param_Tiles_size);
     if (here.r > 0.0 + .001)
     {
-        output += Game__DrawTiles__Sprite__Game_tile__FragSharpFramework_vec2__FragSharpFramework_PointSampler__bool__float(psin, here, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, false, fs_param_solid_blend);
+        output += Game__DrawTiles__Sprite__tile__vec2__PointSampler__Boolean__Single(psin, here, subcell_pos, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy, false, fs_param_solid_blend);
         if (true)
         {
-            output += Game__DrawTiles__GridLines__FragSharpFramework_vec2(subcell_pos);
+            output += Game__DrawTiles__GridLines__vec2(subcell_pos);
         }
     }
     __FinalOutput.Color = output;

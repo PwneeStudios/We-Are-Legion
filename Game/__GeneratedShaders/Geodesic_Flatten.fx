@@ -55,12 +55,12 @@ sampler fs_param_OuterGeo : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__IsValid__float(float direction)
+bool Game__SimShader__IsValid__Single(float direction)
 {
     return direction > 0 + .001;
 }
 
-void Game__Geodesic_Flatten__InheritsFrom__Game_geo__Game_geo(inout float4 outer_geo, float4 inner_geo)
+void Game__Geodesic_Flatten__InheritsFrom__geo__geo(inout float4 outer_geo, float4 inner_geo)
 {
     outer_geo.g = inner_geo.g + 0.003921569;
     outer_geo.ba = inner_geo.ba;
@@ -82,57 +82,57 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 geo_here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy), geo_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 0)) * fs_param_Geo_dxdy), geo_up = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 1)) * fs_param_Geo_dxdy), geo_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 0)) * fs_param_Geo_dxdy), geo_down = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, -(1))) * fs_param_Geo_dxdy), geo_up_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 1)) * fs_param_Geo_dxdy), geo_up_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 1)) * fs_param_Geo_dxdy), geo_down_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, -(1))) * fs_param_Geo_dxdy), geo_down_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Geo_dxdy);
     float4 outer_geo_here = tex2D(fs_param_OuterGeo, psin.TexCoords + (float2(0, 0)) * fs_param_OuterGeo_dxdy);
-    if (Game__SimShader__IsValid__float(geo_here.r))
+    if (Game__SimShader__IsValid__Single(geo_here.r))
     {
         __FinalOutput.Color = geo_here;
         return __FinalOutput;
     }
     outer_geo_here.g = 1.0;
-    if (outer_geo_here.g > geo_right.g + .001 && Game__SimShader__IsValid__float(geo_right.r))
+    if (outer_geo_here.g > geo_right.g + .001 && Game__SimShader__IsValid__Single(geo_right.r))
     {
-        Game__Geodesic_Flatten__InheritsFrom__Game_geo__Game_geo(outer_geo_here, geo_right);
+        Game__Geodesic_Flatten__InheritsFrom__geo__geo(outer_geo_here, geo_right);
     }
     else
     {
-        if (outer_geo_here.g > geo_up.g + .001 && Game__SimShader__IsValid__float(geo_up.r))
+        if (outer_geo_here.g > geo_up.g + .001 && Game__SimShader__IsValid__Single(geo_up.r))
         {
-            Game__Geodesic_Flatten__InheritsFrom__Game_geo__Game_geo(outer_geo_here, geo_up);
+            Game__Geodesic_Flatten__InheritsFrom__geo__geo(outer_geo_here, geo_up);
         }
         else
         {
-            if (outer_geo_here.g > geo_left.g + .001 && Game__SimShader__IsValid__float(geo_left.r))
+            if (outer_geo_here.g > geo_left.g + .001 && Game__SimShader__IsValid__Single(geo_left.r))
             {
-                Game__Geodesic_Flatten__InheritsFrom__Game_geo__Game_geo(outer_geo_here, geo_left);
+                Game__Geodesic_Flatten__InheritsFrom__geo__geo(outer_geo_here, geo_left);
             }
             else
             {
-                if (outer_geo_here.g > geo_down.g + .001 && Game__SimShader__IsValid__float(geo_down.r))
+                if (outer_geo_here.g > geo_down.g + .001 && Game__SimShader__IsValid__Single(geo_down.r))
                 {
-                    Game__Geodesic_Flatten__InheritsFrom__Game_geo__Game_geo(outer_geo_here, geo_down);
+                    Game__Geodesic_Flatten__InheritsFrom__geo__geo(outer_geo_here, geo_down);
                 }
                 else
                 {
-                    if (outer_geo_here.g > geo_up_right.g + .001 && Game__SimShader__IsValid__float(geo_up_right.r))
+                    if (outer_geo_here.g > geo_up_right.g + .001 && Game__SimShader__IsValid__Single(geo_up_right.r))
                     {
-                        Game__Geodesic_Flatten__InheritsFrom__Game_geo__Game_geo(outer_geo_here, geo_up_right);
+                        Game__Geodesic_Flatten__InheritsFrom__geo__geo(outer_geo_here, geo_up_right);
                     }
                     else
                     {
-                        if (outer_geo_here.g > geo_up_left.g + .001 && Game__SimShader__IsValid__float(geo_up_left.r))
+                        if (outer_geo_here.g > geo_up_left.g + .001 && Game__SimShader__IsValid__Single(geo_up_left.r))
                         {
-                            Game__Geodesic_Flatten__InheritsFrom__Game_geo__Game_geo(outer_geo_here, geo_up_left);
+                            Game__Geodesic_Flatten__InheritsFrom__geo__geo(outer_geo_here, geo_up_left);
                         }
                         else
                         {
-                            if (outer_geo_here.g > geo_down_right.g + .001 && Game__SimShader__IsValid__float(geo_down_right.r))
+                            if (outer_geo_here.g > geo_down_right.g + .001 && Game__SimShader__IsValid__Single(geo_down_right.r))
                             {
-                                Game__Geodesic_Flatten__InheritsFrom__Game_geo__Game_geo(outer_geo_here, geo_down_right);
+                                Game__Geodesic_Flatten__InheritsFrom__geo__geo(outer_geo_here, geo_down_right);
                             }
                             else
                             {
-                                if (outer_geo_here.g > geo_down_left.g + .001 && Game__SimShader__IsValid__float(geo_down_left.r))
+                                if (outer_geo_here.g > geo_down_left.g + .001 && Game__SimShader__IsValid__Single(geo_down_left.r))
                                 {
-                                    Game__Geodesic_Flatten__InheritsFrom__Game_geo__Game_geo(outer_geo_here, geo_down_left);
+                                    Game__Geodesic_Flatten__InheritsFrom__geo__geo(outer_geo_here, geo_down_left);
                                 }
                             }
                         }

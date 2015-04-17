@@ -41,7 +41,7 @@ sampler fs_param_Tiles : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__IsBlockingTile__Game_tile(float4 t)
+bool Game__SimShader__IsBlockingTile__tile(float4 t)
 {
     return t.r >= 0.01176471 - .001 || abs(t.r - 0.003921569) < .001 && abs(t.b - 0.1215686) > .001;
 }
@@ -61,73 +61,73 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 0)) * fs_param_Tiles_dxdy), right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, 0)) * fs_param_Tiles_dxdy), up = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 1)) * fs_param_Tiles_dxdy), left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), 0)) * fs_param_Tiles_dxdy), down = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, -(1))) * fs_param_Tiles_dxdy), up_right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, 1)) * fs_param_Tiles_dxdy), up_left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), 1)) * fs_param_Tiles_dxdy), down_right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, -(1))) * fs_param_Tiles_dxdy), down_left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Tiles_dxdy);
-    if (Game__SimShader__IsBlockingTile__Game_tile(here))
+    if (Game__SimShader__IsBlockingTile__tile(here))
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;
     }
     float dir = 0;
-    if (Game__SimShader__IsBlockingTile__Game_tile(up_left))
+    if (Game__SimShader__IsBlockingTile__tile(up_left))
     {
         dir = true ? 0.01176471 : 0.007843138;
     }
-    if (Game__SimShader__IsBlockingTile__Game_tile(up_right))
+    if (Game__SimShader__IsBlockingTile__tile(up_right))
     {
         dir = true ? 0.007843138 : 0.003921569;
     }
-    if (Game__SimShader__IsBlockingTile__Game_tile(down_right))
+    if (Game__SimShader__IsBlockingTile__tile(down_right))
     {
         dir = true ? 0.003921569 : 0.01568628;
     }
-    if (Game__SimShader__IsBlockingTile__Game_tile(down_left))
+    if (Game__SimShader__IsBlockingTile__tile(down_left))
     {
         dir = true ? 0.01568628 : 0.01176471;
     }
     if (true)
     {
-        if (Game__SimShader__IsBlockingTile__Game_tile(right))
+        if (Game__SimShader__IsBlockingTile__tile(right))
         {
             dir = 0.007843138;
-            if (Game__SimShader__IsBlockingTile__Game_tile(up))
+            if (Game__SimShader__IsBlockingTile__tile(up))
             {
                 dir = 0.01176471;
-                if (Game__SimShader__IsBlockingTile__Game_tile(left))
+                if (Game__SimShader__IsBlockingTile__tile(left))
                 {
                     dir = 0.01568628;
                 }
             }
         }
-        if (Game__SimShader__IsBlockingTile__Game_tile(up))
+        if (Game__SimShader__IsBlockingTile__tile(up))
         {
             dir = 0.01176471;
-            if (Game__SimShader__IsBlockingTile__Game_tile(left))
+            if (Game__SimShader__IsBlockingTile__tile(left))
             {
                 dir = 0.01568628;
-                if (Game__SimShader__IsBlockingTile__Game_tile(down))
+                if (Game__SimShader__IsBlockingTile__tile(down))
                 {
                     dir = 0.003921569;
                 }
             }
         }
-        if (Game__SimShader__IsBlockingTile__Game_tile(left))
+        if (Game__SimShader__IsBlockingTile__tile(left))
         {
             dir = 0.01568628;
-            if (Game__SimShader__IsBlockingTile__Game_tile(down))
+            if (Game__SimShader__IsBlockingTile__tile(down))
             {
                 dir = 0.003921569;
-                if (Game__SimShader__IsBlockingTile__Game_tile(right))
+                if (Game__SimShader__IsBlockingTile__tile(right))
                 {
                     dir = 0.007843138;
                 }
             }
         }
-        if (Game__SimShader__IsBlockingTile__Game_tile(down))
+        if (Game__SimShader__IsBlockingTile__tile(down))
         {
             dir = 0.003921569;
-            if (Game__SimShader__IsBlockingTile__Game_tile(right))
+            if (Game__SimShader__IsBlockingTile__tile(right))
             {
                 dir = 0.007843138;
-                if (Game__SimShader__IsBlockingTile__Game_tile(up))
+                if (Game__SimShader__IsBlockingTile__tile(up))
                 {
                     dir = 0.01176471;
                 }
@@ -136,49 +136,49 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     else
     {
-        if (Game__SimShader__IsBlockingTile__Game_tile(right))
+        if (Game__SimShader__IsBlockingTile__tile(right))
         {
             dir = 0.01568628;
-            if (Game__SimShader__IsBlockingTile__Game_tile(down))
+            if (Game__SimShader__IsBlockingTile__tile(down))
             {
                 dir = 0.01176471;
-                if (Game__SimShader__IsBlockingTile__Game_tile(left))
+                if (Game__SimShader__IsBlockingTile__tile(left))
                 {
                     dir = 0.007843138;
                 }
             }
         }
-        if (Game__SimShader__IsBlockingTile__Game_tile(up))
+        if (Game__SimShader__IsBlockingTile__tile(up))
         {
             dir = 0.003921569;
-            if (Game__SimShader__IsBlockingTile__Game_tile(right))
+            if (Game__SimShader__IsBlockingTile__tile(right))
             {
                 dir = 0.01568628;
-                if (Game__SimShader__IsBlockingTile__Game_tile(down))
+                if (Game__SimShader__IsBlockingTile__tile(down))
                 {
                     dir = 0.01176471;
                 }
             }
         }
-        if (Game__SimShader__IsBlockingTile__Game_tile(left))
+        if (Game__SimShader__IsBlockingTile__tile(left))
         {
             dir = 0.007843138;
-            if (Game__SimShader__IsBlockingTile__Game_tile(up))
+            if (Game__SimShader__IsBlockingTile__tile(up))
             {
                 dir = 0.003921569;
-                if (Game__SimShader__IsBlockingTile__Game_tile(right))
+                if (Game__SimShader__IsBlockingTile__tile(right))
                 {
                     dir = 0.01568628;
                 }
             }
         }
-        if (Game__SimShader__IsBlockingTile__Game_tile(down))
+        if (Game__SimShader__IsBlockingTile__tile(down))
         {
             dir = 0.01176471;
-            if (Game__SimShader__IsBlockingTile__Game_tile(left))
+            if (Game__SimShader__IsBlockingTile__tile(left))
             {
                 dir = 0.007843138;
-                if (Game__SimShader__IsBlockingTile__Game_tile(up))
+                if (Game__SimShader__IsBlockingTile__tile(up))
                 {
                     dir = 0.003921569;
                 }
@@ -187,7 +187,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     float4 output = float4(0, 0, 0, 0);
     output.r = dir;
-    int surround_count = (Game__SimShader__IsBlockingTile__Game_tile(up) ? 1 : 0) + (Game__SimShader__IsBlockingTile__Game_tile(left) ? 1 : 0) + (Game__SimShader__IsBlockingTile__Game_tile(down) ? 1 : 0) + (Game__SimShader__IsBlockingTile__Game_tile(right) ? 1 : 0);
+    int surround_count = (Game__SimShader__IsBlockingTile__tile(up) ? 1 : 0) + (Game__SimShader__IsBlockingTile__tile(left) ? 1 : 0) + (Game__SimShader__IsBlockingTile__tile(down) ? 1 : 0) + (Game__SimShader__IsBlockingTile__tile(right) ? 1 : 0);
     if (output.r > 0.0 + .001 && abs(surround_count - 3) < .001)
     {
         output.a = 0.003921569;

@@ -82,6 +82,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static corpse operator *(float a, corpse v)
         {
@@ -171,7 +185,7 @@ namespace Game
             return new corpse(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(corpse v)
+        public static explicit operator color(corpse v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -185,36 +199,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly corpse Zero    = new corpse(0, 0, 0, 0);
         public static readonly corpse Nothing = new corpse(0, 0, 0, 0);
@@ -296,6 +280,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static tile operator *(float a, tile v)
         {
@@ -385,7 +383,7 @@ namespace Game
             return new tile(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(tile v)
+        public static explicit operator color(tile v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -399,36 +397,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly tile Zero    = new tile(0, 0, 0, 0);
         public static readonly tile Nothing = new tile(0, 0, 0, 0);
@@ -510,6 +478,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static magic operator *(float a, magic v)
         {
@@ -599,7 +581,7 @@ namespace Game
             return new magic(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(magic v)
+        public static explicit operator color(magic v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -613,36 +595,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly magic Zero    = new magic(0, 0, 0, 0);
         public static readonly magic Nothing = new magic(0, 0, 0, 0);
@@ -724,6 +676,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static geo operator *(float a, geo v)
         {
@@ -813,7 +779,7 @@ namespace Game
             return new geo(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(geo v)
+        public static explicit operator color(geo v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -827,36 +793,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly geo Zero    = new geo(0, 0, 0, 0);
         public static readonly geo Nothing = new geo(0, 0, 0, 0);
@@ -938,6 +874,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static dirward operator *(float a, dirward v)
         {
@@ -1027,7 +977,7 @@ namespace Game
             return new dirward(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(dirward v)
+        public static explicit operator color(dirward v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -1041,36 +991,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly dirward Zero    = new dirward(0, 0, 0, 0);
         public static readonly dirward Nothing = new dirward(0, 0, 0, 0);
@@ -1152,6 +1072,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static geo_info operator *(float a, geo_info v)
         {
@@ -1241,7 +1175,7 @@ namespace Game
             return new geo_info(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(geo_info v)
+        public static explicit operator color(geo_info v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -1255,36 +1189,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly geo_info Zero    = new geo_info(0, 0, 0, 0);
         public static readonly geo_info Nothing = new geo_info(0, 0, 0, 0);
@@ -1366,6 +1270,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static unit operator *(float a, unit v)
         {
@@ -1455,7 +1373,7 @@ namespace Game
             return new unit(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(unit v)
+        public static explicit operator color(unit v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -1469,36 +1387,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly unit Zero    = new unit(0, 0, 0, 0);
         public static readonly unit Nothing = new unit(0, 0, 0, 0);
@@ -1580,6 +1468,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static data operator *(float a, data v)
         {
@@ -1669,7 +1571,7 @@ namespace Game
             return new data(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(data v)
+        public static explicit operator color(data v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -1683,36 +1585,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly data Zero    = new data(0, 0, 0, 0);
         public static readonly data Nothing = new data(0, 0, 0, 0);
@@ -1794,6 +1666,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static building operator *(float a, building v)
         {
@@ -1883,7 +1769,7 @@ namespace Game
             return new building(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(building v)
+        public static explicit operator color(building v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -1897,36 +1783,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly building Zero    = new building(0, 0, 0, 0);
         public static readonly building Nothing = new building(0, 0, 0, 0);
@@ -2008,6 +1864,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static extra operator *(float a, extra v)
         {
@@ -2097,7 +1967,7 @@ namespace Game
             return new extra(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(extra v)
+        public static explicit operator color(extra v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -2111,36 +1981,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly extra Zero    = new extra(0, 0, 0, 0);
         public static readonly extra Nothing = new extra(0, 0, 0, 0);
@@ -2222,6 +2062,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static BuildingDist operator *(float a, BuildingDist v)
         {
@@ -2311,7 +2165,7 @@ namespace Game
             return new BuildingDist(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(BuildingDist v)
+        public static explicit operator color(BuildingDist v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -2325,36 +2179,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly BuildingDist Zero    = new BuildingDist(0, 0, 0, 0);
         public static readonly BuildingDist Nothing = new BuildingDist(0, 0, 0, 0);
@@ -2436,6 +2260,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static PlayerTuple operator *(float a, PlayerTuple v)
         {
@@ -2525,7 +2363,7 @@ namespace Game
             return new PlayerTuple(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(PlayerTuple v)
+        public static explicit operator color(PlayerTuple v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -2539,36 +2377,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly PlayerTuple Zero    = new PlayerTuple(0, 0, 0, 0);
         public static readonly PlayerTuple Nothing = new PlayerTuple(0, 0, 0, 0);
@@ -2650,6 +2458,20 @@ namespace Game
         [Hlsl("ba")]
         public vec2 ba { get { return zw; } set { zw = value; } }
 
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
 
         public static TeamTuple operator *(float a, TeamTuple v)
         {
@@ -2739,7 +2561,7 @@ namespace Game
             return new TeamTuple(v.x, v.y, v.z, v.w);
         }
 
-        public static implicit operator color(TeamTuple v)
+        public static explicit operator color(TeamTuple v)
         {
             return new color(v.x, v.y, v.z, v.w);
         }
@@ -2753,36 +2575,6 @@ namespace Game
         {
             return new Color(v.x, v.y, v.z, v.w);
         }        
-
-        public float this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case 0: return x;
-                    case 1: return y;
-                    case 2: return z;
-                    case 3: return w;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case 0: x = value; break;
-                    case 1: y = value; break;
-                    case 2: z = value; break;
-                    case 3: w = value; break;
-                }
-
-                throw new ArgumentOutOfRangeException();
-            }
-        }
-
 
         public static readonly TeamTuple Zero    = new TeamTuple(0, 0, 0, 0);
         public static readonly TeamTuple Nothing = new TeamTuple(0, 0, 0, 0);

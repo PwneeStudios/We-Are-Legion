@@ -55,7 +55,7 @@ sampler fs_param_Info : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float Game__SimShader__unpack_val__FragSharpFramework_vec2(float2 packed)
+float Game__SimShader__unpack_val__vec2(float2 packed)
 {
     float coord = 0;
     packed = floor(255.0 * packed + float2(0.5, 0.5));
@@ -63,12 +63,12 @@ float Game__SimShader__unpack_val__FragSharpFramework_vec2(float2 packed)
     return coord;
 }
 
-float Game__SimShader__polar_dist__Game_geo_info(float4 info)
+float Game__SimShader__polar_dist__geo_info(float4 info)
 {
-    return Game__SimShader__unpack_val__FragSharpFramework_vec2(info.rg);
+    return Game__SimShader__unpack_val__vec2(info.rg);
 }
 
-float2 Game__SimShader__pack_val_2byte__float(float x)
+float2 Game__SimShader__pack_val_2byte__Single(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -76,21 +76,21 @@ float2 Game__SimShader__pack_val_2byte__float(float x)
     return packed / 255.0;
 }
 
-float3 Game__SimShader__pack_vec2_3byte__FragSharpFramework_vec2(float2 v)
+float3 Game__SimShader__pack_vec2_3byte__vec2(float2 v)
 {
-    float2 packed_x = Game__SimShader__pack_val_2byte__float(v.x);
-    float2 packed_y = Game__SimShader__pack_val_2byte__float(v.y);
+    float2 packed_x = Game__SimShader__pack_val_2byte__Single(v.x);
+    float2 packed_y = Game__SimShader__pack_val_2byte__Single(v.y);
     return float3(packed_x.y, packed_y.y, packed_x.x + 16 * packed_y.x);
 }
 
-void Game__SimShader__set_geo_pos_id__Game_geo__FragSharpFramework_vec2(inout float4 g, float2 pos)
+void Game__SimShader__set_geo_pos_id__geo__vec2(inout float4 g, float2 pos)
 {
-    g.gba = Game__SimShader__pack_vec2_3byte__FragSharpFramework_vec2(pos);
+    g.gba = Game__SimShader__pack_vec2_3byte__vec2(pos);
 }
 
-void Game__SimShader__set_polar_dist__Game_geo_info__float(inout float4 info, float polar_dist)
+void Game__SimShader__set_polar_dist__geo_info__Single(inout float4 info, float polar_dist)
 {
-    info.rg = Game__SimShader__pack_val_2byte__float(polar_dist);
+    info.rg = Game__SimShader__pack_val_2byte__Single(polar_dist);
 }
 
 // Compiled vertex shader
@@ -108,7 +108,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy), right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 0)) * fs_param_Geo_dxdy), up = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 1)) * fs_param_Geo_dxdy), left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 0)) * fs_param_Geo_dxdy), down = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, -(1))) * fs_param_Geo_dxdy);
-    float dist_right = Game__SimShader__polar_dist__Game_geo_info(tex2D(fs_param_Info, psin.TexCoords + (float2(1, 0)) * fs_param_Info_dxdy)), dist_up = Game__SimShader__polar_dist__Game_geo_info(tex2D(fs_param_Info, psin.TexCoords + (float2(0, 1)) * fs_param_Info_dxdy)), dist_left = Game__SimShader__polar_dist__Game_geo_info(tex2D(fs_param_Info, psin.TexCoords + (float2(-(1), 0)) * fs_param_Info_dxdy)), dist_down = Game__SimShader__polar_dist__Game_geo_info(tex2D(fs_param_Info, psin.TexCoords + (float2(0, -(1))) * fs_param_Info_dxdy));
+    float dist_right = Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (float2(1, 0)) * fs_param_Info_dxdy)), dist_up = Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (float2(0, 1)) * fs_param_Info_dxdy)), dist_left = Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (float2(-(1), 0)) * fs_param_Info_dxdy)), dist_down = Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (float2(0, -(1))) * fs_param_Info_dxdy));
     if (abs(here.r - 0.0) < .001)
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
@@ -117,7 +117,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float dist = 0;
     float4 temp_geo = float4(0, 0, 0, 0);
     float2 pos = psin.TexCoords * fs_param_Geo_size;
-    Game__SimShader__set_geo_pos_id__Game_geo__FragSharpFramework_vec2(temp_geo, pos);
+    Game__SimShader__set_geo_pos_id__geo__vec2(temp_geo, pos);
     if (all(abs(here.gba - temp_geo.gba) < .001))
     {
         dist = 0;
@@ -158,7 +158,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         }
     }
     float4 output = float4(0, 0, 0, 0);
-    Game__SimShader__set_polar_dist__Game_geo_info__float(output, dist);
+    Game__SimShader__set_polar_dist__geo_info__Single(output, dist);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }

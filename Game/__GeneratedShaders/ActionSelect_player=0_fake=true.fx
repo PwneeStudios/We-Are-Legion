@@ -73,34 +73,34 @@ bool fs_param_deselect;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__BlockingTileHere__Game_unit(float4 u)
+bool Game__SimShader__BlockingTileHere__unit(float4 u)
 {
     return u.r >= 0.07843138 - .001;
 }
 
-bool Game__SimShader__selected__Game_data(float4 u)
+bool Game__SimShader__selected__data(float4 u)
 {
     float val = u.b;
     return val >= 0.3764706 - .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_round__float(float v)
+float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Game__SimShader__prior_direction__Game_data(float4 u)
+float Game__SimShader__prior_direction__data(float4 u)
 {
     float val = u.b;
     val = fmod(val, 0.1254902);
-    val = FragSharpFramework__FragSharpStd__fint_round__float(val);
+    val = FragSharpFramework__FragSharpStd__fint_round__Single(val);
     return val;
 }
 
-void Game__SimShader__set_selected_fake__Game_data__bool(inout float4 u, bool fake_selected)
+void Game__SimShader__set_selected_fake__data__Boolean(inout float4 u, bool fake_selected)
 {
-    bool is_selected = Game__SimShader__selected__Game_data(u);
-    float prior_dir = Game__SimShader__prior_direction__Game_data(u);
+    bool is_selected = Game__SimShader__selected__data(u);
+    float prior_dir = Game__SimShader__prior_direction__data(u);
     float select_state= (float)0;
     if (fake_selected)
     {
@@ -113,29 +113,29 @@ void Game__SimShader__set_selected_fake__Game_data__bool(inout float4 u, bool fa
     u.b = prior_dir + select_state;
 }
 
-float Game__SimShader__select_state__Game_data(float4 u)
+float Game__SimShader__select_state__data(float4 u)
 {
-    return u.b - Game__SimShader__prior_direction__Game_data(u);
+    return u.b - Game__SimShader__prior_direction__data(u);
 }
 
-bool Game__SimShader__fake_selected__Game_data(float4 u)
+bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-void Game__SimShader__set_selected__Game_data__bool(inout float4 u, bool selected)
+void Game__SimShader__set_selected__data__Boolean(inout float4 u, bool selected)
 {
-    float state = Game__SimShader__select_state__Game_data(u);
+    float state = Game__SimShader__select_state__data(u);
     if (selected)
     {
-        state = Game__SimShader__fake_selected__Game_data(u) ? 0.3764706 : 0.627451;
+        state = Game__SimShader__fake_selected__data(u) ? 0.3764706 : 0.627451;
     }
     else
     {
-        state = Game__SimShader__fake_selected__Game_data(u) ? 0.2509804 : 0.0;
+        state = Game__SimShader__fake_selected__data(u) ? 0.2509804 : 0.0;
     }
-    u.b = Game__SimShader__prior_direction__Game_data(u) + state;
+    u.b = Game__SimShader__prior_direction__data(u) + state;
 }
 
 // Compiled vertex shader
@@ -160,15 +160,15 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         return __FinalOutput;
     }
     float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    if (select.r > 0 + .001 && (abs(select.g - 0.0) < .001 || abs(unit_here.g - select.g) < .001) && !(Game__SimShader__BlockingTileHere__Game_unit(unit_here)))
+    if (select.r > 0 + .001 && (abs(select.g - 0.0) < .001 || abs(unit_here.g - select.g) < .001) && !(Game__SimShader__BlockingTileHere__unit(unit_here)))
     {
         if (true)
         {
-            Game__SimShader__set_selected_fake__Game_data__bool(data_here, true);
+            Game__SimShader__set_selected_fake__data__Boolean(data_here, true);
         }
         else
         {
-            Game__SimShader__set_selected__Game_data__bool(data_here, true);
+            Game__SimShader__set_selected__data__Boolean(data_here, true);
         }
     }
     else
@@ -177,11 +177,11 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             if (true)
             {
-                Game__SimShader__set_selected_fake__Game_data__bool(data_here, false);
+                Game__SimShader__set_selected_fake__data__Boolean(data_here, false);
             }
             else
             {
-                Game__SimShader__set_selected__Game_data__bool(data_here, false);
+                Game__SimShader__set_selected__data__Boolean(data_here, false);
             }
         }
     }

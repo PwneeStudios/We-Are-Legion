@@ -55,28 +55,28 @@ sampler fs_param_Noise : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__selected__Game_data(float4 u)
+bool Game__SimShader__selected__data(float4 u)
 {
     float val = u.b;
     return val >= 0.3764706 - .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_round__float(float v)
+float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Game__SimShader__prior_direction__Game_data(float4 u)
+float Game__SimShader__prior_direction__data(float4 u)
 {
     float val = u.b;
     val = fmod(val, 0.1254902);
-    val = FragSharpFramework__FragSharpStd__fint_round__float(val);
+    val = FragSharpFramework__FragSharpStd__fint_round__Single(val);
     return val;
 }
 
-void Game__SimShader__set_select_state__Game_data__float(inout float4 u, float state)
+void Game__SimShader__set_select_state__data__Single(inout float4 u, float state)
 {
-    u.b = Game__SimShader__prior_direction__Game_data(u) + state;
+    u.b = Game__SimShader__prior_direction__data(u) + state;
 }
 
 // Compiled vertex shader
@@ -94,13 +94,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 d = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    if (Game__SimShader__selected__Game_data(d))
+    if (Game__SimShader__selected__data(d))
     {
-        Game__SimShader__set_select_state__Game_data__float(d, 0.3764706);
+        Game__SimShader__set_select_state__data__Single(d, 0.3764706);
     }
     else
     {
-        Game__SimShader__set_select_state__Game_data__float(d, 0.0);
+        Game__SimShader__set_select_state__data__Single(d, 0.0);
     }
     float4 n = tex2D(fs_param_Noise, psin.TexCoords + (float2(0, 0)) * fs_param_Noise_dxdy);
     __FinalOutput.Color = tex2D(fs_param_Noise, tex2D(fs_param_Noise, d.xy + n.xy).xy + d.zw);

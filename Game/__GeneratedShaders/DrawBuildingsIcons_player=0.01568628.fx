@@ -91,7 +91,7 @@ sampler fs_param_FarColor : register(s4) = sampler_state
 };
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(VertexToPixel vertex, float2 grid_size)
+float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, float2 grid_size)
 {
     float2 coords = vertex.TexCoords * grid_size;
     float i = floor(coords.x);
@@ -99,23 +99,23 @@ float2 Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharp
     return coords - float2(i, j);
 }
 
-float2 FragSharpFramework__FragSharpStd__Float__FragSharpFramework_vec2(float2 v)
+float2 FragSharpFramework__FragSharpStd__Float__vec2(float2 v)
 {
     return floor(255 * v + float2(0.5, 0.5));
 }
 
-bool Game__SimShader__fake_selected__Game_data(float4 u)
+bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-bool Game__SimShader__fake_selected__Game_building(float4 u)
+bool Game__SimShader__fake_selected__building(float4 u)
 {
-    return Game__SimShader__fake_selected__Game_data(u);
+    return Game__SimShader__fake_selected__data(u);
 }
 
-float4 Game__SelectedUnitColor__Get__float(VertexToPixel psin, float player)
+float4 Game__SelectedUnitColor__Get__Single(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
@@ -136,34 +136,34 @@ float4 Game__SelectedUnitColor__Get__float(VertexToPixel psin, float player)
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float FragSharpFramework__FragSharpStd__fint_round__float(float v)
+float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Game__SimShader__get_type__Game_BuildingDist(float4 u)
+float Game__SimShader__get_type__BuildingDist(float4 u)
 {
-    return FragSharpFramework__FragSharpStd__fint_round__float(u.b / 16.0);
+    return FragSharpFramework__FragSharpStd__fint_round__Single(u.b / 16.0);
 }
 
-float Game__SimShader__get_player__Game_BuildingDist(float4 u)
+float Game__SimShader__get_player__BuildingDist(float4 u)
 {
-    return u.b - Game__SimShader__get_type__Game_BuildingDist(u) * 16.0;
+    return u.b - Game__SimShader__get_type__BuildingDist(u) * 16.0;
 }
 
-int FragSharpFramework__FragSharpStd__Int__float(float v)
+int FragSharpFramework__FragSharpStd__Int__Single(float v)
 {
     return (int)floor(255 * v + 0.5);
 }
 
-float Game__UnitType__BuildingIndex__float(float type)
+float Game__UnitType__BuildingIndex__Single(float type)
 {
     return type - 0.02352941;
 }
 
-float4 Game__BuildingMarkerColors__Get__float__float(VertexToPixel psin, float player, float type)
+float4 Game__BuildingMarkerColors__Get__Single__Single(VertexToPixel psin, float player, float type)
 {
-    return tex2D(fs_param_FarColor, float2(3 + FragSharpFramework__FragSharpStd__Int__float(Game__UnitType__BuildingIndex__float(type))+.5,.5+ FragSharpFramework__FragSharpStd__Int__float(player)) * fs_param_FarColor_dxdy);
+    return tex2D(fs_param_FarColor, float2(3 + FragSharpFramework__FragSharpStd__Int__Single(Game__UnitType__BuildingIndex__Single(type))+.5,.5+ FragSharpFramework__FragSharpStd__Int__Single(player)) * fs_param_FarColor_dxdy);
 }
 
 // Compiled vertex shader
@@ -188,24 +188,24 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         __FinalOutput.Color = float4(0.0, 0.0, 0.0, 0.0);
         return __FinalOutput;
     }
-    float2 subcell_pos = Game__SimShader__get_subcell_pos__FragSharpFramework_VertexOut__FragSharpFramework_vec2(psin, fs_param_BuildingDistances_size);
-    float2 offset = FragSharpFramework__FragSharpStd__Float__FragSharpFramework_vec2(info.rg - float2(0.1568628, 0.1568628));
+    float2 subcell_pos = Game__SimShader__get_subcell_pos__VertexOut__vec2(psin, fs_param_BuildingDistances_size);
+    float2 offset = FragSharpFramework__FragSharpStd__Float__vec2(info.rg - float2(0.1568628, 0.1568628));
     float2 index = float2(offset.x, offset.y);
     float4 b = tex2D(fs_param_Data, psin.TexCoords + (index) * fs_param_Data_dxdy);
     float4 u = tex2D(fs_param_Unit, psin.TexCoords + (index) * fs_param_Unit_dxdy);
     float l = length(255 * (info.rg - float2(0.1568628, 0.1568628)) - (subcell_pos - float2(0.5, 0.5)));
-    if (Game__SimShader__fake_selected__Game_building(b) && abs(u.g - 0.01568628) < .001)
+    if (Game__SimShader__fake_selected__building(b) && abs(u.g - 0.01568628) < .001)
     {
         if (l > 0.8 * fs_param_radius + .001 && l < fs_param_radius * 1.15 - .001)
         {
-            float4 clr = Game__SelectedUnitColor__Get__float(psin, Game__SimShader__get_player__Game_BuildingDist(info)) * 0.75;
+            float4 clr = Game__SelectedUnitColor__Get__Single(psin, Game__SimShader__get_player__BuildingDist(info)) * 0.75;
             clr.a = 1;
             __FinalOutput.Color = clr * fs_param_blend;
             return __FinalOutput;
         }
         if (l < fs_param_radius - .001)
         {
-            float4 clr = Game__BuildingMarkerColors__Get__float__float(psin, Game__SimShader__get_player__Game_BuildingDist(info), Game__SimShader__get_type__Game_BuildingDist(info)) * 1.0;
+            float4 clr = Game__BuildingMarkerColors__Get__Single__Single(psin, Game__SimShader__get_player__BuildingDist(info), Game__SimShader__get_type__BuildingDist(info)) * 1.0;
             clr.a = 1;
             __FinalOutput.Color = clr * fs_param_blend;
             return __FinalOutput;
@@ -215,7 +215,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         if (l < fs_param_radius - .001)
         {
-            float4 clr = Game__BuildingMarkerColors__Get__float__float(psin, Game__SimShader__get_player__Game_BuildingDist(info), Game__SimShader__get_type__Game_BuildingDist(info));
+            float4 clr = Game__BuildingMarkerColors__Get__Single__Single(psin, Game__SimShader__get_player__BuildingDist(info), Game__SimShader__get_type__BuildingDist(info));
             __FinalOutput.Color = clr * fs_param_blend;
             return __FinalOutput;
         }

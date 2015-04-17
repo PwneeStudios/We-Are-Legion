@@ -56,22 +56,22 @@ sampler fs_param_Units : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__IsUnit__float(float type)
+bool Game__SimShader__IsUnit__Single(float type)
 {
     return type >= 0.003921569 - .001 && type < 0.02352941 - .001;
 }
 
-bool Game__SimShader__IsBuilding__float(float type)
+bool Game__SimShader__IsBuilding__Single(float type)
 {
     return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
 }
 
-bool Game__SimShader__IsCenter__Game_building(float4 b)
+bool Game__SimShader__IsCenter__building(float4 b)
 {
     return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
 }
@@ -92,10 +92,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 output = float4(0, 0, 0, 0);
-    if (Game__SimShader__Something__Game_data(data_here))
+    if (Game__SimShader__Something__data(data_here))
     {
         float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-        if (abs(unit_here.r - 0.003921569) < .001 && !((Game__SimShader__IsUnit__float(0.003921569) && abs(unit_here.a - 0.07058824) < .001)) && !((Game__SimShader__IsBuilding__float(0.003921569) && !(Game__SimShader__IsCenter__Game_building(data_here)))))
+        if (abs(unit_here.r - 0.003921569) < .001 && !((Game__SimShader__IsUnit__Single(0.003921569) && abs(unit_here.a - 0.07058824) < .001)) && !((Game__SimShader__IsBuilding__Single(0.003921569) && !(Game__SimShader__IsCenter__building(data_here)))))
         {
             if (abs(unit_here.g - 0.003921569) < .001)
             {

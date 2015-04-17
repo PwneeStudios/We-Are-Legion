@@ -91,7 +91,7 @@ namespace Game
             // Draw polarity only
             if (ValidDirward(here))
             {
-                return here.polarity > .5 ? vec(1, 0, 0, 1) : vec(0, 1, 0, 1);
+                return (color)(here.polarity > .5 ? vec(1, 0, 0, 1) : vec(0, 1, 0, 1));
             }
 
             return output;
@@ -137,7 +137,7 @@ namespace Game
             if (here.dir > _0)
             {
                 dist = dist / 1024.0f;
-                output = vec(dist, dist, dist, 1.0f);
+                output = (color)vec(dist, dist, dist, 1.0f);
             }
 
             return output;

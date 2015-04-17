@@ -40,14 +40,14 @@ sampler fs_param_PreviousLevel : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float Game__SimShader__unpack_val__FragSharpFramework_vec3(float3 packed)
+float Game__SimShader__unpack_val__vec3(float3 packed)
 {
     float coord = 0;
     coord = (255 * 255 * packed.x + 255 * packed.y + packed.z) * 255;
     return coord;
 }
 
-float3 Game__SimShader__pack_coord_3byte__float(float x)
+float3 Game__SimShader__pack_coord_3byte__Single(float x)
 {
     float3 packed = float3(0, 0, 0);
     packed.x = floor(x / (255.0 * 255.0));
@@ -71,10 +71,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 TL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy), TR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy), BL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy), BR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy);
-    float count_3byte = Game__SimShader__unpack_val__FragSharpFramework_vec3(TL.xyz) + Game__SimShader__unpack_val__FragSharpFramework_vec3(TR.xyz) + Game__SimShader__unpack_val__FragSharpFramework_vec3(BL.xyz) + Game__SimShader__unpack_val__FragSharpFramework_vec3(BR.xyz);
+    float count_3byte = Game__SimShader__unpack_val__vec3(TL.xyz) + Game__SimShader__unpack_val__vec3(TR.xyz) + Game__SimShader__unpack_val__vec3(BL.xyz) + Game__SimShader__unpack_val__vec3(BR.xyz);
     float count_1byte = TL.w + TR.w + BL.w + BR.w;
     float4 output = float4(0, 0, 0, 0);
-    output.xyz = Game__SimShader__pack_coord_3byte__float(count_3byte);
+    output.xyz = Game__SimShader__pack_coord_3byte__Single(count_3byte);
     output.w = count_1byte;
     __FinalOutput.Color = output;
     return __FinalOutput;

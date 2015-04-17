@@ -70,22 +70,22 @@ sampler fs_param_TargetData : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_building(float4 u)
+bool Game__SimShader__Something__building(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__IsBuilding__float(float type)
+bool Game__SimShader__IsBuilding__Single(float type)
 {
     return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
 }
 
-bool Game__SimShader__IsBuilding__Game_unit(float4 u)
+bool Game__SimShader__IsBuilding__unit(float4 u)
 {
-    return Game__SimShader__IsBuilding__float(u.r);
+    return Game__SimShader__IsBuilding__Single(u.r);
 }
 
-float2 Game__SimShader__center_dir__Game_building(float4 b)
+float2 Game__SimShader__center_dir__building(float4 b)
 {
     float2 part = float2(b.g, b.a);
     part = -(255) * (part - float2(0.003921569, 0.003921569));
@@ -109,9 +109,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 0)) * fs_param_Building_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
     float4 target = tex2D(fs_param_TargetData, psin.TexCoords + (float2(0, 0)) * fs_param_TargetData_dxdy);
-    if (Game__SimShader__Something__Game_building(building_here) && Game__SimShader__IsBuilding__Game_unit(unit_here))
+    if (Game__SimShader__Something__building(building_here) && Game__SimShader__IsBuilding__unit(unit_here))
     {
-        target = tex2D(fs_param_TargetData, psin.TexCoords + (Game__SimShader__center_dir__Game_building(building_here)) * fs_param_TargetData_dxdy);
+        target = tex2D(fs_param_TargetData, psin.TexCoords + (Game__SimShader__center_dir__building(building_here)) * fs_param_TargetData_dxdy);
     }
     __FinalOutput.Color = target;
     return __FinalOutput;

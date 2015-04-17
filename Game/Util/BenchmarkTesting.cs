@@ -171,9 +171,9 @@ namespace Game
         [FragmentShader]
         vec4 FragmentShader(VertexOut vertex, Field<vec4> s)
         {
-            color output = color.TransparentBlack;
+            vec4 output = vec4.Zero;
 
-            color
+            vec4
                 right = s[RightOne],
                 up = s[UpOne],
                 left = s[LeftOne],
@@ -202,9 +202,9 @@ namespace Game
         [FragmentShader]
         vec4 FragmentShader(VertexOut vertex, Field<vec4> s)
         {
-            color output = color.TransparentBlack;
+            vec4 output = vec4.Zero;
 
-            color
+            vec4
                 right = s[RightOne],
                 up    = s[UpOne],
                 left  = s[LeftOne],

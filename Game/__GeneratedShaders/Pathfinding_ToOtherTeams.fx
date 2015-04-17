@@ -70,17 +70,17 @@ sampler fs_param_Units : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float4 FragSharpFramework__FragSharpStd__min__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4(float4 a, float4 b, float4 c, float4 d)
+float4 FragSharpFramework__FragSharpStd__min__vec4__vec4__vec4__vec4(float4 a, float4 b, float4 c, float4 d)
 {
     return min(min(a, b), min(c, d));
 }
 
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__BlockingTileHere__Game_unit(float4 u)
+bool Game__SimShader__BlockingTileHere__unit(float4 u)
 {
     return u.r >= 0.07843138 - .001;
 }
@@ -102,10 +102,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
     float4 right = tex2D(fs_param_Path, psin.TexCoords + (float2(1, 0)) * fs_param_Path_dxdy), up = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 1)) * fs_param_Path_dxdy), left = tex2D(fs_param_Path, psin.TexCoords + (float2(-(1), 0)) * fs_param_Path_dxdy), down = tex2D(fs_param_Path, psin.TexCoords + (float2(0, -(1))) * fs_param_Path_dxdy);
-    float4 dist_to_enemy_of = FragSharpFramework__FragSharpStd__min__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4__FragSharpFramework_vec4(right, up, left, down) + float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
-    if (Game__SimShader__Something__Game_data(data_here))
+    float4 dist_to_enemy_of = FragSharpFramework__FragSharpStd__min__vec4__vec4__vec4__vec4(right, up, left, down) + float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
+    if (Game__SimShader__Something__data(data_here))
     {
-        if (Game__SimShader__BlockingTileHere__Game_unit(unit_here) || abs(unit_here.g - 0.0) < .001)
+        if (Game__SimShader__BlockingTileHere__unit(unit_here) || abs(unit_here.g - 0.0) < .001)
         {
             dist_to_enemy_of += 100 * float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
         }

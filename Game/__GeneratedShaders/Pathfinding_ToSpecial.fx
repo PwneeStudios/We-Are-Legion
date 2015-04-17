@@ -70,44 +70,44 @@ sampler fs_param_Unit : register(s3) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__IsBuilding__float(float type)
+bool Game__SimShader__IsBuilding__Single(float type)
 {
     return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
 }
 
-bool Game__SimShader__IsBuilding__Game_unit(float4 u)
+bool Game__SimShader__IsBuilding__unit(float4 u)
 {
-    return Game__SimShader__IsBuilding__float(u.r);
+    return Game__SimShader__IsBuilding__Single(u.r);
 }
 
-float FragSharpFramework__FragSharpStd__fint_round__float(float v)
+float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Game__SimShader__get_type__Game_BuildingDist(float4 u)
+float Game__SimShader__get_type__BuildingDist(float4 u)
 {
-    return FragSharpFramework__FragSharpStd__fint_round__float(u.b / 16.0);
+    return FragSharpFramework__FragSharpStd__fint_round__Single(u.b / 16.0);
 }
 
-float Game__SimShader__get_player__Game_BuildingDist(float4 u)
+float Game__SimShader__get_player__BuildingDist(float4 u)
 {
-    return u.b - Game__SimShader__get_type__Game_BuildingDist(u) * 16.0;
+    return u.b - Game__SimShader__get_type__BuildingDist(u) * 16.0;
 }
 
-void Game__SimShader__set_type__Game_BuildingDist__float(inout float4 u, float type)
+void Game__SimShader__set_type__BuildingDist__Single(inout float4 u, float type)
 {
-    u.b = Game__SimShader__get_player__Game_BuildingDist(u) + type * 16.0;
+    u.b = Game__SimShader__get_player__BuildingDist(u) + type * 16.0;
 }
 
-void Game__SimShader__set_player__Game_BuildingDist__float(inout float4 u, float player)
+void Game__SimShader__set_player__BuildingDist__Single(inout float4 u, float player)
 {
-    u.b = player + Game__SimShader__get_type__Game_BuildingDist(u) * 16.0;
+    u.b = player + Game__SimShader__get_type__BuildingDist(u) * 16.0;
 }
 
 // Compiled vertex shader
@@ -127,7 +127,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0, 0, 0, 0);
     float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
     float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (Game__SimShader__Something__Game_data(data_here) && (Game__SimShader__IsBuilding__Game_unit(unit_here) || abs(unit_here.r - 0.007843138) < .001 || abs(unit_here.r - 0.01176471) < .001))
+    if (Game__SimShader__Something__data(data_here) && (Game__SimShader__IsBuilding__unit(unit_here) || abs(unit_here.r - 0.007843138) < .001 || abs(unit_here.r - 0.01176471) < .001))
     {
         float type = unit_here.r;
         if (abs(type - 0.007843138) < .001)
@@ -138,8 +138,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             type = 0.03921569;
         }
-        Game__SimShader__set_type__Game_BuildingDist__float(output, type);
-        Game__SimShader__set_player__Game_BuildingDist__float(output, unit_here.g);
+        Game__SimShader__set_type__BuildingDist__Single(output, type);
+        Game__SimShader__set_player__BuildingDist__Single(output, unit_here.g);
         output.rg = float2(0.1568628, 0.1568628);
         output.a = 0.0;
     }

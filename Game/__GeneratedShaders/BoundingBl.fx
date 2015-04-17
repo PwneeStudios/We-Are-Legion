@@ -40,23 +40,23 @@ sampler fs_param_Data : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__fake_selected__Game_data(float4 u)
+bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-bool Game__SimShader__SomethingFakeSelected__Game_data(float4 u)
+bool Game__SimShader__SomethingFakeSelected__data(float4 u)
 {
-    return Game__SimShader__Something__Game_data(u) && Game__SimShader__fake_selected__Game_data(u);
+    return Game__SimShader__Something__data(u) && Game__SimShader__fake_selected__data(u);
 }
 
-float2 Game__SimShader__pack_val_2byte__float(float x)
+float2 Game__SimShader__pack_val_2byte__Single(float x)
 {
     float2 packed = float2(0, 0);
     packed.x = floor(x / 256.0);
@@ -64,10 +64,10 @@ float2 Game__SimShader__pack_val_2byte__float(float x)
     return packed / 255.0;
 }
 
-float4 Game__SimShader__pack_vec2__FragSharpFramework_vec2(float2 v)
+float4 Game__SimShader__pack_vec2__vec2(float2 v)
 {
-    float2 packed_x = Game__SimShader__pack_val_2byte__float(v.x);
-    float2 packed_y = Game__SimShader__pack_val_2byte__float(v.y);
+    float2 packed_x = Game__SimShader__pack_val_2byte__Single(v.x);
+    float2 packed_y = Game__SimShader__pack_val_2byte__Single(v.y);
     return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
 }
 
@@ -86,7 +86,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float2 uv = psin.TexCoords * fs_param_Data_size;
-    __FinalOutput.Color = Game__SimShader__SomethingFakeSelected__Game_data(tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy)) ? Game__SimShader__pack_vec2__FragSharpFramework_vec2(uv) : float4(1, 1, 1, 1);
+    __FinalOutput.Color = Game__SimShader__SomethingFakeSelected__data(tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy)) ? Game__SimShader__pack_vec2__vec2(uv) : float4(1, 1, 1, 1);
     return __FinalOutput;
 }
 

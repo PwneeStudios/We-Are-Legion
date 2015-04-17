@@ -115,7 +115,7 @@ namespace Game
                 d.a = 1;
             }
 
-            return d;
+            return (color)d;
         }
     }
 }

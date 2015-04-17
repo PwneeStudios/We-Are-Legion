@@ -40,13 +40,13 @@ sampler fs_param_Geo : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float FragSharpFramework__FragSharpStd__fint_floor__float(float v)
+float FragSharpFramework__FragSharpStd__fint_floor__Single(float v)
 {
     v += 0.0005;
     return floor(255 * v) * 0.003921569;
 }
 
-float Game__SimShader__unpack_val__FragSharpFramework_vec2(float2 packed)
+float Game__SimShader__unpack_val__vec2(float2 packed)
 {
     float coord = 0;
     packed = floor(255.0 * packed + float2(0.5, 0.5));
@@ -54,23 +54,23 @@ float Game__SimShader__unpack_val__FragSharpFramework_vec2(float2 packed)
     return coord;
 }
 
-float2 Game__SimShader__unpack_vec2_3byte__FragSharpFramework_vec3(float3 packed)
+float2 Game__SimShader__unpack_vec2_3byte__vec3(float3 packed)
 {
     float extra_bits = packed.z;
-    float extra_y = FragSharpFramework__FragSharpStd__fint_floor__float(extra_bits / 16);
-    float extra_x = FragSharpFramework__FragSharpStd__fint_floor__float(extra_bits - 16 * extra_y);
+    float extra_y = FragSharpFramework__FragSharpStd__fint_floor__Single(extra_bits / 16);
+    float extra_x = FragSharpFramework__FragSharpStd__fint_floor__Single(extra_bits - 16 * extra_y);
     float2 v = float2(0, 0);
-    v.x = Game__SimShader__unpack_val__FragSharpFramework_vec2(float2(extra_x, packed.x));
-    v.y = Game__SimShader__unpack_val__FragSharpFramework_vec2(float2(extra_y, packed.y));
+    v.x = Game__SimShader__unpack_val__vec2(float2(extra_x, packed.x));
+    v.y = Game__SimShader__unpack_val__vec2(float2(extra_y, packed.y));
     return v;
 }
 
-float2 Game__SimShader__geo_pos_id__Game_geo(float4 g)
+float2 Game__SimShader__geo_pos_id__geo(float4 g)
 {
-    return Game__SimShader__unpack_vec2_3byte__FragSharpFramework_vec3(g.gba);
+    return Game__SimShader__unpack_vec2_3byte__vec3(g.gba);
 }
 
-float Game__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(float2 pos)
+float Game__Geodesic_ExtremityPropagation__flatten__vec2(float2 pos)
 {
     return pos.x + 4096 * pos.y;
 }
@@ -95,8 +95,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         __FinalOutput.Color = here;
         return __FinalOutput;
     }
-    float2 extr_here = Game__SimShader__geo_pos_id__Game_geo(here), extr_right = Game__SimShader__geo_pos_id__Game_geo(right), extr_up = Game__SimShader__geo_pos_id__Game_geo(up), extr_left = Game__SimShader__geo_pos_id__Game_geo(left), extr_down = Game__SimShader__geo_pos_id__Game_geo(down), extr_up_right = Game__SimShader__geo_pos_id__Game_geo(up_right), extr_up_left = Game__SimShader__geo_pos_id__Game_geo(up_left), extr_down_right = Game__SimShader__geo_pos_id__Game_geo(down_right), extr_down_left = Game__SimShader__geo_pos_id__Game_geo(down_left);
-    float val_here = Game__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_here), val_right = Game__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_right), val_up = Game__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_up), val_left = Game__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_left), val_down = Game__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_down), val_up_right = Game__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_up_right), val_up_left = Game__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_up_left), val_down_right = Game__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_down_right), val_down_left = Game__Geodesic_ExtremityPropagation__flatten__FragSharpFramework_vec2(extr_down_left);
+    float2 extr_here = Game__SimShader__geo_pos_id__geo(here), extr_right = Game__SimShader__geo_pos_id__geo(right), extr_up = Game__SimShader__geo_pos_id__geo(up), extr_left = Game__SimShader__geo_pos_id__geo(left), extr_down = Game__SimShader__geo_pos_id__geo(down), extr_up_right = Game__SimShader__geo_pos_id__geo(up_right), extr_up_left = Game__SimShader__geo_pos_id__geo(up_left), extr_down_right = Game__SimShader__geo_pos_id__geo(down_right), extr_down_left = Game__SimShader__geo_pos_id__geo(down_left);
+    float val_here = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_here), val_right = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_right), val_up = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_up), val_left = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_left), val_down = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_down), val_up_right = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_up_right), val_up_left = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_up_left), val_down_right = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_down_right), val_down_left = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_down_left);
     if (val_here < val_right - .001)
     {
         here.gba = right.gba;

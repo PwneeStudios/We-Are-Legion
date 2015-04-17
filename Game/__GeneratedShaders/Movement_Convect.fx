@@ -55,33 +55,33 @@ sampler fs_param_CurrentData : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__IsStationary__Game_data(float4 d)
+bool Game__SimShader__IsStationary__data(float4 d)
 {
     return d.r >= 0.01960784 - .001;
 }
 
-bool Game__SimShader__Stayed__Game_data(float4 u)
+bool Game__SimShader__Stayed__data(float4 u)
 {
-    return Game__SimShader__IsStationary__Game_data(u) || abs(u.g - 0.003921569) < .001;
+    return Game__SimShader__IsStationary__data(u) || abs(u.g - 0.003921569) < .001;
 }
 
-bool Game__SimShader__IsValid__float(float direction)
+bool Game__SimShader__IsValid__Single(float direction)
 {
     return direction > 0 + .001;
 }
 
-float2 Game__SimShader__dir_to_vec__float(float direction)
+float2 Game__SimShader__dir_to_vec__Single(float direction)
 {
     float angle = (float)((direction * 255 - 1) * (3.1415926 / 2.0));
-    return Game__SimShader__IsValid__float(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Game__SimShader__IsValid__Single(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
-float Game__SimShader__Reverse__float(float dir)
+float Game__SimShader__Reverse__Single(float dir)
 {
     dir += 2 * 0.003921569;
     if (dir > 0.01568628 + .001)
@@ -91,16 +91,16 @@ float Game__SimShader__Reverse__float(float dir)
     return dir;
 }
 
-float FragSharpFramework__FragSharpStd__fint_round__float(float v)
+float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Game__SimShader__prior_direction__Game_data(float4 u)
+float Game__SimShader__prior_direction__data(float4 u)
 {
     float val = u.b;
     val = fmod(val, 0.1254902);
-    val = FragSharpFramework__FragSharpStd__fint_round__float(val);
+    val = FragSharpFramework__FragSharpStd__fint_round__Single(val);
     return val;
 }
 
@@ -120,15 +120,15 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 here = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy);
     float4 output = float4(0, 0, 0, 0);
-    if (Game__SimShader__Something__Game_data(here))
+    if (Game__SimShader__Something__data(here))
     {
-        if (Game__SimShader__Stayed__Game_data(here))
+        if (Game__SimShader__Stayed__data(here))
         {
             output = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
         }
         else
         {
-            output = tex2D(fs_param_Data, psin.TexCoords + (Game__SimShader__dir_to_vec__float(Game__SimShader__Reverse__float(Game__SimShader__prior_direction__Game_data(here)))) * fs_param_Data_dxdy);
+            output = tex2D(fs_param_Data, psin.TexCoords + (Game__SimShader__dir_to_vec__Single(Game__SimShader__Reverse__Single(Game__SimShader__prior_direction__data(here)))) * fs_param_Data_dxdy);
         }
     }
     __FinalOutput.Color = output;

@@ -26,14 +26,12 @@ namespace Game
     {
         public static SpriteBatch MySpriteBatch;
         
-        static SpriteFont Font1, Font2, Font3;
+        static SpriteFont DefaultFont;
 
         public static void Initialize()
         {
             MySpriteBatch = new SpriteBatch(GameClass.Graphics);
-            Font1 = GameClass.ContentManager.Load<SpriteFont>("Default");
-            Font2 = GameClass.ContentManager.Load<SpriteFont>("Bauhaus");
-            Font3 = GameClass.ContentManager.Load<SpriteFont>("Eras");
+            DefaultFont = GameClass.ContentManager.Load<SpriteFont>("Bauhaus");
         }
 
         public static void StandardRenderSetup()
@@ -78,7 +76,7 @@ namespace Game
 
         public static vec2 MeasureString(string text, float scale)
         {
-            return MeasureString(Font2, text, scale);
+            return MeasureString(DefaultFont, text, scale);
         }
 
         public static vec2 MeasureString(SpriteFont font, string text, float scale)
@@ -88,12 +86,12 @@ namespace Game
 
         public static void DrawText(string text, vec2 pos, float scale, Alignment align = Alignment.LeftJusitfy)
         {
-            DrawText(Font2, text, pos, scale, align, new color(1f, 1f, 1f, 1f));
+            DrawText(DefaultFont, text, pos, scale, align, new color(1f, 1f, 1f, 1f));
         }
 
         public static void DrawText(string text, vec2 pos, float scale, color clr, Alignment align = Alignment.LeftJusitfy)
         {
-            DrawText(Font2, text, pos, scale, align, clr);
+            DrawText(DefaultFont, text, pos, scale, align, clr);
         }
 
         public static void DrawText(SpriteFont font, string text, vec2 pos, float scale, Alignment align, color clr)

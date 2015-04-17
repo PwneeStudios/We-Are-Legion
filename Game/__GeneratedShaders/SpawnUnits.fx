@@ -100,57 +100,57 @@ sampler fs_param_Magic : register(s5) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__IsValid__float(float direction)
+bool Game__SimShader__IsValid__Single(float direction)
 {
     return direction > 0 + .001;
 }
 
-float FragSharpFramework__FragSharpStd__fint_round__float(float v)
+float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
 {
     return floor(255 * v + 0.5) * 0.003921569;
 }
 
-float Game__SimShader__prior_direction__Game_data(float4 u)
+float Game__SimShader__prior_direction__data(float4 u)
 {
     float val = u.b;
     val = fmod(val, 0.1254902);
-    val = FragSharpFramework__FragSharpStd__fint_round__float(val);
+    val = FragSharpFramework__FragSharpStd__fint_round__Single(val);
     return val;
 }
 
-float Game__SimShader__select_state__Game_data(float4 u)
+float Game__SimShader__select_state__data(float4 u)
 {
-    return u.b - Game__SimShader__prior_direction__Game_data(u);
+    return u.b - Game__SimShader__prior_direction__data(u);
 }
 
-bool Game__SimShader__fake_selected__Game_data(float4 u)
+bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-void Game__SimShader__set_selected__Game_data__bool(inout float4 u, bool selected)
+void Game__SimShader__set_selected__data__Boolean(inout float4 u, bool selected)
 {
-    float state = Game__SimShader__select_state__Game_data(u);
+    float state = Game__SimShader__select_state__data(u);
     if (selected)
     {
-        state = Game__SimShader__fake_selected__Game_data(u) ? 0.3764706 : 0.627451;
+        state = Game__SimShader__fake_selected__data(u) ? 0.3764706 : 0.627451;
     }
     else
     {
-        state = Game__SimShader__fake_selected__Game_data(u) ? 0.2509804 : 0.0;
+        state = Game__SimShader__fake_selected__data(u) ? 0.2509804 : 0.0;
     }
-    u.b = Game__SimShader__prior_direction__Game_data(u) + state;
+    u.b = Game__SimShader__prior_direction__data(u) + state;
 }
 
-void Game__SimShader__set_prior_direction__Game_data__float(inout float4 u, float dir)
+void Game__SimShader__set_prior_direction__data__Single(inout float4 u, float dir)
 {
-    u.b = Game__SimShader__select_state__Game_data(u) + dir;
+    u.b = Game__SimShader__select_state__data(u) + dir;
 }
 
 // Compiled vertex shader
@@ -170,7 +170,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 cur_data = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy), prev_data = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousData_dxdy);
     float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
     float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy);
-    if (!(Game__SimShader__Something__Game_data(cur_data)) && !(Game__SimShader__Something__Game_data(prev_data)) && rnd.x > 0.93 + .001)
+    if (!(Game__SimShader__Something__data(cur_data)) && !(Game__SimShader__Something__data(prev_data)) && rnd.x > 0.93 + .001)
     {
         float4 unit_right = tex2D(fs_param_Unit, psin.TexCoords + (float2(1, 0)) * fs_param_Unit_dxdy), unit_up = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 1)) * fs_param_Unit_dxdy), unit_left = tex2D(fs_param_Unit, psin.TexCoords + (float2(-(1), 0)) * fs_param_Unit_dxdy), unit_down = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, -(1))) * fs_param_Unit_dxdy);
         float4 data_right = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousData_dxdy), data_up = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousData_dxdy), data_left = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(-(1), 0)) * fs_param_PreviousData_dxdy), data_down = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, -(1))) * fs_param_PreviousData_dxdy);
@@ -191,24 +191,24 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         {
             spawn_dir = 0.007843138;
         }
-        if (Game__SimShader__IsValid__float(spawn_dir))
+        if (Game__SimShader__IsValid__Single(spawn_dir))
         {
             cur_data.r = spawn_dir;
             cur_data.a = 0.01568628;
             cur_data.g = 0.003921569;
-            Game__SimShader__set_selected__Game_data__bool(cur_data, false);
-            Game__SimShader__set_prior_direction__Game_data__float(cur_data, cur_data.r);
+            Game__SimShader__set_selected__data__Boolean(cur_data, false);
+            Game__SimShader__set_prior_direction__data__Single(cur_data, cur_data.r);
         }
     }
     else
     {
-        if (!(Game__SimShader__Something__Game_data(cur_data)) && abs(magic_here.g - 0.0) > .001)
+        if (!(Game__SimShader__Something__data(cur_data)) && abs(magic_here.g - 0.0) > .001)
         {
             cur_data.r = 0.003921569;
             cur_data.a = 0.01960784;
             cur_data.g = 0.003921569;
-            Game__SimShader__set_selected__Game_data__bool(cur_data, false);
-            Game__SimShader__set_prior_direction__Game_data__float(cur_data, cur_data.r);
+            Game__SimShader__set_selected__data__Boolean(cur_data, false);
+            Game__SimShader__set_prior_direction__data__Single(cur_data, cur_data.r);
         }
     }
     __FinalOutput.Color = cur_data;

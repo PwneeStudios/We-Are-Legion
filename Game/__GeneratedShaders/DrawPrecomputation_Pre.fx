@@ -55,26 +55,26 @@ sampler fs_param_Previous : register(s2) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-bool Game__SimShader__selected__Game_data(float4 u)
+bool Game__SimShader__selected__data(float4 u)
 {
     float val = u.b;
     return val >= 0.3764706 - .001;
 }
 
-bool Game__SimShader__Something__Game_data(float4 u)
+bool Game__SimShader__Something__data(float4 u)
 {
     return u.r > 0 + .001;
 }
 
-bool Game__SimShader__IsValid__float(float direction)
+bool Game__SimShader__IsValid__Single(float direction)
 {
     return direction > 0 + .001;
 }
 
-float2 Game__SimShader__direction_to_vec__float(float direction)
+float2 Game__SimShader__direction_to_vec__Single(float direction)
 {
     float angle = (direction * 255 - 1) * (3.141593 / 2.0);
-    return Game__SimShader__IsValid__float(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+    return Game__SimShader__IsValid__Single(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
 }
 
 // Compiled vertex shader
@@ -94,20 +94,20 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 cur = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
     float4 pre = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * fs_param_Previous_dxdy);
-    float selected_offset = Game__SimShader__selected__Game_data(pre) ? 0.01568628 : 0.0;
+    float selected_offset = Game__SimShader__selected__data(pre) ? 0.01568628 : 0.0;
     float anim = 0;
     float2 vel = float2(0, 0);
-    if (Game__SimShader__Something__Game_data(cur) && abs(cur.g - 0.003921569) < .001)
+    if (Game__SimShader__Something__data(cur) && abs(cur.g - 0.003921569) < .001)
     {
         __FinalOutput.Color = float4(0.0, 0.0, 0.0, 0.0);
         return __FinalOutput;
     }
     else
     {
-        if (Game__SimShader__IsValid__float(pre.r))
+        if (Game__SimShader__IsValid__Single(pre.r))
         {
             anim = pre.r;
-            vel = Game__SimShader__direction_to_vec__float(pre.r);
+            vel = Game__SimShader__direction_to_vec__Single(pre.r);
         }
         else
         {

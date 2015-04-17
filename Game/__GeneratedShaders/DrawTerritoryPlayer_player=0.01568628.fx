@@ -44,7 +44,7 @@ float fs_param_cutoff;
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float Game__SimShader__GetPlayerVal__Game_PlayerTuple__float(float4 tuple, float player)
+float Game__SimShader__GetPlayerVal__PlayerTuple__Single(float4 tuple, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
@@ -83,7 +83,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
     float4 here = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 0)) * fs_param_Path_dxdy);
-    float dist = Game__SimShader__GetPlayerVal__Game_PlayerTuple__float(here, 0.01568628);
+    float dist = Game__SimShader__GetPlayerVal__PlayerTuple__Single(here, 0.01568628);
     bool controlled = dist < fs_param_cutoff - .001;
     float4 clr = controlled ? float4(0.0, 0.0, 0.0, 0.0) : float4(0.0, 0.0, 0.0, 0.65);
     clr.rgb *= clr.a;

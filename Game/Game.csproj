@@ -68,10 +68,13 @@
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Awesomium.Core, Version=1.7.5.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86" />
+    <Reference Include="Awesomium.Core, Version=1.7.5.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86">
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FragSharpFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\Projects\FragSharp\FragSharpFramework\bin\x86\Release\FragSharpFramework.dll</HintPath>
+      <HintPath>..\..\..\Projects\FragSharp\FragSharpFramework\bin\x86\Release\FragSharpFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.Xna.Framework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=x86">
       <Private>False</Private>
@@ -246,8 +249,8 @@ DIR
 ECHO Running PngToCsData
 $(SolutionDir)PngToCsData\PngToCsData\bin\Release\PngToCsData.exe $(ProjectDir)Drawing/GameColors.cs $(SolutionDir)Content/Art/FarColors.png
 ECHO Running FragSharp via the following command line invocation:
-ECHO "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\x86\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)
-"C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\x86\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)</PreBuildEvent>
+ECHO "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)
+"C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>

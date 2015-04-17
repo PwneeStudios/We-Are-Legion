@@ -40,7 +40,7 @@ sampler fs_param_s : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float Game__BenchmarkTest_MathPacking__MathPacking__float(float c)
+float Game__BenchmarkTest_MathPacking__MathPacking__Single(float c)
 {
     float x1 = floor(c / 4.0);
     float x2 = c - 3.2 * x1;
@@ -61,12 +61,12 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 output = float4(0.0, 0.0, 0.0, 0.0);
+    float4 output = float4(0, 0, 0, 0);
     float4 right = tex2D(fs_param_s, psin.TexCoords + (float2(1, 0)) * fs_param_s_dxdy), up = tex2D(fs_param_s, psin.TexCoords + (float2(0, 1)) * fs_param_s_dxdy), left = tex2D(fs_param_s, psin.TexCoords + (float2(-(1), 0)) * fs_param_s_dxdy), down = tex2D(fs_param_s, psin.TexCoords + (float2(0, -(1))) * fs_param_s_dxdy);
-    output.r = Game__BenchmarkTest_MathPacking__MathPacking__float(right.r) + Game__BenchmarkTest_MathPacking__MathPacking__float(right.g) + Game__BenchmarkTest_MathPacking__MathPacking__float(right.b) + Game__BenchmarkTest_MathPacking__MathPacking__float(right.a);
-    output.g = Game__BenchmarkTest_MathPacking__MathPacking__float(left.r) + Game__BenchmarkTest_MathPacking__MathPacking__float(left.g) + Game__BenchmarkTest_MathPacking__MathPacking__float(left.b) + Game__BenchmarkTest_MathPacking__MathPacking__float(left.a);
-    output.b = Game__BenchmarkTest_MathPacking__MathPacking__float(up.r) + Game__BenchmarkTest_MathPacking__MathPacking__float(up.g) + Game__BenchmarkTest_MathPacking__MathPacking__float(up.b) + Game__BenchmarkTest_MathPacking__MathPacking__float(up.a);
-    output.a = Game__BenchmarkTest_MathPacking__MathPacking__float(down.r) + Game__BenchmarkTest_MathPacking__MathPacking__float(down.g) + Game__BenchmarkTest_MathPacking__MathPacking__float(down.b) + Game__BenchmarkTest_MathPacking__MathPacking__float(down.a);
+    output.r = Game__BenchmarkTest_MathPacking__MathPacking__Single(right.r) + Game__BenchmarkTest_MathPacking__MathPacking__Single(right.g) + Game__BenchmarkTest_MathPacking__MathPacking__Single(right.b) + Game__BenchmarkTest_MathPacking__MathPacking__Single(right.a);
+    output.g = Game__BenchmarkTest_MathPacking__MathPacking__Single(left.r) + Game__BenchmarkTest_MathPacking__MathPacking__Single(left.g) + Game__BenchmarkTest_MathPacking__MathPacking__Single(left.b) + Game__BenchmarkTest_MathPacking__MathPacking__Single(left.a);
+    output.b = Game__BenchmarkTest_MathPacking__MathPacking__Single(up.r) + Game__BenchmarkTest_MathPacking__MathPacking__Single(up.g) + Game__BenchmarkTest_MathPacking__MathPacking__Single(up.b) + Game__BenchmarkTest_MathPacking__MathPacking__Single(up.a);
+    output.a = Game__BenchmarkTest_MathPacking__MathPacking__Single(down.r) + Game__BenchmarkTest_MathPacking__MathPacking__Single(down.g) + Game__BenchmarkTest_MathPacking__MathPacking__Single(down.b) + Game__BenchmarkTest_MathPacking__MathPacking__Single(down.a);
     __FinalOutput.Color = output;
     return __FinalOutput;
 }
