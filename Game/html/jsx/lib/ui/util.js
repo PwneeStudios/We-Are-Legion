@@ -22,6 +22,12 @@ define(['lodash', 'react'], function(_, React) {
         width: function(x) {
             return util.size(x, 100);
         },
+
+        subImage: function(image, offset) {
+            var sub = _.assign({}, image);
+            sub.offset = offset;
+            return sub;
+        },
     };
     
     return util;
