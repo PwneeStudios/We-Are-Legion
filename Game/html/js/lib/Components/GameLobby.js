@@ -3,14 +3,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var Button = ReactBootstrap.Button;
     var Well = ReactBootstrap.Well;
     var Popover = ReactBootstrap.Popover;
-    var DropdownButton = ReactBootstrap.DropdownButton;
-    var MenuItem = ReactBootstrap.MenuItem;
     var Table = ReactBootstrap.Table;
     
     var Div = ui.Div;
     var Gap = ui.Gap;
     var UiImage = ui.UiImage;
     var UiButton = ui.UiButton;
+    var Dropdown = ui.Dropdown;
     var RenderAtMixin = ui.RenderAtMixin;
     
     var pos = ui.pos;
@@ -27,15 +26,15 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         },
         
         render: function() {
+            var choices = [
+                {name: 'Kingdom of Wei', value:1, },
+                {name: 'Kingdom of Shu', value:3, },
+                {name: 'Kingdom of Shen', value:4, },
+                {name: 'Kingdom of Beast', value:2, },
+            ];
+
             return (
-                React.createElement("div", {style: {'pointer-events':'auto'}}, 
-                    React.createElement(DropdownButton, {title: "Choose your Kingdom"}, 
-                        React.createElement(MenuItem, null, "Kingdom of Wei"), 
-                        React.createElement(MenuItem, null, "Kingdom of Shu"), 
-                        React.createElement(MenuItem, null, "Kingdom of Shen"), 
-                        React.createElement(MenuItem, null, "Kingdom of Beast")
-                    )
-                )
+                React.createElement(Dropdown, {value: "Kingdom", choices: choices})
             );
         },
     });
@@ -49,16 +48,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         },
         
         render: function() {
+            var choices = _.map(_.range(1, 5), function(team) { return {name: 'Team ' + team, value:team}});
+
             return (
-                React.createElement("div", {style: {'pointer-events':'auto'}}, 
-                    React.createElement(DropdownButton, {title: "Team 1"}, 
-                        _.map(_.range(1, 5), function(i) { return (
-                            React.createElement(MenuItem, null, 
-                                "Team ", i
-                            )
-                        );})
-                    )
-                )
+                React.createElement(Dropdown, {value: "Team", choices: choices})
             );
         },
     });
