@@ -22,6 +22,9 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Web.Script.Serialization;
+
+using Newtonsoft.Json;
 
 namespace Game
 {
@@ -689,6 +692,7 @@ namespace Game
 
                 World.Update();
                 UpdateJsData();
+                UpdateParams();
             }
 
             World.Draw();
@@ -724,7 +728,9 @@ namespace Game
             }
         }
 
-        System.Web.Script.Serialization.JavaScriptSerializer jsonify = new System.Web.Script.Serialization.JavaScriptSerializer();
+        //JavaScriptSerializer jsonify = new JavaScriptSerializer();
+        JsonSerializer jsonify = new JsonSerializer();
+
         StringBuilder sb = new StringBuilder(10000);
         Dictionary<string, object> obj = new Dictionary<string, object>(100);
         public bool ShowChat = false;
@@ -741,9 +747,13 @@ namespace Game
             UpdateShow();
         }
 
+        JsonSerializerSettings settings = new JsonSerializerSettings();
         void SendDict(Dictionary<string, object> dict, string function)
         {
-            var json = jsonify.Serialize(dict);
+            //var json = jsonify.Serialize(dict);
+            
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            var json = JsonConvert.SerializeObject(dict, Formatting.None, settings);
 
             try
             {
@@ -763,6 +773,15 @@ namespace Game
             obj["PlayerInfo"] = ShowAllPlayers ? World.PlayerInfo : null;
 
             SendDict(obj, "update");
+        }
+
+        void UpdateParams()
+        {
+            var obj = new Dictionary<string, object>();
+            obj["Spells"] = Spells.SpellDict;
+            obj["Buildings"] = World.MyPlayerInfo.Params.Buildings;
+
+            SendDict(obj, "setParams");
         }
 
         void UpdateShow()

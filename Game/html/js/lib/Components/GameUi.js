@@ -139,7 +139,41 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
     setPlayerImages();
     setPlayer(1);
     
-    
+
+    var Cost = React.createClass({displayName: "Cost",
+        mixins: [events.SetParamsMixin],
+
+        onSetParams: function(values) {
+            var data = values.Spells[this.props.name] || values.Buildings[this.props.name];
+
+            if (!data) {
+                return;
+            }
+
+            var goldCost = data.GoldCost || 0;
+            var jadeCost = data.JadeCost || 0;
+
+            if (this.state.goldCost === goldCost || this.state.jadeCost === jadeCost) {
+                return;
+            }
+
+            this.setState({
+                goldCost: goldCost,
+                jadeCost: jadeCost,
+            })
+        },
+
+        getInitialState: function() {
+            return {
+            };
+        },
+
+        render: function() {
+            return (
+                React.createElement("p", null, this.state.goldCost || this.state.jadeCost)
+            );
+        },
+    });    
     
     var ActionButton = React.createClass({displayName: "ActionButton",
         mixins: [RenderAtMixin],
@@ -165,7 +199,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                         React.createElement(UiImage, {nonBlocking: true, pos: pos(-1 + (100-90*action.scale)/2,-.5), width: 90*action.scale, image: action.image})
                     ), 
 
-                    React.createElement(Div, {nonBlocking: true, pos: pos(-16,8.5), size: width(100), style: pStyle}, React.createElement("p", null, "100"))
+                    React.createElement(Div, {nonBlocking: true, pos: pos(-16,8.5), size: width(100), style: pStyle}, React.createElement(Cost, {name: this.props.name}))
                 )
             );
         },

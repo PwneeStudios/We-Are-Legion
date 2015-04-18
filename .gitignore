@@ -1,5 +1,6 @@
 obj/
 bin/
+packages/
 .module-cache/
 *.cachefile
 *.suo

@@ -252,8 +252,8 @@ namespace Game
 
         public void StartSpell(string name)
         {
-            if (!Spells.Lookup.ContainsKey(name)) return;
-            StartSpell(Spells.Lookup[name]);
+            if (!Spells.SpellDict.ContainsKey(name)) return;
+            StartSpell(Spells.SpellDict[name]);
         }
         public void StartSpell(Spell spell)
         {

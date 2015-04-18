@@ -39,7 +39,7 @@ namespace Game
 
         public bool DragonLordAlive = false;
 
-        GameParameters Params;
+        public GameParameters Params;
         public PlayerInfo(int Number, GameParameters Params)
         {
             this.Name = "Player " + Number.ToString();
@@ -94,7 +94,7 @@ namespace Game
         public int BuildingCost(int type) { return BuildingCost(_[type]); }
         public int BuildingCost(float type)
         {
-            return Params[type].Cost + Params[type].CostIncrease * this[type].Bought;
+            return Params[type].GoldCost + Params[type].CostIncrease * this[type].Bought;
         }
 
         public void GoldUpdate()

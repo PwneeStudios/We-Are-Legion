@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Input;
 using FragSharpHelper;
 using FragSharpFramework;
 
+using Newtonsoft.Json;
+
 namespace Game
 {
     public class Spell : SimShader
@@ -13,11 +15,11 @@ namespace Game
         public readonly int id;
         public readonly string Name;
 
-        public Action DrawCursor;
-        public Func<bool> Execute;
+        [JsonIgnore] public Action DrawCursor;
+        [JsonIgnore] public Func<bool> Execute;
 
         public delegate void SpellExecution(int PlayerNumer, int TeamNumber, vec2 Pos);
-        public SpellExecution Apply;
+        [JsonIgnore] public SpellExecution Apply;
 
         public int JadeCost = 0;
         public float TerritoryRange = float.MaxValue;
@@ -37,7 +39,7 @@ namespace Game
     public class Spells : BaseShader
     {
         public static List<Spell> SpellList = new List<Spell>();
-        public static Dictionary<string, Spell> Lookup = new Dictionary<string, Spell>();
+        public static Dictionary<string, Spell> SpellDict = new Dictionary<string, Spell>();
 
         static World W { get { return GameClass.World; } }
 
@@ -119,7 +121,7 @@ namespace Game
         public static void Add(Spell spell)
         {
             SpellList.Add(spell);
-            Lookup.Add(spell.Name, spell);
+            SpellDict.Add(spell.Name, spell);
         }
     }
 }
