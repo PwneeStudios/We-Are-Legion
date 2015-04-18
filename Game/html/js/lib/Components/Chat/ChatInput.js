@@ -63,10 +63,15 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
         
         renderAt: function() {
             if (this.state.ShowChat || this.props.show) {
+                var style = {
+                    'pointer-events':'auto',
+                    'background-color':'lightgray',
+                };
+
                 return (
                     React.createElement("div", null, 
                         React.createElement(Input, {value: this.state.value, ref: "input", type: "text", addonBefore: "All", 
-                         style: {'pointer-events':'auto'}, 
+                         style: style, 
                          onChange: this.onTextChange, onKeyDown: this.onKeyDown, 
                          onMouseOver: interop.onOver, onMouseLeave: interop.onLeave, 
                          onBlur: this.focus})

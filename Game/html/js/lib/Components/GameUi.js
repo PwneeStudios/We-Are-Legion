@@ -11,8 +11,8 @@ define(['lodash', 'react', 'interop', 'events', 'Components/InGameUi', 'Componen
 
         render: function() {
             var body;
-            body = React.createElement(InGameUi, null);
-            //body = <GameLobby />;
+            //body = <InGameUi />;
+            body = React.createElement(GameLobby, null);
 
             return (
                 React.createElement("div", null, 

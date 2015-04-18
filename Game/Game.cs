@@ -549,6 +549,8 @@ namespace Game
                         }
                     }
 
+                    DrawWebView();
+
                     break;
 
                 case GameState.Loading:
@@ -601,14 +603,7 @@ namespace Game
 
                     DrawGame(gameTime);
 
-                    // Awesomium should be drawn after the game has been drawn, assuming it's acting as a HUD
-                    if (awesomium.WebViewTexture != null)
-                    {
-                        Render.StartText();
-                        Render.MySpriteBatch.Draw(awesomium.WebViewTexture, GraphicsDevice.Viewport.Bounds, Color.White);
-                        Render.EndText();
-                        //DrawFullScreen(awesomium.WebViewTexture);
-                    }
+                    DrawWebView();
 
                     World.DrawUi();
 
@@ -621,6 +616,17 @@ namespace Game
             }
 
             base.Draw(gameTime);
+        }
+
+        private void DrawWebView()
+        {
+            if (awesomium.WebViewTexture != null)
+            {
+                Render.StartText();
+                Render.MySpriteBatch.Draw(awesomium.WebViewTexture, GraphicsDevice.Viewport.Bounds, Color.White);
+                Render.EndText();
+                //DrawFullScreen(awesomium.WebViewTexture);
+            }
         }
 
         private void BlackOverlay(float s)

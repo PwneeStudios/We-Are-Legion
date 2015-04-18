@@ -3,6 +3,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var Popover = ReactBootstrap.Popover;
     
     var Div = ui.Div;
+    var Gap = ui.Gap;
     var UiImage = ui.UiImage;
     var UiButton = ui.UiButton;
     var RenderAtMixin = ui.RenderAtMixin;
@@ -294,14 +295,6 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 </div>
             );
         },
-    });
-
-    var Gap = React.createClass({
-        render: function() {
-            return (
-                <div style={{'float':'left','overflow':'hidden','height':'1px',width:this.props.width + '%',}} />
-            );
-        }
     });
     
     return React.createClass({
