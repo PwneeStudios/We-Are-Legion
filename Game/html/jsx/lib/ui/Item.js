@@ -17,7 +17,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
 
         render: function() {
             return (
-                <MenuItem onClick={this.onSelect}>
+                <MenuItem onClick={this.onSelect} width='1000px'>
                     {this.props.name}
                 </MenuItem>
             );

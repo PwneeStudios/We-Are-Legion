@@ -26,7 +26,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         };
 
         window.GoldImage = {width:20, height:22, url:'css/Gold.png'};
-        window.JadeImage = {width:20, height:22, url:'css/Jade.png'};    
+        window.JadeImage = {width:20, height:22, url:'css/Jade.png'};
     };
 
     var getPlayerImages = function(player) {
@@ -46,11 +46,11 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     };
     
     var makeTooltip = function(name) {
-        return React.createElement("span", null, name, React.createElement("span", {style: {'float':'right'}}, "250"))
+        return React.createElement("span", null, name, React.createElement("span", {style: {'float':'right'}}, "250"));
     };
 
     var setActions = function() {
-        var buildingScale = .85;
+        var buildingScale = 0.85;
         window.Actions = {
             Fireball: {
                 image:Spells.Fireball,
@@ -156,7 +156,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             this.setState({
                 goldCost: goldCost,
                 jadeCost: jadeCost,
-            })
+            });
         },
 
         getInitialState: function() {
@@ -192,7 +192,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                      overlay: action.tooltip}), 
                     
                     React.createElement(Div, {nonBlocking: true, pos: pos(0,0)}, 
-                        React.createElement(UiImage, {nonBlocking: true, pos: pos(-1 + (100-90*action.scale)/2,-.5), width: 90*action.scale, image: action.image})
+                        React.createElement(UiImage, {nonBlocking: true, pos: pos(-1 + (100-90*action.scale)/2,-0.5), width: 90*action.scale, image: action.image})
                     ), 
 
                     React.createElement(Div, {nonBlocking: true, pos: pos(-16,8.5), size: width(100), style: pStyle}, React.createElement(Cost, {name: this.props.name}))
@@ -246,13 +246,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return (
                 React.createElement("div", null, 
                     React.createElement(UiImage, {width: 100, image: {width:869, height:60, url:'css/UnitBar.png'}}), 
-                    React.createElement(Div, {nonBlocking: true, pos: pos(0,.92)}, 
-                        this.item(pos(x,0),        Buildings.Barracks, 1, pos(0,0), this.state.info ? this.state.info.Barracks.Count : 0), 
-                        this.item(pos(x+=small,0), Units.Soldier,    .85, pos(.4,0), this.state.info ? this.state.info.Units : 0), 
-                        this.item(pos(x+=big,0),   Buildings.GoldMine, 1, pos(0,0), this.state.info ? this.state.info.GoldMine.Count : 0), 
-                        this.item(pos(x+=small,0), GoldImage,         .67, pos(1.2,.5), this.state.info ? this.state.info.Gold : 0), 
-                        this.item(pos(x+=big,0),   Buildings.JadeMine, 1, pos(0,0), this.state.info ? this.state.info.JadeMine.Count : 0), 
-                        this.item(pos(x+=small,0), JadeImage,         .67, pos(1.2,.5), this.state.info ? this.state.info.Jade : 0)
+                    React.createElement(Div, {nonBlocking: true, pos: pos(0,0.92)}, 
+                        this.item(pos(x,0),        Buildings.Barracks, 1,    pos(0,0),     this.state.info ? this.state.info.Barracks.Count : 0), 
+                        this.item(pos(x+=small,0), Units.Soldier,      0.85, pos(0.4,0),   this.state.info ? this.state.info.Units : 0), 
+                        this.item(pos(x+=big,0),   Buildings.GoldMine, 1,    pos(0,0),     this.state.info ? this.state.info.GoldMine.Count : 0), 
+                        this.item(pos(x+=small,0), GoldImage,          0.67, pos(1.2,0.5), this.state.info ? this.state.info.Gold : 0), 
+                        this.item(pos(x+=big,0),   Buildings.JadeMine, 1,    pos(0,0),     this.state.info ? this.state.info.JadeMine.Count : 0), 
+                        this.item(pos(x+=small,0), JadeImage,          0.67, pos(1.2,0.5), this.state.info ? this.state.info.Jade : 0)
                     )
                 )
             );
@@ -266,7 +266,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return (
                 React.createElement("div", null, 
                     React.createElement(UiImage, {pos: pos(0,0), width: 100, image: {width:245, height:254, url:'css/Minimap.png'}}), 
-                    React.createElement(UiImage, {pos: pos(3.5,.35), width: 91, image: {width:245, height:254, url:'css/FakeMinimap.png'}, style: {position:'absolute',left:0,top:0,visibility:'hidden'}})
+                    React.createElement(UiImage, {pos: pos(3.5,0.35), width: 91, image: {width:245, height:254, url:'css/FakeMinimap.png'}, style: {position:'absolute',left:0,top:0,visibility:'hidden'}})
                 )
             );
         },
@@ -342,17 +342,17 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 React.createElement("div", null, 
                     React.createElement(Div, {pos: pos(0,0)}, 
                         _.map(players, function(player, index) {
-                            return React.createElement(UnitBar, {MyPlayerNumber: player, pos: pos(50.5,.4 + index*4.2), size: width(50)});
+                            return React.createElement(UnitBar, {MyPlayerNumber: player, pos: pos(50.5,0.4 + index*4.2), size: width(50)});
                         })
                     ), 
                                         
                     /*<Minimap pos={pos(.2,79)} size={width(11)} />*/
 
                     React.createElement(Div, {pos: pos(15,0)}, 
-                        React.createElement(Chat.ChatInput, {pos: pos(.35,80), size: width(49)}), 
+                        React.createElement(Chat.ChatInput, {pos: pos(0.35,80), size: width(49)}), 
 
                         /*<ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/
-                        React.createElement(Chat.ChatBox, {pos: pos(.38, 78), size: width(38)}), 
+                        React.createElement(Chat.ChatBox, {pos: pos(0.38, 78), size: width(38)}), 
                         
                         React.createElement(Div, {pos: pos(0,85)}, 
                             React.createElement(ActionButton, {name: "Fireball"}), 

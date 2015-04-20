@@ -9,7 +9,7 @@ define(['jquery', 'lodash'], function($, _) {
         },
         
         onOver: function() {
-            console.log('hi')
+            console.log('hi');
             
             if (interop.InXna()) {
                 xna.OnMouseOver();
@@ -17,7 +17,7 @@ define(['jquery', 'lodash'], function($, _) {
         },
 
         onLeave: function() {
-            console.log('leave')
+            console.log('leave');
             
             if (interop.InXna()) {
                 xna.OnMouseLeave();

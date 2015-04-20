@@ -3,7 +3,7 @@ require.config({
     paths: {
         require: 'requirejs/require',
         jquery: 'jquery/dist/jquery.min',
-        react: 'react/react.min',
+        react: 'react/react',
         //react: 'react/react-with-addons.min',
         'react-bootstrap': 'react-bootstrap/react-bootstrap.min',
         lodash: 'lodash/lodash.min',

@@ -17,6 +17,15 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var width = ui.width;
     var subImage = ui.subImage;
 
+    var makeName = function(english, chinese) {
+        return (
+            React.createElement("span", null, 
+                english, 
+                React.createElement("span", {style: {'text-align':'right', 'float':'right'}}, chinese)
+            )
+        );
+    };
+
     var ChooseKingdom = React.createClass({displayName: "ChooseKingdom",
         mixins: [],
                 
@@ -27,10 +36,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         
         render: function() {
             var choices = [
-                {name: 'Kingdom of Wei', value:1, },
-                {name: 'Kingdom of Shu', value:3, },
-                {name: 'Kingdom of Shen', value:4, },
-                {name: 'Kingdom of Beast', value:2, },
+                {name: makeName('Kingdom of Wei',   '魏'), value:1, },
+                {name: makeName('Kingdom of Shu',   '蜀'), value:3, },
+                {name: makeName('Kingdom of Wu',    '吳'), value:4, },
+                {name: makeName('Kingdom of Beast', '獸'), value:2, },
             ];
 
             return (
@@ -48,7 +57,12 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         },
         
         render: function() {
-            var choices = _.map(_.range(1, 5), function(team) { return {name: 'Team ' + team, value:team}});
+            var choices = [
+                {name: makeName('Team 1', '一'), value:1, },
+                {name: makeName('Team 2', '二'), value:3, },
+                {name: makeName('Team 3', '三'), value:4, },
+                {name: makeName('Team 4', '四'), value:2, },
+            ];
 
             return (
                 React.createElement(Dropdown, {value: "Team", choices: choices})
@@ -94,11 +108,17 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                         ), 
 
                         React.createElement(Well, {style: {'height':'75%'}}, 
-                            React.createElement(Chat.ChatBox, {show: true, pos: pos(2, 78), size: width(43)}), 
+                            React.createElement(Chat.ChatBox, {show: true, full: true, pos: pos(2, 17), size: size(43,61)}), 
                             React.createElement(Chat.ChatInput, {show: true, pos: pos(2,80), size: width(43)}), 
 
-                            React.createElement(Div, {nonBlocking: true, pos: pos(48,20), size: width(50), style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
+                            React.createElement(Div, {nonBlocking: true, pos: pos(48,16.9), size: width(50), style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
                                 React.createElement(Table, {style: {width:'100%'}}, React.createElement("tbody", null, 
+                                    /*<tr style={{'background-color':'#1c1e22'}}>
+                                        <th></th>
+                                        <th>國</th>
+                                        <th>隊</th>
+                                    </tr>*/
+
                                     _.map(_.range(1, 5), function(i) { return React.createElement(PlayerEntry, {player: i}); })
                                 ))
                             ), 

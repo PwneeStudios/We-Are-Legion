@@ -26,7 +26,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         };
 
         window.GoldImage = {width:20, height:22, url:'css/Gold.png'};
-        window.JadeImage = {width:20, height:22, url:'css/Jade.png'};    
+        window.JadeImage = {width:20, height:22, url:'css/Jade.png'};
     };
 
     var getPlayerImages = function(player) {
@@ -46,11 +46,11 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     };
     
     var makeTooltip = function(name) {
-        return <span>{name}<span style={{'float':'right'}}>250</span></span>
+        return <span>{name}<span style={{'float':'right'}}>250</span></span>;
     };
 
     var setActions = function() {
-        var buildingScale = .85;
+        var buildingScale = 0.85;
         window.Actions = {
             Fireball: {
                 image:Spells.Fireball,
@@ -156,7 +156,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             this.setState({
                 goldCost: goldCost,
                 jadeCost: jadeCost,
-            })
+            });
         },
 
         getInitialState: function() {
@@ -192,7 +192,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                      overlay={action.tooltip} />
                     
                     <Div nonBlocking pos={pos(0,0)}>
-                        <UiImage nonBlocking pos={pos(-1 + (100-90*action.scale)/2,-.5)} width={90*action.scale} image={action.image} />
+                        <UiImage nonBlocking pos={pos(-1 + (100-90*action.scale)/2,-0.5)} width={90*action.scale} image={action.image} />
                     </Div>
 
                     <Div nonBlocking pos={pos(-16,8.5)} size={width(100)} style={pStyle}><Cost name={this.props.name} /></Div>
@@ -246,13 +246,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return (
                 <div>
                     <UiImage width={100} image={{width:869, height:60, url:'css/UnitBar.png'}} />
-                    <Div nonBlocking pos={pos(0,.92)}>
-                        {this.item(pos(x,0),        Buildings.Barracks, 1, pos(0,0), this.state.info ? this.state.info.Barracks.Count : 0)}
-                        {this.item(pos(x+=small,0), Units.Soldier,    .85, pos(.4,0), this.state.info ? this.state.info.Units : 0)}
-                        {this.item(pos(x+=big,0),   Buildings.GoldMine, 1, pos(0,0), this.state.info ? this.state.info.GoldMine.Count : 0)}
-                        {this.item(pos(x+=small,0), GoldImage,         .67, pos(1.2,.5), this.state.info ? this.state.info.Gold : 0)}
-                        {this.item(pos(x+=big,0),   Buildings.JadeMine, 1, pos(0,0), this.state.info ? this.state.info.JadeMine.Count : 0)}
-                        {this.item(pos(x+=small,0), JadeImage,         .67, pos(1.2,.5), this.state.info ? this.state.info.Jade : 0)}
+                    <Div nonBlocking pos={pos(0,0.92)}>
+                        {this.item(pos(x,0),        Buildings.Barracks, 1,    pos(0,0),     this.state.info ? this.state.info.Barracks.Count : 0)}
+                        {this.item(pos(x+=small,0), Units.Soldier,      0.85, pos(0.4,0),   this.state.info ? this.state.info.Units : 0)}
+                        {this.item(pos(x+=big,0),   Buildings.GoldMine, 1,    pos(0,0),     this.state.info ? this.state.info.GoldMine.Count : 0)}
+                        {this.item(pos(x+=small,0), GoldImage,          0.67, pos(1.2,0.5), this.state.info ? this.state.info.Gold : 0)}
+                        {this.item(pos(x+=big,0),   Buildings.JadeMine, 1,    pos(0,0),     this.state.info ? this.state.info.JadeMine.Count : 0)}
+                        {this.item(pos(x+=small,0), JadeImage,          0.67, pos(1.2,0.5), this.state.info ? this.state.info.Jade : 0)}
                     </Div>
                 </div>
             );
@@ -266,7 +266,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return (
                 <div>
                     <UiImage pos={pos(0,0)} width={100} image={{width:245, height:254, url:'css/Minimap.png'}} />
-                    <UiImage pos={pos(3.5,.35)} width={91} image={{width:245, height:254, url:'css/FakeMinimap.png'}} style={{position:'absolute',left:0,top:0,visibility:'hidden'}}/>
+                    <UiImage pos={pos(3.5,0.35)} width={91} image={{width:245, height:254, url:'css/FakeMinimap.png'}} style={{position:'absolute',left:0,top:0,visibility:'hidden'}}/>
                 </div>
             );
         },
@@ -342,17 +342,17 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 <div>
                     <Div pos={pos(0,0)}>
                         {_.map(players, function(player, index) {
-                            return <UnitBar MyPlayerNumber={player} pos={pos(50.5,.4 + index*4.2)} size={width(50)} />;
+                            return <UnitBar MyPlayerNumber={player} pos={pos(50.5,0.4 + index*4.2)} size={width(50)} />;
                         })}
                     </Div>
                                         
                     {/*<Minimap pos={pos(.2,79)} size={width(11)} />*/}
 
                     <Div pos={pos(15,0)}>
-                        <Chat.ChatInput pos={pos(.35,80)} size={width(49)} />
+                        <Chat.ChatInput pos={pos(0.35,80)} size={width(49)} />
 
                         {/*<ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/}
-                        <Chat.ChatBox pos={pos(.38, 78)} size={width(38)}/>
+                        <Chat.ChatBox pos={pos(0.38, 78)} size={width(38)}/>
                         
                         <Div pos={pos(0,85)}>
                             <ActionButton name='Fireball' />

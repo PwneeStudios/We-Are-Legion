@@ -15,7 +15,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
         getDefaultProps: function() {
             return {
                 willFadeOut:true,
-            }
+                hasBackground:true,
+            };
         },
 
         componentDidMount: function() {
@@ -34,7 +35,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
         },
         
         fadeIn: function() {
-            this.alpha += .05;
+            this.alpha += 0.05;
             if (this.alpha > 1) {
                 this.alpha = 1;
             } else {
@@ -45,7 +46,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
         },
 
         fadeOut: function() {
-            this.alpha -= .05;
+            this.alpha -= 0.05;
             if (this.alpha < 0) {
                 this.alpha = 0;
                 this.props.remove(this.props.message);
@@ -58,8 +59,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
         render: function() {
             var message = this.props.message;
             
+            var className = 'chat-line';
+            if (this.props.hasBackground) {
+                className += ' chat-background';
+            }
+
             return (
-                React.createElement("p", {className: "chat", style: {opacity:1}}, 
+                React.createElement("p", {className: className, style: {opacity:1}}, 
                     React.createElement("span", {style: {color:'rgba(180,180,255,255)'}}, message.name, ": "), 
                     React.createElement("span", null, message.message), 
                     React.createElement("br", null)
