@@ -40,7 +40,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     
         componentDidMount: function() {
             var self = this;
-            //return;
+            return;
             setInterval(function() {
                 self.onChatMessage({name:'player 1', message:'hello there again ' + self.state.counter});
             }, 1000);

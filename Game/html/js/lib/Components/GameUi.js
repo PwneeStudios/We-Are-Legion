@@ -1,4 +1,4 @@
-define(['lodash', 'react', 'interop', 'events', 'Components/InGameUi', 'Components/GameLobby'], function(_, React,interop, events, InGameUi, GameLobby) {
+define(['lodash', 'react', 'interop', 'events', 'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu'], function(_, React,interop, events, InGameUi, GameLobby, GameMenu) {
  
     return React.createClass({
         mixins: [],
@@ -12,7 +12,8 @@ define(['lodash', 'react', 'interop', 'events', 'Components/InGameUi', 'Componen
         render: function() {
             var body;
             //body = <InGameUi />;
-            body = React.createElement(GameLobby, null);
+            //body = <GameLobby />;
+            body = React.createElement(GameMenu, null);
 
             return (
                 React.createElement("div", null, 
