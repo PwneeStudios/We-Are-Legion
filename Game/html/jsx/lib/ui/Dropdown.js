@@ -17,8 +17,10 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, Rea
         render: function() {
             var self = this;
 
+            var style = _.assign({}, {'pointer-events':'auto'}, this.props.style);
+
             return (
-                <div style={{'pointer-events':'auto'}}>
+                <div style={style}>
                     <DropdownButton title={this.state.value}>
                         {_.map(this.props.choices, function(choice) { return (
                             <Item value={choice.value} name={choice.name} onSelect={self.onSelect}/>

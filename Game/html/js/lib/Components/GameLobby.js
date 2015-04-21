@@ -123,6 +123,14 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                                 ))
                             ), 
 
+                            React.createElement(Div, {nonBlocking: true, pos: pos(38,68), size: width(60)}, 
+                                React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
+                                    React.createElement("p", null, 
+                                        React.createElement(Button, null, "Choose map...")
+                                    )
+                                )
+                            ), 
+
                             React.createElement(Div, {nonBlocking: true, pos: pos(38,80), size: width(60)}, 
                                 React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
                                     React.createElement("p", null, 

@@ -87,7 +87,23 @@ input {
 }
 
 /* ------
-   Dropdwon
+   Menu
+   ------ */
+
+td.menu-cell-dropdown button {
+    width: 100%;
+}
+
+td.menu-cell-dropdown div {
+    width: 100%;
+}
+
+td.menu-cell-dropdown .dropdown-menu {
+    width: 100%;
+}
+
+/* ------
+   Dropdown
    ------ */
 
 .dropdown-menu {

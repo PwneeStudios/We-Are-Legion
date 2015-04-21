@@ -123,6 +123,14 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                                 </tbody></Table>
                             </Div>
 
+                            <Div nonBlocking pos={pos(38,68)} size={width(60)}>
+                                <div style={{'float':'right', 'pointer-events':'auto'}}>
+                                    <p>
+                                        <Button>Choose map...</Button>
+                                    </p>
+                                </div>
+                            </Div>
+
                             <Div nonBlocking pos={pos(38,80)} size={width(60)}>
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
