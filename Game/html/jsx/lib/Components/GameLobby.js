@@ -108,38 +108,38 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                         </Panel>
 
                         <Well style={{'height':'75%'}}>
+
+                            {/* Chat */}
                             <Chat.ChatBox show full pos={pos(2, 17)} size={size(43,61)}/>
                             <Chat.ChatInput show pos={pos(2,80)} size={width(43)} />
 
+                            {/* Player Table */}
                             <Div nonBlocking pos={pos(48,16.9)} size={width(50)} style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
                                 <Table style={{width:'100%'}}><tbody>
-                                    {/*<tr style={{'background-color':'#1c1e22'}}>
-                                        <th></th>
-                                        <th>國</th>
-                                        <th>隊</th>
-                                    </tr>*/}
-
                                     {_.map(_.range(1, 5), function(i) { return <PlayerEntry player={i} />; })}
                                 </tbody></Table>
                             </Div>
 
+                            {/* Map */}
                             <Div nonBlocking pos={pos(38,68)} size={width(60)}>
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
-                                        <Button>Choose map...</Button>
+                                        {this.props.host ? <Button>Choose map...</Button> : null}
                                     </p>
                                 </div>
                             </Div>
 
+                            {/* Buttons */}
                             <Div nonBlocking pos={pos(38,80)} size={width(60)}>
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
-                                        <Button>Start Game</Button>
+                                        {this.props.host ? <Button>Start Game</Button> : null}
                                         &nbsp;
                                         <Button>Leave Lobby</Button>
                                     </p>
                                 </div>
                             </Div>
+
                         </Well>
                     </Div>
                 </div>

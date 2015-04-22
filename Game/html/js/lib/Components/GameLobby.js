@@ -108,38 +108,38 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                         ), 
 
                         React.createElement(Well, {style: {'height':'75%'}}, 
+
+                            /* Chat */
                             React.createElement(Chat.ChatBox, {show: true, full: true, pos: pos(2, 17), size: size(43,61)}), 
                             React.createElement(Chat.ChatInput, {show: true, pos: pos(2,80), size: width(43)}), 
 
+                            /* Player Table */
                             React.createElement(Div, {nonBlocking: true, pos: pos(48,16.9), size: width(50), style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
                                 React.createElement(Table, {style: {width:'100%'}}, React.createElement("tbody", null, 
-                                    /*<tr style={{'background-color':'#1c1e22'}}>
-                                        <th></th>
-                                        <th>國</th>
-                                        <th>隊</th>
-                                    </tr>*/
-
                                     _.map(_.range(1, 5), function(i) { return React.createElement(PlayerEntry, {player: i}); })
                                 ))
                             ), 
 
+                            /* Map */
                             React.createElement(Div, {nonBlocking: true, pos: pos(38,68), size: width(60)}, 
                                 React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
                                     React.createElement("p", null, 
-                                        React.createElement(Button, null, "Choose map...")
+                                        this.props.host ? React.createElement(Button, null, "Choose map...") : null
                                     )
                                 )
                             ), 
 
+                            /* Buttons */
                             React.createElement(Div, {nonBlocking: true, pos: pos(38,80), size: width(60)}, 
                                 React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
                                     React.createElement("p", null, 
-                                        React.createElement(Button, null, "Start Game"), 
+                                        this.props.host ? React.createElement(Button, null, "Start Game") : null, 
                                         " ", 
                                         React.createElement(Button, null, "Leave Lobby")
                                     )
                                 )
                             )
+
                         )
                     )
                 )

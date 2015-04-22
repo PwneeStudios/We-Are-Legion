@@ -15,10 +15,11 @@ define(['lodash', 'react', 'interop', 'events',
         render: function() {
             var body;
             //body = <GameMenu />;
-            body = <OptionsMenu />;
+            //body = <OptionsMenu />;
             //( )body = <CreateGame />;
             //( )body = <FindGame />;
-            //body = <GameLobby />;
+            //body = <GameLobby host gamerIndex={2} />;
+            body = <GameLobby gamerIndex={2} />;
             //body = <InGameUi />;
             //body = <InGameMenu />;
 
