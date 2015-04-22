@@ -35,8 +35,12 @@ namespace Game
             Console.WriteLine("Request for: " + request.Path);
 
             var response = new DataSourceResponse();
-            //var data = File.ReadAllBytes(Environment.CurrentDirectory + @"\..\..\..\html\" + request.Path);
+            
+#if DEBUG
             var data = File.ReadAllBytes(Environment.CurrentDirectory + @"\..\..\..\html\" + request.Path);
+#else
+            var data = File.ReadAllBytes(Environment.CurrentDirectory + @"\html\" + request.Path);
+#endif
 
             IntPtr unmanagedPointer = Marshal.AllocHGlobal(data.Length);
             Marshal.Copy(data, 0, unmanagedPointer, data.Length);
