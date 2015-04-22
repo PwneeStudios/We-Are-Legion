@@ -31,15 +31,12 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return (
                 <div>
                     <Div nonBlocking pos={pos(10,5)} size={width(20)} style={{'font-size':'1%','pointer-events':'auto'}}>
-                        
-                            <Nav bsStyle='pills' stacked style={{'pointer-events':'auto'}}>
-                                <MenuItem eventKey={1}>Create game</MenuItem>
-                                <MenuItem eventKey={2}>Find game</MenuItem>
-                                <MenuItem eventKey={3}>Options</MenuItem>
-                                <MenuItem eventKey={4}>Manual</MenuItem>
-                                <MenuItem eventKey={5}>Quit Game</MenuItem>
-                            </Nav>
-                        
+                        <Nav bsStyle='pills' stacked style={{'pointer-events':'auto'}}>
+                            <MenuItem eventKey={1}>Public game</MenuItem>
+                            <MenuItem eventKey={2}>Friends only</MenuItem>
+                            <MenuItem eventKey={3}>Invite only</MenuItem>
+                            <MenuItem eventKey={4}>Back</MenuItem>
+                        </Nav>                        
                     </Div>
                 </div>
             );

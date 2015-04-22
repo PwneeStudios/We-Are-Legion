@@ -29,19 +29,16 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         
         render: function() {
             return (
-                <div>
-                    <Div nonBlocking pos={pos(10,5)} size={width(20)} style={{'font-size':'1%','pointer-events':'auto'}}>
-                        
-                            <Nav bsStyle='pills' stacked style={{'pointer-events':'auto'}}>
-                                <MenuItem eventKey={1}>Create game</MenuItem>
-                                <MenuItem eventKey={2}>Find game</MenuItem>
-                                <MenuItem eventKey={3}>Options</MenuItem>
-                                <MenuItem eventKey={4}>Manual</MenuItem>
-                                <MenuItem eventKey={5}>Quit Game</MenuItem>
-                            </Nav>
-                        
-                    </Div>
-                </div>
+                React.createElement("div", null, 
+                    React.createElement(Div, {nonBlocking: true, pos: pos(10,5), size: width(20), style: {'font-size':'1%','pointer-events':'auto'}}, 
+                        React.createElement(Nav, {bsStyle: "pills", stacked: true, style: {'pointer-events':'auto'}}, 
+                            React.createElement(MenuItem, {eventKey: 1}, "Public game"), 
+                            React.createElement(MenuItem, {eventKey: 2}, "Friends only"), 
+                            React.createElement(MenuItem, {eventKey: 3}, "Invite only"), 
+                            React.createElement(MenuItem, {eventKey: 4}, "Back")
+                        )
+                    )
+                )
             );
         }
     });

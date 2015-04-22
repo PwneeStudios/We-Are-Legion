@@ -1,5 +1,5 @@
-define(['lodash', 'ui/Div', 'ui/Gap', 'ui/RenderAtMixin', 'ui/UiImage', 'ui/UiButton', 'ui/Dropdown', 'ui/Item', 'ui/util'],
-function(_, Div, Gap, RenderAtMixin, UiImage, UiButton, Dropdown, Item, util) {
+define(['lodash', 'ui/Div', 'ui/Gap', 'ui/RenderAtMixin', 'ui/UiImage', 'ui/UiButton', 'ui/Dropdown', 'ui/Item', 'ui/MenuItem', 'ui/util'],
+function(_, Div, Gap, RenderAtMixin, UiImage, UiButton, Dropdown, Item, MenuItem, util) {
     var ui = {
         Div: Div,
         Gap: Gap,
@@ -9,6 +9,8 @@ function(_, Div, Gap, RenderAtMixin, UiImage, UiButton, Dropdown, Item, util) {
 
         Dropdown: Dropdown,
         Item: Item,
+
+        MenuItem: MenuItem,
         
         RenderAtMixin: RenderAtMixin,
     };
