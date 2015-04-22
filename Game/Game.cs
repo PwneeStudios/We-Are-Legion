@@ -549,7 +549,7 @@ namespace Game
                         }
                     }
 
-                    DrawWebView();
+                    //DrawWebView();
 
                     break;
 

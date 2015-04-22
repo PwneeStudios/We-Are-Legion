@@ -248,8 +248,14 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>ECHO ON
+DIR
+ECHO Running PngToCsData
+$(SolutionDir)PngToCsData\PngToCsData\bin\Release\PngToCsData.exe $(ProjectDir)Drawing/GameColors.cs $(SolutionDir)Content/Art/FarColors.png
+ECHO Running FragSharp via the following command line invocation:
+ECHO "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)
+"C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)
+</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>

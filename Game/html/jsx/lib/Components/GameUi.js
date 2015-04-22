@@ -18,9 +18,9 @@ define(['lodash', 'react', 'interop', 'events',
             //body = <OptionsMenu />;
             //( )body = <CreateGame />;
             //( )body = <FindGame />;
-            body = <GameLobby host lobbyPlayerNum={2} />;
+            //body = <GameLobby host lobbyPlayerNum={2} />;
             //body = <GameLobby lobbyPlayerNum={2} />;
-            //body = <InGameUi />;
+            body = <InGameUi />;
             //body = <InGameMenu />;
 
             return (
