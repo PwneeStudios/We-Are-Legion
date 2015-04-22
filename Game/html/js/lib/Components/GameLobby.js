@@ -17,56 +17,52 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var width = ui.width;
     var subImage = ui.subImage;
 
-    var makeName = function(english, chinese) {
-        return (
-            React.createElement("span", null, 
-                english, 
-                React.createElement("span", {style: {'text-align':'right', 'float':'right'}}, chinese)
-            )
-        );
+    var make = function(english, chinese, value) {
+        return ({
+            name:
+                React.createElement("span", null, 
+                    english, 
+                    React.createElement("span", {style: {'text-align':'right', 'float':'right'}}, chinese)
+                ),
+
+            selectedName: english,
+            value: value,
+        });
     };
 
-    var ChooseKingdom = React.createClass({displayName: "ChooseKingdom",
+    var kingdomChoices = [
+        make('Kingdom of Wei',   '魏', 1),
+        make('Kingdom of Shu',   '蜀', 3),
+        make('Kingdom of Wu',    '吳', 4),
+        make('Kingdom of Beast', '獸', 2),
+    ];
+
+    var teamChoices = [
+        make('Team 1', '一', 1),
+        make('Team 2', '二', 3),
+        make('Team 3', '三', 4),
+        make('Team 4', '四', 2),
+    ];
+
+    var Choose = React.createClass({displayName: "Choose",
         mixins: [],
                 
         getInitialState: function() {
             return {
+                value: this.props.default,
             };
         },
         
         render: function() {
-            var choices = [
-                {name: makeName('Kingdom of Wei',   '魏'), value:1, },
-                {name: makeName('Kingdom of Shu',   '蜀'), value:3, },
-                {name: makeName('Kingdom of Wu',    '吳'), value:4, },
-                {name: makeName('Kingdom of Beast', '獸'), value:2, },
-            ];
-
-            return (
-                React.createElement(Dropdown, {value: "Kingdom", choices: choices})
-            );
-        },
-    });
-
-    var ChooseTeam = React.createClass({displayName: "ChooseTeam",
-        mixins: [],
-                
-        getInitialState: function() {
-            return {
-            };
-        },
-        
-        render: function() {
-            var choices = [
-                {name: makeName('Team 1', '一'), value:1, },
-                {name: makeName('Team 2', '二'), value:3, },
-                {name: makeName('Team 3', '三'), value:4, },
-                {name: makeName('Team 4', '四'), value:2, },
-            ];
-
-            return (
-                React.createElement(Dropdown, {value: "Team", choices: choices})
-            );
+            if (this.props.activePlayer == this.props.player) {
+                return (
+                    React.createElement(Dropdown, {value: this.state.value, choices: this.props.choices})
+                );
+            } else {
+                return (
+                    React.createElement("span", null, this.props.choices[0].selectedName)
+                );
+            }
         },
     });
 
@@ -82,8 +78,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return (
                 React.createElement("tr", null, 
                     React.createElement("td", null, "Player ", this.props.player), 
-                    React.createElement("td", null, React.createElement(ChooseTeam, null)), 
-                    React.createElement("td", null, React.createElement(ChooseKingdom, null))
+                    React.createElement("td", null, React.createElement(Choose, React.__spread({choices: teamChoices, default: "Choose team"},  this.props))), 
+                    React.createElement("td", null, React.createElement(Choose, React.__spread({choices: kingdomChoices, default: "Choose kingdom"},  this.props)))
                 )
             );
         },
@@ -98,6 +94,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         },
         
         render: function() {
+            var _this = this;
+
             return (
                 React.createElement("div", null, 
                     React.createElement(Div, {nonBlocking: true, pos: pos(10,5), size: width(80)}, 
@@ -116,7 +114,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             /* Player Table */
                             React.createElement(Div, {nonBlocking: true, pos: pos(48,16.9), size: width(50), style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
                                 React.createElement(Table, {style: {width:'100%'}}, React.createElement("tbody", null, 
-                                    _.map(_.range(1, 5), function(i) { return React.createElement(PlayerEntry, {player: i}); })
+                                    _.map(_.range(1, 5), function(i) {
+                                        return React.createElement(PlayerEntry, {player: i, activePlayer: _this.props.lobbyPlayerNum});
+                                    })
                                 ))
                             ), 
 

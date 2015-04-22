@@ -18,8 +18,8 @@ define(['lodash', 'react', 'interop', 'events',
             //body = <OptionsMenu />;
             //( )body = <CreateGame />;
             //( )body = <FindGame />;
-            //body = <GameLobby host gamerIndex={2} />;
-            body = <GameLobby gamerIndex={2} />;
+            body = <GameLobby host lobbyPlayerNum={2} />;
+            //body = <GameLobby lobbyPlayerNum={2} />;
             //body = <InGameUi />;
             //body = <InGameMenu />;
 

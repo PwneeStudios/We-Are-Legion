@@ -17,56 +17,52 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var width = ui.width;
     var subImage = ui.subImage;
 
-    var makeName = function(english, chinese) {
-        return (
-            <span>
-                {english}
-                <span style={{'text-align':'right', 'float':'right'}}>{chinese}</span>
-            </span>
-        );
+    var make = function(english, chinese, value) {
+        return ({
+            name:
+                <span>
+                    {english}
+                    <span style={{'text-align':'right', 'float':'right'}}>{chinese}</span>
+                </span>,
+
+            selectedName: english,
+            value: value,
+        });
     };
 
-    var ChooseKingdom = React.createClass({
+    var kingdomChoices = [
+        make('Kingdom of Wei',   '魏', 1),
+        make('Kingdom of Shu',   '蜀', 3),
+        make('Kingdom of Wu',    '吳', 4),
+        make('Kingdom of Beast', '獸', 2),
+    ];
+
+    var teamChoices = [
+        make('Team 1', '一', 1),
+        make('Team 2', '二', 3),
+        make('Team 3', '三', 4),
+        make('Team 4', '四', 2),
+    ];
+
+    var Choose = React.createClass({
         mixins: [],
                 
         getInitialState: function() {
             return {
+                value: this.props.default,
             };
         },
         
         render: function() {
-            var choices = [
-                {name: makeName('Kingdom of Wei',   '魏'), value:1, },
-                {name: makeName('Kingdom of Shu',   '蜀'), value:3, },
-                {name: makeName('Kingdom of Wu',    '吳'), value:4, },
-                {name: makeName('Kingdom of Beast', '獸'), value:2, },
-            ];
-
-            return (
-                <Dropdown value='Kingdom' choices={choices} />
-            );
-        },
-    });
-
-    var ChooseTeam = React.createClass({
-        mixins: [],
-                
-        getInitialState: function() {
-            return {
-            };
-        },
-        
-        render: function() {
-            var choices = [
-                {name: makeName('Team 1', '一'), value:1, },
-                {name: makeName('Team 2', '二'), value:3, },
-                {name: makeName('Team 3', '三'), value:4, },
-                {name: makeName('Team 4', '四'), value:2, },
-            ];
-
-            return (
-                <Dropdown value='Team' choices={choices} />
-            );
+            if (this.props.activePlayer == this.props.player) {
+                return (
+                    <Dropdown value={this.state.value} choices={this.props.choices} />
+                );
+            } else {
+                return (
+                    <span>{this.props.choices[0].selectedName}</span>
+                );
+            }
         },
     });
 
@@ -82,8 +78,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return (
                 <tr>
                     <td>Player {this.props.player}</td>
-                    <td><ChooseTeam /></td>
-                    <td><ChooseKingdom /></td>
+                    <td><Choose choices={teamChoices} default='Choose team' {...this.props} /></td>
+                    <td><Choose choices={kingdomChoices} default='Choose kingdom' {...this.props} /></td>
                 </tr>
             );
         },
@@ -98,6 +94,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         },
         
         render: function() {
+            var _this = this;
+
             return (
                 <div>
                     <Div nonBlocking pos={pos(10,5)} size={width(80)}>
@@ -116,7 +114,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             {/* Player Table */}
                             <Div nonBlocking pos={pos(48,16.9)} size={width(50)} style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
                                 <Table style={{width:'100%'}}><tbody>
-                                    {_.map(_.range(1, 5), function(i) { return <PlayerEntry player={i} />; })}
+                                    {_.map(_.range(1, 5), function(i) {
+                                        return <PlayerEntry player={i} activePlayer={_this.props.lobbyPlayerNum} />;
+                                    })}
                                 </tbody></Table>
                             </Div>
 
