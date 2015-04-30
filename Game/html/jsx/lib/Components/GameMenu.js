@@ -13,6 +13,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var Dropdown = ui.Dropdown;
     var RenderAtMixin = ui.RenderAtMixin;
     var MenuItem = ui.MenuItem;
+    var Menu = ui.Menu;
     
     var pos = ui.pos;
     var size = ui.size;
@@ -29,19 +30,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         
         render: function() {
             return (
-                <div>
-                    <Div nonBlocking pos={pos(10,5)} size={width(20)} style={{'font-size':'1%','pointer-events':'auto'}}>
-                        
-                            <Nav bsStyle='pills' stacked style={{'pointer-events':'auto'}}>
-                                <MenuItem eventKey={1}>Create game</MenuItem>
-                                <MenuItem eventKey={2}>Find game</MenuItem>
-                                <MenuItem eventKey={3}>Options</MenuItem>
-                                <MenuItem eventKey={4}>Manual</MenuItem>
-                                <MenuItem eventKey={5}>Quit Game</MenuItem>
-                            </Nav>
-                        
-                    </Div>
-                </div>
+                <Menu>
+                    <MenuItem eventKey={1} to='create-game'>Create game</MenuItem>
+                    <MenuItem eventKey={2} to='find-game'>Find game</MenuItem>
+                    <MenuItem eventKey={3} to='options'>Options</MenuItem>
+                    <MenuItem eventKey={4} to='manual'>Manual</MenuItem>
+                    <MenuItem eventKey={4} to='manual'>Quit Game</MenuItem>
+                </Menu>
             );
         }
     });

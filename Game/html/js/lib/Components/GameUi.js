@@ -7,21 +7,34 @@ define(['lodash', 'react', 'interop', 'events',
         mixins: [],
 
         getInitialState: function() {
+            window.setScreen = this.setScreen;
+
             return {
-                screen:'game',
+                screen:'game-menu',
+                //screen:'in-game-menu',
             };
+        },
+
+        setScreen: function(screen) {
+            this.setState({
+                screen:screen,
+            });
         },
 
         render: function() {
             var body;
-            //body = <GameMenu />;
-            //body = <OptionsMenu />;
-            body = React.createElement(CreateGame, null);
-            //( )body = <FindGame />;
-            //body = <GameLobby host lobbyPlayerNum={2} />;
-            //body = <GameLobby lobbyPlayerNum={2} />;
-            //body = <InGameUi />;
-            //body = <InGameMenu />;
+
+            switch (this.state.screen) {
+                case 'game-menu': body = React.createElement(GameMenu, null); break;
+                case 'options': body = React.createElement(OptionsMenu, null); break;
+                case 'create-game': body = React.createElement(CreateGame, null); break;
+                case 'find-game': body = React.createElement(FindGame, null); break;
+                case 'game-lobby-host': body = React.createElement(GameLobby, {host: true, lobbyPlayerNum: 2}); break;
+                case 'game-lobby': body = React.createElement(GameLobby, {lobbyPlayerNum: 2}); break;
+                
+                case 'in-game-ui': body = React.createElement(InGameUi, null); break;
+                case 'in-game-menu': body = React.createElement(InGameMenu, null); break;
+            }        
 
             return (
                 React.createElement("div", null, 

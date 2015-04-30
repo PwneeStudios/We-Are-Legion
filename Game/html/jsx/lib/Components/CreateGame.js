@@ -13,6 +13,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var Dropdown = ui.Dropdown;
     var RenderAtMixin = ui.RenderAtMixin;
     var MenuItem = ui.MenuItem;
+    var Menu = ui.Menu;
     
     var pos = ui.pos;
     var size = ui.size;
@@ -29,16 +30,12 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         
         render: function() {
             return (
-                <div>
-                    <Div nonBlocking pos={pos(10,5)} size={width(20)} style={{'font-size':'1%','pointer-events':'auto'}}>
-                        <Nav bsStyle='pills' stacked style={{'pointer-events':'auto'}}>
-                            <MenuItem eventKey={1}>Public game</MenuItem>
-                            <MenuItem eventKey={2}>Friends only</MenuItem>
-                            <MenuItem eventKey={3}>Invite only</MenuItem>
-                            <MenuItem eventKey={4}>Back</MenuItem>
-                        </Nav>                        
-                    </Div>
-                </div>
+                <Menu>
+                    <MenuItem eventKey={1} to='game-lobby' params={{type:'public'}}>Public game</MenuItem>
+                    <MenuItem eventKey={2}>Friends only</MenuItem>
+                    <MenuItem eventKey={3}>Invite only</MenuItem>
+                    <MenuItem eventKey={4}>Back</MenuItem>
+                </Menu>
             );
         }
     });

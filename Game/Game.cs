@@ -392,7 +392,11 @@ namespace Game
 
         int DrawCount = 0;
 
-        enum GameState { TitleScreen, Spells, Instructions, ScenarioMenu, Loading, Game, ToEditor, ToMap }
+        enum GameState
+        {
+            TitleScreen, MainMenu, Loading, Game,
+            ToEditor, ToMap
+        }
 
 #if DEBUG
         //GameState State = Program.MultiDebug ? GameState.ToTest : GameState.ToEditor;
@@ -418,6 +422,8 @@ namespace Game
             ScenarioToLoad = name;
             State = GameState.Loading;
         }
+
+        bool MouseMovedSome = false;
 
         /// <summary>
         /// This is called when the game should draw itself.
@@ -447,6 +453,7 @@ namespace Game
             if (Buttons.Back.Down())
                 this.Exit();
 
+            if (World == null) World = new World(Skeleton: true);
             switch (State)
             {
                 case GameState.ToEditor:
@@ -473,51 +480,45 @@ namespace Game
 
                 case GameState.TitleScreen:
                     Render.StandardRenderSetup();
+                    
                     DrawFullScreen(Assets.ScreenTitle);
 
                     if (gameTime.TotalGameTime.Seconds < .25f)
                         break;
 
-                    if (Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||
-                        Keys.Enter.Pressed() || Keys.Space.Pressed() || Keys.Escape.Pressed())
+                    if (MouseMovedSome)
                     {
-                        State = GameState.Spells;
+                        World.DrawArrowCursor();
+                    }
+                    else
+                    {
+                        if (Input.DeltaMousPos.Length() > 40)
+                        {
+                            MouseMovedSome = true;
+                        }
+                    }
+
+                    if (InputHelper.SomethingPressed())
+                    {
+                        State = GameState.MainMenu;
                     }
 
                     break;
 
-                case GameState.Spells:
+                case GameState.MainMenu:
                     Render.StandardRenderSetup();
-                    DrawFullScreen(Assets.ScreenSpells);
+                    
+                    DrawFullScreen(Assets.ScreenDark);
+                    DrawWebView();
+                    World.DrawArrowCursor();
 
-                    if (Keys.Back.Pressed())
-                    {
-                        State = GameState.TitleScreen;
-                    }
-                    else if (Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||
-                        Keys.Enter.Pressed() || Keys.Space.Pressed() || Keys.Escape.Pressed())
-                    {
-                        State = GameState.Instructions;
-                    }
+                    //if (Keys.Back.Pressed())
+                    //{
+                    //    State = GameState.TitleScreen;
+                    //}
 
                     break;
-
-                case GameState.Instructions:
-                    Render.StandardRenderSetup();
-                    DrawFullScreen(Assets.ScreenInstructions);
-
-                    if (Keys.Back.Pressed())
-                    {
-                        State = GameState.Spells;
-                    }
-                    else if (Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||
-                        Keys.Enter.Pressed() || Keys.Space.Pressed() || Keys.Escape.Pressed())
-                    {
-                        State = GameState.ScenarioMenu;
-                    }
-
-                    break;
-
+/*
                 case GameState.ScenarioMenu:
                     Render.StandardRenderSetup();
                     DrawFullScreen(Assets.ScreenScenarios);
@@ -553,9 +554,8 @@ namespace Game
                         }
                     }
 
-                    //DrawWebView();
-
                     break;
+*/
 
                 case GameState.Loading:
                     PreGame();
@@ -597,7 +597,7 @@ namespace Game
                 case GameState.Game:
                     if (Keys.Escape.Pressed())
                     {
-                        State = GameState.ScenarioMenu;
+                        State = GameState.MainMenu;
                     }
 
                     if (awesomium.WebViewTexture != null)

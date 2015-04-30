@@ -2,11 +2,23 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 using FragSharpFramework;
+using FragSharpHelper;
 
 namespace Game
 {
+    public static class InputHelper
+    {
+        public static bool SomethingPressed()
+        {
+            return Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||
+                   Keys.Enter.Pressed() || Keys.Space.Pressed() || Keys.Escape.Pressed() ||
+                   Input.LeftMousePressed;
+        }
+    }
+
     public enum Toggle { Off, On, Flip };
     public static class ToggleExtension
     {

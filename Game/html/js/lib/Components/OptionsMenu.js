@@ -12,6 +12,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var UiImage = ui.UiImage;
     var UiButton = ui.UiButton;
     var Dropdown = ui.Dropdown;
+    var Menu = ui.Menu;
     var RenderAtMixin = ui.RenderAtMixin;
     
     var pos = ui.pos;
@@ -95,16 +96,12 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             ];
 
             return (
-                React.createElement("div", {className: "menu"}, 
-                    React.createElement(Div, {nonBlocking: true, pos: pos(10,5), size: width(30), style: {'font-size':'1%','pointer-events':'auto'}}, 
-                        React.createElement(Table, {style: {width:'100%'}}, React.createElement("tbody", null, 
-                            React.createElement(MenuSlider, null, "Sound"), 
-                            React.createElement(MenuSlider, null, "Music"), 
-                            React.createElement(MenuDropdown, {value: '1920x1080', choices: resolutionChoices}, "Resolution"), 
-                            React.createElement(MenuDropdown, {value: 'Fullscreen', choices: fullscreenChoices}, "Fullscreen setting"), 
-                            React.createElement(MenuButton, null, "Back")
-                        ))
-                    )
+                React.createElement(Menu, {width: 30, type: "table"}, 
+                    React.createElement(MenuSlider, null, "Sound"), 
+                    React.createElement(MenuSlider, null, "Music"), 
+                    React.createElement(MenuDropdown, {value: '1920x1080', choices: resolutionChoices}, "Resolution"), 
+                    React.createElement(MenuDropdown, {value: 'Fullscreen', choices: fullscreenChoices}, "Fullscreen setting"), 
+                    React.createElement(MenuButton, null, "Back")
                 )
             );
         }

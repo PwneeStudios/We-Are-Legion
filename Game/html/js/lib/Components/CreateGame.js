@@ -13,6 +13,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var Dropdown = ui.Dropdown;
     var RenderAtMixin = ui.RenderAtMixin;
     var MenuItem = ui.MenuItem;
+    var Menu = ui.Menu;
     
     var pos = ui.pos;
     var size = ui.size;
@@ -29,15 +30,11 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         
         render: function() {
             return (
-                React.createElement("div", null, 
-                    React.createElement(Div, {nonBlocking: true, pos: pos(10,5), size: width(20), style: {'font-size':'1%','pointer-events':'auto'}}, 
-                        React.createElement(Nav, {bsStyle: "pills", stacked: true, style: {'pointer-events':'auto'}}, 
-                            React.createElement(MenuItem, {eventKey: 1}, "Public game"), 
-                            React.createElement(MenuItem, {eventKey: 2}, "Friends only"), 
-                            React.createElement(MenuItem, {eventKey: 3}, "Invite only"), 
-                            React.createElement(MenuItem, {eventKey: 4}, "Back")
-                        )
-                    )
+                React.createElement(Menu, null, 
+                    React.createElement(MenuItem, {eventKey: 1, to: "game-lobby", params: {type:'public'}}, "Public game"), 
+                    React.createElement(MenuItem, {eventKey: 2}, "Friends only"), 
+                    React.createElement(MenuItem, {eventKey: 3}, "Invite only"), 
+                    React.createElement(MenuItem, {eventKey: 4}, "Back")
                 )
             );
         }

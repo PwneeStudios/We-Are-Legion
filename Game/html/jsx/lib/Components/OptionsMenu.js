@@ -12,6 +12,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var UiImage = ui.UiImage;
     var UiButton = ui.UiButton;
     var Dropdown = ui.Dropdown;
+    var Menu = ui.Menu;
     var RenderAtMixin = ui.RenderAtMixin;
     
     var pos = ui.pos;
@@ -95,17 +96,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             ];
 
             return (
-                <div className='menu'>
-                    <Div nonBlocking pos={pos(10,5)} size={width(30)} style={{'font-size':'1%','pointer-events':'auto'}}>
-                        <Table style={{width:'100%'}}><tbody>
-                            <MenuSlider>Sound</MenuSlider>
-                            <MenuSlider>Music</MenuSlider>
-                            <MenuDropdown value={'1920x1080'} choices={resolutionChoices}>Resolution</MenuDropdown>
-                            <MenuDropdown value={'Fullscreen'} choices={fullscreenChoices}>Fullscreen setting</MenuDropdown>
-                            <MenuButton>Back</MenuButton>
-                        </tbody></Table>
-                    </Div>
-                </div>
+                <Menu width={30} type='table'>
+                    <MenuSlider>Sound</MenuSlider>
+                    <MenuSlider>Music</MenuSlider>
+                    <MenuDropdown value={'1920x1080'} choices={resolutionChoices}>Resolution</MenuDropdown>
+                    <MenuDropdown value={'Fullscreen'} choices={fullscreenChoices}>Fullscreen setting</MenuDropdown>
+                    <MenuButton>Back</MenuButton>
+                </Menu>
             );
         }
     });

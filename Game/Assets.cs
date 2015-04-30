@@ -10,7 +10,8 @@ namespace Game
     public static class Assets
     {
         public static Texture2D
-            ScreenTitle, ScreenSpells, ScreenInstructions, ScreenScenarios, ScreenLoading,
+            ScreenTitle, ScreenDark, ScreenLoading,
+            ScreenSpells, ScreenInstructions, ScreenScenarios,
 
             White, FarColors,
 
@@ -33,10 +34,12 @@ namespace Game
         public static void Initialize()
         {
             ScreenTitle        = LoadTexture("Screen-Title");
+            ScreenLoading      = LoadTexture("Screen-Loading");
+            ScreenDark         = LoadTexture("Screen-Dark");
+
             ScreenSpells       = LoadTexture("Screen-Spells");
             ScreenInstructions = LoadTexture("Screen-Instructions");
             ScreenScenarios    = LoadTexture("Screen-Scenarios");
-            ScreenLoading      = LoadTexture("Screen-Loading");
 
             White               = LoadTexture("White");
             FarColors           = LoadTexture("FarColors");

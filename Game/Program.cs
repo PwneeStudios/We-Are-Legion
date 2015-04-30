@@ -126,7 +126,7 @@ namespace Game
                 //args_ = "--server                --port 13000 --p 1 --t 1234 --n 1 --debug --w 1280 --h 720".Split(' ');
 
                 // Demo release
-                //args_ = "--server                --port 13000 --p 1 --t 1234 --n 1 --w -1".Split(' ');
+                args_ = "--w 1920 --h 1080".Split(' ');
 
                 // Client
                 //args_ = "--client --ip 173.174.83.72 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --w 1280 --h 720 --debug".Split(' ');
@@ -136,7 +136,7 @@ namespace Game
 
                 // Single player windowed
                 //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --w 1280 --h 720".Split(' ');
-                args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --w 1920 --h 1080".Split(' ');
+                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --w 1920 --h 1080".Split(' ');
 
                 // Single player debug
                 //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double".Split(' ');
