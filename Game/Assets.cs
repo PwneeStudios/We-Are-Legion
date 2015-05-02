@@ -35,7 +35,7 @@ namespace Game
         {
             ScreenTitle        = LoadTexture("Screen-Title");
             ScreenLoading      = LoadTexture("Screen-Loading");
-            ScreenDark         = LoadTexture("Screen-Dark");
+            ScreenDark         = LoadTexture("Screen-Paint");
 
             ScreenSpells       = LoadTexture("Screen-Spells");
             ScreenInstructions = LoadTexture("Screen-Instructions");

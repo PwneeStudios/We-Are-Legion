@@ -13,6 +13,7 @@ p {
 
 body {
     background-color:rgba(0,0,0,0);
+    /* background-color:rgba(0,0,0,255); */
     overflow:hidden;
 
     user-select: none;
@@ -24,6 +25,7 @@ body {
     padding: 0;
     user-select: none;
     -webkit-user-select: none;
+    border-style: none;
 }
 
 /* ------
@@ -63,7 +65,10 @@ body {
 }
 
 .chat-background {
-    background-color:rgba(0,0,0,.45);
+    background-color: rgba(28, 30, 34, 1);
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 2px;
 }
 
 .chatMessage-enter {

@@ -46,9 +46,11 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/util', 'ui/Div'], function(_, 
                     );
             }
 
-            //<div className='menu'>
+            //var pos = pos(13,14);
+            var menuPos = pos(65,14);
+
             return (
-                <Div nonBlocking pos={pos(13,14)} size={width(this.props.width)} style={{'font-size':'1%','pointer-events':'auto'}}>
+                <Div nonBlocking pos={menuPos} size={width(this.props.width)} style={{'font-size':'1%','pointer-events':'auto'}}>
                     {body}
                 </Div>
             );
