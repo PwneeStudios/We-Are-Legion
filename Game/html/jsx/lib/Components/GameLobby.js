@@ -135,7 +135,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                                     <p>
                                         {this.props.host ? <Button>Start Game</Button> : null}
                                         &nbsp;
-                                        <Button>Leave Lobby</Button>
+                                        <Button onClick={back}>Leave Lobby</Button>
                                     </p>
                                 </div>
                             </Div>

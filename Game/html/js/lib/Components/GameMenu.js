@@ -35,7 +35,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     React.createElement(MenuItem, {eventKey: 2, to: "find-game"}, "Find game"), 
                     React.createElement(MenuItem, {eventKey: 3, to: "options"}, "Options"), 
                     React.createElement(MenuItem, {eventKey: 4, to: "manual"}, "Manual"), 
-                    React.createElement(MenuItem, {eventKey: 4, to: "manual"}, "Quit Game")
+                    React.createElement(MenuItem, {eventKey: 4, to: "back"}, "Quit Game")
                 )
             );
         }

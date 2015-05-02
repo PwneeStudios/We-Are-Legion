@@ -34,7 +34,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     <MenuItem eventKey={1} to='game-lobby' params={{type:'public'}}>Public game</MenuItem>
                     <MenuItem eventKey={2}>Friends only</MenuItem>
                     <MenuItem eventKey={3}>Invite only</MenuItem>
-                    <MenuItem eventKey={4}>Back</MenuItem>
+                    <MenuItem eventKey={4} to='back'>Back</MenuItem>
                 </Menu>
             );
         }

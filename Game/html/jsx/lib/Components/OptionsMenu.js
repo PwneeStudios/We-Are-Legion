@@ -68,7 +68,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 <tr style={{'background-color':'#1c1e22','pointer-events':'auto'}}>
                     <td></td>
                     <td>
-                        <Button style={{'float':'right','width':'100%'}}>
+                        <Button onClick={this.props.onClick} style={{'float':'right','width':'100%'}}>
                             {this.props.children}
                         </Button>
                     </td>
@@ -101,7 +101,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     <MenuSlider>Music</MenuSlider>
                     <MenuDropdown value={'1920x1080'} choices={resolutionChoices}>Resolution</MenuDropdown>
                     <MenuDropdown value={'Fullscreen'} choices={fullscreenChoices}>Fullscreen setting</MenuDropdown>
-                    <MenuButton>Back</MenuButton>
+                    <MenuButton onClick={back}>Back</MenuButton>
                 </Menu>
             );
         }

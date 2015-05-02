@@ -35,7 +35,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     <MenuItem eventKey={2} to='find-game'>Find game</MenuItem>
                     <MenuItem eventKey={3} to='options'>Options</MenuItem>
                     <MenuItem eventKey={4} to='manual'>Manual</MenuItem>
-                    <MenuItem eventKey={4} to='manual'>Quit Game</MenuItem>
+                    <MenuItem eventKey={4} to='back'>Quit Game</MenuItem>
                 </Menu>
             );
         }

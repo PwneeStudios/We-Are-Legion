@@ -135,7 +135,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                                     React.createElement("p", null, 
                                         this.props.host ? React.createElement(Button, null, "Start Game") : null, 
                                         " ", 
-                                        React.createElement(Button, null, "Leave Lobby")
+                                        React.createElement(Button, {onClick: back}, "Leave Lobby")
                                     )
                                 )
                             )

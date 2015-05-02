@@ -4,7 +4,11 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
     return React.createClass({
         onClick: function(e) {
             if (this.props.to) {
-                window.setScreen(this.props.to);
+                if (this.props.to === 'back') {
+                    window.back();
+                } else {
+                    window.setScreen(this.props.to);
+                }
             }
         },
 

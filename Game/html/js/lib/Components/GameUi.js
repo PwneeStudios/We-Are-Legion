@@ -8,14 +8,28 @@ define(['lodash', 'react', 'interop', 'events',
 
         getInitialState: function() {
             window.setScreen = this.setScreen;
+            window.back = this.back;
+            window.screenHistory = [];
 
-            return {
-                screen:'game-menu',
-                //screen:'in-game-menu',
-            };
+            return { };
+        },
+
+        componentDidMount: function() {
+            setScreen('game-menu');
+        },
+
+        back: function(e) {
+            screenHistory.pop();
+            this.setScreen(screenHistory.pop());
+
+            if (e) {
+                e.preventDefault();
+            }
         },
 
         setScreen: function(screen) {
+            screenHistory.push(screen);
+
             this.setState({
                 screen:screen,
             });

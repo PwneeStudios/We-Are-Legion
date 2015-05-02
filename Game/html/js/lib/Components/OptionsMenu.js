@@ -68,7 +68,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 React.createElement("tr", {style: {'background-color':'#1c1e22','pointer-events':'auto'}}, 
                     React.createElement("td", null), 
                     React.createElement("td", null, 
-                        React.createElement(Button, {style: {'float':'right','width':'100%'}}, 
+                        React.createElement(Button, {onClick: this.props.onClick, style: {'float':'right','width':'100%'}}, 
                             this.props.children
                         )
                     )
@@ -101,7 +101,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     React.createElement(MenuSlider, null, "Music"), 
                     React.createElement(MenuDropdown, {value: '1920x1080', choices: resolutionChoices}, "Resolution"), 
                     React.createElement(MenuDropdown, {value: 'Fullscreen', choices: fullscreenChoices}, "Fullscreen setting"), 
-                    React.createElement(MenuButton, null, "Back")
+                    React.createElement(MenuButton, {onClick: back}, "Back")
                 )
             );
         }
