@@ -483,7 +483,7 @@ namespace Game
                     
                     DrawFullScreen(Assets.ScreenTitle);
 
-                    if (gameTime.TotalGameTime.Seconds < .25f)
+                    if (gameTime.TotalGameTime.Seconds < .005f)
                         break;
 
                     if (MouseMovedSome)

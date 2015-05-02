@@ -1,7 +1,7 @@
 define(['lodash', 'react', 'interop', 'events',
-        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame'],
+        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame'],
     function(_, React,interop, events,
-            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame) {
+            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame) {
  
     return React.createClass({
         mixins: [],
@@ -16,6 +16,7 @@ define(['lodash', 'react', 'interop', 'events',
 
         componentDidMount: function() {
             setScreen('game-menu');
+            setScreen('find-game');
         },
 
         back: function(e) {
