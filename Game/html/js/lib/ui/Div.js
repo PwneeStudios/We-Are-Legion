@@ -16,7 +16,7 @@ define(['lodash', 'react'], function(_, React) {
             }
             
             return (
-                React.createElement("div", {style: style}, 
+                React.createElement("div", {style: style, className: this.props.className}, 
                     this.props.children
                 )
             );

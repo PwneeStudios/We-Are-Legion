@@ -25,14 +25,16 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, Rea
 
             var style = _.assign({}, {'pointer-events':'auto'}, this.props.style);
             var item = this.state.selected;
-            console.log(item);
 
             return (
                 React.createElement("div", {style: style}, 
                     React.createElement(DropdownButton, {title: item.selectedName || item.name}, 
-                        _.map(this.props.choices, function(choice) { return (
-                            React.createElement(Item, {item: choice, name: choice.name, onSelect: self.onSelect})
-                        );})
+                        _.map(this.props.choices, function(choice) { 
+                            var _choice = _.clone(choice);
+                            return (
+                                React.createElement(Item, {item: _choice, name: choice.name, onSelect: self.onSelect})
+                            );
+                        })
                     )
                 )
             );

@@ -7,7 +7,6 @@ define(['lodash', 'react', 'interop', 'events',
         mixins: [events.SetModeMixin],
 
         onSetMode: function(mode) {
-            console.log('hello');
             this.setMode(mode);
         },
 

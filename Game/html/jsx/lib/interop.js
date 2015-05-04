@@ -15,8 +15,6 @@ define(['lodash'], function(_) {
         },
 
         onLeave: function() {
-            console.log('leave');
-            
             if (interop.InXna()) {
                 xna.OnMouseLeave();
             }

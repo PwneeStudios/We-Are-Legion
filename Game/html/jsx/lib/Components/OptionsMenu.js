@@ -69,9 +69,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     });
 
     var MenuDropdown = React.createClass({
-        onSelect: function(value) {
+        onSelect: function(item) {
             if (interop.InXna()) {
-                xna['Set' + this.props.variable](value);
+                xna['Set' + this.props.variable](item.value);
             }
         },
 

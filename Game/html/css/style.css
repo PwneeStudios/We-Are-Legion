@@ -17,6 +17,18 @@ body {
     border-style: none;
 }
 
+.top {
+    pointer-events: auto;
+    z-index: 100;
+}
+
+/* ------
+   Carousel
+   ------ */
+
+.carousel-indicators {
+    bottom:30%;
+}
 
 /* ------
    Font

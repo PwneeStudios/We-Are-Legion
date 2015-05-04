@@ -948,7 +948,7 @@ namespace Game
             return Jsonify(options);
         }
 
-        int Resolution = 23;
+        int Resolution = 1;
         JSValue SetResolution(object sender, JavascriptMethodEventArgs e)
         {
             Resolution = (int)e.Arguments[0];

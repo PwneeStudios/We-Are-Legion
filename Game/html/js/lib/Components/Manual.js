@@ -65,6 +65,15 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                             React.createElement("p", null, "Praesent commodo cursus magna, vel scelerisque nisl consectetur.")
                         )
                     )
+                ), 
+
+                /* Buttons */
+                React.createElement(Div, {className: "top", nonBlocking: true, pos: pos(90,90), size: width(60)}, 
+                    React.createElement("div", {style: {'pointer-events':'auto'}}, 
+                        React.createElement("p", null, 
+                            React.createElement(Button, {onClick: back}, "Back")
+                        )
+                    )
                 )
             )
         );

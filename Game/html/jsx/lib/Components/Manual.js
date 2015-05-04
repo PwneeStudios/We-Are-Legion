@@ -66,6 +66,15 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                         </div>
                     </CarouselItem>
                 </Carousel>
+
+                {/* Buttons */}
+                <Div className='top' nonBlocking pos={pos(90,90)} size={width(60)}>
+                    <div style={{'pointer-events':'auto'}}>
+                        <p>
+                            <Button onClick={back}>Back</Button>
+                        </p>
+                    </div>
+                </Div>
             </Div>
         );
     }

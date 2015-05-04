@@ -16,7 +16,7 @@ define(['lodash', 'react'], function(_, React) {
             }
             
             return (
-                <div style={style}>
+                <div style={style} className={this.props.className}>
                     {this.props.children}
                 </div>
             );

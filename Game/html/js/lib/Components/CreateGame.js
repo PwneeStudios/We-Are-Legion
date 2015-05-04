@@ -31,9 +31,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         render: function() {
             return (
                 React.createElement(Menu, null, 
-                    React.createElement(MenuItem, {eventKey: 1, to: "game-lobby", params: {type:'public'}}, "Public game"), 
-                    React.createElement(MenuItem, {eventKey: 2}, "Friends only"), 
-                    React.createElement(MenuItem, {eventKey: 3}, "Invite only"), 
+                    React.createElement(MenuItem, {eventKey: 1, to: "game-lobby-host", params: {type:'public'}}, "Public game"), 
+                    React.createElement(MenuItem, {eventKey: 2, to: "game-lobby-host", params: {type:'friends'}}, "Friends only"), 
+                    React.createElement(MenuItem, {eventKey: 3, to: "game-lobby-host", params: {type:'private'}}, "Invite only"), 
                     React.createElement(MenuItem, {eventKey: 4, to: "back"}, "Back")
                 )
             );
