@@ -6,12 +6,23 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, Rea
                 
         getInitialState: function() {
             return {
-                value: this.props.value,
+                value: this.props.selected.value,
+                name: this.props.selected.name,
             };
         },
 
         onSelect: function(item) {
-            console.log(item.props.value);
+            var value = item.props.value;
+            var name = item.props.name;
+
+            //console.log(value);
+            this.setState({
+                value:value,
+                name:name,
+            });
+            if (this.props.onSelect) {
+                this.props.onSelect(value);
+            }
         },
         
         render: function() {
@@ -21,7 +32,7 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, Rea
 
             return (
                 React.createElement("div", {style: style}, 
-                    React.createElement(DropdownButton, {title: this.state.value}, 
+                    React.createElement(DropdownButton, {title: this.state.name}, 
                         _.map(this.props.choices, function(choice) { return (
                             React.createElement(Item, {value: choice.value, name: choice.name, onSelect: self.onSelect})
                         );})

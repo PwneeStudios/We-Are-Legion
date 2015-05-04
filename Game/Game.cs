@@ -29,6 +29,8 @@ using Newtonsoft.Json;
 
 namespace Game
 {
+    using Dict = Dictionary<string, object>;
+
     public class MainDataSource : DataSource
     {
         protected override void OnRequest(DataSourceRequest request)
@@ -178,11 +180,12 @@ namespace Game
             xnaObj.Bind("GetMusicVolume", GetMusicVolume);
             xnaObj.Bind("SetSoundVolume", SetSoundVolume);
             xnaObj.Bind("GetSoundVolume", GetSoundVolume);
-            //xnaObj.Bind("SetFullscreen", SetFullscreen);
-            //xnaObj.Bind("GetFullscreen", GetFullscreen);
-            //xnaObj.Bind("SetResolution", SetResolution);
-            //xnaObj.Bind("GetResolution", GetResolution);
-            //xnaObj.Bind("GetResolutionValues", GetResolutionValues);
+            xnaObj.Bind("SetFullscreen", SetFullscreen);
+            xnaObj.Bind("GetFullscreen", GetFullscreen);
+            xnaObj.Bind("GetFullscreenValues", GetFullscreenValues);
+            xnaObj.Bind("SetResolution", SetResolution);
+            xnaObj.Bind("GetResolution", GetResolution);
+            xnaObj.Bind("GetResolutionValues", GetResolutionValues);
 
             awesomium.WebView.Source = @"asset://root/index.html".ToUri();
             while (!awesomium.WebView.IsDocumentReady)
@@ -747,11 +750,17 @@ namespace Game
             }
         }
 
-        //JavaScriptSerializer jsonify = new JavaScriptSerializer();
         JsonSerializer jsonify = new JsonSerializer();
-
-        StringBuilder sb = new StringBuilder(10000);
+        JsonSerializerSettings settings = new JsonSerializerSettings();
         Dictionary<string, object> obj = new Dictionary<string, object>(100);
+
+        string Jsonify(object obj)
+        {
+            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            var json = JsonConvert.SerializeObject(obj, Formatting.None, settings);
+            return json;
+        }
+
         public bool ShowChat = false;
         public void ToggleChat(Toggle value = Toggle.Flip)
         {
@@ -766,13 +775,9 @@ namespace Game
             UpdateShow();
         }
 
-        JsonSerializerSettings settings = new JsonSerializerSettings();
         void SendDict(Dictionary<string, object> dict, string function)
         {
-            //var json = jsonify.Serialize(dict);
-            
-            settings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            var json = JsonConvert.SerializeObject(dict, Formatting.None, settings);
+            var json = Jsonify(dict);
 
             try
             {
@@ -916,14 +921,20 @@ namespace Game
 
         JSValue GetFullscreenValues(object sender, JavascriptMethodEventArgs e)
         {
-            var list = new List<JSValue>();
+            var options = new List<Dict>();
+            var dict = new Dict();
 
-            var o = new JSObject();
-            o["name"] = "Fullscreen";
-            o["value"] = true;
-            list.Add(o);
+            dict = new Dict();
+            dict["name"] = "Fullscreen";
+            dict["value"] = true;
+            options.Add(dict);
 
-            return list.ToArray();
+            dict = new Dict();
+            dict["name"] = "Windowed";
+            dict["value"] = false;
+            options.Add(dict);
+
+            return Jsonify(options);
         }
 
         int Resolution = 23;
@@ -941,15 +952,20 @@ namespace Game
 
         JSValue GetResolutionValues(object sender, JavascriptMethodEventArgs e)
         {
-            return 23;
-            var list = new List<JSValue>();
+            var options = new List<Dict>();
+            var dict = new Dict();
 
-            var o = new JSObject();
-            o["name"] = "800x600";
-            o["value"] = 1;
-            list.Add(o);
+            dict = new Dict();
+            dict["name"] = "800x600";
+            dict["value"] = 1;
+            options.Add(dict);
 
-            return new JSValue(list.ToArray());
+            dict = new Dict();
+            dict["name"] = "1280x720";
+            dict["value"] = 2;
+            options.Add(dict);
+
+            return Jsonify(options);
         }
     }
 }

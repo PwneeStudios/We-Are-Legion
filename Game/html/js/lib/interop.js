@@ -1,4 +1,4 @@
-define(['jquery', 'lodash'], function($, _) {
+define(['lodash'], function(_) {
     var interop = {
         InXna: function() {
             return typeof xna !== 'undefined';
@@ -9,8 +9,6 @@ define(['jquery', 'lodash'], function($, _) {
         },
         
         onOver: function() {
-            console.log('hi');
-            
             if (interop.InXna()) {
                 xna.OnMouseOver();
             }
@@ -22,6 +20,11 @@ define(['jquery', 'lodash'], function($, _) {
             if (interop.InXna()) {
                 xna.OnMouseLeave();
             }
+        },
+
+        get: function(funcName) {
+            var stringResult = xna[funcName]();
+            return JSON.parse(stringResult);
         },
     };
     

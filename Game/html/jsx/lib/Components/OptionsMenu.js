@@ -69,25 +69,22 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     });
 
     var MenuDropdown = React.createClass({
-    	//var setVal = xna['Set' + this.props.variable]();
+        onSelect: function(value) {
+            if (interop.InXna()) {
+                xna['Set' + this.props.variable](value);
+            }
+        },
 
         render: function() {
-        	return <br />;
         	var choices, value;
 
         	if (interop.InXna()) {
-        		console.log('start');
-	        	choices = xna['Get' + this.props.variable + 'Values']();
-	        	console.log('got');
-	        	console.log(choices);
-	        	choices = choices || this.props.choices;
-	        	console.log(choices);
-	        	console.log('finish');
+        		value = xna['Get' + this.props.variable]();        		
+	        	choices = interop.get('Get' + this.props.variable + 'Values');
+				choices = choices || this.props.choices;
 
 	        	var item = xna['Get' + this.props.variable]();
         		value = _.find(choices, function(o) {return o.value === value;});
-        		console.log('finish');
-        		console.log(value);
 
 	        	if (!value) {
 	        		value = choices[0];
@@ -101,7 +98,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 <tr style={{'background-color':'#1c1e22'}}>
                     <td>{this.props.children}</td>
                     <td className='menu-cell-dropdown'>
-                        <Dropdown value={value.name} choices={choices} style={{'float':'right'}} />
+                        <Dropdown selected={value} choices={choices} onSelect={this.onSelect} style={{'float':'right'}} />
                     </td>
                 </tr>
             );
