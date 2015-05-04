@@ -14,7 +14,8 @@ define(['lodash'], function(_) {
             },
             
             componentWillUnmount: function() {
-                _.remove(callbacks, function(e) { e === this; });
+                var _this = this;
+                _.remove(callbacks, function(e) { return e === _this; });
             },
         };
     };
@@ -24,5 +25,6 @@ define(['lodash'], function(_) {
         OnChatMixin: makeEventMixin('addChatMessage', 'onChatMessage'),
         ShowUpdateMixin: makeEventMixin('show', 'onShowUpdate'),
         SetParamsMixin: makeEventMixin('setParams', 'onSetParams'),
+        SetModeMixin: makeEventMixin('setMode', 'onSetMode'),
     };
 });

@@ -49,14 +49,20 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 
         getInitialState: function() {
             return {
-                value: this.props.default,
+                selected: this.props.choices[0],
             };
         },
         
+        onSelected: function(item) {
+            this.setState({
+                selected: item,
+            });
+        },
+
         render: function() {
             if (this.props.activePlayer == this.props.player) {
                 return (
-                    <Dropdown value={this.state.value} choices={this.props.choices} />
+                    <Dropdown selected={this.state.selected} choices={this.props.choices} onSelected={this.onSelected} />
                 );
             } else {
                 return (

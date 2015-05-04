@@ -32,10 +32,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         render: function() {
             return (
                 <Menu>
-                    <MenuItem eventKey={1}>Return to game</MenuItem>
+                    <MenuItem eventKey={1} to='back'>Return to game</MenuItem>
                     <MenuItem eventKey={2}>Pause game</MenuItem>
-                    <MenuItem eventKey={3}>Options</MenuItem>
-                    <MenuItem eventKey={5}>Quit Game</MenuItem>
+                    <MenuItem eventKey={3} to='options'>Options</MenuItem>
+                    <MenuItem eventKey={5} toMode='main-menu'>Quit Game</MenuItem>
                 </Menu>
             );
         }

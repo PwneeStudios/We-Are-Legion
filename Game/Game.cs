@@ -513,6 +513,8 @@ namespace Game
                     if (InputHelper.SomethingPressed())
                     {
                         State = GameState.MainMenu;
+                        SendString("setMode", "main-menu");
+                        SendString("setScreen", "game-menu");
                     }
 
                     break;
@@ -775,17 +777,26 @@ namespace Game
             UpdateShow();
         }
 
-        void SendDict(Dictionary<string, object> dict, string function)
+        void SendDict(string function, Dictionary<string, object> dict)
         {
             var json = Jsonify(dict);
+            SendString(function, json);
+        }
 
+        void SendString(string function, string s)
+        {
+            Send(function, '\'' + s + '\'');
+        }
+
+        void Send(string function, string s)
+        {
             try
             {
-                awesomium.WebView.ExecuteJavascript(function + "(" + json + ");");
+                awesomium.WebView.ExecuteJavascript(function + "(" + s + ");");
             }
             catch
             {
-                Console.WriteLine("Could not communicate with Awesomium");
+                Console.WriteLine("Could not communicate with Awesomium, {0}({1})", function, s);
             }
         }
 
@@ -796,7 +807,7 @@ namespace Game
             obj["MyPlayerNumber"] = World.MyPlayerNumber;
             obj["PlayerInfo"] = ShowAllPlayers ? World.PlayerInfo : null;
 
-            SendDict(obj, "update");
+            SendDict("update", obj);
         }
 
         void UpdateParams()
@@ -805,7 +816,7 @@ namespace Game
             obj["Spells"] = Spells.SpellDict;
             obj["Buildings"] = World.MyPlayerInfo.Params.Buildings;
 
-            SendDict(obj, "setParams");
+            SendDict("setParams", obj);
         }
 
         void UpdateShow()
@@ -814,7 +825,7 @@ namespace Game
             obj["ShowChat"] = ShowChat;
             obj["ShowAllPlayers"] = ShowAllPlayers;
 
-            SendDict(obj, "show");            
+            SendDict("show", obj);
         }
 
         public void AddChatMessage(int player, string message)
@@ -824,7 +835,7 @@ namespace Game
             obj["player"] = player;
             obj["name"] = PlayerInfo[player].Name;
 
-            SendDict(obj, "addChatMessage");
+            SendDict("addChatMessage", obj);
         }
 
         public bool MouseOverHud = false;

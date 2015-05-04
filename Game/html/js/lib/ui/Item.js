@@ -11,7 +11,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         
         onSelect: function() {
             if (this.props.onSelect) {
-                this.props.onSelect(this);
+                this.props.onSelect(this.props.item);
             }
         },
 

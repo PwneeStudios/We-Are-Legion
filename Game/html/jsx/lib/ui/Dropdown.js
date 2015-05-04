@@ -6,22 +6,17 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, Rea
                 
         getInitialState: function() {
             return {
-                value: this.props.selected.value,
-                name: this.props.selected.name,
+                selected: this.props.selected,
             };
         },
 
         onSelect: function(item) {
-            var value = item.props.value;
-            var name = item.props.name;
-
-            //console.log(value);
             this.setState({
-                value:value,
-                name:name,
+                selected: item,
             });
+
             if (this.props.onSelect) {
-                this.props.onSelect(value);
+                this.props.onSelect(item);
             }
         },
         
@@ -29,12 +24,14 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, Rea
             var self = this;
 
             var style = _.assign({}, {'pointer-events':'auto'}, this.props.style);
+            var item = this.state.selected;
+            console.log(item);
 
             return (
                 <div style={style}>
-                    <DropdownButton title={this.state.name}>
+                    <DropdownButton title={item.selectedName || item.name}>
                         {_.map(this.props.choices, function(choice) { return (
-                            <Item value={choice.value} name={choice.name} onSelect={self.onSelect}/>
+                            <Item item={choice} name={choice.name} onSelect={self.onSelect}/>
                         );})}
                     </DropdownButton>
                 </div>
