@@ -31,17 +31,36 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     });
 
     var MenuSlider = React.createClass({
+    	onChange: function(e) {
+			var value = this.refs.slider.getDOMNode().value;
+			this.setState({value:value});
+
+        	if (interop.InXna()) {
+	        	xna['Set' + this.props.variable](value);
+			}
+    	},
+
+    	getInitialState: function() {
+        	var value = 0.0;
+        	if (interop.InXna()) {
+				value = xna['Get' + this.props.variable]();
+        	}
+
+    		return {value:value};
+    	},
+
         render: function() {
             return (
                 <tr style={{'background-color':'#1c1e22','pointer-events':'auto'}}>
                     <td>{this.props.children}</td>
                     <td>
                         <input style={{'float':'right','width':'100%'}}
-                            type="range"
-                            value={this.props.value}
+                        	ref='slider'
+                            type='range'
+                            value={this.state.value}
                             min={0}
                             max={1}
-                            onInput={null}
+                            onChange={this.onChange}
                             step={0.05} />
                     </td>
                 </tr>
@@ -50,12 +69,39 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     });
 
     var MenuDropdown = React.createClass({
+    	//var setVal = xna['Set' + this.props.variable]();
+
         render: function() {
+        	return <br />;
+        	var choices, value;
+
+        	if (interop.InXna()) {
+        		console.log('start');
+	        	choices = xna['Get' + this.props.variable + 'Values']();
+	        	console.log('got');
+	        	console.log(choices);
+	        	choices = choices || this.props.choices;
+	        	console.log(choices);
+	        	console.log('finish');
+
+	        	var item = xna['Get' + this.props.variable]();
+        		value = _.find(choices, function(o) {return o.value === value;});
+        		console.log('finish');
+        		console.log(value);
+
+	        	if (!value) {
+	        		value = choices[0];
+	        	}
+        	} else {
+        		choices = this.props.choices;
+        		value = choices[0];
+        	}
+
             return (
                 <tr style={{'background-color':'#1c1e22'}}>
                     <td>{this.props.children}</td>
                     <td className='menu-cell-dropdown'>
-                        <Dropdown value={this.props.value} choices={this.props.choices} style={{'float':'right'}} />
+                        <Dropdown value={value.name} choices={choices} style={{'float':'right'}} />
                     </td>
                 </tr>
             );
@@ -87,20 +133,20 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         
         render: function() {
             var resolutionChoices = [
-                {name: '1920x1080', value:1},
+                {name: '1920x1080', value:[1920,1080]},
             ];
 
             var fullscreenChoices = [
-                {name: 'Fullscreen', value:1},
-                {name: 'Windowed', value:2},
+                {name: 'Fullscreen', value:true},
+                {name: 'Windowed', value:false},
             ];
 
             return (
                 <Menu width={30} type='table'>
-                    <MenuSlider>Sound</MenuSlider>
-                    <MenuSlider>Music</MenuSlider>
-                    <MenuDropdown value={'1920x1080'} choices={resolutionChoices}>Resolution</MenuDropdown>
-                    <MenuDropdown value={'Fullscreen'} choices={fullscreenChoices}>Fullscreen setting</MenuDropdown>
+                    <MenuSlider variable='SoundVolume'>Sound</MenuSlider>
+                    <MenuSlider variable='MusicVolume'>Music</MenuSlider>
+                    <MenuDropdown variable='Resolution' choices={resolutionChoices}>Resolution</MenuDropdown>
+                    <MenuDropdown variable='Fullscreen' choices={fullscreenChoices}>Fullscreen setting</MenuDropdown>
                     <MenuButton onClick={back}>Back</MenuButton>
                 </Menu>
             );

@@ -16,7 +16,8 @@ define(['lodash', 'react', 'interop', 'events',
 
         componentDidMount: function() {
             setScreen('game-menu');
-            setScreen('find-game');
+            //setScreen('find-game');
+            setScreen('options');
         },
 
         back: function(e) {

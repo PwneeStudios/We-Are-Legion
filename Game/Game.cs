@@ -13,6 +13,7 @@ using FragSharpFramework;
 
 using Awesomium.Core;
 using Awesomium.Core.Data;
+using Awesomium.Core.Dynamic;
 using AwesomiumXNA;
 
 using System.Text;
@@ -28,7 +29,7 @@ using Newtonsoft.Json;
 
 namespace Game
 {
-    public class SampleDataSource : DataSource
+    public class MainDataSource : DataSource
     {
         protected override void OnRequest(DataSourceRequest request)
         {
@@ -149,7 +150,7 @@ namespace Game
             Components.Add(awesomium);
 
             // Add a data source that will simply act as a pass-through
-            awesomium.WebView.WebSession.AddDataSource("sample", new SampleDataSource());
+            awesomium.WebView.WebSession.AddDataSource("root", new MainDataSource());
 
             // This will trap all console messages
             awesomium.WebView.ConsoleMessage += WebView_ConsoleMessage;
@@ -173,13 +174,21 @@ namespace Game
             xnaObj.Bind("OnMouseLeave", OnMouseLeave);
             xnaObj.Bind("ActionButtonPressed", ActionButtonPressed);
             xnaObj.Bind("OnChatEnter", OnChatEnter);
+            xnaObj.Bind("SetMusicVolume", SetMusicVolume);
+            xnaObj.Bind("GetMusicVolume", GetMusicVolume);
+            xnaObj.Bind("SetSoundVolume", SetSoundVolume);
+            xnaObj.Bind("GetSoundVolume", GetSoundVolume);
+            //xnaObj.Bind("SetFullscreen", SetFullscreen);
+            //xnaObj.Bind("GetFullscreen", GetFullscreen);
+            //xnaObj.Bind("SetResolution", SetResolution);
+            //xnaObj.Bind("GetResolution", GetResolution);
+            //xnaObj.Bind("GetResolutionValues", GetResolutionValues);
 
-            awesomium.WebView.Source = @"asset://sample/index.html".ToUri();
+            awesomium.WebView.Source = @"asset://root/index.html".ToUri();
             while (!awesomium.WebView.IsDocumentReady)
             {
                 WebCore.Update();
             }
-            //UpdateShow();
         }
 
         JSValue WebView_ConsoleLog(object sender, JavascriptMethodEventArgs javascriptMethodEventArgs)
@@ -814,21 +823,21 @@ namespace Game
         }
 
         public bool MouseOverHud = false;
-        protected JSValue OnMouseLeave(object sender, JavascriptMethodEventArgs e)
+        JSValue OnMouseLeave(object sender, JavascriptMethodEventArgs e)
         {
             MouseOverHud = false;
             Console.WriteLine(MouseOverHud);
             return JSValue.Null;
         }
 
-        protected JSValue OnMouseOver(object sender, JavascriptMethodEventArgs e)
+        JSValue OnMouseOver(object sender, JavascriptMethodEventArgs e)
         {
             MouseOverHud = true;
             Console.WriteLine(MouseOverHud);
             return JSValue.Null;
         }
 
-        protected JSValue ActionButtonPressed(object sender, JavascriptMethodEventArgs e)
+        JSValue ActionButtonPressed(object sender, JavascriptMethodEventArgs e)
         {
             try
             {
@@ -852,7 +861,7 @@ namespace Game
             return JSValue.Null;
         }
 
-        protected JSValue OnChatEnter(object sender, JavascriptMethodEventArgs e)
+        JSValue OnChatEnter(object sender, JavascriptMethodEventArgs e)
         {
             string message = e.Arguments[0];
 
@@ -865,6 +874,82 @@ namespace Game
             ToggleChat(Toggle.Off);
 
             return JSValue.Null;
+        }
+
+        double MusicVolume, SoundVolume;
+        JSValue SetSoundVolume(object sender, JavascriptMethodEventArgs e)
+        {
+            SoundVolume = double.Parse(e.Arguments[0].ToString());
+
+            return JSValue.Null;
+        }
+
+        JSValue GetSoundVolume(object sender, JavascriptMethodEventArgs e)
+        {
+            return SoundVolume;
+        }
+
+        JSValue SetMusicVolume(object sender, JavascriptMethodEventArgs e)
+        {
+            MusicVolume = double.Parse(e.Arguments[0].ToString());
+
+            return JSValue.Null;
+        }
+
+        JSValue GetMusicVolume(object sender, JavascriptMethodEventArgs e)
+        {
+            return MusicVolume;
+        }
+
+        bool Fullscreen;
+        JSValue SetFullscreen(object sender, JavascriptMethodEventArgs e)
+        {
+            Fullscreen = (bool)e.Arguments[0];
+
+            return JSValue.Null;
+        }
+
+        JSValue GetFullscreen(object sender, JavascriptMethodEventArgs e)
+        {
+            return Fullscreen;
+        }
+
+        JSValue GetFullscreenValues(object sender, JavascriptMethodEventArgs e)
+        {
+            var list = new List<JSValue>();
+
+            var o = new JSObject();
+            o["name"] = "Fullscreen";
+            o["value"] = true;
+            list.Add(o);
+
+            return list.ToArray();
+        }
+
+        int Resolution = 23;
+        JSValue SetResolution(object sender, JavascriptMethodEventArgs e)
+        {
+            Resolution = (int)e.Arguments[0];
+
+            return JSValue.Null;
+        }
+
+        JSValue GetResolution(object sender, JavascriptMethodEventArgs e)
+        {
+            return Resolution;
+        }
+
+        JSValue GetResolutionValues(object sender, JavascriptMethodEventArgs e)
+        {
+            return 23;
+            var list = new List<JSValue>();
+
+            var o = new JSObject();
+            o["name"] = "800x600";
+            o["value"] = 1;
+            list.Add(o);
+
+            return new JSValue(list.ToArray());
         }
     }
 }
