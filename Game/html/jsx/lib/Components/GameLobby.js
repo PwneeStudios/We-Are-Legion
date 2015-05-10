@@ -1,9 +1,16 @@
-define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, React, ReactBootstrap, interop, events, ui, Chat) {
+define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui',
+        'Components/Chat', 'Components/MapPicker'],
+function(_, React, ReactBootstrap, interop, events, ui,
+         Chat, MapPicker) {
+
     var Panel = ReactBootstrap.Panel;
     var Button = ReactBootstrap.Button;
     var Well = ReactBootstrap.Well;
     var Popover = ReactBootstrap.Popover;
     var Table = ReactBootstrap.Table;
+    var ListGroup = ReactBootstrap.ListGroup;
+    var ListGroupItem = ReactBootstrap.ListGroupItem;
+    var ModalTrigger = ReactBootstrap.ModalTrigger;
     
     var Div = ui.Div;
     var Gap = ui.Gap;
@@ -96,9 +103,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 
         getInitialState: function() {
             return {
+                lobbyPlayerNum: 3,
             };
         },
-        
+
         render: function() {
             var _this = this;
 
@@ -121,7 +129,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             <Div nonBlocking pos={pos(48,16.9)} size={width(50)} style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
                                 <Table style={{width:'100%'}}><tbody>
                                     {_.map(_.range(1, 5), function(i) {
-                                        return <PlayerEntry player={i} activePlayer={_this.props.lobbyPlayerNum} />;
+                                        return <PlayerEntry player={i} activePlayer={_this.state.lobbyPlayerNum} />;
                                     })}
                                 </tbody></Table>
                             </Div>
@@ -130,7 +138,11 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             <Div nonBlocking pos={pos(38,68)} size={width(60)}>
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
-                                        {this.props.host ? <Button>Choose map...</Button> : null}
+                                        {this.props.params.host ? 
+                                            <ModalTrigger modal={<MapPicker />}>
+                                                <Button bsStyle='primary' bsSize='large'>Choose map...</Button>
+                                            </ModalTrigger>
+                                            : null}
                                     </p>
                                 </div>
                             </Div>
@@ -139,7 +151,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             <Div nonBlocking pos={pos(38,80)} size={width(60)}>
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
-                                        {this.props.host ? <Button>Start Game</Button> : null}
+                                        {this.props.params.host ? <Button>Start Game</Button> : null}
                                         &nbsp;
                                         <Button onClick={back}>Leave Lobby</Button>
                                     </p>

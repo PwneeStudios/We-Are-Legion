@@ -34,8 +34,8 @@ define(['lodash', 'react', 'interop', 'events',
             setMode('main-menu');
             setScreen('game-menu');
             //setScreen('options');
-            //setScreen('game-lobby');
-            setScreen('manual');
+            setScreen('game-lobby', {host:true});
+            //setScreen('manual');
 
             //setMode('in-game');
             //setScreen('in-game-ui');
@@ -44,7 +44,8 @@ define(['lodash', 'react', 'interop', 'events',
 
         refresh: function(e) {
             if (screenHistory.length > 0) {
-                this.setScreen(screenHistory.pop());                
+                var prev = screenHistory.pop();
+                this.setScreen(prev.screen, prev.params);
             }
 
             if (e) {
@@ -55,7 +56,9 @@ define(['lodash', 'react', 'interop', 'events',
         back: function(e) {
             if (screenHistory.length > 0) {
                 screenHistory.pop();
-                this.setScreen(screenHistory.pop());                
+
+                var prev = screenHistory.pop();
+                this.setScreen(prev.screen, prev.params);
             }
 
             if (e) {
@@ -77,11 +80,12 @@ define(['lodash', 'react', 'interop', 'events',
             this.refresh();
         },
 
-        setScreen: function(screen) {
-            screenHistory.push(screen);
+        setScreen: function(screen, params) {
+            screenHistory.push({screen:screen,params:params});
 
             this.setState({
                 screen:screen,
+                params:params,
             });
         },
 
@@ -94,12 +98,15 @@ define(['lodash', 'react', 'interop', 'events',
                 case 'manual': body = <Manual />; break;
                 case 'create-game': body = <CreateGame />; break;
                 case 'find-game': body = <FindGame />; break;
-                case 'game-lobby-host': body = <GameLobby host lobbyPlayerNum={2} />; break;
-                case 'game-lobby': body = <GameLobby lobbyPlayerNum={2} />; break;
+                case 'game-lobby': body = <GameLobby />; break;
                 
                 case 'in-game-ui': body = <InGameUi />; break;
                 case 'in-game-menu': body = <InGameMenu />; break;
-            }        
+            }
+
+            if (body) {
+                body.props.params = this.state.params;
+            }
 
             return (
                 <div>

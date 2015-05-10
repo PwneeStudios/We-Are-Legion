@@ -7,10 +7,10 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                 if (this.props.to === 'back') {
                     window.back();
                 } else {
-                    window.setScreen(this.props.to);
+                    window.setScreen(this.props.to, this.props.params);
                 }
             } else if (this.props.toMode) {
-                window.setMode(this.props.toMode);
+                window.setMode(this.props.toMode, this.props.params);
             }
         },
 
