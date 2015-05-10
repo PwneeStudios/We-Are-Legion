@@ -28,6 +28,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             };
         },
         
+        onClick: function() {
+            setScreen('game-lobby', {host:false});
+        },
+
         render: function() {
             return (
                 <tr>
@@ -35,7 +39,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     <td>{this.props.mapName}</td>
                     <td>{this.props.players}</td>
                     <td>
-                        <Button>
+                        <Button onClick={this.onClick}>
                             Join
                         </Button>
                     </td>
@@ -90,8 +94,6 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             <Div nonBlocking pos={pos(38,80)} size={width(60)}>
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
-                                        {this.props.host ? <Button>Join Game</Button> : null}
-                                        &nbsp;
                                         <Button onClick={back}>Back</Button>
                                     </p>
                                 </div>

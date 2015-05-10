@@ -28,6 +28,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             };
         },
         
+        onClick: function() {
+            setScreen('game-lobby', {host:false});
+        },
+
         render: function() {
             return (
                 React.createElement("tr", null, 
@@ -35,7 +39,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     React.createElement("td", null, this.props.mapName), 
                     React.createElement("td", null, this.props.players), 
                     React.createElement("td", null, 
-                        React.createElement(Button, null, 
+                        React.createElement(Button, {onClick: this.onClick}, 
                             "Join"
                         )
                     )
@@ -90,8 +94,6 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             React.createElement(Div, {nonBlocking: true, pos: pos(38,80), size: width(60)}, 
                                 React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
                                     React.createElement("p", null, 
-                                        this.props.host ? React.createElement(Button, null, "Join Game") : null, 
-                                        " ", 
                                         React.createElement(Button, {onClick: back}, "Back")
                                     )
                                 )
