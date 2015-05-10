@@ -155,9 +155,11 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             ), 
 
                             /* Game visibility type */
-                            React.createElement(Div, {pos: pos(48,43), size: size(24,66.2)}, 
-                                React.createElement(OptionList, {options: visibility})
-                            ), 
+                            this.props.params.host ? 
+                                React.createElement(Div, {pos: pos(48,43), size: size(24,66.2)}, 
+                                    React.createElement(OptionList, {options: visibility})
+                                )
+                                : null, 
 
                             /* Buttons */
                             React.createElement(Div, {nonBlocking: true, pos: pos(38,80), size: width(60)}, 

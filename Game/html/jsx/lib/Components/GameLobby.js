@@ -155,9 +155,11 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             </Div>
 
                             {/* Game visibility type */}
-                            <Div pos={pos(48,43)} size={size(24,66.2)}>
-                                <OptionList options={visibility} />
-                            </Div>
+                            {this.props.params.host ? 
+                                <Div pos={pos(48,43)} size={size(24,66.2)}>
+                                    <OptionList options={visibility} />
+                                </Div>
+                                : null}
 
                             {/* Buttons */}
                             <Div nonBlocking pos={pos(38,80)} size={width(60)}>
