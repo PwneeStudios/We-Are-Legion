@@ -12,6 +12,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var UiImage = ui.UiImage;
     var UiButton = ui.UiButton;
     var Dropdown = ui.Dropdown;
+    var OptionList = ui.OptionList;
     var RenderAtMixin = ui.RenderAtMixin;
     
     var pos = ui.pos;
@@ -54,6 +55,11 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         render: function() {
             var _this = this;
 
+            var visibility = [
+                {name:'Public games', value:'public'},
+                {name:'Friend games', value:'friend'},
+            ];
+
             return (
                 React.createElement("div", null, 
                     React.createElement(Div, {nonBlocking: true, pos: pos(10,5), size: width(80)}, 
@@ -75,11 +81,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                                 ))
                             ), 
 
+                            /* Game visibility type */
                             React.createElement(Div, {pos: pos(55.3,16.9), size: size(30,66.2)}, 
-                                React.createElement(ListGroup, {style: {'pointer-events':'auto','font-size': '1.4%'}}, 
-                                    React.createElement(ListGroupItem, {href: "#"}, "Public games"), 
-                                    React.createElement(ListGroupItem, {href: "#", active: true}, "Friend games")
-                                )
+                                React.createElement(OptionList, {options: visibility})
                             ), 
 
                             /* Buttons */

@@ -31,23 +31,23 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     });
 
     var MenuSlider = React.createClass({displayName: "MenuSlider",
-    	onChange: function(e) {
-			var value = this.refs.slider.getDOMNode().value;
-			this.setState({value:value});
+        onChange: function(e) {
+            var value = this.refs.slider.getDOMNode().value;
+            this.setState({value:value});
 
-        	if (interop.InXna()) {
-	        	xna['Set' + this.props.variable](value);
-			}
-    	},
+            if (interop.InXna()) {
+                xna['Set' + this.props.variable](value);
+            }
+        },
 
-    	getInitialState: function() {
-        	var value = 0.0;
-        	if (interop.InXna()) {
-				value = xna['Get' + this.props.variable]();
-        	}
+        getInitialState: function() {
+            var value = 0.0;
+            if (interop.InXna()) {
+                value = xna['Get' + this.props.variable]();
+            }
 
-    		return {value:value};
-    	},
+            return {value:value};
+        },
 
         render: function() {
             return (
@@ -55,7 +55,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     React.createElement("td", null, this.props.children), 
                     React.createElement("td", null, 
                         React.createElement("input", {style: {'float':'right','width':'100%'}, 
-                        	ref: "slider", 
+                            ref: "slider", 
                             type: "range", 
                             value: this.state.value, 
                             min: 0, 
@@ -76,23 +76,23 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         },
 
         render: function() {
-        	var choices, value;
+            var choices, value;
 
-        	if (interop.InXna()) {
-        		value = xna['Get' + this.props.variable]();        		
-	        	choices = interop.get('Get' + this.props.variable + 'Values');
-				choices = choices || this.props.choices;
+            if (interop.InXna()) {
+                value = xna['Get' + this.props.variable]();                
+                choices = interop.get('Get' + this.props.variable + 'Values');
+                choices = choices || this.props.choices;
 
-	        	var item = xna['Get' + this.props.variable]();
-        		value = _.find(choices, function(o) {return o.value === value;});
+                var item = xna['Get' + this.props.variable]();
+                value = _.find(choices, function(o) {return o.value === value;});
 
-	        	if (!value) {
-	        		value = choices[0];
-	        	}
-        	} else {
-        		choices = this.props.choices;
-        		value = choices[0];
-        	}
+                if (!value) {
+                    value = choices[0];
+                }
+            } else {
+                choices = this.props.choices;
+                value = choices[0];
+            }
 
             return (
                 React.createElement("tr", {style: {'background-color':'#1c1e22'}}, 
