@@ -17,6 +17,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
     var UiImage = ui.UiImage;
     var UiButton = ui.UiButton;
     var Dropdown = ui.Dropdown;
+    var OptionList = ui.OptionList;
     var RenderAtMixin = ui.RenderAtMixin;
     
     var pos = ui.pos;
@@ -110,6 +111,12 @@ function(_, React, ReactBootstrap, interop, events, ui,
         render: function() {
             var _this = this;
 
+            var visibility = [
+                {name:'Public game', value:'public'},
+                {name:'Friends only', value:'friend'},
+                {name:'Private', value:'private'},
+            ];
+
             return (
                 <div>
                     <Div nonBlocking pos={pos(10,5)} size={width(80)}>
@@ -145,6 +152,11 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                             : null}
                                     </p>
                                 </div>
+                            </Div>
+
+                            {/* Game visibility type */}
+                            <Div pos={pos(48,43)} size={size(24,66.2)}>
+                                <OptionList options={visibility} />
                             </Div>
 
                             {/* Buttons */}

@@ -14,7 +14,6 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/util', 'ui/Div'], function(_, 
         },
 
         getInitialState: function() {
-            console.log(this.props.value || this.props.options[0].value);
             return {
                 value: this.props.value || this.props.options[0].value,
             };
