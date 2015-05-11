@@ -65,8 +65,13 @@ namespace Game
             ToClients(message.MakeFullMessage());
         }
 
+        static Server _Server;
+        static Client _Client;
         public static void Start()
         {
+            if (_Server != null) { _Server.Cleanup(); _Server = null; }
+            if (_Client != null) { _Client.Cleanup(); _Client = null; }
+
             if (Program.Server) new Server();
             if (Program.Client) new Client();
         }

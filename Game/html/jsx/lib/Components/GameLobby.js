@@ -108,6 +108,36 @@ function(_, React, ReactBootstrap, interop, events, ui,
             };
         },
 
+        startGame: function() {
+            if (interop.InXna()) {
+                xna.StartGame();
+            }
+        },
+
+        onClickStart: function() {
+            this.setState({
+                starting:true,
+            });
+
+            this.countDown();
+        },
+
+        countDown: function() {
+            this.startGame();return;
+            
+            var _this = this;
+
+            this.addMessage('Game starting in...');
+            setTimeout(function() { _this.addMessage('3...'); }, 1000);
+            setTimeout(function() { _this.addMessage('2...'); }, 2000);
+            setTimeout(function() { _this.addMessage('1...'); }, 3000);
+            setTimeout(_this.startGame, 4000);
+        },
+
+        addMessage: function(msg) {
+            this.refs.chat.onChatMessage({message:msg,name:''});
+        },
+
         render: function() {
             var _this = this;
 
@@ -129,7 +159,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                         <Well style={{'height':'75%'}}>
 
                             {/* Chat */}
-                            <Chat.ChatBox show full pos={pos(2, 17)} size={size(43,61)}/>
+                            <Chat.ChatBox ref='chat' show full pos={pos(2, 17)} size={size(43,61)}/>
                             <Chat.ChatInput show pos={pos(2,80)} size={width(43)} />
 
                             {/* Player Table */}
@@ -165,9 +195,11 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             <Div nonBlocking pos={pos(38,80)} size={width(60)}>
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
-                                        {this.props.params.host ? <Button>Start Game</Button> : null}
+                                        {this.props.params.host ?
+                                            <Button disabled={this.state.starting} onClick={this.onClickStart}>Start Game</Button>
+                                            : null}
                                         &nbsp;
-                                        <Button onClick={back}>Leave Lobby</Button>
+                                        <Button disabled={this.state.starting} onClick={back}>Leave Lobby</Button>
                                     </p>
                                 </div>
                             </Div>

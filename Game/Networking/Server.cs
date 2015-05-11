@@ -49,11 +49,14 @@ namespace Game
         
         public static List<GameClient> Clients;
 
+        Thread ServerThread;
+        bool ShouldStop = false;
+
         void SendReceiveThread()
         {
             Tuple<int, Message> package = null;
 
-            while (true)
+            while (!ShouldStop)
             {
                 // Receive
                 foreach (var client in Clients)
@@ -134,7 +137,8 @@ namespace Game
 
                 Console.WriteLine("All players connected!");
 
-                new Thread(SendReceiveThread).Start();
+                ServerThread = new Thread(SendReceiveThread);
+                ServerThread.Start();
             }
             catch (ArgumentNullException e)
             {
@@ -159,6 +163,16 @@ namespace Game
                 if (client.Stream != null) client.Stream.Close();
                 if (client.Client != null) client.Client.Close();
             }
+        }
+
+        public void Cleanup()
+        {
+            if (ServerThread != null)
+            {
+                ShouldStop = true;
+                ServerThread.Join();
+            }
+            CloseAll();
         }
     }
 }

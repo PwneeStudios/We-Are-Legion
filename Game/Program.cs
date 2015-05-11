@@ -119,52 +119,76 @@ namespace Game
         /// </summary>
         static void Main(string[] args_)
         {
+            string args = null;
+
 #if DEBUG
             if (args_.Length == 0)
             {
                 // Demo debug
-                //args_ = "--server                --port 13000 --p 1 --t 1234 --n 1 --debug --w 1280 --h 720".Split(' ');
+                //args = "--server                --port 13000 --p 1 --t 1234 --n 1 --debug --w 1280 --h 720";
 
                 // Demo release
-                args_ = "--w 1920 --h 1080".Split(' ');
+                args = "--w 1920 --h 1080";
 
                 // Client
-                //args_ = "--client --ip 173.174.83.72 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --w 1280 --h 720 --debug".Split(' ');
+                //args = "--client --ip 173.174.83.72 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --w 1280 --h 720 --debug";
 
                 // Local client
-                //args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double".Split(' ');
+                //args = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double";
 
                 // Single player windowed
-                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --w 1280 --h 720".Split(' ');
-                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --w 1920 --h 1080".Split(' ');
+                //args = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --w 1280 --h 720";
+                //args = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --w 1920 --h 1080";
 
                 // Single player debug
-                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double".Split(' ');
+                //args = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double";
 
                 // Single player
-                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n".Split(' ');
+                //args = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n";
 
                 // Single player with client-server debug
-                //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double --logshorthash".Split(' ');
+                //args = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double --logshorthash";
 
                 // Two player debug
-                //args_ = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10".Split(' ');
+                //args = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10";
                 //Start("  --server                --port 13000 --p 2 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10");
 
                 // Four player debug
-                //args_ = "--server                --port 13000 --p 1 --t 1234 --n 4 --map Beset.m3n   --debug --quad".Split(' ');
+                //args = "--server                --port 13000 --p 1 --t 1234 --n 4 --map Beset.m3n   --debug --quad";
                 //Start("  --client --ip 127.0.0.1 --port 13000 --p 2 --t 1234 --n 4 --map Beset.m3n   --debug --quad");
                 //Start("  --client --ip 127.0.0.1 --port 13000 --p 3 --t 1234 --n 4 --map Beset.m3n   --debug --quad");
                 //Start("  --client --ip 127.0.0.1 --port 13000 --p 4 --t 1234 --n 4 --map Beset.m3n   --debug --quad");
             }
 #else
             // Demo release
-            args_ = "--server                --port 13000 --p 1 --t 1234 --n 1 --w -1".Split(' ');
+            args = "--server                --port 13000 --p 1 --t 1234 --n 1 --w -1";
 
-            //args_ = "--server                --port 13000 --p 1 --t 1234 --n 1 --map Beset.m3n".Split(' ');
-            //args_ = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double".Split(' ');
+            //args = "--server                --port 13000 --p 1 --t 1234 --n 1 --map Beset.m3n";
+            //args = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double";
 #endif
 
+            if (args != null)
+            {
+                ParseOptions(args);
+            }
+            else
+            {
+                ParseOptions(args_);
+            }
+
+            using (GameClass game = new GameClass())
+            {
+                game.Run();
+            }
+        }
+
+        public static void ParseOptions(string args)
+        {
+            ParseOptions(args.Split(' '));
+        }
+
+        public static void ParseOptions(string[] args_)
+        {
             List<string> args = new List<string>(args_);
 
             if (args.Contains("--p")) { int i = args.IndexOf("--p"); StartupPlayerNumber = int.Parse(args[i + 1]); }
@@ -181,7 +205,7 @@ namespace Game
 
             if (args.Contains("--map")) { int i = args.IndexOf("--map"); StartupMap = args[i + 1]; }
 
-            if      (args.Contains("--server")) Server = true;
+            if (args.Contains("--server")) Server = true;
             else if (args.Contains("--client")) Client = true;
 
             if (args.Contains("--ip")) { int i = args.IndexOf("--ip"); IpAddress = args[i + 1]; }
@@ -194,7 +218,7 @@ namespace Game
             if (args.Contains("--headless")) { Headless = true; }
             if (args.Contains("--maxfps")) { MaxFps = true; }
             if (args.Contains("--console")) { HasConsole = true; }
-            
+
             if (args.Contains("--logperiod")) { int i = args.IndexOf("--logperiod"); LogPeriod = int.Parse(args[i + 1]); }
 
             if (args.Contains("--w")) { int i = args.IndexOf("--w"); Width = int.Parse(args[i + 1]); }
@@ -217,11 +241,6 @@ namespace Game
 
             if (args.Contains("--double")) SetDouble(args);
             if (args.Contains("--quad")) SetQuad(args);
-
-            using (GameClass game = new GameClass())
-            {
-                game.Run();
-            }
         }
 
         private static void SetDouble(List<string> args)

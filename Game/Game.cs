@@ -175,6 +175,7 @@ namespace Game
             xnaObj.Bind("OnMouseOver", OnMouseOver);
             xnaObj.Bind("OnMouseLeave", OnMouseLeave);
             xnaObj.Bind("ActionButtonPressed", ActionButtonPressed);
+            xnaObj.Bind("StartGame", StartGame);
             xnaObj.Bind("OnChatEnter", OnChatEnter);
             xnaObj.Bind("SetMusicVolume", SetMusicVolume);
             xnaObj.Bind("GetMusicVolume", GetMusicVolume);
@@ -237,7 +238,6 @@ namespace Game
             Render.Initialize();
 
             Spells.Initialize();
-
             Networking.Start();
 
             AwesomiumInitialize();
@@ -579,6 +579,9 @@ namespace Game
 
                     if (ScenarioToLoad != null)
                     {
+                        SendString("setMode", "in-game");
+                        SendString("setScreen", "in-game-ui");
+
                         World = new World();
                         World.Load(Path.Combine("Content", Path.Combine("Maps", ScenarioToLoad)));
 
@@ -780,7 +783,7 @@ namespace Game
         void SendDict(string function, Dictionary<string, object> dict)
         {
             var json = Jsonify(dict);
-            SendString(function, json);
+            Send(function, json);
         }
 
         void SendString(string function, string s)
@@ -807,6 +810,7 @@ namespace Game
             obj["MyPlayerNumber"] = World.MyPlayerNumber;
             obj["PlayerInfo"] = ShowAllPlayers ? World.PlayerInfo : null;
 
+            var json = Jsonify(obj);
             SendDict("update", obj);
         }
 
@@ -873,6 +877,16 @@ namespace Game
             {
                 Console.WriteLine("Action did not specify a name:string.");
             }
+
+            return JSValue.Null;
+        }
+
+        JSValue StartGame(object sender, JavascriptMethodEventArgs e)
+        {
+            //Program.ParseOptions("--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double");
+            Program.ParseOptions("--server                --port 13000 --p 1 --t 1234 --n 1 --map Beset.m3n   --debug");
+            SetScenarioToLoad("Beset.m3n");
+            Networking.Start();
 
             return JSValue.Null;
         }

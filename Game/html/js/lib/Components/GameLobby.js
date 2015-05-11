@@ -108,6 +108,36 @@ function(_, React, ReactBootstrap, interop, events, ui,
             };
         },
 
+        startGame: function() {
+            if (interop.InXna()) {
+                xna.StartGame();
+            }
+        },
+
+        onClickStart: function() {
+            this.setState({
+                starting:true,
+            });
+
+            this.countDown();
+        },
+
+        countDown: function() {
+            this.startGame();return;
+            
+            var _this = this;
+
+            this.addMessage('Game starting in...');
+            setTimeout(function() { _this.addMessage('3...'); }, 1000);
+            setTimeout(function() { _this.addMessage('2...'); }, 2000);
+            setTimeout(function() { _this.addMessage('1...'); }, 3000);
+            setTimeout(_this.startGame, 4000);
+        },
+
+        addMessage: function(msg) {
+            this.refs.chat.onChatMessage({message:msg,name:''});
+        },
+
         render: function() {
             var _this = this;
 
@@ -129,7 +159,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                         React.createElement(Well, {style: {'height':'75%'}}, 
 
                             /* Chat */
-                            React.createElement(Chat.ChatBox, {show: true, full: true, pos: pos(2, 17), size: size(43,61)}), 
+                            React.createElement(Chat.ChatBox, {ref: "chat", show: true, full: true, pos: pos(2, 17), size: size(43,61)}), 
                             React.createElement(Chat.ChatInput, {show: true, pos: pos(2,80), size: width(43)}), 
 
                             /* Player Table */
@@ -165,9 +195,11 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             React.createElement(Div, {nonBlocking: true, pos: pos(38,80), size: width(60)}, 
                                 React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
                                     React.createElement("p", null, 
-                                        this.props.params.host ? React.createElement(Button, null, "Start Game") : null, 
+                                        this.props.params.host ?
+                                            React.createElement(Button, {disabled: this.state.starting, onClick: this.onClickStart}, "Start Game")
+                                            : null, 
                                         " ", 
-                                        React.createElement(Button, {onClick: back}, "Leave Lobby")
+                                        React.createElement(Button, {disabled: this.state.starting, onClick: back}, "Leave Lobby")
                                     )
                                 )
                             )

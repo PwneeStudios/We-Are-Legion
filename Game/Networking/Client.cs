@@ -16,9 +16,12 @@ namespace Game
         NetworkStream stream = null;
         byte[] bytes = new byte[1 << 16];
 
+        Thread ClientThread;
+        bool ShouldStop = false;
+
         void SendReceiveThread()
         {
-            while (true)
+            while (!ShouldStop)
             {
                 // Receive
                 if (stream.DataAvailable)
@@ -106,6 +109,16 @@ namespace Game
         {
             if (stream != null) stream.Close();
             if (client != null) client.Close();
+        }
+
+        public void Cleanup()
+        {
+            if (ClientThread != null)
+            {
+                ShouldStop = true;
+                ClientThread.Join();
+            }
+            CloseAll();
         }
     }
 }
