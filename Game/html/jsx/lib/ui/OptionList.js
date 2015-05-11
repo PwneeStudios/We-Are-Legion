@@ -30,15 +30,22 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/util', 'ui/Div'], function(_, 
 
             var options = _.map(this.props.options, function(option) {
                 return (
-                    <ListGroupItem href='#' active={option.value===_this.state.value}
-                     onClick={function() { _this.onSelect(option); }}>
+                    <ListGroupItem active={option.value===_this.state.value}
+                                   href='#'
+                                   style={_this.props.disabled ? {cursor:'default'} : {}}
+                                   onClick={_this.props.disabled ? null : function() { _this.onSelect(option); }}>
                         {option.name}
                     </ListGroupItem>
                 );
             });
 
+            var style = {
+                'pointer-events': this.props.disabled ? 'none' : 'auto',
+                'font-size': '1.4%',
+            };
+
             return (
-                <ListGroup style={{'pointer-events':'auto','font-size': '1.4%'}}>
+                <ListGroup style={style}>
                     {options}
                 </ListGroup>
             );

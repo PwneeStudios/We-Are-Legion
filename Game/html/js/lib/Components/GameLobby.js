@@ -70,7 +70,10 @@ function(_, React, ReactBootstrap, interop, events, ui,
         render: function() {
             if (this.props.activePlayer == this.props.player) {
                 return (
-                    React.createElement(Dropdown, {selected: this.state.selected, choices: this.props.choices, onSelected: this.onSelected})
+                    React.createElement(Dropdown, {disabled: this.props.disabled, 
+                              selected: this.state.selected, 
+                              choices: this.props.choices, 
+                              onSelected: this.onSelected})
                 );
             } else {
                 return (
@@ -92,8 +95,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
             return (
                 React.createElement("tr", null, 
                     React.createElement("td", null, "Player ", this.props.player), 
-                    React.createElement("td", null, React.createElement(Choose, React.__spread({choices: teamChoices, default: "Choose team"},  this.props))), 
-                    React.createElement("td", null, React.createElement(Choose, React.__spread({choices: kingdomChoices, default: "Choose kingdom"},  this.props)))
+                    React.createElement("td", null, React.createElement(Choose, React.__spread({disabled: this.props.disabled, choices: teamChoices, default: "Choose team"},  this.props))), 
+                    React.createElement("td", null, React.createElement(Choose, React.__spread({disabled: this.props.disabled, choices: kingdomChoices, default: "Choose kingdom"},  this.props)))
                 )
             );
         },
@@ -123,8 +126,9 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
 
         countDown: function() {
-            this.startGame();return;
-            
+            this.startGame();
+            //return;
+
             var _this = this;
 
             this.addMessage('Game starting in...');
@@ -166,7 +170,11 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             React.createElement(Div, {nonBlocking: true, pos: pos(48,16.9), size: width(50), style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
                                 React.createElement(Table, {style: {width:'100%'}}, React.createElement("tbody", null, 
                                     _.map(_.range(1, 5), function(i) {
-                                        return React.createElement(PlayerEntry, {player: i, activePlayer: _this.state.lobbyPlayerNum});
+                                        return (
+                                            React.createElement(PlayerEntry, {disabled: _this.state.starting, 
+                                                         player: i, 
+                                                         activePlayer: _this.state.lobbyPlayerNum})
+                                         );
                                     })
                                 ))
                             ), 
@@ -177,7 +185,9 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                     React.createElement("p", null, 
                                         this.props.params.host ? 
                                             React.createElement(ModalTrigger, {modal: React.createElement(MapPicker, null)}, 
-                                                React.createElement(Button, {bsStyle: "primary", bsSize: "large"}, "Choose map...")
+                                                React.createElement(Button, {disabled: this.state.starting, bsStyle: "primary", bsSize: "large"}, 
+                                                    "Choose map..."
+                                                )
                                             )
                                             : null
                                     )
@@ -187,7 +197,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             /* Game visibility type */
                             this.props.params.host ? 
                                 React.createElement(Div, {pos: pos(48,43), size: size(24,66.2)}, 
-                                    React.createElement(OptionList, {options: visibility})
+                                    React.createElement(OptionList, {disabled: this.state.starting, options: visibility})
                                 )
                                 : null, 
 

@@ -28,7 +28,7 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, Rea
 
             return (
                 <div style={style}>
-                    <DropdownButton title={item.selectedName || item.name}>
+                    <DropdownButton disabled={this.props.disabled} title={item.selectedName || item.name}>
                         {_.map(this.props.choices, function(choice) { 
                             var _choice = _.clone(choice);
                             return (
