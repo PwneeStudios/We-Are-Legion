@@ -125,10 +125,10 @@ namespace Game
             if (args_.Length == 0)
             {
                 // Demo debug
-                //args = "--server                --port 13000 --p 1 --t 1234 --n 1 --debug --w 1280 --h 720";
+                args = "--server                --port 13000 --p 1 --t 1234 --n 1 --debug --w 1280 --h 720";
 
                 // Demo release
-                args = "--w 1920 --h 1080";
+                //args = "--w 1920 --h 1080";
 
                 // Client
                 //args = "--client --ip 173.174.83.72 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --w 1280 --h 720 --debug";

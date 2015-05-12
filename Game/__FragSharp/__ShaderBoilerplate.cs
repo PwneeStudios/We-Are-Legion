@@ -3098,6 +3098,9 @@ namespace Game
             CompiledEffect.Parameters["fs_param_Path_size"].SetValue(FragSharpMarshal.Marshal(vec(Path.Width, Path.Height)));
             CompiledEffect.Parameters["fs_param_Path_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Path.Width, Path.Height)));
             CompiledEffect.Parameters["fs_param_blend"].SetValue(FragSharpMarshal.Marshal(blend));
+            CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
+            CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
+            CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
@@ -5845,6 +5848,9 @@ namespace Game
             CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
             CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
             CompiledEffect.Parameters["fs_param_PercentSimStepComplete"].SetValue(FragSharpMarshal.Marshal(PercentSimStepComplete));
+            CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
+            CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
+            CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
@@ -5943,6 +5949,9 @@ namespace Game
             CompiledEffect.Parameters["fs_param_selection_blend"].SetValue(FragSharpMarshal.Marshal(selection_blend));
             CompiledEffect.Parameters["fs_param_selection_size"].SetValue(FragSharpMarshal.Marshal(selection_size));
             CompiledEffect.Parameters["fs_param_solid_blend"].SetValue(FragSharpMarshal.Marshal(solid_blend));
+            CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
+            CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
+            CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

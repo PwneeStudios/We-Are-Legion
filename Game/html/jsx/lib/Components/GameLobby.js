@@ -126,8 +126,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
 
         countDown: function() {
-            this.startGame();
-            //return;
+            //this.startGame(); return;
 
             var _this = this;
 
@@ -139,7 +138,9 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
 
         addMessage: function(msg) {
-            this.refs.chat.onChatMessage({message:msg,name:''});
+            if (this.refs.chat && this.refs.chat.onChatMessage) {
+                this.refs.chat.onChatMessage({message:msg,name:''});
+            }
         },
 
         render: function() {

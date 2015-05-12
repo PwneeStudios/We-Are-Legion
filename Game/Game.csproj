@@ -248,10 +248,17 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <PropertyGroup>
-    <PreBuildEvent>IF $(ConfigurationName) EQU Release (
+    <PreBuildEvent>ECHO ON
+DIR
+
+IF $(ConfigurationName) EQU Release (
   ECHO Copying html directory
   xcopy $(ProjectDir)html $(TargetDir)html /E /D /Y
-)</PreBuildEvent>
+
+  ECHO Running PngToCsData
+  $(SolutionDir)PngToCsData\PngToCsData\bin\Release\PngToCsData.exe $(ProjectDir)Drawing/GameColors.cs $(SolutionDir)Content/Art/FarColors.png
+)
+</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PostBuildEvent>
