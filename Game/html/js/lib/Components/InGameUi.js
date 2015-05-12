@@ -1,6 +1,8 @@
 define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, React, ReactBootstrap, interop, events, ui, Chat) {
     var Input = ReactBootstrap.Input;
     var Popover = ReactBootstrap.Popover;
+    var Button = ReactBootstrap.Button;
+    var Glyphicon = ReactBootstrap.Glyphicon;
     
     var Div = ui.Div;
     var Gap = ui.Gap;
@@ -259,6 +261,35 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         },
     });
 
+    var MenuButton = React.createClass({displayName: "MenuButton",
+        mixins: [RenderAtMixin],
+                        
+        renderAt: function() {
+            var pStyle = {fontSize: '90%', textAlign: 'right'};
+
+            return (
+                React.createElement("div", null, 
+                    React.createElement(Div, {nonBlocking: true, pos: pos(0,0,'absolute'), style: {'float':'right', 'pointer-events':'auto'}}, 
+                        React.createElement(Button, {style: {position:'absolute', 'pointer-events':'auto'}, 
+                                onClick: function() { window.setScreen('in-game-menu'); }}, 
+                            React.createElement(Glyphicon, {glyph: "arrow-up"})
+                        )
+                    )
+                )
+            );
+
+            return (
+                React.createElement("div", {className: "menu-button"}, 
+                    React.createElement(UiButton, {width: 90, image: {width:120, height:60, url:'css/MenuButton.png'}, 
+                              onClick: null}), 
+                    React.createElement(Div, {nonBlocking: true, pos: pos(-20,0.4), size: width(100), style: pStyle}, 
+                        React.createElement("p", null, "Menu")
+                    )
+                )
+            );
+        },
+    });
+
     var Minimap = React.createClass({displayName: "Minimap",
         mixins: [RenderAtMixin],
         
@@ -348,10 +379,12 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                                         
                     /*<Minimap pos={pos(.2,79)} size={width(11)} />*/
 
+                    React.createElement(MenuButton, {pos: pos(0.5,0.4), size: width(50)}), 
+
                     React.createElement(Div, {pos: pos(15,0)}, 
                         React.createElement(Chat.ChatInput, {pos: pos(0.35,80), size: width(49)}), 
 
-                        /*<ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/
+                        /*<Chat.ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/
                         React.createElement(Chat.ChatBox, {pos: pos(0.38, 78), size: width(38)}), 
                         
                         React.createElement(Div, {pos: pos(0,85)}, 

@@ -34,13 +34,13 @@ define(['lodash', 'react', 'interop', 'events',
             setMode('main-menu');
             setScreen('game-menu');
             //setScreen('options');
-            setScreen('game-lobby', {host:true});
+            //setScreen('game-lobby', {host:true});
             //setScreen('game-lobby', {host:false});
             //setScreen('manual');
             //setScreen('find-game');
 
-            //setMode('in-game');
-            //setScreen('in-game-ui');
+            setMode('in-game');
+            setScreen('in-game-ui');
             //setScreen('in-game-menu');
         },
 

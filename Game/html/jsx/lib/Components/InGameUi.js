@@ -1,6 +1,8 @@
 define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, React, ReactBootstrap, interop, events, ui, Chat) {
     var Input = ReactBootstrap.Input;
     var Popover = ReactBootstrap.Popover;
+    var Button = ReactBootstrap.Button;
+    var Glyphicon = ReactBootstrap.Glyphicon;
     
     var Div = ui.Div;
     var Gap = ui.Gap;
@@ -259,6 +261,35 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         },
     });
 
+    var MenuButton = React.createClass({
+        mixins: [RenderAtMixin],
+                        
+        renderAt: function() {
+            var pStyle = {fontSize: '90%', textAlign: 'right'};
+
+            return (
+                <div>
+                    <Div nonBlocking pos={pos(0,0,'absolute')} style={{'float':'right', 'pointer-events':'auto'}}>
+                        <Button style={{position:'absolute', 'pointer-events':'auto'}}
+                                onClick={function() { window.setScreen('in-game-menu'); }}>
+                            <Glyphicon glyph='arrow-up' />
+                        </Button>
+                    </Div>
+                </div>
+            );
+
+            return (
+                <div className='menu-button'>
+                    <UiButton width={90} image={{width:120, height:60, url:'css/MenuButton.png'}}
+                              onClick={null} />
+                    <Div nonBlocking pos={pos(-20,0.4)} size={width(100)} style={pStyle}>
+                        <p>Menu</p>
+                    </Div>
+                </div>
+            );
+        },
+    });
+
     var Minimap = React.createClass({
         mixins: [RenderAtMixin],
         
@@ -348,10 +379,12 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                                         
                     {/*<Minimap pos={pos(.2,79)} size={width(11)} />*/}
 
+                    <MenuButton pos={pos(0.5,0.4)} size={width(50)} />
+
                     <Div pos={pos(15,0)}>
                         <Chat.ChatInput pos={pos(0.35,80)} size={width(49)} />
 
-                        {/*<ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/}
+                        {/*<Chat.ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/}
                         <Chat.ChatBox pos={pos(0.38, 78)} size={width(38)}/>
                         
                         <Div pos={pos(0,85)}>

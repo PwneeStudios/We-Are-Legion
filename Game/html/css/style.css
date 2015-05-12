@@ -50,6 +50,10 @@ p {
     pointer-events:auto;
 }
 
+.menu-button p {
+    font-family: Verdana, Geneva, sans-serif;
+}
+
 /* ------
    Tooltips
    ------ */
