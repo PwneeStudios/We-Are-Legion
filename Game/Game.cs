@@ -176,6 +176,8 @@ namespace Game
             xnaObj.Bind("OnMouseLeave", OnMouseLeave);
             xnaObj.Bind("ActionButtonPressed", ActionButtonPressed);
             xnaObj.Bind("StartGame", StartGame);
+            xnaObj.Bind("LeaveGame", LeaveGame);
+            xnaObj.Bind("QuitApp", QuitApp);
             xnaObj.Bind("OnChatEnter", OnChatEnter);
             xnaObj.Bind("SetMusicVolume", SetMusicVolume);
             xnaObj.Bind("GetMusicVolume", GetMusicVolume);
@@ -887,6 +889,27 @@ namespace Game
             Program.ParseOptions("--server                --port 13000 --p 1 --t 1234 --n 1 --map Beset.m3n   --debug");
             SetScenarioToLoad("Beset.m3n");
             Networking.Start();
+
+            return JSValue.Null;
+        }
+
+        JSValue LeaveGame(object sender, JavascriptMethodEventArgs e)
+        {
+            SendString("removeMode", "in-game");
+            SendString("removeMode", "main-menu");
+
+            SendString("setMode", "main-menu");
+            SendString("setScreen", "game-menu");
+
+            State = GameState.MainMenu;
+            awesomium.AllowMouseEvents = true;
+
+            return JSValue.Null;
+        }
+
+        JSValue QuitApp(object sender, JavascriptMethodEventArgs e)
+        {
+            Exit();
 
             return JSValue.Null;
         }

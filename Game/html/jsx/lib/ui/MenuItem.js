@@ -11,6 +11,8 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
                 }
             } else if (this.props.toMode) {
                 window.setMode(this.props.toMode, this.props.params);
+            } else if (this.props.onClick) {
+                this.props.onClick(e);
             }
         },
 

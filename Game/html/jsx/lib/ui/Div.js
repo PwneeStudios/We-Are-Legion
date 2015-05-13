@@ -1,8 +1,6 @@
 define(['lodash', 'react'], function(_, React) {
     return React.createClass({
         render: function() {
-            console.log(this.props.className);
-
             var style = {
                 width:'100%',
                 height:'100%',

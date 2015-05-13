@@ -35,7 +35,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     <MenuItem eventKey={1} to='back'>Return to game</MenuItem>
                     <MenuItem eventKey={2}>Pause game</MenuItem>
                     <MenuItem eventKey={3} to='options'>Options</MenuItem>
-                    <MenuItem eventKey={5} toMode='main-menu'>Quit Game</MenuItem>
+                    <MenuItem eventKey={5} onClick={leaveGame}>Leave Game</MenuItem>
                 </Menu>
             );
         }

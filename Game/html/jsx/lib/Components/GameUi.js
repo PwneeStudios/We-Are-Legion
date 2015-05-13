@@ -14,11 +14,35 @@ define(['lodash', 'react', 'interop', 'events',
             this.setScreen(screen);
         },
 
+        leaveGame: function() {
+            if (interop.InXna()) {
+                interop.xna().LeaveGame();
+            } else {
+                removeMode("in-game");
+                removeMode("main-menu");
+
+                setMode("main-menu");
+                setScreen("game-menu");
+            }
+        },
+
+        quitApp: function() {
+            if (interop.InXna()) {
+                interop.xna().QuitApp();
+            } else {
+                return;
+            }
+        },
+
         getInitialState: function() {
+            window.leaveGame = this.leaveGame;
+            window.quitApp = this.quitApp;
+
             window.setScreen = this.setScreen;
             window.setMode = this.setMode;
             window.back = this.back;
             window.refresh = this.refresh;
+            window.removeMode = this.removeMode;
             
             window.modes = {};
             window.mode = null;
@@ -66,6 +90,10 @@ define(['lodash', 'react', 'interop', 'events',
             if (e) {
                 e.preventDefault();
             }
+        },
+
+        removeMode: function(mode) {
+            _.remove(modes, function(_mode) { return _mode === mode; });
         },
 
         setMode: function(newMode) {
