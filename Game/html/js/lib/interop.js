@@ -20,6 +20,18 @@ define(['lodash'], function(_) {
             }
         },
 
+        disableGameInput: function() {
+            if (interop.InXna()) {
+                xna.DisableGameInput();
+            }
+        },
+
+        enableGameInput: function() {
+            if (interop.InXna()) {
+                xna.EnableGameInput();
+            }
+        },
+
         get: function(funcName) {
             var stringResult = xna[funcName]();
             return JSON.parse(stringResult);

@@ -174,6 +174,8 @@ namespace Game
             xnaObj = awesomium.WebView.CreateGlobalJavascriptObject("xna");
             xnaObj.Bind("OnMouseOver", OnMouseOver);
             xnaObj.Bind("OnMouseLeave", OnMouseLeave);
+            xnaObj.Bind("EnableGameInput", EnableGameInput);
+            xnaObj.Bind("DisableGameInput", DisableGameInput);
             xnaObj.Bind("ActionButtonPressed", ActionButtonPressed);
             xnaObj.Bind("StartGame", StartGame);
             xnaObj.Bind("LeaveGame", LeaveGame);
@@ -730,6 +732,14 @@ namespace Game
         public bool MouseDownOverUi = false;
         public void CalculateMouseDownOverUi()
         {
+            if (!GameInputEnabled)
+            { 
+                awesomium.AllowMouseEvents = true;
+                MouseOverHud = true;
+                MouseDownOverUi = true;
+                return;
+            }
+
             if (World != null && World.BoxSelecting)
             {
                 awesomium.AllowMouseEvents = false;
@@ -842,6 +852,19 @@ namespace Game
             obj["name"] = PlayerInfo[player].Name;
 
             SendDict("addChatMessage", obj);
+        }
+
+        public bool GameInputEnabled = true;
+        JSValue DisableGameInput(object sender, JavascriptMethodEventArgs e)
+        {
+            GameInputEnabled = false;
+            return JSValue.Null;
+        }
+
+        JSValue EnableGameInput(object sender, JavascriptMethodEventArgs e)
+        {
+            GameInputEnabled = true;
+            return JSValue.Null;
         }
 
         public bool MouseOverHud = false;

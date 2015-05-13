@@ -28,7 +28,15 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return {
             };
         },
+
+        componentDidMount: function() {
+            interop.disableGameInput();
+        },
         
+        componentWillUnmount: function() {
+            interop.enableGameInput();
+        },
+
         render: function() {
             return (
                 React.createElement(Menu, null, 
