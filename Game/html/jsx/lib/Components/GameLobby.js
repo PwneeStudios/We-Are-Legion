@@ -111,6 +111,14 @@ function(_, React, ReactBootstrap, interop, events, ui,
             };
         },
 
+        componentDidMount: function() {
+            interop.drawMapPreviewAt(0,0);
+        },
+        
+        componentWillUnmount: function() {
+            interop.hideMapPreview();
+        },
+
         startGame: function() {
             if (interop.InXna()) {
                 xna.StartGame();
@@ -141,6 +149,11 @@ function(_, React, ReactBootstrap, interop, events, ui,
             if (this.refs.chat && this.refs.chat.onChatMessage) {
                 this.refs.chat.onChatMessage({message:msg,name:''});
             }
+        },
+
+        onMapPick: function(map) {
+            console.log(map);
+            interop.setMap(map);
         },
 
         render: function() {
@@ -185,7 +198,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
                                         {this.props.params.host ? 
-                                            <ModalTrigger modal={<MapPicker />}>
+                                            <ModalTrigger modal={<MapPicker onPick={this.onMapPick} />}>
                                                 <Button disabled={this.state.starting} bsStyle='primary' bsSize='large'>
                                                     Choose map...
                                                 </Button>

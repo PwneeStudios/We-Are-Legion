@@ -94,8 +94,6 @@ namespace Game
         MarkerList Markers;
         UserMessageList UserMessages;
 
-        RectangleQuad Ground;
-
         public RenderTarget2D Minimap;
         public RectangleQuad MinimapQuad = new RectangleQuad();
 

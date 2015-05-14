@@ -23,17 +23,29 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var MapEntry = React.createClass({
         render: function() {
             return (
-                <ListGroupItem href='#'>{this.props.name}</ListGroupItem>
+                <ListGroupItem href='#' onClick={this.props.onPick}>{this.props.name}</ListGroupItem>
             );
         },
     });
 
     return React.createClass({
+        onPick: function(map) {
+            if (this.props.onPick) {
+                this.props.onPick(map);
+            }
+        },
+
         render: function() {
-            var maps = ['Beset', 'Clash of Madness', "Isn't This Nice?", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello"];
+            var _this = this;
+
+            var maps = ['Beset', 'Clash of Madness', "Nice", "Gilgamesh", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello"];
             var mapEntrees = _.map(maps, function(map) {
+                var onPick = function() {
+                    _this.onPick(map);
+                };
+
                 return (
-                    <MapEntry name={map} />
+                    <MapEntry name={map} onPick={onPick} />
                 );
             });
 

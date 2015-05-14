@@ -374,7 +374,7 @@ namespace Game
         }
 
         bool MinimapInitialized = false;
-        void UpdateMinimap()
+        public void UpdateMinimap()
         {
             MinimapInitialized = true;
 
@@ -410,7 +410,7 @@ namespace Game
             q.Draw(GameClass.Graphics);
         }
 
-        private void DrawMinimap()
+        public void DrawMinimap()
         {
             vec2 size = vec(.2f, .2f);
             vec2 center = vec(-CameraAspect, -1) + new vec2(size.x, size.y) * vec(1.1f, 1.15f);

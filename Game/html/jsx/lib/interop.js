@@ -32,6 +32,24 @@ define(['lodash'], function(_) {
             }
         },
 
+        drawMapPreviewAt: function(x, y) {
+            if (interop.InXna()) {
+                xna.DrawMapPreviewAt(x, y);
+            }
+        },
+
+        hideMapPreview: function() {
+            if (interop.InXna()) {
+                xna.HideMapPreview();
+            }
+        },
+
+        setMap: function(map) {
+            if (interop.InXna()) {
+                xna.SetMap(map);
+            }
+        },
+
         get: function(funcName) {
             var stringResult = xna[funcName]();
             return JSON.parse(stringResult);

@@ -147,29 +147,23 @@ namespace Game
             ms.Close();
         }
 
-        public void Load(string FileName)
+        public void Load(string FileName, int Retries = 10000)
         {
-            if (true)
+            do
             {
-                while (true)
+                try
                 {
-                    try
-                    {
-                        _Load(FileName);
-                        return;
-                    }
-                    catch (IOException e)
-                    {
-                        System.Console.WriteLine(e);
-                    }
-
-                    System.Threading.Thread.Sleep(100);
+                    _Load(FileName);
+                    return;
                 }
+                catch (IOException e)
+                {
+                    System.Console.WriteLine(e);
+                }
+
+                System.Threading.Thread.Sleep(100);
             }
-            else
-            {
-                _Load(FileName);
-            }
+            while (Retries-- > 0);
         }
 
         void _Load(string FileName)

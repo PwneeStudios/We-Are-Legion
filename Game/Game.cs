@@ -176,6 +176,9 @@ namespace Game
             xnaObj.Bind("OnMouseLeave", OnMouseLeave);
             xnaObj.Bind("EnableGameInput", EnableGameInput);
             xnaObj.Bind("DisableGameInput", DisableGameInput);
+            xnaObj.Bind("DrawMapPreviewAt", DrawMapPreviewAt);
+            xnaObj.Bind("HideMapPreview", HideMapPreview);
+            xnaObj.Bind("SetMap", SetMap);
             xnaObj.Bind("ActionButtonPressed", ActionButtonPressed);
             xnaObj.Bind("StartGame", StartGame);
             xnaObj.Bind("LeaveGame", LeaveGame);
@@ -525,7 +528,14 @@ namespace Game
 
                 case GameState.MainMenu:
                     Render.StandardRenderSetup();
-                    
+                    if (DrawMapPreview && World != null && World.DataGroup != null)
+                    {
+                        World.UpdateMinimap();
+                        GridHelper.GraphicsDevice.SetRenderTarget(null);
+                        World.DrawMinimap();
+                    }
+
+                    Render.StandardRenderSetup();
                     DrawFullScreen(Assets.ScreenDark);
                     DrawWebView();
                     World.DrawArrowCursor();
@@ -867,18 +877,55 @@ namespace Game
             return JSValue.Null;
         }
 
+        public bool DrawMapPreview = false;
+        public vec2 MapPreviewPos = vec2.Zero;
+        JSValue DrawMapPreviewAt(object sender, JavascriptMethodEventArgs e)
+        {
+            float x = float.Parse(e.Arguments[0].ToString());
+            float y = float.Parse(e.Arguments[1].ToString());
+            MapPreviewPos = new vec2(x, y);
+
+            DrawMapPreview = true;
+
+            return JSValue.Null;
+        }
+
+        JSValue HideMapPreview(object sender, JavascriptMethodEventArgs e)
+        {
+            DrawMapPreview = false;
+            return JSValue.Null;
+        }
+
+        JSValue SetMap(object sender, JavascriptMethodEventArgs e)
+        {
+            string map = e.Arguments[0] + ".m3n";
+
+            try
+            {
+                World = new World();
+                World.Load(Path.Combine("Content", Path.Combine("Maps", map)), Retries:0);
+            }
+            catch
+            {
+                World = new World();
+                World.Load(Path.Combine("Content", Path.Combine("Maps", "Beset.m3n")), Retries: 0);
+            }
+
+            return JSValue.Null;
+        }
+
         public bool MouseOverHud = false;
         JSValue OnMouseLeave(object sender, JavascriptMethodEventArgs e)
         {
             MouseOverHud = false;
-            Console.WriteLine(MouseOverHud);
+            //Console.WriteLine(MouseOverHud);
             return JSValue.Null;
         }
 
         JSValue OnMouseOver(object sender, JavascriptMethodEventArgs e)
         {
             MouseOverHud = true;
-            Console.WriteLine(MouseOverHud);
+            //Console.WriteLine(MouseOverHud);
             return JSValue.Null;
         }
 
