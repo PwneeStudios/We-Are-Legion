@@ -32,9 +32,9 @@ define(['lodash'], function(_) {
             }
         },
 
-        drawMapPreviewAt: function(x, y) {
+        drawMapPreviewAt: function(x, y, width, height) {
             if (interop.InXna()) {
-                xna.DrawMapPreviewAt(x, y);
+                xna.DrawMapPreviewAt(x, y, width, height);
             }
         },
 

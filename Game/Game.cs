@@ -532,12 +532,19 @@ namespace Game
                     {
                         World.UpdateMinimap();
                         GridHelper.GraphicsDevice.SetRenderTarget(null);
-                        World.DrawMinimap();
                     }
 
                     Render.StandardRenderSetup();
                     DrawFullScreen(Assets.ScreenDark);
                     DrawWebView();
+
+                    if (DrawMapPreview && World != null && World.DataGroup != null)
+                    {
+                        //MapPreviewPos = new vec2(2.66f, 0.554f);
+                        //MapPreviewSize = new vec2(.22f, .22f);
+                        World.DrawMinimap(MapPreviewPos, MapPreviewSize);
+                    }
+
                     World.DrawArrowCursor();
 
                     //if (Keys.Back.Pressed())
@@ -879,11 +886,16 @@ namespace Game
 
         public bool DrawMapPreview = false;
         public vec2 MapPreviewPos = vec2.Zero;
+        public vec2 MapPreviewSize = vec2.Zero;
         JSValue DrawMapPreviewAt(object sender, JavascriptMethodEventArgs e)
         {
             float x = float.Parse(e.Arguments[0].ToString());
             float y = float.Parse(e.Arguments[1].ToString());
             MapPreviewPos = new vec2(x, y);
+
+            float width = float.Parse(e.Arguments[2].ToString());
+            float height = float.Parse(e.Arguments[3].ToString());
+            MapPreviewSize = new vec2(width, height);
 
             DrawMapPreview = true;
 

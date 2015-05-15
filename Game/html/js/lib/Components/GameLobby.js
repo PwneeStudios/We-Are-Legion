@@ -112,7 +112,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
 
         componentDidMount: function() {
-            interop.drawMapPreviewAt(0,0);
+            interop.drawMapPreviewAt(2.66, 0.554, 0.22, 0.22);
         },
         
         componentWillUnmount: function() {
