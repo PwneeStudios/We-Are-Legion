@@ -527,6 +527,8 @@ namespace Game
                     break;
 
                 case GameState.MainMenu:
+                    UpdateLobbyMapLoading();
+
                     if (MapLoading && NewMap != null)
                     {
                         World = NewMap;
@@ -832,9 +834,9 @@ namespace Game
             {
                 awesomium.WebView.ExecuteJavascript(function + "(" + s + ");");
             }
-            catch
+            catch (Exception e)
             {
-                Console.WriteLine("Could not communicate with Awesomium, {0}({1})", function, s);
+                Console.WriteLine("Could not communicate with Awesomium, {0}({1}): {2}", function, s, e);
             }
         }
 
@@ -865,6 +867,20 @@ namespace Game
             obj["ShowAllPlayers"] = ShowAllPlayers;
 
             SendDict("show", obj);
+        }
+
+        bool _MapLoading = false;
+        void UpdateLobbyMapLoading()
+        {
+            if (_MapLoading != MapLoading)
+            {
+                _MapLoading = MapLoading;
+            }
+
+            var obj = new Dictionary<string, object>();
+            obj["LobbyMapLoading"] = MapLoading;
+
+            SendDict("lobby", obj);
         }
 
         public void AddChatMessage(int player, string message)
@@ -938,7 +954,6 @@ namespace Game
         {
             if (PrevMapThread != null && PrevMapThread.IsAlive) PrevMapThread.Join();
 
-            //if (World != null && World.Name == map) return;
             if (NewMap != null && NewMap.Name == map) return;
             if (map != GameMapName) return;
 

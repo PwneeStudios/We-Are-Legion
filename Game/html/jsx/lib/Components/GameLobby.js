@@ -103,11 +103,24 @@ function(_, React, ReactBootstrap, interop, events, ui,
     });
 
     return React.createClass({
-        mixins: [],
+        mixins: [events.LobbyMixin],
+
+        onLobbyUpdate: function(values) {
+            var loading = values.LobbyMapLoading;
+            
+            if (loading === this.state.loading) {
+                return;
+            }
+
+            this.setState({
+                loading:loading,
+            });
+        },
                 
         getInitialState: function() {
             return {
                 lobbyPlayerNum: 3,
+                loading: false,
             };
         },
 
@@ -165,6 +178,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
                 {name:'Private', value:'private'},
             ];
 
+            var disabled = this.state.starting || this.state.loading;
+
             return (
                 <div>
                     <Div nonBlocking pos={pos(10,5)} size={width(80)}>
@@ -185,7 +200,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 <Table style={{width:'100%'}}><tbody>
                                     {_.map(_.range(1, 5), function(i) {
                                         return (
-                                            <PlayerEntry disabled={_this.state.starting}
+                                            <PlayerEntry disabled={disabled}
                                                          player={i}
                                                          activePlayer={_this.state.lobbyPlayerNum} />
                                          );
@@ -199,7 +214,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                     <p>
                                         {this.props.params.host ? 
                                             <ModalTrigger modal={<MapPicker onPick={this.onMapPick} />}>
-                                                <Button disabled={this.state.starting} bsStyle='primary' bsSize='large'>
+                                                <Button disabled={disabled} bsStyle='primary' bsSize='large'>
                                                     Choose map...
                                                 </Button>
                                             </ModalTrigger>
@@ -211,7 +226,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             {/* Game visibility type */}
                             {this.props.params.host ? 
                                 <Div pos={pos(48,43)} size={size(24,66.2)}>
-                                    <OptionList disabled={this.state.starting} options={visibility} />
+                                    <OptionList disabled={disabled} options={visibility} />
                                 </Div>
                                 : null}
 
@@ -220,10 +235,10 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
                                         {this.props.params.host ?
-                                            <Button disabled={this.state.starting} onClick={this.onClickStart}>Start Game</Button>
+                                            <Button disabled={disabled} onClick={this.onClickStart}>Start Game</Button>
                                             : null}
                                         &nbsp;
-                                        <Button disabled={this.state.starting} onClick={back}>Leave Lobby</Button>
+                                        <Button disabled={disabled} onClick={back}>Leave Lobby</Button>
                                     </p>
                                 </div>
                             </Div>
