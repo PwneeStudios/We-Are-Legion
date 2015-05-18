@@ -527,11 +527,10 @@ namespace Game
                     break;
 
                 case GameState.MainMenu:
-                    if (NewMap != null)
+                    if (MapLoading && NewMap != null)
                     {
                         World = NewMap;
                         MapLoading = false;
-                        NewMap = null;
                     }
 
                     Render.StandardRenderSetup();
@@ -915,17 +914,19 @@ namespace Game
             return JSValue.Null;
         }
 
-        Thread SetMapThread;
+        Thread SetMapThread, PrevMapThread;
         bool MapLoading = false;
+        string GameMapName = null;
         JSValue SetMap(object sender, JavascriptMethodEventArgs e)
         {
-            MapLoading = true;
+            string new_map = e.Arguments[0] + ".m3n";
 
-            if (SetMapThread != null) SetMapThread.Join();
+            if ((SetMapThread == null || !SetMapThread.IsAlive) && GameMapName == new_map) return JSValue.Null;
 
-            string map = e.Arguments[0] + ".m3n";
+            GameMapName = new_map;
 
-            SetMapThread = new Thread(() => SetMap(map));
+            PrevMapThread = SetMapThread;
+            SetMapThread = new Thread(() => SetMap(GameMapName));
             SetMapThread.Priority = ThreadPriority.Highest;
             SetMapThread.Start();
 
@@ -935,8 +936,16 @@ namespace Game
         World NewMap;
         void SetMap(string map)
         {
+            if (PrevMapThread != null && PrevMapThread.IsAlive) PrevMapThread.Join();
+
+            //if (World != null && World.Name == map) return;
+            if (NewMap != null && NewMap.Name == map) return;
+            if (map != GameMapName) return;
+
             NewMap = null;
             World _NewMap = new World();
+            
+            MapLoading = true;
 
             try
             {

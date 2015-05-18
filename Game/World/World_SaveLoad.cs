@@ -147,8 +147,11 @@ namespace Game
             ms.Close();
         }
 
+        public string Name;
         public void Load(string FileName, int Retries = 10000, bool DataOnly = false)
         {
+            Name = Path.GetFileName(FileName);
+
             do
             {
                 try
