@@ -178,7 +178,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
                 {name:'Private', value:'private'},
             ];
 
-            var disabled = this.state.starting || this.state.loading;
+            var disabled = this.state.starting;
+            var preventStart = this.state.starting || this.state.loading;
 
             return (
                 React.createElement("div", null, 
@@ -235,7 +236,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
                                     React.createElement("p", null, 
                                         this.props.params.host ?
-                                            React.createElement(Button, {disabled: disabled, onClick: this.onClickStart}, "Start Game")
+                                            React.createElement(Button, {disabled: preventStart, onClick: this.onClickStart}, "Start Game")
                                             : null, 
                                         " ", 
                                         React.createElement(Button, {disabled: disabled, onClick: back}, "Leave Lobby")

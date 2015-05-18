@@ -178,7 +178,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
                 {name:'Private', value:'private'},
             ];
 
-            var disabled = this.state.starting || this.state.loading;
+            var disabled = this.state.starting;
+            var preventStart = this.state.starting || this.state.loading;
 
             return (
                 <div>
@@ -235,7 +236,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
                                         {this.props.params.host ?
-                                            <Button disabled={disabled} onClick={this.onClickStart}>Start Game</Button>
+                                            <Button disabled={preventStart} onClick={this.onClickStart}>Start Game</Button>
                                             : null}
                                         &nbsp;
                                         <Button disabled={disabled} onClick={back}>Leave Lobby</Button>
