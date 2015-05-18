@@ -147,13 +147,13 @@ namespace Game
             ms.Close();
         }
 
-        public void Load(string FileName, int Retries = 10000)
+        public void Load(string FileName, int Retries = 10000, bool DataOnly = false)
         {
             do
             {
                 try
                 {
-                    _Load(FileName);
+                    _Load(FileName, DataOnly:DataOnly);
                     return;
                 }
                 catch (IOException e)
@@ -166,7 +166,7 @@ namespace Game
             while (Retries-- > 0);
         }
 
-        void _Load(string FileName)
+        void _Load(string FileName, bool DataOnly = false)
         {
             Render.UnsetDevice();
 
@@ -178,7 +178,11 @@ namespace Game
             reader.Close();
             stream.Close();
 
-            Startup();
+            if (!DataOnly)
+            {
+                Startup();
+            }
+
             //Migrate();
         }
 

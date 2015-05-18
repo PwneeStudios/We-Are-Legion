@@ -415,7 +415,7 @@ namespace Game
             DrawMinimap(vec2.Zero, vec(.2f, .2f));
         }
 
-        public void DrawMinimap(vec2 pos, vec2 size)
+        public void DrawMinimap(vec2 pos, vec2 size, bool ShowCameraBox = true, bool SolidColor = false)
         {
             vec2 center = pos + vec(-CameraAspect, -1) + new vec2(size.x, size.y) * vec(1.1f, 1.15f);
             MinimapQuad.SetupVertices(center - size, center + size, vec(0, 0), vec(1, 1));
@@ -425,16 +425,27 @@ namespace Game
             DrawTextureSmooth.Using(vec(0, 0, 1, 1), CameraAspect, Assets.Minimap);
             RectangleQuad.Draw(GameClass.Graphics, _center, _size);
 
-            DrawTextureSmooth.Using(vec(0, 0, 1, 1), CameraAspect, Minimap);
-            MinimapQuad.Draw(GameClass.Graphics);
+            if (SolidColor)
+            {
+                DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, rgb(0x222222));
+                MinimapQuad.Draw(GameClass.Graphics);
+            }
+            else
+            {
+                DrawTextureSmooth.Using(vec(0, 0, 1, 1), CameraAspect, Minimap);
+                MinimapQuad.Draw(GameClass.Graphics);                
+            }
 
-            vec2 cam = CameraPos * size;
-            vec2 bl = center + cam - vec(CameraAspect, 1) * size / CameraZoom;
-            vec2 tr = center + cam + vec(CameraAspect, 1) * size / CameraZoom;
-            bl = max(bl, center - size);
-            tr = min(tr, center + size);
-            DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, new color(.6f, .6f, .6f, .5f));
-            DrawBox(bl, tr, 2f / GameClass.Screen.x);
+            if (ShowCameraBox)
+            {
+                vec2 cam = CameraPos * size;
+                vec2 bl = center + cam - vec(CameraAspect, 1) * size / CameraZoom;
+                vec2 tr = center + cam + vec(CameraAspect, 1) * size / CameraZoom;
+                bl = max(bl, center - size);
+                tr = min(tr, center + size);
+                DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, new color(.6f, .6f, .6f, .5f));
+                DrawBox(bl, tr, 2f / GameClass.Screen.x);   
+            }
         }
 
         Ui TopUi, TopUi_Player1, TopUi_Player2;

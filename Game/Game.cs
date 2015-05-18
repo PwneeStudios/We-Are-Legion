@@ -527,6 +527,13 @@ namespace Game
                     break;
 
                 case GameState.MainMenu:
+                    if (NewMap != null)
+                    {
+                        World = NewMap;
+                        MapLoading = false;
+                        NewMap = null;
+                    }
+
                     Render.StandardRenderSetup();
                     if (DrawMapPreview && World != null && World.DataGroup != null)
                     {
@@ -542,7 +549,7 @@ namespace Game
                     {
                         //MapPreviewPos = new vec2(2.66f, 0.554f);
                         //MapPreviewSize = new vec2(.22f, .22f);
-                        World.DrawMinimap(MapPreviewPos, MapPreviewSize);
+                        World.DrawMinimap(MapPreviewPos, MapPreviewSize, ShowCameraBox:false, SolidColor:MapLoading);
                     }
 
                     World.DrawArrowCursor();
@@ -908,22 +915,39 @@ namespace Game
             return JSValue.Null;
         }
 
+        Thread SetMapThread;
+        bool MapLoading = false;
         JSValue SetMap(object sender, JavascriptMethodEventArgs e)
         {
+            MapLoading = true;
+
+            if (SetMapThread != null) SetMapThread.Join();
+
             string map = e.Arguments[0] + ".m3n";
+
+            SetMapThread = new Thread(() => SetMap(map));
+            SetMapThread.Priority = ThreadPriority.Highest;
+            SetMapThread.Start();
+
+            return JSValue.Null;
+        }
+
+        World NewMap;
+        void SetMap(string map)
+        {
+            NewMap = null;
+            World _NewMap = new World();
 
             try
             {
-                World = new World();
-                World.Load(Path.Combine("Content", Path.Combine("Maps", map)), Retries:0);
+                _NewMap.Load(Path.Combine("Content", Path.Combine("Maps", map)), Retries: 0, DataOnly: true);
             }
             catch
             {
-                World = new World();
-                World.Load(Path.Combine("Content", Path.Combine("Maps", "Beset.m3n")), Retries: 0);
+                _NewMap.Load(Path.Combine("Content", Path.Combine("Maps", "Beset.m3n")), Retries: 0, DataOnly: true);
             }
 
-            return JSValue.Null;
+            NewMap = _NewMap;
         }
 
         public bool MouseOverHud = false;

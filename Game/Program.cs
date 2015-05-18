@@ -161,7 +161,8 @@ namespace Game
             }
 #else
             // Demo release
-            args = "--server                --port 13000 --p 1 --t 1234 --n 1 --w -1";
+            //args = "--server                --port 13000 --p 1 --t 1234 --n 1 --w -1";
+            args = "--server                --port 13000 --p 1 --t 1234 --n 1 --w 1280 --h 720";
 
             //args = "--server                --port 13000 --p 1 --t 1234 --n 1 --map Beset.m3n";
             //args = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double";
