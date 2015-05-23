@@ -118,11 +118,11 @@ void CallbackClass::OnFindLobbies(LobbyMatchList_t *pLobbyMatchList, bool bIOFai
 {
 	if ( !bIOFailure )
 	{
-		SteamMatches::s_nLobbiesFound = 0;
+		SteamMatches::s_nLobbiesFound = pLobbyMatchList->m_nLobbiesMatching;
 	}
 	else
 	{
-		SteamMatches::s_nLobbiesFound = pLobbyMatchList->m_nLobbiesMatching;
+		SteamMatches::s_nLobbiesFound = 0;
 	}
 
 	SteamMatches::s_OnFindLobbies->Invoke( bIOFailure );
@@ -130,12 +130,17 @@ void CallbackClass::OnFindLobbies(LobbyMatchList_t *pLobbyMatchList, bool bIOFai
 
 void CallbackClass::OnJoinLobby( LobbyEnter_t * pCallback, bool bIOFailure )
 {
+	if ( !bIOFailure )
+	{
+		SteamMatches::s_CurrentLobby = SteamLobby( pCallback->m_ulSteamIDLobby );
+	}
+
 	SteamMatches::s_OnJoinLobby->Invoke( bIOFailure );
 }
 
 void CallbackClass::OnLobbyCreated( LobbyCreated_t *pCallback, bool bIOFailure )
 {
-	if ( bIOFailure )
+	if ( !bIOFailure )
 	{
 		SteamMatches::s_CurrentLobby = SteamLobby( pCallback->m_ulSteamIDLobby );
 	}
@@ -278,8 +283,10 @@ System::String^ SteamMatches::GetLobbyData( int Index, System::String^ Key )
 	}
 }
 
-void SteamMatches::JoinLobby( int Index )
+void SteamMatches::JoinLobby( int Index, Action< bool >^ OnJoinLobby )
 {
+	SteamMatches::s_OnJoinLobby = OnJoinLobby;
+
 	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
 
 	SteamAPICall_t hSteamAPICall = SteamMatchmaking()->JoinLobby( steamIDLobby );

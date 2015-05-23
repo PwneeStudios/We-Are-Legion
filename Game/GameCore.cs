@@ -120,6 +120,43 @@ namespace Game
             }
         }
 
+        void OnCreateLobby(bool result)
+        {
+            Console.WriteLine(result);
+
+            SteamMatches.SetLobbyData("name", "test lobby");
+
+            SteamMatches.FindLobbies(OnFindLobbies);
+        }
+
+        void OnFindLobbies(bool result)
+        {
+            Console.WriteLine(result);
+
+            if (result)
+            {
+                Console.WriteLine("Failure during lobby search.");
+                return;
+            }
+
+            int n = SteamMatches.NumLobbies();
+            Console.WriteLine("Found {0} lobbies", n);
+
+            for (int i = 0; i < n; i++)
+            {
+                Console.WriteLine(SteamMatches.GetLobbyData(i, "name"));
+            }
+
+            SteamMatches.JoinLobby(0, OnJoinLobby);
+        }
+
+        void OnJoinLobby(bool result)
+        {
+            Console.WriteLine(result);
+
+            Console.WriteLine(SteamMatches.GetLobbyData("name"));
+        }
+
         protected override void Initialize()
         {
             if (UsingSteam)
@@ -137,6 +174,10 @@ namespace Game
                 Console.WriteLine("Initializing Steam.");
                 SteamInitialized = SteamCore.Initialize();
                 Console.WriteLine("Steam initialization: {0}", SteamInitialized ? "Success" : "Failed");
+
+                //
+
+                SteamMatches.CreateLobby(OnCreateLobby);
             }
 
 #if DEBUG

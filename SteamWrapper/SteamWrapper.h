@@ -155,7 +155,7 @@ namespace SteamWrapper
 		
 		static int const NumLobbies();
 		static String^ GetLobbyData( int Index, String^ Key );
-		static void JoinLobby( int Index );
+		static void JoinLobby( int Index, Action< bool >^ OnJoinLobby );
 
 		static void CreateLobby(Action< bool >^ OnCreateLobby);
 
