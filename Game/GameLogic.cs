@@ -183,11 +183,6 @@ namespace Game
                     break;
 
                 case GameState.Game:
-                    if (Keys.Escape.Pressed())
-                    {
-                        State = GameState.MainMenu;
-                    }
-
                     if (awesomium.WebViewTexture != null)
                     {
                         CalculateMouseDownOverUi();
@@ -206,6 +201,31 @@ namespace Game
 
                     break;
             }
+        }
+
+        void DrawGame(GameTime gameTime)
+        {
+            if (GameClass.GameActive && GameClass.HasFocus)
+            {
+                if (World.MapEditorActive)
+                {
+                    if (Keys.S.Pressed())
+                    {
+                        World.Save("TestSave.m3n");
+                    }
+
+                    if (Keys.L.Pressed())
+                    {
+                        World.Load("TestSave.m3n");
+                    }
+                }
+
+                World.Update();
+                UpdateJsData();
+                UpdateParams();
+            }
+
+            World.Draw();
         }
 
         void PreGame()

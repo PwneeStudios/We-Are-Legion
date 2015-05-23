@@ -26,11 +26,24 @@ using System.Runtime.InteropServices;
 using System.Web.Script.Serialization;
 
 using Newtonsoft.Json;
+using SteamWrapper;
 
 namespace Game
 {
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
+        // Steam Integration
+        // Set this to true to turn on Steam Integrtaion code
+        public const bool UsingSteam = true;
+        public static bool SteamInitialized = false;
+        public static bool SteamAvailable
+        {
+            get
+            {
+                return UsingSteam && SteamInitialized;
+            }
+        }
+
         public static bool GameActive { get { return GameClass.Game.IsActive || Program.AlwaysActive; } }
 
         public static GameClass Game;
@@ -109,8 +122,24 @@ namespace Game
 
         protected override void Initialize()
         {
+            if (UsingSteam)
+            {
+                Console.WriteLine("Using Steam, checking if restart is needed.");
+
+                if (SteamCore.RestartViaSteamIfNecessary(354560))
+                {
+                    Console.WriteLine("Restart is needed.");
+
+                    Exit();
+                    return;
+                }
+
+                Console.WriteLine("Initializing Steam.");
+                SteamInitialized = SteamCore.Initialize();
+                Console.WriteLine("Steam initialization: {0}", SteamInitialized ? "Success" : "Failed");
+            }
+
 #if DEBUG
-            //if (Assets.HotSwap && !Program.Server && !Program.Client)
             if (Assets.HotSwap)
                 SetupHotswap();
 #endif
@@ -298,6 +327,8 @@ namespace Game
 
         protected override void OnExiting(object sender, EventArgs args)
         {
+            SteamCore.Shutdown();
+
             Environment.Exit(0);
             base.OnExiting(sender, args);
         }
@@ -308,6 +339,11 @@ namespace Game
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            if (SteamAvailable)
+            {
+                SteamCore.Update();
+            }
+
             GameClass.Time = gameTime;
             DrawCount++;
             TimeSinceLoad += gameTime.ElapsedGameTime.TotalSeconds;
@@ -357,31 +393,6 @@ namespace Game
             q.SetColor(new color(1f, 1f, 1f, 1f));
             DrawTextureSmooth.Using(new vec4(0, 0, 1, 1), ScreenAspect, texture);
             q.Draw(GameClass.Graphics);
-        }
-
-        void DrawGame(GameTime gameTime)
-        {
-            if (GameClass.GameActive && GameClass.HasFocus)
-            {
-                if (World.MapEditorActive)
-                {
-                    if (Keys.S.Pressed())
-                    {
-                        World.Save("TestSave.m3n");
-                    }
-
-                    if (Keys.L.Pressed())
-                    {
-                        World.Load("TestSave.m3n");
-                    }
-                }
-
-                World.Update();
-                UpdateJsData();
-                UpdateParams();
-            }
-
-            World.Draw();
         }
     }
 }

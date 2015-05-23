@@ -1,3 +1,10 @@
+ipch/
+*.sdf
+*.opensdf
+Debug/
+Release/
+sdk/
+
 obj/
 bin/
 packages/
