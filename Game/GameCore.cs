@@ -162,12 +162,12 @@ namespace Game
         }
         bool StartSending = false;
 
-        void OnLobbyDataUpdate(bool result)
+        void OnLobbyDataUpdate()
         {
             Console.WriteLine("data updated");
         }
 
-        void OnLobbyChatUpdate(bool result)
+        void OnLobbyChatUpdate()
         {
             Console.WriteLine("chat updated");
         }
@@ -310,8 +310,8 @@ namespace Game
 
             if (StartSending)
             {
-                SteamMatches.SendChatMsg("Hello");
-                SteamMatches.SetLobbyData("name", "changed");
+                //SteamMatches.SendChatMsg("Hello");
+                SteamMatches.SetLobbyData("frame", DrawCount.ToString());
             }
         }
 

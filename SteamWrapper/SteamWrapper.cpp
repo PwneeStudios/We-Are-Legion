@@ -80,7 +80,9 @@ bool SteamTextInput::ShowGamepadTextInput(System::String^ Description, System::S
 
 CallbackClass::CallbackClass() :
 	m_GamepadInputEnded( this, &CallbackClass::OnGamepadInputEnd ),
-	m_OnChatMsg( this, &CallbackClass::OnChatMsg )
+	m_OnChatMsg( this, &CallbackClass::OnChatMsg ),
+	m_OnDataUpdate( this, &CallbackClass::OnDataUpdate ),
+	m_OnChatUpdate( this, &CallbackClass::OnChatUpdate )
 {
 }
 
@@ -139,11 +141,11 @@ void CallbackClass::OnJoinLobby( LobbyEnter_t * pCallback, bool bIOFailure )
 	SteamMatches::s_OnJoinLobby->Invoke( bIOFailure );
 }
 
-void CallbackClass::OnChatUpdate( LobbyChatUpdate_t * pCallback, bool bIOFailure )
+void CallbackClass::OnChatUpdate( LobbyChatUpdate_t * pCallback )
 {
 	if ( SteamMatches::s_OnChatUpdate )
 	{
-		SteamMatches::s_OnChatUpdate->Invoke( bIOFailure );
+		SteamMatches::s_OnChatUpdate->Invoke();
 	}
 }
 
@@ -164,11 +166,11 @@ void CallbackClass::OnChatMsg( LobbyChatMsg_t * pCallback )
 	}
 }
 
-void CallbackClass::OnDataUpdate( LobbyDataUpdate_t * pCallback, bool bIOFailure )
+void CallbackClass::OnDataUpdate( LobbyDataUpdate_t * pCallback )
 {
 	if ( SteamMatches::s_OnDataUpdate )
 	{
-		SteamMatches::s_OnDataUpdate->Invoke( bIOFailure );
+		SteamMatches::s_OnDataUpdate->Invoke();
 	}
 }
 
@@ -319,9 +321,9 @@ System::String^ SteamMatches::GetLobbyData( int Index, System::String^ Key )
 
 void SteamMatches::JoinLobby( int Index,
 	Action< bool >^ OnJoinLobby,
-	Action< bool >^ OnChatUpdate,
+	Action^ OnChatUpdate,
 	Action< String^ >^ OnChatMsg,
-	Action< bool >^ OnDataUpdate )
+	Action^ OnDataUpdate )
 {
 	SteamMatches::s_OnJoinLobby = OnJoinLobby;
 	SteamMatches::s_OnChatUpdate = OnChatUpdate;
