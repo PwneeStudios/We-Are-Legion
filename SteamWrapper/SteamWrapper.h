@@ -90,11 +90,16 @@ namespace SteamWrapper
 		void OnLeaderboardDownloadedEntries( LeaderboardScoresDownloaded_t * pLeaderboardScoresDownloaded, bool bIOFailure );
 		
 		STEAM_CALLBACK( CallbackClass, OnGamepadInputEnd, GamepadTextInputDismissed_t, m_GamepadInputEnded );
-		//void OnGamepadInputEnd( GamepadTextInputDismissed_t * );
 
 		void OnFindLobbies( LobbyMatchList_t * pLobbyMatchList, bool bIOFailure );
 		void OnJoinLobby( LobbyEnter_t * pCallback, bool bIOFailure );
 		void OnLobbyCreated( LobbyCreated_t * pCallback, bool bIOFailure );
+		void OnChatUpdate( LobbyChatUpdate_t * pCallback, bool bIOFailure );
+		void OnDataUpdate( LobbyDataUpdate_t * pCallback, bool bIOFailure );
+
+		STEAM_CALLBACK( CallbackClass, OnChatMsg, LobbyChatMsg_t, m_OnChatMsg );
+		//STEAM_CALLBACK( CallbackClass, OnChatMsg, LobbyChatMsg_t, m_OnChatMsg );
+		//STEAM_CALLBACK( CallbackClass, OnChatMsg, LobbyChatMsg_t, m_OnChatMsg );
 	};
 
 	// Global items. Not exposed to the C# wrapper.
@@ -104,6 +109,9 @@ namespace SteamWrapper
 	CCallResult< CallbackClass, LobbyMatchList_t > g_CallResultLobbyMatchList;
 	CCallResult< CallbackClass, LobbyEnter_t > g_CallResultJoinLobby;
 	CCallResult< CallbackClass, LobbyCreated_t > g_CallResultLobbyCreated;
+	CCallResult< CallbackClass, LobbyChatUpdate_t > g_CallResultChatUpdate;
+	CCallResult< CallbackClass, LobbyChatMsg_t > g_CallResultChatMsg;
+	CCallResult< CallbackClass, LobbyDataUpdate_t > g_CallResultDataUpdate;
 	const int nMaxLeaderboardEntries = 1000;
 	LeaderboardEntry_t m_leaderboardEntries[nMaxLeaderboardEntries];
 
@@ -146,6 +154,9 @@ namespace SteamWrapper
 		static Action< bool >^ s_OnFindLobbies;
 		static Action< bool >^ s_OnJoinLobby;
 		static Action< bool >^ s_OnCreateLobby;
+		static Action< bool >^ s_OnChatUpdate;
+		static Action< String^ >^ s_OnChatMsg;
+		static Action< bool >^ s_OnDataUpdate;
 
 		static int s_nLobbiesFound = 0;
 		static SteamLobby s_CurrentLobby;
@@ -155,12 +166,17 @@ namespace SteamWrapper
 		
 		static int const NumLobbies();
 		static String^ GetLobbyData( int Index, String^ Key );
-		static void JoinLobby( int Index, Action< bool >^ OnJoinLobby );
+		static void JoinLobby( int Index,
+			Action< bool >^ OnJoinLobby,
+			Action< bool >^ OnChatUpdate,
+			Action< String^ >^ OnChatMsg,
+			Action< bool >^ OnDataUpdate );
 
 		static void CreateLobby(Action< bool >^ OnCreateLobby);
 
 		static void SetLobbyData( String^ Key, String^ Value );
 		static String^ GetLobbyData( String^ Key );
 
+		static void SendChatMsg( String^ Msg );
 	};
 }

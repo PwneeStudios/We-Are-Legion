@@ -79,7 +79,8 @@ bool SteamTextInput::ShowGamepadTextInput(System::String^ Description, System::S
 
 
 CallbackClass::CallbackClass() :
-	m_GamepadInputEnded( this, &CallbackClass::OnGamepadInputEnd )
+	m_GamepadInputEnded( this, &CallbackClass::OnGamepadInputEnd ),
+	m_OnChatMsg( this, &CallbackClass::OnChatMsg )
 {
 }
 
@@ -136,6 +137,39 @@ void CallbackClass::OnJoinLobby( LobbyEnter_t * pCallback, bool bIOFailure )
 	}
 
 	SteamMatches::s_OnJoinLobby->Invoke( bIOFailure );
+}
+
+void CallbackClass::OnChatUpdate( LobbyChatUpdate_t * pCallback, bool bIOFailure )
+{
+	if ( SteamMatches::s_OnChatUpdate )
+	{
+		SteamMatches::s_OnChatUpdate->Invoke( bIOFailure );
+	}
+}
+
+char pvData[4096];
+int cubData = sizeof(pvData);
+void CallbackClass::OnChatMsg( LobbyChatMsg_t * pCallback )
+{
+	CSteamID sender;
+	EChatEntryType entryType;
+
+	int readed = SteamMatchmaking()->GetLobbyChatEntry( pCallback->m_ulSteamIDLobby, pCallback->m_iChatID,
+		&sender, pvData, cubData, &entryType );
+
+	if ( SteamMatches::s_OnChatMsg )
+	{
+		auto msg = gcnew System::String ( pvData );
+		SteamMatches::s_OnChatMsg->Invoke( msg );
+	}
+}
+
+void CallbackClass::OnDataUpdate( LobbyDataUpdate_t * pCallback, bool bIOFailure )
+{
+	if ( SteamMatches::s_OnDataUpdate )
+	{
+		SteamMatches::s_OnDataUpdate->Invoke( bIOFailure );
+	}
 }
 
 void CallbackClass::OnLobbyCreated( LobbyCreated_t *pCallback, bool bIOFailure )
@@ -283,14 +317,25 @@ System::String^ SteamMatches::GetLobbyData( int Index, System::String^ Key )
 	}
 }
 
-void SteamMatches::JoinLobby( int Index, Action< bool >^ OnJoinLobby )
+void SteamMatches::JoinLobby( int Index,
+	Action< bool >^ OnJoinLobby,
+	Action< bool >^ OnChatUpdate,
+	Action< String^ >^ OnChatMsg,
+	Action< bool >^ OnDataUpdate )
 {
 	SteamMatches::s_OnJoinLobby = OnJoinLobby;
+	SteamMatches::s_OnChatUpdate = OnChatUpdate;
+	SteamMatches::s_OnChatMsg = OnChatMsg;
+	SteamMatches::s_OnDataUpdate = OnDataUpdate;
 
 	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
 
 	SteamAPICall_t hSteamAPICall = SteamMatchmaking()->JoinLobby( steamIDLobby );
 	g_CallResultJoinLobby.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnJoinLobby );
+	
+	//g_CallResultChatUpdate.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnChatUpdate );
+	//g_CallResultChatMsg.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnChatMsg );
+	//g_CallResultDataUpdate.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnDataUpdate );
 }
 
 void SteamMatches::CreateLobby( Action< bool >^ OnCreateLobby )
@@ -317,4 +362,12 @@ System::String^ SteamMatches::GetLobbyData( System::String^ Key )
 
 	char const * pchVal = SteamMatchmaking()->GetLobbyData( *SteamMatches::s_CurrentLobby.m_handle, pchKey );
 	return gcnew System::String ( pchVal );
+}
+
+void SteamMatches::SendChatMsg( System::String^ Msg )
+{
+	marshal_context context;
+	char const * pchMsg = context.marshal_as< char const * >( Msg );
+
+	SteamMatchmaking()->SendLobbyChatMsg( *SteamMatches::s_CurrentLobby.m_handle, pchMsg, Msg->Length + 1 );
 }
