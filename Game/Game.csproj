@@ -131,6 +131,7 @@
   <ItemGroup>
     <Compile Include="Assets.cs" />
     <Compile Include="Drawing\DrawAntiMagic.cs" />
+    <Compile Include="Ui.cs" />
     <Compile Include="Networking\PlayerActionMessages.cs" />
     <Compile Include="Networking\Server.cs" />
     <Compile Include="Networking\Client.cs" />
