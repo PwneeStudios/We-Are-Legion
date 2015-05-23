@@ -157,6 +157,11 @@ namespace SteamWrapper
 		static SteamLobby s_CurrentLobby;
 
 	public:
+		static const int
+			LobbyType_Public = 0,
+			LobbyType_FriendsOnly = 1,
+			LobbyType_Private = 2;
+
 		static void FindLobbies(Action< bool >^ OnFind);
 		
 		static int const NumLobbies();
@@ -167,7 +172,7 @@ namespace SteamWrapper
 			Action< String^ >^ OnChatMsg,
 			Action^ OnDataUpdate );
 
-		static void CreateLobby(Action< bool >^ OnCreateLobby);
+		static void CreateLobby(Action< bool >^ OnCreateLobby, int LobbyType );
 
 		static void SetLobbyData( String^ Key, String^ Value );
 		static String^ GetLobbyData( String^ Key );

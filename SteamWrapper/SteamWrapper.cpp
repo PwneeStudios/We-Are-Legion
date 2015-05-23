@@ -340,11 +340,19 @@ void SteamMatches::JoinLobby( int Index,
 	//g_CallResultDataUpdate.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnDataUpdate );
 }
 
-void SteamMatches::CreateLobby( Action< bool >^ OnCreateLobby )
+void SteamMatches::CreateLobby( Action< bool >^ OnCreateLobby, int LobbyType )
 {
 	SteamMatches::s_OnCreateLobby = OnCreateLobby;
 
-	SteamAPICall_t hSteamAPICall = SteamMatchmaking()->CreateLobby( k_ELobbyTypePublic, 4 );
+	ELobbyType type;
+	switch ( LobbyType )
+	{
+	case LobbyType_Public:      type = k_ELobbyTypePublic;      break;
+	case LobbyType_FriendsOnly: type = k_ELobbyTypeFriendsOnly; break;
+	case LobbyType_Private:     type = k_ELobbyTypePrivate;     break;
+	}
+
+	SteamAPICall_t hSteamAPICall = SteamMatchmaking()->CreateLobby( type, 4 );
 	g_CallResultLobbyCreated.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnLobbyCreated );
 }
 
