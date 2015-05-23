@@ -157,8 +157,10 @@ namespace Game
             Console.WriteLine(result);
 
             Console.WriteLine(SteamMatches.GetLobbyData("name"));
-            
+
             StartSending = true;
+            SteamMatches.LeaveLobby();
+            SteamMatches.FindLobbies(OnFindLobbies);
         }
         bool StartSending = false;
 
@@ -311,7 +313,7 @@ namespace Game
             if (StartSending)
             {
                 //SteamMatches.SendChatMsg("Hello");
-                SteamMatches.SetLobbyData("frame", DrawCount.ToString());
+                //SteamMatches.SetLobbyData("frame", DrawCount.ToString());
             }
         }
 

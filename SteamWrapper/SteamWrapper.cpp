@@ -373,3 +373,8 @@ void SteamMatches::SendChatMsg( System::String^ Msg )
 
 	SteamMatchmaking()->SendLobbyChatMsg( *SteamMatches::s_CurrentLobby.m_handle, pchMsg, Msg->Length + 1 );
 }
+
+void SteamMatches::LeaveLobby()
+{
+	SteamMatchmaking()->LeaveLobby( *SteamMatches::s_CurrentLobby.m_handle );
+}

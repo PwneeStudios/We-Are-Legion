@@ -173,5 +173,7 @@ namespace SteamWrapper
 		static String^ GetLobbyData( String^ Key );
 
 		static void SendChatMsg( String^ Msg );
+
+		static void LeaveLobby();
 	};
 }
