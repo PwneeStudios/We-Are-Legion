@@ -131,7 +131,9 @@
   <ItemGroup>
     <Compile Include="Assets.cs" />
     <Compile Include="Drawing\DrawAntiMagic.cs" />
-    <Compile Include="Ui.cs" />
+    <Compile Include="GameLogic.cs" />
+    <Compile Include="UiLogic.cs" />
+    <Compile Include="UiCore.cs" />
     <Compile Include="Networking\PlayerActionMessages.cs" />
     <Compile Include="Networking\Server.cs" />
     <Compile Include="Networking\Client.cs" />
@@ -192,7 +194,7 @@
     <Compile Include="Simulation\Unit.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Game.cs" />
+    <Compile Include="GameCore.cs" />
     <Compile Include="World\World.cs" />
     <Compile Include="World\Marker.cs" />
     <Compile Include="World\PlayerInfo.cs" />
