@@ -207,9 +207,7 @@ namespace Game
 
             if (Program.PosX >= 0 && Program.PosY >= 0)
             {
-                var form = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
-
-                form.Location = new System.Drawing.Point(Program.PosX - 14, Program.PosY);
+                Form.Location = new System.Drawing.Point(Program.PosX - 14, Program.PosY);
             }
 
             FragSharp.Initialize(Content, GraphicsDevice);
@@ -222,6 +220,12 @@ namespace Game
             Networking.Start();
 
             AwesomiumInitialize();
+
+            Activated += ActivatedEvent;
+            Deactivated += DeactivatedEvent;
+
+            Form.MinimizeBox = false;
+            Form.MaximizeBox = false;
 
             base.Initialize();
         }
@@ -317,6 +321,24 @@ namespace Game
 
         protected override void OnDeactivated(object sender, EventArgs args)
         {
+            // The following seems to prevent context loss from WinKey + D.
+            // If you want to be even more aggressive, set TopMost = true and return.
+            Form.TopMost = true;
+            Form.TopMost = false;
+
+            // Don't do the default behavior.
+            //base.OnDeactivated(sender, args);
+        }
+
+        void DeactivatedEvent(object sender, EventArgs args)
+        {
+            // The following code saves the game state to a buffer
+            // so it can be retrieved if context is lost.
+            // There doesn't seem to be a way to call this soon enough
+            // before the context is lost, however.
+            // Currently this is not called, because we do not call
+            // base.OnDeactivated in our override OnDeactivated method.
+
             Render.UnsetDevice();
 
             if (AutoSaveOnTab && !FocusSaved && World != null)
@@ -326,12 +348,10 @@ namespace Game
             }
 
             FakeMinimize();
-
-            base.OnDeactivated(sender, args);
         }
 
         bool ActivateFakeFullScreen = false;
-        protected override void OnActivated(object sender, EventArgs args)
+        void ActivatedEvent(object sender, EventArgs args)
         {
             if (AutoSaveOnTab && FocusSaved && World != null)
             {
@@ -340,54 +360,57 @@ namespace Game
             }
 
             ActivateFakeFullScreen = true;
+        }
 
-            base.OnActivated(sender, args);
+        Windows.Control Control
+        {
+            get
+            {
+                IntPtr hWnd = Window.Handle;
+                var control = Windows.Control.FromHandle(hWnd);
+                return control;
+            }
+        }
+
+        Windows.Form Form
+        {
+            get
+            {
+                return Control.FindForm();
+            }
         }
 
         void FakeFullscreen()
         {
             ActivateFakeFullScreen = false;
 
-            IntPtr hWnd = Window.Handle;
-            var control = Windows.Control.FromHandle(hWnd);
-            var form = control.FindForm();
-
             if (FullScreen)
             {
-                //control.Show();
-                control.Location = new System.Drawing.Point(0, 0);
-
-                form.TopMost = true;
-
-                form.FormBorderStyle = Windows.FormBorderStyle.None;
-                //form.WindowState = Windows.FormWindowState.Maximized;
+                Control.Location = new System.Drawing.Point(0, 0);
+                Form.TopMost = true;
+                Form.FormBorderStyle = Windows.FormBorderStyle.None;
             }
             else
             {
-                form.TopMost = false;
-
-                form.FormBorderStyle = Windows.FormBorderStyle.FixedSingle;
-                //form.WindowState = Windows.FormWindowState.Normal;
+                Form.TopMost = true;
+                Form.FormBorderStyle = Windows.FormBorderStyle.FixedSingle;
             }
         }
 
         void FakeMinimize()
         {
-            IntPtr hWnd = Window.Handle;
-            var control = Windows.Control.FromHandle(hWnd);
-            var form = control.FindForm();
+            Form.TopMost = true;
 
+            /* If we actually want to minimize, do the following.
             if (FullScreen)
             {
-                form.TopMost = false;
-
-                form.FormBorderStyle = Windows.FormBorderStyle.None;
-                //form.WindowState = Windows.FormWindowState.Minimized;
-
-                control.Location = new System.Drawing.Point(-10000, -10000);
+                Form.TopMost = false;
+                Form.FormBorderStyle = Windows.FormBorderStyle.None;
+                //Form.WindowState = Windows.FormWindowState.Minimized;
+                Control.Location = new System.Drawing.Point(-10000, -10000);
             }
+            */
         }
-
 
         int DrawCount = 0;
         bool FocusSaved = false;
