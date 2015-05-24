@@ -132,8 +132,14 @@
     <Compile Include="Assets.cs" />
     <Compile Include="Drawing\DrawAntiMagic.cs" />
     <Compile Include="GameLogic.cs" />
-    <Compile Include="UiLogic.cs" />
-    <Compile Include="UiCore.cs" />
+    <Compile Include="Ui\Logic\GeneralInput.cs" />
+    <Compile Include="Ui\Logic\Lobby.cs" />
+    <Compile Include="Ui\Logic\FindLobby.cs" />
+    <Compile Include="Ui\Logic\InGame.cs" />
+    <Compile Include="Ui\Logic\Menu.cs" />
+    <Compile Include="Ui\Logic\Options.cs" />
+    <Compile Include="Ui\BindMethods.cs" />
+    <Compile Include="Ui\UiCore.cs" />
     <Compile Include="Networking\PlayerActionMessages.cs" />
     <Compile Include="Networking\Server.cs" />
     <Compile Include="Networking\Client.cs" />
@@ -252,6 +258,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <PropertyGroup>

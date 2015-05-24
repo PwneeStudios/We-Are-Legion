@@ -184,5 +184,28 @@ namespace Game
             var json = JsonConvert.SerializeObject(obj, Formatting.None, settings);
             return json;
         }
+
+        void SendDict(string function, Dictionary<string, object> dict)
+        {
+            var json = Jsonify(dict);
+            Send(function, json);
+        }
+
+        void SendString(string function, string s)
+        {
+            Send(function, '\'' + s + '\'');
+        }
+
+        void Send(string function, string s)
+        {
+            try
+            {
+                awesomium.WebView.ExecuteJavascript(function + "(" + s + ");");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Could not communicate with Awesomium, {0}({1}): {2}", function, s, e);
+            }
+        }
     }
 }
