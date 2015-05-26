@@ -72,12 +72,6 @@ define(['lodash'], function(_) {
                 xna.JoinLobby(index);
             }
         },
-
-        joinCreatedLobby: function(index) {
-            if (interop.InXna()) {
-                xna.JoinCreatedLobby(index);
-            }
-        },
     };
     
     return interop;

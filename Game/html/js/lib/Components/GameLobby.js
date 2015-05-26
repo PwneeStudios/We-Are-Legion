@@ -124,11 +124,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
                 
         joinLobby: function() {
-            console.log('join the lobby');
             if (this.props.params.host) {
                 interop.createLobby();
-                //interop.joinCreatedLobby();
-                window.back();
             } else {
                 interop.joinLobby(this.props.params.lobbyIndex);
             }
