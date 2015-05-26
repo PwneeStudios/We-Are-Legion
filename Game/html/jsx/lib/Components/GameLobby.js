@@ -103,20 +103,22 @@ function(_, React, ReactBootstrap, interop, events, ui,
     });
 
     return React.createClass({
-        mixins: [events.LobbyMixin],
+        mixins: [events.LobbyMixin, events.LobbyMapMixin],
 
         onLobbyUpdate: function(values) {
-            console.log('lobby updated');
-            var mapLoading = false;
-            /*
+            this.setState({
+                loading: false,
+            });
+        },
+
+        onLobbyMapUpdate: function(values) {
             var mapLoading = values.LobbyMapLoading;
 
             if (mapLoading === this.state.mapLoading) {
                 return;
-            }*/
+            }
 
             this.setState({
-                loading: false,
                 mapLoading: mapLoading,
             });
         },
@@ -128,7 +130,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                 //interop.joinCreatedLobby();
                 window.back();
             } else {
-                interop.JoinLobby(this.props.params.lobbyIndex);
+                interop.joinLobby(this.props.params.lobbyIndex);
             }
         },
 
