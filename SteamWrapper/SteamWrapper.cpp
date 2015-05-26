@@ -358,6 +358,8 @@ void SteamMatches::CreateLobby( Action< bool >^ OnCreateLobby, int LobbyType )
 
 void SteamMatches::SetLobbyData( System::String^ Key, System::String^ Value )
 {
+	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
+
 	marshal_context context;
 	const char* pchKey = context.marshal_as< const char* >( Key );
 	const char* pchVal = context.marshal_as< const char* >( Value );
@@ -367,6 +369,11 @@ void SteamMatches::SetLobbyData( System::String^ Key, System::String^ Value )
 
 System::String^ SteamMatches::GetLobbyData( System::String^ Key )
 {
+	if (SteamMatches::s_CurrentLobby.m_handle == NULL)
+	{
+		return gcnew System::String("");
+	}
+
 	marshal_context context;
 	char const * pchKey = context.marshal_as< char const * >( Key );
 
@@ -376,6 +383,8 @@ System::String^ SteamMatches::GetLobbyData( System::String^ Key )
 
 void SteamMatches::SendChatMsg( System::String^ Msg )
 {
+	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
+
 	marshal_context context;
 	char const * pchMsg = context.marshal_as< char const * >( Msg );
 
@@ -384,5 +393,8 @@ void SteamMatches::SendChatMsg( System::String^ Msg )
 
 void SteamMatches::LeaveLobby()
 {
+	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
+
 	SteamMatchmaking()->LeaveLobby( *SteamMatches::s_CurrentLobby.m_handle );
+	SteamMatches::s_CurrentLobby.m_handle = NULL;
 }

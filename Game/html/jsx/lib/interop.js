@@ -54,6 +54,12 @@ define(['lodash'], function(_) {
             var stringResult = xna[funcName]();
             return JSON.parse(stringResult);
         },
+
+        findLobbies: function() {
+            if (interop.InXna()) {
+                xna.FindLobbies();
+            }
+        },
     };
     
     return interop;

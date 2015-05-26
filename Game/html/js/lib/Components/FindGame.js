@@ -21,8 +21,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var subImage = ui.subImage;
 
     var GameItem = React.createClass({displayName: "GameItem",
-        mixins: [],
-                
+        mixin: [],
+
         getInitialState: function() {
             return {
             };
@@ -35,9 +35,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         render: function() {
             return (
                 React.createElement("tr", null, 
-                    React.createElement("td", null, this.props.hostName), 
-                    React.createElement("td", null, this.props.mapName), 
-                    React.createElement("td", null, this.props.players), 
+                    React.createElement("td", null, this.props.data.Name), 
+                    React.createElement("td", null, this.props.data.Name), 
+                    React.createElement("td", null, this.props.data.Name), 
                     React.createElement("td", null, 
                         React.createElement(Button, {onClick: this.onClick}, 
                             "Join"
@@ -49,10 +49,21 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     });
 
     return React.createClass({
-        mixins: [],
+        mixins: [event.FindLobbiesMixin],
+
+        onFindLobbies: function(values) {
+            this.setState({
+                loading: false,
+                lobbies: values.Lobbies,
+            });
+        },
                 
         getInitialState: function() {
+            interop.findLobbies();
+
             return {
+                loading: true,
+                lobbies: [],
             };
         },
         
@@ -78,11 +89,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             /* Game List */
                             React.createElement(Div, {className: "game-list", pos: pos(3.3,16.9), size: size(50,66.2), 
                                  style: {'overflow-y':'scroll','pointer-events':'auto','font-size': '1.4%'}}, 
-                                React.createElement(Table, {style: {width:'100%','pointer-events':'auto'}}, React.createElement("tbody", null, 
-                                    _.map(_.range(1, 50), function(i) {
-                                        return React.createElement(GameItem, {hostName: "cookin ash", mapName: "beset", players: "2/4"});
-                                    })
-                                ))
+                                this.state.loading ? 'Loading...' :
+                                    React.createElement(Table, {style: {width:'100%','pointer-events':'auto'}}, React.createElement("tbody", null, 
+                                        _.map(this.state.lobbies, function(lobby) {
+                                            return React.createElement(GameItem, {data: lobby});
+                                        })
+                                    ))
+                                
                             ), 
 
                             /* Game visibility type */

@@ -27,5 +27,6 @@ define(['lodash'], function(_) {
         ShowUpdateMixin: makeEventMixin('show', 'onShowUpdate'),
         SetParamsMixin: makeEventMixin('setParams', 'onSetParams'),
         SetModeMixin: makeEventMixin('setMode', 'onSetMode'),
+        FindLobbyMixin: makeEventMixin('lobbies', 'onFindLobbies'),
     };
 });

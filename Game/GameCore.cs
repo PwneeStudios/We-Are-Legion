@@ -120,63 +120,6 @@ namespace Game
             }
         }
 
-        void OnCreateLobby(bool result)
-        {
-            Console.WriteLine(result);
-
-            string player_name = SteamCore.PlayerName();
-            string lobby_name = string.Format("{0}'s lobby", player_name);
-            SteamMatches.SetLobbyData("name", lobby_name);
-
-            SteamMatches.FindLobbies(OnFindLobbies);
-        }
-
-        void OnFindLobbies(bool result)
-        {
-            Console.WriteLine(result);
-
-            if (result)
-            {
-                Console.WriteLine("Failure during lobby search.");
-                return;
-            }
-
-            int n = SteamMatches.NumLobbies();
-            Console.WriteLine("Found {0} lobbies", n);
-
-            for (int i = 0; i < n; i++)
-            {
-                Console.WriteLine(SteamMatches.GetLobbyData(i, "name"));
-            }
-
-            SteamMatches.JoinLobby(0, OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);
-        }
-
-        void OnJoinLobby(bool result)
-        {
-            Console.WriteLine(result);
-
-            Console.WriteLine(SteamMatches.GetLobbyData("name"));
-
-            StartSending = true;
-        }
-        bool StartSending = false;
-
-        void OnLobbyDataUpdate()
-        {
-            Console.WriteLine("data updated");
-        }
-
-        void OnLobbyChatUpdate()
-        {
-            Console.WriteLine("chat updated");
-        }
-
-        void OnLobbyChatMsg(string msg)
-        {
-            Console.WriteLine("chat msg = {0}", msg);
-        }
-
         protected override void Initialize()
         {
             if (UsingSteam)
@@ -197,7 +140,7 @@ namespace Game
 
                 //
 
-                SteamMatches.CreateLobby(OnCreateLobby, SteamMatches.LobbyType_Public);
+                //Test_CreateLobby();
             }
 
 #if DEBUG
@@ -311,12 +254,6 @@ namespace Game
         protected override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
-            if (StartSending)
-            {
-                //SteamMatches.SendChatMsg("Hello");
-                //SteamMatches.SetLobbyData("frame", DrawCount.ToString());
-            }
         }
 
         protected override void OnDeactivated(object sender, EventArgs args)

@@ -27,6 +27,8 @@ using System.Web.Script.Serialization;
 
 using Newtonsoft.Json;
 
+using SteamWrapper;
+
 namespace Game
 {
     using Dict = Dictionary<string, object>;
@@ -39,10 +41,17 @@ namespace Game
             xnaObj.Bind("HideMapPreview", HideMapPreview);
             xnaObj.Bind("SetMap", SetMap);
             xnaObj.Bind("StartGame", StartGame);
-            //xnaObj.Bind("LeaveLobby", LeaveLobby);
-            //xnaObj.Bind("SendChat", SendChat);
-            //xnaObj.Bind("SelectTeam", SelectTeam);
-            //xnaObj.Bind("SelectKingdom", SelectKingdom);
+            xnaObj.Bind("LeaveLobby", LeaveLobby);
+            xnaObj.Bind("SendChat", SendChat);
+            xnaObj.Bind("SelectTeam", SelectTeam);
+            xnaObj.Bind("SelectKingdom", SelectKingdom);
+        }
+
+        void UpdateSettings()
+        { 
+            // send teams, players, game flags string, etc, all as one string
+            // just do this through chat sending, parse out if starts with a '.'
+            // everyone subscribes to onchat and calls this themselves
         }
 
         bool _MapLoading = false;
@@ -135,6 +144,59 @@ namespace Game
             Networking.Start();
 
             return JSValue.Null;
+        }
+
+        JSValue LeaveLobby(object sender, JavascriptMethodEventArgs e)
+        {
+            SteamMatches.LeaveLobby();
+
+            return JSValue.Null;
+        }
+
+        JSValue SendChat(object sender, JavascriptMethodEventArgs e)
+        {
+            string msg = e.Arguments[0].ToString();
+            SteamMatches.SendChatMsg(msg);
+
+            return JSValue.Null;
+        }
+
+        JSValue SelectTeam(object sender, JavascriptMethodEventArgs e)
+        {
+            string msg = e.Arguments[0].ToString();
+            SteamMatches.SendChatMsg(msg);
+
+            return JSValue.Null;
+        }
+
+        JSValue SelectKingdom(object sender, JavascriptMethodEventArgs e)
+        {
+            string msg = e.Arguments[0].ToString();
+            SteamMatches.SendChatMsg(msg);
+
+            return JSValue.Null;
+        }
+
+        void OnJoinLobby(bool result)
+        {
+            Console.WriteLine("Join lobby failed? : {0}", result);
+
+            Console.WriteLine(SteamMatches.GetLobbyData("name"));
+        }
+
+        void OnLobbyDataUpdate()
+        {
+            Console.WriteLine("lobby data updated");
+        }
+
+        void OnLobbyChatUpdate()
+        {
+            Console.WriteLine("lobby chat updated");
+        }
+
+        void OnLobbyChatMsg(string msg)
+        {
+            Console.WriteLine("chat msg = {0}", msg);
         }
     }
 }

@@ -131,6 +131,7 @@
   <ItemGroup>
     <Compile Include="Assets.cs" />
     <Compile Include="Drawing\DrawAntiMagic.cs" />
+    <Compile Include="TestSteam.cs" />
     <Compile Include="GameLogic.cs" />
     <Compile Include="Ui\Logic\GeneralInput.cs" />
     <Compile Include="Ui\Logic\Lobby.cs" />

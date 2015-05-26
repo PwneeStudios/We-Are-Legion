@@ -27,6 +27,8 @@ using System.Web.Script.Serialization;
 
 using Newtonsoft.Json;
 
+using SteamWrapper;
+
 namespace Game
 {
     using Dict = Dictionary<string, object>;
@@ -35,8 +37,57 @@ namespace Game
     {
         void BindMethods_FindLobby()
         {
-            //xnaObj.Bind("FindLobbies", FindLobbies);
-            //xnaObj.Bind("JoinLobby", JoinLobby);
+            xnaObj.Bind("FindLobbies", FindLobbies);
+            xnaObj.Bind("JoinLobby", JoinLobby);
+        }
+
+        JSValue FindLobbies(object sender, JavascriptMethodEventArgs e)
+        {
+            SteamMatches.FindLobbies(OnFindLobbies);
+            return JSValue.Null;
+        }
+
+        JSValue JoinLobby(object sender, JavascriptMethodEventArgs e)
+        {
+            int lobby = (int)e.Arguments[0];
+            SteamMatches.JoinLobby(lobby, OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);
+
+            return JSValue.Null;
+        }
+
+        void OnFindLobbies(bool result)
+        {
+            Console.WriteLine(result);
+
+            if (result)
+            {
+                Console.WriteLine("Failure during lobby search.");
+                return;
+            }
+
+            var obj = new Dict();
+
+            int n = SteamMatches.NumLobbies();
+            Console.WriteLine("Found {0} lobbies", n);
+            obj["NumLobbies"] = n;
+
+            var lobby_list = new List<Dict>(n);
+            for (int i = 0; i < n; i++)
+            {
+                string lobby_name = SteamMatches.GetLobbyData(i, "name");
+                
+                Console.WriteLine("lobby {0} name: {1}", i, lobby_name);
+
+                var lobby = new Dict();
+                lobby["Name"] = lobby_name;
+                lobby["Index"] = i;
+
+                lobby_list.Add(lobby);
+            }
+
+            obj["Lobbies"] = lobby_list;
+
+            SendDict("lobbies", obj);
         }
     }
 }

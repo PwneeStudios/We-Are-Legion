@@ -21,8 +21,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var subImage = ui.subImage;
 
     var GameItem = React.createClass({
-        mixins: [],
-                
+        mixin: [],
+
         getInitialState: function() {
             return {
             };
@@ -35,9 +35,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         render: function() {
             return (
                 <tr>
-                    <td>{this.props.hostName}</td>
-                    <td>{this.props.mapName}</td>
-                    <td>{this.props.players}</td>
+                    <td>{this.props.data.Name}</td>
+                    <td>{this.props.data.Name}</td>
+                    <td>{this.props.data.Name}</td>
                     <td>
                         <Button onClick={this.onClick}>
                             Join
@@ -49,10 +49,21 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     });
 
     return React.createClass({
-        mixins: [],
+        mixins: [event.FindLobbiesMixin],
+
+        onFindLobbies: function(values) {
+            this.setState({
+                loading: false,
+                lobbies: values.Lobbies,
+            });
+        },
                 
         getInitialState: function() {
+            interop.findLobbies();
+
             return {
+                loading: true,
+                lobbies: [],
             };
         },
         
@@ -78,11 +89,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             {/* Game List */}
                             <Div className='game-list' pos={pos(3.3,16.9)} size={size(50,66.2)}
                                  style={{'overflow-y':'scroll','pointer-events':'auto','font-size': '1.4%'}}>
-                                <Table style={{width:'100%','pointer-events':'auto'}}><tbody>
-                                    {_.map(_.range(1, 50), function(i) {
-                                        return <GameItem hostName='cookin ash' mapName='beset' players='2/4' />;
-                                    })}
-                                </tbody></Table>
+                                {this.state.loading ? 'Loading...' :
+                                    <Table style={{width:'100%','pointer-events':'auto'}}><tbody>
+                                        {_.map(this.state.lobbies, function(lobby) {
+                                            return <GameItem data={lobby} />;
+                                        })}
+                                    </tbody></Table>
+                                }
                             </Div>
 
                             {/* Game visibility type */}
