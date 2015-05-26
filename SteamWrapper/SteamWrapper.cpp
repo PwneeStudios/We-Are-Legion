@@ -319,12 +319,14 @@ System::String^ SteamMatches::GetLobbyData( int Index, System::String^ Key )
 	}
 }
 
-void SteamMatches::JoinLobby(
+void SteamMatches::JoinCreatedLobby(
 	Action< bool >^ OnJoinLobby,
 	Action^ OnChatUpdate,
 	Action< String^ >^ OnChatMsg,
 	Action^ OnDataUpdate )
 {
+	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
+
 	SteamMatches::JoinLobby( *SteamMatches::s_CurrentLobby.m_handle, OnJoinLobby, OnChatUpdate, OnChatMsg, OnDataUpdate );
 }
 

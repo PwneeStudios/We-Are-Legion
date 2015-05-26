@@ -29,7 +29,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         },
         
         onClick: function() {
-            setScreen('game-lobby', {host:false});
+            setScreen('game-lobby', {
+                host: false,
+                lobbyIndex: this.props.data.Index,
+            });
         },
 
         render: function() {
@@ -49,9 +52,11 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     });
 
     return React.createClass({
-        mixins: [event.FindLobbiesMixin],
+        mixins: [events.FindLobbiesMixin],
 
         onFindLobbies: function(values) {
+            console.log('found lobbies');
+
             this.setState({
                 loading: false,
                 lobbies: values.Lobbies,

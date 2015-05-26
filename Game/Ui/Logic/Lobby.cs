@@ -62,7 +62,7 @@ namespace Game
                 _MapLoading = MapLoading;
             }
 
-            var obj = new Dictionary<string, object>();
+            var obj = new Dict();
             obj["LobbyMapLoading"] = MapLoading;
 
             SendDict("lobby", obj);
@@ -180,8 +180,15 @@ namespace Game
         void OnJoinLobby(bool result)
         {
             Console.WriteLine("Join lobby failed? : {0}", result);
+            return;
 
-            Console.WriteLine(SteamMatches.GetLobbyData("name"));
+            string lobbyName = SteamMatches.GetLobbyData("name");
+            Console.WriteLine("joined lobby {0}", lobbyName);
+
+            var obj = new Dict();
+            obj["LobbyLoading"] = false;
+
+            SendDict("lobby", obj);
         }
 
         void OnLobbyDataUpdate()

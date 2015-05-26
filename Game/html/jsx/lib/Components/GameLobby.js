@@ -106,21 +106,39 @@ function(_, React, ReactBootstrap, interop, events, ui,
         mixins: [events.LobbyMixin],
 
         onLobbyUpdate: function(values) {
-            var loading = values.LobbyMapLoading;
-            
-            if (loading === this.state.loading) {
+            console.log('lobby updated');
+            var mapLoading = false;
+            /*
+            var mapLoading = values.LobbyMapLoading;
+
+            if (mapLoading === this.state.mapLoading) {
                 return;
-            }
+            }*/
 
             this.setState({
-                loading:loading,
+                loading: false,
+                mapLoading: mapLoading,
             });
         },
                 
+        joinLobby: function() {
+            console.log('join the lobby');
+            if (this.props.params.host) {
+                interop.createLobby();
+                //interop.joinCreatedLobby();
+                window.back();
+            } else {
+                interop.JoinLobby(this.props.params.lobbyIndex);
+            }
+        },
+
         getInitialState: function() {
+            this.joinLobby();
+
             return {
+                loading: true,
                 lobbyPlayerNum: 3,
-                loading: false,
+                mapLoading: false,
             };
         },
 
@@ -172,6 +190,15 @@ function(_, React, ReactBootstrap, interop, events, ui,
         render: function() {
             var _this = this;
 
+            console.log('render the lobby');
+
+            if (this.state.loading) {
+                return (
+                    <div>
+                    </div>
+                );
+            }
+
             var visibility = [
                 {name:'Public game', value:'public'},
                 {name:'Friends only', value:'friend'},
@@ -179,7 +206,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
             ];
 
             var disabled = this.state.starting;
-            var preventStart = this.state.starting || this.state.loading;
+            var preventStart = this.state.starting || this.state.mapLoading;
 
             return (
                 <div>

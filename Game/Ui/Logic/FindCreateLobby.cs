@@ -41,6 +41,7 @@ namespace Game
 
             xnaObj.Bind("FindLobbies", FindLobbies);
             xnaObj.Bind("JoinLobby", JoinLobby);
+            xnaObj.Bind("JoinCreatedLobby", JoinCreatedLobby);
         }
 
         JSValue CreateLobby(object sender, JavascriptMethodEventArgs e)
@@ -63,10 +64,16 @@ namespace Game
             return JSValue.Null;
         }
 
+        JSValue JoinCreatedLobby(object sender, JavascriptMethodEventArgs e)
+        {
+            Console.WriteLine("Trying to join the created lobby.");
+            SteamMatches.JoinCreatedLobby(OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);
+
+            return JSValue.Null;
+        }
+
         void OnCreateLobby(bool result)
         {
-            Console.WriteLine(result);
-
             if (result)
             {
                 Console.WriteLine("Failure during lobby creation.");
@@ -76,14 +83,10 @@ namespace Game
             string player_name = SteamCore.PlayerName();
             string lobby_name = string.Format("{0}'s lobby", player_name);
             SteamMatches.SetLobbyData("name", lobby_name);
-
-            //SteamMatches.FindLobbies(Test_OnFindLobbies);
         }
 
         void OnFindLobbies(bool result)
         {
-            Console.WriteLine(result);
-
             if (result)
             {
                 Console.WriteLine("Failure during lobby search.");

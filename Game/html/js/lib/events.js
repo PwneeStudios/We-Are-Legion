@@ -1,7 +1,7 @@
 define(['lodash'], function(_) {
     var makeEventMixin = function(triggerName, eventName) {
         var callbacks = [];
-        
+
         window[triggerName] = function(json) {
             _.each(callbacks, function(item) {
                 item[eventName](json);
@@ -27,6 +27,6 @@ define(['lodash'], function(_) {
         ShowUpdateMixin: makeEventMixin('show', 'onShowUpdate'),
         SetParamsMixin: makeEventMixin('setParams', 'onSetParams'),
         SetModeMixin: makeEventMixin('setMode', 'onSetMode'),
-        FindLobbyMixin: makeEventMixin('lobbies', 'onFindLobbies'),
+        FindLobbiesMixin: makeEventMixin('lobbies', 'onFindLobbies'),
     };
 });

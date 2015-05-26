@@ -53,7 +53,7 @@ namespace SteamWrapper
 	{
 
 	public:
-		CSteamID * m_handle;
+		CSteamID * m_handle = NULL;
 
 		SteamLobby( CSteamID * handle ) :
 			m_handle( handle )
@@ -166,7 +166,7 @@ namespace SteamWrapper
 		
 		static int const NumLobbies();
 		static String^ GetLobbyData( int Index, String^ Key );
-		static void JoinLobby(                   Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^ >^ OnChatMsg, Action^ OnDataUpdate );
+		static void JoinCreatedLobby(            Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^ >^ OnChatMsg, Action^ OnDataUpdate );
 		static void JoinLobby( int Index,        Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^ >^ OnChatMsg, Action^ OnDataUpdate );
 		static void JoinLobby( CSteamID LobbyID, Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^ >^ OnChatMsg, Action^ OnDataUpdate );
 

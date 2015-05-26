@@ -112,7 +112,7 @@ namespace Game
                     break;
 
                 case GameState.MainMenu:
-                    UpdateLobbyMapLoading();
+                    //UpdateLobbyMapLoading();
 
                     if (MapLoading && NewMap != null)
                     {
