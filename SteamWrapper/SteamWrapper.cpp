@@ -319,7 +319,26 @@ System::String^ SteamMatches::GetLobbyData( int Index, System::String^ Key )
 	}
 }
 
+void SteamMatches::JoinLobby(
+	Action< bool >^ OnJoinLobby,
+	Action^ OnChatUpdate,
+	Action< String^ >^ OnChatMsg,
+	Action^ OnDataUpdate )
+{
+	SteamMatches::JoinLobby( *SteamMatches::s_CurrentLobby.m_handle, OnJoinLobby, OnChatUpdate, OnChatMsg, OnDataUpdate );
+}
+
 void SteamMatches::JoinLobby( int Index,
+	Action< bool >^ OnJoinLobby,
+	Action^ OnChatUpdate,
+	Action< String^ >^ OnChatMsg,
+	Action^ OnDataUpdate )
+{
+	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
+	SteamMatches::JoinLobby( steamIDLobby, OnJoinLobby, OnChatUpdate, OnChatMsg, OnDataUpdate );
+}
+
+void SteamMatches::JoinLobby( CSteamID LobbyID,
 	Action< bool >^ OnJoinLobby,
 	Action^ OnChatUpdate,
 	Action< String^ >^ OnChatMsg,
@@ -330,14 +349,8 @@ void SteamMatches::JoinLobby( int Index,
 	SteamMatches::s_OnChatMsg = OnChatMsg;
 	SteamMatches::s_OnDataUpdate = OnDataUpdate;
 
-	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
-
-	SteamAPICall_t hSteamAPICall = SteamMatchmaking()->JoinLobby( steamIDLobby );
+	SteamAPICall_t hSteamAPICall = SteamMatchmaking()->JoinLobby( LobbyID );
 	g_CallResultJoinLobby.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnJoinLobby );
-	
-	//g_CallResultChatUpdate.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnChatUpdate );
-	//g_CallResultChatMsg.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnChatMsg );
-	//g_CallResultDataUpdate.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnDataUpdate );
 }
 
 void SteamMatches::CreateLobby( Action< bool >^ OnCreateLobby, int LobbyType )

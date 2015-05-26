@@ -60,6 +60,12 @@ define(['lodash'], function(_) {
                 xna.FindLobbies();
             }
         },
+
+        createLobby: function() {
+            if (interop.InXna()) {
+                xna.CreateLobby();
+            }
+        },
     };
     
     return interop;

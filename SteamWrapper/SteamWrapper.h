@@ -166,11 +166,9 @@ namespace SteamWrapper
 		
 		static int const NumLobbies();
 		static String^ GetLobbyData( int Index, String^ Key );
-		static void JoinLobby( int Index,
-			Action< bool >^ OnJoinLobby,
-			Action^ OnChatUpdate,
-			Action< String^ >^ OnChatMsg,
-			Action^ OnDataUpdate );
+		static void JoinLobby(                   Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^ >^ OnChatMsg, Action^ OnDataUpdate );
+		static void JoinLobby( int Index,        Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^ >^ OnChatMsg, Action^ OnDataUpdate );
+		static void JoinLobby( CSteamID LobbyID, Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^ >^ OnChatMsg, Action^ OnDataUpdate );
 
 		static void CreateLobby(Action< bool >^ OnCreateLobby, int LobbyType );
 

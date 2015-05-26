@@ -37,8 +37,16 @@ namespace Game
     {
         void BindMethods_FindLobby()
         {
+            xnaObj.Bind("CreateLobby", CreateLobby);
+
             xnaObj.Bind("FindLobbies", FindLobbies);
             xnaObj.Bind("JoinLobby", JoinLobby);
+        }
+
+        JSValue CreateLobby(object sender, JavascriptMethodEventArgs e)
+        {
+            SteamMatches.CreateLobby(OnCreateLobby, SteamMatches.LobbyType_Public);
+            return JSValue.Null;
         }
 
         JSValue FindLobbies(object sender, JavascriptMethodEventArgs e)
@@ -53,6 +61,23 @@ namespace Game
             SteamMatches.JoinLobby(lobby, OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);
 
             return JSValue.Null;
+        }
+
+        void OnCreateLobby(bool result)
+        {
+            Console.WriteLine(result);
+
+            if (result)
+            {
+                Console.WriteLine("Failure during lobby creation.");
+                return;
+            }
+
+            string player_name = SteamCore.PlayerName();
+            string lobby_name = string.Format("{0}'s lobby", player_name);
+            SteamMatches.SetLobbyData("name", lobby_name);
+
+            //SteamMatches.FindLobbies(Test_OnFindLobbies);
         }
 
         void OnFindLobbies(bool result)

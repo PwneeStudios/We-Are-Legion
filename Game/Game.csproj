@@ -135,7 +135,7 @@
     <Compile Include="GameLogic.cs" />
     <Compile Include="Ui\Logic\GeneralInput.cs" />
     <Compile Include="Ui\Logic\Lobby.cs" />
-    <Compile Include="Ui\Logic\FindLobby.cs" />
+    <Compile Include="Ui\Logic\FindCreateLobby.cs" />
     <Compile Include="Ui\Logic\InGame.cs" />
     <Compile Include="Ui\Logic\Menu.cs" />
     <Compile Include="Ui\Logic\Options.cs" />

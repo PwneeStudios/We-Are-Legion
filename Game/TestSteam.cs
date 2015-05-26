@@ -61,7 +61,7 @@ namespace Game
                 Console.WriteLine(SteamMatches.GetLobbyData(i, "name"));
             }
 
-            SteamMatches.JoinLobby(0, Test_OnJoinLobby, Test_OnLobbyChatUpdate, Test_OnLobbyChatMsg, Test_OnLobbyDataUpdate);
+            SteamMatches.JoinLobby(Test_OnJoinLobby, Test_OnLobbyChatUpdate, Test_OnLobbyChatMsg, Test_OnLobbyDataUpdate);
         }
 
         void Test_OnJoinLobby(bool result)
