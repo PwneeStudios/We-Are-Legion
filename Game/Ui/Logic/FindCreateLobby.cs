@@ -97,12 +97,16 @@ namespace Game
             for (int i = 0; i < n; i++)
             {
                 string lobby_name = SteamMatches.GetLobbyData(i, "name");
+                int member_count = SteamMatches.GetLobbyMemberCount(i);
+                int capacity = SteamMatches.GetLobbyCapacity(i);
                 
-                Console.WriteLine("lobby {0} name: {1}", i, lobby_name);
+                Console.WriteLine("lobby {0} name: {1} members: {2}/{3}", i, lobby_name, member_count, capacity);
 
                 var lobby = new Dict();
                 lobby["Name"] = lobby_name;
                 lobby["Index"] = i;
+                lobby["MemberCount"] = member_count;
+                lobby["Capacity"] = capacity;
 
                 lobby_list.Add(lobby);
             }

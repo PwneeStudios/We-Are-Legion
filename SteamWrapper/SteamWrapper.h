@@ -177,6 +177,10 @@ namespace SteamWrapper
 
 		static void SendChatMsg( String^ Msg );
 
+		static int GetLobbyMemberCount( int Index );
+		static int GetLobbyCapacity(int Index);
+		static void SetLobbyType(int LobbyType);
+
 		static void LeaveLobby();
 	};
 }

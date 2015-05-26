@@ -355,17 +355,25 @@ void SteamMatches::JoinLobby( CSteamID LobbyID,
 	g_CallResultJoinLobby.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnJoinLobby );
 }
 
+ELobbyType IntToLobbyType(int LobbyType)
+{
+	ELobbyType type = k_ELobbyTypePublic;
+
+	switch (LobbyType)
+	{
+	case SteamMatches::LobbyType_Public:      type = k_ELobbyTypePublic;      break;
+	case SteamMatches::LobbyType_FriendsOnly: type = k_ELobbyTypeFriendsOnly; break;
+	case SteamMatches::LobbyType_Private:     type = k_ELobbyTypePrivate;     break;
+	}
+
+	return type;
+}
+
 void SteamMatches::CreateLobby( Action< bool >^ OnCreateLobby, int LobbyType )
 {
 	SteamMatches::s_OnCreateLobby = OnCreateLobby;
 
-	ELobbyType type;
-	switch ( LobbyType )
-	{
-	case LobbyType_Public:      type = k_ELobbyTypePublic;      break;
-	case LobbyType_FriendsOnly: type = k_ELobbyTypeFriendsOnly; break;
-	case LobbyType_Private:     type = k_ELobbyTypePrivate;     break;
-	}
+	ELobbyType type = IntToLobbyType( LobbyType );
 
 	SteamAPICall_t hSteamAPICall = SteamMatchmaking()->CreateLobby( type, 4 );
 	g_CallResultLobbyCreated.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnLobbyCreated );
@@ -393,7 +401,28 @@ System::String^ SteamMatches::GetLobbyData( System::String^ Key )
 	char const * pchKey = context.marshal_as< char const * >( Key );
 
 	char const * pchVal = SteamMatchmaking()->GetLobbyData( *SteamMatches::s_CurrentLobby.m_handle, pchKey );
+	
 	return gcnew System::String ( pchVal );
+}
+
+int SteamMatches::GetLobbyMemberCount( int Index )
+{
+	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
+	return SteamMatchmaking()->GetNumLobbyMembers( steamIDLobby );
+}
+
+int SteamMatches::GetLobbyCapacity( int Index )
+{
+	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
+	return SteamMatchmaking()->GetLobbyMemberLimit( steamIDLobby );
+}
+
+void SteamMatches::SetLobbyType( int LobbyType )
+{
+	if (SteamMatches::s_CurrentLobby.m_handle == NULL) return;
+
+	ELobbyType type = IntToLobbyType( LobbyType );
+	SteamMatchmaking()->SetLobbyType( *SteamMatches::s_CurrentLobby.m_handle, type );
 }
 
 void SteamMatches::SendChatMsg( System::String^ Msg )

@@ -39,8 +39,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return (
                 <tr>
                     <td>{this.props.data.Name}</td>
-                    <td>{this.props.data.Name}</td>
-                    <td>{this.props.data.Name}</td>
+                    <td>{this.props.data.MemberCount} / {this.props.data.Capacity}</td>
                     <td>
                         <Button onClick={this.onClick}>
                             Join

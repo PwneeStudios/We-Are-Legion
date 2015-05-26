@@ -39,8 +39,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return (
                 React.createElement("tr", null, 
                     React.createElement("td", null, this.props.data.Name), 
-                    React.createElement("td", null, this.props.data.Name), 
-                    React.createElement("td", null, this.props.data.Name), 
+                    React.createElement("td", null, this.props.data.MemberCount, " / ", this.props.data.Capacity), 
                     React.createElement("td", null, 
                         React.createElement(Button, {onClick: this.onClick}, 
                             "Join"
