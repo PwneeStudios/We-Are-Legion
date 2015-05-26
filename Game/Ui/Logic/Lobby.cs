@@ -45,6 +45,7 @@ namespace Game
             xnaObj.Bind("SendChat", SendChat);
             xnaObj.Bind("SelectTeam", SelectTeam);
             xnaObj.Bind("SelectKingdom", SelectKingdom);
+            xnaObj.Bind("OnLobbyChatEnter", OnLobbyChatEnter);
         }
 
         void UpdateSettings()
@@ -55,13 +56,8 @@ namespace Game
         }
 
         bool _MapLoading = false;
-        void UpdateLobbyMapLoading()
+        void SetMapLoading()
         {
-            if (_MapLoading != MapLoading)
-            {
-                _MapLoading = MapLoading;
-            }
-
             var obj = new Dict();
             obj["LobbyMapLoading"] = MapLoading;
 
@@ -194,6 +190,19 @@ namespace Game
             SendDict("lobby", obj);
         }
 
+        JSValue OnLobbyChatEnter(object sender, JavascriptMethodEventArgs e)
+        {
+            string message = e.Arguments[0];
+
+            if (message != null && message.Length > 0)
+            {
+                Console.WriteLine("lobby chat message: " + message);
+                SteamMatches.SendChatMsg(message);
+            }
+
+            return JSValue.Null;
+        }
+
         void OnLobbyDataUpdate()
         {
             Console.WriteLine("lobby data updated");
@@ -207,6 +216,7 @@ namespace Game
         void OnLobbyChatMsg(string msg)
         {
             Console.WriteLine("chat msg = {0}", msg);
+            GameClass.Game.AddChatMessage(1, msg);
         }
     }
 }

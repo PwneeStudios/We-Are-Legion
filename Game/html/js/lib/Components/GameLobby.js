@@ -112,6 +112,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
 
         onLobbyMapUpdate: function(values) {
+            console.log('onLobbyMapUpdate');
             var mapLoading = values.LobbyMapLoading;
 
             if (mapLoading === this.state.mapLoading) {
@@ -220,7 +221,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
                             /* Chat */
                             React.createElement(Chat.ChatBox, {ref: "chat", show: true, full: true, pos: pos(2, 17), size: size(43,61)}), 
-                            React.createElement(Chat.ChatInput, {show: true, pos: pos(2,80), size: width(43)}), 
+                            React.createElement(Chat.ChatInput, {show: true, lobbyChat: true, pos: pos(2,80), size: width(43)}), 
 
                             /* Player Table */
                             React.createElement(Div, {nonBlocking: true, pos: pos(48,16.9), size: width(50), style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 

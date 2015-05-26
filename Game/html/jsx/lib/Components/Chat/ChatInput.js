@@ -52,7 +52,12 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
             if (keyCode == '13') {
                 if (interop.InXna()) {
                     var message = this.refs.input.getInputDOMNode().value;
-                    xna.OnChatEnter(message);
+                    
+                    if (this.props.lobbyChat) {
+                        xna.OnLobbyChatEnter(message);
+                    } else {
+                        xna.OnChatEnter(message);
+                    }
                     
                     this.setState({
                         value:'',

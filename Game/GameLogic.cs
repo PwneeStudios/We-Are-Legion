@@ -112,12 +112,18 @@ namespace Game
                     break;
 
                 case GameState.MainMenu:
-                    //UpdateLobbyMapLoading();
+                    if (_MapLoading != MapLoading)
+                    {
+                        _MapLoading = MapLoading;
+                        SetMapLoading();
+                    }
 
                     if (MapLoading && NewMap != null)
                     {
                         World = NewMap;
                         MapLoading = false;
+
+                        SetMapLoading();
                     }
 
                     Render.StandardRenderSetup();

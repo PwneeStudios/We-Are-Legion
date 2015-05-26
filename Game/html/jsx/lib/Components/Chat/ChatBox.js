@@ -20,7 +20,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             message.index = this.state.counter++;
             
             self.state.messages.push(message);
-            self.setState({messages: self.state.messages});
+            self.setState({
+                messages: self.state.messages
+            });
         },
 
         remove: function(message) {
