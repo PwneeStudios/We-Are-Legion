@@ -144,6 +144,7 @@ namespace Game
 
         JSValue LeaveLobby(object sender, JavascriptMethodEventArgs e)
         {
+            Console.WriteLine("leaving lobby");
             SteamMatches.LeaveLobby();
 
             return JSValue.Null;

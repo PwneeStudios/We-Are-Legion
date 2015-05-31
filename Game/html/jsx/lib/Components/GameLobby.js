@@ -234,6 +234,11 @@ function(_, React, ReactBootstrap, interop, events, ui,
             interop.setMap(map);
         },
 
+        leaveLobby: function() {
+            interop.leaveLobby();
+            back();
+        },
+
         render: function() {
             var _this = this;
 
@@ -315,7 +320,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                             <Button disabled={preventStart} onClick={this.onClickStart}>Start Game</Button>
                                             : null}
                                         &nbsp;
-                                        <Button disabled={disabled} onClick={back}>Leave Lobby</Button>
+                                        <Button disabled={disabled} onClick={this.leaveLobby}>Leave Lobby</Button>
                                     </p>
                                 </div>
                             </Div>
