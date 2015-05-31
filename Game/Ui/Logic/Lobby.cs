@@ -93,22 +93,35 @@ namespace Game
         string GameMapName = null;
         JSValue SetMap(object sender, JavascriptMethodEventArgs e)
         {
-            string new_map = e.Arguments[0] + ".m3n";
+            string new_map = e.Arguments[0];
+            
+            SetMap(new_map);
 
-            if ((SetMapThread == null || !SetMapThread.IsAlive) && GameMapName == new_map) return JSValue.Null;
-
-            GameMapName = new_map;
-
-            PrevMapThread = SetMapThread;
-            SetMapThread = new Thread(() => SetMap(GameMapName));
-            SetMapThread.Priority = ThreadPriority.Highest;
-            SetMapThread.Start();
+            if (SteamMatches.IsLobbyOwner())
+            {
+                LobbyInfo.MapName = new_map;
+                SteamMatches.SetLobbyData("MapName", new_map);
+            }
 
             return JSValue.Null;
         }
 
+        void SetMap(string map_name)
+        {
+            map_name += ".m3n";
+
+            if ((SetMapThread == null || !SetMapThread.IsAlive) && GameMapName == map_name) return;
+
+            GameMapName = map_name;
+
+            PrevMapThread = SetMapThread;
+            SetMapThread = new Thread(() => SetMapThreadFunc(GameMapName));
+            SetMapThread.Priority = ThreadPriority.Highest;
+            SetMapThread.Start();
+        }
+
         World NewMap;
-        void SetMap(string map)
+        void SetMapThreadFunc(string map)
         {
             if (PrevMapThread != null && PrevMapThread.IsAlive) PrevMapThread.Join();
 
@@ -188,11 +201,21 @@ namespace Game
                 return;
             }
 
+            if (SteamMatches.IsLobbyOwner())
+            {
+                BuildMapList();
+            }
+
             string lobbyName = SteamMatches.GetLobbyData("name");
             Console.WriteLine("joined lobby {0}", lobbyName);
 
             SendLobbyData();
             BuildLobbyInfo();
+        }
+
+        void BuildMapList()
+        {
+            //Path.Combine("Content", Path.Combine("Maps", map));
         }
 
         void SendLobbyData()
@@ -328,6 +351,12 @@ namespace Game
         void OnLobbyDataUpdate()
         {
             Console.WriteLine("lobby data updated");
+
+            string map = SteamMatches.GetLobbyData("MapName");
+            if (map != null && map.Length > 0)
+            {
+                SetMap(map);
+            }
 
             SendLobbyData();
         }

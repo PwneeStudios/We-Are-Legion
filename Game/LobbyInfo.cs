@@ -41,6 +41,7 @@ namespace Game
     public class LobbyInfo
     {
         public List<PlayerLobbyInfo> Players = new List<PlayerLobbyInfo>(4);
+        public string MapName = "Beset";
 
         public LobbyInfo()
         {
