@@ -3,10 +3,18 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, Rea
 
     return React.createClass({
         mixins: [],
+
+        componentWillReceiveProps: function(nextProps) {
+            this.setState(this.getInitialState(nextProps));
+        },
                 
-        getInitialState: function() {
+        getInitialState: function(props) {
+            if (typeof props === 'undefined') {
+                props = this.props;
+            }
+
             return {
-                selected: this.props.selected,
+                selected: props.selected,
             };
         },
 

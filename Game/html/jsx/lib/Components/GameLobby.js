@@ -54,13 +54,21 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
     var Choose = React.createClass({
         mixins: [],
-                
-        getInitialState: function() {
-            var self = this;
-            var selected = this.props.choices[0];
 
-            _.forEach(this.props.choices, function(choice) {
-                if (choice.value === self.props.value) {
+        componentWillReceiveProps: function(nextProps) {
+            this.setState(this.getInitialState(nextProps));
+        },
+                
+        getInitialState: function(props) {
+            if (typeof props === 'undefined') {
+                props = this.props;
+            }
+
+            var self = this;
+            var selected = props.choices[0];
+
+            _.forEach(props.choices, function(choice) {
+                if (choice.value === props.value) {
                     selected = choice;
                 }
             });

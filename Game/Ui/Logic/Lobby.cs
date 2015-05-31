@@ -180,6 +180,8 @@ namespace Game
 
         void OnJoinLobby(bool result)
         {
+            LobbyInfo = new LobbyInfo();
+
             if (result)
             {
                 Console.WriteLine("Failure joining the lobby.");
@@ -219,24 +221,85 @@ namespace Game
         {
             if (!SteamMatches.IsLobbyOwner()) return;
 
+            var PrevInfo = LobbyInfo;
             LobbyInfo = new LobbyInfo();
 
             int members = SteamMatches.GetLobbyMemberCount();
             for (int i = 0; i < members; i++)
             {
                 var player = LobbyInfo.Players[i];
-
-                //
-                //loop through old lobbyinfo and pull out old player if they exist
-
                 player.SteamID = SteamMatches.GetMememberId(i);
+
+                // If a match from the previous info exists for this player,
+                // use the previous data, otherwise use defaults.
+                var match = PrevInfo.Players.Find(_match => _match.SteamID == player.SteamID);
+                if (match == null)
+                {
+                    player.GamePlayer = -1;
+                    player.GameTeam = -1;
+                }
+                else
+                {
+                    player = match;
+                }
+
                 player.Name = SteamMatches.GetMememberName(i);
             }
 
-            //
-            //assign initial choices for those players that dont have choices
+            // For every player that doesn't have a kingdom/team set,
+            // choose an available initial value.
+            foreach (var player in LobbyInfo.Players)
+            {
+                if (player.GamePlayer <= 0 || player.GamePlayer > 4)
+                {
+                    player.GamePlayer = FirstKingdomAvailableTo(player.SteamID);
+                }
+
+                if (player.GameTeam <= 0 || player.GameTeam > 4)
+                {
+                    player.GameTeam = FirstTeamAvailableTo(player.SteamID);
+                }
+            }
 
             SetLobbyInfo();
+        }
+
+        int FirstTeamAvailableTo(uint SteamID)
+        {
+            for (int team = 1; team <= 4; team++)
+            {
+                if (TeamAvailableTo(team, SteamID))
+                {
+                    return team;
+                }
+            }
+
+            return 0;
+        }
+
+        int FirstKingdomAvailableTo(uint SteamID)
+        {
+            for (int kingdom = 1; kingdom <= 4; kingdom++)
+            {
+                if (KingdomAvailableTo(kingdom, SteamID))
+                {
+                    return kingdom;
+                }
+            }
+
+            return 0;
+        }
+
+        bool TeamAvailableTo(int team, uint SteamID)
+        {
+            return !LobbyInfo.Players.Exists(player =>
+                player.SteamID != 0 && player.SteamID != SteamID && player.GameTeam == team);
+        }
+
+        bool KingdomAvailableTo(int kingdom, uint SteamID)
+        {
+            return !LobbyInfo.Players.Exists(player =>
+                player.SteamID != 0 && player.SteamID != SteamID && player.GamePlayer == kingdom);
         }
 
         void SetLobbyInfo()
@@ -326,13 +389,19 @@ namespace Game
             // Update the player's info.
             if (msg[1] == 'k')
             {
-                GameClass.Game.AddChatMessage(1, "Has changed kingdoms!");
-                player.GamePlayer = value;
+                if (KingdomAvailableTo(value, id))
+                {
+                    GameClass.Game.AddChatMessage(1, "Has changed kingdoms!");
+                    player.GamePlayer = value;                    
+                }
             }
             else if (msg[1] == 't')
             {
-                GameClass.Game.AddChatMessage(1, "Has changed teams!");
-                player.GameTeam = value;
+                if (TeamAvailableTo(value, id))
+                {
+                    GameClass.Game.AddChatMessage(1, "Has changed teams!");
+                    player.GameTeam = value;                    
+                }
             }
             else
             {
