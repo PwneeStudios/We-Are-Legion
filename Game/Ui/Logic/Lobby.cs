@@ -160,7 +160,9 @@ namespace Game
 
         JSValue SelectTeam(object sender, JavascriptMethodEventArgs e)
         {
-            string msg = e.Arguments[0].ToString();
+            string team = e.Arguments[0].ToString();
+            string msg = string.Format("%t{0}", team);
+
             SteamMatches.SendChatMsg(msg);
 
             return JSValue.Null;
@@ -168,7 +170,9 @@ namespace Game
 
         JSValue SelectKingdom(object sender, JavascriptMethodEventArgs e)
         {
-            string msg = e.Arguments[0].ToString();
+            string kingdom = e.Arguments[0].ToString();
+            string msg = string.Format("%k{0}", kingdom);
+
             SteamMatches.SendChatMsg(msg);
 
             return JSValue.Null;
@@ -320,7 +324,7 @@ namespace Game
             var player = LobbyInfo.Players.Where(_player => _player.SteamID == id).First();
 
             // Update the player's info.
-            if (msg[1] == 'p')
+            if (msg[1] == 'k')
             {
                 GameClass.Game.AddChatMessage(1, "Has changed kingdoms!");
                 player.GamePlayer = value;

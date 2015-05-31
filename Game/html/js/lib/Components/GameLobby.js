@@ -71,10 +71,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
         
         onSelected: function(item) {
-            console.log('something selected');
-            if (interop.InXna()) {
-                console.log('select team');
-                xna.SelectTeam(this.props.player, item.value);
+            if (this.props.onSelect) {
+                this.props.onSelect(item);
             }
 
             this.setState({
@@ -105,14 +103,32 @@ function(_, React, ReactBootstrap, interop, events, ui,
             return {
             };
         },
+
+        selectTeam: function(item) {
+            if (interop.InXna()) {
+                xna.SelectTeam(item.value);
+            }
+        },
+
+        selectKingdom: function(item) {
+            if (interop.InXna()) {
+                xna.SelectKingdom(item.value);
+            }
+        },
         
         render: function() {
             if (this.props.info.Name) {
                 return (
                     React.createElement("tr", null, 
                         React.createElement("td", null, this.props.info.Name), 
-                        React.createElement("td", null, React.createElement(Choose, React.__spread({disabled: this.props.disabled, choices: teamChoices, value: this.props.info.GameTeam, default: "Choose team"},  this.props))), 
-                        React.createElement("td", null, React.createElement(Choose, React.__spread({disabled: this.props.disabled, choices: kingdomChoices, value: this.props.info.GamePlayer, default: "Choose kingdom"},  this.props)))
+                        React.createElement("td", null, 
+                            React.createElement(Choose, React.__spread({onSelect: this.selectTeam, disabled: this.props.disabled, choices: teamChoices, 
+                                    value: this.props.info.GameTeam, default: "Choose team"},  this.props))
+                        ), 
+                        React.createElement("td", null, 
+                            React.createElement(Choose, React.__spread({onSelect: this.selectKingdom, disabled: this.props.disabled, choices: kingdomChoices, 
+                                    value: this.props.info.GamePlayer, default: "Choose kingdom"},  this.props))
+                        )
                     )
                 );
             } else {
