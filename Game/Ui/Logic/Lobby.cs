@@ -182,25 +182,25 @@ namespace Game
                 return;
             }
 
-            BuildLobbyInfo();
-
             string lobbyName = SteamMatches.GetLobbyData("name");
             Console.WriteLine("joined lobby {0}", lobbyName);
 
             SendLobbyData();
+            BuildLobbyInfo();
         }
 
         void SendLobbyData()
         {
             var obj = new Dict();
             obj["SteamID"] = SteamCore.PlayerId();
-            obj["LobbyName"] = SteamMatches.GetLobbyData("name");
             obj["Maps"] = new string[] {"Beset", "Clash of Madness", "Nice"};
 
+            string lobby_name = SteamMatches.GetLobbyData("name");
             string lobby_info = SteamMatches.GetLobbyData("LobbyInfo");
-            if (lobby_info != null && lobby_info.Length > 0)
+            if (lobby_info != null && lobby_info.Length > 0 && lobby_name.Length > 0)
             {
                 obj["LobbyInfo"] = lobby_info;
+                obj["LobbyName"] = lobby_name;
                 obj["LobbyLoading"] = false;
             }
             else
@@ -208,7 +208,6 @@ namespace Game
                 obj["LobbyLoading"] = true;
             }
 
-            Console.WriteLine("lobby name = {0}", obj["LobbyName"]);
             SendDict("lobby", obj);
         }
 

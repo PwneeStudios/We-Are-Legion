@@ -131,8 +131,10 @@ function(_, React, ReactBootstrap, interop, events, ui,
         mixins: [events.LobbyMixin, events.LobbyMapMixin],
 
         onLobbyUpdate: function(values) {
-            //values = {"SteamID":100410705,"LobbyName":"Cookin' Ash's lobby","Maps":['Beset', 'Clash of Madness', 'Nice'],"LobbyInfo":"{\"Players\":[{\"LobbyIndex\":0,\"Name\":\"Cookin' Ash\",\"SteamID\":100410705,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0}]}","LobbyLoading":false};
-            //values = {"SteamID":100410705,"LobbyName":"Cookin' Ash's lobby","Maps":["Beset","Clash of Madness","Nice"],"LobbyLoading":true};
+            if (!this.state.loading && values.LobbyLoading) {
+                return;
+            }
+
             //console.log('values');
             //console.log(JSON.stringify(values));
             //console.log('---');
@@ -248,9 +250,6 @@ function(_, React, ReactBootstrap, interop, events, ui,
                     </div>
                 );
             }
-
-            console.log('this.state.lobbyInfo');
-            console.log(JSON.stringify(this.state.lobbyInfo));
 
             var visibility = [
                 {name:'Public game', value:'public'},

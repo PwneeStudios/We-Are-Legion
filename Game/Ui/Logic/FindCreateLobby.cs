@@ -80,7 +80,7 @@ namespace Game
         private static void SetLobbyName()
         {
             string player_name = SteamCore.PlayerName();
-            string lobby_name = string.Format("{0}'s lobby", player_name);
+            string lobby_name = string.Format("{0}'s lobby {1}", player_name, joincount);
             SteamMatches.SetLobbyData("name", lobby_name);
         }
 
