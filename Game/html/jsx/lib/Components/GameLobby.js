@@ -215,10 +215,6 @@ function(_, React, ReactBootstrap, interop, events, ui,
             };
         },
 
-        componentDidMount: function() {
-            interop.drawMapPreviewAt(2.66, 0.554, 0.22, 0.22);
-        },
-
         componentWillUnmount: function() {
             interop.hideMapPreview();
         },
@@ -283,6 +279,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
             var disabled = this.state.starting;
             var preventStart = this.state.starting || this.state.mapLoading;
+
+            interop.drawMapPreviewAt(2.66, 0.554, 0.22, 0.22);
 
             return (
                 <div>

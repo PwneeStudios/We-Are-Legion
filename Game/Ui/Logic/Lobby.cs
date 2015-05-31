@@ -99,7 +99,6 @@ namespace Game
 
             if (SteamMatches.IsLobbyOwner())
             {
-                LobbyInfo.MapName = new_map;
                 SteamMatches.SetLobbyData("MapName", new_map);
             }
 
@@ -201,9 +200,13 @@ namespace Game
                 return;
             }
 
+            BuildMapList();
+
             if (SteamMatches.IsLobbyOwner())
             {
-                BuildMapList();
+                GameMapName = null;
+                MapLoading = true;
+                SetMap(Maps[0]);
             }
 
             string lobbyName = SteamMatches.GetLobbyData("name");
@@ -213,16 +216,24 @@ namespace Game
             BuildLobbyInfo();
         }
 
+        List<string> Maps;
         void BuildMapList()
         {
-            //Path.Combine("Content", Path.Combine("Maps", map));
+            Maps = new List<string>();
+
+            string path = Path.Combine("Content", "Maps");
+            foreach (string file in Directory.EnumerateFiles(path, "*.m3n", SearchOption.TopDirectoryOnly))
+            {
+                string name = Path.GetFileNameWithoutExtension(file);
+                Maps.Add(name);
+            }
         }
 
         void SendLobbyData()
         {
             var obj = new Dict();
             obj["SteamID"] = SteamCore.PlayerId();
-            obj["Maps"] = new string[] {"Beset", "Clash of Madness", "Nice"};
+            obj["Maps"] = Maps;
 
             string lobby_name = SteamMatches.GetLobbyData("name");
             string lobby_info = SteamMatches.GetLobbyData("LobbyInfo");
