@@ -21,6 +21,7 @@ namespace SteamWrapper
 		static void Update();
 
 		static String^ PlayerName();
+		static UInt32 PlayerId();
 	};
 
 	public ref class SteamTextInput

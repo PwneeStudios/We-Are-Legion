@@ -51,6 +51,11 @@ System::String^ SteamCore::PlayerName()
 	return gcnew System::String( "" );
 }
 
+UInt32 SteamCore::PlayerId()
+{
+	return (uint32)SteamUser()->GetSteamID().GetAccountID();
+}
+
 const char * SteamTextInput::GetText()
 {
 	int cchText = SteamUtils()->GetEnteredGamepadTextLength();

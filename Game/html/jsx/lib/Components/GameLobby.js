@@ -56,8 +56,17 @@ function(_, React, ReactBootstrap, interop, events, ui,
         mixins: [],
                 
         getInitialState: function() {
+            var self = this;
+            var selected = this.props.choices[0];
+
+            _.forEach(this.props.choices, function(choice) {
+                if (choice.value === self.props.value) {
+                    selected = choice;
+                }
+            });
+
             return {
-                selected: this.props.choices[0],
+                selected: selected,
             };
         },
         
@@ -74,7 +83,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
 
         render: function() {
-            if (this.props.activePlayer == this.props.player) {
+            if (this.props.activePlayer === this.props.info.SteamID) {
                 return (
                     <Dropdown disabled={this.props.disabled}
                               selected={this.state.selected}
@@ -83,7 +92,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                 );
             } else {
                 return (
-                    <span>{this.props.choices[0].selectedName}</span>
+                    <span>{this.state.selected.selectedName}</span>
                 );
             }
         },
@@ -102,8 +111,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
                 return (
                     <tr>
                         <td>{this.props.info.Name}</td>
-                        <td><Choose disabled={this.props.disabled} choices={teamChoices} default='Choose team' {...this.props} /></td>
-                        <td><Choose disabled={this.props.disabled} choices={kingdomChoices} default='Choose kingdom' {...this.props} /></td>
+                        <td><Choose disabled={this.props.disabled} choices={teamChoices} value={this.props.info.GameTeam} default='Choose team' {...this.props} /></td>
+                        <td><Choose disabled={this.props.disabled} choices={kingdomChoices} value={this.props.info.GamePlayer} default='Choose kingdom' {...this.props} /></td>
                     </tr>
                 );
             } else {
@@ -128,6 +137,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
             this.setState({
                 loading: false,
                 lobbyInfo: values.LobbyInfo,
+                activePlayer: values.SteamID,
             });
         },
 
@@ -265,7 +275,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                             <PlayerEntry disabled={disabled}
                                                          player={i}
                                                          info={_this.state.lobbyInfo.Players[i-1]}
-                                                         activePlayer={_this.state.lobbyPlayerNum} />
+                                                         activePlayer={_this.state.activePlayer} />
                                          );
                                     })}
                                 </tbody></Table>
