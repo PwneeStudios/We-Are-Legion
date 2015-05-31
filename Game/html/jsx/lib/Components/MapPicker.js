@@ -38,8 +38,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         render: function() {
             var _this = this;
 
-            var maps = ['Beset', 'Clash of Madness', "Nice", "Gilgamesh", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello"];
-            var mapEntrees = _.map(maps, function(map) {
+            var mapEntrees = _.map(this.props.maps, function(map) {
                 var onPick = function() {
                     _this.onPick(map);
                 };

@@ -56,7 +56,7 @@ UInt32 SteamCore::PlayerId()
 	return (uint32)SteamUser()->GetSteamID().GetAccountID();
 }
 
-const char * SteamTextInput::GetText()
+char const * SteamTextInput::GetText()
 {
 	int cchText = SteamUtils()->GetEnteredGamepadTextLength();
 	char * pchText = new char[cchText];
@@ -313,7 +313,7 @@ System::String^ SteamMatches::GetLobbyData( int Index, System::String^ Key )
 	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
 
 	marshal_context context;
-	char const * pchKey = context.marshal_as< const char* >(Key);
+	char const * pchKey = context.marshal_as< const char* >( Key );
 
 	char const * pchVal = SteamMatchmaking()->GetLobbyData( steamIDLobby, pchKey );
 

@@ -131,13 +131,18 @@ function(_, React, ReactBootstrap, interop, events, ui,
         mixins: [events.LobbyMixin, events.LobbyMapMixin],
 
         onLobbyUpdate: function(values) {
-            console.log(values);
-            console.log(values.LobbyInfo);
+            //values = {"SteamID":100410705,"LobbyName":"Cookin' Ash's lobby","Maps":['Beset', 'Clash of Madness', 'Nice'],"LobbyInfo":"{\"Players\":[{\"LobbyIndex\":0,\"Name\":\"Cookin' Ash\",\"SteamID\":100410705,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0}]}","LobbyLoading":false};
+            //values = {"SteamID":100410705,"LobbyName":"Cookin' Ash's lobby","Maps":["Beset","Clash of Madness","Nice"],"LobbyLoading":true};
+            //console.log('values');
+            //console.log(JSON.stringify(values));
+            //console.log('---');
 
             this.setState({
-                loading: false,
-                lobbyInfo: values.LobbyInfo,
+                loading: values.LobbyLoading || false,
+                lobbyInfo: values.LobbyInfo ? JSON.parse(values.LobbyInfo) : null,
                 activePlayer: values.SteamID,
+                maps: values.Maps,
+                map: 'Beset',
             });
         },
 
@@ -158,9 +163,16 @@ function(_, React, ReactBootstrap, interop, events, ui,
             if (!interop.InXna()) {
                 var values = {
                     SteamID: 5,
+
+                    Maps:
+                        ['Beset', 'Clash of Madness', "Nice", "Gilgamesh", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello"],
+
                     LobbyInfo:
                         {"Players":[{"LobbyIndex":0,"Name":'some person',"SteamID":0,"GamePlayer":2,"GameTeam":3},{"LobbyIndex":0,"Name":'Me!',"SteamID":5,"GamePlayer":3,"GameTeam":4},{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0},{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0}]}
                 };
+
+                values =
+                    {"SteamID":100410705,"LobbyName":"Cookin' Ash's lobby","Maps":['Beset', 'Clash of Madness', 'Nice'],"LobbyInfo":"{\"Players\":[{\"LobbyIndex\":0,\"Name\":\"Cookin' Ash\",\"SteamID\":100410705,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0}]}","LobbyLoading":false};
 
                 setTimeout(function() {
                     window.lobby(values);
@@ -234,14 +246,15 @@ function(_, React, ReactBootstrap, interop, events, ui,
         render: function() {
             var _this = this;
 
-            console.log('render the lobby');
-
             if (this.state.loading) {
                 return (
                     React.createElement("div", null
                     )
                 );
             }
+
+            console.log('this.state.lobbyInfo');
+            console.log(JSON.stringify(this.state.lobbyInfo));
 
             var visibility = [
                 {name:'Public game', value:'public'},
@@ -286,7 +299,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
                                     React.createElement("p", null, 
                                         this.props.params.host ? 
-                                            React.createElement(ModalTrigger, {modal: React.createElement(MapPicker, {onPick: this.onMapPick})}, 
+                                            React.createElement(ModalTrigger, {modal: React.createElement(MapPicker, {maps: this.state.maps, onPick: this.onMapPick})}, 
                                                 React.createElement(Button, {disabled: disabled, bsStyle: "primary", bsSize: "large"}, 
                                                     "Choose map..."
                                                 )

@@ -88,7 +88,7 @@ namespace Game
             {
                 WebCore.Update();
             }
-
+            
             // Trap log commands so that we can differentiate between log statements and JS errors
             JSObject console = awesomium.WebView.CreateGlobalJavascriptObject("console");
             console.Bind("log", WebView_ConsoleLog);
@@ -201,6 +201,7 @@ namespace Game
             try
             {
                 awesomium.WebView.ExecuteJavascript(function + "(" + s + ");");
+                //var result = awesomium.WebView.ExecuteJavascriptWithResult(function + "(" + s + ");");
             }
             catch (Exception e)
             {

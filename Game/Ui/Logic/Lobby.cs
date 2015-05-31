@@ -186,8 +186,26 @@ namespace Game
             string lobbyName = SteamMatches.GetLobbyData("name");
             Console.WriteLine("joined lobby {0}", lobbyName);
 
+            SendLobbyData();
+        }
+
+        void SendLobbyData()
+        {
             var obj = new Dict();
-            obj["LobbyLoading"] = false;
+            obj["SteamID"] = SteamCore.PlayerId();
+            obj["LobbyName"] = SteamMatches.GetLobbyData("name");
+            obj["Maps"] = new string[] {"Beset", "Clash of Madness", "Nice"};
+
+            string lobby_info = SteamMatches.GetLobbyData("LobbyInfo");
+            if (lobby_info != null && lobby_info.Length > 0)
+            {
+                obj["LobbyInfo"] = lobby_info;
+                obj["LobbyLoading"] = false;
+            }
+            else
+            {
+                obj["LobbyLoading"] = true;
+            }
 
             SendDict("lobby", obj);
         }
@@ -204,14 +222,14 @@ namespace Game
                 var player = LobbyInfo.Players[i];
 
                 //
-                loop through old lobbyinfo and pull out old player if they exist
+                //loop through old lobbyinfo and pull out old player if they exist
 
                 player.SteamID = SteamMatches.GetMememberId(i);
                 player.Name = SteamMatches.GetMememberName(i);
             }
 
             //
-            assign initial choices for those players that dont have choices
+            //assign initial choices for those players that dont have choices
 
             SetLobbyInfo();
         }
@@ -240,6 +258,8 @@ namespace Game
         void OnLobbyDataUpdate()
         {
             Console.WriteLine("lobby data updated");
+
+            SendLobbyData();
         }
 
         void OnLobbyChatUpdate()
