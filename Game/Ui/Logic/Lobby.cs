@@ -385,7 +385,7 @@ namespace Game
 
             if (!ProcessAsAction(msg, id, name))
             {
-                GameClass.Game.AddChatMessage(1, msg);
+                GameClass.Game.AddChatMessage(name, msg);
             }
         }
 
@@ -431,7 +431,7 @@ namespace Game
             {
                 if (KingdomAvailableTo(value, id))
                 {
-                    GameClass.Game.AddChatMessage(1, "Has changed kingdoms!");
+                    GameClass.Game.AddChatMessage(name, "Has changed kingdoms!");
                     player.GamePlayer = value;                    
                 }
             }
@@ -439,7 +439,7 @@ namespace Game
             {
                 if (TeamAvailableTo(value, id))
                 {
-                    GameClass.Game.AddChatMessage(1, "Has changed teams!");
+                    GameClass.Game.AddChatMessage(name, "Has changed teams!");
                     player.GameTeam = value;                    
                 }
             }

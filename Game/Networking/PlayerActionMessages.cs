@@ -40,15 +40,19 @@ namespace Game
 
     public class MessageChat : MessagePlayerActionTail
     {
+        public bool Global;
+        public string Name;
         public string ChatMessage;
 
-        public MessageChat(string ChatMessage)
+        public MessageChat(bool Global, string Name, string ChatMessage)
         {
+            this.Global = Global;
+            this.Name = Name;
             this.ChatMessage = ChatMessage;
         }
 
-        public override MessageStr EncodeHead() { return _ | ChatMessage; }
-        public static MessageChat Parse(string s) { return new MessageChat(Pop(ref s)); }
+        public override MessageStr EncodeHead() { return _ | Global | Name | ChatMessage; }
+        public static MessageChat Parse(string s) { return new MessageChat(PopBool(ref s), Pop(ref s), Pop(ref s)); }
         public override Message MakeFullMessage() { return MakeFullMessage(PlayerAction.ChatMessage); }
 
         public override void Immediate()
@@ -58,7 +62,7 @@ namespace Game
         public override void Do()
         {
             if (Log.Do) Console.WriteLine("   Do message chat at {0} : {1}", GameClass.World.SimStep, this);
-            GameClass.Game.AddChatMessage(((MessagePlayerAction)Outer).PlayerNumber, ChatMessage);
+            GameClass.Game.AddChatMessage(Name, (Global ? "[All] " : "[Team] ") + ChatMessage);
         }
     }
 

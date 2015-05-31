@@ -82,12 +82,11 @@ namespace Game
             UpdateShow();
         }
 
-        public void AddChatMessage(int player, string message)
+        public void AddChatMessage(string name, string message)
         {
             var obj = new Dictionary<string, object>();
             obj["message"] = message;
-            obj["player"] = player;
-            obj["name"] = PlayerInfo[player].Name;
+            obj["name"] = name;
 
             SendDict("addChatMessage", obj);
         }
@@ -123,7 +122,7 @@ namespace Game
             if (message != null && message.Length > 0)
             {
                 Console.WriteLine("ui chat message: " + message);
-                Networking.ToServer(new MessageChat(message));
+                Networking.ToServer(new MessageChat(true, Game.PlayerName(), message));
             }
 
             ToggleChat(Toggle.Off);

@@ -422,5 +422,17 @@ namespace Game
             DrawTextureSmooth.Using(new vec4(0, 0, 1, 1), ScreenAspect, texture);
             q.Draw(GameClass.Graphics);
         }
+
+        public string PlayerName()
+        {
+            if (SteamAvailable)
+            {
+                return SteamCore.PlayerName();
+            }
+            else
+            {
+                return "Me";
+            }
+        }
     }
 }

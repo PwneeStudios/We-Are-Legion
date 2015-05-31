@@ -168,7 +168,8 @@ void CallbackClass::OnChatMsg( LobbyChatMsg_t * pCallback )
 	{
 		auto msg = gcnew System::String ( pvData );
 		auto id = sender.GetAccountID();
-		auto name = gcnew System::String(pvData);
+		auto pchName = SteamFriends()->GetFriendPersonaName( sender );
+		auto name = gcnew System::String( pchName );
 
 		SteamMatches::s_OnChatMsg->Invoke( msg, id, name );
 	}
