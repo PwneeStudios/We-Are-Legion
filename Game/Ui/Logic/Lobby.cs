@@ -207,6 +207,7 @@ namespace Game
                 obj["LobbyLoading"] = true;
             }
 
+            Console.WriteLine("lobby name = {0}", obj["LobbyName"]);
             SendDict("lobby", obj);
         }
 
@@ -237,6 +238,8 @@ namespace Game
         void SetLobbyInfo()
         {
             if (!SteamMatches.IsLobbyOwner()) return;
+
+            SetLobbyName();
 
             string lobby_info = Jsonify(LobbyInfo);
             SteamMatches.SetLobbyData("LobbyInfo", lobby_info);

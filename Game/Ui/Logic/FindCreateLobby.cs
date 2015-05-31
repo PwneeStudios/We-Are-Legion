@@ -71,12 +71,17 @@ namespace Game
                 return;
             }
 
-            string player_name = SteamCore.PlayerName();
-            string lobby_name = string.Format("{0}'s lobby", player_name);
-            SteamMatches.SetLobbyData("name", lobby_name);
+            SetLobbyName();
 
             Console.WriteLine("Trying to join the created lobby.");
             SteamMatches.JoinCreatedLobby(OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);
+        }
+
+        private static void SetLobbyName()
+        {
+            string player_name = SteamCore.PlayerName();
+            string lobby_name = string.Format("{0}'s lobby", player_name);
+            SteamMatches.SetLobbyData("name", lobby_name);
         }
 
         void OnFindLobbies(bool result)

@@ -139,6 +139,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
             this.setState({
                 loading: values.LobbyLoading || false,
+                name: values.LobbyName || '',
                 lobbyInfo: values.LobbyInfo ? JSON.parse(values.LobbyInfo) : null,
                 activePlayer: values.SteamID,
                 maps: values.Maps,
@@ -158,19 +159,9 @@ function(_, React, ReactBootstrap, interop, events, ui,
                 mapLoading: mapLoading,
             });
         },
-                
+
         joinLobby: function() {
             if (!interop.InXna()) {
-                var values = {
-                    SteamID: 5,
-
-                    Maps:
-                        ['Beset', 'Clash of Madness', "Nice", "Gilgamesh", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello"],
-
-                    LobbyInfo:
-                        {"Players":[{"LobbyIndex":0,"Name":'some person',"SteamID":0,"GamePlayer":2,"GameTeam":3},{"LobbyIndex":0,"Name":'Me!',"SteamID":5,"GamePlayer":3,"GameTeam":4},{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0},{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0}]}
-                };
-
                 values =
                     {"SteamID":100410705,"LobbyName":"Cookin' Ash's lobby","Maps":['Beset', 'Clash of Madness', 'Nice'],"LobbyInfo":"{\"Players\":[{\"LobbyIndex\":0,\"Name\":\"Cookin' Ash\",\"SteamID\":100410705,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0}]}","LobbyLoading":false};
 
@@ -201,7 +192,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
         componentDidMount: function() {
             interop.drawMapPreviewAt(2.66, 0.554, 0.22, 0.22);
         },
-        
+
         componentWillUnmount: function() {
             interop.hideMapPreview();
         },
@@ -270,7 +261,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                     <Div nonBlocking pos={pos(10,5)} size={width(80)}>
                         <Panel>
                             <h2>
-                                Game Lobby
+                                {this.state.name}
                             </h2>
                         </Panel>
 
