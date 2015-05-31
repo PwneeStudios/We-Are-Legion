@@ -203,9 +203,15 @@ namespace Game
             {
                 var player = LobbyInfo.Players[i];
 
+                //
+                loop through old lobbyinfo and pull out old player if they exist
+
                 player.SteamID = SteamMatches.GetMememberId(i);
                 player.Name = SteamMatches.GetMememberName(i);
             }
+
+            //
+            assign initial choices for those players that dont have choices
 
             SetLobbyInfo();
         }

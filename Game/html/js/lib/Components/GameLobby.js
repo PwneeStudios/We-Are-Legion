@@ -47,9 +47,9 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
     var teamChoices = [
         make('Team 1', '一', 1),
-        make('Team 2', '二', 3),
-        make('Team 3', '三', 4),
-        make('Team 4', '四', 2),
+        make('Team 2', '二', 2),
+        make('Team 3', '三', 3),
+        make('Team 4', '四', 4),
     ];
 
     var Choose = React.createClass({displayName: "Choose",
@@ -98,13 +98,23 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
         
         render: function() {
-            return (
-                React.createElement("tr", null, 
-                    React.createElement("td", null, "Player ", this.props.player), 
-                    React.createElement("td", null, React.createElement(Choose, React.__spread({disabled: this.props.disabled, choices: teamChoices, default: "Choose team"},  this.props))), 
-                    React.createElement("td", null, React.createElement(Choose, React.__spread({disabled: this.props.disabled, choices: kingdomChoices, default: "Choose kingdom"},  this.props)))
-                )
-            );
+            if (this.props.info.Name) {
+                return (
+                    React.createElement("tr", null, 
+                        React.createElement("td", null, this.props.info.Name), 
+                        React.createElement("td", null, React.createElement(Choose, React.__spread({disabled: this.props.disabled, choices: teamChoices, default: "Choose team"},  this.props))), 
+                        React.createElement("td", null, React.createElement(Choose, React.__spread({disabled: this.props.disabled, choices: kingdomChoices, default: "Choose kingdom"},  this.props)))
+                    )
+                );
+            } else {
+                return (
+                    React.createElement("tr", null, 
+                        React.createElement("td", null, "Slot open"), 
+                        React.createElement("td", null), 
+                        React.createElement("td", null)
+                    )
+                );
+            }
         },
     });
 
@@ -112,8 +122,12 @@ function(_, React, ReactBootstrap, interop, events, ui,
         mixins: [events.LobbyMixin, events.LobbyMapMixin],
 
         onLobbyUpdate: function(values) {
+            console.log(values);
+            console.log(values.LobbyInfo);
+
             this.setState({
                 loading: false,
+                lobbyInfo: values.LobbyInfo,
             });
         },
 
@@ -133,8 +147,9 @@ function(_, React, ReactBootstrap, interop, events, ui,
         joinLobby: function() {
             if (!interop.InXna()) {
                 var values = {
-                    lobbyInfo:
-                        {"Players":[{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0},{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0},{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0},{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0}]}
+                    SteamID: 5,
+                    LobbyInfo:
+                        {"Players":[{"LobbyIndex":0,"Name":'some person',"SteamID":0,"GamePlayer":2,"GameTeam":3},{"LobbyIndex":0,"Name":'Me!',"SteamID":5,"GamePlayer":3,"GameTeam":4},{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0},{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0}]}
                 };
 
                 setTimeout(function() {
@@ -249,6 +264,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                         return (
                                             React.createElement(PlayerEntry, {disabled: disabled, 
                                                          player: i, 
+                                                         info: _this.state.lobbyInfo.Players[i-1], 
                                                          activePlayer: _this.state.lobbyPlayerNum})
                                          );
                                     })
