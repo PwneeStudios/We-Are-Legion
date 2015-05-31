@@ -267,6 +267,9 @@
     <PreBuildEvent>ECHO ON
 DIR
 
+ECHO Copying maps
+xcopy $(SolutionDir)Content\Maps $(TargetDir)Content\Maps\ /E /D /Y
+
 IF $(ConfigurationName) EQU Release (
   ECHO Copying html directory
   xcopy $(ProjectDir)html $(TargetDir)html /E /D /Y

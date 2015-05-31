@@ -174,7 +174,6 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
 
         onLobbyMapUpdate: function(values) {
-            console.log('onLobbyMapUpdate');
             var mapLoading = values.LobbyMapLoading;
 
             if (mapLoading === this.state.mapLoading) {
@@ -217,6 +216,16 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
         componentWillUnmount: function() {
             interop.hideMapPreview();
+        },
+
+        componentDidUpdate: function() {
+            this.componentDidMount();
+        },
+
+        componentDidMount: function() {
+            if (!this.state.loading) {
+                interop.drawMapPreviewAt(2.66, 0.554, 0.22, 0.22);
+            }
         },
 
         startGame: function() {
@@ -279,8 +288,6 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
             var disabled = this.state.starting;
             var preventStart = this.state.starting || this.state.mapLoading;
-
-            interop.drawMapPreviewAt(2.66, 0.554, 0.22, 0.22);
 
             return (
                 React.createElement("div", null, 
