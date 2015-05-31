@@ -81,7 +81,7 @@ namespace Game
             Console.WriteLine("chat updated");
         }
 
-        void Test_OnLobbyChatMsg(string msg)
+        void Test_OnLobbyChatMsg(string msg, uint id, string name)
         {
             Console.WriteLine("chat msg = {0}", msg);
         }

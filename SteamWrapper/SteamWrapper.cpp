@@ -44,11 +44,11 @@ System::String^ SteamCore::PlayerName()
 	
 	if ( sf != 0 )
 	{
-		const char *pchName = sf->GetPersonaName();
-		return gcnew System::String(pchName);
+		char const * const pchName = sf->GetPersonaName();
+		return gcnew System::String( pchName );
 	}
 
-	return gcnew System::String("");
+	return gcnew System::String( "" );
 }
 
 const char * SteamTextInput::GetText()
@@ -162,7 +162,10 @@ void CallbackClass::OnChatMsg( LobbyChatMsg_t * pCallback )
 	if ( SteamMatches::s_OnChatMsg )
 	{
 		auto msg = gcnew System::String ( pvData );
-		SteamMatches::s_OnChatMsg->Invoke( msg );
+		auto id = sender.GetAccountID();
+		auto name = gcnew System::String(pvData);
+
+		SteamMatches::s_OnChatMsg->Invoke( msg, id, name );
 	}
 }
 
@@ -322,7 +325,7 @@ System::String^ SteamMatches::GetLobbyData( int Index, System::String^ Key )
 void SteamMatches::JoinCreatedLobby(
 	Action< bool >^ OnJoinLobby,
 	Action^ OnChatUpdate,
-	Action< String^ >^ OnChatMsg,
+	Action< String^, uint32, String^ >^ OnChatMsg,
 	Action^ OnDataUpdate )
 {
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
@@ -333,7 +336,7 @@ void SteamMatches::JoinCreatedLobby(
 void SteamMatches::JoinLobby( int Index,
 	Action< bool >^ OnJoinLobby,
 	Action^ OnChatUpdate,
-	Action< String^ >^ OnChatMsg,
+	Action< String^, uint32, String^ >^ OnChatMsg,
 	Action^ OnDataUpdate )
 {
 	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
@@ -343,7 +346,7 @@ void SteamMatches::JoinLobby( int Index,
 void SteamMatches::JoinLobby( CSteamID LobbyID,
 	Action< bool >^ OnJoinLobby,
 	Action^ OnChatUpdate,
-	Action< String^ >^ OnChatMsg,
+	Action< String^, uint32, String^ >^ OnChatMsg,
 	Action^ OnDataUpdate )
 {
 	SteamMatches::s_OnJoinLobby = OnJoinLobby;
@@ -392,10 +395,7 @@ void SteamMatches::SetLobbyData( System::String^ Key, System::String^ Value )
 
 System::String^ SteamMatches::GetLobbyData( System::String^ Key )
 {
-	if (SteamMatches::s_CurrentLobby.m_handle == NULL)
-	{
-		return gcnew System::String("");
-	}
+	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return gcnew System::String("");
 
 	marshal_context context;
 	char const * pchKey = context.marshal_as< char const * >( Key );
@@ -419,7 +419,7 @@ int SteamMatches::GetLobbyCapacity( int Index )
 
 void SteamMatches::SetLobbyType( int LobbyType )
 {
-	if (SteamMatches::s_CurrentLobby.m_handle == NULL) return;
+	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
 
 	ELobbyType type = IntToLobbyType( LobbyType );
 	SteamMatchmaking()->SetLobbyType( *SteamMatches::s_CurrentLobby.m_handle, type );
@@ -433,6 +433,37 @@ void SteamMatches::SendChatMsg( System::String^ Msg )
 	char const * pchMsg = context.marshal_as< char const * >( Msg );
 
 	SteamMatchmaking()->SendLobbyChatMsg( *SteamMatches::s_CurrentLobby.m_handle, pchMsg, Msg->Length + 1 );
+}
+
+int SteamMatches::GetLobbyMemberCount()
+{
+	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return -1;
+	return SteamMatchmaking()->GetNumLobbyMembers( *SteamMatches::s_CurrentLobby.m_handle );
+}
+
+String^ SteamMatches::GetMememberName( int Index )
+{
+	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return gcnew System::String("");
+	
+	CSteamID steamIDLobbyMember = SteamMatchmaking()->GetLobbyMemberByIndex( *SteamMatches::s_CurrentLobby.m_handle, Index );
+
+	char const * const pchName = SteamFriends()->GetFriendPersonaName( steamIDLobbyMember );
+	return gcnew System::String( pchName );
+}
+
+UInt32 SteamMatches::GetMememberId( int Index )
+{
+	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return 0;
+	
+	CSteamID steamIDLobbyMember = SteamMatchmaking()->GetLobbyMemberByIndex( *SteamMatches::s_CurrentLobby.m_handle, Index );
+
+	return (uint32)steamIDLobbyMember.GetAccountID();
+}
+
+bool SteamMatches::IsLobbyOwner()
+{
+	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return false;
+	return SteamUser()->GetSteamID() == SteamMatchmaking()->GetLobbyOwner( *SteamMatches::s_CurrentLobby.m_handle );
 }
 
 void SteamMatches::LeaveLobby()

@@ -112,6 +112,9 @@ namespace Game
                     break;
 
                 case GameState.MainMenu:
+                    //LobbyInfo = new LobbyInfo();
+                    //string s = Jsonify(LobbyInfo);
+
                     if (_MapLoading != MapLoading)
                     {
                         _MapLoading = MapLoading;

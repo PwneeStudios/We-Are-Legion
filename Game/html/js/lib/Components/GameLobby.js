@@ -62,6 +62,12 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
         
         onSelected: function(item) {
+            console.log('something selected');
+            if (interop.InXna()) {
+                console.log('select team');
+                xna.SelectTeam(this.props.player, item.value);
+            }
+
             this.setState({
                 selected: item,
             });
@@ -73,7 +79,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                     React.createElement(Dropdown, {disabled: this.props.disabled, 
                               selected: this.state.selected, 
                               choices: this.props.choices, 
-                              onSelected: this.onSelected})
+                              onSelect: this.onSelected})
                 );
             } else {
                 return (
@@ -125,6 +131,19 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
                 
         joinLobby: function() {
+            if (!interop.InXna()) {
+                var values = {
+                    lobbyInfo:
+                        {"Players":[{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0},{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0},{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0},{"LobbyIndex":0,"Name":null,"SteamID":0,"GamePlayer":0,"GameTeam":0}]}
+                };
+
+                setTimeout(function() {
+                    window.lobby(values);
+                }, 100);
+
+                return;
+            }
+
             if (this.props.params.host) {
                 interop.createLobby();
             } else {

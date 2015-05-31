@@ -181,6 +181,8 @@ namespace Game
                 return;
             }
 
+            BuildLobbyInfo();
+
             string lobbyName = SteamMatches.GetLobbyData("name");
             Console.WriteLine("joined lobby {0}", lobbyName);
 
@@ -188,6 +190,32 @@ namespace Game
             obj["LobbyLoading"] = false;
 
             SendDict("lobby", obj);
+        }
+
+        void BuildLobbyInfo()
+        {
+            if (!SteamMatches.IsLobbyOwner()) return;
+
+            LobbyInfo = new LobbyInfo();
+
+            int members = SteamMatches.GetLobbyMemberCount();
+            for (int i = 0; i < members; i++)
+            {
+                var player = LobbyInfo.Players[i];
+
+                player.SteamID = SteamMatches.GetMememberId(i);
+                player.Name = SteamMatches.GetMememberName(i);
+            }
+
+            SetLobbyInfo();
+        }
+
+        void SetLobbyInfo()
+        {
+            if (!SteamMatches.IsLobbyOwner()) return;
+
+            string lobby_info = Jsonify(LobbyInfo);
+            SteamMatches.SetLobbyData("LobbyInfo", lobby_info);
         }
 
         JSValue OnLobbyChatEnter(object sender, JavascriptMethodEventArgs e)
@@ -211,12 +239,75 @@ namespace Game
         void OnLobbyChatUpdate()
         {
             Console.WriteLine("lobby chat updated");
+
+            BuildLobbyInfo();
         }
 
-        void OnLobbyChatMsg(string msg)
+        void OnLobbyChatMsg(string msg, uint id, string name)
         {
             Console.WriteLine("chat msg = {0}", msg);
-            GameClass.Game.AddChatMessage(1, msg);
+
+            if (!ProcessAsAction(msg, id, name))
+            {
+                GameClass.Game.AddChatMessage(1, msg);
+            }
+        }
+
+        bool ProcessAsAction(string msg, uint id, string name)
+        {
+            if (msg[0] != '%') return false; // Action message must start with a '%'
+            if (msg.Length < 3) return false; // Action message must have at least 3 characters, eg '%p3'
+
+            if (!SteamMatches.IsLobbyOwner())
+            {
+                // Only the lobby owner can act on action messages.
+                // Everyone else should ignore them, so return true,
+                // signalling this action was already processed.
+                return true;
+            }
+
+            // The third character in the message stores the numeric value.
+            // Parse it and store in this variable.
+            int value = -1;
+
+            try
+            {
+                string valueStr = "" + msg[2];
+                int.TryParse(valueStr, out value);
+            }
+            catch
+            {
+                Console.WriteLine("bad chat command : {0}", msg);
+                return false;
+            }
+
+            // The numeric value for team/player must be one of 1, 2, 3, 4.
+            if (value <= 0 || value > 4)
+            {
+                return false;
+            }
+
+            // Get the info for the player sending the message.
+            var player = LobbyInfo.Players.Where(_player => _player.SteamID == id).First();
+
+            // Update the player's info.
+            if (msg[1] == 'p')
+            {
+                GameClass.Game.AddChatMessage(1, "Has changed kingdoms!");
+                player.GamePlayer = value;
+            }
+            else if (msg[1] == 't')
+            {
+                GameClass.Game.AddChatMessage(1, "Has changed teams!");
+                player.GameTeam = value;
+            }
+            else
+            {
+                return false;
+            }
+
+            SetLobbyInfo();
+            return true;
         }
     }
 }

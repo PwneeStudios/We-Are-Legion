@@ -37,18 +37,6 @@ namespace SteamWrapper
 
 	};
 
-	public value class SteamUser
-	{
-	
-	public:
-		CSteamID* m_handle;
-
-		SteamUser( CSteamID* handle ) :
-			m_handle( handle )
-		{
-		}
-	};
-
 	public value class SteamLobby
 	{
 
@@ -150,7 +138,7 @@ namespace SteamWrapper
 		static Action< bool >^ s_OnJoinLobby;
 		static Action< bool >^ s_OnCreateLobby;
 		static Action^ s_OnChatUpdate;
-		static Action< String^ >^ s_OnChatMsg;
+		static Action< String^, uint32, String^ >^ s_OnChatMsg;
 		static Action^ s_OnDataUpdate;
 
 		static int s_nLobbiesFound = 0;
@@ -166,9 +154,9 @@ namespace SteamWrapper
 		
 		static int const NumLobbies();
 		static String^ GetLobbyData( int Index, String^ Key );
-		static void JoinCreatedLobby(            Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^ >^ OnChatMsg, Action^ OnDataUpdate );
-		static void JoinLobby( int Index,        Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^ >^ OnChatMsg, Action^ OnDataUpdate );
-		static void JoinLobby( CSteamID LobbyID, Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^ >^ OnChatMsg, Action^ OnDataUpdate );
+		static void JoinCreatedLobby(            Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^, uint32, String^ >^ OnChatMsg, Action^ OnDataUpdate );
+		static void JoinLobby( int Index,        Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^, uint32, String^ >^ OnChatMsg, Action^ OnDataUpdate );
+		static void JoinLobby( CSteamID LobbyID, Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^, uint32, String^ >^ OnChatMsg, Action^ OnDataUpdate );
 
 		static void CreateLobby(Action< bool >^ OnCreateLobby, int LobbyType );
 
@@ -176,10 +164,16 @@ namespace SteamWrapper
 		static String^ GetLobbyData( String^ Key );
 
 		static void SendChatMsg( String^ Msg );
-
+		
 		static int GetLobbyMemberCount( int Index );
-		static int GetLobbyCapacity(int Index);
-		static void SetLobbyType(int LobbyType);
+		static int GetLobbyCapacity( int Index );
+		static void SetLobbyType( int LobbyType );
+
+		static int GetLobbyMemberCount();
+		static String^ GetMememberName( int Index );
+		static UInt32 GetMememberId(int Index);
+
+		static bool IsLobbyOwner();
 
 		static void LeaveLobby();
 	};
