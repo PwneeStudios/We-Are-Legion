@@ -164,6 +164,11 @@ td.menu-cell-dropdown .dropdown-menu {
     width: 190%;
 }
 
+.disabled-item a span {
+    color: #c8c8c8;
+    opacity: .5;
+}
+
 /* ------
    Button
    ------ */

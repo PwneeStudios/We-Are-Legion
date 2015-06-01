@@ -38,9 +38,9 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, Rea
                 React.createElement("div", {style: style}, 
                     React.createElement(DropdownButton, {disabled: this.props.disabled, title: item.selectedName || item.name}, 
                         _.map(this.props.choices, function(choice) { 
-                            var _choice = _.clone(choice);
+                            //var _choice = _.clone(choice);
                             return (
-                                React.createElement(Item, {item: _choice, name: choice.name, onSelect: self.onSelect})
+                                React.createElement(Item, {disabled: choice.taken, item: choice, name: choice.name, onSelect: self.onSelect})
                             );
                         })
                     )

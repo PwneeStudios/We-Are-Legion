@@ -16,8 +16,13 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
         },
 
         render: function() {
+            var className = null;
+            if (this.props.disabled) {
+                className = 'disabled-item';
+            }
+
             return (
-                React.createElement(MenuItem, {onClick: this.onSelect, width: "1000px"}, 
+                React.createElement(MenuItem, {className: className, onClick: this.onSelect, width: "1000px"}, 
                     this.props.name
                 )
             );

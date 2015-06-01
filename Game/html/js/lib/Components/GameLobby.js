@@ -26,16 +26,20 @@ function(_, React, ReactBootstrap, interop, events, ui,
     var subImage = ui.subImage;
 
     var make = function(english, chinese, value) {
-        return ({
-            name:
+        return {
+            name: (
                 React.createElement("span", null, 
                     english, 
-                    React.createElement("span", {style: {'text-align':'right', 'float':'right'}}, chinese)
-                ),
+                    React.createElement("span", {style: {'text-align':'right', 'float':'right'}}, 
+                        chinese
+                    )
+                )
+            ),
 
             selectedName: english,
             value: value,
-        });
+            taken: false,
+        };
     };
 
     var kingdomChoices = [
@@ -51,6 +55,15 @@ function(_, React, ReactBootstrap, interop, events, ui,
         make('Team 3', '三', 3),
         make('Team 4', '四', 4),
     ];
+
+    var arrayClone = function(l) {
+        var copy = [];
+        for (var i = 0; i < l.length; i++) {
+            copy.push(_.clone(l[i]));
+        }
+
+        return copy;
+    };
 
     var Choose = React.createClass({displayName: "Choose",
         mixins: [],
@@ -126,15 +139,27 @@ function(_, React, ReactBootstrap, interop, events, ui,
         
         render: function() {
             if (this.props.info.Name) {
+                var myTeamChoices = arrayClone(teamChoices);
+                var myKingdomChoices = arrayClone(kingdomChoices);
+                for (i = 1; i < 5; i++) {
+                    if (i === this.props.player) continue;
+
+                    var player = this.props.players[i-1];
+                    if (player.SteamID === 0) continue;
+
+                    _.find(myTeamChoices, 'value', player.GameTeam).taken = true;
+                    _.find(myKingdomChoices, 'value', player.GamePlayer).taken = true;
+                }
+
                 return (
                     React.createElement("tr", null, 
                         React.createElement("td", null, this.props.info.Name), 
                         React.createElement("td", null, 
-                            React.createElement(Choose, React.__spread({onSelect: this.selectTeam, disabled: this.props.disabled, choices: teamChoices, 
+                            React.createElement(Choose, React.__spread({onSelect: this.selectTeam, disabled: this.props.disabled, choices: myTeamChoices, 
                                     value: this.props.info.GameTeam, default: "Choose team"},  this.props))
                         ), 
                         React.createElement("td", null, 
-                            React.createElement(Choose, React.__spread({onSelect: this.selectKingdom, disabled: this.props.disabled, choices: kingdomChoices, 
+                            React.createElement(Choose, React.__spread({onSelect: this.selectKingdom, disabled: this.props.disabled, choices: myKingdomChoices, 
                                     value: this.props.info.GamePlayer, default: "Choose kingdom"},  this.props))
                         )
                     )
@@ -188,7 +213,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
         joinLobby: function() {
             if (!interop.InXna()) {
                 values =
-                    {"SteamID":100410705,"LobbyName":"Cookin' Ash's lobby","Maps":['Beset', 'Clash of Madness', 'Nice'],"LobbyInfo":"{\"Players\":[{\"LobbyIndex\":0,\"Name\":\"Cookin' Ash\",\"SteamID\":100410705,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0}]}","LobbyLoading":false};
+                    {"SteamID":100410705,"LobbyName":"Cookin' Ash's lobby","Maps":['Beset', 'Clash of Madness', 'Nice'],"LobbyInfo":"{\"Players\":[{\"LobbyIndex\":0,\"Name\":\"Cookin' Ash\",\"SteamID\":100410705,\"GamePlayer\":1,\"GameTeam\":1},{\"LobbyIndex\":0,\"Name\":\"other player\",\"SteamID\":12,\"GamePlayer\":2,\"GameTeam\":3},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0}]}","LobbyLoading":false};
 
                 setTimeout(function() {
                     window.lobby(values);
@@ -219,10 +244,14 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
 
         componentDidUpdate: function() {
-            this.componentDidMount();
+            this.drawMap();
         },
 
         componentDidMount: function() {
+            this.drawMap();
+        },
+
+        drawMap: function() {
             if (!this.state.loading) {
                 interop.drawMapPreviewAt(2.66, 0.554, 0.22, 0.22);
             }
@@ -312,6 +341,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                             React.createElement(PlayerEntry, {disabled: disabled, 
                                                          player: i, 
                                                          info: _this.state.lobbyInfo.Players[i-1], 
+                                                         players: _this.state.lobbyInfo.Players, 
                                                          activePlayer: _this.state.activePlayer})
                                          );
                                     })
