@@ -188,12 +188,16 @@ function(_, React, ReactBootstrap, interop, events, ui,
             //console.log(JSON.stringify(values));
             //console.log('---');
 
+            if (values.CountDownStarted && !this.state.starting) {
+                this.startStartGameCountdown();
+            }
+
             this.setState({
                 loading: values.LobbyLoading || false,
-                name: values.LobbyName || '',
-                lobbyInfo: values.LobbyInfo ? JSON.parse(values.LobbyInfo) : null,
-                activePlayer: values.SteamID,
-                maps: values.Maps,
+                name: values.LobbyName || this.state.name || '',
+                lobbyInfo: values.LobbyInfo ? JSON.parse(values.LobbyInfo) : this.state.lobbyInfo || null,
+                activePlayer: values.SteamID || this.state.activePlayer,
+                maps: values.Maps || this.state.maps,
                 map: 'Beset',
             });
         },
@@ -264,6 +268,18 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
 
         onClickStart: function() {
+            if (interop.InXna()) {
+                xna.StartGameCountdown();
+            } else {
+                setTimeout(function() {
+                    window.lobby({
+                        CountDownStarted:true
+                    });
+                }, 100);
+            }
+        },
+
+        startStartGameCountdown: function() {
             this.setState({
                 starting:true,
             });

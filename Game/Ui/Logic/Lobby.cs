@@ -41,6 +41,7 @@ namespace Game
             xnaObj.Bind("HideMapPreview", HideMapPreview);
             xnaObj.Bind("SetMap", SetMap);
             xnaObj.Bind("StartGame", StartGame);
+            xnaObj.Bind("StartGameCountdown", StartGameCountdown);
             xnaObj.Bind("LeaveLobby", LeaveLobby);
             xnaObj.Bind("SendChat", SendChat);
             xnaObj.Bind("SelectTeam", SelectTeam);
@@ -154,6 +155,16 @@ namespace Game
             return JSValue.Null;
         }
 
+        JSValue StartGameCountdown(object sender, JavascriptMethodEventArgs e)
+        {
+            // Only the lobby owner can start the match.
+            if (!SteamMatches.IsLobbyOwner()) return JSValue.Null;
+
+            SteamMatches.SetLobbyData("CountDownStarted", "true");
+
+            return JSValue.Null;
+        }
+
         JSValue LeaveLobby(object sender, JavascriptMethodEventArgs e)
         {
             Console.WriteLine("leaving lobby");
@@ -242,6 +253,7 @@ namespace Game
                 obj["LobbyInfo"] = lobby_info;
                 obj["LobbyName"] = lobby_name;
                 obj["LobbyLoading"] = false;
+                obj["CountDownStarted"] = SteamMatches.GetLobbyData("CountDownStarted");
             }
             else
             {
