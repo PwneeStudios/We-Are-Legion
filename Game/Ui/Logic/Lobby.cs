@@ -49,11 +49,12 @@ namespace Game
             xnaObj.Bind("OnLobbyChatEnter", OnLobbyChatEnter);
         }
 
-        void UpdateSettings()
-        { 
-            // send teams, players, game flags string, etc, all as one string
-            // just do this through chat sending, parse out if starts with a '.'
-            // everyone subscribes to onchat and calls this themselves
+        PlayerLobbyInfo ThisPlayer
+        {
+            get
+            {
+                return LobbyInfo.Players.Where(match => match.SteamID == SteamCore.PlayerId()).First();
+            }
         }
 
         bool _MapLoading = false;
@@ -148,8 +149,9 @@ namespace Game
         JSValue StartGame(object sender, JavascriptMethodEventArgs e)
         {
             //Program.ParseOptions("--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double");
-            Program.ParseOptions("--server                --port 13000 --p 1 --t 1234 --n 1 --map Beset.m3n   --debug");
-            SetScenarioToLoad("Beset.m3n");
+            //Program.ParseOptions("--server                --port 13000 --p 1 --t 1234 --n 1 --map Beset.m3n   --debug");
+            Program.ParseOptions(ThisPlayer.Args);
+            SetScenarioToLoad(Program.StartupMap);
             Networking.Start();
 
             return JSValue.Null;
