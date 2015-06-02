@@ -263,6 +263,31 @@ namespace Game
             SendDict("lobby", obj);
         }
 
+        void BuildArgs()
+        {
+            if (!SteamMatches.IsLobbyOwner()) return;
+
+            //"--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --w 1280 --h 720"
+            var teams = new StringBuilder("0000");
+            int players = 0;
+            foreach (var player in LobbyInfo.Players)
+            {
+                teams[player.GamePlayer - 1] = player.GameTeam.ToString()[0];
+
+                if (player.SteamID != 0)
+                {
+                    players++;
+                }
+            }
+
+            foreach (var player in LobbyInfo.Players)
+            {
+                string type = player.Host ? "--server" : "--client";
+
+                player.Args = string.Format("{0} --p {1} --t {2} --n {3} --map {4}", type, player.GamePlayer, teams, players, GameMapName);
+            }
+        }
+
         void BuildLobbyInfo()
         {
             if (!SteamMatches.IsLobbyOwner()) return;
@@ -306,6 +331,21 @@ namespace Game
                     player.GameTeam = FirstTeamAvailableTo(player.SteamID);
                 }
             }
+
+            // Set the current player to be the host.
+            foreach (var player in LobbyInfo.Players)
+            {
+                if (player.SteamID == SteamCore.PlayerId())
+                {
+                    player.Host = true;
+                }
+                else
+                {
+                    player.Host = false;
+                }
+            }
+
+            BuildArgs();
 
             SetLobbyInfo();
         }
@@ -353,6 +393,7 @@ namespace Game
             if (!SteamMatches.IsLobbyOwner()) return;
 
             SetLobbyName();
+            BuildArgs();
 
             string lobby_info = Jsonify(LobbyInfo);
             SteamMatches.SetLobbyData("LobbyInfo", lobby_info);
@@ -444,7 +485,7 @@ namespace Game
                 if (KingdomAvailableTo(value, id))
                 {
                     GameClass.Game.AddChatMessage(name, "Has changed kingdoms!");
-                    player.GamePlayer = value;                    
+                    player.GamePlayer = value;
                 }
             }
             else if (msg[1] == 't')
@@ -452,7 +493,7 @@ namespace Game
                 if (TeamAvailableTo(value, id))
                 {
                     GameClass.Game.AddChatMessage(name, "Has changed teams!");
-                    player.GameTeam = value;                    
+                    player.GameTeam = value;
                 }
             }
             else

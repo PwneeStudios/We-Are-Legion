@@ -36,6 +36,8 @@ namespace Game
         public uint SteamID;
         public int GamePlayer;
         public int GameTeam;
+        public bool Host;
+        public string Args;
     }
 
     public class LobbyInfo
