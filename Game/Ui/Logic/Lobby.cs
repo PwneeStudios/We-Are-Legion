@@ -323,12 +323,12 @@ namespace Game
             {
                 if (player.GamePlayer <= 0 || player.GamePlayer > 4)
                 {
-                    player.GamePlayer = FirstKingdomAvailableTo(player.SteamID);
+                    player.GamePlayer = FirstKingdomAvailableTo(player);
                 }
 
                 if (player.GameTeam <= 0 || player.GameTeam > 4)
                 {
-                    player.GameTeam = FirstTeamAvailableTo(player.SteamID);
+                    player.GameTeam = FirstTeamAvailableTo(player);
                 }
             }
 
@@ -350,11 +350,11 @@ namespace Game
             SetLobbyInfo();
         }
 
-        int FirstTeamAvailableTo(uint SteamID)
+        int FirstTeamAvailableTo(PlayerLobbyInfo player)
         {
             for (int team = 1; team <= 4; team++)
             {
-                if (TeamAvailableTo(team, SteamID))
+                if (TeamAvailableTo(team, player))
                 {
                     return team;
                 }
@@ -363,11 +363,11 @@ namespace Game
             return 0;
         }
 
-        int FirstKingdomAvailableTo(uint SteamID)
+        int FirstKingdomAvailableTo(PlayerLobbyInfo player)
         {
             for (int kingdom = 1; kingdom <= 4; kingdom++)
             {
-                if (KingdomAvailableTo(kingdom, SteamID))
+                if (KingdomAvailableTo(kingdom, player))
                 {
                     return kingdom;
                 }
@@ -376,21 +376,45 @@ namespace Game
             return 0;
         }
 
-        bool TeamAvailableTo(int team, uint SteamID)
+        bool TeamAvailableTo(int team, PlayerLobbyInfo player)
         {
-            return !LobbyInfo.Players.Exists(player =>
-                player.SteamID != 0 && player.SteamID != SteamID && player.GameTeam == team);
+            if (player.SteamID == 0)
+            {
+                return !LobbyInfo.Players.Exists(match =>
+                    match != player && match.GameTeam == team);
+            }
+            else
+            {
+                return !LobbyInfo.Players.Exists(match =>
+                    match.SteamID != 0 && match.SteamID != player.SteamID && match.GameTeam == team);
+            }
         }
 
-        bool KingdomAvailableTo(int kingdom, uint SteamID)
+        bool KingdomAvailableTo(int kingdom, PlayerLobbyInfo player)
         {
-            return !LobbyInfo.Players.Exists(player =>
-                player.SteamID != 0 && player.SteamID != SteamID && player.GamePlayer == kingdom);
+            if (player.SteamID == 0)
+            {
+                return !LobbyInfo.Players.Exists(match =>
+                    match != player && match.GamePlayer == kingdom);
+            }
+            else
+            {
+                return !LobbyInfo.Players.Exists(match =>
+                    match.SteamID != 0 && match.SteamID != player.SteamID && match.GamePlayer == kingdom);
+            }
         }
 
         void SetLobbyInfo()
         {
             if (!SteamMatches.IsLobbyOwner()) return;
+
+            // Assign unused teams/player spots to non-gamer players. (SteamID == 0).
+            foreach (var player in LobbyInfo.Players)
+            {
+                if (player.SteamID != 0) continue;
+                player.GamePlayer = FirstKingdomAvailableTo(player);
+                player.GameTeam = FirstTeamAvailableTo(player);
+            }
 
             SetLobbyName();
             BuildArgs();
@@ -482,7 +506,7 @@ namespace Game
             // Update the player's info.
             if (msg[1] == 'k')
             {
-                if (KingdomAvailableTo(value, id))
+                if (KingdomAvailableTo(value, player))
                 {
                     GameClass.Game.AddChatMessage(name, "Has changed kingdoms!");
                     player.GamePlayer = value;
@@ -490,7 +514,7 @@ namespace Game
             }
             else if (msg[1] == 't')
             {
-                if (TeamAvailableTo(value, id))
+                if (TeamAvailableTo(value, player))
                 {
                     GameClass.Game.AddChatMessage(name, "Has changed teams!");
                     player.GameTeam = value;
