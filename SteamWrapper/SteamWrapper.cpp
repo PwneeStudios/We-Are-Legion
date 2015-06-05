@@ -51,9 +51,9 @@ System::String^ SteamCore::PlayerName()
 	return gcnew System::String( "" );
 }
 
-UInt32 SteamCore::PlayerId()
+UInt64 SteamCore::PlayerId()
 {
-	return (uint32)SteamUser()->GetSteamID().GetAccountID();
+	return (uint64)SteamUser()->GetSteamID().GetAccountID();
 }
 
 char const * SteamTextInput::GetText()
@@ -74,7 +74,7 @@ bool SteamTextInput::ShowGamepadTextInput(System::String^ Description, System::S
 	const char* pchDescription = context.marshal_as< const char* >( Description );
 	const char* pchInitialText = context.marshal_as< const char* >( InitialText );
 
-	uint32 unCharMax = static_cast<uint32>( MaxCharacters );
+	uint64 unCharMax = static_cast<uint64>( MaxCharacters );
 
 	bool val = SteamUtils()->ShowGamepadTextInput( k_EGamepadTextInputModeNormal, k_EGamepadTextInputLineModeSingleLine, pchDescription, unCharMax, pchInitialText );
 
@@ -331,7 +331,7 @@ System::String^ SteamMatches::GetLobbyData( int Index, System::String^ Key )
 void SteamMatches::JoinCreatedLobby(
 	Action< bool >^ OnJoinLobby,
 	Action^ OnChatUpdate,
-	Action< String^, uint32, String^ >^ OnChatMsg,
+	Action< String^, uint64, String^ >^ OnChatMsg,
 	Action^ OnDataUpdate )
 {
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
@@ -342,7 +342,7 @@ void SteamMatches::JoinCreatedLobby(
 void SteamMatches::JoinLobby( int Index,
 	Action< bool >^ OnJoinLobby,
 	Action^ OnChatUpdate,
-	Action< String^, uint32, String^ >^ OnChatMsg,
+	Action< String^, uint64, String^ >^ OnChatMsg,
 	Action^ OnDataUpdate )
 {
 	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
@@ -352,7 +352,7 @@ void SteamMatches::JoinLobby( int Index,
 void SteamMatches::JoinLobby( CSteamID LobbyID,
 	Action< bool >^ OnJoinLobby,
 	Action^ OnChatUpdate,
-	Action< String^, uint32, String^ >^ OnChatMsg,
+	Action< String^, uint64, String^ >^ OnChatMsg,
 	Action^ OnDataUpdate )
 {
 	SteamMatches::s_OnJoinLobby = OnJoinLobby;
@@ -457,13 +457,13 @@ String^ SteamMatches::GetMememberName( int Index )
 	return gcnew System::String( pchName );
 }
 
-UInt32 SteamMatches::GetMememberId( int Index )
+UInt64 SteamMatches::GetMememberId( int Index )
 {
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return 0;
 	
 	CSteamID steamIDLobbyMember = SteamMatchmaking()->GetLobbyMemberByIndex( *SteamMatches::s_CurrentLobby.m_handle, Index );
 
-	return (uint32)steamIDLobbyMember.GetAccountID();
+	return (uint64)steamIDLobbyMember.GetAccountID();
 }
 
 bool SteamMatches::IsLobbyOwner()

@@ -102,6 +102,7 @@ namespace Game
             if (SteamMatches.IsLobbyOwner())
             {
                 SteamMatches.SetLobbyData("MapName", new_map);
+                SetLobbyInfo();
             }
 
             return JSValue.Null;
@@ -348,7 +349,6 @@ namespace Game
             }
 
             BuildArgs();
-
             SetLobbyInfo();
         }
 
@@ -458,7 +458,7 @@ namespace Game
             BuildLobbyInfo();
         }
 
-        void OnLobbyChatMsg(string msg, uint id, string name)
+        void OnLobbyChatMsg(string msg, UInt64 id, string name)
         {
             Console.WriteLine("chat msg = {0}", msg);
 
@@ -468,7 +468,7 @@ namespace Game
             }
         }
 
-        bool ProcessAsAction(string msg, uint id, string name)
+        bool ProcessAsAction(string msg, UInt64 id, string name)
         {
             if (msg[0] != '%') return false; // Action message must start with a '%'
             if (msg.Length < 3) return false; // Action message must have at least 3 characters, eg '%p3'

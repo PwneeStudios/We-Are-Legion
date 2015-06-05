@@ -33,7 +33,7 @@ namespace Game
     {
         public int LobbyIndex;
         public string Name;
-        public uint SteamID;
+        public UInt64 SteamID;
         public int GamePlayer;
         public int GameTeam;
         public bool Host;
