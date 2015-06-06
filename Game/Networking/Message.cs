@@ -28,8 +28,8 @@ namespace Game
     {
         public MessageStr _ = new MessageStr("");
 
-        public GameClient _Source;
-        public GameClient Source
+        public Connection _Source;
+        public Connection Source
         {
             get
             {

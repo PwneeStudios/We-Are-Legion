@@ -55,6 +55,23 @@ namespace SteamWrapper
 		}
 	};
 
+	public value class SteamPlayer
+	{
+
+	public:
+		CSteamID * m_handle = NULL;
+
+		SteamPlayer( CSteamID * handle ) :
+			m_handle( handle )
+		{
+		}
+
+		SteamPlayer( uint64 handle ) :
+			SteamPlayer( new CSteamID( handle ) )
+		{
+		}
+	};
+
 	public value class LeaderboardHandle
 	{
 
@@ -177,5 +194,17 @@ namespace SteamWrapper
 		static bool IsLobbyOwner();
 
 		static void LeaveLobby();
+	};
+
+	public ref class SteamP2P
+	{
+
+	internal:
+
+	public:
+		static void SendMessage( SteamPlayer User, String^ Message );
+		static void SendMessage( CSteamID User, String^ Message );
+		static bool MessageAvailable();
+		static String^ ReadMessage();
 	};
 }

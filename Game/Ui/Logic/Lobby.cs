@@ -287,7 +287,7 @@ namespace Game
             {
                 string type = player.Host ? "--server" : "--client";
 
-                player.Args = string.Format("{0} --p {1} --t {2} --n {3} --map {4}", type, player.GamePlayer, teams, players, GameMapName);
+                player.Args = string.Format("{0} --steam-networking --p {1} --t {2} --n {3} --map {4}", type, player.GamePlayer, teams, players, GameMapName);
             }
         }
 

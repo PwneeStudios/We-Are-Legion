@@ -8,46 +8,15 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
+using SteamWrapper;
+
 namespace Game
 {
-    public class GameClient
-    {
-        public static GameClient Server = new GameClient(IsServer: true);
-
-        public TcpClient Client = null;
-        public NetworkStream Stream = null;
-        public int Index = -1;
-        public int SimStep = 0;
-
-        public bool IsServer = false;
-
-        public bool HasLoaded = false;
-
-        public GameClient(bool IsServer = false)
-        {
-            this.IsServer = IsServer;
-
-            if (IsServer)
-            {
-                Index = 0;
-            }
-        }
-
-        public GameClient(TcpClient Client, int Index)
-        {
-            this.Client = Client;
-            this.Index = Index;
-
-            this.Stream = this.Client.GetStream();
-        }
-    }
-
     public class Server
     {
         TcpListener server = null;
-        byte[] bytes = new byte[1 << 16];
         
-        public static List<GameClient> Clients;
+        public static List<Connection> Clients;
 
         Thread ServerThread;
         bool ShouldStop = false;
@@ -63,9 +32,9 @@ namespace Game
                 {
                     if (client.IsServer) continue;
 
-                    if (client.Stream.DataAvailable)
+                    if (client.MessageAvailable())
                     {
-                        var messages = client.Stream.Receive(bytes);
+                        var messages = client.GetMessages();
 
                         foreach (var s in messages)
                         {
@@ -98,47 +67,66 @@ namespace Game
 
                         if (client.IsServer)
                         {
-                            message.Source = GameClient.Server;
+                            message.Source = Connection.Server;
                             Networking.Inbox.Enqueue(message);
                         }
                         else
                         {                            
-                            client.Stream.Send(encoding);
+                            client.Send(encoding);
                         }
 
                         if (Log.Send) Console.WriteLine("(Server) Sent to {0}: {1}", index, encoding);
                     }
                 }
 
-                //Thread.Sleep(200);
                 Thread.Sleep(1);
-                //Thread.SpinWait(1);
             }
         }
 
         public Server()
+        {
+            Clients = new List<Connection>();
+            Clients.Add(Connection.Server);
+
+            if (Program.SteamNetworking)
+            {
+                StartSteamServer();
+            }
+            else
+            {
+                StartTcpServer();
+            }
+        }
+
+        void StartServerThread()
+        {
+            ServerThread = new Thread(SendReceiveThread);
+            ServerThread.Start();
+        }
+
+        void StartSteamServer()
+        {
+            StartServerThread();
+        }
+
+        void StartTcpServer()
         {
             try
             {
                 server = new TcpListener(IPAddress.Any, Program.Port);
                 server.Start();
 
-                //new Thread(ConnectThread).Start();
-                Clients = new List<GameClient>();
-                Clients.Add(GameClient.Server);
-
                 for (int i = 1; i < Program.NumPlayers; i++)
                 {
                     Console.Write("Waiting for a connection... ");
                     var client = server.AcceptTcpClient();
-                    Clients.Add(new GameClient(client, i));
+                    Clients.Add(new TcpConnection(client, i));
                     Console.WriteLine("Connected!");
                 }
 
                 Console.WriteLine("All players connected!");
 
-                ServerThread = new Thread(SendReceiveThread);
-                ServerThread.Start();
+                StartServerThread();
             }
             catch (ArgumentNullException e)
             {
@@ -160,8 +148,7 @@ namespace Game
         {
             foreach (var client in Clients)
             {
-                if (client.Stream != null) client.Stream.Close();
-                if (client.Client != null) client.Client.Close();
+                client.Close();
             }
         }
 

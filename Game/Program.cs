@@ -74,7 +74,8 @@ namespace Game
 
         public static bool
             Server = false,
-            Client = false;
+            Client = false,
+            SteamNetworking = false;
 
         public static int Port = 13000;
         public static string IpAddress = "127.0.0.1";
@@ -125,7 +126,7 @@ namespace Game
             if (args_.Length == 0)
             {
                 // Demo debug
-                args = "--server                --port 13000 --p 1 --t 1234 --n 1 --debug --w 1280 --h 720";
+                //args = "--server                --port 13000 --p 1 --t 1234 --n 1 --debug --w 1280 --h 720";
 
                 // Demo release
                 //args = "--w 1920 --h 1080";
@@ -150,8 +151,10 @@ namespace Game
                 //args = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double --logshorthash";
 
                 // Two player debug
-                //args = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10";
-                //Start("  --server                --port 13000 --p 2 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10");
+                var clientArgs = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10";
+                var serverArgs = "--server                --port 13000 --p 2 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10";
+                args = serverArgs;
+                Start(clientArgs);
 
                 // Four player debug
                 //args = "--server                --port 13000 --p 1 --t 1234 --n 4 --map Beset.m3n   --debug --quad";
@@ -208,6 +211,8 @@ namespace Game
 
             if (args.Contains("--server")) Server = true;
             else if (args.Contains("--client")) Client = true;
+
+            if (args.Contains("--steam-networking")) SteamNetworking = true;
 
             if (args.Contains("--ip")) { int i = args.IndexOf("--ip"); IpAddress = args[i + 1]; }
             if (args.Contains("--port")) { int i = args.IndexOf("--port"); Port = int.Parse(args[i + 1]); }

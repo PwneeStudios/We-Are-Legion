@@ -10,12 +10,25 @@ using System.Collections.Concurrent;
 
 namespace Game
 {
+    public class TcpServerConnection : TcpConnection
+    {
+        public override void Connect()
+        {
+            //IPAddress server_addr = IPAddress.Parse("2604:2000:efc0:103:f878:6e49:e62d:74b0");
+            IPAddress server_addr = IPAddress.Parse(Program.IpAddress);
+
+            Client = new TcpClient();
+
+            Client.Connect(server_addr, Program.Port);
+            Console.WriteLine("Connected!");
+
+            Stream = Client.GetStream();
+        }
+    }
+
     public class Client
     {
-        TcpClient client = null;
-        NetworkStream stream = null;
-        byte[] bytes = new byte[1 << 16];
-
+        Connection MyConnection = new TcpServerConnection();
         Thread ClientThread;
         bool ShouldStop = false;
 
@@ -24,16 +37,16 @@ namespace Game
             while (!ShouldStop)
             {
                 // Receive
-                if (stream.DataAvailable)
+                if (MyConnection.MessageAvailable())
                 {
-                    var messages = stream.Receive(bytes);
+                    var messages = MyConnection.GetMessages();
 
                     foreach (var s in messages)
                     {
                         try
                         {
                             var message = Message.Parse(s);
-                            message.Source = GameClient.Server;
+                            message.Source = MyConnection;
 
                             Networking.Inbox.Enqueue(message);
                             if (Log.Receive) Console.WriteLine("(Client) Received: {0}", message);
@@ -50,12 +63,11 @@ namespace Game
                 if (Networking.Outbox.TryDequeue(out outgoing))
                 {
                     string encoding = outgoing.Item2.Encode();
-                    stream.Send(encoding);
+                    MyConnection.Send(encoding);
                     if (Log.Send) Console.WriteLine("(Client) Sent: {0}", encoding);
                 }
 
                 Thread.Sleep(1);
-                //Thread.SpinWait(1);
             }
         }
 
@@ -68,7 +80,8 @@ namespace Game
 
         void Start()
         {
-            new Thread(SendReceiveThread).Start();
+            ClientThread = new Thread(SendReceiveThread);
+            ClientThread.Start();
         }
 
         void Connect()
@@ -77,38 +90,24 @@ namespace Game
             {
                 try
                 {
-                    //Program.IpAddress = "2604:2000:efc0:103:f878:6e49:e62d:74b0";
-                    IPAddress server_addr = IPAddress.Parse(Program.IpAddress);
-                    //client = new TcpClient(server_addr.AddressFamily);
-                    client = new TcpClient();
-
                     Console.Write("Waiting to connect... " + (i > 0 ? "(attempt {0})" : ""), i);
-                    client.Connect(server_addr, Program.Port);
-                    Console.WriteLine("Connected!");
-
-                    stream = client.GetStream();
+                    MyConnection.Connect();
 
                     break;
                 }
                 catch (ArgumentNullException e)
                 {
                     Console.WriteLine("ArgumentNullException: {0}", e);
-                    CloseAll();
+                    MyConnection.Close();
                 }
                 catch (SocketException e)
                 {
                     Console.WriteLine("SocketException: {0}", e);
-                    CloseAll();
+                    MyConnection.Close();
                 }
 
                 Thread.Sleep(100);
             }
-        }
-
-        void CloseAll()
-        {
-            if (stream != null) stream.Close();
-            if (client != null) client.Close();
         }
 
         public void Cleanup()
@@ -118,7 +117,8 @@ namespace Game
                 ShouldStop = true;
                 ClientThread.Join();
             }
-            CloseAll();
+
+            MyConnection.Close();
         }
     }
 }

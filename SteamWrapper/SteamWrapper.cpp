@@ -479,3 +479,50 @@ void SteamMatches::LeaveLobby()
 	SteamMatchmaking()->LeaveLobby( *SteamMatches::s_CurrentLobby.m_handle );
 	SteamMatches::s_CurrentLobby.m_handle = NULL;
 }
+
+
+void SteamP2P::SendMessage( SteamPlayer User, String^ Message )
+{
+	SendMessage( *User.m_handle, Message );
+}
+
+void SteamP2P::SendMessage( CSteamID User, String^ Message )
+{
+	marshal_context context;
+	char const * pchMsg = context.marshal_as< char const * >( Message );
+
+	SteamNetworking()->SendP2PPacket( User, pchMsg, Message->Length, k_EP2PSendReliable );
+}
+
+bool SteamP2P::MessageAvailable()
+{
+	uint32 msgSize = 0;
+	bool result = SteamNetworking()->IsP2PPacketAvailable( &msgSize );
+	
+	return result;
+}
+
+String^ SteamP2P::ReadMessage()
+{
+	uint32 msgSize = 0;
+	bool result = SteamNetworking()->IsP2PPacketAvailable( &msgSize );
+
+	if ( !result ) {
+		return nullptr;
+	}
+
+	char * packet = (char *)malloc( msgSize );
+	CSteamID steamIDRemote;
+	uint32 bytesRead = 0;
+	
+	String^ msg = nullptr;
+	if ( SteamNetworking()->ReadP2PPacket( packet, msgSize, &bytesRead, &steamIDRemote ) )
+	{
+		msg = gcnew System::String( packet );
+	}
+	
+	free( packet );
+
+	return msg;
+}
+

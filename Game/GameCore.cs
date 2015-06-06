@@ -113,12 +113,6 @@ namespace Game
             {
                 FakeFullscreen();
             }
-
-            if (Program.StartupMap != null)
-            {
-                //State = GameState.ToMap;
-                State = GameState.ToEditor;
-            }
         }
 
         protected override void Initialize()
