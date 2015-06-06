@@ -1,7 +1,7 @@
 define(['lodash', 'react', 'interop', 'events',
-        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual'],
+        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual', 'Components/GameOver'],
     function(_, React,interop, events,
-            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual) {
+            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual, GameOver) {
  
     return React.createClass({
         mixins: [events.SetModeMixin],
@@ -55,15 +55,17 @@ define(['lodash', 'react', 'interop', 'events',
             setMode('none');
             //return;
 
-            setMode('main-menu');
-            setScreen('game-menu');
+            //setMode('main-menu');
+            //setScreen('game-menu');
             //setScreen('options');
             //setScreen('game-lobby', {host:true});
             //setScreen('game-lobby', {host:false});
             //setScreen('manual');
             //setScreen('find-game');
 
-            //setMode('in-game');
+            setMode('in-game');
+            setScreen('victory');
+            //setScreen('defeat');
             //setScreen('in-game-ui');
             //setScreen('in-game-menu');
         },
@@ -131,6 +133,8 @@ define(['lodash', 'react', 'interop', 'events',
                 case 'game-lobby': body = React.createElement(GameLobby, null); break;
                 
                 case 'in-game-ui': body = React.createElement(InGameUi, null); break;
+                case 'victory': body = React.createElement(GameOver, {victory: true}); break;
+                case 'defeat': body = React.createElement(GameOver, {victory: false}); break;
                 case 'in-game-menu': body = React.createElement(InGameMenu, null); break;
             }
 

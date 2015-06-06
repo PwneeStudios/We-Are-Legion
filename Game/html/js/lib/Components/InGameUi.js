@@ -277,16 +277,6 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     )
                 )
             );
-
-            return (
-                React.createElement("div", {className: "menu-button"}, 
-                    React.createElement(UiButton, {width: 90, image: {width:120, height:60, url:'css/MenuButton.png'}, 
-                              onClick: null}), 
-                    React.createElement(Div, {nonBlocking: true, pos: pos(-20,0.4), size: width(100), style: pStyle}, 
-                        React.createElement("p", null, "Menu")
-                    )
-                )
-            );
         },
     });
 

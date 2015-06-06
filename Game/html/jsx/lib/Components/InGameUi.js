@@ -277,16 +277,6 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     </Div>
                 </div>
             );
-
-            return (
-                <div className='menu-button'>
-                    <UiButton width={90} image={{width:120, height:60, url:'css/MenuButton.png'}}
-                              onClick={null} />
-                    <Div nonBlocking pos={pos(-20,0.4)} size={width(100)} style={pStyle}>
-                        <p>Menu</p>
-                    </Div>
-                </div>
-            );
         },
     });
 
