@@ -39,25 +39,20 @@ namespace Game
 
         public static void ToClients(Message message)
         {
-            //new Thread(() =>
-            //{
-            //    Thread.Sleep(100);
-
-                if (Program.Server)
+            if (Program.Server)
+            {
+                foreach (var client in Server.Clients)
                 {
-                    foreach (var client in Server.Clients)
-                    {
-                        int index = client.Index;
+                    int index = client.Index;
 
-                        if (Log.Outbox) Console.WriteLine("* Enqueued {0}", message);
-                        Outbox.Enqueue(new Tuple<int, Message>(index, message));
-                    }
+                    if (Log.Outbox) Console.WriteLine("* Enqueued {0}", message);
+                    Outbox.Enqueue(new Tuple<int, Message>(index, message));
                 }
-                else
-                {
-                    throw new Exception("Clients cannot send messages to clients.");
-                }
-            //}).Start();
+            }
+            else
+            {
+                throw new Exception("Clients cannot send messages to clients.");
+            }
         }
 
         public static void ToClients(MessageTail message)

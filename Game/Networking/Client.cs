@@ -8,6 +8,8 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
+using SteamWrapper;
+
 namespace Game
 {
     public class TcpServerConnection : TcpConnection
@@ -26,11 +28,37 @@ namespace Game
         }
     }
 
+    public class SteamServerConnection : SteamConnection
+    {
+        public SteamServerConnection() : base(new SteamPlayer(Program.SteamServer))
+        {
+        }
+
+        public override void Connect()
+        {
+        }
+    }
+
     public class Client
     {
-        Connection MyConnection = new TcpServerConnection();
+        Connection MyConnection;
         Thread ClientThread;
         bool ShouldStop = false;
+
+        public Client()
+        {
+            if (Program.SteamNetworking)
+            {
+                MyConnection = new SteamServerConnection();
+            }
+            else
+            {
+                MyConnection = new TcpServerConnection();
+            }
+
+            Connect();
+            Start();
+        }
 
         void SendReceiveThread()
         {
@@ -69,13 +97,6 @@ namespace Game
 
                 Thread.Sleep(1);
             }
-        }
-
-        public Client()
-        {
-            Connect();
-            
-            Start();
         }
 
         void Start()

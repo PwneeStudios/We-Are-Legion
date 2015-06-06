@@ -106,6 +106,17 @@ namespace Game
 
         void StartSteamServer()
         {
+            int count = 1;
+            foreach (UInt64 user in Program.SteamUsers)
+            {
+                if (user == 0 || user == Program.SteamServer) continue;
+
+                SteamPlayer player = new SteamPlayer(user);
+                Clients.Add(new SteamConnection(player, count++));
+
+                Console.WriteLine("Connected!");
+            }
+
             StartServerThread();
         }
 

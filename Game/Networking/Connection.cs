@@ -82,9 +82,9 @@ namespace Game
 
     public class SteamConnection : Connection
     {
-        private SteamPlayer User;
+        public SteamPlayer User;
 
-        public SteamConnection(SteamPlayer User, int Index)
+        public SteamConnection(SteamPlayer User, int Index = -1)
         {
             this.User = User;
             this.Index = Index;

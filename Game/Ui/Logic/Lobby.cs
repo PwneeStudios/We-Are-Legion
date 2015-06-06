@@ -283,11 +283,23 @@ namespace Game
                 }
             }
 
+            string server = "", users = LobbyInfo.Players.Count.ToString();
+            foreach (var player in LobbyInfo.Players)
+            {
+                if (player.Host)
+                {
+                    server = player.SteamID.ToString();
+                }
+                
+                users += ' ' + player.SteamID.ToString();
+            }
+
             foreach (var player in LobbyInfo.Players)
             {
                 string type = player.Host ? "--server" : "--client";
+                string networking = string.Format("{0} --steam-networking --steam-server {1} --steam-users {2}", type, server, users);
 
-                player.Args = string.Format("{0} --steam-networking --p {1} --t {2} --n {3} --map {4}", type, player.GamePlayer, teams, players, GameMapName);
+                player.Args = string.Format("{0} --p {1} --t {2} --n {3} --map \"{4}\"", networking, player.GamePlayer, teams, players, GameMapName);
             }
         }
 

@@ -77,6 +77,9 @@ namespace Game
             Client = false,
             SteamNetworking = false;
 
+        public static UInt64 SteamServer = 0;
+        public static UInt64[] SteamUsers = { 0, 0, 0, 0 };
+
         public static int Port = 13000;
         public static string IpAddress = "127.0.0.1";
 
@@ -126,7 +129,7 @@ namespace Game
             if (args_.Length == 0)
             {
                 // Demo debug
-                //args = "--server                --port 13000 --p 1 --t 1234 --n 1 --debug --w 1280 --h 720";
+                args = "--server                --port 13000 --p 1 --t 1234 --n 1 --debug --w 1280 --h 720";
 
                 // Demo release
                 //args = "--w 1920 --h 1080";
@@ -151,10 +154,10 @@ namespace Game
                 //args = "--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --double --logshorthash";
 
                 // Two player debug
-                var clientArgs = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10";
-                var serverArgs = "--server                --port 13000 --p 2 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10";
-                args = serverArgs;
-                Start(clientArgs);
+                //var clientArgs = "--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10";
+                //var serverArgs = "--server                --port 13000 --p 2 --t 1234 --n 2 --map Beset.m3n   --debug --double --logshorthash --logperiod 10";
+                //args = serverArgs;
+                //Start(clientArgs);
 
                 // Four player debug
                 //args = "--server                --port 13000 --p 1 --t 1234 --n 4 --map Beset.m3n   --debug --quad";
@@ -177,7 +180,7 @@ namespace Game
             }
             else
             {
-                ParseOptions(args_);
+                ParseOptions(new List<string>(args_));
             }
 
             using (GameClass game = new GameClass())
@@ -188,13 +191,26 @@ namespace Game
 
         public static void ParseOptions(string args)
         {
-            ParseOptions(args.Split(' '));
+            var parts = args.Split('"');
+
+            var argList = new List<string>();
+            for (int i = 0; i < parts.Length; i += 2)
+            {
+                argList.AddRange(parts[i].Split(' '));
+                
+                if (i + 1 < parts.Length)
+                {
+                    argList.Add(parts[i + 1]);
+                }
+            }
+
+            argList.RemoveAll(match => match == "");
+
+            ParseOptions(argList);
         }
 
-        public static void ParseOptions(string[] args_)
+        public static void ParseOptions(List<string> args)
         {
-            List<string> args = new List<string>(args_);
-
             if (args.Contains("--p")) { int i = args.IndexOf("--p"); StartupPlayerNumber = int.Parse(args[i + 1]); }
 
             if (args.Contains("--t"))
@@ -202,17 +218,43 @@ namespace Game
                 string teams = args[args.IndexOf("--t") + 1];
 
                 for (int i = 0; i < 4; i++)
+                {
                     Teams[i + 1] = int.Parse(teams[i].ToString());
+                }
             }
 
             if (args.Contains("--n")) { int i = args.IndexOf("--n"); NumPlayers = int.Parse(args[i + 1]); }
 
-            if (args.Contains("--map")) { int i = args.IndexOf("--map"); StartupMap = args[i + 1]; }
+            if (args.Contains("--map"))
+            {
+                int i = args.IndexOf("--map");
+                StartupMap = args[i + 1];
+            }
 
             if (args.Contains("--server")) Server = true;
             else if (args.Contains("--client")) Client = true;
 
             if (args.Contains("--steam-networking")) SteamNetworking = true;
+
+            if (args.Contains("--steam-users"))
+            {
+                int index = args.IndexOf("--steam-users");
+                int count = int.Parse(args[index + 1]);
+
+                for (int i = 0; i < count; i++)
+                {
+                    string user = args[index + i + 2];
+                    SteamUsers[i] = UInt64.Parse(user);
+                }
+            }
+
+            if (args.Contains("--steam-server"))
+            {
+                int index = args.IndexOf("--steam-server");
+
+                string user = args[index + 1];
+                SteamServer = UInt64.Parse(user);
+            }
 
             if (args.Contains("--ip")) { int i = args.IndexOf("--ip"); IpAddress = args[i + 1]; }
             if (args.Contains("--port")) { int i = args.IndexOf("--port"); Port = int.Parse(args[i + 1]); }
