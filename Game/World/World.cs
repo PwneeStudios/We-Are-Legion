@@ -17,9 +17,11 @@ namespace Game
             CameraAspect = GameClass.ScreenAspect;
 
             Params = new GameParameters();
+            TeamInfo = new TeamInfo[5];
             PlayerInfo = new PlayerInfo[5];
             for (int i = 1; i <= 4; i++)
             {
+                TeamInfo[i] = new TeamInfo();
                 PlayerInfo[i] = new PlayerInfo(i, Params);
             }
 
@@ -89,6 +91,7 @@ namespace Game
         public DataGroup DataGroup;
 
         GameParameters Params;
+        public TeamInfo[] TeamInfo;
         public PlayerInfo[] PlayerInfo;
 
         MarkerList Markers;
@@ -141,6 +144,14 @@ namespace Game
             get
             {
                 return PlayerInfo[MyPlayerNumber];
+            }
+        }
+
+        public TeamInfo MyTeamInfo
+        {
+            get
+            {
+                return TeamInfo[MyTeamNumber];
             }
         }
 

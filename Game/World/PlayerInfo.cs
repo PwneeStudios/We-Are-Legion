@@ -21,6 +21,12 @@ namespace Game
         }
     }
 
+    public class TeamInfo : SimShader
+    {
+        public int DragonLordCount = 0;
+        public bool Defeated = false;
+    }
+
     public class PlayerInfo : SimShader
     {
         public string Name;

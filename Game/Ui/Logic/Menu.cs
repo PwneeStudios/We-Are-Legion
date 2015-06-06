@@ -27,6 +27,8 @@ using System.Web.Script.Serialization;
 
 using Newtonsoft.Json;
 
+using SteamWrapper;
+
 namespace Game
 {
     using Dict = Dictionary<string, object>;
@@ -41,9 +43,11 @@ namespace Game
 
         JSValue LeaveGame(object sender, JavascriptMethodEventArgs e)
         {
+            SteamMatches.LeaveLobby();
+
             SendString("removeMode", "in-game");
             SendString("removeMode", "main-menu");
-
+            
             SendString("setMode", "main-menu");
             SendString("setScreen", "game-menu");
 

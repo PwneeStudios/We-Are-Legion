@@ -263,5 +263,15 @@ namespace Game
                 }
             }
         }
+
+        public void Defeat()
+        {
+            SendString("setScreen", "defeated");
+        }
+
+        public void Victory()
+        {
+            SendString("setScreen", "victory");
+        }
     }
 }

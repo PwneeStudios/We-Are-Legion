@@ -321,6 +321,7 @@ namespace Game
                     DataGroup.UpdateIcons();
                     DataGroup.DoDragonLordCount(PlayerInfo); // This should happen soon after CurrentUnit.anim is updated, so it can catch the death switch with low latency.
                     DragonLordDeathCheck();
+                    EndOfGameCheck();
 
                     break;
 
@@ -393,13 +394,21 @@ namespace Game
 
         void DragonLordDeathCheck()
         {
+            for (int t = 1; t <= 4; t++)
+            {
+                TeamInfo[t].DragonLordCount = 0;
+            }
+
             for (int p = 1; p <= 4; p++)
             {
-                if (PlayerInfo[p].DragonLordAlive)
+                var player = PlayerInfo[p];
+                var team = TeamInfo[PlayerTeams[p]];
+
+                if (player.DragonLordAlive)
                 {
-                    if (PlayerInfo[p].DragonLords == 0)
+                    if (player.DragonLords == 0)
                     {
-                        PlayerInfo[p].DragonLordAlive = false;
+                        player.DragonLordAlive = false;
 
                         if (!MapEditorActive)
                         {
@@ -410,10 +419,48 @@ namespace Game
                 }
                 else
                 {
-                    if (PlayerInfo[p].DragonLords > 0)
+                    if (player.DragonLords > 0)
                     {
-                        PlayerInfo[p].DragonLordAlive = true;
-                    }                    
+                        player.DragonLordAlive = true;
+                    }
+                }
+
+                team.DragonLordCount += player.DragonLords;
+            }
+        }
+
+        public bool GameOver = false;
+        void EndOfGameCheck()
+        {
+            if (GameOver) return;
+
+            int alive_count = 0;
+            for (int t = 1; t <= 4; t++)
+            {
+                var team = TeamInfo[t];
+
+                if (team.DragonLordCount == 0)
+                {
+                    team.Defeated = true;
+                }
+                else
+                {
+                    team.Defeated = false;
+                    alive_count++;
+                }
+            }
+
+            if (alive_count <= 1)
+            {
+                GameOver = true;
+
+                if (MyTeamInfo.Defeated)
+                {
+                    GameClass.Game.Defeat();
+                }
+                else
+                {
+                    GameClass.Game.Victory();
                 }
             }
         }

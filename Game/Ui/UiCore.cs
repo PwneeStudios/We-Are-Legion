@@ -185,13 +185,13 @@ namespace Game
             return json;
         }
 
-        void SendDict(string function, Dictionary<string, object> dict)
+        public void SendDict(string function, Dictionary<string, object> dict)
         {
             var json = Jsonify(dict);
             Send(function, json);
         }
 
-        void SendString(string function, string s)
+        public void SendString(string function, string s)
         {
             Send(function, '\'' + s + '\'');
         }

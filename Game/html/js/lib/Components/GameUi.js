@@ -95,7 +95,10 @@ define(['lodash', 'react', 'interop', 'events',
         },
 
         removeMode: function(mode) {
-            _.remove(modes, function(_mode) { return _mode === mode; });
+            //_.remove(modes, function(_mode) { return _mode === mode; });
+            if (mode in modes) {
+                modes[mode] = [];
+            }
         },
 
         setMode: function(newMode) {
@@ -123,6 +126,8 @@ define(['lodash', 'react', 'interop', 'events',
 
         render: function() {
             var body = null;
+
+            console.log('render screen ' + this.state.screen);
 
             switch (this.state.screen) {
                 case 'game-menu': body = React.createElement(GameMenu, null); break;
