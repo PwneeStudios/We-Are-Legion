@@ -44,7 +44,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 this.props.params.victory ? 'Victory!' : 'Defeat!'
                             ), 
 
-                            this.props.winningTeam ?
+                            this.props.params.winningTeam ?
                             React.createElement("h2", null, 
                                  "Team ", this.props.params.winningTeam, " wins!"
                             )

@@ -63,7 +63,7 @@ namespace Game
             var obj = new Dict();
             obj["LobbyMapLoading"] = MapLoading;
 
-            SendDict("lobbyMap", obj);
+            Send("lobbyMap", obj);
         }
 
         public bool DrawMapPreview = false;
@@ -263,7 +263,7 @@ namespace Game
                 obj["LobbyLoading"] = true;
             }
 
-            SendDict("lobby", obj);
+            Send("lobby", obj);
         }
 
         void BuildArgs()

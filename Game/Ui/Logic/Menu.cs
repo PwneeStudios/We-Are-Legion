@@ -45,11 +45,11 @@ namespace Game
         {
             SteamMatches.LeaveLobby();
 
-            SendString("removeMode", "in-game");
-            SendString("removeMode", "main-menu");
+            Send("removeMode", "in-game");
+            Send("removeMode", "main-menu");
             
-            SendString("setMode", "main-menu");
-            SendString("setScreen", "game-menu");
+            Send("setMode", "main-menu");
+            Send("setScreen", "game-menu");
 
             State = GameState.MainMenu;
             awesomium.AllowMouseEvents = true;

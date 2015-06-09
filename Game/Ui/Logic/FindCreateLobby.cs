@@ -118,7 +118,7 @@ namespace Game
 
             obj["Lobbies"] = lobby_list;
 
-            SendDict("lobbies", obj);
+            Send("lobbies", obj);
         }
     }
 }

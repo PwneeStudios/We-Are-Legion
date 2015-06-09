@@ -185,17 +185,6 @@ namespace Game
             return json;
         }
 
-        public void SendDict(string function, Dictionary<string, object> dict)
-        {
-            var json = Jsonify(dict);
-            Send(function, json);
-        }
-
-        public void SendString(string function, string s)
-        {
-            Send(function, '\'' + s + '\'');
-        }
-
         public void Send(string function, params object[] args)
         {
             string s = "";
@@ -209,11 +198,6 @@ namespace Game
                 first = false;
             }
 
-            Send(function, s);
-        }
-
-        void Send(string function, string s)
-        {
             try
             {
                 awesomium.WebView.ExecuteJavascript(function + "(" + s + ");");

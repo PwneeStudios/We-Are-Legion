@@ -105,8 +105,8 @@ namespace Game
                     if (InputHelper.SomethingPressed())
                     {
                         State = GameState.MainMenu;
-                        SendString("setMode", "main-menu");
-                        SendString("setScreen", "game-menu");
+                        Send("setMode", "main-menu");
+                        Send("setScreen", "game-menu");
                     }
 
                     break;
@@ -159,8 +159,8 @@ namespace Game
 
                     if (ScenarioToLoad != null)
                     {
-                        SendString("setMode", "in-game");
-                        SendString("setScreen", "in-game-ui");
+                        Send("setMode", "in-game");
+                        Send("setScreen", "in-game-ui");
 
                         World = new World();
                         World.Load(Path.Combine("Content", Path.Combine("Maps", ScenarioToLoad)));

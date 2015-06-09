@@ -44,7 +44,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 {this.props.params.victory ? 'Victory!' : 'Defeat!'}
                             </h1>
 
-                            {this.props.winningTeam ?
+                            {this.props.params.winningTeam ?
                             <h2>
                                  Team {this.props.params.winningTeam} wins!
                             </h2>

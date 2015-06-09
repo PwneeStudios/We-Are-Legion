@@ -47,7 +47,7 @@ namespace Game
             obj["PlayerInfo"] = ShowAllPlayers ? World.PlayerInfo : null;
 
             var json = Jsonify(obj);
-            SendDict("update", obj);
+            Send("update", obj);
         }
 
         void UpdateParams()
@@ -56,7 +56,7 @@ namespace Game
             obj["Spells"] = Spells.SpellDict;
             obj["Buildings"] = World.MyPlayerInfo.Params.Buildings;
 
-            SendDict("setParams", obj);
+            Send("setParams", obj);
         }
 
         void UpdateShow()
@@ -65,7 +65,7 @@ namespace Game
             obj["ShowChat"] = ShowChat;
             obj["ShowAllPlayers"] = ShowAllPlayers;
 
-            SendDict("show", obj);
+            Send("show", obj);
         }
 
         public bool ShowChat = false;
@@ -88,7 +88,7 @@ namespace Game
             obj["message"] = message;
             obj["name"] = name;
 
-            SendDict("addChatMessage", obj);
+            Send("addChatMessage", obj);
         }
 
         JSValue ActionButtonPressed(object sender, JavascriptMethodEventArgs e)
