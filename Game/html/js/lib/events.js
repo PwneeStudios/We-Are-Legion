@@ -30,5 +30,6 @@ define(['lodash'], function(_) {
         SetParamsMixin: makeEventMixin('setParams', 'onSetParams'),
         SetModeMixin: makeEventMixin('setMode', 'onSetMode'),
         FindLobbiesMixin: makeEventMixin('lobbies', 'onFindLobbies'),
+        WinningTeamMixin: makeEventMixin('winningTeam', 'onWinningTeam'),
     };
 });

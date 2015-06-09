@@ -264,14 +264,14 @@ namespace Game
             }
         }
 
-        public void Defeat()
+        public void Defeat(int winning_team)
         {
-            SendString("setScreen", "defeated");
+            Send("setScreen", "gameOver", new { victory = false, winningTeam = winning_team });
         }
 
-        public void Victory()
+        public void Victory(int winning_team)
         {
-            SendString("setScreen", "victory");
+            Send("setScreen", "gameOver", new { victory = true, winningTeam = winning_team });
         }
     }
 }

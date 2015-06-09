@@ -435,6 +435,7 @@ namespace Game
             if (GameOver) return;
 
             int alive_count = 0;
+            int winning_team = -1;
             for (int t = 1; t <= 4; t++)
             {
                 var team = TeamInfo[t];
@@ -445,6 +446,7 @@ namespace Game
                 }
                 else
                 {
+                    winning_team = t;
                     team.Defeated = false;
                     alive_count++;
                 }
@@ -456,11 +458,11 @@ namespace Game
 
                 if (MyTeamInfo.Defeated)
                 {
-                    GameClass.Game.Defeat();
+                    GameClass.Game.Defeat(winning_team);
                 }
                 else
                 {
-                    GameClass.Game.Victory();
+                    GameClass.Game.Victory(winning_team);
                 }
             }
         }

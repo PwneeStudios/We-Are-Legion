@@ -64,8 +64,8 @@ define(['lodash', 'react', 'interop', 'events',
             //setScreen('find-game');
 
             setMode('in-game');
-            setScreen('victory');
-            //setScreen('defeat');
+            setScreen('gameOver', {victory:false});
+            //setScreen('gameOver', {victory:true});
             //setScreen('in-game-ui');
             //setScreen('in-game-menu');
         },
@@ -127,7 +127,7 @@ define(['lodash', 'react', 'interop', 'events',
         render: function() {
             var body = null;
 
-            console.log('render screen ' + this.state.screen);
+            console.log('render screen ' + this.state.screen + ' ' + JSON.stringify(this.state.params));
 
             switch (this.state.screen) {
                 case 'game-menu': body = <GameMenu />; break;
@@ -138,8 +138,7 @@ define(['lodash', 'react', 'interop', 'events',
                 case 'game-lobby': body = <GameLobby />; break;
                 
                 case 'in-game-ui': body = <InGameUi />; break;
-                case 'victory': body = <GameOver victory={true} />; break;
-                case 'defeat': body = <GameOver victory={false} />; break;
+                case 'gameOver': body = <GameOver />; break;
                 case 'in-game-menu': body = <InGameMenu />; break;
             }
 

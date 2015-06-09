@@ -41,8 +41,14 @@ function(_, React, ReactBootstrap, interop, events, ui,
                     <Div nonBlocking pos={pos(10,10)} size={width(80)}>
                         <Well style={{'height':'80%'}}>
                             <h1>
-                                {this.props.victory ? 'Victory!' : 'Defeat!'}
+                                {this.props.params.victory ? 'Victory!' : 'Defeat!'}
                             </h1>
+
+                            {this.props.winningTeam ?
+                            <h2>
+                                 Team {this.props.params.winningTeam} wins!
+                            </h2>
+                            : null}
 
                             {/* Buttons */}
                             <Div nonBlocking pos={pos(36,72)} size={width(60)}>

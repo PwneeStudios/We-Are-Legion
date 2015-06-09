@@ -196,6 +196,22 @@ namespace Game
             Send(function, '\'' + s + '\'');
         }
 
+        public void Send(string function, params object[] args)
+        {
+            string s = "";
+            bool first = true;
+
+            foreach (var arg in args)
+            {
+                if (!first) { s += ","; }
+                
+                s += Jsonify(arg);
+                first = false;
+            }
+
+            Send(function, s);
+        }
+
         void Send(string function, string s)
         {
             try
