@@ -228,6 +228,19 @@ namespace Game
 
             SendLobbyData();
             BuildLobbyInfo();
+
+            SteamP2P.SetOnP2PSessionRequest(OnP2PSessionRequest);
+            SteamP2P.SetOnP2PSessionConnectFail(OnP2PSessionConnectFail);
+        }
+
+        void OnP2PSessionRequest(UInt64 Player)
+        {
+            SteamP2P.AcceptP2PSessionWithPlayer(new SteamPlayer(Player));
+        }
+
+        void OnP2PSessionConnectFail(UInt64 Player)
+        {
+            Console.WriteLine("Failed connection attempt with {0}", Player);
         }
 
         List<string> Maps;

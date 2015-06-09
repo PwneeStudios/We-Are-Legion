@@ -104,6 +104,9 @@ namespace SteamWrapper
 		STEAM_CALLBACK( CallbackClass, OnChatMsg, LobbyChatMsg_t, m_OnChatMsg );
 		STEAM_CALLBACK( CallbackClass, OnDataUpdate, LobbyDataUpdate_t, m_OnDataUpdate );
 		STEAM_CALLBACK( CallbackClass, OnChatUpdate, LobbyChatUpdate_t, m_OnChatUpdate );
+
+		STEAM_CALLBACK( CallbackClass, OnP2PSessionRequest, P2PSessionRequest_t, m_CallbackP2PSessionRequest );
+		STEAM_CALLBACK( CallbackClass, OnP2PSessionConnectFail, P2PSessionConnectFail_t, m_CallbackP2PSessionConnectFail );
 	};
 
 	// Global items. Not exposed to the C# wrapper.
@@ -201,10 +204,18 @@ namespace SteamWrapper
 
 	internal:
 
+		static Action< uint64 >^ OnRequest;
+		static Action< uint64 >^ OnConnectionFail;
+
 	public:
+
 		static void SendMessage( SteamPlayer User, String^ Message );
 		static void SendMessage( CSteamID User, String^ Message );
 		static bool MessageAvailable();
 		static String^ ReadMessage();
+
+		static void SetOnP2PSessionRequest( Action< uint64 >^ OnRequest );
+		static void SetOnP2PSessionConnectFail( Action< uint64 >^ OnConnectionFail );
+		static void AcceptP2PSessionWithPlayer( SteamPlayer Player );
 	};
 }

@@ -87,7 +87,9 @@ CallbackClass::CallbackClass() :
 	m_GamepadInputEnded( this, &CallbackClass::OnGamepadInputEnd ),
 	m_OnChatMsg( this, &CallbackClass::OnChatMsg ),
 	m_OnDataUpdate( this, &CallbackClass::OnDataUpdate ),
-	m_OnChatUpdate( this, &CallbackClass::OnChatUpdate )
+	m_OnChatUpdate( this, &CallbackClass::OnChatUpdate ),
+	m_CallbackP2PSessionRequest( this, &CallbackClass::OnP2PSessionRequest ),
+	m_CallbackP2PSessionConnectFail( this, &CallbackClass::OnP2PSessionConnectFail )
 {
 }
 
@@ -193,12 +195,26 @@ void CallbackClass::OnLobbyCreated( LobbyCreated_t *pCallback, bool bIOFailure )
 	SteamMatches::s_OnCreateLobby->Invoke( bIOFailure );
 }
 
+void CallbackClass::OnP2PSessionRequest(P2PSessionRequest_t *pP2PSessionRequest)
+{
+	if ( SteamP2P::OnRequest == nullptr ) return;
+
+	SteamP2P::OnRequest( pP2PSessionRequest->m_steamIDRemote.GetAccountID() );
+}
+
+void CallbackClass::OnP2PSessionConnectFail( P2PSessionConnectFail_t *pP2PSessionConnectFail )
+{
+	if ( SteamP2P::OnConnectionFail == nullptr ) return;
+
+	SteamP2P::OnConnectionFail( pP2PSessionConnectFail->m_steamIDRemote.GetAccountID() );
+}
+
 bool SteamStats::Initialize()
 {
 	g_CallbackClassInstance = new CallbackClass();
 
 	// Is Steam loaded? If not we can't get stats.
-	if( SteamUserStats() == 0 )
+	if ( SteamUserStats() == 0 )
 	//if ( SteamUserStats() == 0 || SteamUser() == 0 )
 	{
 		return false;
@@ -526,3 +542,17 @@ String^ SteamP2P::ReadMessage()
 	return msg;
 }
 
+void SteamP2P::SetOnP2PSessionRequest(Action< uint64 >^ OnRequest)
+{
+	SteamP2P::OnRequest = OnRequest;
+}
+
+void SteamP2P::SetOnP2PSessionConnectFail(Action< uint64 >^ OnConnectionFail)
+{
+	SteamP2P::OnConnectionFail = OnConnectionFail;
+}
+
+void SteamP2P::AcceptP2PSessionWithPlayer( SteamPlayer Player )
+{
+	SteamNetworking()->AcceptP2PSessionWithUser( *Player.m_handle );
+}
