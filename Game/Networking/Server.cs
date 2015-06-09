@@ -114,6 +114,8 @@ namespace Game
                 SteamPlayer player = new SteamPlayer(user);
                 Clients.Add(new SteamConnection(player, count++));
 
+                SteamP2P.SendMessage(player, "Implicit connection acceptance.");
+
                 Console.WriteLine("Connected!");
             }
 

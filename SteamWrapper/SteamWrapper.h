@@ -197,6 +197,7 @@ namespace SteamWrapper
 		static bool IsLobbyOwner();
 
 		static void LeaveLobby();
+		static void SetLobbyJoinable( bool Joinable );
 	};
 
 	public ref class SteamP2P

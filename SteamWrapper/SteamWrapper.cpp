@@ -496,6 +496,12 @@ void SteamMatches::LeaveLobby()
 	SteamMatches::s_CurrentLobby.m_handle = NULL;
 }
 
+void SteamMatches::SetLobbyJoinable( bool Joinable )
+{
+	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
+
+	SteamMatchmaking()->SetLobbyJoinable( *SteamMatches::s_CurrentLobby.m_handle, Joinable );
+}
 
 void SteamP2P::SendMessage( SteamPlayer User, String^ Message )
 {

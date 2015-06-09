@@ -32,6 +32,7 @@ namespace Game
     {
         public SteamServerConnection() : base(new SteamPlayer(Program.SteamServer))
         {
+            SteamP2P.SendMessage(User, "Implicit connection acceptance.");
         }
 
         public override void Connect()

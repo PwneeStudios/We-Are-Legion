@@ -163,6 +163,7 @@ namespace Game
             // Only the lobby owner can start the match.
             if (!SteamMatches.IsLobbyOwner()) return JSValue.Null;
 
+            SteamMatches.SetLobbyJoinable(false);
             SteamMatches.SetLobbyData("CountDownStarted", "true");
 
             return JSValue.Null;
