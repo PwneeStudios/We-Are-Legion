@@ -76,7 +76,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
 
             var visibility = [
                 {name:'Public games', value:'public'},
-                {name:'Friend games', value:'friend'},
+                {name:'Friend games', value:'friends'},
             ];
 
             return (

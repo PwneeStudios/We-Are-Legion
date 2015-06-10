@@ -20,6 +20,10 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/util', 'ui/Div'], function(_, 
         },
 
         onSelect: function(item) {
+            if (this.props.onSelect) {
+                this.props.onSelect(item);
+            }
+
             this.setState({
                 value: item.value,
             });

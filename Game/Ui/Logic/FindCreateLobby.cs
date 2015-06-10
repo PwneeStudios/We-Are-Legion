@@ -38,6 +38,7 @@ namespace Game
         void BindMethods_FindLobby()
         {
             xnaObj.Bind("CreateLobby", CreateLobby);
+            xnaObj.Bind("SetLobbyType", SetLobbyType);
 
             xnaObj.Bind("FindLobbies", FindLobbies);
             xnaObj.Bind("JoinLobby", JoinLobby);
@@ -45,8 +46,30 @@ namespace Game
 
         JSValue CreateLobby(object sender, JavascriptMethodEventArgs e)
         {
-            SteamMatches.CreateLobby(OnCreateLobby, SteamMatches.LobbyType_Public);
+            int lobbyType = StringToLobbyType(e.Arguments[0]);
+
+            SteamMatches.CreateLobby(OnCreateLobby, lobbyType);
             return JSValue.Null;
+        }
+
+        JSValue SetLobbyType(object sender, JavascriptMethodEventArgs e)
+        {
+            int lobbyType = StringToLobbyType(e.Arguments[0]);
+
+            SteamMatches.SetLobbyType(lobbyType);
+            return JSValue.Null;
+        }
+
+        private static int StringToLobbyType(string _lobbyType)
+        {
+            switch (_lobbyType)
+            {
+                case "public": return SteamMatches.LobbyType_FriendsOnly;
+                case "friends": return SteamMatches.LobbyType_FriendsOnly;
+                case "private": return SteamMatches.LobbyType_Private;
+            }
+            
+            return SteamMatches.LobbyType_Public;
         }
 
         JSValue FindLobbies(object sender, JavascriptMethodEventArgs e)

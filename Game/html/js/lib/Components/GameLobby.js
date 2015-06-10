@@ -227,7 +227,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
             }
 
             if (this.props.params.host) {
-                interop.createLobby();
+                interop.createLobby(this.props.params.type);
             } else {
                 interop.joinLobby(this.props.params.lobbyIndex);
             }
@@ -315,6 +315,10 @@ function(_, React, ReactBootstrap, interop, events, ui,
             back();
         },
 
+        onLobbyTypeSelect: function(item) {
+            interop.setLobbyType(item.value);
+        },
+
         render: function() {
             var _this = this;
 
@@ -327,7 +331,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
             var visibility = [
                 {name:'Public game', value:'public'},
-                {name:'Friends only', value:'friend'},
+                {name:'Friends only', value:'friends'},
                 {name:'Private', value:'private'},
             ];
 
@@ -382,7 +386,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             /* Game visibility type */
                             this.props.params.host ? 
                                 React.createElement(Div, {pos: pos(48,43), size: size(24,66.2)}, 
-                                    React.createElement(OptionList, {disabled: disabled, options: visibility})
+                                    React.createElement(OptionList, {disabled: disabled, options: visibility, 
+                                                onSelect: this.onLobbyTypeSelect, value: this.props.params.type})
                                 )
                                 : null, 
 
