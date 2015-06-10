@@ -118,6 +118,9 @@ namespace SteamWrapper
 	CCallResult< CallbackClass, LobbyCreated_t > g_CallResultLobbyCreated;
 	const int nMaxLeaderboardEntries = 1000;
 	LeaderboardEntry_t m_leaderboardEntries[nMaxLeaderboardEntries];
+	const int nMaxFriendLobbies = 1000;
+	CSteamID m_friendLobbies[nMaxFriendLobbies];
+
 
 	public ref class SteamStats
 	{
@@ -163,6 +166,8 @@ namespace SteamWrapper
 		static Action^ s_OnDataUpdate;
 
 		static int s_nLobbiesFound = 0;
+		static int s_nFriendLobbiesFound = 0;
+
 		static SteamLobby s_CurrentLobby;
 
 	public:
@@ -171,7 +176,8 @@ namespace SteamWrapper
 			LobbyType_FriendsOnly = 1,
 			LobbyType_Private = 2;
 
-		static void FindLobbies(Action< bool >^ OnFind);
+		static void FindLobbies( Action< bool >^ OnFind );
+		static void FindFriendLobbies( Action< bool >^ OnFind );
 		
 		static int const NumLobbies();
 		static String^ GetLobbyData( int Index, String^ Key );
@@ -190,6 +196,7 @@ namespace SteamWrapper
 		static int GetLobbyCapacity( int Index );
 		static void SetLobbyType( int LobbyType );
 
+		static CSteamID GetLobby( int Index );
 		static int GetLobbyMemberCount();
 		static String^ GetMememberName( int Index );
 		static UInt64 GetMememberId(int Index);

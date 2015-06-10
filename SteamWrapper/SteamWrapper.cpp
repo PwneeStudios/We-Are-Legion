@@ -307,27 +307,64 @@ const int SteamStats::Results_GetId( int Index )
 	return m_leaderboardEntries[ Index ].m_steamIDUser.GetAccountID();
 }
 
-void SteamMatches::FindLobbies(Action< bool >^ OnFind)
+void SteamMatches::FindLobbies( Action< bool >^ OnFind )
 {
 	SteamMatches::s_OnFindLobbies = OnFind;
+	SteamMatches::s_nFriendLobbiesFound = 0;
 
-	if (SteamMatchmaking() == 0)
-	{
-		return;
-	}
+	if (SteamMatchmaking() == 0) return;
 
 	SteamAPICall_t hSteamAPICall = SteamMatchmaking()->RequestLobbyList();
 	g_CallResultLobbyMatchList.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnFindLobbies );
 }
 
+void SteamMatches::FindFriendLobbies( Action< bool >^ OnFind )
+{
+	SteamMatches::s_OnFindLobbies = OnFind;
+	SteamMatches::s_nFriendLobbiesFound = 0;
+
+	if (SteamMatchmaking() == 0) return;
+
+	int cFriends = SteamFriends()->GetFriendCount( k_EFriendFlagImmediate );
+	for ( int i = 0; i < cFriends; i++ ) 
+	{
+		FriendGameInfo_t friendGameInfo;
+		CSteamID steamIDFriend = SteamFriends()->GetFriendByIndex( i, k_EFriendFlagImmediate );
+		if ( SteamFriends()->GetFriendGamePlayed( steamIDFriend, &friendGameInfo ) && friendGameInfo.m_steamIDLobby.IsValid() )
+		{
+			m_friendLobbies[SteamMatches::s_nFriendLobbiesFound++] = friendGameInfo.m_steamIDLobby;
+				//is a valid lobby, you can join it or use RequestLobbyData() get it's metadata
+		}
+	}
+}
+
 int const SteamMatches::NumLobbies()
 {
-	return s_nLobbiesFound;
+	if ( s_nFriendLobbiesFound > 0 )
+	{
+		return s_nFriendLobbiesFound;
+	}
+	else
+	{
+		return s_nLobbiesFound;
+	}
+}
+
+CSteamID SteamMatches::GetLobby( int Index )
+{
+	if ( s_nFriendLobbiesFound > 0 )
+	{
+		return m_friendLobbies[ Index ];
+	}
+	else
+	{
+		return SteamMatchmaking()->GetLobbyByIndex( Index );
+	}
 }
 
 System::String^ SteamMatches::GetLobbyData( int Index, System::String^ Key )
 {
-	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
+	CSteamID steamIDLobby = GetLobby( Index );
 
 	marshal_context context;
 	char const * pchKey = context.marshal_as< const char* >( Key );
@@ -361,7 +398,7 @@ void SteamMatches::JoinLobby( int Index,
 	Action< String^, uint64, String^ >^ OnChatMsg,
 	Action^ OnDataUpdate )
 {
-	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
+	CSteamID steamIDLobby = GetLobby( Index );
 	SteamMatches::JoinLobby( steamIDLobby, OnJoinLobby, OnChatUpdate, OnChatMsg, OnDataUpdate );
 }
 
@@ -429,13 +466,13 @@ System::String^ SteamMatches::GetLobbyData( System::String^ Key )
 
 int SteamMatches::GetLobbyMemberCount( int Index )
 {
-	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
+	CSteamID steamIDLobby = GetLobby( Index );
 	return SteamMatchmaking()->GetNumLobbyMembers( steamIDLobby );
 }
 
 int SteamMatches::GetLobbyCapacity( int Index )
 {
-	CSteamID steamIDLobby = SteamMatchmaking()->GetLobbyByIndex( Index );
+	CSteamID steamIDLobby = GetLobby( Index );
 	return SteamMatchmaking()->GetLobbyMemberLimit( steamIDLobby );
 }
 
