@@ -34,9 +34,14 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, Rea
             var style = _.assign({}, {'pointer-events':'auto'}, this.props.style);
             var item = this.state.selected;
 
+            var className = null;
+            if (this.props.scroll) {
+                className = 'scroll-dropdown';
+            }
+
             return (
                 React.createElement("div", {style: style}, 
-                    React.createElement(DropdownButton, {disabled: this.props.disabled, title: item.selectedName || item.name}, 
+                    React.createElement(DropdownButton, {className: className, disabled: this.props.disabled, title: item.selectedName || item.name}, 
                         _.map(this.props.choices, function(choice) { 
                             //var _choice = _.clone(choice);
                             return (

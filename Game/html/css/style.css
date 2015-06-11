@@ -169,6 +169,11 @@ td.menu-cell-dropdown .dropdown-menu {
     opacity: .5;
 }
 
+div.scroll-dropdown ul {
+    overflow-y: scroll;
+    height: 500%;
+}
+
 /* ------
    Button
    ------ */

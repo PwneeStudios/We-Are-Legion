@@ -98,7 +98,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 React.createElement("tr", {style: {'background-color':'#1c1e22'}}, 
                     React.createElement("td", null, this.props.children), 
                     React.createElement("td", {className: "menu-cell-dropdown"}, 
-                        React.createElement(Dropdown, {selected: value, choices: choices, onSelect: this.onSelect, style: {'float':'right'}})
+                        React.createElement(Dropdown, {scroll: this.props.scroll, selected: value, choices: choices, onSelect: this.onSelect, style: {'float':'right'}})
                     )
                 )
             );
@@ -131,6 +131,35 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         render: function() {
             var resolutionChoices = [
                 {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
+                {name: '1920x1080', value:[1920,1080]},
             ];
 
             var fullscreenChoices = [
@@ -142,7 +171,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 React.createElement(Menu, {width: 30, type: "table"}, 
                     React.createElement(MenuSlider, {variable: "SoundVolume"}, "Sound"), 
                     React.createElement(MenuSlider, {variable: "MusicVolume"}, "Music"), 
-                    React.createElement(MenuDropdown, {variable: "Resolution", choices: resolutionChoices}, "Resolution"), 
+                    React.createElement(MenuDropdown, {scroll: true, variable: "Resolution", choices: resolutionChoices}, "Resolution"), 
                     React.createElement(MenuDropdown, {variable: "Fullscreen", choices: fullscreenChoices}, "Fullscreen setting"), 
                     React.createElement(MenuButton, {onClick: back}, "Back")
                 )

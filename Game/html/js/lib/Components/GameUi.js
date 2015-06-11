@@ -55,16 +55,16 @@ define(['lodash', 'react', 'interop', 'events',
             setMode('none');
             //return;
 
-            //setMode('main-menu');
+            setMode('main-menu');
             //setScreen('game-menu');
-            //setScreen('options');
+            setScreen('options');
             //setScreen('game-lobby', {host:true});
             //setScreen('game-lobby', {host:false});
             //setScreen('manual');
             //setScreen('find-game');
 
-            setMode('in-game');
-            setScreen('gameOver', {victory:false});
+            //setMode('in-game');
+            //setScreen('gameOver', {victory:false});
             //setScreen('gameOver', {victory:true});
             //setScreen('in-game-ui');
             //setScreen('in-game-menu');
