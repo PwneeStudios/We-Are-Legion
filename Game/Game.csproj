@@ -140,6 +140,7 @@
     <Compile Include="Ui\Logic\FindCreateLobby.cs" />
     <Compile Include="Ui\Logic\InGame.cs" />
     <Compile Include="Ui\Logic\Menu.cs" />
+    <Compile Include="Ui\Logic\Config.cs" />
     <Compile Include="Ui\Logic\Options.cs" />
     <Compile Include="Ui\BindMethods.cs" />
     <Compile Include="Ui\UiCore.cs" />

@@ -67,7 +67,6 @@ namespace Game
         public static PlayerInfo[] PlayerInfo { get { return World.PlayerInfo; } }
         public static LobbyInfo LobbyInfo;
 
-        bool FullScreen = false;
         bool AutoSaveOnTab = false;
 
         public GameClass()
@@ -80,15 +79,19 @@ namespace Game
 
             if (Program.Width < 0 || Program.Height < 0)
             {
-                FullScreen = true;
-                graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-                graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+                LoadConfig();
             }
             else
             {
-                graphics.PreferredBackBufferWidth = Program.Width;
-                graphics.PreferredBackBufferHeight = Program.Height;
+                var config = new Config();
+                config.Width = Program.Width;
+                config.Height = Program.Height;
+                config.Fullscreen = false;
+
+                CurrentConfig = config;
             }
+
+            ApplyConfig(Activate:false);
 
             if (Program.MaxFps)
             {
@@ -108,11 +111,6 @@ namespace Game
             }
 
             Content.RootDirectory = "Content";
-
-            if (FullScreen)
-            {
-                FakeFullscreen();
-            }
         }
 
         protected override void Initialize()
@@ -316,7 +314,7 @@ namespace Game
         {
             ActivateFakeFullScreen = false;
 
-            if (FullScreen)
+            if (CurrentConfig.Fullscreen)
             {
                 Control.Location = new System.Drawing.Point(0, 0);
                 Form.TopMost = true;

@@ -72,17 +72,19 @@ namespace Game
             return MusicVolume;
         }
 
-        bool Fullscreen;
         JSValue SetFullscreen(object sender, JavascriptMethodEventArgs e)
         {
-            Fullscreen = (bool)e.Arguments[0];
+            CurrentConfig.Fullscreen = (bool)e.Arguments[0];
+            
+            SaveConfig();
+            ApplyConfig();
 
             return JSValue.Null;
         }
 
         JSValue GetFullscreen(object sender, JavascriptMethodEventArgs e)
         {
-            return Fullscreen;
+            return CurrentConfig.Fullscreen;
         }
 
         JSValue GetFullscreenValues(object sender, JavascriptMethodEventArgs e)
@@ -117,10 +119,11 @@ namespace Game
 
         void SetResolution(DisplayMode mode)
         {
-            graphics.PreferredBackBufferWidth = mode.Width;
-            graphics.PreferredBackBufferHeight = mode.Height;
+            CurrentConfig.Width = mode.Width;
+            CurrentConfig.Height = mode.Height;
 
-            graphics.ApplyChanges();
+            SaveConfig();
+            ApplyConfig();
         }
 
         JSValue GetResolution(object sender, JavascriptMethodEventArgs e)
