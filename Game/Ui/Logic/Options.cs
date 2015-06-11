@@ -103,43 +103,71 @@ namespace Game
             return Jsonify(options);
         }
 
-        int Resolution = 1;
         JSValue SetResolution(object sender, JavascriptMethodEventArgs e)
         {
-            Resolution = (int)e.Arguments[0];
+            int Resolution = (int)e.Arguments[0];
+
+            if (Resolution >= 0 && Resolution < Resolutions.Count)
+            {
+                SetResolution(Resolutions[Resolution]);
+            }
 
             return JSValue.Null;
         }
 
-        JSValue GetResolution(object sender, JavascriptMethodEventArgs e)
+        void SetResolution(DisplayMode mode)
         {
-            return Resolution;
+            graphics.PreferredBackBufferWidth = mode.Width;
+            graphics.PreferredBackBufferHeight = mode.Height;
+
+            graphics.ApplyChanges();
         }
 
-        static List<DisplayMode> Modes;
-        void GetResolutions()
+        JSValue GetResolution(object sender, JavascriptMethodEventArgs e)
         {
-            Modes = new List<DisplayMode>();
-            foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
-            {
-                if (Modes.Any(existing => existing.Width == mode.Width && existing.Height == mode.Height))
-                    continue;
-                else
-                    Modes.Add(mode);
-            }
+            int index = Resolutions.FindIndex(match =>
+                match.Width == graphics.PreferredBackBufferWidth &&
+                match.Height == graphics.PreferredBackBufferHeight);
 
-            Modes.Sort((a, b) => { return a.Width.CompareTo(b.Width); });
+            if (index >= 0)
+            {
+                return index;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        static List<DisplayMode> _Modes = null;
+        List<DisplayMode> Resolutions
+        {
+            get
+            {
+                if (_Modes != null) return _Modes;
+
+                _Modes = new List<DisplayMode>();
+                foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
+                {
+                    if (_Modes.Any(existing => existing.Width == mode.Width && existing.Height == mode.Height))
+                        continue;
+                    else
+                        _Modes.Add(mode);
+                }
+
+                _Modes.Sort((a, b) => { return a.Width.CompareTo(b.Width); });
+
+                return _Modes;
+            }
         }
 
         JSValue GetResolutionValues(object sender, JavascriptMethodEventArgs e)
         {
-            GetResolutions();
-
             var options = new List<object>();
 
-            for (int i = 0; i < Modes.Count; i++)
+            for (int i = 0; i < Resolutions.Count; i++)
             {
-                var mode = Modes[i];
+                var mode = Resolutions[i];
 
                 options.Add(
                     new
