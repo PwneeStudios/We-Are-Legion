@@ -116,20 +116,39 @@ namespace Game
             return Resolution;
         }
 
+        static List<DisplayMode> Modes;
+        void GetResolutions()
+        {
+            Modes = new List<DisplayMode>();
+            foreach (DisplayMode mode in GraphicsAdapter.DefaultAdapter.SupportedDisplayModes)
+            {
+                if (Modes.Any(existing => existing.Width == mode.Width && existing.Height == mode.Height))
+                    continue;
+                else
+                    Modes.Add(mode);
+            }
+
+            Modes.Sort((a, b) => { return a.Width.CompareTo(b.Width); });
+        }
+
         JSValue GetResolutionValues(object sender, JavascriptMethodEventArgs e)
         {
-            var options = new List<Dict>();
-            var dict = new Dict();
+            GetResolutions();
 
-            dict = new Dict();
-            dict["name"] = "800x600";
-            dict["value"] = 1;
-            options.Add(dict);
+            var options = new List<object>();
 
-            dict = new Dict();
-            dict["name"] = "1280x720";
-            dict["value"] = 2;
-            options.Add(dict);
+            for (int i = 0; i < Modes.Count; i++)
+            {
+                var mode = Modes[i];
+
+                options.Add(
+                    new
+                    {
+                        name = string.Format("{0}x{1}", mode.Width, mode.Height),
+                        value = i,
+                    }
+                );
+            }
 
             return Jsonify(options);
         }

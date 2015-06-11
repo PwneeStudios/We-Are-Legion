@@ -41,6 +41,7 @@ namespace Game
             xnaObj.Bind("SetLobbyType", SetLobbyType);
 
             xnaObj.Bind("FindLobbies", FindLobbies);
+            xnaObj.Bind("FindFriendLobbies", FindFriendLobbies);
             xnaObj.Bind("JoinLobby", JoinLobby);
         }
 
@@ -64,7 +65,7 @@ namespace Game
         {
             switch (_lobbyType)
             {
-                case "public": return SteamMatches.LobbyType_FriendsOnly;
+                case "public": return SteamMatches.LobbyType_Public;
                 case "friends": return SteamMatches.LobbyType_FriendsOnly;
                 case "private": return SteamMatches.LobbyType_Private;
             }
@@ -75,6 +76,12 @@ namespace Game
         JSValue FindLobbies(object sender, JavascriptMethodEventArgs e)
         {
             SteamMatches.FindLobbies(OnFindLobbies);
+            return JSValue.Null;
+        }
+
+        JSValue FindFriendLobbies(object sender, JavascriptMethodEventArgs e)
+        {
+            SteamMatches.FindFriendLobbies(OnFindLobbies);
             return JSValue.Null;
         }
 

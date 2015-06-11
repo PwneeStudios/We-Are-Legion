@@ -55,9 +55,13 @@ define(['lodash'], function(_) {
             return JSON.parse(stringResult);
         },
 
-        findLobbies: function() {
+        findLobbies: function(friends) {
             if (interop.InXna()) {
-                xna.FindLobbies();
+                if (friends) {
+                    xna.FindFriendLobbies();
+                } else {
+                    xna.FindLobbies();
+                }
             }
         },
 

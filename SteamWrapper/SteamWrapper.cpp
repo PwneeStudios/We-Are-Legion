@@ -310,6 +310,7 @@ const int SteamStats::Results_GetId( int Index )
 void SteamMatches::FindLobbies( Action< bool >^ OnFind )
 {
 	SteamMatches::s_OnFindLobbies = OnFind;
+	SteamMatches::s_nLobbiesFound = 0;
 	SteamMatches::s_nFriendLobbiesFound = 0;
 
 	if (SteamMatchmaking() == 0) return;
@@ -321,6 +322,7 @@ void SteamMatches::FindLobbies( Action< bool >^ OnFind )
 void SteamMatches::FindFriendLobbies( Action< bool >^ OnFind )
 {
 	SteamMatches::s_OnFindLobbies = OnFind;
+	SteamMatches::s_nLobbiesFound = 0;
 	SteamMatches::s_nFriendLobbiesFound = 0;
 
 	if (SteamMatchmaking() == 0) return;
@@ -335,6 +337,11 @@ void SteamMatches::FindFriendLobbies( Action< bool >^ OnFind )
 			m_friendLobbies[SteamMatches::s_nFriendLobbiesFound++] = friendGameInfo.m_steamIDLobby;
 				//is a valid lobby, you can join it or use RequestLobbyData() get it's metadata
 		}
+	}
+
+	if ( SteamMatches::s_OnFindLobbies != nullptr )
+	{
+		SteamMatches::s_OnFindLobbies( false );
 	}
 }
 

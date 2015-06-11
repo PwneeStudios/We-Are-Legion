@@ -61,14 +61,28 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 lobbies: values.Lobbies,
             });
         },
+
+        loadingState: {
+            loading: true,
+            lobbies: [],
+        },
+
+        findLobbies: function(friends) {
+            interop.findLobbies(friends);
+
+            this.setState(this.loadingState);
+        },
                 
         getInitialState: function() {
-            interop.findLobbies();
+            interop.findLobbies(false);
 
-            return {
-                loading: true,
-                lobbies: [],
-            };
+            return this.loadingState;
+        },
+
+        onVisibilityChange: function(item) {
+            var friends = item.value === 'friends';
+
+            this.findLobbies(friends);
         },
         
         render: function() {
@@ -104,7 +118,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
 
                             {/* Game visibility type */}
                             <Div pos={pos(55.3,16.9)} size={size(30,66.2)}>
-                                <OptionList options={visibility} />
+                                <OptionList options={visibility} onSelect={this.onVisibilityChange} />
                             </Div>
 
                             {/* Buttons */}
