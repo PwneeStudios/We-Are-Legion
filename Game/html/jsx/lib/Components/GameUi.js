@@ -54,27 +54,18 @@ define(['lodash', 'react', 'interop', 'events',
         },
 
         dumpState: function() {
-            console.log('dump state');
-
             if (interop.InXna()) {
                 var state = {
                     mode:window.mode,
                     modes:window.modes,
                 };
 
-                console.log('ready for interop');
                 var dump = JSON.stringify(state);
-                console.log(dump);
                 interop.xna().DumpState(dump);
             }
-
-            console.log('dumped state');
         },
 
         restoreState: function(state) {
-            console.log('restore state');
-            console.log(state);
-
             if (interop.InXna()) {
                 var _state = JSON.parse(state);
 
@@ -83,8 +74,6 @@ define(['lodash', 'react', 'interop', 'events',
 
                 window.refresh();
             }
-
-            console.log('restored state');
         },
 
         componentDidMount: function() {
@@ -107,8 +96,6 @@ define(['lodash', 'react', 'interop', 'events',
         },
 
         screenHistory: function() {
-            console.log('get screenHistory for ' + mode);
-
             if (mode) {
                 return modes[mode];
             } else {
@@ -117,11 +104,9 @@ define(['lodash', 'react', 'interop', 'events',
         },
 
         refresh: function(e) {
-            console.log('refresh');
             if (this.screenHistory().length > 0) {
                 var prev = this.screenHistory().pop();
 
-                console.log('refresh screen ' + prev.screen);
                 this.setScreen(prev.screen, prev.params);
             }
 
