@@ -64,6 +64,7 @@ define(['lodash', 'react', 'interop', 'events',
 
                 console.log('ready for interop');
                 var dump = JSON.stringify(state);
+                console.log(dump);
                 interop.xna().DumpState(dump);
             }
 
@@ -72,12 +73,15 @@ define(['lodash', 'react', 'interop', 'events',
 
         restoreState: function(state) {
             console.log('restore state');
+            console.log(state);
 
             if (interop.InXna()) {
                 var _state = JSON.parse(state);
 
-                window.mode = state.mode;
-                window.modes = state.modes;
+                window.mode = _state.mode;
+                window.modes = _state.modes;
+
+                window.refresh();
             }
 
             console.log('restored state');
@@ -89,7 +93,7 @@ define(['lodash', 'react', 'interop', 'events',
 
             setMode('main-menu');
             setScreen('game-menu');
-            setScreen('options');
+            //setScreen('options');
             //setScreen('game-lobby', {host:true});
             //setScreen('game-lobby', {host:false});
             //setScreen('manual');
@@ -103,6 +107,8 @@ define(['lodash', 'react', 'interop', 'events',
         },
 
         screenHistory: function() {
+            console.log('get screenHistory for ' + mode);
+
             if (mode) {
                 return modes[mode];
             } else {
@@ -111,8 +117,11 @@ define(['lodash', 'react', 'interop', 'events',
         },
 
         refresh: function(e) {
+            console.log('refresh');
             if (this.screenHistory().length > 0) {
                 var prev = this.screenHistory().pop();
+
+                console.log('refresh screen ' + prev.screen);
                 this.setScreen(prev.screen, prev.params);
             }
 
