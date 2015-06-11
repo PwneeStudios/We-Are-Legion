@@ -39,6 +39,15 @@ namespace Game
         {
             xnaObj.Bind("LeaveGame", LeaveGame);
             xnaObj.Bind("QuitApp", QuitApp);
+            xnaObj.Bind("DumpState", DumpState);
+        }
+
+        static string DumpedState = "";
+        JSValue DumpState(object sender, JavascriptMethodEventArgs e)
+        {
+            DumpedState = (string)e.Arguments[0];
+
+            return JSValue.Null;
         }
 
         JSValue LeaveGame(object sender, JavascriptMethodEventArgs e)

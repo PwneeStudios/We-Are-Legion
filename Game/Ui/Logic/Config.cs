@@ -89,6 +89,7 @@ namespace Game
             File.WriteAllText(ConfigFilePath, config);
         }
 
+        bool NeedsApplication = false;
         void ApplyConfig(bool Activate=true)
         {
             if (CurrentConfig.Fullscreen)
@@ -106,8 +107,22 @@ namespace Game
 
             if (Activate)
             {
-                graphics.ApplyChanges();
+                NeedsApplication = true;
             }
+        }
+
+        void DoActivation()
+        {
+            NeedsApplication = false;
+
+            graphics.ApplyChanges();
+
+            Send("dumpState");
+            WebCore.Update();
+            AwesomiumInitialize();
+            WebCore.Update();
+            Send("restoreState", DumpedState);
+            WebCore.Update();
         }
     }
 }

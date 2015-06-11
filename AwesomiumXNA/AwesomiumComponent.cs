@@ -142,10 +142,14 @@ namespace AwesomiumXNA
         {
             this.area = area;
 
-            WebCore.Initialize(new WebConfig());
+            if (!WebCore.IsInitialized)
+            {
+                WebCore.Initialize(new WebConfig());
+            }
+
             WebView = WebCore.CreateWebView(area.Width, area.Height);
 
-            while(WebView.IsLoading)
+            while (WebView.IsLoading)
             {
                 WebCore.Update();
             }

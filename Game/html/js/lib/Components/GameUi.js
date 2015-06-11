@@ -37,18 +37,50 @@ define(['lodash', 'react', 'interop', 'events',
         getInitialState: function() {
             window.leaveGame = this.leaveGame;
             window.quitApp = this.quitApp;
+            
+            window.dumpState = this.dumpState;
+            window.restoreState = this.restoreState;
 
             window.setScreen = this.setScreen;
             window.setMode = this.setMode;
             window.back = this.back;
             window.refresh = this.refresh;
             window.removeMode = this.removeMode;
-            
+
             window.modes = {};
             window.mode = null;
-            window.screenHistory = null;
 
             return { };
+        },
+
+        dumpState: function() {
+            console.log('dump state');
+
+            if (interop.InXna()) {
+                var state = {
+                    mode:window.mode,
+                    modes:window.modes,
+                };
+
+                console.log('ready for interop');
+                var dump = JSON.stringify(state);
+                interop.xna().DumpState(dump);
+            }
+
+            console.log('dumped state');
+        },
+
+        restoreState: function(state) {
+            console.log('restore state');
+
+            if (interop.InXna()) {
+                var _state = JSON.parse(state);
+
+                window.mode = state.mode;
+                window.modes = state.modes;
+            }
+
+            console.log('restored state');
         },
 
         componentDidMount: function() {
@@ -56,7 +88,7 @@ define(['lodash', 'react', 'interop', 'events',
             //return;
 
             setMode('main-menu');
-            //setScreen('game-menu');
+            setScreen('game-menu');
             setScreen('options');
             //setScreen('game-lobby', {host:true});
             //setScreen('game-lobby', {host:false});
@@ -70,9 +102,17 @@ define(['lodash', 'react', 'interop', 'events',
             //setScreen('in-game-menu');
         },
 
+        screenHistory: function() {
+            if (mode) {
+                return modes[mode];
+            } else {
+                return [];
+            }
+        },
+
         refresh: function(e) {
-            if (screenHistory.length > 0) {
-                var prev = screenHistory.pop();
+            if (this.screenHistory().length > 0) {
+                var prev = this.screenHistory().pop();
                 this.setScreen(prev.screen, prev.params);
             }
 
@@ -82,10 +122,10 @@ define(['lodash', 'react', 'interop', 'events',
         },
 
         back: function(e) {
-            if (screenHistory.length > 0) {
-                screenHistory.pop();
+            if (this.screenHistory().length > 0) {
+                this.screenHistory().pop();
 
-                var prev = screenHistory.pop();
+                var prev = this.screenHistory().pop();
                 this.setScreen(prev.screen, prev.params);
             }
 
@@ -95,7 +135,6 @@ define(['lodash', 'react', 'interop', 'events',
         },
 
         removeMode: function(mode) {
-            //_.remove(modes, function(_mode) { return _mode === mode; });
             if (mode in modes) {
                 modes[mode] = [];
             }
@@ -111,12 +150,11 @@ define(['lodash', 'react', 'interop', 'events',
                 modes[mode] = [];
             }
 
-            screenHistory = modes[mode];
             this.refresh();
         },
 
         setScreen: function(screen, params) {
-            screenHistory.push({screen:screen,params:params});
+            this.screenHistory().push({screen:screen,params:params});
 
             this.setState({
                 screen:screen,
