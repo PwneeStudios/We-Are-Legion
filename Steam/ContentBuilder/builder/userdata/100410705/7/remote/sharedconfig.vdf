@@ -1,0 +1,80 @@
+"UserRoamingConfigStore"
+{
+	"Software"
+	{
+		"Valve"
+		{
+			"Steam"
+			{
+				"SSAVersion"		"2"
+				"DesktopShortcutCheck"		"0"
+				"StartMenuShortcutCheck"		"0"
+				"AutoLaunchGameListCheck"		"0"
+				"apps"
+				{
+					"210870"
+					{
+						"LastPlayed"		"1370738925"
+					}
+					"570"
+					{
+						"LastPlayed"		"1369963229"
+						"cloudenabled"		"1"
+					}
+					"220900"
+					{
+						"LastPlayed"		"1370728450"
+					}
+					"8930"
+					{
+						"cloudenabled"		"1"
+					}
+					"8870"
+					{
+						"cloudenabled"		"1"
+					}
+				}
+				"PrivacyPolicyVersion"		"2"
+			}
+		}
+	}
+	"Web"
+	{
+		"WebFav0_URL"		"https://www.google.com/"
+		"WebFav0_Name"		"Google"
+		"WebFav1_URL"		"http://www.youtube.com/"
+		"WebFav1_Name"		"YouTube"
+		"WebFav2_URL"		"http://www.twitter.com/"
+		"WebFav2_Name"		"Twitter"
+		"WebFav3_URL"		"http://www.facebook.com/"
+		"WebFav3_Name"		"Facebook"
+		"WebFav4_URL"		"http://www.reddit.com/"
+		"WebFav4_Name"		"Reddit"
+		"WebRecent0_URL"		"http://steamcommunity.com/id/PwneeStudios/home/invites/"
+		"WebRecent0_Name"		"Steam Community :: Invites :: Pwnee Studios"
+		"WebFrequent0_URL"		"http://steamcommunity.com/id/PwneeStudios/home/invites/"
+		"WebFrequent0_Name"		"Steam Community :: Invites :: Pwnee Studios"
+		"WebFrequent0_Access"		"2"
+		"WebRecent1_URL"		"https://www.google.com/"
+		"WebRecent1_Name"		"Google"
+		"WebFrequent1_URL"		"http://steamcommunity.com/id/PwneeStudios/"
+		"WebFrequent1_Name"		"Steam Community :: ID :: Pwnee Studios"
+		"WebFrequent1_Access"		"2"
+		"WebRecent2_URL"		"http://www.reddit.com/"
+		"WebRecent2_Name"		"reddit: the front page of the internet"
+		"WebFrequent2_URL"		"https://www.google.com/"
+		"WebFrequent2_Name"		"Google"
+		"WebFrequent2_Access"		"1"
+		"WebRecent3_URL"		"http://www.pwnee.com/"
+		"WebRecent3_Name"		"Pwnee Studios"
+		"WebFrequent3_URL"		"http://www.pwnee.com/"
+		"WebFrequent3_Name"		"Pwnee Studios"
+		"WebFrequent3_Access"		"1"
+		"WebRecent4_URL"		"http://steamcommunity.com/id/PwneeStudios/"
+		"WebRecent4_Name"		"Steam Community :: ID :: Pwnee Studios"
+		"WebFrequent4_URL"		"http://www.reddit.com/"
+		"WebFrequent4_Name"		"reddit: the front page of the internet"
+		"WebFrequent4_Access"		"1"
+	}
+	"TradeInfoHint"		"1"
+}

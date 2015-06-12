@@ -67,6 +67,9 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Awesomium.Core, Version=1.7.5.0, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86">
       <Private>True</Private>
@@ -268,6 +271,12 @@
   <PropertyGroup>
     <PreBuildEvent>ECHO ON
 DIR
+
+IF $(ConfigurationName) EQU $(ConfigurationName)False (
+  ECHO Running FragSharp via the following command line invocation:
+  ECHO "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)
+  "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)
+)
 
 ECHO Copying maps
 xcopy $(SolutionDir)Content\Maps $(TargetDir)Content\Maps\ /E /D /Y

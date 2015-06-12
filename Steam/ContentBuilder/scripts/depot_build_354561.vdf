@@ -1,0 +1,19 @@
+"DepotBuildConfig"
+{
+  "DepotID" "354561"
+
+  // include all files recursively
+  "FileMapping"
+  {
+    "LocalPath" "*"
+    "DepotPath" "."
+    "recursive" "1"
+  }
+
+  "FileExclusion" "*.pdb"
+  "FileExclusion" "*.sqlite"
+  "FileExclusion" "*mario*"
+  "FileExclusion" "*Mario*"
+  
+  "FileExclusion" "*Sound Track*"
+}

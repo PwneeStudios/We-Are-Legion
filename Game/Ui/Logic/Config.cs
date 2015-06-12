@@ -45,7 +45,7 @@ namespace Game
                 Width = 1280;
                 Height = 720;
 #else
-                FullScreen = true;
+                Fullscreen = true;
                 Width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
                 Height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 #endif
