@@ -59,6 +59,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             this.setState({
                 loading: false,
                 lobbies: values.Lobbies,
+                online: values.Online,
             });
         },
 
@@ -93,6 +94,22 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 {name:'Friend games', value:'friends'},
             ];
 
+            var view = null;
+
+            if (this.state.loading) {
+                view = 'Loading...';
+            } if (!this.state.online) {
+                view = "Offline. Can't find lobbies.";
+            } else {
+                view = (
+                    React.createElement(Table, {style: {width:'100%','pointer-events':'auto'}}, React.createElement("tbody", null, 
+                        _.map(this.state.lobbies, function(lobby) {
+                            return React.createElement(GameItem, {data: lobby});
+                        })
+                    ))
+                );
+            }
+
             return (
                 React.createElement("div", null, 
                     React.createElement(Div, {nonBlocking: true, pos: pos(10,5), size: width(80)}, 
@@ -107,13 +124,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             /* Game List */
                             React.createElement(Div, {className: "game-list", pos: pos(3.3,16.9), size: size(50,66.2), 
                                  style: {'overflow-y':'scroll','pointer-events':'auto','font-size': '1.4%'}}, 
-                                this.state.loading ? 'Loading...' :
-                                    React.createElement(Table, {style: {width:'100%','pointer-events':'auto'}}, React.createElement("tbody", null, 
-                                        _.map(this.state.lobbies, function(lobby) {
-                                            return React.createElement(GameItem, {data: lobby});
-                                        })
-                                    ))
-                                
+                                 view
                             ), 
 
                             /* Game visibility type */

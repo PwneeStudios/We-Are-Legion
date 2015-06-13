@@ -81,12 +81,16 @@ namespace Game
 
         JSValue FindLobbies(object sender, JavascriptMethodEventArgs e)
         {
+            if (!SteamCore.SteamIsConnected()) Offline();
+
             SteamMatches.FindLobbies(OnFindLobbies);
             return JSValue.Null;
         }
 
         JSValue FindFriendLobbies(object sender, JavascriptMethodEventArgs e)
         {
+            if (!SteamCore.SteamIsConnected()) Offline();
+
             SteamMatches.FindFriendLobbies(OnFindLobbies);
             return JSValue.Null;
         }
@@ -119,7 +123,7 @@ namespace Game
 
             if (SteamCore.InOfflineMode())
             {
-                lobby_name = "Local lobby, offline";
+                lobby_name = "Local lobby. Offline.";
             }
             else
             {
@@ -127,6 +131,17 @@ namespace Game
             }
 
             SteamMatches.SetLobbyData("name", lobby_name);
+        }
+
+        void Offline()
+        {
+            var obj = new
+            {
+                Lobbies = 0,
+                Online = false,
+            };
+
+            Send("lobbies", obj);
         }
 
         void OnFindLobbies(bool result)

@@ -592,7 +592,7 @@ String^ SteamMatches::GetMememberName( int Index )
 {
 	if ( SteamCore::InOfflineMode() )
 	{
-		return "local player";
+		return "Local player";
 	}
 
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return gcnew System::String("");
