@@ -7,12 +7,32 @@ using namespace msclr::interop;
 
 #include "SteamWrapper.h"
 using namespace SteamWrapper;
-
+using namespace System::Collections::Generic;
 
 bool SteamCore::RestartViaSteamIfNecessary( uint32 AppId )
 {
 	bool result = SteamAPI_RestartAppIfNecessary( AppId );
 	return result;
+}
+
+bool SteamCore::SteamIsRunning()
+{
+	return SteamAPI_IsSteamRunning();
+}
+
+bool SteamCore::SteamIsConnected()
+{
+	return SteamCore::SteamIsRunning() && SteamUser()->BLoggedOn();
+}
+
+void SteamCore::SetOfflineMode(bool Offline)
+{
+	SteamCore::s_bOffline = Offline;
+}
+
+bool SteamCore::InOfflineMode()
+{
+	return SteamCore::s_bOffline;
 }
 
 bool SteamCore::Initialize()
@@ -53,6 +73,12 @@ System::String^ SteamCore::PlayerName()
 
 UInt64 SteamCore::PlayerId()
 {
+	if ( SteamCore::InOfflineMode() || !SteamCore::SteamIsConnected() )
+	{
+		// Return consistent but invalid Steam ID, for use throughout the application.
+		return 12345;
+	}
+
 	return (uint64)SteamUser()->GetSteamID().GetAccountID();
 }
 
@@ -140,7 +166,7 @@ void CallbackClass::OnFindLobbies(LobbyMatchList_t *pLobbyMatchList, bool bIOFai
 
 void CallbackClass::OnJoinLobby( LobbyEnter_t * pCallback, bool bIOFailure )
 {
-	if ( !bIOFailure )
+	if ( !bIOFailure && !SteamCore::InOfflineMode() )
 	{
 		SteamMatches::s_CurrentLobby = SteamLobby( pCallback->m_ulSteamIDLobby );
 	}
@@ -313,7 +339,7 @@ void SteamMatches::FindLobbies( Action< bool >^ OnFind )
 	SteamMatches::s_nLobbiesFound = 0;
 	SteamMatches::s_nFriendLobbiesFound = 0;
 
-	if (SteamMatchmaking() == 0) return;
+	if ( SteamMatchmaking() == 0 ) return;
 
 	SteamAPICall_t hSteamAPICall = SteamMatchmaking()->RequestLobbyList();
 	g_CallResultLobbyMatchList.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnFindLobbies );
@@ -325,7 +351,7 @@ void SteamMatches::FindFriendLobbies( Action< bool >^ OnFind )
 	SteamMatches::s_nLobbiesFound = 0;
 	SteamMatches::s_nFriendLobbiesFound = 0;
 
-	if (SteamMatchmaking() == 0) return;
+	if ( SteamMatchmaking() == 0 ) return;
 
 	int cFriends = SteamFriends()->GetFriendCount( k_EFriendFlagImmediate );
 	for ( int i = 0; i < cFriends; i++ ) 
@@ -335,7 +361,6 @@ void SteamMatches::FindFriendLobbies( Action< bool >^ OnFind )
 		if ( SteamFriends()->GetFriendGamePlayed( steamIDFriend, &friendGameInfo ) && friendGameInfo.m_steamIDLobby.IsValid() )
 		{
 			m_friendLobbies[SteamMatches::s_nFriendLobbiesFound++] = friendGameInfo.m_steamIDLobby;
-				//is a valid lobby, you can join it or use RequestLobbyData() get it's metadata
 		}
 	}
 
@@ -394,6 +419,13 @@ void SteamMatches::JoinCreatedLobby(
 	Action< String^, uint64, String^ >^ OnChatMsg,
 	Action^ OnDataUpdate )
 {
+	if ( SteamCore::InOfflineMode() )
+	{
+		SteamMatches::SetLobbyCallbacks( OnJoinLobby, OnChatUpdate, OnChatMsg, OnDataUpdate );
+		g_CallbackClassInstance->OnJoinLobby( NULL, false );
+		return;
+	}
+
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
 
 	SteamMatches::JoinLobby( *SteamMatches::s_CurrentLobby.m_handle, OnJoinLobby, OnChatUpdate, OnChatMsg, OnDataUpdate );
@@ -415,13 +447,22 @@ void SteamMatches::JoinLobby( CSteamID LobbyID,
 	Action< String^, uint64, String^ >^ OnChatMsg,
 	Action^ OnDataUpdate )
 {
+	SteamMatches::SetLobbyCallbacks( OnJoinLobby, OnChatUpdate, OnChatMsg, OnDataUpdate );
+
+	SteamAPICall_t hSteamAPICall = SteamMatchmaking()->JoinLobby( LobbyID );
+	g_CallResultJoinLobby.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnJoinLobby );
+}
+
+void SteamMatches::SetLobbyCallbacks(
+	Action< bool >^ OnJoinLobby,
+	Action^ OnChatUpdate,
+	Action< String^, uint64, String^ >^ OnChatMsg,
+	Action^ OnDataUpdate)
+{
 	SteamMatches::s_OnJoinLobby = OnJoinLobby;
 	SteamMatches::s_OnChatUpdate = OnChatUpdate;
 	SteamMatches::s_OnChatMsg = OnChatMsg;
 	SteamMatches::s_OnDataUpdate = OnDataUpdate;
-
-	SteamAPICall_t hSteamAPICall = SteamMatchmaking()->JoinLobby( LobbyID );
-	g_CallResultJoinLobby.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnJoinLobby );
 }
 
 ELobbyType IntToLobbyType(int LobbyType)
@@ -440,6 +481,15 @@ ELobbyType IntToLobbyType(int LobbyType)
 
 void SteamMatches::CreateLobby( Action< bool >^ OnCreateLobby, int LobbyType )
 {
+	if ( SteamCore::InOfflineMode() )
+	{
+		SteamMatches::s_LocalLobbyData = gcnew Dictionary< String^, String^ >();
+
+		OnCreateLobby( false );
+
+		return;
+	}
+
 	SteamMatches::s_OnCreateLobby = OnCreateLobby;
 
 	ELobbyType type = IntToLobbyType( LobbyType );
@@ -450,6 +500,13 @@ void SteamMatches::CreateLobby( Action< bool >^ OnCreateLobby, int LobbyType )
 
 void SteamMatches::SetLobbyData( System::String^ Key, System::String^ Value )
 {
+	if ( SteamCore::InOfflineMode() )
+	{
+		SteamMatches::s_LocalLobbyData[ Key ] = Value;
+		g_CallbackClassInstance->OnDataUpdate( NULL );
+		return;
+	}
+
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
 
 	marshal_context context;
@@ -461,6 +518,18 @@ void SteamMatches::SetLobbyData( System::String^ Key, System::String^ Value )
 
 System::String^ SteamMatches::GetLobbyData( System::String^ Key )
 {
+	if ( SteamCore::InOfflineMode() )
+	{
+		try
+		{
+			return SteamMatches::s_LocalLobbyData[ Key ];
+		}
+		catch (Exception^ e)
+		{
+			return gcnew System::String("");
+		}
+	}
+
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return gcnew System::String("");
 
 	marshal_context context;
@@ -485,6 +554,7 @@ int SteamMatches::GetLobbyCapacity( int Index )
 
 void SteamMatches::SetLobbyType( int LobbyType )
 {
+	if ( SteamCore::InOfflineMode() ) return;
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
 
 	ELobbyType type = IntToLobbyType( LobbyType );
@@ -493,6 +563,12 @@ void SteamMatches::SetLobbyType( int LobbyType )
 
 void SteamMatches::SendChatMsg( System::String^ Msg )
 {
+	if ( SteamCore::InOfflineMode() )
+	{
+		SteamMatches::s_OnChatMsg->Invoke( Msg, SteamCore::PlayerId(), "player" );
+		return;
+	}
+
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
 
 	marshal_context context;
@@ -503,12 +579,22 @@ void SteamMatches::SendChatMsg( System::String^ Msg )
 
 int SteamMatches::GetLobbyMemberCount()
 {
+	if ( SteamCore::InOfflineMode() )
+	{
+		return 1;
+	}
+
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return -1;
 	return SteamMatchmaking()->GetNumLobbyMembers( *SteamMatches::s_CurrentLobby.m_handle );
 }
 
 String^ SteamMatches::GetMememberName( int Index )
 {
+	if ( SteamCore::InOfflineMode() )
+	{
+		return "local player";
+	}
+
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return gcnew System::String("");
 	
 	CSteamID steamIDLobbyMember = SteamMatchmaking()->GetLobbyMemberByIndex( *SteamMatches::s_CurrentLobby.m_handle, Index );
@@ -519,6 +605,11 @@ String^ SteamMatches::GetMememberName( int Index )
 
 UInt64 SteamMatches::GetMememberId( int Index )
 {
+	if ( SteamCore::InOfflineMode() )
+	{
+		return SteamCore::PlayerId();
+	}
+
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return 0;
 	
 	CSteamID steamIDLobbyMember = SteamMatchmaking()->GetLobbyMemberByIndex( *SteamMatches::s_CurrentLobby.m_handle, Index );
@@ -528,6 +619,8 @@ UInt64 SteamMatches::GetMememberId( int Index )
 
 bool SteamMatches::IsLobbyOwner()
 {
+	if ( SteamCore::InOfflineMode() ) return true;
+
 	if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return false;
 	return SteamUser()->GetSteamID() == SteamMatchmaking()->GetLobbyOwner( *SteamMatches::s_CurrentLobby.m_handle );
 }

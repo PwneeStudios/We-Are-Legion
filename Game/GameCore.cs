@@ -375,21 +375,30 @@ namespace Game
 
             if (GameClass.GameActive)
             {
-                if (ActivateFakeFullScreen) FakeFullscreen();
+                if (ActivateFakeFullScreen)
+                {
+                    FakeFullscreen();
+                }
 
                 Input.Update();
+
+                if (Buttons.Back.Down())
+                {
+                    this.Exit();
+                }
             }
             else
             {
-                Graphics.SetRenderTarget(null);
-                Graphics.Clear(Color.Black);
+                // Normally we would pause the game if we don't have focus.
+                // Since this is multiplayer, and since we don't want to give up
+                // our GPU resources, we keep rendering as usual.
+                // Hopefully nothing awful happens.
+                //Graphics.SetRenderTarget(null);
+                //Graphics.Clear(Color.Black);
 
-                base.Draw(gameTime);
-                return;
+                //base.Draw(gameTime);
+                //return;
             }
-
-            if (Buttons.Back.Down())
-                this.Exit();
 
             if (World == null) World = new World(Skeleton: true);
             GameLogic(gameTime);

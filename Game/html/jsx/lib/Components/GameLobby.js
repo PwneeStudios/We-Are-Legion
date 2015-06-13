@@ -231,6 +231,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
             } else {
                 interop.joinLobby(this.props.params.lobbyIndex);
             }
+
+            console.log('made the lobby');
         },
 
         getInitialState: function() {

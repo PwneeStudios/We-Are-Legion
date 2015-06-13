@@ -49,7 +49,13 @@ namespace Game
         {
             int lobbyType = StringToLobbyType(e.Arguments[0]);
 
+            if (!SteamCore.SteamIsConnected())
+            {
+                SteamCore.SetOfflineMode(true);
+            }
+
             SteamMatches.CreateLobby(OnCreateLobby, lobbyType);
+
             return JSValue.Null;
         }
 
@@ -104,13 +110,22 @@ namespace Game
             SetLobbyName();
 
             Console.WriteLine("Trying to join the created lobby.");
-            SteamMatches.JoinCreatedLobby(OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);
+            SteamMatches.JoinCreatedLobby(OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);                
         }
 
         private static void SetLobbyName()
         {
-            string player_name = SteamCore.PlayerName();
-            string lobby_name = string.Format("{0}'s lobby", player_name);
+            string lobby_name = "";
+
+            if (SteamCore.InOfflineMode())
+            {
+                lobby_name = "Local lobby, offline";
+            }
+            else
+            {
+                lobby_name = string.Format("{0}'s lobby", SteamCore.PlayerName());
+            }
+
             SteamMatches.SetLobbyData("name", lobby_name);
         }
 

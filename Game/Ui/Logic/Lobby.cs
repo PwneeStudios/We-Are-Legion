@@ -110,6 +110,8 @@ namespace Game
 
         void SetMap(string map_name)
         {
+            Console.WriteLine("set map to {0}", map_name);
+
             map_name += ".m3n";
 
             if ((SetMapThread == null || !SetMapThread.IsAlive) && GameMapName == map_name) return;
@@ -125,7 +127,10 @@ namespace Game
         World NewMap;
         void SetMapThreadFunc(string map)
         {
-            if (PrevMapThread != null && PrevMapThread.IsAlive) PrevMapThread.Join();
+            if (PrevMapThread != null && PrevMapThread.IsAlive && Thread.CurrentThread != PrevMapThread)
+            {
+                PrevMapThread.Join();
+            }
 
             if (NewMap != null && NewMap.Name == map) return;
             if (map != GameMapName) return;

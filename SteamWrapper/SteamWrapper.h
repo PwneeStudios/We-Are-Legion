@@ -5,6 +5,7 @@
 #include "steam_api.h"
 
 using namespace System;
+using namespace System::Collections::Generic;
 
 namespace SteamWrapper
 {
@@ -15,6 +16,11 @@ namespace SteamWrapper
 	public:
 
 		static bool RestartViaSteamIfNecessary( uint32 AppId );
+		static bool SteamIsRunning();
+		static bool SteamIsConnected();
+
+		static void SetOfflineMode(bool Offline);
+		static bool InOfflineMode();
 
 		static bool Initialize();
 		static void Shutdown();
@@ -22,6 +28,11 @@ namespace SteamWrapper
 
 		static String^ PlayerName();
 		static UInt64 PlayerId();
+
+	private:
+
+		static bool s_bOffline = false;
+
 	};
 
 	public ref class SteamTextInput
@@ -170,6 +181,8 @@ namespace SteamWrapper
 
 		static SteamLobby s_CurrentLobby;
 
+		static Dictionary< String^, String^ >^ s_LocalLobbyData;
+
 	public:
 		static const int
 			LobbyType_Public = 0,
@@ -184,6 +197,7 @@ namespace SteamWrapper
 		static void JoinCreatedLobby(            Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^, uint64, String^ >^ OnChatMsg, Action^ OnDataUpdate );
 		static void JoinLobby( int Index,        Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^, uint64, String^ >^ OnChatMsg, Action^ OnDataUpdate );
 		static void JoinLobby( CSteamID LobbyID, Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^, uint64, String^ >^ OnChatMsg, Action^ OnDataUpdate );
+		static void SetLobbyCallbacks( Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^, uint64, String^ >^ OnChatMsg, Action^ OnDataUpdate );
 
 		static void CreateLobby(Action< bool >^ OnCreateLobby, int LobbyType );
 
