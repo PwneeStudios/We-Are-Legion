@@ -16,3 +16,10 @@ packages/
 *.userprefs
 *.psess
 *.vsp
+
+Steam/ContentBuilder/builder/logs/
+Steam/ContentBuilder/builder/appcache/
+Steam/ContentBuilder/builder/config/
+Steam/ContentBuilder/builder/steamapps/
+Steam/ContentBuilder/builder/userdata/
+Steam/ContentBuilder/output/

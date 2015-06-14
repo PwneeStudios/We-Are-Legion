@@ -156,7 +156,13 @@ namespace Game
         {
             //Program.ParseOptions("--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double");
             //Program.ParseOptions("--server                --port 13000 --p 1 --t 1234 --n 1 --map Beset.m3n   --debug");
+            
+            var lobby_data = SteamMatches.GetLobbyData("LobbyInfo");
+            var lobby = JsonConvert.DeserializeObject(lobby_data, typeof(LobbyInfo));
+            LobbyInfo = (LobbyInfo)lobby;
+
             Program.ParseOptions(ThisPlayer.Args);
+
             SetScenarioToLoad(Program.StartupMap);
             Networking.Start();
 
@@ -212,7 +218,7 @@ namespace Game
 
         void OnJoinLobby(bool result)
         {
-            LobbyInfo = new LobbyInfo();
+            LobbyInfo = new LobbyInfo(4);
 
             if (result)
             {
@@ -327,7 +333,7 @@ namespace Game
             if (!SteamMatches.IsLobbyOwner()) return;
 
             var PrevInfo = LobbyInfo;
-            LobbyInfo = new LobbyInfo();
+            LobbyInfo = new LobbyInfo(4);
 
             int members = SteamMatches.GetLobbyMemberCount();
             for (int i = 0; i < members; i++)
@@ -345,7 +351,7 @@ namespace Game
                 }
                 else
                 {
-                    player = match;
+                    player = LobbyInfo.Players[i] = match;
                 }
 
                 player.Name = SteamMatches.GetMememberName(i);

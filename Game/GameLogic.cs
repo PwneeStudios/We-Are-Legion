@@ -179,12 +179,18 @@ namespace Game
                         break;
                     }
 
-                    if (TimeSinceLoad > .3f)
+#if DEBUG
+                    const float LoadTime = .3f;
+#else
+                    const float LoadTime = 1.3f;
+#endif
+
+                    if (TimeSinceLoad > LoadTime)
                     {
-                        BlackOverlay((float)(TimeSinceLoad - .3f) / .7f);
+                        BlackOverlay((float)(TimeSinceLoad - LoadTime) / .7f);
                     }
 
-                    if (TimeSinceLoad > 1f)
+                    if (TimeSinceLoad > LoadTime + .7f)
                     {
                         State = GameState.Game;
                     }

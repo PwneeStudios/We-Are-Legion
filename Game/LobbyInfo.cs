@@ -46,7 +46,11 @@ namespace Game
 
         public LobbyInfo()
         {
-            for (int i = 0; i < 4; i++)
+        }
+
+        public LobbyInfo(int NumPlayers)
+        {
+            for (int i = 0; i < NumPlayers; i++)
             {
                 Players.Add(new PlayerLobbyInfo());
             }

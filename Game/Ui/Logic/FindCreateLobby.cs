@@ -154,12 +154,12 @@ namespace Game
 
             var obj = new Dict();
 
-            int n = SteamMatches.NumLobbies();
-            Console.WriteLine("Found {0} lobbies", n);
-            obj["NumLobbies"] = n;
+            int num_lobbies = SteamMatches.NumLobbies();
+            Console.WriteLine("Found {0} lobbies", num_lobbies);
+            obj["NumLobbies"] = num_lobbies;
 
-            var lobby_list = new List<Dict>(n);
-            for (int i = 0; i < n; i++)
+            var lobby_list = new List<Dict>(num_lobbies);
+            for (int i = 0; i < num_lobbies; i++)
             {
                 string lobby_name = SteamMatches.GetLobbyData(i, "name");
                 int member_count = SteamMatches.GetLobbyMemberCount(i);
@@ -177,6 +177,7 @@ namespace Game
             }
 
             obj["Lobbies"] = lobby_list;
+            obj["Online"] = true;
 
             Send("lobbies", obj);
         }
