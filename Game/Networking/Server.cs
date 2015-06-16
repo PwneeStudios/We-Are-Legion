@@ -27,6 +27,8 @@ namespace Game
 
             while (!ShouldStop)
             {
+                PreprocessMessages();
+
                 // Receive
                 foreach (var client in Clients)
                 {
@@ -98,6 +100,39 @@ namespace Game
             }
         }
 
+        void PreprocessMessages()
+        {
+            if (Program.SteamNetworking)
+            {
+                SteamPreprocessMessages();
+            }
+            else
+            {
+                TcpPreprocessMessages();
+            }
+        }
+
+        void SteamPreprocessMessages()
+        {
+            while (SteamP2P.MessageAvailable())
+            {
+                var msg = SteamP2P.ReadMessage();
+
+                foreach (var client in Clients)
+                {
+                    var c = client as ClientSteamConnection;
+                    if (c.User.Id() != msg.Item1) continue;
+
+                    c.Messages.Add(msg.Item2);
+                }
+            }
+        }
+
+        void TcpPreprocessMessages()
+        { 
+            
+        }
+
         void StartServerThread()
         {
             ServerThread = new Thread(SendReceiveThread);
@@ -112,7 +147,7 @@ namespace Game
                 if (user == 0 || user == Program.SteamServer) continue;
 
                 SteamPlayer player = new SteamPlayer(user);
-                Clients.Add(new SteamConnection(player, count++));
+                Clients.Add(new ClientSteamConnection(player, count++));
 
                 SteamP2P.SendMessage(player, "Implicit connection acceptance.");
 

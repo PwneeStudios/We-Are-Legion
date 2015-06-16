@@ -81,6 +81,8 @@ namespace SteamWrapper
 			SteamPlayer( new CSteamID( handle ) )
 		{
 		}
+
+		UInt64 Id();
 	};
 
 	public value class LeaderboardHandle
@@ -234,7 +236,7 @@ namespace SteamWrapper
 		static void SendMessage( SteamPlayer User, String^ Message );
 		static void SendMessage( CSteamID User, String^ Message );
 		static bool MessageAvailable();
-		static String^ ReadMessage();
+		static Tuple< UInt64, String^ >^ ReadMessage();
 
 		static void SetOnP2PSessionRequest( Action< uint64 >^ OnRequest );
 		static void SetOnP2PSessionConnectFail( Action< uint64 >^ OnConnectionFail );

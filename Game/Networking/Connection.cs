@@ -95,15 +95,48 @@ namespace Game
             return SteamP2P.MessageAvailable();
         }
 
-        byte[] bytes = new byte[1 << 16];
         public override List<string> GetMessages()
         {
             var message = SteamP2P.ReadMessage();
             
             var list = new List<string>();
-            list.Add(message);
+            list.Add(message.Item2);
 
             return list;
+        }
+
+        public override void Send(string message)
+        {
+            SteamP2P.SendMessage(User, message);
+        }
+
+        public override void Close()
+        {
+        }
+    }
+
+    public class ClientSteamConnection : Connection
+    {
+        public SteamPlayer User;
+        public List<string> Messages = new List<string>();
+
+        public ClientSteamConnection(SteamPlayer User, int Index = -1)
+        {
+            this.User = User;
+            this.Index = Index;
+        }
+
+        public override bool MessageAvailable()
+        {
+            return Messages.Count > 0;
+        }
+
+        public override List<string> GetMessages()
+        {
+            var messages = Messages;
+            Messages = new List<string>();
+
+            return messages;
         }
 
         public override void Send(string message)

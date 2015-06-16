@@ -64,11 +64,16 @@ namespace Game
         static Client _Client;
         public static void Start()
         {
-            if (_Server != null) { _Server.Cleanup(); _Server = null; }
-            if (_Client != null) { _Client.Cleanup(); _Client = null; }
+            Cleanup();
 
             if (Program.Server) _Server = new Server();
             if (Program.Client) _Client = new Client();
+        }
+
+        public static void Cleanup()
+        {
+            if (_Server != null) { _Server.Cleanup(); _Server = null; }
+            if (_Client != null) { _Client.Cleanup(); _Client = null; }
         }
 
         public static bool Send(this NetworkStream stream, string message)

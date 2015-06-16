@@ -10,6 +10,8 @@ namespace Game
     public static class Log
     {
         public static bool
+            Debug = true,
+
             SpeedMods = false,
             Errors = true,
             Receive = false,
@@ -211,6 +213,9 @@ namespace Game
 
         public static void ParseOptions(List<string> args)
         {
+            GameStarted = false;
+            WorldLoaded = false;
+
             if (args.Contains("--p")) { int i = args.IndexOf("--p"); StartupPlayerNumber = int.Parse(args[i + 1]); }
 
             if (args.Contains("--t"))
@@ -272,7 +277,7 @@ namespace Game
             if (args.Contains("--w")) { int i = args.IndexOf("--w"); Width = int.Parse(args[i + 1]); }
             if (args.Contains("--h")) { int i = args.IndexOf("--h"); Height = int.Parse(args[i + 1]); }
 
-            if (args.Contains("--debug")) { HasConsole = true; DisableScreenEdge = true; AlwaysActive = true; }
+            if (Log.Debug || args.Contains("--debug")) { HasConsole = true; DisableScreenEdge = true; AlwaysActive = true; }
 
             // Log settings
             Console.WriteLine("ip set to {0}", IpAddress);
