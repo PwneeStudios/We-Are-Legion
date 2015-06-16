@@ -90,5 +90,24 @@ namespace Game
         {
             SteamMatches.CreateLobby(Test_OnCreateLobby, SteamMatches.LobbyType_Public);
         }
+
+        void Test_P2P()
+        {
+            SteamP2P.SetOnP2PSessionRequest(OnP2PSessionRequest);
+            SteamP2P.SetOnP2PSessionConnectFail(OnP2PSessionConnectFail);
+
+            while (true)
+            {
+                //SteamP2P.SendMessage(new SteamPlayer(SteamCore.PlayerId()), "Hello");
+                SteamP2P.SendMessage(new SteamPlayer(76561198060676433), "Hello to 76561198060676433");
+                SteamP2P.SendMessage(new SteamPlayer(76561198201081585), "Hello to 76561198201081585");
+
+                while (SteamP2P.MessageAvailable())
+                {
+                    var msg = SteamP2P.ReadMessage();
+                    Console.WriteLine("got message! {0}", msg);
+                }
+            }
+        }
     }
 }

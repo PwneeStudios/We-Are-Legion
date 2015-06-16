@@ -102,7 +102,7 @@ namespace Game
             else
             {
                 graphics.PreferredBackBufferWidth = CurrentConfig.Width;
-                graphics.PreferredBackBufferHeight = CurrentConfig.Height;                
+                graphics.PreferredBackBufferHeight = CurrentConfig.Height;
             }
 
             if (Activate)

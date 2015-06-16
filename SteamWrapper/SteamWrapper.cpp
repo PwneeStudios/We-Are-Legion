@@ -79,7 +79,7 @@ UInt64 SteamCore::PlayerId()
 		return 12345;
 	}
 
-	return (uint64)SteamUser()->GetSteamID().GetAccountID();
+	return (uint64)SteamUser()->GetSteamID().ConvertToUint64();
 }
 
 char const * SteamTextInput::GetText()
@@ -195,7 +195,7 @@ void CallbackClass::OnChatMsg( LobbyChatMsg_t * pCallback )
 	if ( SteamMatches::s_OnChatMsg )
 	{
 		auto msg = gcnew System::String ( pvData );
-		auto id = sender.GetAccountID();
+		auto id = sender.ConvertToUint64();
 		auto pchName = SteamFriends()->GetFriendPersonaName( sender );
 		auto name = gcnew System::String( pchName );
 
@@ -225,14 +225,14 @@ void CallbackClass::OnP2PSessionRequest(P2PSessionRequest_t *pP2PSessionRequest)
 {
 	if ( SteamP2P::OnRequest == nullptr ) return;
 
-	SteamP2P::OnRequest( pP2PSessionRequest->m_steamIDRemote.GetAccountID() );
+	SteamP2P::OnRequest( pP2PSessionRequest->m_steamIDRemote.ConvertToUint64() );
 }
 
 void CallbackClass::OnP2PSessionConnectFail( P2PSessionConnectFail_t *pP2PSessionConnectFail )
 {
 	if ( SteamP2P::OnConnectionFail == nullptr ) return;
 
-	SteamP2P::OnConnectionFail( pP2PSessionConnectFail->m_steamIDRemote.GetAccountID() );
+	SteamP2P::OnConnectionFail( pP2PSessionConnectFail->m_steamIDRemote.ConvertToUint64() );
 }
 
 bool SteamStats::Initialize()
@@ -614,7 +614,7 @@ UInt64 SteamMatches::GetMememberId( int Index )
 	
 	CSteamID steamIDLobbyMember = SteamMatchmaking()->GetLobbyMemberByIndex( *SteamMatches::s_CurrentLobby.m_handle, Index );
 
-	return (uint64)steamIDLobbyMember.GetAccountID();
+	return (uint64)steamIDLobbyMember.ConvertToUint64();
 }
 
 bool SteamMatches::IsLobbyOwner()
@@ -651,15 +651,16 @@ void SteamP2P::SendMessage( CSteamID User, String^ Message )
 {
 	marshal_context context;
 	char const * pchMsg = context.marshal_as< char const * >( Message );
-
+	
 	SteamNetworking()->SendP2PPacket( User, pchMsg, Message->Length, k_EP2PSendReliable );
+	//SteamNetworking()->SendP2PPacket( User, pchMsg, Message->Length, k_EP2PSendUnreliable );
 }
 
 bool SteamP2P::MessageAvailable()
 {
 	uint32 msgSize = 0;
 	bool result = SteamNetworking()->IsP2PPacketAvailable( &msgSize );
-
+	
 	if ( result )
 	{
 		return result;
@@ -690,15 +691,15 @@ Tuple< UInt64, String^ >^ SteamP2P::ReadMessage()
 	
 	free( packet );
 
-	return gcnew Tuple< UInt64, String^ >( steamIDRemote.GetAccountID(), msg );
+	return gcnew Tuple< UInt64, String^ >( steamIDRemote.ConvertToUint64(), msg );
 }
 
-void SteamP2P::SetOnP2PSessionRequest(Action< uint64 >^ OnRequest)
+void SteamP2P::SetOnP2PSessionRequest( Action< uint64 >^ OnRequest )
 {
 	SteamP2P::OnRequest = OnRequest;
 }
 
-void SteamP2P::SetOnP2PSessionConnectFail(Action< uint64 >^ OnConnectionFail)
+void SteamP2P::SetOnP2PSessionConnectFail( Action< uint64 >^ OnConnectionFail )
 {
 	SteamP2P::OnConnectionFail = OnConnectionFail;
 }
@@ -710,5 +711,5 @@ void SteamP2P::AcceptP2PSessionWithPlayer( SteamPlayer Player )
 
 UInt64 SteamPlayer::Id()
 {
-	return m_handle->GetAccountID();
+	return m_handle->ConvertToUint64();
 }

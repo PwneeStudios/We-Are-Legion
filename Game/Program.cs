@@ -125,6 +125,8 @@ namespace Game
         /// </summary>
         static void Main(string[] args_)
         {
+            Console.WriteLine("Starting up application.");
+
             string args = null;
 
 #if DEBUG
@@ -215,6 +217,9 @@ namespace Game
         {
             GameStarted = false;
             WorldLoaded = false;
+            Server = false;
+            Client = false;
+            SteamNetworking = false;
 
             if (args.Contains("--p")) { int i = args.IndexOf("--p"); StartupPlayerNumber = int.Parse(args[i + 1]); }
 

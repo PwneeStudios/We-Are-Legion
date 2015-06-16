@@ -121,7 +121,7 @@ namespace Game
                 foreach (var client in Clients)
                 {
                     var c = client as ClientSteamConnection;
-                    if (c.User.Id() != msg.Item1) continue;
+                    if (null == c || c.User.Id() != msg.Item1) continue;
 
                     c.Messages.Add(msg.Item2);
                 }
