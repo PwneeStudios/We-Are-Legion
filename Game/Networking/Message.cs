@@ -279,6 +279,7 @@ namespace Game
                 case PlayerAction.AttackMove: message.Inner = MessageAttackMove.Parse(s); break;
                 case PlayerAction.PlaceBuilding: message.Inner = MessagePlaceBuilding.Parse(s); break;
                 case PlayerAction.CastSpell: message.Inner = MessageCastSpell.Parse(s); break;
+                case PlayerAction.ChatMessage: message.Inner = MessageChat.Parse(s); break;
             }
 
             return message;
@@ -289,7 +290,9 @@ namespace Game
     {
         public string MyString = "";
 
-        public static char Seperator = ' ';
+        //public static char Seperator = ' ';
+        public static char Seperator = (char)14;
+
         public static string s<T>(T v)
         {
             return v.ToString() + Seperator;
@@ -314,7 +317,8 @@ namespace Game
         {
             if (str == null) return m;
 
-            return new MessageStr(m.MyString + str);
+            //return new MessageStr(m.MyString + (char)14 + str + (char)15);
+            return new MessageStr(m.MyString + s(str));
         }
 
         public static MessageStr operator |(MessageStr m, vec2 v)
