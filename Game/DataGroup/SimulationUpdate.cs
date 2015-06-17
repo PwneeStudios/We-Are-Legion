@@ -86,7 +86,7 @@ namespace Game
 
         public void UpdateIcons()
         {
-            for (int i = 0; i < 5; i++) UpdateGradient_ToBuildings();
+            for (int i = 0; i < 8; i++) UpdateGradient_ToBuildings();
         }
 
         public void UpdateRnd()

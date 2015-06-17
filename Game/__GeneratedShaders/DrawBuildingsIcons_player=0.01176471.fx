@@ -73,6 +73,7 @@ float fs_param_blend;
 
 float fs_param_radius;
 
+float fs_param_s;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 // Texture Sampler for fs_param_FarColor, using register location 4
@@ -104,6 +105,30 @@ float2 FragSharpFramework__FragSharpStd__Float__vec2(float2 v)
     return floor(255 * v + float2(0.5, 0.5));
 }
 
+float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
+{
+    return floor(255 * v + 0.5) * 0.003921569;
+}
+
+float Game__SimShader__prior_direction__data(float4 u)
+{
+    float val = u.b;
+    val = fmod(val, 0.1254902);
+    val = FragSharpFramework__FragSharpStd__fint_round__Single(val);
+    return val;
+}
+
+bool Game__SimShader__IsValid__Single(float direction)
+{
+    return direction > 0 + .001;
+}
+
+float2 Game__SimShader__direction_to_vec__Single(float direction)
+{
+    float angle = (direction * 255 - 1) * (3.141593 / 2.0);
+    return Game__SimShader__IsValid__Single(direction) ? float2(cos(angle), sin(angle)) : float2(0, 0);
+}
+
 bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
@@ -115,30 +140,25 @@ bool Game__SimShader__fake_selected__building(float4 u)
     return Game__SimShader__fake_selected__data(u);
 }
 
-float4 Game__SelectedUnitColor__Get__Single(float player)
+float4 Game__SelectedUnitColor__Get__Single(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.007843138) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01176471) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01568628) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
-}
-
-float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
-{
-    return floor(255 * v + 0.5) * 0.003921569;
 }
 
 float Game__SimShader__get_type__BuildingDist(float4 u)
@@ -193,12 +213,19 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 index = float2(offset.x, offset.y);
     float4 b = tex2D(fs_param_Data, psin.TexCoords + (index) * fs_param_Data_dxdy);
     float4 u = tex2D(fs_param_Unit, psin.TexCoords + (index) * fs_param_Unit_dxdy);
-    float l = length(255 * (info.rg - float2(0.1568628, 0.1568628)) - (subcell_pos - float2(0.5, 0.5)));
+    float4 d = b;
+    float2 walking_offset = float2(0, 0);
+    if (abs(d.g - 0.0) < .001)
+    {
+        float prior_dir = Game__SimShader__prior_direction__data(d);
+        walking_offset = (1 - fs_param_s) * Game__SimShader__direction_to_vec__Single(prior_dir);
+    }
+    float l = length(255 * (info.rg - float2(0.1568628, 0.1568628)) - (walking_offset + subcell_pos - float2(0.5, 0.5)));
     if (Game__SimShader__fake_selected__building(b) && abs(u.g - 0.01176471) < .001)
     {
         if (l > 0.8 * fs_param_radius + .001 && l < fs_param_radius * 1.15 - .001)
         {
-            float4 clr = Game__SelectedUnitColor__Get__Single(Game__SimShader__get_player__BuildingDist(info)) * 0.75;
+            float4 clr = Game__SelectedUnitColor__Get__Single(psin, Game__SimShader__get_player__BuildingDist(info)) * 0.75;
             clr.a = 1;
             __FinalOutput.Color = clr * fs_param_blend;
             return __FinalOutput;

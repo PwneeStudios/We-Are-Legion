@@ -789,12 +789,14 @@ namespace Game
             Markers.Draw(DrawOrder.AfterUnits);
 
             // Building icons
-            if (CameraZoom <= z / 4)
+            //if (CameraZoom <= z / 4)
             {
                 float blend = CoreMath.LogLerpRestrict(z / 4, 0, z / 8, 1, CameraZoom);
                 float radius = 5.5f / CameraZoom;
+                blend = 1;
+                radius = 3;
 
-                DrawBuildingsIcons.Using(camvec, CameraAspect, DataGroup.DistanceToBuildings, DataGroup.CurrentData, DataGroup.CurrentUnits, blend, radius, MyPlayerValue);
+                DrawBuildingsIcons.Using(camvec, CameraAspect, DataGroup.DistanceToBuildings, DataGroup.CurrentData, DataGroup.CurrentUnits, blend, radius, MyPlayerValue, PercentSimStepComplete);
                 GridHelper.DrawGrid();
             }
         }

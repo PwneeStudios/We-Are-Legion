@@ -5,7 +5,7 @@ namespace Game
     public partial class DrawBuildingsIcons : BaseShader
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<BuildingDist> BuildingDistances, Field<building> Data, Field<unit> Unit, float blend, float radius, [Player.Vals] float player)
+        color FragmentShader(VertexOut vertex, Field<BuildingDist> BuildingDistances, Field<building> Data, Field<unit> Unit, float blend, float radius, [Player.Vals] float player, float s)
         {
             BuildingDist info = BuildingDistances[Here];
 
@@ -19,8 +19,16 @@ namespace Game
             building b = Data[index];
             unit u = Unit[index];
 
+            data d = (data)(vec4)b;
+            vec2 walking_offset = vec2.Zero;
+            if (d.change == Change.Moved)
+            {
+                var prior_dir = prior_direction(d);
+                walking_offset = (1 - s) * direction_to_vec(prior_dir);
+            }
+
             // Get the distance from here to the building center
-            float l = length(255 * (info.diff - Pathfinding_ToSpecial.CenterOffset) - (subcell_pos - vec(.5f, .5f)));
+            float l = length(255 * (info.diff - Pathfinding_ToSpecial.CenterOffset) - (walking_offset + subcell_pos - vec(.5f, .5f)));
             
             // Draw pixel
             if (fake_selected(b) && u.player == player)

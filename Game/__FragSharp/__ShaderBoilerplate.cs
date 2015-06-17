@@ -3098,6 +3098,9 @@ namespace Game
             CompiledEffect.Parameters["fs_param_Path_size"].SetValue(FragSharpMarshal.Marshal(vec(Path.Width, Path.Height)));
             CompiledEffect.Parameters["fs_param_Path_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Path.Width, Path.Height)));
             CompiledEffect.Parameters["fs_param_blend"].SetValue(FragSharpMarshal.Marshal(blend));
+            CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
+            CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
+            CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
@@ -3118,33 +3121,33 @@ namespace Game
         public static Effect CompiledEffect_player_0p01176471;
         public static Effect CompiledEffect_player_0p01568628;
 
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, Texture2D Unit, float blend, float radius, float player, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, Texture2D Unit, float blend, float radius, float player, float s, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, BuildingDistances, Data, Unit, blend, radius, player);
+            Using(cameraPos, cameraAspect, BuildingDistances, Data, Unit, blend, radius, player, s);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, Texture2D Unit, float blend, float radius, float player, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, Texture2D Unit, float blend, float radius, float player, float s, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, BuildingDistances, Data, Unit, blend, radius, player);
+            Using(cameraPos, cameraAspect, BuildingDistances, Data, Unit, blend, radius, player, s);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, Texture2D Unit, float blend, float radius, float player, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, Texture2D Unit, float blend, float radius, float player, float s, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, BuildingDistances, Data, Unit, blend, radius, player);
+            Using(cameraPos, cameraAspect, BuildingDistances, Data, Unit, blend, radius, player, s);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, Texture2D Unit, float blend, float radius, float player, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, Texture2D Unit, float blend, float radius, float player, float s, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, BuildingDistances, Data, Unit, blend, radius, player);
+            Using(cameraPos, cameraAspect, BuildingDistances, Data, Unit, blend, radius, player, s);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, Texture2D Unit, float blend, float radius, float player)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, Texture2D Unit, float blend, float radius, float player, float s)
         {
             Effect CompiledEffect = null;
 
@@ -3169,6 +3172,7 @@ namespace Game
             CompiledEffect.Parameters["fs_param_Unit_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Unit.Width, Unit.Height)));
             CompiledEffect.Parameters["fs_param_blend"].SetValue(FragSharpMarshal.Marshal(blend));
             CompiledEffect.Parameters["fs_param_radius"].SetValue(FragSharpMarshal.Marshal(radius));
+            CompiledEffect.Parameters["fs_param_s"].SetValue(FragSharpMarshal.Marshal(s));
             CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
             CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
@@ -5845,6 +5849,9 @@ namespace Game
             CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
             CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
             CompiledEffect.Parameters["fs_param_PercentSimStepComplete"].SetValue(FragSharpMarshal.Marshal(PercentSimStepComplete));
+            CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
+            CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
+            CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
@@ -5943,6 +5950,9 @@ namespace Game
             CompiledEffect.Parameters["fs_param_selection_blend"].SetValue(FragSharpMarshal.Marshal(selection_blend));
             CompiledEffect.Parameters["fs_param_selection_size"].SetValue(FragSharpMarshal.Marshal(selection_size));
             CompiledEffect.Parameters["fs_param_solid_blend"].SetValue(FragSharpMarshal.Marshal(solid_blend));
+            CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
+            CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
+            CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
