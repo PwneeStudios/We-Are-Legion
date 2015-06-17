@@ -17,6 +17,13 @@ namespace Game
                    Keys.Enter.Pressed() || Keys.Space.Pressed() || Keys.Escape.Pressed() ||
                    Input.LeftMousePressed;
         }
+
+        public static bool SomethingDown()
+        {
+            return Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||
+                   Keys.Enter.Down() || Keys.Space.Down() || Keys.Escape.Down() ||
+                   Input.LeftMouseDown;
+        }
     }
 
     public enum Toggle { Off, On, Flip };

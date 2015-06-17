@@ -83,6 +83,9 @@ namespace Game
                     break;
 
                 case GameState.TitleScreen:
+                    // No mouse input to Awesomium
+                    awesomium.AllowMouseEvents = false;
+
                     Render.StandardRenderSetup();
 
                     DrawFullScreen(Assets.ScreenTitle);
@@ -112,8 +115,10 @@ namespace Game
                     break;
 
                 case GameState.MainMenu:
-                    //LobbyInfo = new LobbyInfo();
-                    //string s = Jsonify(LobbyInfo);
+                    if (!InputHelper.SomethingDown())
+                    {
+                        awesomium.AllowMouseEvents = true;
+                    }
 
                     if (_MapLoading != MapLoading)
                     {
