@@ -311,7 +311,7 @@ namespace Game
             }
         }
 
-        void FakeFullscreen()
+        void ApplyConfigToForm()
         {
             ActivateFakeFullScreen = false;
 
@@ -380,7 +380,7 @@ namespace Game
             {
                 if (ActivateFakeFullScreen)
                 {
-                    FakeFullscreen();
+                    ApplyConfigToForm();
                 }
 
                 Input.Update();

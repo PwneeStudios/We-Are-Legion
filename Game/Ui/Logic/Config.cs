@@ -97,12 +97,14 @@ namespace Game
                 graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
                 graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
 
-                FakeFullscreen();
+                ApplyConfigToForm();
             }
             else
             {
                 graphics.PreferredBackBufferWidth = CurrentConfig.Width;
                 graphics.PreferredBackBufferHeight = CurrentConfig.Height;
+
+                ApplyConfigToForm();
             }
 
             if (Activate)
