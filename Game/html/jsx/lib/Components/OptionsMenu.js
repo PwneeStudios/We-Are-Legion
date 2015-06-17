@@ -79,7 +79,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             var choices, value;
 
             if (interop.InXna()) {
-                value = xna['Get' + this.props.variable]();                
+                value = xna['Get' + this.props.variable]();
                 choices = interop.get('Get' + this.props.variable + 'Values');
                 choices = choices || this.props.choices;
 
@@ -98,7 +98,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 <tr style={{'background-color':'#1c1e22'}}>
                     <td>{this.props.children}</td>
                     <td className='menu-cell-dropdown'>
-                        <Dropdown scroll={this.props.scroll} selected={value} choices={choices} onSelect={this.onSelect} style={{'float':'right'}} />
+                        <Dropdown
+                            disabled={this.props.disabled}
+                            scroll={this.props.scroll}
+                            selected={value}
+                            choices={choices}
+                            onSelect={this.onSelect}
+                            style={{'float':'right'}} />
                     </td>
                 </tr>
             );
@@ -167,8 +173,16 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 {name: 'Windowed', value:false},
             ];
 
+            var disableResolutions = false;
+            if (interop.InXna()) {
+                var value = xna.GetFullscreen();
+                if (value) {
+                    disableResolutions = true;
+                }
+            }
+
             var screenOptions = [
-                <MenuDropdown scroll variable='Resolution' choices={resolutionChoices}>Resolution</MenuDropdown>,
+                <MenuDropdown disabled={disableResolutions} scroll variable='Resolution' choices={resolutionChoices}>Resolution</MenuDropdown>,
                 <MenuDropdown variable='Fullscreen' choices={fullscreenChoices}>Fullscreen setting</MenuDropdown>,
             ];
 

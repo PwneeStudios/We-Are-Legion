@@ -79,7 +79,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             var choices, value;
 
             if (interop.InXna()) {
-                value = xna['Get' + this.props.variable]();                
+                value = xna['Get' + this.props.variable]();
                 choices = interop.get('Get' + this.props.variable + 'Values');
                 choices = choices || this.props.choices;
 
@@ -98,7 +98,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 React.createElement("tr", {style: {'background-color':'#1c1e22'}}, 
                     React.createElement("td", null, this.props.children), 
                     React.createElement("td", {className: "menu-cell-dropdown"}, 
-                        React.createElement(Dropdown, {scroll: this.props.scroll, selected: value, choices: choices, onSelect: this.onSelect, style: {'float':'right'}})
+                        React.createElement(Dropdown, {
+                            disabled: this.props.disabled, 
+                            scroll: this.props.scroll, 
+                            selected: value, 
+                            choices: choices, 
+                            onSelect: this.onSelect, 
+                            style: {'float':'right'}})
                     )
                 )
             );
@@ -167,8 +173,16 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 {name: 'Windowed', value:false},
             ];
 
+            var disableResolutions = false;
+            if (interop.InXna()) {
+                var value = xna.GetFullscreen();
+                if (value) {
+                    disableResolutions = true;
+                }
+            }
+
             var screenOptions = [
-                React.createElement(MenuDropdown, {scroll: true, variable: "Resolution", choices: resolutionChoices}, "Resolution"),
+                React.createElement(MenuDropdown, {disabled: disableResolutions, scroll: true, variable: "Resolution", choices: resolutionChoices}, "Resolution"),
                 React.createElement(MenuDropdown, {variable: "Fullscreen", choices: fullscreenChoices}, "Fullscreen setting"),
             ];
 
