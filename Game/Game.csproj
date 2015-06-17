@@ -283,7 +283,9 @@ xcopy $(SolutionDir)Content\Maps $(TargetDir)Content\Maps\ /E /D /Y
 
 IF $(ConfigurationName) EQU Release (
   ECHO Copying html directory
-  xcopy $(ProjectDir)html $(TargetDir)html /E /D /Y
+  ECHO $(ProjectDir)html
+  ECHO $(TargetDir)html
+  xcopy $(ProjectDir)html $(TargetDir)html\ /E /D /Y
 
   ECHO Running PngToCsData
   $(SolutionDir)PngToCsData\PngToCsData\bin\Release\PngToCsData.exe $(ProjectDir)Drawing/GameColors.cs $(SolutionDir)Content/Art/FarColors.png
