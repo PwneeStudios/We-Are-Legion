@@ -282,7 +282,7 @@ namespace Game
             if (args.Contains("--w")) { int i = args.IndexOf("--w"); Width = int.Parse(args[i + 1]); }
             if (args.Contains("--h")) { int i = args.IndexOf("--h"); Height = int.Parse(args[i + 1]); }
 
-            if (Log.Debug || args.Contains("--debug")) { HasConsole = true; DisableScreenEdge = true; AlwaysActive = true; }
+            if (Log.Debug || args.Contains("--debug")) { HasConsole = true; AlwaysActive = true; }
 
             // Log settings
             Console.WriteLine("ip set to {0}", IpAddress);

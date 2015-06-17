@@ -32,7 +32,7 @@ namespace Game
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
         static string ConfigFilePath = "config.txt";
-        class Config
+        public class Config
         {
             public float Version = 1;
             public bool Fullscreen;
@@ -53,7 +53,7 @@ namespace Game
         }
 
         Config _CurrentConfig = null;
-        Config CurrentConfig
+        public Config CurrentConfig
         {
             get
             {

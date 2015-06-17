@@ -138,7 +138,9 @@ namespace Game
             //    CameraPos += Input.DeltaMousPos / CameraZoom * MoveRate_ClickAndDrag * new vec2(-1, 1);
 
             // Move the camera via: Push Edge
-            if (GameClass.MouseEnabled && (!Program.DisableScreenEdge || BoxSelecting))
+            if (GameClass.MouseEnabled &&
+               (GameClass.Game.CurrentConfig.Fullscreen || BoxSelecting) &&
+               (!Program.DisableScreenEdge || BoxSelecting))
             {
                 float MoveRate_PushEdge = .075f * FpsRateModifier;
                 var push_dir = vec2.Zero;
