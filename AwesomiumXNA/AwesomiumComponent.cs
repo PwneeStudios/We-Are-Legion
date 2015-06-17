@@ -172,12 +172,18 @@ namespace AwesomiumXNA
             WebView.FocusView();
         }
 
-
-        ~AwesomiumComponent()
+        public void Release()
         {
             // Remove the message hook.
             if (hookHandle != IntPtr.Zero)
+            {
                 User32.UnhookWindowsHookEx(hookHandle);
+            }
+        }
+
+        ~AwesomiumComponent()
+        {
+            Release();
         }
 
         public Texture2D WebViewTexture { get; private set; }

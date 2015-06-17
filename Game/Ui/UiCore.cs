@@ -64,6 +64,13 @@ namespace Game
 
         void AwesomiumInitialize()
         {
+            if (awesomium != null)
+            {
+                Components.Remove(awesomium);
+                awesomium.Release();
+                awesomium.Dispose();
+            }
+            
             awesomium = new AwesomiumComponent(this, GraphicsDevice.Viewport.Bounds);
             
             Console.WriteLine("GraphicsDevice.Viewport.Bounds");
