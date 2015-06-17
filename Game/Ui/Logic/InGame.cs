@@ -61,11 +61,12 @@ namespace Game
 
         void UpdateShow()
         {
-            var obj = new Dictionary<string, object>();
-            obj["ShowChat"] = ShowChat;
-            obj["ShowAllPlayers"] = ShowAllPlayers;
-
-            Send("show", obj);
+            Send("show", new
+            {
+                ShowChat = ShowChat,
+                ShowAllPlayers = ShowAllPlayers,
+                ChatGlobal = ChatGlobal,
+            });
         }
 
         public bool ShowChat = false;

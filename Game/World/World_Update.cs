@@ -180,8 +180,8 @@ namespace Game
             // Switch to chat
             if (!GameClass.Game.ShowChat && Keys.Enter.Pressed() && ChatInhibitor <= 0)
             {
-                GameClass.Game.ToggleChat();
                 GameClass.Game.ChatGlobal = !(Keys.LeftShift.Down() || Keys.RightShift.Down());
+                GameClass.Game.ToggleChat();
             }
             if (GameClass.Game.ShowChat) { ChatInhibitor = 5; return; }
             if (ChatInhibitor > 0 && !Keys.Enter.Down()) ChatInhibitor--;

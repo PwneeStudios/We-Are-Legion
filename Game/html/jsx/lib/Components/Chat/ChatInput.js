@@ -17,6 +17,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
         onShowUpdate: function(values) {
             this.setState({
                 ShowChat: values.ShowChat,
+                ChatGlobal: values.ChatGlobal,
             });
         },
 
@@ -75,7 +76,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
 
                 return (
                     <div>
-                        <Input value={this.state.value} ref="input" type="text" addonBefore="All"
+                        <Input value={this.state.value} ref="input" type="text"
+                         addonBefore={this.state.ChatGlobal ? "All" : "Team"}
                          style={style}
                          onChange={this.onTextChange} onKeyDown={this.onKeyDown}
                          onMouseOver={interop.onOver} onMouseLeave={interop.onLeave}
@@ -86,7 +88,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                 return (
                     <div>
                     </div>
-                )
+                );
             }
         },
     });
