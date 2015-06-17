@@ -167,12 +167,18 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 {name: 'Windowed', value:false},
             ];
 
+            var screenOptions = [
+                React.createElement(MenuDropdown, {scroll: true, variable: "Resolution", choices: resolutionChoices}, "Resolution"),
+                React.createElement(MenuDropdown, {variable: "Fullscreen", choices: fullscreenChoices}, "Fullscreen setting"),
+            ];
+
             return (
                 React.createElement(Menu, {width: 30, type: "table"}, 
                     React.createElement(MenuSlider, {variable: "SoundVolume"}, "Sound"), 
                     React.createElement(MenuSlider, {variable: "MusicVolume"}, "Music"), 
-                    React.createElement(MenuDropdown, {scroll: true, variable: "Resolution", choices: resolutionChoices}, "Resolution"), 
-                    React.createElement(MenuDropdown, {variable: "Fullscreen", choices: fullscreenChoices}, "Fullscreen setting"), 
+
+                    this.props.params.inGame ? null : screenOptions, 
+
                     React.createElement(MenuButton, {onClick: back}, "Back")
                 )
             );

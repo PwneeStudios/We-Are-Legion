@@ -148,6 +148,10 @@ define(['lodash', 'react', 'interop', 'events',
         },
 
         setScreen: function(screen, params) {
+            if (typeof params === 'undefined') {
+                params = { };
+            }
+
             this.screenHistory().push({screen:screen,params:params});
 
             this.setState({
