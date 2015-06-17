@@ -24,17 +24,32 @@ namespace Game
         {
             message.Innermost.Immediate();
 
-            //new Thread(() =>
-            //{
-            //    Thread.Sleep(100);
-
-                Outbox.Enqueue(new Tuple<int, Message>(0, message));
-            //}).Start();
+            Outbox.Enqueue(new Tuple<int, Message>(-1, message));
         }
 
         public static void ToServer(MessageTail message)
         {
             ToServer(message.MakeFullMessage());
+        }
+
+        public static void ToClient(Connection client, MessageTail message)
+        {
+            ToClient(client, message.MakeFullMessage());
+        }
+
+        public static void ToClient(Connection client, Message message)
+        {
+            if (Program.Server)
+            {
+                int index = client.Index;
+
+                if (Log.Outbox) Console.WriteLine("* Enqueued {0} for {1}", message, index);
+                Outbox.Enqueue(new Tuple<int, Message>(index, message));
+            }
+            else
+            {
+                throw new Exception("Clients cannot send messages to clients.");
+            }
         }
 
         public static void ToClients(Message message)
@@ -43,10 +58,7 @@ namespace Game
             {
                 foreach (var client in Server.Clients)
                 {
-                    int index = client.Index;
-
-                    if (Log.Outbox) Console.WriteLine("* Enqueued {0}", message);
-                    Outbox.Enqueue(new Tuple<int, Message>(index, message));
+                    ToClient(client, message);
                 }
             }
             else

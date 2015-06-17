@@ -63,22 +63,28 @@ namespace Game
                     var message  = package.Item2;
                     var encoding = message.Encode();
 
-                    if (index < Clients.Count)
+                    Connection client;
+                    if (index < 0)
                     {
-                        var client = Clients[index];
-
-                        if (client.IsServer)
-                        {
-                            message.Source = Connection.Server;
-                            Networking.Inbox.Enqueue(message);
-                        }
-                        else
-                        {                            
-                            client.Send(encoding);
-                        }
-
-                        if (Log.Send) Console.WriteLine("(Server) Sent to {0}: {1}", index, encoding);
+                        client = Connection.Server;
                     }
+                    else
+                    {
+                        client = Clients.Find(match => match.Index == index);
+                        if (client == null) continue;
+                    }
+
+                    if (client.IsServer)
+                    {
+                        message.Source = Connection.Server;
+                        Networking.Inbox.Enqueue(message);
+                    }
+                    else
+                    {                            
+                        client.Send(encoding);
+                    }
+
+                    if (Log.Send) Console.WriteLine("(Server) Sent to {0}: {1}", index, encoding);
                 }
 
                 Thread.Sleep(1);
@@ -88,7 +94,6 @@ namespace Game
         public Server()
         {
             Clients = new List<Connection>();
-            Clients.Add(Connection.Server);
 
             if (Program.SteamNetworking)
             {
@@ -142,9 +147,19 @@ namespace Game
         void StartSteamServer()
         {
             int count = 1;
+
             foreach (UInt64 user in Program.SteamUsers)
             {
-                if (user == 0 || user == Program.SteamServer) continue;
+                if (user == 0) continue;
+
+                if (user == Program.SteamServer)
+                {
+                    Connection.Server.Index = count++;
+                    Clients.Add(Connection.Server);
+                    Console.WriteLine("Server connected to self!");
+
+                    continue;
+                }
 
                 SteamPlayer player = new SteamPlayer(user);
                 Clients.Add(new ClientSteamConnection(player, count++));
@@ -159,6 +174,8 @@ namespace Game
 
         void StartTcpServer()
         {
+            Clients.Add(Connection.Server);
+
             try
             {
                 server = new TcpListener(IPAddress.Any, Program.Port);

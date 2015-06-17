@@ -153,7 +153,33 @@ namespace Game
                 {
                     if (message.Type == MessageType.PlayerAction)
                     {
-                        Networking.ToClients(new MessagePlayerActionAck(AckSimStep, message));
+                        var ack = new MessagePlayerActionAck(AckSimStep, message);
+
+                        var chat = message.Innermost as MessageChat;
+                        if (null != chat)
+                        {
+                            if (chat.Global)
+                            {
+                                Networking.ToClients(ack);
+                            }
+                            else
+                            {
+                                var chat_team = message.Source.Team;
+                                if (chat_team < 0) continue;
+
+                                foreach (var client in Server.Clients)
+                                {
+                                    if (client.Team == chat_team)
+                                    {
+                                        Networking.ToClient(client, ack);
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            Networking.ToClients(ack);
+                        }
                     }
                 }
 

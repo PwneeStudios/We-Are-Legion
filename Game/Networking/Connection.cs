@@ -22,6 +22,16 @@ namespace Game
         public bool IsServer = false;
         public bool HasLoaded = false;
 
+        public int Team
+        {
+            get
+            {
+                if (Index < 0 || Index > 4) return -1;
+
+                return GameClass.World.PlayerTeams[Index];
+            }
+        }
+
         public Connection(bool IsServer = false)
         {
             this.IsServer = IsServer;

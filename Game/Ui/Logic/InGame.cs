@@ -69,6 +69,7 @@ namespace Game
         }
 
         public bool ShowChat = false;
+        public bool ChatGlobal = true;
         public void ToggleChat(Toggle value = Toggle.Flip)
         {
             value.Apply(ref ShowChat);
@@ -122,7 +123,7 @@ namespace Game
             if (message != null && message.Length > 0)
             {
                 Console.WriteLine("ui chat message: " + message);
-                Networking.ToServer(new MessageChat(true, Game.PlayerName(), message));
+                Networking.ToServer(new MessageChat(ChatGlobal, Game.PlayerName(), message));
             }
 
             ToggleChat(Toggle.Off);
