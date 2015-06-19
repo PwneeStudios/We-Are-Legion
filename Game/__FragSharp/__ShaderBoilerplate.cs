@@ -2609,37 +2609,40 @@ namespace Game
     {
         public static Effect CompiledEffect;
 
-        public static void Apply(Texture2D Units, PlayerTuple Teams, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Units, Texture2D Data, PlayerTuple Teams, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Units, Teams);
+            Using(Units, Data, Teams);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Units, PlayerTuple Teams, RenderTarget2D Output)
+        public static void Apply(Texture2D Units, Texture2D Data, PlayerTuple Teams, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Units, Teams);
+            Using(Units, Data, Teams);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Units, PlayerTuple Teams, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Units, Texture2D Data, PlayerTuple Teams, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Units, Teams);
+            Using(Units, Data, Teams);
         }
-        public static void Using(Texture2D Units, PlayerTuple Teams, RenderTarget2D Output)
+        public static void Using(Texture2D Units, Texture2D Data, PlayerTuple Teams, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Units, Teams);
+            Using(Units, Data, Teams);
         }
-        public static void Using(Texture2D Units, PlayerTuple Teams)
+        public static void Using(Texture2D Units, Texture2D Data, PlayerTuple Teams)
         {
             CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
             CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
             CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
             CompiledEffect.Parameters["fs_param_Teams"].SetValue(FragSharpMarshal.Marshal(Teams));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }

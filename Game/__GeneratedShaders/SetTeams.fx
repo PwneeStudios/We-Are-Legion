@@ -37,11 +37,31 @@ sampler fs_param_Units : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
+// Texture Sampler for fs_param_Data, using register location 2
+float2 fs_param_Data_size;
+float2 fs_param_Data_dxdy;
+
+Texture fs_param_Data_Texture;
+sampler fs_param_Data : register(s2) = sampler_state
+{
+    texture   = <fs_param_Data_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
+
 float4 fs_param_Teams;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
+bool Game__SimShader__Something__data(float4 u)
+{
+    return u.r > 0 + .001;
+}
+
 float Game__SimShader__GetPlayerVal__PlayerTuple__Single(float4 tuple, float player)
 {
     if (abs(player - 0.003921569) < .001)
@@ -78,7 +98,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    if (abs(unit_here.g - 0.0) < .001)
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    if (!(Game__SimShader__Something__data(data_here)) && abs(unit_here.g - 0.0) < .001)
     {
         __FinalOutput.Color = unit_here;
         return __FinalOutput;

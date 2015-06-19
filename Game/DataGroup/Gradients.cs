@@ -16,7 +16,7 @@ namespace Game
 {
     public partial class DataGroup : SimShader
     {
-        void UpdateGradient_ToOtherTeams()
+        public void UpdateGradient_ToOtherTeams()
         {
             Pathfinding_ToOtherTeams.Apply(DistanceToOtherTeams, CurrentData, CurrentUnits, Output: Temp1);
             Swap(ref DistanceToOtherTeams, ref Temp1);

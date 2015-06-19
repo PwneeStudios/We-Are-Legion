@@ -5,11 +5,12 @@ namespace Game
     public partial class SetTeams : SimShader
     {
         [FragmentShader]
-        unit FragmentShader(VertexOut vertex, Field<unit> Units, PlayerTuple Teams)
+        unit FragmentShader(VertexOut vertex, Field<unit> Units, Field<data> Data, PlayerTuple Teams)
         {
             unit unit_here = Units[Here];
+            data data_here = Data[Here];
 
-            if (unit_here.player == Player.None) return unit_here;
+            if (!Something(data_here) && unit_here.player == Player.None) return unit_here;
 
             unit_here.team = GetPlayerVal(Teams, unit_here.player);
 
@@ -23,16 +24,24 @@ namespace Game
         {
             Render.UnsetDevice();
 
-            SetTeams.Apply(DataGroup.CurrentUnits, PlayerTeamVals, Output: DataGroup.Temp1);
+            // Set datagroup team data.
+            SetTeams.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, PlayerTeamVals, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
 
-            SetTeams.Apply(DataGroup.PreviousUnits, PlayerTeamVals, Output: DataGroup.Temp1);
+            SetTeams.Apply(DataGroup.PreviousUnits, DataGroup.PreviousData, PlayerTeamVals, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousUnits);
 
-            // Focus camera on a dragon lord
+            DataGroup.DistanceToOtherTeams.Clear();
+            for (int i = 0; i < 24; i++)
+            {
+                DataGroup.UpdateGradient_ToOtherTeams();
+            }
+        
+            // Focus camera on a dragon lord.
             vec2 pos = DataGroup.DragonLordPos(MyPlayerValue);
+            
             //{0.01248588,0.004402504}
-            CameraPos = GridToWorldCood(pos + vec(.5f, 1.5f));
+            CameraPos = GridToWorldCood(pos + vec(.375f, 1.5f));
             CameraZoom = 80f;
 
             Render.UnsetDevice();

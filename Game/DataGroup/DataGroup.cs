@@ -103,7 +103,6 @@ namespace Game
             Tiles, Corpses, Magic, Necromancy, AntiMagic,
             SelectField,
 
-            Paths_Right, Paths_Left, Paths_Up, Paths_Down,
             DistanceToPlayers, DistanceToOtherTeams, DistanceToBuildings,
 
             Geo, AntiGeo, OuterGeo, TempGeo, GeoInfo,
@@ -148,11 +147,6 @@ namespace Game
 
             Temp1 = MakeTarget(w, h);
             Temp2 = MakeTarget(w, h);
-
-            Paths_Right = MakeTarget(w, h);
-            Paths_Left = MakeTarget(w, h);
-            Paths_Up = MakeTarget(w, h);
-            Paths_Down = MakeTarget(w, h);
 
             DistanceToPlayers = MakeTarget(w, h);
             DistanceToOtherTeams = MakeTarget(w, h);
