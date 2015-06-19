@@ -25,6 +25,15 @@ namespace Game
             return pos;
         }
 
+        public vec2 DragonLordPos(float player)
+        {
+            DragonLordGridCoord.Apply(CurrentUnits, player, Output: Multigrid[0]);
+            color packed = MultigridReduce(_PreferTl.Apply);
+            vec2 pos = SimShader.unpack_vec2(packed);
+
+            return pos;
+        }
+
         public vec2 SelectedBound_BL, SelectedBound_TR;
         /// <summary>
         /// Warning: This is not network synchronized. Should only affect local clients fake selection field or the information should be communicated over the network.

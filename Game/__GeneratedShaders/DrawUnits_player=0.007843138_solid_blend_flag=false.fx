@@ -125,6 +125,20 @@ float fs_param_selection_size;
 float fs_param_solid_blend;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
+// Texture Sampler for fs_param_FarColor, using register location 7
+float2 fs_param_FarColor_size;
+float2 fs_param_FarColor_dxdy;
+
+Texture fs_param_FarColor_Texture;
+sampler fs_param_FarColor : register(s7) = sampler_state
+{
+    texture   = <fs_param_FarColor_Texture>;
+    MipFilter = Point;
+    MagFilter = Point;
+    MinFilter = Point;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
+};
 
 // The following methods are included because they are referenced by the fragment shader.
 float2 Game__SimShader__get_subcell_pos__VertexOut__vec2__vec2(VertexToPixel vertex, float2 grid_size, float2 grid_shift)
@@ -156,23 +170,23 @@ bool Game__SimShader__fake_selected__data(float4 u)
     return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
 }
 
-float4 Game__SelectedUnitColor__Get__Single(float player)
+float4 Game__SelectedUnitColor__Get__Single(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.007843138) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01176471) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01568628) < .001)
     {
-        return float4(0.1490196, 0.6588235, 0.1333333, 1.0);
+        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
@@ -190,7 +204,7 @@ float4 Game__DrawUnits__ShadowSprite__Single__data__unit__vec2__TextureSampler__
         if (clr.a > 0 + .001)
         {
             float a = clr.a;
-            clr = Game__SelectedUnitColor__Get__Single(u.g);
+            clr = Game__SelectedUnitColor__Get__Single(psin, u.g);
             clr.a = a;
         }
     }
@@ -249,30 +263,30 @@ float Game__UnitType__UnitIndex__unit(float4 u)
     return FragSharpFramework__FragSharpStd__Float__Single(u.r - 0.003921569);
 }
 
-float4 Game__UnitColor__Get__Single(float player)
+float4 Game__UnitColor__Get__Single(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .001)
     {
-        return float4(0.4392157, 0.4078431, 0.6117647, 1.0);
+        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.007843138) < .001)
     {
-        return float4(0.572549, 0.2588235, 0.2235294, 1.0);
+        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01176471) < .001)
     {
-        return float4(0.3803922, 0.6117647, 0.7058824, 1.0);
+        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01568628) < .001)
     {
-        return float4(0.9647059, 0.6431373, 0.6980392, 1.0);
+        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
-float4 Game__DrawUnits__SolidColor__Single__data__unit(float player, float4 data, float4 unit)
+float4 Game__DrawUnits__SolidColor__Single__data__unit(VertexToPixel psin, float player, float4 data, float4 unit)
 {
-    return abs(unit.g - player) < .001 && Game__SimShader__fake_selected__data(data) ? Game__SelectedUnitColor__Get__Single(unit.g) : Game__UnitColor__Get__Single(unit.g);
+    return abs(unit.g - player) < .001 && Game__SimShader__fake_selected__data(data) ? Game__SelectedUnitColor__Get__Single(psin, unit.g) : Game__UnitColor__Get__Single(psin, unit.g);
 }
 
 float4 Game__DrawUnits__Sprite__Single__data__unit__vec2__Single__TextureSampler__Single__Single__Boolean__Single(VertexToPixel psin, float player, float4 d, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
@@ -288,7 +302,7 @@ float4 Game__DrawUnits__Sprite__Single__data__unit__vec2__Single__TextureSampler
     float4 clr = tex2D(Texture, pos);
     if (solid_blend_flag)
     {
-        clr = solid_blend * clr + (1 - solid_blend) * Game__DrawUnits__SolidColor__Single__data__unit(player, d, u);
+        clr = solid_blend * clr + (1 - solid_blend) * Game__DrawUnits__SolidColor__Single__data__unit(psin, player, d, u);
     }
     return clr;
 }

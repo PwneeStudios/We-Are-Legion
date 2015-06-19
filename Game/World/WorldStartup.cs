@@ -29,6 +29,12 @@ namespace Game
             SetTeams.Apply(DataGroup.PreviousUnits, PlayerTeamVals, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousUnits);
 
+            // Focus camera on a dragon lord
+            vec2 pos = DataGroup.DragonLordPos(MyPlayerValue);
+            //{0.01248588,0.004402504}
+            CameraPos = GridToWorldCood(pos + vec(.5f, 1.5f));
+            CameraZoom = 80f;
+
             Render.UnsetDevice();
         }
     }

@@ -21,6 +21,25 @@ namespace Game
         }
     }
 
+    public partial class DragonLordGridCoord : SimShader
+    {
+        [FragmentShader]
+        vec4 FragmentShader(VertexOut vertex, Field<unit> CurrentUnits, [Player.Vals] float player)
+        {
+            vec2 uv = vertex.TexCoords * CurrentUnits.Size;
+            unit here = CurrentUnits[Here];
+
+            if (here.player == player && here.type == UnitType.DragonLord)
+            {
+                return pack_vec2(uv);
+            }
+            else
+            {
+                return vec4.Zero;
+            }
+        }
+    }
+
     /// <summary>
     /// Warning: This is not network synchronized. Should only affect local clients fake selection field or the information should be communicated over the network.
     /// </summary>
@@ -76,6 +95,20 @@ namespace Game
                 BR = unpack_vec2(PreviousLevel[UpRight]);
 
             return pack_vec2(min(TL, TR, BL, BR));
+        }
+    }
+
+    public partial class _PreferTl : SimShader
+    {
+        [FragmentShader]
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> PreviousLevel)
+        {
+            if (PreviousLevel[Here] != vec4.Zero) return PreviousLevel[Here];
+            if (PreviousLevel[RightOne] != vec4.Zero) return PreviousLevel[RightOne];
+            if (PreviousLevel[UpOne] != vec4.Zero) return PreviousLevel[UpOne];
+            if (PreviousLevel[UpRight] != vec4.Zero) return PreviousLevel[UpRight];
+
+            return vec4.Zero;
         }
     }
 }
