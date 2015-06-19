@@ -38,6 +38,8 @@ namespace Game
 
         JSValue PlaySound(object sender, JavascriptMethodEventArgs e)
         {
+            if (!awesomium.AllowMouseEvents) return JSValue.Null;
+
             string soundName = e.Arguments[0].ToString();
 
             var sound = SoundWad.Wad.FindByName(soundName);
