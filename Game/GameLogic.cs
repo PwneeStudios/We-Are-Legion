@@ -38,8 +38,8 @@ namespace Game
         }
 
 #if DEBUG
-        //GameState State = GameState.ToMap;
-        GameState State = GameState.TitleScreen;
+        GameState State = GameState.ToMap;
+        //GameState State = GameState.TitleScreen;
 #else
         GameState State = GameState.TitleScreen;
 #endif
@@ -116,6 +116,7 @@ namespace Game
                     Render.StandardRenderSetup();
                     DrawFullScreen(Assets.ScreenLoading);
 
+                    if (Program.StartupMap == null) Program.StartupMap = "Beset.m3n";
                     SetScenarioToLoad(Program.StartupMap);
 
                     break;

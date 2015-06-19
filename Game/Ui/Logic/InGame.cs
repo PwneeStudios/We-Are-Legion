@@ -52,8 +52,10 @@ namespace Game
 
         void UpdateParams()
         {
+            World.MyPlayerInfo.Update();
+
             var obj = new Dictionary<string, object>();
-            obj["Spells"] = Spells.SpellDict;
+            obj["SpellCosts"] = World.MyPlayerInfo.SpellCosts;
             obj["Buildings"] = World.MyPlayerInfo.Params.Buildings;
 
             Send("setParams", obj);

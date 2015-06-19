@@ -6,7 +6,7 @@ namespace Game
     public class BuildingParameters : SimShader
     {
         public int
-            GoldCost, CostIncrease, GoldPerTick, JadePerTick;
+            GoldCost, CostIncrease, GoldPerTick, JadePerTick, CurrentGoldCost;
 
         public float
             UnitType;

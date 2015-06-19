@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Collections.Generic;
 
 namespace Game
 {
@@ -43,6 +44,10 @@ namespace Game
             Units = 0,
             DragonLords = -1;
 
+        public Dictionary<string, int>
+            SpellCasts = new Dictionary<string, int>(),
+            SpellCosts = new Dictionary<string, int>();
+
         public bool DragonLordAlive = false;
 
         public GameParameters Params;
@@ -55,6 +60,12 @@ namespace Game
 
             Gold = Params.StartGold;
             Jade = Params.StartJade;
+
+            foreach (var spell in Spells.SpellList)
+            {
+                SpellCasts.Add(spell.Name, 0);
+                SpellCosts.Add(spell.Name, 0);
+            }
         }
 
         public bool CanAffordSpell(Spell spell)
@@ -71,11 +82,12 @@ namespace Game
             if (GameClass.World.MapEditorActive) return;
 
             Jade -= SpellCost(spell);
+            SpellCasts[spell.Name]++;
         }
 
         public int SpellCost(Spell spell)
         {
-            return spell.JadeCost;
+            return spell.JadeCost + spell.JadeCostIncrease * SpellCasts[spell.Name];
         }
 
         public bool CanAffordBuilding(int type) { return CanAffordBuilding(_[type]); }
@@ -95,6 +107,18 @@ namespace Game
 
             Gold -= BuildingCost(type);
             this[type].Bought++;
+        }
+
+        public void Update()
+        {
+            Params.Barracks.CurrentGoldCost = BuildingCost(UnitType.Barracks);
+            Params.GoldMine.CurrentGoldCost = BuildingCost(UnitType.GoldMine);
+            Params.JadeMine.CurrentGoldCost = BuildingCost(UnitType.JadeMine);
+
+            foreach (var spell in Spells.SpellList)
+            {
+                SpellCosts[spell.Name] = SpellCost(spell);
+            }
         }
 
         public int BuildingCost(int type) { return BuildingCost(_[type]); }

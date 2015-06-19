@@ -142,16 +142,18 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         mixins: [events.SetParamsMixin],
 
         onSetParams: function(values) {
-            var data = values.Spells[this.props.name] || values.Buildings[this.props.name];
+            var goldCost = 0, jadeCost = 0;
 
-            if (!data) {
-                return;
+            if (values.SpellCosts[this.props.name]) {
+                jadeCost = values.SpellCosts[this.props.name];
+            } else {
+                var data = values.Buildings[this.props.name];
+                
+                goldCost = data.CurrentGoldCost || data.GoldCost || 0;
+                jadeCost = data.CurrentJadeCost || data.JadeCost || 0;
             }
-
-            var goldCost = data.GoldCost || 0;
-            var jadeCost = data.JadeCost || 0;
-
-            if (this.state.goldCost === goldCost || this.state.jadeCost === jadeCost) {
+            
+            if (this.state.goldCost === goldCost && this.state.jadeCost === jadeCost) {
                 return;
             }
 

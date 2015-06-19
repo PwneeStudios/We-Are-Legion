@@ -21,7 +21,7 @@ namespace Game
         public delegate void SpellExecution(int PlayerNumer, int TeamNumber, vec2 Pos);
         [JsonIgnore] public SpellExecution Apply;
 
-        public int JadeCost = 0;
+        public int JadeCost = 0, JadeCostIncrease = 0;
         public float TerritoryRange = float.MaxValue;
 
         static int next_id = 0;
@@ -64,12 +64,14 @@ namespace Game
             spell.Execute = () => W.Fireball();
             spell.Apply = (p, t, v) => W.FireballApply(p, t, v);
             spell.JadeCost = 1000;
+            spell.JadeCostIncrease = 0;
 
             SkeletonArmy = spell = new Spell("Skeletons");
             spell.DrawCursor = SkeletonCursor;
             spell.Execute = () => W.RaiseSkeletons(RaiseR);
             spell.Apply = (p, t, v) => W.RaiseSkeletonsApply(p, t, v, RaiseR);
             spell.JadeCost = 1000;
+            spell.JadeCostIncrease = 0;
 
             Necromancer = spell = new Spell("Necromancer");
             spell.DrawCursor = () => NecroCursor(Necromancer.TerritoryRange);
@@ -77,12 +79,14 @@ namespace Game
             spell.Apply = (p, t, v) => W.SummonNecromancerApply(p, t, v);
             spell.JadeCost = 1000;
             spell.TerritoryRange = _64;
+            spell.JadeCostIncrease = 500;
 
             TerracottaArmy = spell = new Spell("Terracotta");
             spell.DrawCursor = TerracottaCursor;
             spell.Execute = () => W.SummonTerracotta(TerracottaR);
             spell.Apply = (p, t, v) => W.SummonTerracottaApply(p, t, v, TerracottaR);
             spell.JadeCost = 1000;
+            spell.JadeCostIncrease = 1000;
         }
 
         static void SkeletonCursor()
