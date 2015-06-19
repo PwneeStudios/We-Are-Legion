@@ -59,7 +59,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             )
         );
     };
-    
+
     var setActions = function() {
         var buildingScale = 0.85;
         window.Actions = {
@@ -70,7 +70,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                     React.createElement(Popover, {title: makeTooltip('Fireball', 'Fireball')}, 
                         React.createElement("div", null, 
                             React.createElement("p", null, "This is a p test."), 
-                            React.createElement("strong", null, "FIRE!"), " Everything will ", React.createElement("em", null, "burrrrnnn"), ". Ahhh-hahaha." + ' ' +
+                            "Fire!Everything will ", React.createElement("em", null, "burrrrnnn"), ". Ahhh-hahaha." + ' ' +
                             "Except dragonlords. They have anti-magic. Also, anything near a dragonlord. Again... uh, anti-magic. But, ", React.createElement("em", null, "everything else"), "... burrrrnnns.", 
                             React.createElement("br", null), React.createElement("br", null), 
                             "That includes your own soldiers, so be careful. For real."
@@ -82,7 +82,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 scale:1,
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Raise Skeletal Army', 'Skeletons')}, 
-                        React.createElement("strong", null, "Command the dead!"), " Raise an army of the dead. All corpses not being stomped on will rise up and fight for your cause in the area you select."
+                        "Command the dead! Raise an army of the dead. All corpses not being stomped on will rise up and fight for your cause in the area you select."
                     ),
             },
             Necromancer: {
@@ -90,7 +90,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 scale:1,
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Summon Necromancer', 'Necromancer')}, 
-                        React.createElement("strong", null, "Have ", React.createElement("em", null, "someone else"), " command the dead!"), " Summon forth a single, skillful necromancer at a given location." + ' ' +
+                        "Have ", React.createElement("em", null, "someone else"), " command the dead! Summon forth a single, skillful necromancer at a given location." + ' ' +
                         "This lord of death will raise any corpse near them into a skeletal warrior ready to thirst for blood and brains."
                     ),
             },
@@ -99,9 +99,9 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 scale:1,
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Raise Terracotta Army', 'Terracotta')}, 
-                        React.createElement("strong", null, "Clay soldiers! YESSSS."), " Mother Earth says: take my earth-warrior-children things! Use them to slay the filthy humans and/or animals!" + ' ' +
+                        "Clay soldiers! Yesssss. Mother Earth says: take my earth-warrior-children things! Use them to slay the filthy humans and/or animals!" + ' ' +
                         "Kill everything! Mother Earth AAANGRRY." + ' ' +
-                        "Seriously. In a given ", React.createElement("strong", null, "open"), " area you select, summon forth an army of clay warriors to do your worst biddings."
+                        "Seriously. In a given open area you select, summon forth an army of clay warriors to do your worst biddings."
                     ),
             },
             
@@ -110,7 +110,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 scale:buildingScale,
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Build Barracks', 'Barracks')}, 
-                        React.createElement("strong", null, "The engine of war."), " This building that dudes hang out in and train for battle and stuff. Also where new 'recruits' magically appear, ready for battle."
+                        "The engine of war. This building that dudes hang out in and train for battle and stuff. Also where new 'recruits' magically appear, ready for battle."
                     ),
             },
             GoldMine: {
@@ -118,7 +118,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 scale:buildingScale,
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Build Gold Mine', 'GoldMine')}, 
-                        React.createElement("strong", null, "Gooooolllld."), " Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign."
+                        "Gooooolllld. Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign."
                     ),
             },
             JadeMine: {
@@ -126,8 +126,8 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 scale:buildingScale,
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Build Jade Mine', 'JadeMine')}, 
-                        React.createElement("strong", null, "Green is the color of... MAGIC."), " From Jade flows all magic, both real and imaginary. Place this jade mine on a jade source on the map." + ' ' +
-                        "Once built the mine will continuously generate jade for you to use in super sweet ", React.createElement("strong", null, "Dragonlord spells"), "."
+                        "Green is the color of... MAGIC. From Jade flows all magic, both real and imaginary. Place this jade mine on a jade source on the map." + ' ' +
+                        "Once built the mine will continuously generate jade for you to use in super sweet Dragonlord Spells."
                     ),
             },
         };
