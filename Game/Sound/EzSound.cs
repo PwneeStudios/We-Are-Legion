@@ -29,7 +29,7 @@ namespace Game
             if (GameClass.Game.DrawCount - LastPlayedStamp <= DelayTillNextSoundCanPlay)
                 return;
 
-            sound.Play(SoundWad.SoundVolume * DefaultVolume, 0, 0);
+            sound.Play(GameClass.Game.CurrentConfig.SoundVolume * DefaultVolume, 0, 0);
 
             LastPlayedStamp = GameClass.Game.DrawCount;
         }
@@ -50,14 +50,14 @@ namespace Game
         {
             if (SoundWad.SuppressSounds) return;
 
-            sound.Play(volume * SoundWad.SoundVolume * DefaultVolume, 0, 0);
+            sound.Play(volume * GameClass.Game.CurrentConfig.SoundVolume * DefaultVolume, 0, 0);
         }
 
         public void Play(float volume, float pitch, float pan)
         {
             if (SoundWad.SuppressSounds) return;
 
-            sound.Play(volume * SoundWad.SoundVolume * DefaultVolume, CoreMath.Restrict(-1, 1, pitch), CoreMath.Restrict(-1, 1, pan));
+            sound.Play(volume * GameClass.Game.CurrentConfig.SoundVolume * DefaultVolume, CoreMath.Restrict(-1, 1, pitch), CoreMath.Restrict(-1, 1, pan));
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Game
 
             TopUi, Minimap;
 
-        public static BaseSong Song_140mph, Song_Happy;
+        public static BaseSong Song_MenuMusic, Song_Heavens;
         public static List<BaseSong> SongList_Standard = new List<BaseSong>();
 
         public static ContentManager Content { get { return GameClass.Game.Content; } }
@@ -40,9 +40,8 @@ namespace Game
         public static void Initialize()
         {
             LoadTextures();
-
-            TopUi = LoadTexture("TopUi");
-            Minimap = LoadTexture("Minimap");
+            LoadMusic();
+            LoadSound();
         }
 
         private static void LoadTextures()
@@ -88,6 +87,9 @@ namespace Game
             AoE_Fire = LoadTexture("AoE_Fire");
             AoE_Skeleton = LoadTexture("AoE_Skeleton");
             AoE_Terra = LoadTexture("AoE_Terra");
+
+            TopUi = LoadTexture("TopUi");
+            Minimap = LoadTexture("Minimap");
         }
 
         private static void LoadMusic()
@@ -116,15 +118,15 @@ namespace Game
 
             float ReduceAll = .8f;
 
-            Song_Happy = SongWad.Wad.FindByName("Happy^James_Stant");
-            Song_Happy.Volume = .9f * ReduceAll;
+            Song_MenuMusic = SongWad.Wad.FindByName("Menu-Music^Unknown");
+            Song_MenuMusic.Volume = .9f * ReduceAll;
 
-            Song_140mph = SongWad.Wad.FindByName("140_Mph_in_the_Fog^Blind_Digital");
-            Song_140mph.Volume = .5f * ReduceAll;
+            Song_Heavens = SongWad.Wad.FindByName("The_Heavens_Opened^Peacemaker");
+            Song_Heavens.Volume = 1f * ReduceAll;
 
             // Create the standard playlist
             SongList_Standard.AddRange(SongWad.Wad.SongList);
-            SongList_Standard.Remove(Song_Happy);
+            SongList_Standard.Remove(Song_MenuMusic);
         }
 
         static void LoadSound()

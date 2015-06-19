@@ -150,12 +150,12 @@ namespace Game
         }
 
         public static float CurSongVolume;
-        public static float MusicVolume;
+        public static float MusicVolume = 1;
 
         public static float CurVolume = -1;
         public static void UpdateVolume()
         {
-            float NewVolume = MusicVolume * VolumeFade * CurSongVolume;
+            float NewVolume = GameClass.Game.CurrentConfig.MusicVolume * MusicVolume * VolumeFade * CurSongVolume;
             if (Wad != null && Wad.Paused) NewVolume = 0;
             if (NewVolume != CurVolume)
             {

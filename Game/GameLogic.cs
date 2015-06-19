@@ -56,6 +56,30 @@ namespace Game
             State = GameState.Loading;
         }
 
+        bool ShouldStartMenuMusic = true;
+        void StartMenuMusicIfNeeded()
+        {
+            if (ShouldStartMenuMusic)
+            {
+                PlayMenuMusic();
+            }
+
+            ShouldStartMenuMusic = false;
+            ShouldStartGameMusic = true;
+        }
+
+        bool ShouldStartGameMusic = true;
+        void StartGameMusicIfNeeded()
+        {
+            if (ShouldStartGameMusic)
+            {
+                PlayGameMusic();
+            }
+
+            ShouldStartGameMusic = false;
+            ShouldStartMenuMusic = true;
+        }
+
         void GameLogic(GameTime gameTime)
         {
             switch (State)
@@ -83,6 +107,8 @@ namespace Game
                     break;
 
                 case GameState.TitleScreen:
+                    StartMenuMusicIfNeeded();
+
                     // No mouse input to Awesomium
                     awesomium.AllowMouseEvents = false;
 
@@ -115,6 +141,8 @@ namespace Game
                     break;
 
                 case GameState.MainMenu:
+                    StartMenuMusicIfNeeded();
+
                     if (!InputHelper.SomethingDown())
                     {
                         awesomium.AllowMouseEvents = true;
@@ -203,6 +231,8 @@ namespace Game
                     break;
 
                 case GameState.Game:
+                    StartGameMusicIfNeeded();
+
                     if (awesomium.WebViewTexture != null)
                     {
                         CalculateMouseDownOverUi();
@@ -246,6 +276,19 @@ namespace Game
             }
 
             World.Draw();
+        }
+
+        public void PlayMenuMusic()
+        {
+            SongWad.Wad.SuppressNextInfoDisplay = true;
+            SongWad.Wad.SetPlayList(Assets.Song_MenuMusic);
+            SongWad.Wad.Restart(true);
+        }
+
+        public void PlayGameMusic()
+        {
+            SongWad.Wad.SetPlayList(Assets.SongList_Standard);
+            SongWad.Wad.Restart(true);
         }
 
         void PreGame()

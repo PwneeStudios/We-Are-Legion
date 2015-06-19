@@ -60,6 +60,8 @@ namespace Game
 
         private bool Play_SetPlayerParams(bool DisplayInfo)
         {
+            SongWad.CurSongVolume = Volume;
+
             if (SongWad.Wad.SuppressNextInfoDisplay)
                 SongWad.Wad.SuppressNextInfoDisplay = DisplayInfo = false;
 

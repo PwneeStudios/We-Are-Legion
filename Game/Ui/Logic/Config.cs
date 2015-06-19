@@ -38,16 +38,24 @@ namespace Game
             public bool Fullscreen;
             public int Width, Height;
 
+            public float MusicVolume, SoundVolume;
+
             public Config()
             {
 #if DEBUG
                 Fullscreen = false;
                 Width = 1280;
                 Height = 720;
+
+                MusicVolume = 1;
+                SoundVolume = 1;
 #else
                 Fullscreen = true;
                 Width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
                 Height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+
+                MusicVolume = 1;
+                SoundVolume = 1;
 #endif
             }
         }

@@ -9,8 +9,6 @@ namespace Game
     {
         public static SoundWad Wad = new SoundWad(4);
 
-        public static float SoundVolume;
-
         /// <summary>
         /// When true all new sounds to be played are suppressed.
         /// </summary>

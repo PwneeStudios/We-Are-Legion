@@ -379,6 +379,12 @@ namespace Game
             DrawCount++;
             TimeSinceLoad += gameTime.ElapsedGameTime.TotalSeconds;
 
+            // Update songs
+            if (SongWad.Wad != null)
+            {
+                SongWad.Wad.PhsxStep();
+            }
+
             if (GameClass.GameActive)
             {
                 if (ActivateFakeFullScreen)
