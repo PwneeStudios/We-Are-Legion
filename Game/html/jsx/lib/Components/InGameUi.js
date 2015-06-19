@@ -47,10 +47,19 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         };
     };
     
-    var makeTooltip = function(name) {
-        return <span>{name}<span style={{'float':'right'}}>250</span></span>;
-    };
+    var makeTooltip = function(name, key) {
+        return (
+            <span>
+                {name}
 
+                {/* Float the cost to right. This breaks for some reason.
+                <span style={{'float':'right'}}>
+                    <Cost name={'Fireball'}/>
+                </span>*/}
+            </span>
+        );
+    };
+    
     var setActions = function() {
         var buildingScale = 0.85;
         window.Actions = {
@@ -58,7 +67,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 image:Spells.Fireball,
                 scale:1,
                 tooltip:
-                    <Popover title={makeTooltip('Fireball')}>
+                    <Popover title={makeTooltip('Fireball', 'Fireball')}>
                         <div>
                             <p>This is a p test.</p>
                             <strong>FIRE!</strong> Everything will <em>burrrrnnn</em>. Ahhh-hahaha.
@@ -72,7 +81,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 image:Spells.Skeletons,
                 scale:1,
                 tooltip:
-                    <Popover title={makeTooltip('Raise Skeletal Army')}>
+                    <Popover title={makeTooltip('Raise Skeletal Army', 'Skeletons')}>
                         <strong>Command the dead!</strong> Raise an army of the dead. All corpses not being stomped on will rise up and fight for your cause in the area you select.
                     </Popover>,
             },
@@ -80,7 +89,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 image:Spells.Necromancer,
                 scale:1,
                 tooltip:
-                    <Popover title={makeTooltip('Summon Necromancer')}>
+                    <Popover title={makeTooltip('Summon Necromancer', 'Necromancer')}>
                         <strong>Have <em>someone else</em> command the dead!</strong> Summon forth a single, skillful necromancer at a given location.
                         This lord of death will raise any corpse near them into a skeletal warrior ready to thirst for blood and brains.
                     </Popover>,
@@ -89,7 +98,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 image:Spells.Terracotta,
                 scale:1,
                 tooltip:
-                    <Popover title={makeTooltip('Raise Terracotta Army')}>
+                    <Popover title={makeTooltip('Raise Terracotta Army', 'Terracotta')}>
                         <strong>Clay soldiers! YESSSS.</strong> Mother Earth says: take my earth-warrior-children things! Use them to slay the filthy humans and/or animals!
                         Kill everything! Mother Earth AAANGRRY.
                         Seriously. In a given <strong>open</strong> area you select, summon forth an army of clay warriors to do your worst biddings.
@@ -100,7 +109,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 image:Buildings.Barracks,
                 scale:buildingScale,
                 tooltip:
-                    <Popover title={makeTooltip('Build Barracks')}>
+                    <Popover title={makeTooltip('Build Barracks', 'Barracks')}>
                         <strong>The engine of war.</strong> This building that dudes hang out in and train for battle and stuff. Also where new 'recruits' magically appear, ready for battle.
                     </Popover>,
             },
@@ -108,7 +117,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 image:Buildings.GoldMine,
                 scale:buildingScale,
                 tooltip:
-                    <Popover title={makeTooltip('Build Gold Mine')}>
+                    <Popover title={makeTooltip('Build Gold Mine', 'GoldMine')}>
                         <strong>Gooooolllld.</strong> Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign.
                     </Popover>,
             },
@@ -116,7 +125,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 image:Buildings.JadeMine,
                 scale:buildingScale,
                 tooltip:
-                    <Popover title={makeTooltip('Build Jade Mine')}>
+                    <Popover title={makeTooltip('Build Jade Mine', 'JadeMine')}>
                         <strong>Green is the color of... MAGIC.</strong> From Jade flows all magic, both real and imaginary. Place this jade mine on a jade source on the map.
                         Once built the mine will continuously generate jade for you to use in super sweet <strong>Dragonlord spells</strong>.
                     </Popover>,
@@ -148,7 +157,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 jadeCost = values.SpellCosts[this.props.name];
             } else {
                 var data = values.Buildings[this.props.name];
-                
+
                 goldCost = data.CurrentGoldCost || data.GoldCost || 0;
                 jadeCost = data.CurrentJadeCost || data.JadeCost || 0;
             }
