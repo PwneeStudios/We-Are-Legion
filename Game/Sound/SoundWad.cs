@@ -14,19 +14,19 @@ namespace Game
         /// </summary>
         public static bool SuppressSounds = false;
 
-        public List<EzSound> SoundList;
+        public List<Sound> SoundList;
         public int MaxInstancesPerSound;
 
         public SoundWad(int MaxInstancesPerSound)
         {
             this.MaxInstancesPerSound = MaxInstancesPerSound;
 
-            SoundList = new List<EzSound>();
+            SoundList = new List<Sound>();
         }
 
-        public EzSound FindByName(string name)
+        public Sound FindByName(string name)
         {
-            foreach (EzSound Snd in SoundList)
+            foreach (Sound Snd in SoundList)
                 if (String.Compare(Snd.Name, name, StringComparison.OrdinalIgnoreCase) == 0)
                     return Snd;
 
@@ -35,7 +35,7 @@ namespace Game
 
         public void AddSound(SoundEffect sound, string Name)
         {
-            EzSound NewSound = new EzSound();
+            Sound NewSound = new Sound();
             NewSound.Name = Name;
             NewSound.sound = sound;
             NewSound.MaxInstances = MaxInstancesPerSound;

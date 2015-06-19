@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework.Audio;
 
 namespace Game
 {
-    public class EzSound
+    public class Sound
     {
         public SoundEffect sound;
 
@@ -15,7 +15,7 @@ namespace Game
         public int DelayTillNextSoundCanPlay;
         int LastPlayedStamp;
 
-        public EzSound()
+        public Sound()
         {
             DelayTillNextSoundCanPlay = 1;
 
