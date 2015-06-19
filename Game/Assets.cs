@@ -1,7 +1,10 @@
+using System;
 using System.IO;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Audio;
 
 using FragSharpFramework;
 
@@ -29,55 +32,122 @@ namespace Game
 
             TopUi, Minimap;
 
+        public static BaseSong Song_140mph, Song_Happy;
+        public static List<BaseSong> SongList_Standard = new List<BaseSong>();
+
         public static ContentManager Content { get { return GameClass.Game.Content; } }
 
         public static void Initialize()
         {
-            ScreenTitle        = LoadTexture("Screen-Title");
-            ScreenLoading      = LoadTexture("Screen-Loading");
-            ScreenDark         = LoadTexture("Screen-Paint");
-
-            ScreenSpells       = LoadTexture("Screen-Spells");
-            ScreenInstructions = LoadTexture("Screen-Instructions");
-            ScreenScenarios    = LoadTexture("Screen-Scenarios");
-
-            White               = LoadTexture("White");
-            FarColors           = LoadTexture("FarColors");
-            SimShader.FarColor  = new Field<color>(FarColors);
-
-            DebugTexture_Arrows = LoadTexture("Debug_Arrows");
-            DebugTexture_Num    = LoadTexture("Debug_Num");
-
-            BuildingTexture_1   = LoadTexture("Buildings_1");
-            
-            ExplosionTexture_1  = LoadTexture("BuildingExplosion_1");
-            MagicTexture        = LoadTexture("MagicEffect");
-            SmokeTexture        = LoadTexture("SmokeEffect");
-
-            UnitTexture_1       = LoadTexture("Soldier_1");
-            UnitTexture_2       = LoadTexture("Soldier_2");
-            UnitTexture_4       = LoadTexture("Soldier_4");
-
-            ShadowTexture       = LoadTexture("Shadow");
-
-            TileSpriteSheet_1   = LoadTexture("TileSet_1");
-            TileSpriteSheet_2   = LoadTexture("TileSet_2");
-            TileSpriteSheet_4   = LoadTexture("TileSet_4");
-            TileSpriteSheet_8   = LoadTexture("TileSet_8");
-
-            Cursor              = LoadTexture("Cursor");
-            SelectCircle        = LoadTexture("SelectCircle");
-            SelectCircle_Data   = LoadTexture("SelectCircle_Data");
-            SelectDot           = LoadTexture("SelectDot");
-            AttackMarker        = LoadTexture("AttackMarker");
-
-            AoE_Fire     = LoadTexture("AoE_Fire");
-            AoE_Skeleton = LoadTexture("AoE_Skeleton");
-            AoE_Terra    = LoadTexture("AoE_Terra");
+            LoadTextures();
 
             TopUi = LoadTexture("TopUi");
             Minimap = LoadTexture("Minimap");
         }
+
+        private static void LoadTextures()
+        {
+            ScreenTitle = LoadTexture("Screen-Title");
+            ScreenLoading = LoadTexture("Screen-Loading");
+            ScreenDark = LoadTexture("Screen-Paint");
+
+            ScreenSpells = LoadTexture("Screen-Spells");
+            ScreenInstructions = LoadTexture("Screen-Instructions");
+            ScreenScenarios = LoadTexture("Screen-Scenarios");
+
+            White = LoadTexture("White");
+            FarColors = LoadTexture("FarColors");
+            SimShader.FarColor = new Field<color>(FarColors);
+
+            DebugTexture_Arrows = LoadTexture("Debug_Arrows");
+            DebugTexture_Num = LoadTexture("Debug_Num");
+
+            BuildingTexture_1 = LoadTexture("Buildings_1");
+
+            ExplosionTexture_1 = LoadTexture("BuildingExplosion_1");
+            MagicTexture = LoadTexture("MagicEffect");
+            SmokeTexture = LoadTexture("SmokeEffect");
+
+            UnitTexture_1 = LoadTexture("Soldier_1");
+            UnitTexture_2 = LoadTexture("Soldier_2");
+            UnitTexture_4 = LoadTexture("Soldier_4");
+
+            ShadowTexture = LoadTexture("Shadow");
+
+            TileSpriteSheet_1 = LoadTexture("TileSet_1");
+            TileSpriteSheet_2 = LoadTexture("TileSet_2");
+            TileSpriteSheet_4 = LoadTexture("TileSet_4");
+            TileSpriteSheet_8 = LoadTexture("TileSet_8");
+
+            Cursor = LoadTexture("Cursor");
+            SelectCircle = LoadTexture("SelectCircle");
+            SelectCircle_Data = LoadTexture("SelectCircle_Data");
+            SelectDot = LoadTexture("SelectDot");
+            AttackMarker = LoadTexture("AttackMarker");
+
+            AoE_Fire = LoadTexture("AoE_Fire");
+            AoE_Skeleton = LoadTexture("AoE_Skeleton");
+            AoE_Terra = LoadTexture("AoE_Terra");
+        }
+
+        private static void LoadMusic()
+        {
+            SongWad.Wad = new SongWad();
+
+            SongWad.Wad.PlayerControl = SongWad.Wad.DisplayInfo = true;
+
+            string path = Path.Combine(Content.RootDirectory, "Music");
+            string[] files = Directory.GetFiles(path);
+
+            foreach (String file in files)
+            {
+                int i = file.IndexOf("Music") + 5 + 1;
+                if (i < 0) continue;
+                int j = file.IndexOf(".", i);
+                if (j <= i) continue;
+                String name = file.Substring(i, j - i);
+                String extension = file.Substring(j + 1);
+
+                if (extension == "xnb")
+                {
+                    SongWad.Wad.AddSong(name);
+                }
+            }
+
+            float ReduceAll = .8f;
+
+            Song_Happy = SongWad.Wad.FindByName("Happy^James_Stant");
+            Song_Happy.Volume = .9f * ReduceAll;
+
+            Song_140mph = SongWad.Wad.FindByName("140_Mph_in_the_Fog^Blind_Digital");
+            Song_140mph.Volume = .5f * ReduceAll;
+
+            // Create the standard playlist
+            SongList_Standard.AddRange(SongWad.Wad.SongList);
+            SongList_Standard.Remove(Song_Happy);
+        }
+
+        static void LoadSound()
+        {
+            string path = Path.Combine(Content.RootDirectory, "Sound");
+            string[] files = Directory.GetFiles(path);
+
+            foreach (String file in files)
+            {
+                int i = file.IndexOf("Sound") + 5 + 1;
+                if (i < 0) continue;
+                int j = file.IndexOf(".", i);
+                if (j <= i) continue;
+                String name = file.Substring(i, j - i);
+                String extension = file.Substring(j + 1);
+
+                if (extension == "xnb")
+                {
+                    SoundWad.Wad.AddSound(Content.Load<SoundEffect>("Sound\\" + name), name);
+                }
+            }
+        }
+
 
 #if DEBUG
         public static bool HotSwap = false;

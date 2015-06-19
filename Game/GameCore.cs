@@ -49,6 +49,7 @@ namespace Game
         public static GameClass Game;
         public static GameTime Time;
         public static double ElapsedSeconds { get { return Time.ElapsedGameTime.TotalSeconds; } }
+        public static double DeltaT = 0;
 
         public const bool UnlimitedSpeed = false;
         public const bool MouseEnabled = true;
@@ -343,7 +344,7 @@ namespace Game
             */
         }
 
-        int DrawCount = 0;
+        public int DrawCount = 0;
         bool FocusSaved = false;
 
         protected override void OnExiting(object sender, EventArgs args)
@@ -362,6 +363,8 @@ namespace Game
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            DeltaT = gameTime.ElapsedGameTime.TotalSeconds;
+
             if (NeedsApplication)
             {
                 DoActivation();

@@ -136,6 +136,10 @@
     <Compile Include="Drawing\DrawAntiMagic.cs" />
     <Compile Include="LobbyInfo.cs" />
     <Compile Include="Networking\Connection.cs" />
+    <Compile Include="Song\EzSong.cs" />
+    <Compile Include="Song\EzSongWad.cs" />
+    <Compile Include="Sound\EzSound.cs" />
+    <Compile Include="Sound\EzSoundWad.cs" />
     <Compile Include="TestSteam.cs" />
     <Compile Include="GameLogic.cs" />
     <Compile Include="Ui\Logic\GeneralInput.cs" />
