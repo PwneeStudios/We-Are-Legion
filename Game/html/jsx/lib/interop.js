@@ -88,6 +88,12 @@ define(['lodash'], function(_) {
                 xna.SetLobbyType(type);
             }
         },
+
+        playSound: function(sound) {
+            if (interop.InXna()) {
+                xna.PlaySound(sound);
+            }
+        },
     };
     
     return interop;

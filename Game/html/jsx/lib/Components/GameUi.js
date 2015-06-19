@@ -1,6 +1,6 @@
 define(['lodash', 'react', 'interop', 'events',
         'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual', 'Components/GameOver'],
-    function(_, React,interop, events,
+    function(_, React, interop, events,
             InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual, GameOver) {
  
     return React.createClass({

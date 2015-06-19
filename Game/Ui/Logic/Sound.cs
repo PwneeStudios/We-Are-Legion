@@ -29,21 +29,21 @@ using Newtonsoft.Json;
 
 namespace Game
 {
-    using Dict = Dictionary<string, object>;
-
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
-        void BindMethods()
+        void BindMethods_Sound()
         {
-            BindMethods_GeneralInput();
-            BindMethods_Sound();
+            xnaObj.Bind("PlaySound", PlaySound);
+        }
 
-            BindMethods_FindLobby();
-            BindMethods_Lobby();
-            BindMethods_Menu();
-            BindMethods_Options();
+        JSValue PlaySound(object sender, JavascriptMethodEventArgs e)
+        {
+            string soundName = e.Arguments[0].ToString();
 
-            BindMethods_InGame();
+            var sound = SoundWad.Wad.FindByName(soundName);
+            if (sound != null) sound.Play();
+
+            return JSValue.Null;
         }
     }
 }

@@ -142,6 +142,7 @@
     <Compile Include="Sound\EzSoundWad.cs" />
     <Compile Include="TestSteam.cs" />
     <Compile Include="GameLogic.cs" />
+    <Compile Include="Ui\Logic\Sound.cs" />
     <Compile Include="Ui\Logic\GeneralInput.cs" />
     <Compile Include="Ui\Logic\Lobby.cs" />
     <Compile Include="Ui\Logic\FindCreateLobby.cs" />

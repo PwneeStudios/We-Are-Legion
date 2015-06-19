@@ -1,4 +1,4 @@
-define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap) {
+define(['lodash', 'sound', 'react', 'react-bootstrap'], function(_, sound, React, ReactBootstrap) {
     var NavItem = ReactBootstrap.NavItem;
 
     return React.createClass({
@@ -18,7 +18,7 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
 
         render: function() {
             return (
-                React.createElement(NavItem, React.__spread({},  this.props, {onClick: this.onClick}), 
+                React.createElement(NavItem, React.__spread({},  this.props, {onClick: this.onClick, onMouseEnter: sound.onEvent('Menu_Back')}), 
                     React.createElement("h3", null, this.props.children)
                 )
             );
