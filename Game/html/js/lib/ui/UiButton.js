@@ -1,4 +1,4 @@
-define(['lodash', 'react', 'react-bootstrap', 'interop', 'ui/RenderAtMixin'], function(_, React, ReactBootstrap, interop, RenderAtMixin) {
+define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'ui/RenderAtMixin'], function(_, sound, React, ReactBootstrap, interop, RenderAtMixin) {
     var OverlayTrigger = ReactBootstrap.OverlayTrigger;
     var Popover = ReactBootstrap.Popover;
     
@@ -13,6 +13,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'ui/RenderAtMixin'], fu
         
         onClick: function() {
             if (this.props.onClick) {
+                sound.play.click();
                 this.props.onClick();
             }
             

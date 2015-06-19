@@ -1,4 +1,4 @@
-define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, React, ReactBootstrap, interop, events, ui, Chat) {
+define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, sound, React, ReactBootstrap, interop, events, ui, Chat) {
     var Panel = ReactBootstrap.Panel;
     var Button = ReactBootstrap.Button;
     var Well = ReactBootstrap.Well;
@@ -136,7 +136,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             <Div nonBlocking pos={pos(38,80)} size={width(60)}>
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
-                                        <Button onClick={back}>Back</Button>
+                                        {ui.BackButton()}
                                     </p>
                                 </div>
                             </Div>

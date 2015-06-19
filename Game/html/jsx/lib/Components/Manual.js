@@ -23,60 +23,60 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
     var subImage = ui.subImage;
 
     return React.createClass({
-    getInitialState: function() {
-        return {
-            index: 0,
-            direction: null
-        };
-    },
+        getInitialState: function() {
+            return {
+                index: 0,
+                direction: null
+            };
+        },
 
-    handleSelect: function(selectedIndex, selectedDirection) {
-        this.setState({
-            index: selectedIndex,
-            direction: selectedDirection
-        });
-    },
+        handleSelect: function(selectedIndex, selectedDirection) {
+            this.setState({
+                index: selectedIndex,
+                direction: selectedDirection
+            });
+        },
 
-    render: function() {
-        return (
-            <Div pos={pos(0,0)} size={size(100,100)} style={{'pointer-events':'auto'}}>
-                <Carousel activeIndex={this.state.index} direction={this.state.direction} onSelect={this.handleSelect}>
-                    <CarouselItem style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
-                        <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Instructions.png'}}/>
+        render: function() {
+            return (
+                <Div pos={pos(0,0)} size={size(100,100)} style={{'pointer-events':'auto'}}>
+                    <Carousel activeIndex={this.state.index} direction={this.state.direction} onSelect={this.handleSelect}>
+                        <CarouselItem style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
+                            <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Instructions.png'}}/>
 
-                        <div className='carousel-caption'>
-                            <h3>First slide label</h3>
-                            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                            <div className='carousel-caption'>
+                                <h3>First slide label</h3>
+                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                            </div>
+                        </CarouselItem>
+                        <CarouselItem>
+                            <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Spells.png'}}/>
+
+                            <div className='carousel-caption'>
+                                <h3>Second slide label</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </CarouselItem>
+                        <CarouselItem>
+                            <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Instructions.png'}}/>
+
+                            <div className='carousel-caption'>
+                                <h3>Third slide label</h3>
+                                <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                            </div>
+                        </CarouselItem>
+                    </Carousel>
+
+                    {/* Buttons */}
+                    <Div className='top' nonBlocking pos={pos(90,90)} size={width(60)}>
+                        <div style={{'pointer-events':'auto'}}>
+                            <p>
+                                {ui.BackButton()}
+                            </p>
                         </div>
-                    </CarouselItem>
-                    <CarouselItem>
-                        <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Spells.png'}}/>
-
-                        <div className='carousel-caption'>
-                            <h3>Second slide label</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                        </div>
-                    </CarouselItem>
-                    <CarouselItem>
-                        <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Instructions.png'}}/>
-
-                        <div className='carousel-caption'>
-                            <h3>Third slide label</h3>
-                            <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-                        </div>
-                    </CarouselItem>
-                </Carousel>
-
-                {/* Buttons */}
-                <Div className='top' nonBlocking pos={pos(90,90)} size={width(60)}>
-                    <div style={{'pointer-events':'auto'}}>
-                        <p>
-                            <Button onClick={back}>Back</Button>
-                        </p>
-                    </div>
+                    </Div>
                 </Div>
-            </Div>
-        );
-    }
+            );
+        }
+    });
 });
-}); 

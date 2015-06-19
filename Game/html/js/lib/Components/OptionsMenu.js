@@ -1,4 +1,4 @@
-define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, React, ReactBootstrap, interop, events, ui, Chat) {
+define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, sound, React, ReactBootstrap, interop, events, ui, Chat) {
     var Panel = ReactBootstrap.Panel;
     var Button = ReactBootstrap.Button;
     var Well = ReactBootstrap.Well;
@@ -112,12 +112,20 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     });
 
     var MenuButton = React.createClass({displayName: "MenuButton",
+        onClick: function() {
+            sound.play.click();
+
+            if (this.props.onClick) {
+                this.props.onClick();
+            }
+        },
+
         render: function() {
             return (
                 React.createElement("tr", {style: {'background-color':'#1c1e22','pointer-events':'auto'}}, 
                     React.createElement("td", null), 
                     React.createElement("td", null, 
-                        React.createElement(Button, {onClick: this.props.onClick, style: {'float':'right','width':'100%'}}, 
+                        React.createElement(Button, {onClick: this.onClick, onMouseEnter: sound.play.hover, style: {'float':'right','width':'100%'}}, 
                             this.props.children
                         )
                     )

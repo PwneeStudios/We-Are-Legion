@@ -1,4 +1,4 @@
-define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap) {
+define(['lodash', 'sound', 'react', 'react-bootstrap'], function(_, sound, React, ReactBootstrap) {
     var MenuItem = ReactBootstrap.MenuItem;
 
     return React.createClass({
@@ -22,7 +22,8 @@ define(['lodash', 'react', 'react-bootstrap'], function(_, React, ReactBootstrap
             }
 
             return (
-                React.createElement(MenuItem, {className: className, onClick: this.onSelect, width: "1000px"}, 
+                React.createElement(MenuItem, {className: className, onClick: this.onSelect, width: "1000px", 
+                          onMouseEnter: this.props.disabled ? null : sound.play.listHover}, 
                     this.props.name
                 )
             );

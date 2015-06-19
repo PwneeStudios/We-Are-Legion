@@ -1,4 +1,4 @@
-define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, ReactBootstrap, Item) {
+define(['lodash', 'sound', 'react', 'react-bootstrap', 'ui/Item'], function(_, sound, React, ReactBootstrap, Item) {
     var DropdownButton = ReactBootstrap.DropdownButton;
 
     return React.createClass({
@@ -19,6 +19,8 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, Rea
         },
 
         onSelect: function(item) {
+            sound.play.click();
+
             this.setState({
                 selected: item,
             });
@@ -41,8 +43,9 @@ define(['lodash', 'react', 'react-bootstrap', 'ui/Item'], function(_, React, Rea
 
             return (
                 React.createElement("div", {style: style}, 
-                    React.createElement(DropdownButton, {className: className, disabled: this.props.disabled, title: item.selectedName || item.name}, 
-                        _.map(this.props.choices, function(choice) { 
+                    React.createElement(DropdownButton, {className: className, disabled: this.props.disabled, title: item.selectedName || item.name, 
+                                    onMouseEnter: this.props.disabled ? null : sound.play.hover}, 
+                        _.map(this.props.choices, function(choice) {
                             //var _choice = _.clone(choice);
                             return (
                                 React.createElement(Item, {disabled: choice.taken, item: choice, name: choice.name, onSelect: self.onSelect})

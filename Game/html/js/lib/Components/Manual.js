@@ -23,60 +23,60 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
     var subImage = ui.subImage;
 
     return React.createClass({
-    getInitialState: function() {
-        return {
-            index: 0,
-            direction: null
-        };
-    },
+        getInitialState: function() {
+            return {
+                index: 0,
+                direction: null
+            };
+        },
 
-    handleSelect: function(selectedIndex, selectedDirection) {
-        this.setState({
-            index: selectedIndex,
-            direction: selectedDirection
-        });
-    },
+        handleSelect: function(selectedIndex, selectedDirection) {
+            this.setState({
+                index: selectedIndex,
+                direction: selectedDirection
+            });
+        },
 
-    render: function() {
-        return (
-            React.createElement(Div, {pos: pos(0,0), size: size(100,100), style: {'pointer-events':'auto'}}, 
-                React.createElement(Carousel, {activeIndex: this.state.index, direction: this.state.direction, onSelect: this.handleSelect}, 
-                    React.createElement(CarouselItem, {style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
-                        React.createElement(UiImage, {width: 100, image: {width:1920, height:1080, url:'css/Screen-Instructions.png'}}), 
+        render: function() {
+            return (
+                React.createElement(Div, {pos: pos(0,0), size: size(100,100), style: {'pointer-events':'auto'}}, 
+                    React.createElement(Carousel, {activeIndex: this.state.index, direction: this.state.direction, onSelect: this.handleSelect}, 
+                        React.createElement(CarouselItem, {style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
+                            React.createElement(UiImage, {width: 100, image: {width:1920, height:1080, url:'css/Screen-Instructions.png'}}), 
 
-                        React.createElement("div", {className: "carousel-caption"}, 
-                            React.createElement("h3", null, "First slide label"), 
-                            React.createElement("p", null, "Nulla vitae elit libero, a pharetra augue mollis interdum.")
+                            React.createElement("div", {className: "carousel-caption"}, 
+                                React.createElement("h3", null, "First slide label"), 
+                                React.createElement("p", null, "Nulla vitae elit libero, a pharetra augue mollis interdum.")
+                            )
+                        ), 
+                        React.createElement(CarouselItem, null, 
+                            React.createElement(UiImage, {width: 100, image: {width:1920, height:1080, url:'css/Screen-Spells.png'}}), 
+
+                            React.createElement("div", {className: "carousel-caption"}, 
+                                React.createElement("h3", null, "Second slide label"), 
+                                React.createElement("p", null, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
+                            )
+                        ), 
+                        React.createElement(CarouselItem, null, 
+                            React.createElement(UiImage, {width: 100, image: {width:1920, height:1080, url:'css/Screen-Instructions.png'}}), 
+
+                            React.createElement("div", {className: "carousel-caption"}, 
+                                React.createElement("h3", null, "Third slide label"), 
+                                React.createElement("p", null, "Praesent commodo cursus magna, vel scelerisque nisl consectetur.")
+                            )
                         )
                     ), 
-                    React.createElement(CarouselItem, null, 
-                        React.createElement(UiImage, {width: 100, image: {width:1920, height:1080, url:'css/Screen-Spells.png'}}), 
 
-                        React.createElement("div", {className: "carousel-caption"}, 
-                            React.createElement("h3", null, "Second slide label"), 
-                            React.createElement("p", null, "Lorem ipsum dolor sit amet, consectetur adipiscing elit.")
-                        )
-                    ), 
-                    React.createElement(CarouselItem, null, 
-                        React.createElement(UiImage, {width: 100, image: {width:1920, height:1080, url:'css/Screen-Instructions.png'}}), 
-
-                        React.createElement("div", {className: "carousel-caption"}, 
-                            React.createElement("h3", null, "Third slide label"), 
-                            React.createElement("p", null, "Praesent commodo cursus magna, vel scelerisque nisl consectetur.")
-                        )
-                    )
-                ), 
-
-                /* Buttons */
-                React.createElement(Div, {className: "top", nonBlocking: true, pos: pos(90,90), size: width(60)}, 
-                    React.createElement("div", {style: {'pointer-events':'auto'}}, 
-                        React.createElement("p", null, 
-                            React.createElement(Button, {onClick: back}, "Back")
+                    /* Buttons */
+                    React.createElement(Div, {className: "top", nonBlocking: true, pos: pos(90,90), size: width(60)}, 
+                        React.createElement("div", {style: {'pointer-events':'auto'}}, 
+                            React.createElement("p", null, 
+                                ui.BackButton()
+                            )
                         )
                     )
                 )
-            )
-        );
-    }
+            );
+        }
+    });
 });
-}); 

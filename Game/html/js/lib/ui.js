@@ -1,5 +1,7 @@
-define(['lodash', 'ui/Div', 'ui/Gap', 'ui/RenderAtMixin', 'ui/UiImage', 'ui/UiButton', 'ui/Dropdown', 'ui/Item', 'ui/MenuItem', 'ui/Menu', 'ui/OptionList', 'ui/util'],
-function(_, Div, Gap, RenderAtMixin, UiImage, UiButton, Dropdown, Item, MenuItem, Menu, OptionList, util) {
+define(['lodash', 'sound', 'react', 'react-bootstrap', 'ui/Div', 'ui/Gap', 'ui/RenderAtMixin', 'ui/UiImage', 'ui/UiButton', 'ui/Dropdown', 'ui/Item', 'ui/MenuItem', 'ui/Menu', 'ui/OptionList', 'ui/util'],
+function(_, sound, React, ReactBootstrap, Div, Gap, RenderAtMixin, UiImage, UiButton, Dropdown, Item, MenuItem, Menu, OptionList, util) {
+    var Button = ReactBootstrap.Button;
+
     var ui = {
         Div: Div,
         Gap: Gap,
@@ -14,6 +16,17 @@ function(_, Div, Gap, RenderAtMixin, UiImage, UiButton, Dropdown, Item, MenuItem
         MenuItem: MenuItem,
 
         OptionList: OptionList,
+
+        back: function() {
+            sound.play.back();
+            window.back();
+        },
+
+        BackButton: function() {
+            return (
+                React.createElement(Button, {onMouseEnter: sound.play.hover, onClick: ui.back}, "Back")
+            );
+        },
         
         RenderAtMixin: RenderAtMixin,
     };

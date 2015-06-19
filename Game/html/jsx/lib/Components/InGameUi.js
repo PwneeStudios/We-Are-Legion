@@ -1,4 +1,4 @@
-define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, React, ReactBootstrap, interop, events, ui, Chat) {
+define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, sound, React, ReactBootstrap, interop, events, ui, Chat) {
     var Input = ReactBootstrap.Input;
     var Popover = ReactBootstrap.Popover;
     var Button = ReactBootstrap.Button;
@@ -271,7 +271,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 <div>
                     <Div nonBlocking pos={pos(0,0,'absolute')} style={{'float':'right', 'pointer-events':'auto'}}>
                         <Button style={{position:'absolute', 'pointer-events':'auto'}}
-                                onClick={function() { window.setScreen('in-game-menu'); }}>
+                                onClick={function() { window.setScreen('in-game-menu'); sound.play.click(); }}>
                             <Glyphicon glyph='arrow-up' />
                         </Button>
                     </Div>
