@@ -195,8 +195,8 @@ div.scroll-dropdown ul {
    ------ */
 
 button {
-    user-select: text;
-    -webkit-user-select: text;
+    user-select: none;
+    -webkit-user-select: none;
     font-family: Verdana, Geneva, sans-serif;
 }
 
