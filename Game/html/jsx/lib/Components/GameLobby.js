@@ -376,9 +376,9 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                     <p>
                                         {this.props.params.host ? 
                                             <ModalTrigger modal={<MapPicker maps={this.state.maps} onPick={this.onMapPick} />}>
-                                                <Button disabled={disabled} bsStyle='primary' bsSize='large'>
+                                                <ui.Button disabled={disabled} bsStyle='primary' bsSize='large'>
                                                     Choose map...
-                                                </Button>
+                                                </ui.Button>
                                             </ModalTrigger>
                                             : null}
                                     </p>
@@ -398,10 +398,10 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
                                         {this.props.params.host ?
-                                            <Button disabled={preventStart} onClick={this.onClickStart}>Start Game</Button>
+                                            <ui.Button disabled={preventStart} onClick={this.onClickStart}>Start Game</ui.Button>
                                             : null}
                                         &nbsp;
-                                        <Button disabled={disabled} onClick={this.leaveLobby}>Leave Lobby</Button>
+                                        <ui.Button disabled={disabled} onClick={this.leaveLobby}>Leave Lobby</ui.Button>
                                     </p>
                                 </div>
                             </Div>

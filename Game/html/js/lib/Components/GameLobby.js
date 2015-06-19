@@ -376,7 +376,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                     React.createElement("p", null, 
                                         this.props.params.host ? 
                                             React.createElement(ModalTrigger, {modal: React.createElement(MapPicker, {maps: this.state.maps, onPick: this.onMapPick})}, 
-                                                React.createElement(Button, {disabled: disabled, bsStyle: "primary", bsSize: "large"}, 
+                                                React.createElement(ui.Button, {disabled: disabled, bsStyle: "primary", bsSize: "large"}, 
                                                     "Choose map..."
                                                 )
                                             )
@@ -398,10 +398,10 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
                                     React.createElement("p", null, 
                                         this.props.params.host ?
-                                            React.createElement(Button, {disabled: preventStart, onClick: this.onClickStart}, "Start Game")
+                                            React.createElement(ui.Button, {disabled: preventStart, onClick: this.onClickStart}, "Start Game")
                                             : null, 
                                         " ", 
-                                        React.createElement(Button, {disabled: disabled, onClick: this.leaveLobby}, "Leave Lobby")
+                                        React.createElement(ui.Button, {disabled: disabled, onClick: this.leaveLobby}, "Leave Lobby")
                                     )
                                 )
                             )

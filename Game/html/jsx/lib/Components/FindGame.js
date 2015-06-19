@@ -136,7 +136,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                             <Div nonBlocking pos={pos(38,80)} size={width(60)}>
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
-                                        {ui.BackButton()}
+                                        <ui.BackButton />
                                     </p>
                                 </div>
                             </Div>

@@ -71,7 +71,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                     <Div className='top' nonBlocking pos={pos(90,90)} size={width(60)}>
                         <div style={{'pointer-events':'auto'}}>
                             <p>
-                                {ui.BackButton()}
+                                <ui.BackButton />
                             </p>
                         </div>
                     </Div>

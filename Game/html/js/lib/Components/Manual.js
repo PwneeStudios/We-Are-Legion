@@ -71,7 +71,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                     React.createElement(Div, {className: "top", nonBlocking: true, pos: pos(90,90), size: width(60)}, 
                         React.createElement("div", {style: {'pointer-events':'auto'}}, 
                             React.createElement("p", null, 
-                                ui.BackButton()
+                                React.createElement(ui.BackButton, null)
                             )
                         )
                     )

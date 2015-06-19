@@ -22,11 +22,37 @@ function(_, sound, React, ReactBootstrap, Div, Gap, RenderAtMixin, UiImage, UiBu
             window.back();
         },
 
-        BackButton: function() {
-            return (
-                <Button onMouseEnter={sound.play.hover} onClick={ui.back}>Back</Button>
-            );
-        },
+        BackButton: React.createClass({
+            render: function() {
+                return (
+                    <Button onMouseEnter={sound.play.hover} onClick={ui.back}>
+                        Back
+                    </Button>
+                );
+            },
+        }),
+
+        Button: React.createClass({
+            onClick: function() {
+                sound.play.click();
+
+                if (this.props.onClick !== null) {
+                    this.props.onClick();
+                }
+            },
+
+            render: function() {
+                return (
+                    <Button
+                        {...this.props}
+                        disabled={this.props.disabled}
+                        onClick={this.onClick}
+                        onMouseEnter={sound.play.hover}>
+                        {this.props.children}
+                    </Button>
+                );
+            },
+        }),
         
         RenderAtMixin: RenderAtMixin,
     };

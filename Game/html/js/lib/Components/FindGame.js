@@ -136,7 +136,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                             React.createElement(Div, {nonBlocking: true, pos: pos(38,80), size: width(60)}, 
                                 React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
                                     React.createElement("p", null, 
-                                        ui.BackButton()
+                                        React.createElement(ui.BackButton, null)
                                     )
                                 )
                             )
