@@ -65,6 +65,20 @@ namespace Game
             }
 
             ShouldStartMenuMusic = false;
+            ShouldFadeOutMenuMusic = true;
+            ShouldStartGameMusic = true;
+        }
+
+        bool ShouldFadeOutMenuMusic = true;
+        void FadeOutMenuMusicIfNeeded()
+        {
+            if (ShouldFadeOutMenuMusic)
+            {
+                FadeOutMenuMusic();
+            }
+
+            ShouldStartMenuMusic = false;
+            ShouldFadeOutMenuMusic = false;
             ShouldStartGameMusic = true;
         }
 
@@ -185,6 +199,8 @@ namespace Game
                     break;
 
                 case GameState.Loading:
+                    FadeOutMenuMusicIfNeeded();
+
                     PreGame();
 
                     Render.StandardRenderSetup();
@@ -215,15 +231,16 @@ namespace Game
 #if DEBUG
                     const float LoadTime = .3f;
 #else
-                    const float LoadTime = 1.3f;
+                    const float LoadTime = 2.7f;
 #endif
+                    const float FadeLength = .7f;
 
                     if (TimeSinceLoad > LoadTime)
                     {
-                        BlackOverlay((float)(TimeSinceLoad - LoadTime) / .7f);
+                        BlackOverlay((float)(TimeSinceLoad - LoadTime) / FadeLength);
                     }
 
-                    if (TimeSinceLoad > LoadTime + .7f)
+                    if (TimeSinceLoad > LoadTime + FadeLength)
                     {
                         State = GameState.Game;
                     }
@@ -283,6 +300,11 @@ namespace Game
             SongWad.Wad.SuppressNextInfoDisplay = true;
             SongWad.Wad.SetPlayList(Assets.Song_MenuMusic);
             SongWad.Wad.Restart(true);
+        }
+
+        public void FadeOutMenuMusic()
+        {
+            SongWad.Wad.FadeOut();
         }
 
         public void PlayGameMusic()

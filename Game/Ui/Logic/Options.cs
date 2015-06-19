@@ -47,29 +47,40 @@ namespace Game
             xnaObj.Bind("GetResolutionValues", GetResolutionValues);
         }
 
-        double MusicVolume, SoundVolume;
+        float ArgTo0to1(JSValue arg)
+        {
+            float val = (float)double.Parse(arg.ToString());
+            
+            if (val < 0) val = 0;
+            if (val > 1) val = 1;
+
+            return val;
+        }
+
         JSValue SetSoundVolume(object sender, JavascriptMethodEventArgs e)
         {
-            SoundVolume = double.Parse(e.Arguments[0].ToString());
+            CurrentConfig.SoundVolume = ArgTo0to1(e.Arguments[0]);
+            SaveConfig();
 
             return JSValue.Null;
         }
 
         JSValue GetSoundVolume(object sender, JavascriptMethodEventArgs e)
         {
-            return SoundVolume;
+            return CurrentConfig.SoundVolume;
         }
 
         JSValue SetMusicVolume(object sender, JavascriptMethodEventArgs e)
         {
-            MusicVolume = double.Parse(e.Arguments[0].ToString());
+            CurrentConfig.MusicVolume = ArgTo0to1(e.Arguments[0]);
+            SaveConfig();
 
             return JSValue.Null;
         }
 
         JSValue GetMusicVolume(object sender, JavascriptMethodEventArgs e)
         {
-            return MusicVolume;
+            return CurrentConfig.MusicVolume;
         }
 
         JSValue SetFullscreen(object sender, JavascriptMethodEventArgs e)
