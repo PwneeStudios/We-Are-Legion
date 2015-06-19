@@ -71,6 +71,8 @@ namespace Game
         int ChatInhibitor = 0;
         public void Update()
         {
+            if (!GameClass.Game.GameInputEnabled) return;
+
             EditorUpdate();
 
             float FpsRateModifier = 1;

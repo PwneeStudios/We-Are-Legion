@@ -380,15 +380,17 @@ namespace Game
             DrawMouseUi(AfterUi: false);
             Markers.Draw(DrawOrder.AfterMouse);
 
-            DrawMinimap();
+            if (GameClass.Game.MinimapEnabled)
+            {
+                DrawMinimap();
+            }
         }
 
         public void DrawUi()
         {
             Render.StandardRenderSetup();
 
-            //DrawTopUi();
-            DrawSelectedInfo();
+            if (GameClass.Game.UnitDisplayEnabled) DrawSelectedInfo();
             DrawMouseUi(AfterUi: true);
 
             if (MyPlayerNumber == 0) return;
@@ -527,14 +529,6 @@ namespace Game
             Ui.e.SetupPosition(vec(a - 1.46851851851852f, 0.90925925925926f), vec(a - 1.4f, 0.94074074074074f));
         }
 
-        void DrawTopUi()
-        {
-            MakeTopUi();
-            TopUi.Draw();
-            TopUi_Player1.Draw();
-            //TopUi_Player2.Draw();
-        }
-
         vec2 ToBatchCoord(vec2 p)
         {
             return vec((p.x + CameraAspect) / (2 * CameraAspect), (1 - (p.y + 1) / 2)) * GameClass.Screen;
@@ -542,63 +536,9 @@ namespace Game
 
         void DrawUiText()
         {
-            // Top Ui
-            //Ui.ActiveUi = TopUi_Player1;
-            //DrawPlayerInfo(MyPlayerNumber);
-            //Ui.ActiveUi = TopUi_Player2;
-            //DrawPlayerInfo(2);
-
-            //// Ui Text
-            //DrawUi_TopInfo();
-            //DrawUi_PlayerGrid();
-            //DrawUi_CursorText();
-
-            // Spell
-            //DrawUi_SpellText();
-
             // User Messages
             UserMessages.Update();
             UserMessages.Draw();
-        }
-
-        void DrawPlayerInfo(int player)
-        {
-            string s;
-            float scale = .5f;
-            vec2 offset = vec(.0043f, .012f);
-
-            Ui.Element("[Text] Barrackses");
-            s = string.Format("{0:#,##0}", DataGroup.BarracksCount[player]);
-            Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
-
-            Ui.Element("[Text] Units");
-            s = string.Format("{0:#,##0}", DataGroup.UnitCount[player]);
-            Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
-
-            Ui.Element("[Text] Gold mines");
-            s = string.Format("{0:#,##0}", PlayerInfo[player][UnitType.GoldMine].Count);
-            Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
-            
-            Ui.Element("[Text] Gold");
-            s = string.Format("{0:#,##0}", PlayerInfo[player].Gold);
-            Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
-
-            Ui.Element("[Text] Jade mines");
-            s = string.Format("{0:#,##0}", PlayerInfo[player][UnitType.JadeMine].Count);
-            Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
-
-            Ui.Element("[Text] Jade");
-            s = string.Format("{0:#,##0}", PlayerInfo[player].Jade);
-            Render.DrawText(s, ToBatchCoord(Ui.e.Tl + offset), scale);
-        }
-
-        void DrawUi_SpellText()
-        {
-            if (CurUserMode == UserMode.CastSpell)
-            {
-                string s = CurSpell.Name;
-                Render.DrawText(s, GameClass.Screen * vec(.95f, .985f), 1, rgba(0xdddddd, .95f), Alignment.Right | Alignment.Bottom);
-            }
         }
 
         void MapEditorUiText()
@@ -629,6 +569,13 @@ namespace Game
         void DrawMouseUi(bool AfterUi)
         {
             CanPlaceItem = false;
+
+            if (!GameClass.Game.GameInputEnabled)
+            {
+                if (AfterUi) DrawArrowCursor();
+                return;
+            }
+
             if (GameClass.MouseEnabled)
             {
                 switch (CurUserMode)

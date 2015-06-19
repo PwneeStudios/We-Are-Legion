@@ -50,6 +50,7 @@ namespace Game
         public bool[]
             UnitSummary = new bool[Int(UnitType.Last)],
             PrevUnitSummary = new bool[Int(UnitType.Last)];
+
         public void DoUnitSummary(float player, bool only_selected)
         {
             Swap(ref UnitSummary, ref PrevUnitSummary);

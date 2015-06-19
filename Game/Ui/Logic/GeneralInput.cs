@@ -42,15 +42,21 @@ namespace Game
         }
 
         public bool GameInputEnabled = true;
+        public bool MinimapEnabled = true;
+        public bool UnitDisplayEnabled = true;
         JSValue DisableGameInput(object sender, JavascriptMethodEventArgs e)
         {
             GameInputEnabled = false;
+            MinimapEnabled = false;
+            UnitDisplayEnabled = false;
             return JSValue.Null;
         }
 
         JSValue EnableGameInput(object sender, JavascriptMethodEventArgs e)
         {
             GameInputEnabled = true;
+            MinimapEnabled = true;
+            UnitDisplayEnabled = true;
             return JSValue.Null;
         }
 

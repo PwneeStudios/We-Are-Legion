@@ -320,7 +320,15 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
     
     return React.createClass({
         mixins: [events.UpdateMixin, events.ShowUpdateMixin],
-                
+
+        componentDidMount: function() {
+            interop.enableGameInput();
+        },
+        
+        componentWillUnmount: function() {
+            interop.disableGameInput();
+        },
+
         onShowUpdate: function(values) {
             if (this.state.ShowChat === values.ShowChat &&
                 this.state.ShowAllPlayers === values.ShowAllPlayers) {

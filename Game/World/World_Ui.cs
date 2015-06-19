@@ -22,62 +22,43 @@ namespace Game
 
         void DrawSelectedInfo()
         {
-            //switch (CurUserMode)
-            //{
-            //    case UserMode.Select:
-                    color clr = rgba(0x888888, .5f).Premultiplied;
+            color clr = rgba(0x888888, .5f).Premultiplied;
 
-                    bool building_selected = UnitType.BuildingVals.Any(type => DataGroup.UnitSummary[Int(type) - 1]);
+            bool building_selected = UnitType.BuildingVals.Any(type => DataGroup.UnitSummary[Int(type) - 1]);
 
-                    vec2 size = vec(.145f, .145f);
-                    float building_scale = 1.4f;
-                    float building_shift = building_selected ? (building_scale - 1) * 2 * size.x : 0;
-                    vec2 shift = vec(-size.x, 0);
-                    vec2 start = vec(CameraAspect, -1) + vec(-.1f, .21f);
-                    vec2 cur_pos = start - vec(building_shift, 0);
+            vec2 size = vec(.145f, .145f);
+            float building_scale = 1.4f;
+            float building_shift = building_selected ? (building_scale - 1) * 2 * size.x : 0;
+            vec2 shift = vec(-size.x, 0);
+            vec2 start = vec(CameraAspect, -1) + vec(-.1f, .21f);
+            vec2 cur_pos = start - vec(building_shift, 0);
 
-                    //unit_count = string.Format("{0:#,##0}", DataGroup.UnitCountUi);
-                    //float text_width = Render.MeasureString(unit_count, 1f).x * 1f;
-                    //float count = NumUnitTypesSelected();
-                    //if (count > 0) count += .5f;
-                    //float ui_box_width = .1f * count / 2 + UiSizeToScreenSize(vec(text_width, 0)).x + size.x * .7f + building_shift / 2;
-                    //vec2 box_size = vec(ui_box_width, .1f);
-                    //DrawSolid.Using(vec(0, 0, 1, 1), CameraAspect, clr);
-                    //RectangleQuad.Draw(GameClass.Graphics, start - box_size.FlipY() + vec(.008f, -.008f), box_size);
+            for (int i = Int(UnitType.Count) - 1; i>= 0 ; i--)
+            {
+                if (DataGroup.UnitSummary[i])
+                {
+                    float type = _[i + 1];
 
-                    for (int i = Int(UnitType.Count) - 1; i>= 0 ; i--)
+                    vec2 pos = cur_pos + -2 * size.FlipY();
+
+                    vec2 s = size;
+                    if (IsBuilding(type))
                     {
-                        if (DataGroup.UnitSummary[i])
-                        {
-                            float type = _[i + 1];
-
-                            vec2 pos = cur_pos + -2 * size.FlipY();
-
-                            vec2 s = size;
-                            if (IsBuilding(type))
-                            {
-                                s *= building_scale;
-                                pos.y += s.y * .2f;
-                            }
-
-                            SetUnitQuad(pos, s, type, MyPlayerNumber, (GameClass.World.DrawCount / 7) % UnitSpriteSheet.AnimLength, Dir.Left, q);
-
-                            bool FilteredOut = SelectionFilter.FilterHasUnit(CurSelectionFilter, type);
-                            color Shade = FilteredOut ? rgb(0xffffff) : rgb(0x000000);
-
-                            DrawColoredTexture.Using(vec(0, 0, 1, 1), CameraAspect, q.Texture, Shade);
-                            q.Draw(GameClass.Graphics);
-
-                            cur_pos += shift;
-                        }
+                        s *= building_scale;
+                        pos.y += s.y * .2f;
                     }
 
-                    //if (DataGroup.UnitCountUi > 0)
-                    //    cur_pos += shift;
-                    //count_text_pos = cur_pos + vec(-.023f, -0.0225f);
+                    SetUnitQuad(pos, s, type, MyPlayerNumber, (GameClass.World.DrawCount / 7) % UnitSpriteSheet.AnimLength, Dir.Left, q);
 
-            //        break;
-            //}
+                    bool FilteredOut = SelectionFilter.FilterHasUnit(CurSelectionFilter, type);
+                    color Shade = FilteredOut ? rgb(0xffffff) : rgb(0x000000);
+
+                    DrawColoredTexture.Using(vec(0, 0, 1, 1), CameraAspect, q.Texture, Shade);
+                    q.Draw(GameClass.Graphics);
+
+                    cur_pos += shift;
+                }
+            }
         }
 
         void DrawUi_CursorText()
