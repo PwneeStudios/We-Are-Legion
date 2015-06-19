@@ -18,7 +18,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap'], function(_, sound, React
 
         render: function() {
             return (
-                <NavItem {...this.props} onClick={this.onClick} onMouseEnter={sound.onEvent('Menu_Back')}>
+                <NavItem {...this.props} onClick={this.onClick} onMouseEnter={sound.play.hover}>
                     <h3>{this.props.children}</h3>
                 </NavItem>
             );

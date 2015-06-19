@@ -41,9 +41,10 @@ namespace Game
             if (!awesomium.AllowMouseEvents) return JSValue.Null;
 
             string soundName = e.Arguments[0].ToString();
+            float volume = ArgTo0to1(e.Arguments[1]);
 
             var sound = SoundWad.Wad.FindByName(soundName);
-            if (sound != null) sound.Play();
+            if (sound != null) sound.Play(volume);
 
             return JSValue.Null;
         }

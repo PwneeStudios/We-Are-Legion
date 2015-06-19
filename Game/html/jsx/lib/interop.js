@@ -89,9 +89,13 @@ define(['lodash'], function(_) {
             }
         },
 
-        playSound: function(sound) {
+        playSound: function(sound, vol) {
             if (interop.InXna()) {
-                xna.PlaySound(sound);
+                if (typeof vol === 'undefined') {
+                    vol = 1;
+                }
+
+                xna.PlaySound(sound, vol);
             }
         },
     };

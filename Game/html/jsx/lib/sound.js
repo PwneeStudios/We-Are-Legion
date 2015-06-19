@@ -1,9 +1,19 @@
 define(['lodash', 'interop'], function(_, interop) {
+    var onEvent = function(name) {
+        return function(e) {
+            sound.playSound(name);
+        };
+    };
+
     var sound = {
-        onEvent: function(name) {
-            return function(e) {
-                interop.playSound(name);
-            };
+        playSound: function(name, vol) {
+            interop.playSound(name, vol);
+        },
+
+        play: {
+            hover: onEvent('Menu_Back'),
+            click: onEvent('Menu_Back'),
+            back: onEvent('Menu_Back'),
         },
     };
     
