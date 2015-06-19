@@ -209,7 +209,7 @@ namespace Game
             // Switch to standard select
             if (Keys.Escape.Down() || Keys.Back.Down() || Input.RightMousePressed)
             {
-                if (CurUserMode == UserMode.PlaceBuilding)
+                if (CurUserMode == UserMode.PlaceBuilding || CurUserMode == UserMode.CastSpell)
                     SkipNextSelectionUpdate = true;
 
                 CurUserMode = UserMode.Select;
