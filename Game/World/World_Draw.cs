@@ -659,6 +659,9 @@ namespace Game
             //DrawDirwardInfo.Using(camvec, CameraAspect, DataGroup.Dirward[Dir.Right], Assets.DebugTexture_Arrows); GridHelper.DrawGrid();
             //DrawPolarInfo.Using(camvec, CameraAspect, DataGroup.Geo, DataGroup.GeoInfo, Assets.DebugTexture_Num); GridHelper.DrawGrid();
 
+            // Dragon Lord marker
+            DrawDragonLordMarker();
+
             // Territory and corpses
             if ((CurUserMode == UserMode.PlaceBuilding || CurUserMode == UserMode.CastSpell && CurSpell.TerritoryRange < float.MaxValue)
                 && !MapEditorActive)
@@ -744,6 +747,20 @@ namespace Game
                 DrawBuildingsIcons.Using(camvec, CameraAspect, DataGroup.DistanceToBuildings, DataGroup.CurrentData, DataGroup.CurrentUnits, blend, radius, MyPlayerValue);
                 GridHelper.DrawGrid();
             }
+        }
+
+        void DrawDragonLordMarker()
+        {
+            DrawTexture.Using(camvec, CameraAspect, Assets.DragonLord_Marker);
+            var q = new RectangleQuad();
+            //var p = vec(0.01248588f, 0.004402504f);
+            var p = CurDragonLordPos * PercentSimStepComplete + PrevDragonLordPos * (1 - PercentSimStepComplete);
+            p = GridToWorldCood(p + vec(.375f, 1.5f));
+            var s = vec(.01f, .01f) + .0001f * vec2.Ones * (float)Math.Cos(GameClass.Game.DrawCount * .08f);
+            q.SetupVertices(p - s, p + s, vec(0, 0), vec(1, 1));
+            q.SetColor(new color(.8f, .8f, .8f, .2f));
+            q.Texture = Assets.DragonLord_Marker;
+            q.Draw(GameClass.Game.GraphicsDevice);
         }
 
         private void UpdateAllPlayerUnitCounts()

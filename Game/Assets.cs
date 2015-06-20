@@ -29,6 +29,7 @@ namespace Game
 
             Cursor, SelectCircle, SelectCircle_Data, SelectDot, AttackMarker,
             AoE_Fire, AoE_Skeleton, AoE_Terra,
+            DragonLord_Marker,
 
             TopUi, Minimap;
 
@@ -87,6 +88,8 @@ namespace Game
             AoE_Fire = LoadTexture("AoE_Fire");
             AoE_Skeleton = LoadTexture("AoE_Skeleton");
             AoE_Terra = LoadTexture("AoE_Terra");
+
+            DragonLord_Marker = LoadTexture("DragonLord_Marker");
 
             TopUi = LoadTexture("TopUi");
             Minimap = LoadTexture("Minimap");

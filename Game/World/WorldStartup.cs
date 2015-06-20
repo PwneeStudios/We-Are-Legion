@@ -40,7 +40,6 @@ namespace Game
             // Focus camera on a dragon lord.
             vec2 pos = DataGroup.DragonLordPos(MyPlayerValue);
             
-            //{0.01248588,0.004402504}
             CameraPos = GridToWorldCood(pos + vec(.375f, 1.5f));
             CameraZoom = 80f;
 

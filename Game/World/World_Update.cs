@@ -320,6 +320,8 @@ namespace Game
                     else
                         DataGroup.SimulationUpdate();
 
+                    UpdateDragonLordTracking();
+
                     break;
 
                 case 1:
@@ -484,6 +486,19 @@ namespace Game
             if (MapEditorActive) return;
 
             for (int player = 1; player <= 4; player++) PlayerInfo[player].JadeUpdate();
+        }
+
+        bool TrackDragonLord = true;
+        vec2 CurDragonLordPos = vec2.Zero, PrevDragonLordPos = vec2.Zero;
+
+        private void UpdateDragonLordTracking()
+        {
+            if (TrackDragonLord)
+            {
+                PrevDragonLordPos = CurDragonLordPos;
+                CurDragonLordPos = DataGroup.DragonLordPos(MyPlayerValue);
+                if (PrevDragonLordPos == vec2.Zero) PrevDragonLordPos = CurDragonLordPos;
+            }
         }
     }
 }
