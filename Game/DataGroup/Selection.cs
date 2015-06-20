@@ -29,9 +29,10 @@ namespace Game
         {
             DragonLordGridCoord.Apply(CurrentUnits, player, Output: Multigrid[0]);
             color packed = MultigridReduce(_PreferTl.Apply);
-            vec2 pos = SimShader.unpack_vec2(packed);
+            
+            vec2 pos = SimShader.unpack_vec2_corrected(packed);
 
-            return pos;
+            return pos + vec(0.5f, 0.75f);
         }
 
         public vec2 SelectedBound_BL, SelectedBound_TR;

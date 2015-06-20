@@ -758,7 +758,7 @@ namespace Game
             
             var q = new RectangleQuad();
             var p = CurDragonLordPos * PercentSimStepComplete + PrevDragonLordPos * (1 - PercentSimStepComplete);
-            p = GridToWorldCood(p + vec(0.375f, 1.5f));
+            p = GridToWorldCood(p);
             var s = vec(.01f, .01f) + .0001f * vec2.Ones * (float)Math.Cos(GameClass.Game.DrawCount * .08f);
             float alpha = 1;
 

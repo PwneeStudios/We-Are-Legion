@@ -26,12 +26,12 @@ namespace Game
         [FragmentShader]
         vec4 FragmentShader(VertexOut vertex, Field<unit> CurrentUnits, [Player.Vals] float player)
         {
-            vec2 uv = vertex.TexCoords * CurrentUnits.Size;
+            vec2 uv = vertex.TexCoords * CurrentUnits.Size + vec(.5f, .5f);
             unit here = CurrentUnits[Here];
 
             if (here.player == player && here.type == UnitType.DragonLord)
             {
-                return pack_vec2(uv);
+                return pack_vec2_corrected(uv);
             }
             else
             {

@@ -1160,6 +1160,41 @@ namespace Game
         }
 
 
+        public static vec2 pack_val_2byte_corrected(float x)
+        {
+            vec2 packed = vec2.Zero;
+
+            packed.x = floor(x / 256.0f);
+            packed.y = x - packed.x * 256.0f;
+
+            return packed / 256.0f;
+        }
+
+        public static float unpack_val_corrected(vec2 packed)
+        {
+            float coord = 0;
+
+            packed = floor(256.0f * packed + vec(.5f, .5f));
+            coord = 256 * packed.x + packed.y;
+
+            return coord;
+        }
+
+        public static vec4 pack_vec2_corrected(vec2 v)
+        {
+            vec2 packed_x = pack_val_2byte_corrected(v.x);
+            vec2 packed_y = pack_val_2byte_corrected(v.y);
+            return vec(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
+        }
+
+        public static vec2 unpack_vec2_corrected(vec4 packed)
+        {
+            vec2 v = vec2.Zero;
+            v.x = unpack_val_corrected(packed.rg);
+            v.y = unpack_val_corrected(packed.ba);
+            return v;
+        }
+
         /// <summary>
         /// Packs a vec2 into a 3-byte vec3.
         /// </summary>
