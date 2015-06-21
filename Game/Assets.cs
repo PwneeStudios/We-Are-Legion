@@ -29,9 +29,11 @@ namespace Game
 
             Cursor, SelectCircle, SelectCircle_Data, SelectDot, AttackMarker,
             AoE_Fire, AoE_Skeleton, AoE_Terra,
-            DragonLord_Marker,
+            DragonLord_Marker, AoE_DragonLord_Selected,
 
             TopUi, Minimap;
+
+        public static Texture2D[] AoE_DragonLord;
 
         public static BaseSong Song_MenuMusic, Song_Heavens;
         public static List<BaseSong> SongList_Standard = new List<BaseSong>();
@@ -90,6 +92,12 @@ namespace Game
             AoE_Terra = LoadTexture("AoE_Terra");
 
             DragonLord_Marker = LoadTexture("DragonLord_Marker");
+            AoE_DragonLord_Selected = LoadTexture("AoE_DragonLord_Selected");
+            AoE_DragonLord = new Texture2D[5];
+            for (int player = 1; player <= 4; player++)
+            {
+                AoE_DragonLord[player] = LoadTexture("AoE_DragonLord_" + player.ToString());
+            }
 
             TopUi = LoadTexture("TopUi");
             Minimap = LoadTexture("Minimap");

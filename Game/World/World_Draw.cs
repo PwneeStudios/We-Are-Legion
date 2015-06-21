@@ -756,7 +756,7 @@ namespace Game
         {
             if (!TrackDragonLord) return;
 
-            for (int player = 1; player < 4; player++)
+            for (int player = 1; player <= 4; player++)
             {
                 DrawDragonLordMarker(player, After);
             }
@@ -813,7 +813,10 @@ namespace Game
                 q.SetupVertices(p - s, p + s, vec(0, 0), vec(1, 1));
                 q.SetColor(new color(.8f, .8f, .8f, 1f * alpha));
 
-                DrawTexture.Using(camvec, CameraAspect, Assets.AoE_Skeleton);
+                var texture = Assets.AoE_DragonLord[player];
+                if (player == MyPlayerNumber && selected) texture = Assets.AoE_DragonLord_Selected;
+
+                DrawTexture.Using(camvec, CameraAspect, texture);
                 q.Draw(GameClass.Game.GraphicsDevice);
             }
         }

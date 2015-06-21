@@ -496,7 +496,7 @@ namespace Game
         {
             if (TrackDragonLord)
             {
-                for (int player = 1; player < 4; player++)
+                for (int player = 1; player <= 4; player++)
                 {
                     PrevDragonLordPos[player] = CurDragonLordPos[player];
                     CurDragonLordPos[player] = DataGroup.DragonLordPos(_[player]);
