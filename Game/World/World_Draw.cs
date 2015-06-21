@@ -476,59 +476,6 @@ namespace Game
             }
         }
 
-        Ui TopUi, TopUi_Player1, TopUi_Player2;
-        void MakeTopUi()
-        {
-            if (TopUi != null) return;
-
-            float a = CameraAspect;
-
-            TopUi = new Ui();
-            Ui.Element("Upper Ui");
-            Ui.e.SetupPosition(vec(a - 1.87777777777778f, 0.8962962962963f), vec(a - -0.04444444444444f, 1f));
-            Ui.e.Texture = Assets.TopUi;
-
-
-            TopUi_Player1 = new Ui();
-            Ui.Element("[Text] Jade");
-            Ui.e.SetupPosition(vec(a - 0.21111111111111f, 0.96111111111111f), vec(a - 0.06296296296296f, 0.99259259259259f));
-
-            Ui.Element("[Text] Jade mines");
-            Ui.e.SetupPosition(vec(a - 0.4037037037037f, 0.96296296296296f), vec(a - 0.33333333333333f, 0.99444444444444f));
-
-            Ui.Element("[Text] Gold");
-            Ui.e.SetupPosition(vec(a - 0.7462962962963f, 0.96111111111111f), vec(a - 0.59814814814815f, 0.99259259259259f));
-
-            Ui.Element("[Text] Gold mines");
-            Ui.e.SetupPosition(vec(a - 0.93703703703704f, 0.96296296296296f), vec(a - 0.86666666666667f, 0.99444444444444f));
-
-            Ui.Element("[Text] Units");
-            Ui.e.SetupPosition(vec(a - 1.27037037037037f, 0.96111111111111f), vec(a - 1.13888888888889f, 0.99259259259259f));
-
-            Ui.Element("[Text] Barrackses");
-            Ui.e.SetupPosition(vec(a - 1.46851851851852f, 0.96296296296296f), vec(a - 1.4f, 0.99444444444444f));
-
-
-            TopUi_Player2 = new Ui();
-            Ui.Element("[Text] Jade");
-            Ui.e.SetupPosition(vec(a - 0.21111111111111f, 0.90740740740741f), vec(a - 0.06296296296296f, 0.93888888888889f));
-
-            Ui.Element("[Text] Jade mines");
-            Ui.e.SetupPosition(vec(a - 0.4037037037037f, 0.90925925925926f), vec(a - 0.33333333333333f, 0.94074074074074f));
-
-            Ui.Element("[Text] Gold");
-            Ui.e.SetupPosition(vec(a - 0.7462962962963f, 0.90740740740741f), vec(a - 0.59814814814815f, 0.93888888888889f));
-
-            Ui.Element("[Text] Gold mines");
-            Ui.e.SetupPosition(vec(a - 0.93703703703704f, 0.90925925925926f), vec(a - 0.86666666666667f, 0.94074074074074f));
-
-            Ui.Element("[Text] Units");
-            Ui.e.SetupPosition(vec(a - 1.27037037037037f, 0.90740740740741f), vec(a - 1.13888888888889f, 0.93888888888889f));
-
-            Ui.Element("[Text] Barrackses");
-            Ui.e.SetupPosition(vec(a - 1.46851851851852f, 0.90925925925926f), vec(a - 1.4f, 0.94074074074074f));
-        }
-
         vec2 ToBatchCoord(vec2 p)
         {
             return vec((p.x + CameraAspect) / (2 * CameraAspect), (1 - (p.y + 1) / 2)) * GameClass.Screen;
@@ -639,14 +586,11 @@ namespace Game
             float tiles_solid_blend = CoreMath.LogLerpRestrict(1f, 0, 5f, 1, CameraZoom);
             bool tiles_solid_blend_flag = tiles_solid_blend < 1;
 
-            if (x_edge > 1)
+            if (x_edge > 1 || y_edge > 1)
             {
                 DrawOutsideTiles.Using(camvec, CameraAspect, DataGroup.Tiles, TileSprite, tiles_solid_blend_flag, tiles_solid_blend);
 
-                OutsideTiles.SetupVertices(vec(-x_edge, -1), vec(0, 1), vec(0, 0), vec(-x_edge / 2, 1));
-                OutsideTiles.Draw(GameClass.Graphics);
-
-                OutsideTiles.SetupVertices(vec(x_edge, -1), vec(0, 1), vec(0, 0), vec(x_edge / 2, 1));
+                OutsideTiles.SetupVertices(vec(-2.5f, -2f), vec(2.5f, 2), vec(0, 0), vec(-5 / 2, 2 / 1));
                 OutsideTiles.Draw(GameClass.Graphics);
             }
 

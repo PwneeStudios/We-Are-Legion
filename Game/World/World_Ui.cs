@@ -61,13 +61,6 @@ namespace Game
             }
         }
 
-        void DrawUi_CursorText()
-        {
-            if (CurUserMode != UserMode.Select) return;
-
-            Render.DrawText(unit_count, ToBatchCoord(count_text_pos), 1f, Alignment.Right | Alignment.Bottom);
-        }
-
         public void DrawGridCell()
         {
             vec2 GridCoord = ScreenToGridCoord(Input.CurMousePos);

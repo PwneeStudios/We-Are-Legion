@@ -66,8 +66,8 @@ namespace Game
             }
         }
 
-        public static float StaticMaxZoomOut = 1;
-        float x_edge;
+        public static float StaticMaxZoomOut = .7333f;
+        float x_edge, y_edge;
         int ChatInhibitor = 0;
         public void Update()
         {
@@ -85,7 +85,7 @@ namespace Game
             if (MapEditorActive)
             {
                 // Full zoom-in/out
-                MaxZoomOut = 1f;
+                MaxZoomOut = .733f;
                 MaxZoomIn = 200f;
             }
             else
@@ -93,7 +93,7 @@ namespace Game
                 MaxZoomOut = World.StaticMaxZoomOut;
                 MaxZoomIn = 200f; // Full zoom-in, Partial zoom-out
             }
-            MaxZoomOut = 1f;
+
             // Zoom all the way out
             if (!GameClass.Game.ShowChat && Keys.Space.Down())
                 CameraZoom = MaxZoomOut;
@@ -172,13 +172,19 @@ namespace Game
 
 
             // Make sure the camera doesn't go too far offscreen
-            x_edge = Math.Max(.5f * (CameraAspect / CameraZoom) + .5f * (CameraAspect / MaxZoomOut), 1);
+            y_edge = 1 + 0.433f / CameraZoom;
+            x_edge = Math.Max(.5f * (CameraAspect / CameraZoom) + .5f * (CameraAspect / MaxZoomOut), 1); // Old style zoom out bounds.
+            x_edge = Math.Min(x_edge, y_edge * CameraAspect);
+            x_edge = CoreMath.LogLerpRestrict(MaxZoomIn, 1 + .35f / CameraZoom, MaxZoomOut, x_edge, CameraZoom);
+
+            if (CameraZoom == MaxZoomOut) CameraPos = vec(0, -0.07f);
+
             var TR = ScreenToWorldCoord(new vec2(GameClass.Screen.x, 0));
             if (TR.x > x_edge) CameraPos = new vec2(CameraPos.x - (TR.x - x_edge), CameraPos.y);
-            if (TR.y > 1) CameraPos = new vec2(CameraPos.x, CameraPos.y - (TR.y - 1));
+            if (TR.y > y_edge) CameraPos = new vec2(CameraPos.x, CameraPos.y - (TR.y - y_edge));
             var BL = ScreenToWorldCoord(new vec2(0, GameClass.Screen.y));
             if (BL.x < -x_edge) CameraPos = new vec2(CameraPos.x - (BL.x + x_edge), CameraPos.y);
-            if (BL.y < -1) CameraPos = new vec2(CameraPos.x, CameraPos.y - (BL.y + 1));
+            if (BL.y < -y_edge) CameraPos = new vec2(CameraPos.x, CameraPos.y - (BL.y + y_edge));
 
             
             // Switch to chat
