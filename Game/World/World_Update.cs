@@ -489,15 +489,19 @@ namespace Game
         }
 
         bool TrackDragonLord = true;
-        vec2 CurDragonLordPos = vec2.Zero, PrevDragonLordPos = vec2.Zero;
+        vec2[] CurDragonLordPos = new vec2[] { vec2.Zero, vec2.Zero, vec2.Zero, vec2.Zero, vec2.Zero };
+        vec2[] PrevDragonLordPos = new vec2[] { vec2.Zero, vec2.Zero, vec2.Zero, vec2.Zero, vec2.Zero };
 
         private void UpdateDragonLordTracking()
         {
             if (TrackDragonLord)
             {
-                PrevDragonLordPos = CurDragonLordPos;
-                CurDragonLordPos = DataGroup.DragonLordPos(MyPlayerValue);
-                if (PrevDragonLordPos == vec2.Zero) PrevDragonLordPos = CurDragonLordPos;
+                for (int player = 1; player < 4; player++)
+                {
+                    PrevDragonLordPos[player] = CurDragonLordPos[player];
+                    CurDragonLordPos[player] = DataGroup.DragonLordPos(_[player]);
+                    if (PrevDragonLordPos[player] == vec2.Zero) PrevDragonLordPos[player] = CurDragonLordPos[player];
+                }
             }
         }
     }

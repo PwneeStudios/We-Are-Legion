@@ -755,9 +755,24 @@ namespace Game
         void DrawDragonLordMarker(bool After=false)
         {
             if (!TrackDragonLord) return;
+
+            for (int player = 1; player < 4; player++)
+            {
+                DrawDragonLordMarker(player, After);
+            }
+        }
+
+        void DrawDragonLordMarker(int player, bool After=false)
+        {
+            if (!TrackDragonLord) return;
+
+            vec2 cur = CurDragonLordPos[player];
+            vec2 prev = PrevDragonLordPos[player];
+
+            if (cur.x < 1 && cur.y < 1) return;
             
             var q = new RectangleQuad();
-            var p = CurDragonLordPos * PercentSimStepComplete + PrevDragonLordPos * (1 - PercentSimStepComplete);
+            var p = cur * PercentSimStepComplete + prev * (1 - PercentSimStepComplete);
             p = GridToWorldCood(p);
             var s = vec(.01f, .01f) + .0001f * vec2.Ones * (float)Math.Cos(GameClass.Game.DrawCount * .08f);
             float alpha = 1;
@@ -767,7 +782,7 @@ namespace Game
             if (!After)
             {
                 alpha = selected ? .11f : .05f;
-                color clr = selected ? new color(.8f, 1f, .8f, alpha) : new color(.8f, .8f, .8f, alpha); 
+                color clr = selected ? new color(1f, 1f, 1f, alpha) : new color(.8f, .8f, .8f, alpha); 
 
                 q.SetupVertices(p - s * 3, p + s * 3, vec(0, 0), vec(1, 1));
                 q.SetColor(clr);

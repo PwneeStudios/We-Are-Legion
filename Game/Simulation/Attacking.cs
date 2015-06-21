@@ -42,7 +42,7 @@ namespace Game
 
                 vec4 rnd = Random[Here];
 
-                if (unit_here.type != UnitType.DragonLord && rnd.x > .7f || rnd.x > .96f)
+                if (unit_here.type != UnitType.DragonLord && rnd.x > .7f || rnd.x > .915f)
                 {
                     if (Something(data_right) && unit_right.team != unit_here.team && unit_right.team != Team.None && data_right.direction == Dir.Left  && data_right.action == UnitAction.Attacking && data_right.change == Change.Stayed ||
                         Something(data_left)  && unit_left.team  != unit_here.team && unit_left.team  != Team.None && data_left.direction  == Dir.Right && data_left.action  == UnitAction.Attacking && data_left.change  == Change.Stayed ||
