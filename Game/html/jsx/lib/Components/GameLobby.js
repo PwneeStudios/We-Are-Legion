@@ -254,6 +254,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
 
         componentDidMount: function() {
+            interop.lobbyUiCreated();
             this.drawMap();
         },
 

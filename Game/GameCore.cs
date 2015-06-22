@@ -165,6 +165,8 @@ namespace Game
             Form.MinimizeBox = false;
             Form.MaximizeBox = false;
 
+            BlankWorld = new World();
+
             base.Initialize();
         }
 

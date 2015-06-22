@@ -47,8 +47,8 @@ namespace Game
                 Width = 1280;
                 Height = 720;
 
-                MusicVolume = 1;
-                SoundVolume = 1;
+                MusicVolume = 0;
+                SoundVolume = .5f;
 #else
                 Fullscreen = true;
                 Width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;

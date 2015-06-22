@@ -32,6 +32,12 @@ define(['lodash'], function(_) {
             }
         },
 
+        lobbyUiCreated: function() {
+            if (interop.InXna()) {
+                xna.LobbyUiCreated();
+            }
+        },
+
         drawMapPreviewAt: function(x, y, width, height) {
             if (interop.InXna()) {
                 xna.DrawMapPreviewAt(x, y, width, height);

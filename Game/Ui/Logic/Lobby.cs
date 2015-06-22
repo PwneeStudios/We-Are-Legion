@@ -37,6 +37,7 @@ namespace Game
     {
         void BindMethods_Lobby()
         {
+            xnaObj.Bind("LobbyUiCreated", LobbyUiCreated);
             xnaObj.Bind("DrawMapPreviewAt", DrawMapPreviewAt);
             xnaObj.Bind("HideMapPreview", HideMapPreview);
             xnaObj.Bind("SetMap", SetMap);
@@ -64,6 +65,16 @@ namespace Game
             obj["LobbyMapLoading"] = MapLoading;
 
             Send("lobbyMap", obj);
+        }
+
+        public World BlankWorld;
+        JSValue LobbyUiCreated(object sender, JavascriptMethodEventArgs e)
+        {
+            World = BlankWorld;
+            GameMapName = null;
+            NewMap = null;
+
+            return JSValue.Null;
         }
 
         public bool DrawMapPreview = false;
@@ -124,7 +135,7 @@ namespace Game
             SetMapThread.Start();
         }
 
-        World NewMap;
+        World NewMap = null;
         void SetMapThreadFunc(string map)
         {
             if (PrevMapThread != null && PrevMapThread.IsAlive && Thread.CurrentThread != PrevMapThread)
