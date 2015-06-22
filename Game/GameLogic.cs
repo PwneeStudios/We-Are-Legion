@@ -1,31 +1,16 @@
 using System;
 using System.IO;
 
-using Windows = System.Windows.Forms;
 
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using FragSharpHelper;
 using FragSharpFramework;
 
-using Awesomium.Core;
-using Awesomium.Core.Data;
-using Awesomium.Core.Dynamic;
-using AwesomiumXNA;
 
-using System.Text;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading;
-using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Web.Script.Serialization;
 
-using Newtonsoft.Json;
 
 namespace Game
 {
@@ -38,8 +23,8 @@ namespace Game
         }
 
 #if DEBUG
-        //GameState State = GameState.ToMap;
-        GameState State = GameState.TitleScreen;
+        GameState State = GameState.ToMap;
+        //GameState State = GameState.TitleScreen;
 #else
         GameState State = GameState.TitleScreen;
 #endif
@@ -349,6 +334,31 @@ namespace Game
         public void Victory(int winning_team)
         {
             Send("setScreen", "gameOver", new { victory = true, winningTeam = winning_team });
+        }
+
+        void GameOverLogic()
+        {
+            if (World == null || !World.GameOver) return;
+
+            if (T - World.GameOverTime < 2)
+            {
+                DeltaT *= .03f;
+                World.Markers.Hide = true;
+            }
+            else if (T - World.GameOverTime < 3)
+            {
+                DeltaT *= .25f;
+            }
+            else
+            {
+                World.Markers.Hide = false;
+            }
+
+            GameInputEnabled = false;
+
+            float s = (float)Math.Min(1, (T - World.GameOverTime) / 1.25);
+            World.CameraPos = s * World.DragonLordDeathPos + (1 - s) * World.GameOverPos;
+            World.CameraZoom = CoreMath.LogLerpRestrict((float)World.GameOverTime, World.GameOverZoom, (float)World.GameOverTime + 1.25f, 100, (float)T);
         }
     }
 }

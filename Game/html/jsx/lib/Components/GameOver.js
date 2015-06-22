@@ -28,13 +28,29 @@ function(_, React, ReactBootstrap, interop, events, ui,
     return React.createClass({
         mixins: [],
 
+        show: function() {
+            this.setState({
+                show: true,
+            });
+        },
+
         getInitialState: function() {
+            setTimeout(this.show, 4500);
+
             return {
+                show: false,
             };
         },
 
         render: function() {
             var _this = this;
+
+            if (!this.state.show) {
+                return (
+                    <div>
+                    </div>
+                );
+            }
 
             return (
                 <div>

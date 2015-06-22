@@ -49,7 +49,7 @@ namespace Game
         public static GameClass Game;
         public static GameTime Time;
         public static double ElapsedSeconds { get { return Time.ElapsedGameTime.TotalSeconds; } }
-        public static double DeltaT = 0;
+        public static double DeltaT = 0, T = 0;
 
         public const bool UnlimitedSpeed = false;
         public const bool MouseEnabled = true;
@@ -366,6 +366,9 @@ namespace Game
         protected override void Draw(GameTime gameTime)
         {
             DeltaT = gameTime.ElapsedGameTime.TotalSeconds;
+            T = gameTime.TotalGameTime.TotalSeconds;
+
+            GameOverLogic();
 
             if (NeedsApplication)
             {

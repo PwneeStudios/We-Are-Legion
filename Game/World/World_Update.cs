@@ -443,6 +443,9 @@ namespace Game
         }
 
         public bool GameOver = false;
+        public double GameOverTime = 0;
+        public vec2 GameOverPos;
+        public float GameOverZoom;
         void EndOfGameCheck()
         {
             if (GameOver) return;
@@ -468,6 +471,9 @@ namespace Game
             if (alive_count <= 1)
             {
                 GameOver = true;
+                GameOverTime = GameClass.T;
+                GameOverPos = CameraPos;
+                GameOverZoom = CameraZoom;
 
                 if (MyTeamInfo.Defeated)
                 {

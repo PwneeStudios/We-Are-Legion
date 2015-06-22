@@ -239,11 +239,13 @@ namespace Game
             Markers.Add(new Marker(this, pos, size, Assets.AttackMarker, -1f));
         }
 
+        public vec2 DragonLordDeathPos;
         public void DragonLordDeath(vec2 GridCoord, int PlayerNum)
         {
             vec2 Pos = GridToWorldCood(GridCoord + vec(1, 1));
+            DragonLordDeathPos = Pos;
+
             AddExplosion(Pos, vec(5, 5));
-            //AddSummonAreaEffect(Pos, vec(5, 5));
             AddSummonUnitEffect(GridCoord);
             Message_PlayerDefeated(PlayerNum);
         }

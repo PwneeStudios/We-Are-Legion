@@ -7,6 +7,8 @@ namespace Game
 {
     public class MarkerList
     {
+        public bool Hide = false;
+
         List<Marker> Markers = new List<Marker>();
 
         public void Add(Marker marker)
@@ -16,11 +18,15 @@ namespace Game
 
         public void Draw(DrawOrder CurrentDrawOrder)
         {
+            if (Hide) return;
+
             foreach (var marker in Markers) if (marker.MyDrawOrder == CurrentDrawOrder) marker.Draw();
         }
 
         public void Update()
         {
+            if (Hide) return;
+
             foreach (var marker in Markers) marker.Update();
             Markers.RemoveAll(marker => marker.Dead);
         }
@@ -77,7 +83,7 @@ namespace Game
 
         public void Update()
         {
-            float dt = (float)GameClass.Time.ElapsedGameTime.TotalSeconds;
+            float dt = (float)GameClass.DeltaT;
 
             alpha += dalpha_dt * dt;
             
@@ -87,7 +93,6 @@ namespace Game
 
             size += dsize_dt * dt;
             quad.SetupVertices(pos - size / 2, pos + size / 2, vec(frame / (float)frames, 0), vec((frame + 1) / (float)frames, 1));
-            //quad.SetupUv(vec(frame / (float)frames, 0), vec((frame + 1) / (float)frames, 1));
         }
     }
 }

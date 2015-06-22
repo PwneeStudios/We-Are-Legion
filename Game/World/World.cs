@@ -83,8 +83,8 @@ namespace Game
         /// </summary>
         public float PlayerOrNeutral { get { return MapEditorActive ? Player.None : MyPlayerValue; } }
 
-        vec2 CameraPos = vec2.Zero;
-        float CameraZoom = 30;
+        public vec2 CameraPos = vec2.Zero;
+        public float CameraZoom = 30;
         public float CameraAspect = 1;
         public vec4 camvec { get { return new vec4(CameraPos.x, CameraPos.y, CameraZoom, CameraZoom); } }
 
@@ -94,7 +94,7 @@ namespace Game
         public TeamInfo[] TeamInfo;
         public PlayerInfo[] PlayerInfo;
 
-        MarkerList Markers;
+        public MarkerList Markers;
         UserMessageList UserMessages;
 
         public RenderTarget2D Minimap;

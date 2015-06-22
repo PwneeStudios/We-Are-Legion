@@ -214,20 +214,13 @@ namespace Game
             {
                 if (NotPaused_SimulationUpdate)
                 {
-                    double Elapsed = GameClass.ElapsedSeconds;
+                    double Elapsed = GameClass.DeltaT; //GameClass.ElapsedSeconds;
 
                     if (SimStep + SecondsSinceLastUpdate / DelayBetweenUpdates < ServerSimStep - .25f)
-                    //if (SimStep + SecondsSinceLastUpdate / DelayBetweenUpdates < ServerSimStep - .5f)
                     {
                         Elapsed *= 1.15f;
                         if (Log.SpeedMods) Console.WriteLine("            -- Speed up please, Elasped = {3}  # {0}/{1} :{2}", Elapsed, SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates);
                     }
-
-                    //if (!Program.Server && SimStep + SecondsSinceLastUpdate / DelayBetweenUpdates > ServerSimStep - .15f)
-                    //{
-                    //    Elapsed /= 1.15f;
-                    //    if (Log.SpeedMods) Console.WriteLine("            -- Slow down please, Elasped = {3}  # {0}/{1} :{2}", Elapsed, SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates);
-                    //}
 
                     SecondsSinceLastUpdate += Elapsed;
                     T += (float)Elapsed;
@@ -241,11 +234,6 @@ namespace Game
                         SecondsSinceLastUpdate += DelayBetweenUpdates;
                         T += (float)DelayBetweenUpdates;
                     }
-                    //DeququeActions(SimStep + 1);
-                    //FullUpdate();
-                    //SentBookend = false;
-                    //Networking.ToServer(new MessageStartingStep(SimStep));
-                    //PostSimulationUpdate();
                 }
 
                 if (GameClass.HasFocus)
