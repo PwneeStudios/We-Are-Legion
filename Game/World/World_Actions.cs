@@ -705,8 +705,7 @@ namespace Game
 
             if (MouseOverMinimap)
             {
-                Pos = (UiMousePos - MinimapQuad.pos) / MinimapQuad.size;
-                Pos = WorldToGridCood(Pos);
+                Pos = MinimapGridPos();
             }
             
             vec2 Selected_BL = DataGroup.SelectedBound_BL;

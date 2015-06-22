@@ -167,7 +167,7 @@ namespace Game
             // Move the camera via: Minimap
             if ((LeftMouseDown || Input.DeltaMouseScroll != 0) && !BoxSelecting && MouseOverMinimap)
             {
-                CameraPos = (UiMousePos - MinimapQuad.pos) / MinimapQuad.size;
+                CameraPos = MinimapWorldPos();
             }
 
 

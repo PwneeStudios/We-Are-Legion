@@ -84,6 +84,16 @@ namespace Game
             }
         }
 
+        private vec2 MinimapWorldPos()
+        {
+            return (UiMousePos - MinimapQuad.pos) / MinimapQuad.size;
+        }
+
+        private vec2 MinimapGridPos()
+        {
+            return WorldToGridCood(MinimapWorldPos());
+        }
+
         vec2 ScreenToWorldCoord(vec2 pos)
         {
             var screen = GameClass.Screen;

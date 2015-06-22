@@ -224,6 +224,12 @@ namespace Game
         void AddAttackMarker()
         {
             vec2 pos = ScreenToWorldCoord(Input.CurMousePos);
+
+            if (MouseOverMinimap)
+            {
+                pos = MinimapWorldPos();
+            }
+
             vec2 cell_size = 2 * (1 / DataGroup.GridSize);
 
             float bigger = 1 / (CameraZoom / 30);
