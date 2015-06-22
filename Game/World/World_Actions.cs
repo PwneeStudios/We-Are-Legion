@@ -702,6 +702,12 @@ namespace Game
             if (DataGroup.SelectedUnits == 0) return;
 
             vec2 Pos = ScreenToGridCoord(Input.CurMousePos);
+
+            if (MouseOverMinimap)
+            {
+                Pos = (UiMousePos - MinimapQuad.pos) / MinimapQuad.size;
+                Pos = WorldToGridCood(Pos);
+            }
             
             vec2 Selected_BL = DataGroup.SelectedBound_BL;
             vec2 Selected_Size = DataGroup.SelectedBound_TR - DataGroup.SelectedBound_BL;
