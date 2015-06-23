@@ -246,7 +246,10 @@ namespace Game
 
                     if (message.Type == MessageType.ServerLeft)
                     {
-                        GameClass.Game.ReturnToMainMenu();
+                        if (!Program.Server)
+                        {
+                            GameClass.Game.ReturnToMainMenu();
+                        }
                     }
                 }
             }

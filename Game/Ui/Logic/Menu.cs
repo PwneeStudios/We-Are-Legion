@@ -57,7 +57,7 @@ namespace Game
         {
             if (Program.Server)
             {
-                Networking.ToServer(new Message(MessageType.ServerLeft));
+                Networking.ToClients(new Message(MessageType.ServerLeft));
             }
             else
             {

@@ -14,6 +14,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var Dropdown = ui.Dropdown;
     var Menu = ui.Menu;
     var MenuItem = ui.MenuItem;
+    var MenuTitle = ui.MenuTitle;
     var RenderAtMixin = ui.RenderAtMixin;
     
     var pos = ui.pos;
@@ -36,7 +37,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         render: function() {
             return (
                 React.createElement(Menu, null, 
-                    React.createElement("p", null, "Game paused"), 
+                    React.createElement(MenuTitle, null, "Game paused"), 
                     React.createElement(MenuItem, {disabled: !this.props.params.canUnpause, eventKey: 1, onClick: this.unpause}, "Unpause")
                 )
             );

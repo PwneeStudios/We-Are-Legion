@@ -14,6 +14,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var Dropdown = ui.Dropdown;
     var Menu = ui.Menu;
     var MenuItem = ui.MenuItem;
+    var MenuTitle = ui.MenuTitle;
     var RenderAtMixin = ui.RenderAtMixin;
     
     var pos = ui.pos;
@@ -23,24 +24,22 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
 
     return React.createClass({
         mixins: [],
-
+                
         getInitialState: function() {
             return {
             };
         },
 
-        pause: function(e) {
-            interop.requestPause();
-            back();
+        unpause: function(e) {
+            interop.requestUnpause();
         },
 
         render: function() {
             return (
                 React.createElement(Menu, null, 
-                    React.createElement(MenuItem, {eventKey: 1, to: "back"}, "Return to game"), 
-                    React.createElement(MenuItem, {eventKey: 2, onClick: this.pause}, "Pause game"), 
-                    React.createElement(MenuItem, {eventKey: 3, to: "options", params: {inGame:true}}, "Options"), 
-                    React.createElement(MenuItem, {eventKey: 5, to: "confirm-leave-game"}, "Leave Game")
+                    React.createElement(MenuTitle, null, "Are you sure?"), 
+                    React.createElement(MenuItem, {eventKey: 2, onClick: leaveGame}, "Leave Game"), 
+                    React.createElement(MenuItem, {eventKey: 3, to: "back"}, "Cancel")
                 )
             );
         }

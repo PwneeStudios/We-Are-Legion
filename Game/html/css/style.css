@@ -54,6 +54,10 @@ p {
     font-family: Verdana, Geneva, sans-serif;
 }
 
+li.title h3 {
+  color: white;
+}
+
 /* ------
    Tooltips
    ------ */

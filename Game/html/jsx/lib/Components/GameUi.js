@@ -1,7 +1,7 @@
 define(['lodash', 'react', 'interop', 'events',
-        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual', 'Components/GameOver', 'Components/GamePaused'],
+        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual', 'Components/GameOver', 'Components/GamePaused', 'Components/ConfirmLeaveGame'],
     function(_, React, interop, events,
-            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual, GameOver, GamePaused) {
+            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual, GameOver, GamePaused, ConfirmLeaveGame) {
  
     return React.createClass({
         mixins: [events.SetModeMixin],
@@ -88,11 +88,12 @@ define(['lodash', 'react', 'interop', 'events',
             //setScreen('manual');
             //setScreen('find-game');
 
-            //setMode('in-game');
+            setMode('in-game');
             //setScreen('gameOver', {victory:false});
             //setScreen('gameOver', {victory:true});
             //setScreen('in-game-ui');
             //setScreen('in-game-menu');
+            setScreen('confirm-leave-game');
         },
 
         screenHistory: function() {
@@ -177,6 +178,7 @@ define(['lodash', 'react', 'interop', 'events',
                 case 'game-over': body = <GameOver />; break;
                 case 'in-game-menu': body = <InGameMenu />; break;
                 case 'game-paused': body = <GamePaused />; break;
+                case 'confirm-leave-game': body = <ConfirmLeaveGame />; break;
             }
 
             if (body) {

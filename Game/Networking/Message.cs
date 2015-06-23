@@ -207,7 +207,6 @@ namespace Game
             {
                 Source.SimStep = SimStep;
                 
-                //GameClass.World.MinClientSimStep = Server.Clients.Min(client => client.SimStep);
                 GameClass.World.MinClientSimStep = Server.Clients
                     .Where(client => !client.HasLeft)
                     .Min(client => client.SimStep);
