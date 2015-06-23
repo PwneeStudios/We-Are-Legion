@@ -26,13 +26,14 @@ function(_, React, ReactBootstrap, interop, events, ui,
     var subImage = ui.subImage;
 
     var UnitBar = React.createClass({displayName: "UnitBar",
-        mixins: [RenderAtMixin, events.UpdateMixin],
+        mixins: [RenderAtMixin],
 
-        item: function(p, image, scale, image_pos, data) {
+        item: function(image, scale, data) {
             return (
-                React.createElement(Div, {nonBlocking: true, pos: p}, 
-                    React.createElement(UiImage, {nonBlocking: true, pos: image_pos, width: 4.2*scale, image: image}), 
+                React.createElement("td", null, 
+                    React.createElement(UiImage, {width: 24.2*scale, image: image}), 
                     React.createElement("p", {style: {paddingLeft:'5%', 'pointer-events': 'none'}}, 
+                        " ", 
                         data
                     )
                 )
@@ -40,24 +41,21 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
         
         renderAt: function() {
-            var x = 2;
-            var small = 13.2, big = 17.2;
-            
             var Images = playerImages[this.props.MyPlayerNumber];
             var Buildings = Images.Buildings;
             var Units = Images.Units;
+
+            var name = this.props.info.PlayerName || 'Player ' + this.props.MyPlayerNumber;
         
             return (
-                React.createElement("div", null, 
-                    React.createElement(Div, {nonBlocking: true, pos: pos(0,0.92)}, 
-                        React.createElement(Div, {pos: pos(x-small,0)}, React.createElement("p", null, "Player ", this.props.MyPlayerNumber)), 
-                        this.item(pos(x,0),        Buildings.Barracks, 1,    pos(0,0),     this.props.info.Barracks.Count), 
-                        this.item(pos(x+=small,0), Units.Soldier,      0.85, pos(0.4,0),   this.props.info.Units), 
-                        this.item(pos(x+=big,0),   Buildings.GoldMine, 1,    pos(0,0),     this.props.info.GoldMine.Count), 
-                        this.item(pos(x+=small,0), GoldImage,          0.67, pos(1.2,0.5), this.props.info.Gold), 
-                        this.item(pos(x+=big,0),   Buildings.JadeMine, 1,    pos(0,0),     this.props.info.JadeMine.Count), 
-                        this.item(pos(x+=small,0), JadeImage,          0.67, pos(1.2,0.5), this.props.info.Jade)
-                    )
+                React.createElement("tr", null, 
+                    React.createElement("td", null, React.createElement("p", null, name)), 
+                    this.item(Buildings.Barracks, 1.2,  this.props.info.Barracks.Count), 
+                    this.item(Units.Soldier,      0.85, this.props.info.Units), 
+                    this.item(Buildings.GoldMine, 2,    this.props.info.GoldMine.Count), 
+                    this.item(GoldImage,          0.5,  this.props.info.Gold), 
+                    this.item(Buildings.JadeMine, 2,    this.props.info.JadeMine.Count), 
+                    this.item(JadeImage,          0.5,  this.props.info.Jade)
                 )
             );
         },
@@ -111,13 +109,14 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             ), 
 
                             /* Info */
-                            React.createElement(Div, {pos: pos(-30,20)}, 
+                            React.createElement(Div, {pos: pos(5,20)}, 
+                                React.createElement(Table, {style: {width:'90%'}}, React.createElement("tbody", null, 
                                 _.map(players, function(player, index) {
                                     return (
-                                        React.createElement(UnitBar, {MyPlayerNumber: player, info: _this.props.params.info[player], 
-                                                 pos: pos(50.5,0.4 + index*7), size: width(75)})
+                                        React.createElement(UnitBar, {MyPlayerNumber: player, info: _this.props.params.info[player]})
                                     );
                                 })
+                                ))
                             ), 
 
                             /* Buttons */

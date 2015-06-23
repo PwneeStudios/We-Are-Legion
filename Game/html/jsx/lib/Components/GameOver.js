@@ -26,39 +26,37 @@ function(_, React, ReactBootstrap, interop, events, ui,
     var subImage = ui.subImage;
 
     var UnitBar = React.createClass({
-        mixins: [RenderAtMixin, events.UpdateMixin],
+        mixins: [RenderAtMixin],
 
-        item: function(p, image, scale, image_pos, data) {
+        item: function(image, scale, data) {
             return (
-                <Div nonBlocking pos={p}>
-                    <UiImage nonBlocking pos={image_pos} width={4.2*scale} image={image} />
+                <td>
+                    <UiImage width={24.2*scale} image={image} />
                     <p style={{paddingLeft:'5%', 'pointer-events': 'none'}}>
+                        &nbsp;
                         {data}
                     </p>
-                </Div>
+                </td>
             );
         },
         
         renderAt: function() {
-            var x = 2;
-            var small = 13.2, big = 17.2;
-            
             var Images = playerImages[this.props.MyPlayerNumber];
             var Buildings = Images.Buildings;
             var Units = Images.Units;
+
+            var name = this.props.info.PlayerName || 'Player ' + this.props.MyPlayerNumber;
         
             return (
-                <div>
-                    <Div nonBlocking pos={pos(0,0.92)}>
-                        <Div pos={pos(x-small,0)}><p>Player {this.props.MyPlayerNumber}</p></Div>
-                        {this.item(pos(x,0),        Buildings.Barracks, 1,    pos(0,0),     this.props.info.Barracks.Count)}
-                        {this.item(pos(x+=small,0), Units.Soldier,      0.85, pos(0.4,0),   this.props.info.Units)}
-                        {this.item(pos(x+=big,0),   Buildings.GoldMine, 1,    pos(0,0),     this.props.info.GoldMine.Count)}
-                        {this.item(pos(x+=small,0), GoldImage,          0.67, pos(1.2,0.5), this.props.info.Gold)}
-                        {this.item(pos(x+=big,0),   Buildings.JadeMine, 1,    pos(0,0),     this.props.info.JadeMine.Count)}
-                        {this.item(pos(x+=small,0), JadeImage,          0.67, pos(1.2,0.5), this.props.info.Jade)}
-                    </Div>
-                </div>
+                <tr>
+                    <td><p>{name}</p></td>
+                    {this.item(Buildings.Barracks, 1.2,  this.props.info.Barracks.Count)}
+                    {this.item(Units.Soldier,      0.85, this.props.info.Units)}
+                    {this.item(Buildings.GoldMine, 2,    this.props.info.GoldMine.Count)}
+                    {this.item(GoldImage,          0.5,  this.props.info.Gold)}
+                    {this.item(Buildings.JadeMine, 2,    this.props.info.JadeMine.Count)}
+                    {this.item(JadeImage,          0.5,  this.props.info.Jade)}
+                </tr>
             );
         },
     });
@@ -111,13 +109,14 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             </h1>
 
                             {/* Info */}
-                            <Div pos={pos(-30,20)}>
+                            <Div pos={pos(5,20)}>
+                                <Table style={{width:'90%'}}><tbody>
                                 {_.map(players, function(player, index) {
                                     return (
-                                        <UnitBar MyPlayerNumber={player} info={_this.props.params.info[player]}
-                                                 pos={pos(50.5,0.4 + index*7)} size={width(75)} />
+                                        <UnitBar MyPlayerNumber={player} info={_this.props.params.info[player]} />
                                     );
                                 })}
+                                </tbody></Table>
                             </Div>
 
                             {/* Buttons */}
