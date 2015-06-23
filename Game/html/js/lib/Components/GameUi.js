@@ -1,7 +1,7 @@
 define(['lodash', 'react', 'interop', 'events',
-        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual', 'Components/GameOver', 'Components/GamePaused', 'Components/ConfirmLeaveGame', 'Components/Disconnected'],
+        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual', 'Components/GameOver', 'Components/GamePaused', 'Components/ConfirmLeaveGame', 'Components/Disconnected', 'Components/Waiting'],
     function(_, React, interop, events,
-            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual, GameOver, GamePaused, ConfirmLeaveGame, Disconnected) {
+            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual, GameOver, GamePaused, ConfirmLeaveGame, Disconnected, Waiting) {
  
     return React.createClass({
         mixins: [events.SetModeMixin],
@@ -180,6 +180,7 @@ define(['lodash', 'react', 'interop', 'events',
                 case 'game-paused': body = React.createElement(GamePaused, null); break;
                 case 'confirm-leave-game': body = React.createElement(ConfirmLeaveGame, null); break;
                 case 'disconnected': body = React.createElement(Disconnected, null); break;
+                case 'waiting': body = React.createElement(Waiting, null); break;
             }
 
             if (body) {

@@ -277,6 +277,34 @@ namespace Game
             }
         }
 
+        bool ShowingWaiting = false;
+        void CheckIfShouldShowWaiting()
+        {
+            if (WaitingTime < WaitTimeBeforeShowWaiting)
+            {
+                if (ShowingWaiting)
+                {
+                    GameClass.Game.Send("back");
+                    ShowingWaiting = false;
+                }
+            }
+            else
+            {
+                if (!ShowingWaiting && GameClass.Game.GameInputEnabled)
+                {
+                    ShowingWaiting = true;
+                    GameClass.Game.Send("setScreen", "waiting", new { canLeave = WaitingTime > 8 });
+                }
+            }
+        }
+
+        /// <summary>
+        /// How long we have been waiting for the server to respond.
+        /// </summary>
+        double WaitingTime = 0;
+
+        const double WaitTimeBeforeShowWaiting = 5;
+
         bool SentBookend = false;
         public void Draw()
         {
@@ -288,6 +316,7 @@ namespace Game
             double PreviousSecondsSinceLastUpdate = SecondsSinceLastUpdate;
 
             CheckIfShouldPause();
+            CheckIfShouldShowWaiting();
 
             if (GameClass.GameActive && !ServerPaused)
             {
@@ -365,9 +394,10 @@ namespace Game
                     if (SecondsSinceLastUpdate / DelayBetweenUpdates > .75f && SimStep == ServerSimStep && !SentBookend)
                     {
                         if (Log.UpdateSim) Console.WriteLine("Ready for bookend. {0}/{1} : {2}", SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates);
+                        
                         SentBookend = true;
+
                         AckSimStep = ServerSimStep + 2;
-                        //AckSimStep = ServerSimStep + 5;
                         Networking.ToClients(new MessageBookend(ServerSimStep + 1));
                     }
                 }
@@ -383,6 +413,8 @@ namespace Game
                 {
                     if (SimStep < ServerSimStep && !(Program.Server && MinClientSimStep + 2 < ServerSimStep))
                     {
+                        WaitingTime = 0;
+
                         if (!PostUpdateFinished)
                         {
                             PostSimulationUpdate(); // If we are behind do another post-sim update to help catchup.
@@ -410,6 +442,8 @@ namespace Game
                     }
                     else
                     {
+                        WaitingTime += GameClass.ElapsedSeconds;
+
                         if (Log.Delays) Console.WriteLine("-Reverting from # {0}/{1} : {2}", SimStep, ServerSimStep, SecondsSinceLastUpdate / DelayBetweenUpdates);
                         SecondsSinceLastUpdate = DelayBetweenUpdates;
                         T -= (float)GameClass.ElapsedSeconds;

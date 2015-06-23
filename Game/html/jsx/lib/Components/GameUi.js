@@ -1,7 +1,7 @@
 define(['lodash', 'react', 'interop', 'events',
-        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual', 'Components/GameOver', 'Components/GamePaused', 'Components/ConfirmLeaveGame', 'Components/Disconnected'],
+        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual', 'Components/GameOver', 'Components/GamePaused', 'Components/ConfirmLeaveGame', 'Components/Disconnected', 'Components/Waiting'],
     function(_, React, interop, events,
-            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual, GameOver, GamePaused, ConfirmLeaveGame, Disconnected) {
+            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual, GameOver, GamePaused, ConfirmLeaveGame, Disconnected, Waiting) {
  
     return React.createClass({
         mixins: [events.SetModeMixin],
@@ -180,6 +180,7 @@ define(['lodash', 'react', 'interop', 'events',
                 case 'game-paused': body = <GamePaused />; break;
                 case 'confirm-leave-game': body = <ConfirmLeaveGame />; break;
                 case 'disconnected': body = <Disconnected />; break;
+                case 'waiting': body = <Waiting />; break;
             }
 
             if (body) {
