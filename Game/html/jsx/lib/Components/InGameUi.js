@@ -213,15 +213,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             );
         },
     });
-    
-    var UnitBarItem = React.createClass({
-        render: function() {
-            return (
-                <Div pos={pos(2+this.props.index * 14,0)}><p>{this.props.data}</p></Div>
-            );
-        },
-    });
-    
+        
     var UnitBar = React.createClass({
         mixins: [RenderAtMixin, events.UpdateMixin],
                 

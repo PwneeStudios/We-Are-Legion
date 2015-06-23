@@ -328,12 +328,12 @@ namespace Game
 
         public void Defeat(int winning_team)
         {
-            Send("setScreen", "gameOver", new { victory = false, winningTeam = winning_team });
+            Send("setScreen", "gameOver", new { victory = false, winningTeam = winning_team, info = World.PlayerInfo });
         }
 
         public void Victory(int winning_team)
         {
-            Send("setScreen", "gameOver", new { victory = true, winningTeam = winning_team });
+            Send("setScreen", "gameOver", new { victory = true, winningTeam = winning_team, info = World.PlayerInfo });
         }
 
         void GameOverLogic()
@@ -345,7 +345,7 @@ namespace Game
                 DeltaT *= .03f;
                 World.Markers.Hide = true;
             }
-            else if (T - World.GameOverTime < 3)
+            else if (T - World.GameOverTime < 3.75)
             {
                 DeltaT *= .25f;
             }

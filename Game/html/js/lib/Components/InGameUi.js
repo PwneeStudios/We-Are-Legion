@@ -213,15 +213,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             );
         },
     });
-    
-    var UnitBarItem = React.createClass({displayName: "UnitBarItem",
-        render: function() {
-            return (
-                React.createElement(Div, {pos: pos(2+this.props.index * 14,0)}, React.createElement("p", null, this.props.data))
-            );
-        },
-    });
-    
+        
     var UnitBar = React.createClass({displayName: "UnitBar",
         mixins: [RenderAtMixin, events.UpdateMixin],
                 

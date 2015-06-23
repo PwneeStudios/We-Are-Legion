@@ -88,8 +88,8 @@ define(['lodash', 'react', 'interop', 'events',
             //setScreen('manual');
             //setScreen('find-game');
 
-            //setMode('in-game');
-            //setScreen('gameOver', {victory:false});
+            setMode('in-game');
+            setScreen('gameOver', {victory:false});
             //setScreen('gameOver', {victory:true});
             //setScreen('in-game-ui');
             //setScreen('in-game-menu');
