@@ -38,14 +38,22 @@ namespace Game
         public int GameTeam;
         public bool Host;
         public string Args;
+
+        public bool HasPickedTeam = false;
     }
 
     public class LobbyInfo
     {
         public List<PlayerLobbyInfo> Players = new List<PlayerLobbyInfo>(4);
+        public int Increment = 0;
 
         public LobbyInfo()
         {
+        }
+
+        public void MarkAsChanged()
+        {
+            Increment++;
         }
 
         public LobbyInfo(int NumPlayers)

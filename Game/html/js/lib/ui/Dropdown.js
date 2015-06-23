@@ -46,9 +46,11 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'ui/Item'], function(_, s
                     React.createElement(DropdownButton, {className: className, disabled: this.props.disabled, title: item.selectedName || item.name, 
                                     onMouseEnter: this.props.disabled ? null : sound.play.hover}, 
                         _.map(this.props.choices, function(choice) {
-                            //var _choice = _.clone(choice);
                             return (
-                                React.createElement(Item, {disabled: choice.taken, item: choice, name: choice.name, onSelect: self.onSelect})
+                                React.createElement(Item, {disabled: choice.taken, 
+                                      item: choice, 
+                                      name: choice.name, 
+                                      onSelect: choice.taken ? null : self.onSelect})
                             );
                         })
                     )

@@ -147,7 +147,11 @@ function(_, React, ReactBootstrap, interop, events, ui,
                     var player = this.props.players[i-1];
                     if (player.SteamID === 0) continue;
 
-                    _.find(myTeamChoices, 'value', player.GameTeam).taken = true;
+                    // Use this if you want to prevent taken teams from being double picked.
+                    //_.find(myTeamChoices, 'value', player.GameTeam).taken = true;
+
+                    // Use this if you want to prevent taken kingdoms from being double picked.
+                    // NOTE: multiple players playing as the same kingdom is not supported by the engine.
                     _.find(myKingdomChoices, 'value', player.GamePlayer).taken = true;
                 }
 

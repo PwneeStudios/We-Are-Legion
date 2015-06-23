@@ -207,6 +207,12 @@ namespace Game
             return JSValue.Null;
         }
 
+        void SendAnnouncement(string message)
+        {
+            string msg = string.Format("%a{0}", message);
+            SteamMatches.SendChatMsg(msg);
+        }
+
         JSValue SelectTeam(object sender, JavascriptMethodEventArgs e)
         {
             string team = e.Arguments[0].ToString();
@@ -381,6 +387,7 @@ namespace Game
                 if (player.GameTeam <= 0 || player.GameTeam > 4)
                 {
                     player.GameTeam = FirstTeamAvailableTo(player);
+                    player.HasPickedTeam = true;
                 }
             }
 
@@ -436,8 +443,19 @@ namespace Game
             }
             else
             {
-                return !LobbyInfo.Players.Exists(match =>
-                    match.SteamID != 0 && match.SteamID != player.SteamID && match.GameTeam == team);
+                bool PreventTeamCollissions = false;
+
+                if (!player.HasPickedTeam) PreventTeamCollissions = true;
+
+                if (PreventTeamCollissions)
+                {
+                    return !LobbyInfo.Players.Exists(match =>
+                        match.SteamID != 0 && match.SteamID != player.SteamID && match.GameTeam == team);
+                }
+                else
+                {
+                    return true;
+                }
             }
         }
 
@@ -459,12 +477,17 @@ namespace Game
         {
             if (!SteamMatches.IsLobbyOwner()) return;
 
+            // This ensures the lobby info changes and forces and update,
+            // even if no relevant values changed.
+            LobbyInfo.MarkAsChanged();
+
             // Assign unused teams/player spots to non-gamer players. (SteamID == 0).
             foreach (var player in LobbyInfo.Players)
             {
                 if (player.SteamID != 0) continue;
                 player.GamePlayer = FirstKingdomAvailableTo(player);
                 player.GameTeam = FirstTeamAvailableTo(player);
+                player.HasPickedTeam = true;
             }
 
             SetLobbyName();
@@ -522,58 +545,83 @@ namespace Game
             if (msg[0] != '%') return false; // Action message must start with a '%'
             if (msg.Length < 3) return false; // Action message must have at least 3 characters, eg '%p3'
 
-            if (!SteamMatches.IsLobbyOwner())
+            if (msg[1] == 'a')
             {
-                // Only the lobby owner can act on action messages.
-                // Everyone else should ignore them, so return true,
-                // signalling this action was already processed.
-                return true;
-            }
-
-            // The third character in the message stores the numeric value.
-            // Parse it and store in this variable.
-            int value = -1;
-
-            try
-            {
-                string valueStr = "" + msg[2];
-                int.TryParse(valueStr, out value);
-            }
-            catch
-            {
-                Console.WriteLine("bad chat command : {0}", msg);
-                return false;
-            }
-
-            // The numeric value for team/player must be one of 1, 2, 3, 4.
-            if (value <= 0 || value > 4)
-            {
-                return false;
-            }
-
-            // Get the info for the player sending the message.
-            var player = LobbyInfo.Players.Where(_player => _player.SteamID == id).First();
-
-            // Update the player's info.
-            if (msg[1] == 'k')
-            {
-                if (KingdomAvailableTo(value, player))
+                try
                 {
-                    GameClass.Game.AddChatMessage(name, "Has changed kingdoms!");
-                    player.GamePlayer = value;
+                    string remainder = msg.Substring(2);
+
+                    if (remainder != null & remainder.Length > 0)
+                    {
+                        GameClass.Game.AddChatMessage("Game", remainder);
+                        return true;
+                    }
                 }
-            }
-            else if (msg[1] == 't')
-            {
-                if (TeamAvailableTo(value, player))
+                catch
                 {
-                    GameClass.Game.AddChatMessage(name, "Has changed teams!");
-                    player.GameTeam = value;
+                    Console.WriteLine("bad chat command : {0}", msg);
+                    return false;
                 }
+
+                return false;
             }
             else
             {
-                return false;
+                if (!SteamMatches.IsLobbyOwner())
+                {
+                    // Only the lobby owner can act on action messages.
+                    // Everyone else should ignore them, so return true,
+                    // signalling this action was already processed.
+                    return true;
+                }
+
+                // Get the info for the player sending the message.
+                var player = LobbyInfo.Players.Where(_player => _player.SteamID == id).First();
+
+                // The third character in the message stores the numeric value.
+                // Parse it and store in this variable.
+                int value = -1;
+
+                try
+                {
+                    string valueStr = "" + msg[2];
+                    int.TryParse(valueStr, out value);
+                }
+                catch
+                {
+                    Console.WriteLine("bad chat command : {0}", msg);
+                    return false;
+                }
+
+                // The numeric value for team/player must be one of 1, 2, 3, 4.
+                if (value <= 0 || value > 4)
+                {
+                    return false;
+                }
+
+                // Update the player's info.
+                if (msg[1] == 'k')
+                {
+                    if (KingdomAvailableTo(value, player))
+                    {
+                        //GameClass.Game.AddChatMessage(name, "Has changed kingdoms!");
+                        SendAnnouncement(name + " has changed kingdoms!");
+                        player.GamePlayer = value;
+                    }
+                }
+                else if (msg[1] == 't')
+                {
+                    if (TeamAvailableTo(value, player))
+                    {
+                        //GameClass.Game.AddChatMessage(name, "Has changed teams!");
+                        SendAnnouncement(name + " has changed teams!");
+                        player.GameTeam = value;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             SetLobbyInfo();
