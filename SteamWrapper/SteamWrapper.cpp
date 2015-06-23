@@ -713,3 +713,11 @@ UInt64 SteamPlayer::Id()
 {
 	return m_handle->ConvertToUint64();
 }
+
+String^ SteamPlayer::Name()
+{
+	char const * pchName = SteamFriends()->GetFriendPersonaName( *m_handle );
+	String^ name = gcnew System::String( pchName );
+	
+	return name;
+}

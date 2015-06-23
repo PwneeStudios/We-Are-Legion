@@ -45,7 +45,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
             var Buildings = Images.Buildings;
             var Units = Images.Units;
 
-            var name = this.props.info.PlayerName || 'Player ' + this.props.MyPlayerNumber;
+            var name = this.props.info.Name || 'Player ' + this.props.MyPlayerNumber;
         
             return (
                 <tr>

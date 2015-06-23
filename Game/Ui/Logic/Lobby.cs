@@ -259,6 +259,7 @@ namespace Game
         void OnP2PSessionRequest(UInt64 Player)
         {
             SteamP2P.AcceptP2PSessionWithPlayer(new SteamPlayer(Player));
+            GetNames();
         }
 
         void OnP2PSessionConnectFail(UInt64 Player)

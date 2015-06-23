@@ -83,6 +83,7 @@ namespace SteamWrapper
 		}
 
 		UInt64 Id();
+		String^ Name();
 	};
 
 	public value class LeaderboardHandle

@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-
+using System.Linq;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -8,9 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using FragSharpHelper;
 using FragSharpFramework;
 
-
-using System.Linq;
-
+using SteamWrapper;
 
 namespace Game
 {
@@ -206,6 +204,8 @@ namespace Game
                         ScenarioToLoad = null;
                         TimeSinceLoad = 0;
                         DrawFullScreen(Assets.ScreenLoading);
+
+                        GetNames();
                     }
 
                     if (!Program.GameStarted)
@@ -326,13 +326,31 @@ namespace Game
             }
         }
 
+        public void GetNames()
+        {
+            if (World != null && World.PlayerInfo != null && Program.SteamUsers == null || Program.SteamUsers.Length == 0) return;
+
+            for (int player = 0; player < 4; player++)
+            {
+                UInt64 user = Program.SteamUsers[player];
+                string name = new SteamPlayer(user).Name();
+
+                if (name != null && name.Length > 0)
+                {
+                    World.PlayerInfo[player + 1].Name = name;
+                }
+            }
+        }
+
         public void Defeat(int winning_team)
         {
+            GetNames();
             Send("setScreen", "gameOver", new { victory = false, winningTeam = winning_team, info = World.PlayerInfo });
         }
 
         public void Victory(int winning_team)
         {
+            GetNames();
             Send("setScreen", "gameOver", new { victory = true, winningTeam = winning_team, info = World.PlayerInfo });
         }
 
@@ -340,14 +358,17 @@ namespace Game
         {
             if (World == null || !World.GameOver) return;
 
-            if (T - World.GameOverTime < 2)
+            float dist = (World.DragonLordDeathPos - World.GameOverPos).Length();
+            float PanTime = CoreMath.LerpRestrict(0, .5f, 1.35f, 2, dist);
+
+            if (T - World.GameOverTime < PanTime)
             {
                 DeltaT *= .03f;
                 World.Markers.Hide = true;
             }
-            else if (T - World.GameOverTime < 3.75)
+            else if (T - World.GameOverTime < PanTime + 1.25)
             {
-                DeltaT *= .25f;
+                DeltaT *= .35f;
             }
             else
             {

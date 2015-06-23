@@ -468,7 +468,7 @@ namespace Game
                 }
             }
 
-            //if (alive_count <= 1)
+            if (alive_count <= 1)
             {
                 GameOver = true;
                 GameOverTime = GameClass.T;
