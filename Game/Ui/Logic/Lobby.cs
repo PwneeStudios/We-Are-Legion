@@ -110,17 +110,26 @@ namespace Game
             
             SetMap(new_map);
 
-            if (SteamMatches.IsLobbyOwner())
-            {
-                SteamMatches.SetLobbyData("MapName", new_map);
-                SetLobbyInfo();
-            }
-
             return JSValue.Null;
         }
 
         void SetMap(string map_name)
         {
+            if (SteamMatches.IsLobbyOwner())
+            {
+                string current = SteamMatches.GetLobbyData("MapName");
+                string name = map_name;
+
+                if (name.Length > 0 && name.Contains(".m3n"))
+                    name = name.Substring(0, name.Length - 4);
+
+                if (current != map_name)
+                {
+                    SteamMatches.SetLobbyData("MapName", name);
+                    SetLobbyInfo();
+                }
+            }
+
             Console.WriteLine("set map to {0}", map_name);
 
             map_name += ".m3n";

@@ -175,7 +175,8 @@ namespace Game
                     {
                         //MapPreviewPos = new vec2(2.66f, 0.554f);
                         //MapPreviewSize = new vec2(.22f, .22f);
-                        World.DrawMinimap(MapPreviewPos, MapPreviewSize, ShowCameraBox: false, SolidColor: MapLoading);
+                        bool UseSolidColor = MapLoading || World == BlankWorld;
+                        World.DrawMinimap(MapPreviewPos, MapPreviewSize, ShowCameraBox: false, SolidColor: UseSolidColor);
                     }
 
                     World.DrawArrowCursor();

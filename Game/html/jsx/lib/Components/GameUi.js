@@ -88,12 +88,12 @@ define(['lodash', 'react', 'interop', 'events',
             //setScreen('manual');
             //setScreen('find-game');
 
-            setMode('in-game');
+            //setMode('in-game');
             //setScreen('gameOver', {victory:false});
             //setScreen('gameOver', {victory:true});
             //setScreen('in-game-ui');
             //setScreen('in-game-menu');
-            setScreen('confirm-leave-game');
+            //setScreen('confirm-leave-game');
         },
 
         screenHistory: function() {
