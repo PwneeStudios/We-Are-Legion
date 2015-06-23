@@ -10,7 +10,7 @@ namespace Game
             color output = color.TransparentBlack;
 
             data cur = Current[Here];
-	        data pre = Previous[Here];
+            data pre = Previous[Here];
 
             float selected_offset = selected(cur) ? _4 : _0;
 

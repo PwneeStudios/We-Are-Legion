@@ -6,9 +6,9 @@ using XnaMedia = Microsoft.Xna.Framework.Media;
 
 namespace Game
 {
-	public abstract class MediaPlayer
-	{
-		public static MediaPlayer Instance = new XnaMediaPlayer();
+    public abstract class MediaPlayer
+    {
+        public static MediaPlayer Instance = new XnaMediaPlayer();
 
         public static XnaMedia.MediaState State
         {
@@ -18,76 +18,76 @@ namespace Game
             }
         }
 
-		public static BaseSong CurrentSong;
+        public static BaseSong CurrentSong;
 
-		public abstract void Stop ();
-		public abstract bool IsRepeating { get; set; }
-		public abstract float Volume { get; set; }
-		public abstract void Pause ();
-		public abstract void Resume ();
+        public abstract void Stop ();
+        public abstract bool IsRepeating { get; set; }
+        public abstract float Volume { get; set; }
+        public abstract void Pause ();
+        public abstract void Resume ();
 
-		public abstract BaseSong NewSong();
-	}
+        public abstract BaseSong NewSong();
+    }
 
-	public class XnaMediaPlayer : MediaPlayer
-	{
-		public override BaseSong NewSong ()
-		{
-			return new XnaSong();
-		}
+    public class XnaMediaPlayer : MediaPlayer
+    {
+        public override BaseSong NewSong ()
+        {
+            return new XnaSong();
+        }
 
-		public override void Stop()
-		{
+        public override void Stop()
+        {
             try
             {
-			    XnaMedia.MediaPlayer.Stop();
+                XnaMedia.MediaPlayer.Stop();
             }
             catch (Exception e)
             {
             }
-		}
+        }
 
-		public override bool IsRepeating
-		{
-			get
+        public override bool IsRepeating
+        {
+            get
             {
                 try
                 {
-				    return XnaMedia.MediaPlayer.IsRepeating;
+                    return XnaMedia.MediaPlayer.IsRepeating;
                 }
                 catch (Exception e)
                 {
                     return false;
                 }
-			}
+            }
 
-			set
+            set
             {
                 try
                 {
-				    XnaMedia.MediaPlayer.IsRepeating = value;
+                    XnaMedia.MediaPlayer.IsRepeating = value;
                 }
                 catch (Exception e)
                 {
                 }
-			}
-		}
+            }
+        }
 
-		public override float Volume
+        public override float Volume
         {
-			get
+            get
             {
                 try
                 {
-				    return XnaMedia.MediaPlayer.Volume;
+                    return XnaMedia.MediaPlayer.Volume;
                 }
                 catch (Exception e)
                 {
                     return 0;
                 }
-			}
+            }
 
-			set
+            set
             {
                 try
                 {
@@ -96,87 +96,87 @@ namespace Game
                 catch (Exception e)
                 {
                 }
-			}
-		}
+            }
+        }
 
-		public override void Pause()
-		{
+        public override void Pause()
+        {
             try
             {
-			    XnaMedia.MediaPlayer.Pause();
+                XnaMedia.MediaPlayer.Pause();
             }
             catch (Exception e)
             {
             }
-		}
+        }
 
-		public override void Resume()
-		{
+        public override void Resume()
+        {
             try
             {
-			    XnaMedia.MediaPlayer.Resume();
+                XnaMedia.MediaPlayer.Resume();
             }
             catch (Exception e)
             {
             }
-		}
-	}
+        }
+    }
 
-	public class EmptyMediaPlayer : MediaPlayer
-	{
-		class EmptySong : BaseSong
-		{
-			protected override void LoadSong (string name)
-			{
-				base.LoadSong (name);
-			}
+    public class EmptyMediaPlayer : MediaPlayer
+    {
+        class EmptySong : BaseSong
+        {
+            protected override void LoadSong (string name)
+            {
+                base.LoadSong (name);
+            }
 
-			public override double Play (bool DisplayInfo)
-			{
-				return base.Play (DisplayInfo);
-			}
-		}
+            public override double Play (bool DisplayInfo)
+            {
+                return base.Play (DisplayInfo);
+            }
+        }
 
-		public override BaseSong NewSong ()
-		{
-			return new EmptySong ();
-		}
+        public override BaseSong NewSong ()
+        {
+            return new EmptySong ();
+        }
 
-		public override void Stop()
-		{
+        public override void Stop()
+        {
 
-		}
+        }
 
-		public override bool IsRepeating
-		{
-			get {
-				return false;
-			}
+        public override bool IsRepeating
+        {
+            get {
+                return false;
+            }
 
-			set {
+            set {
 
-			}
-		}
+            }
+        }
 
-		public override float Volume {
-			get {
-				return 0;
-			}
-			set {
+        public override float Volume {
+            get {
+                return 0;
+            }
+            set {
 
-			}
-		}
+            }
+        }
 
-		public override void Pause ()
-		{
+        public override void Pause ()
+        {
 
-		}
+        }
 
-		public override void Resume ()
-		{
+        public override void Resume ()
+        {
 
-		}
-	}
+        }
+    }
 
     public class SongWad
     {
@@ -229,7 +229,7 @@ namespace Game
 
             StartingSong = false;
 
-			MediaPlayer.Instance.IsRepeating = false;
+            MediaPlayer.Instance.IsRepeating = false;
         }
         
         public void FadeOut()
@@ -239,13 +239,13 @@ namespace Game
 
         public void Stop()
         {
-			try
-			{
-				MediaPlayer.Instance.Stop();
-			}
-			catch
-			{
-			}
+            try
+            {
+                MediaPlayer.Instance.Stop();
+            }
+            catch
+            {
+            }
 
             PlayNext = false;
         }
@@ -255,26 +255,26 @@ namespace Game
         {
             Paused = true;
 
-			try
-			{
-				MediaPlayer.Instance.Pause();
-			}
-			catch
-			{
-			}
+            try
+            {
+                MediaPlayer.Instance.Pause();
+            }
+            catch
+            {
+            }
         }
 
         public void Unpause()
         {
             Paused = false;
             
-			try
-			{
-				MediaPlayer.Instance.Resume();
-			}
-			catch
-			{
-			}
+            try
+            {
+                MediaPlayer.Instance.Resume();
+            }
+            catch
+            {
+            }
         }
 
         public void DisplaySongInfo(BaseSong song)
@@ -304,7 +304,7 @@ namespace Game
 
         public void PhsxStep()
         {
-			if (Paused && MediaPlayer.State != XnaMedia.MediaState.Paused)
+            if (Paused && MediaPlayer.State != XnaMedia.MediaState.Paused)
                 Pause();
 
             FadePhsx();
@@ -322,16 +322,16 @@ namespace Game
                 if (Fade <= 0)
                 {
                     PlayNext = false;
-					
-					try
-					{
-						MediaPlayer.Instance.Stop();
-					}
-					catch
-					{
-					}
                     
-					Fading = false;
+                    try
+                    {
+                        MediaPlayer.Instance.Stop();
+                    }
+                    catch
+                    {
+                    }
+                    
+                    Fading = false;
                 }
             }
 
@@ -364,7 +364,7 @@ namespace Game
         {
             if (StartingSong)
             {
-				if (MediaPlayer.State == XnaMedia.MediaState.Playing)
+                if (MediaPlayer.State == XnaMedia.MediaState.Playing)
                     StartingSong = false;
                 else
                     return;
@@ -379,16 +379,16 @@ namespace Game
                     if (PlayList == null || PlayList.Count <= 1)
                         CanControl = false;
 
-				// WITHOUT player song switching enabled
-				// Switch to the next song if the current song is over
-				if (PlayNext && Elapsed > Duration)
-					Next();
+                // WITHOUT player song switching enabled
+                // Switch to the next song if the current song is over
+                if (PlayNext && Elapsed > Duration)
+                    Next();
             }
         }
 
         public bool IsPlaying()
         {
-			if (MediaPlayer.State == XnaMedia.MediaState.Playing)
+            if (MediaPlayer.State == XnaMedia.MediaState.Playing)
                 return true;
             else
                 return false;
@@ -396,9 +396,9 @@ namespace Game
 
         public void Next(BaseSong song)
         {
-			bool HoldSuppress = SuppressNextInfoDisplay;
+            bool HoldSuppress = SuppressNextInfoDisplay;
 
-			SuppressNextInfoDisplay = HoldSuppress;
+            SuppressNextInfoDisplay = HoldSuppress;
 
             CurIndex = PlayList.IndexOf(song);
             if (CurIndex < 0) CurIndex = 0;
@@ -523,15 +523,15 @@ namespace Game
             SetSong(PlayList.IndexOf(song));
         }
 
-		public bool _SuppressNextInfoDisplay = false;
-		public bool SuppressNextInfoDisplay
-		{
-			get { return _SuppressNextInfoDisplay; }
-			set
-			{
-				_SuppressNextInfoDisplay = value;
-			}
-		}
+        public bool _SuppressNextInfoDisplay = false;
+        public bool SuppressNextInfoDisplay
+        {
+            get { return _SuppressNextInfoDisplay; }
+            set
+            {
+                _SuppressNextInfoDisplay = value;
+            }
+        }
 
         public void SetSong(int Index) { SetSong(Index, true); }
         public void SetSong(int Index, bool DisplayInfo)
@@ -541,13 +541,13 @@ namespace Game
             Fade = 1;
             Fading = false;
 
-			try
-			{
-				MediaPlayer.Instance.Stop();
-			}
-			catch
-			{
-			}
+            try
+            {
+                MediaPlayer.Instance.Stop();
+            }
+            catch
+            {
+            }
 
             // Suppress next info display
             if (DisplayInfo && SuppressNextInfoDisplay)
@@ -575,7 +575,7 @@ namespace Game
 
         public void AddSong(string Name)
         {
-			BaseSong NewSong = MediaPlayer.Instance.NewSong ();
+            BaseSong NewSong = MediaPlayer.Instance.NewSong ();
 
             int Index = Name.IndexOf("^");
 
@@ -591,7 +591,7 @@ namespace Game
                 AristName = "Unknown artist";
             }
 
-			SongName = SongName.Replace ('$', '\'');
+            SongName = SongName.Replace ('$', '\'');
 
             NewSong.FileName = Name;
             NewSong.Name = Name;

@@ -164,7 +164,7 @@ namespace Game
 
         public override MessageStr EncodeHead()
         {
- 	        return _ | Type;
+             return _ | Type;
         }
     }
 

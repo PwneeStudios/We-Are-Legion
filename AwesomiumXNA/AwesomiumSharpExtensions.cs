@@ -6,12 +6,12 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AwesomiumXNA
 {
-	public static class AwesomiumXnaExtensions
-	{
-		public static Texture2D RenderTexture2D(this BitmapSurface buffer, Texture2D texture)
-		{
-			TextureFormatConverter.DirectBlit(buffer, ref texture);
-			return texture;
-		}
-	}
+    public static class AwesomiumXnaExtensions
+    {
+        public static Texture2D RenderTexture2D(this BitmapSurface buffer, Texture2D texture)
+        {
+            TextureFormatConverter.DirectBlit(buffer, ref texture);
+            return texture;
+        }
+    }
 }

@@ -7,9 +7,9 @@ using XnaMedia = Microsoft.Xna.Framework.Media;
 
 namespace Game
 {
-	public class XnaSong : BaseSong
-	{
-		public XnaMedia.Song song;
+    public class XnaSong : BaseSong
+    {
+        public XnaMedia.Song song;
 
         public override double Play(bool DisplayInfo)
         {
@@ -17,8 +17,8 @@ namespace Game
 
             try
             {
-				MediaPlayer.Instance.Stop();
-				XnaMedia.MediaPlayer.Play(song);
+                MediaPlayer.Instance.Stop();
+                XnaMedia.MediaPlayer.Play(song);
 
                 return song.Duration.TotalSeconds;
             }
@@ -31,7 +31,7 @@ namespace Game
 
         protected override void LoadSong(string name)
         {
-			//song = GameClass.Game.Content.LoadTillSuccess<XnaMedia.Song>("Music\\" + name);
+            //song = GameClass.Game.Content.LoadTillSuccess<XnaMedia.Song>("Music\\" + name);
 
             try
             {
@@ -42,7 +42,7 @@ namespace Game
                 song = null;
             }
         }
-	}
+    }
 
     public abstract class BaseSong
     {
