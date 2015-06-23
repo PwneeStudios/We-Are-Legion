@@ -38,19 +38,38 @@ namespace Game
 
 		public override void Stop()
 		{
-			XnaMedia.MediaPlayer.Stop();
+            try
+            {
+			    XnaMedia.MediaPlayer.Stop();
+            }
+            catch (Exception e)
+            {
+            }
 		}
 
 		public override bool IsRepeating
 		{
 			get
             {
-				return XnaMedia.MediaPlayer.IsRepeating;
+                try
+                {
+				    return XnaMedia.MediaPlayer.IsRepeating;
+                }
+                catch (Exception e)
+                {
+                    return false;
+                }
 			}
 
 			set
             {
-				XnaMedia.MediaPlayer.IsRepeating = value;
+                try
+                {
+				    XnaMedia.MediaPlayer.IsRepeating = value;
+                }
+                catch (Exception e)
+                {
+                }
 			}
 		}
 
@@ -58,23 +77,48 @@ namespace Game
         {
 			get
             {
-				return XnaMedia.MediaPlayer.Volume;
+                try
+                {
+				    return XnaMedia.MediaPlayer.Volume;
+                }
+                catch (Exception e)
+                {
+                    return 0;
+                }
 			}
 
 			set
             {
-				XnaMedia.MediaPlayer.Volume = value;
+                try
+                {
+                    XnaMedia.MediaPlayer.Volume = value;
+                }
+                catch (Exception e)
+                {
+                }
 			}
 		}
 
-		public override void Pause ()
+		public override void Pause()
 		{
-			XnaMedia.MediaPlayer.Pause ();
+            try
+            {
+			    XnaMedia.MediaPlayer.Pause();
+            }
+            catch (Exception e)
+            {
+            }
 		}
 
-		public override void Resume ()
+		public override void Resume()
 		{
-			XnaMedia.MediaPlayer.Resume ();
+            try
+            {
+			    XnaMedia.MediaPlayer.Resume();
+            }
+            catch (Exception e)
+            {
+            }
 		}
 	}
 

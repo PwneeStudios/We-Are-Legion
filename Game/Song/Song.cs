@@ -19,20 +19,28 @@ namespace Game
             {
 				MediaPlayer.Instance.Stop();
 				XnaMedia.MediaPlayer.Play(song);
+
+                return song.Duration.TotalSeconds;
             }
             catch (Exception e)
             {
                 SongWad.Wad.Stop();
                 return 1000000;
             }
-
-            return song.Duration.TotalSeconds;
         }
 
         protected override void LoadSong(string name)
         {
 			//song = GameClass.Game.Content.LoadTillSuccess<XnaMedia.Song>("Music\\" + name);
-            song = GameClass.Game.Content.Load<XnaMedia.Song>("Music\\" + name);
+
+            try
+            {
+                song = GameClass.Game.Content.Load<XnaMedia.Song>("Music\\" + name);
+            }
+            catch (Exception e)
+            {
+                song = null;
+            }
         }
 	}
 

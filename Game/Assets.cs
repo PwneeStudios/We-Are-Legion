@@ -156,7 +156,13 @@ namespace Game
 
                 if (extension == "xnb")
                 {
-                    SoundWad.Wad.AddSound(Content.Load<SoundEffect>("Sound\\" + name), name);
+                    try
+                    {
+                        SoundWad.Wad.AddSound(Content.Load<SoundEffect>("Sound\\" + name), name);
+                    }
+                    catch (Exception e)
+                    {
+                    }
                 }
             }
         }

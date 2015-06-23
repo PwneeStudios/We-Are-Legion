@@ -30,6 +30,8 @@ namespace Game
                 if (String.Compare(Snd.Name, name, StringComparison.OrdinalIgnoreCase) == 0)
                     return Snd;
 
+            if (SoundList.Count == 0) return null;
+
             return SoundList[0];
         }
 
