@@ -204,15 +204,19 @@ namespace Game
                     }
                 }
 
+                // Messages from players
+                if (message != null)
+                {
+                    if (message.Type == MessageType.StartingStep)
+                    {
+                        message.Innermost.Do();
+                    }
+                }
+
                 // Messages from the server
                 if (message.Source.IsServer)
                 {
                     if (message.Type == MessageType.Bookend)
-                    {
-                        message.Innermost.Do();
-                    }
-
-                    if (message.Type == MessageType.StartingStep)
                     {
                         message.Innermost.Do();
                     }
