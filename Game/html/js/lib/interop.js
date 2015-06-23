@@ -95,6 +95,18 @@ define(['lodash'], function(_) {
             }
         },
 
+        requestPause: function(index) {
+            if (interop.InXna()) {
+                xna.RequestPause();
+            }
+        },
+
+        requestUnpause: function(index) {
+            if (interop.InXna()) {
+                xna.RequestUnpause();
+            }
+        },
+
         playSound: function(sound, vol) {
             if (interop.InXna()) {
                 if (typeof vol === 'undefined') {

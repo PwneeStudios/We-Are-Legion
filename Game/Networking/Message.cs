@@ -15,7 +15,7 @@ using FragSharpFramework;
 namespace Game
 {
     public enum MessageType {
-        DoneLoading, Start, Pause, Unpause,
+        DoneLoading, Start, LeaveGame, ServerLeft, RequestPause, RequestUnpause, Pause, Unpause,
         PlayerAction, PlayerActionAck, Bookend, StartingStep
     }
 
@@ -206,7 +206,11 @@ namespace Game
             if (Program.Server)
             {
                 Source.SimStep = SimStep;
-                GameClass.World.MinClientSimStep = Server.Clients.Min(client => client.SimStep);
+                
+                //GameClass.World.MinClientSimStep = Server.Clients.Min(client => client.SimStep);
+                GameClass.World.MinClientSimStep = Server.Clients
+                    .Where(client => !client.HasLeft)
+                    .Min(client => client.SimStep);
 
                 if (Log.DoUpdates) Console.WriteLine("   Do StartingStep. Client {0} is now at step {1}. We're at step {2}:{3}. Min is {2}", Source.Index, SimStep, GameClass.World.SimStep, GameClass.World.ServerSimStep, GameClass.World.MinClientSimStep);
             }

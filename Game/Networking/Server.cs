@@ -20,6 +20,15 @@ namespace Game
 
         Thread ServerThread;
         bool ShouldStop = false;
+        bool ShouldStopWhenEmpty = false;
+
+        public void FinalSend()
+        {
+            if (ServerThread == null) return;
+
+            ShouldStopWhenEmpty = true;
+            ServerThread.Join();
+        }
 
         void SendReceiveThread()
         {
@@ -85,6 +94,13 @@ namespace Game
                     }
 
                     if (Log.Send) Console.WriteLine("(Server) Sent to {0}: {1}", index, encoding);
+                }
+                else
+                {
+                    if (ShouldStopWhenEmpty)
+                    {
+                        ShouldStop = true;
+                    }
                 }
 
                 Thread.Sleep(1);

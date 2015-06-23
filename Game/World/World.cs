@@ -73,6 +73,7 @@ namespace Game
         
         public bool SimulationPaused = false;
         public bool WorldPaused = false;
+        public bool ServerPaused = false;
 
         bool NotPaused_SimulationUpdate { get { return !SimulationPaused; } } // Allow unit orders even if simulation is paused, as long as we're in the map editor and the world isn't paused
         bool NotPaused_UnitOrders { get { return !SimulationPaused || MapEditorActive && !WorldPaused; } } // Allow unit orders even if simulation is paused, as long as we're in the map editor and the world isn't paused

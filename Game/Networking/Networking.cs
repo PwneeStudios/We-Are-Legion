@@ -74,12 +74,20 @@ namespace Game
 
         static Server _Server;
         static Client _Client;
+
         public static void Start()
         {
             Cleanup();
 
             if (Program.Server) _Server = new Server();
             if (Program.Client) _Client = new Client();
+        }
+
+        public static void FinalSend()
+        {
+            if (_Server != null) { _Server.FinalSend(); }
+            if (_Client != null) { _Client.FinalSend(); }
+            GameClass.World.ProcessInbox();
         }
 
         public static void Cleanup()

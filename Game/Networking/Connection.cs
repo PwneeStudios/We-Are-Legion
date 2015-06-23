@@ -22,6 +22,9 @@ namespace Game
         public bool IsServer = false;
         public bool HasLoaded = false;
 
+        public bool HasLeft = false;
+        public bool RequestingPause = false;
+
         public int Team
         {
             get

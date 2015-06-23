@@ -142,7 +142,7 @@ namespace Game
             QueuedActions[SimStep] = null;
         }
 
-        void ProcessInbox()
+        public void ProcessInbox()
         {
             Message message;
             while (Networking.Inbox.TryDequeue(out message))
@@ -181,22 +181,91 @@ namespace Game
                             Networking.ToClients(ack);
                         }
                     }
+
+                    if (message.Type == MessageType.LeaveGame)
+                    {
+                        message.Source.HasLeft = true;
+                    }
+
+                    if (message.Type == MessageType.RequestPause)
+                    {
+                        message.Source.RequestingPause = true;
+                    }
+
+                    if (message.Type == MessageType.RequestUnpause)
+                    {
+                        message.Source.RequestingPause = false;
+
+                        // Cancel everyone's pause request.
+                        foreach (var client in Server.Clients)
+                        {
+                            client.RequestingPause = false;
+                        }
+                    }
                 }
 
-                if (message.Type == MessageType.Bookend)
+                // Messages from the server
+                if (message.Source.IsServer)
                 {
-                    message.Innermost.Do();
-                }
+                    if (message.Type == MessageType.Bookend)
+                    {
+                        message.Innermost.Do();
+                    }
 
-                if (message.Type == MessageType.StartingStep)
-                {
-                    message.Innermost.Do();
-                }
+                    if (message.Type == MessageType.StartingStep)
+                    {
+                        message.Innermost.Do();
+                    }
 
-                if (message.Type == MessageType.PlayerActionAck)
-                {
-                    message.Inner.Do();
+                    if (message.Type == MessageType.PlayerActionAck)
+                    {
+                        message.Inner.Do();
+                    }
+
+                    if (message.Type == MessageType.Pause)
+                    {
+                        if (!ServerPaused)
+                        {
+                            ServerPaused = true;
+                            GameClass.Game.Send("setScreen", "game-paused", new { canUnpause = true });
+                        }
+                    }
+
+                    if (message.Type == MessageType.Unpause)
+                    {
+                        if (ServerPaused)
+                        {
+                            ServerPaused = false;
+                            GameClass.Game.Send("back");
+                        }
+                    }
+
+                    if (message.Type == MessageType.ServerLeft)
+                    {
+                        GameClass.Game.ReturnToMainMenu();
+                    }
                 }
+            }
+        }
+
+        void CheckIfShouldPause()
+        {
+            if (!Program.Server) return;
+
+            bool ShouldPause = false;
+            foreach (var client in Server.Clients)
+            {
+                if (!client.HasLeft && client.RequestingPause)
+                    ShouldPause = true;
+            }
+
+            if (ShouldPause && !ServerPaused)
+            {
+                Networking.ToClients(new Message(MessageType.Pause));
+            }
+            else if (!ShouldPause && ServerPaused)
+            {
+                Networking.ToClients(new Message(MessageType.Unpause));
             }
         }
 
@@ -210,7 +279,9 @@ namespace Game
 
             double PreviousSecondsSinceLastUpdate = SecondsSinceLastUpdate;
 
-            if (GameClass.GameActive)
+            CheckIfShouldPause();
+
+            if (GameClass.GameActive && !ServerPaused)
             {
                 if (NotPaused_SimulationUpdate)
                 {

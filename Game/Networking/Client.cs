@@ -45,6 +45,7 @@ namespace Game
         Connection MyConnection;
         Thread ClientThread;
         bool ShouldStop = false;
+        bool ShouldStopWhenEmpty = false;
 
         public Client()
         {
@@ -57,8 +58,18 @@ namespace Game
                 MyConnection = new TcpServerConnection();
             }
 
+            MyConnection.IsServer = true;
+
             Connect();
             Start();
+        }
+
+        public void FinalSend()
+        {
+            if (ClientThread == null) return;
+
+            ShouldStopWhenEmpty = true;
+            ClientThread.Join();
         }
 
         void SendReceiveThread()
@@ -94,6 +105,13 @@ namespace Game
                     string encoding = outgoing.Item2.Encode();
                     MyConnection.Send(encoding);
                     if (Log.Send) Console.WriteLine("(Client) Sent: {0}", encoding);
+                }
+                else
+                {
+                    if (ShouldStopWhenEmpty)
+                    {
+                        ShouldStop = true;
+                    }
                 }
 
                 Thread.Sleep(1);

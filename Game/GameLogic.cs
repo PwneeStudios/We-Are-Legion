@@ -345,13 +345,13 @@ namespace Game
         public void Defeat(int winning_team)
         {
             GetNames();
-            Send("setScreen", "gameOver", new { victory = false, winningTeam = winning_team, info = World.PlayerInfo });
+            Send("setScreen", "game-over", new { victory = false, winningTeam = winning_team, info = World.PlayerInfo });
         }
 
         public void Victory(int winning_team)
         {
             GetNames();
-            Send("setScreen", "gameOver", new { victory = true, winningTeam = winning_team, info = World.PlayerInfo });
+            Send("setScreen", "game-over", new { victory = true, winningTeam = winning_team, info = World.PlayerInfo });
         }
 
         void GameOverLogic()

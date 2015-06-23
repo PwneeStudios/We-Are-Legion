@@ -1,7 +1,7 @@
 define(['lodash', 'react', 'interop', 'events',
-        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual', 'Components/GameOver'],
+        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual', 'Components/GameOver', 'Components/GamePaused'],
     function(_, React, interop, events,
-            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual, GameOver) {
+            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual, GameOver, GamePaused) {
  
     return React.createClass({
         mixins: [events.SetModeMixin],
@@ -174,8 +174,9 @@ define(['lodash', 'react', 'interop', 'events',
                 case 'game-lobby': body = React.createElement(GameLobby, null); break;
                 
                 case 'in-game-ui': body = React.createElement(InGameUi, null); break;
-                case 'gameOver': body = React.createElement(GameOver, null); break;
+                case 'game-over': body = React.createElement(GameOver, null); break;
                 case 'in-game-menu': body = React.createElement(InGameMenu, null); break;
+                case 'game-paused': body = React.createElement(GamePaused, null); break;
             }
 
             if (body) {

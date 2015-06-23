@@ -40,6 +40,9 @@ namespace Game
             xnaObj.Bind("LeaveGame", LeaveGame);
             xnaObj.Bind("QuitApp", QuitApp);
             xnaObj.Bind("DumpState", DumpState);
+
+            xnaObj.Bind("RequestPause", RequestPause);
+            xnaObj.Bind("RequestUnpause", RequestUnpause);
         }
 
         static string DumpedState = "";
@@ -52,23 +55,53 @@ namespace Game
 
         JSValue LeaveGame(object sender, JavascriptMethodEventArgs e)
         {
+            if (Program.Server)
+            {
+                Networking.ToServer(new Message(MessageType.ServerLeft));
+            }
+            else
+            {
+                Networking.ToServer(new Message(MessageType.LeaveGame));
+            }
+            
+            Networking.FinalSend();
+
             SteamMatches.LeaveLobby();
 
+            ReturnToMainMenu();
+
+            return JSValue.Null;
+        }
+
+        public void ReturnToMainMenu()
+        {
             Send("removeMode", "in-game");
             Send("removeMode", "main-menu");
-            
+
             Send("setMode", "main-menu");
             Send("setScreen", "game-menu");
 
             State = GameState.MainMenu;
             awesomium.AllowMouseEvents = true;
-
-            return JSValue.Null;
         }
 
         JSValue QuitApp(object sender, JavascriptMethodEventArgs e)
         {
             Exit();
+
+            return JSValue.Null;
+        }
+
+        JSValue RequestPause(object sender, JavascriptMethodEventArgs e)
+        {
+            Networking.ToServer(new Message(MessageType.RequestPause));
+
+            return JSValue.Null;
+        }
+
+        JSValue RequestUnpause(object sender, JavascriptMethodEventArgs e)
+        {
+            Networking.ToServer(new Message(MessageType.RequestUnpause));
 
             return JSValue.Null;
         }

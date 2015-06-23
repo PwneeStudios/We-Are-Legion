@@ -23,25 +23,22 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
 
     return React.createClass({
         mixins: [],
-
+                
         getInitialState: function() {
             return {
             };
         },
 
-        pause: function(e) {
-            interop.requestPause();
-            back();
+        unpause: function(e) {
+            interop.requestUnpause();
         },
 
         render: function() {
             return (
-                <Menu>
-                    <MenuItem eventKey={1} to='back'>Return to game</MenuItem>
-                    <MenuItem eventKey={2} onClick={this.pause}>Pause game</MenuItem>
-                    <MenuItem eventKey={3} to='options' params={{inGame:true}}>Options</MenuItem>
-                    <MenuItem eventKey={5} onClick={leaveGame}>Leave Game</MenuItem>
-                </Menu>
+                React.createElement(Menu, null, 
+                    React.createElement("p", null, "Game paused"), 
+                    React.createElement(MenuItem, {disabled: !this.props.params.canUnpause, eventKey: 1, onClick: this.unpause}, "Unpause")
+                )
             );
         }
     });
