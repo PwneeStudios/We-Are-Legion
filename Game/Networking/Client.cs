@@ -70,6 +70,15 @@ namespace Game
 
             ShouldStopWhenEmpty = true;
             ClientThread.Join();
+
+            int count = 0;
+            while (!ShouldStop)
+            {
+                count++;
+                if (count > 1000) return;
+
+                Thread.Sleep(1);
+            }
         }
 
         void SendReceiveThread()

@@ -33,9 +33,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         render: function() {
             return (
                 React.createElement(Menu, null, 
-                    React.createElement(MenuTitle, null, "Are you sure?"), 
-                    React.createElement(MenuItem, {eventKey: 2, onClick: leaveGame}, "Leave Game"), 
-                    React.createElement(MenuItem, {eventKey: 3, to: "back"}, "Cancel")
+                    React.createElement(MenuTitle, null, this.props.params.message), 
+                    React.createElement(MenuItem, {eventKey: 2, onClick: leaveGame}, "Leave Game")
                 )
             );
         }

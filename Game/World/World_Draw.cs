@@ -248,7 +248,8 @@ namespace Game
                     {
                         if (!Program.Server)
                         {
-                            GameClass.Game.ReturnToMainMenu();
+                            //GameClass.Game.ReturnToMainMenu();
+                            GameClass.Game.Send("setScreen", "disconnected", new { message = "The server has quit. Tell them they suck." });
                         }
                     }
                 }

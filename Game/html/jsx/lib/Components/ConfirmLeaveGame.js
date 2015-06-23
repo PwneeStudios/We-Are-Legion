@@ -30,10 +30,6 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             };
         },
 
-        unpause: function(e) {
-            interop.requestUnpause();
-        },
-
         render: function() {
             return (
                 <Menu>
