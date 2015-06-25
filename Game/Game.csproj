@@ -138,6 +138,7 @@
     <Compile Include="Networking\Connection.cs" />
     <Compile Include="Song\Song.cs" />
     <Compile Include="Song\SongWad.cs" />
+    <Compile Include="Sound\AmbientSound.cs" />
     <Compile Include="Sound\Sound.cs" />
     <Compile Include="Sound\SoundWad.cs" />
     <Compile Include="TestSteam.cs" />

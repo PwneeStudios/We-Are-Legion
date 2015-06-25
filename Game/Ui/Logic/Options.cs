@@ -60,6 +60,7 @@ namespace Game
         JSValue SetSoundVolume(object sender, JavascriptMethodEventArgs e)
         {
             CurrentConfig.SoundVolume = ArgTo0to1(e.Arguments[0]);
+            AmbientSounds.UpdateVolumes();
             SaveConfig();
 
             return JSValue.Null;

@@ -165,8 +165,9 @@ namespace Game
                     }
                 }
             }
-        }
 
+            AmbientSounds.StartAmbientSounds();
+        }
 
 #if DEBUG
         public static bool HotSwap = false;

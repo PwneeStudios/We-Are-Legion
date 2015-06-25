@@ -1,0 +1,335 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="CombinedSwordFight_data" version="1.3.0" audacityversion="2.1.0" sel0="0.0000000000" sel1="0.0000000000" vpos="496" h="0.0000000000" zoom="4.3675380524" rate="48000.0" snapto="off" selectionformat="hh:mm:ss + milliseconds">
+	<tags>
+		<tag name="ALBUM" value="Yap Audio Production SFX"/>
+		<tag name="ARTIST" value="Yap Audio Production"/>
+		<tag name="YEAR" value="2014"/>
+		<tag name="Composer" value="Matthew McLean"/>
+		<tag name="GENRE" value="Other"/>
+	</tags>
+	<wavetrack name="175951__freefire66__swordbattle2" channel="0" linked="1" mute="0" solo="0" height="143" minimized="0" isSelected="0" rate="96000" gain="1.0" pan="-0.7">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="1911312">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000329.au" len="183067" min="-0.299671" max="0.299671" rms="0.080605"/>
+				</waveblock>
+				<waveblock start="183067">
+					<simpleblockfile filename="e0000919.au" len="183067" min="-0.299671" max="0.299671" rms="0.072849"/>
+				</waveblock>
+				<waveblock start="366134">
+					<simpleblockfile filename="e0000240.au" len="262144" min="-0.299671" max="0.299671" rms="0.049966"/>
+				</waveblock>
+				<waveblock start="628278">
+					<simpleblockfile filename="e0000153.au" len="262144" min="-0.299671" max="0.299671" rms="0.072682"/>
+				</waveblock>
+				<waveblock start="890422">
+					<simpleblockfile filename="e0000b9e.au" len="262144" min="-0.299671" max="0.299671" rms="0.065695"/>
+				</waveblock>
+				<waveblock start="1152566">
+					<simpleblockfile filename="e0000a7c.au" len="262144" min="-0.299671" max="0.299671" rms="0.059902"/>
+				</waveblock>
+				<waveblock start="1414710">
+					<simpleblockfile filename="e0000367.au" len="262144" min="-0.299671" max="0.299671" rms="0.070333"/>
+				</waveblock>
+				<waveblock start="1676854">
+					<simpleblockfile filename="e000011d.au" len="234458" min="-0.299671" max="0.299671" rms="0.07281"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="175951__freefire66__swordbattle2" channel="1" linked="0" mute="0" solo="0" height="157" minimized="0" isSelected="0" rate="96000" gain="1.0" pan="-0.7">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="1911312">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000d13.au" len="183067" min="-0.299671" max="0.299671" rms="0.080605"/>
+				</waveblock>
+				<waveblock start="183067">
+					<simpleblockfile filename="e0000409.au" len="183067" min="-0.299671" max="0.299671" rms="0.072849"/>
+				</waveblock>
+				<waveblock start="366134">
+					<simpleblockfile filename="e00004bc.au" len="262144" min="-0.299671" max="0.299671" rms="0.049966"/>
+				</waveblock>
+				<waveblock start="628278">
+					<simpleblockfile filename="e0000c2a.au" len="262144" min="-0.299671" max="0.299671" rms="0.072682"/>
+				</waveblock>
+				<waveblock start="890422">
+					<simpleblockfile filename="e0000004.au" len="262144" min="-0.299671" max="0.299671" rms="0.065695"/>
+				</waveblock>
+				<waveblock start="1152566">
+					<simpleblockfile filename="e0000c30.au" len="262144" min="-0.299671" max="0.299671" rms="0.059902"/>
+				</waveblock>
+				<waveblock start="1414710">
+					<simpleblockfile filename="e00001d9.au" len="262144" min="-0.299671" max="0.299671" rms="0.070333"/>
+				</waveblock>
+				<waveblock start="1676854">
+					<simpleblockfile filename="e0000c57.au" len="234458" min="-0.299671" max="0.299671" rms="0.07281"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="175951__freefire66__swordbattle2" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="96000" gain="1.0" pan="-0.3">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="1897660">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000935.au" len="169404" min="-0.299671" max="0.299671" rms="0.058067"/>
+				</waveblock>
+				<waveblock start="169404">
+					<simpleblockfile filename="e0000b58.au" len="169404" min="-0.299671" max="0.299671" rms="0.056049"/>
+				</waveblock>
+				<waveblock start="338808">
+					<simpleblockfile filename="e0000b8b.au" len="262144" min="-0.299671" max="0.299671" rms="0.082474"/>
+				</waveblock>
+				<waveblock start="600952">
+					<simpleblockfile filename="e0000240.au" len="262144" min="-0.299671" max="0.299671" rms="0.049966"/>
+				</waveblock>
+				<waveblock start="863096">
+					<simpleblockfile filename="e0000153.au" len="262144" min="-0.299671" max="0.299671" rms="0.072682"/>
+				</waveblock>
+				<waveblock start="1125240">
+					<simpleblockfile filename="e000095d.au" len="248492" min="-0.299671" max="0.299671" rms="0.065704"/>
+				</waveblock>
+				<waveblock start="1373732">
+					<simpleblockfile filename="e0000a7c.au" len="262144" min="-0.299671" max="0.299671" rms="0.059902"/>
+				</waveblock>
+				<waveblock start="1635876">
+					<simpleblockfile filename="e00001bb.au" len="261784" min="-0.299671" max="0.299671" rms="0.070331"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="175951__freefire66__swordbattle2" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="96000" gain="1.0" pan="-0.3">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="1897660">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000344.au" len="169404" min="-0.299671" max="0.299671" rms="0.058067"/>
+				</waveblock>
+				<waveblock start="169404">
+					<simpleblockfile filename="e0000ed6.au" len="169404" min="-0.299671" max="0.299671" rms="0.056049"/>
+				</waveblock>
+				<waveblock start="338808">
+					<simpleblockfile filename="e0000b68.au" len="262144" min="-0.299671" max="0.299671" rms="0.082474"/>
+				</waveblock>
+				<waveblock start="600952">
+					<simpleblockfile filename="e00004bc.au" len="262144" min="-0.299671" max="0.299671" rms="0.049966"/>
+				</waveblock>
+				<waveblock start="863096">
+					<simpleblockfile filename="e0000c2a.au" len="262144" min="-0.299671" max="0.299671" rms="0.072682"/>
+				</waveblock>
+				<waveblock start="1125240">
+					<simpleblockfile filename="e0000d3d.au" len="248492" min="-0.299671" max="0.299671" rms="0.065704"/>
+				</waveblock>
+				<waveblock start="1373732">
+					<simpleblockfile filename="e0000c30.au" len="262144" min="-0.299671" max="0.299671" rms="0.059902"/>
+				</waveblock>
+				<waveblock start="1635876">
+					<simpleblockfile filename="e0000719.au" len="261784" min="-0.299671" max="0.299671" rms="0.070331"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="175951__freefire66__swordbattle2" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="96000" gain="1.0" pan="0.3">
+		<waveclip offset="0.22753717">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="1873427">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000f8e.au" len="104159" min="-0.299671" max="0.299671" rms="0.069121"/>
+				</waveblock>
+				<waveblock start="104159">
+					<simpleblockfile filename="e0000321.au" len="262144" min="-0.299671" max="0.299671" rms="0.074735"/>
+				</waveblock>
+				<waveblock start="366303">
+					<simpleblockfile filename="e000060b.au" len="262144" min="-0.299671" max="0.299671" rms="0.06696"/>
+				</waveblock>
+				<waveblock start="628447">
+					<simpleblockfile filename="e0000ddf.au" len="262144" min="-0.299671" max="0.299671" rms="0.063905"/>
+				</waveblock>
+				<waveblock start="890591">
+					<simpleblockfile filename="e0000c8c.au" len="262144" min="-0.299671" max="0.299671" rms="0.063319"/>
+				</waveblock>
+				<waveblock start="1152735">
+					<simpleblockfile filename="e000095b.au" len="262144" min="-0.299671" max="0.299671" rms="0.050188"/>
+				</waveblock>
+				<waveblock start="1414879">
+					<simpleblockfile filename="e0000539.au" len="246103" min="-0.299671" max="0.299671" rms="0.054176"/>
+				</waveblock>
+				<waveblock start="1660982">
+					<simpleblockfile filename="e0000778.au" len="212445" min="-0.299671" max="0.299671" rms="0.057286"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="175951__freefire66__swordbattle2" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="96000" gain="1.0" pan="0.3">
+		<waveclip offset="0.22753717">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="1873427">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000f82.au" len="104159" min="-0.299671" max="0.299671" rms="0.069121"/>
+				</waveblock>
+				<waveblock start="104159">
+					<simpleblockfile filename="e00003d6.au" len="262144" min="-0.299671" max="0.299671" rms="0.074735"/>
+				</waveblock>
+				<waveblock start="366303">
+					<simpleblockfile filename="e0000239.au" len="262144" min="-0.299671" max="0.299671" rms="0.06696"/>
+				</waveblock>
+				<waveblock start="628447">
+					<simpleblockfile filename="e00008a0.au" len="262144" min="-0.299671" max="0.299671" rms="0.063905"/>
+				</waveblock>
+				<waveblock start="890591">
+					<simpleblockfile filename="e000046a.au" len="262144" min="-0.299671" max="0.299671" rms="0.063319"/>
+				</waveblock>
+				<waveblock start="1152735">
+					<simpleblockfile filename="e0000684.au" len="262144" min="-0.299671" max="0.299671" rms="0.050188"/>
+				</waveblock>
+				<waveblock start="1414879">
+					<simpleblockfile filename="e0000361.au" len="246103" min="-0.299671" max="0.299671" rms="0.054176"/>
+				</waveblock>
+				<waveblock start="1660982">
+					<simpleblockfile filename="e0000b75.au" len="212445" min="-0.299671" max="0.299671" rms="0.057286"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="175951__freefire66__swordbattle2" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="96000" gain="1.0" pan="0.7">
+		<waveclip offset="0.05688429">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="1905851">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000924.au" len="186200" min="-0.299671" max="0.299671" rms="0.062305"/>
+				</waveblock>
+				<waveblock start="186200">
+					<simpleblockfile filename="e0000450.au" len="262144" min="-0.299671" max="0.299671" rms="0.061233"/>
+				</waveblock>
+				<waveblock start="448344">
+					<simpleblockfile filename="e0000e05.au" len="262144" min="-0.299671" max="0.299671" rms="0.065007"/>
+				</waveblock>
+				<waveblock start="710488">
+					<simpleblockfile filename="e0000930.au" len="262144" min="-0.299671" max="0.299671" rms="0.061932"/>
+				</waveblock>
+				<waveblock start="972632">
+					<simpleblockfile filename="e0000d54.au" len="262144" min="-0.299671" max="0.299671" rms="0.070633"/>
+				</waveblock>
+				<waveblock start="1234776">
+					<simpleblockfile filename="e00004a3.au" len="262144" min="-0.299671" max="0.299671" rms="0.065297"/>
+				</waveblock>
+				<waveblock start="1496920">
+					<simpleblockfile filename="e0000ae6.au" len="262144" min="-0.299671" max="0.299671" rms="0.05684"/>
+				</waveblock>
+				<waveblock start="1759064">
+					<simpleblockfile filename="e0000ffd.au" len="146787" min="-0.299671" max="0.299671" rms="0.036733"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="175951__freefire66__swordbattle2" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="96000" gain="1.0" pan="0.7">
+		<waveclip offset="0.05688429">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="1905851">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000a62.au" len="186200" min="-0.299671" max="0.299671" rms="0.062305"/>
+				</waveblock>
+				<waveblock start="186200">
+					<simpleblockfile filename="e0000599.au" len="262144" min="-0.299671" max="0.299671" rms="0.061233"/>
+				</waveblock>
+				<waveblock start="448344">
+					<simpleblockfile filename="e0000adf.au" len="262144" min="-0.299671" max="0.299671" rms="0.065007"/>
+				</waveblock>
+				<waveblock start="710488">
+					<simpleblockfile filename="e00001f9.au" len="262144" min="-0.299671" max="0.299671" rms="0.061932"/>
+				</waveblock>
+				<waveblock start="972632">
+					<simpleblockfile filename="e0000f71.au" len="262144" min="-0.299671" max="0.299671" rms="0.070633"/>
+				</waveblock>
+				<waveblock start="1234776">
+					<simpleblockfile filename="e0000230.au" len="262144" min="-0.299671" max="0.299671" rms="0.065297"/>
+				</waveblock>
+				<waveblock start="1496920">
+					<simpleblockfile filename="e0000a5d.au" len="262144" min="-0.299671" max="0.299671" rms="0.05684"/>
+				</waveblock>
+				<waveblock start="1759064">
+					<simpleblockfile filename="e000099c.au" len="146787" min="-0.299671" max="0.299671" rms="0.036733"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="192072__pfranzen__ambient-battle-noise-swords-and-shouting" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="48000" gain="0.223872" pan="-0.5">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="921770">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000410.au" len="262144" min="-0.845443" max="1.008638" rms="0.143997"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e0000758.au" len="262144" min="-0.918614" max="0.964137" rms="0.157295"/>
+				</waveblock>
+				<waveblock start="524288">
+					<simpleblockfile filename="e0000efc.au" len="262144" min="-0.892082" max="1.096824" rms="0.14199"/>
+				</waveblock>
+				<waveblock start="786432">
+					<simpleblockfile filename="e000027f.au" len="135338" min="-1.001237" max="1.000103" rms="0.164778"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="192072__pfranzen__ambient-battle-noise-swords-and-shouting" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="48000" gain="0.223872" pan="-0.5">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="921770">
+				<waveblock start="0">
+					<simpleblockfile filename="e000029d.au" len="262144" min="-0.851021" max="1.02301" rms="0.142524"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e0000e51.au" len="262144" min="-0.972259" max="0.984927" rms="0.154687"/>
+				</waveblock>
+				<waveblock start="524288">
+					<simpleblockfile filename="e00004f5.au" len="262144" min="-0.894242" max="1.074743" rms="0.140578"/>
+				</waveblock>
+				<waveblock start="786432">
+					<simpleblockfile filename="e0000d30.au" len="135338" min="-0.989694" max="0.960752" rms="0.160381"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="218522__yap-audio-production__medievalcombatloop" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="0.630957" pan="0.6">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="846876">
+				<waveblock start="0">
+					<simpleblockfile filename="e000004b.au" len="262144" min="-0.500566" max="0.513313" rms="0.090512"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e0000a53.au" len="262144" min="-0.492781" max="0.510471" rms="0.087325"/>
+				</waveblock>
+				<waveblock start="524288">
+					<simpleblockfile filename="e0000d20.au" len="262144" min="-0.491864" max="0.500583" rms="0.085042"/>
+				</waveblock>
+				<waveblock start="786432">
+					<simpleblockfile filename="e000049f.au" len="60444" min="-0.337905" max="0.433877" rms="0.071324"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="218522__yap-audio-production__medievalcombatloop" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="0.630957" pan="0.6">
+		<waveclip offset="0.00000000">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="846876">
+				<waveblock start="0">
+					<simpleblockfile filename="e0000e53.au" len="262144" min="-0.500566" max="0.513313" rms="0.090512"/>
+				</waveblock>
+				<waveblock start="262144">
+					<simpleblockfile filename="e000051d.au" len="262144" min="-0.492781" max="0.510471" rms="0.087325"/>
+				</waveblock>
+				<waveblock start="524288">
+					<simpleblockfile filename="e00005bd.au" len="262144" min="-0.491864" max="0.500583" rms="0.085042"/>
+				</waveblock>
+				<waveblock start="786432">
+					<simpleblockfile filename="e00005c4.au" len="60444" min="-0.337905" max="0.433877" rms="0.071324"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>

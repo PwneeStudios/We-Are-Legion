@@ -15,12 +15,9 @@ namespace Game
         public static bool SuppressSounds = false;
 
         public List<Sound> SoundList;
-        public int MaxInstancesPerSound;
 
         public SoundWad(int MaxInstancesPerSound)
         {
-            this.MaxInstancesPerSound = MaxInstancesPerSound;
-
             SoundList = new List<Sound>();
         }
 
@@ -40,7 +37,6 @@ namespace Game
             Sound NewSound = new Sound();
             NewSound.Name = Name;
             NewSound.sound = sound;
-            NewSound.MaxInstances = MaxInstancesPerSound;
 
             SoundList.Add(NewSound);
         }

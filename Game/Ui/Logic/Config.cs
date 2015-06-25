@@ -56,6 +56,7 @@ namespace Game
 
                 MusicVolume = 1;
                 SoundVolume = 1;
+                AmbientSounds.UpdateVolumes();
 #endif
             }
         }
@@ -114,6 +115,8 @@ namespace Game
 
                 ApplyConfigToForm();
             }
+
+            AmbientSounds.UpdateVolumes();
 
             if (Activate)
             {
