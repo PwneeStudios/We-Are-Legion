@@ -30,7 +30,7 @@ namespace Game
             return pos;
         }
 
-        vec2 WorldToGridCood(vec2 pos)
+        public vec2 WorldToGridCood(vec2 pos)
         {
             pos.y = -pos.y;
             pos = DataGroup.GridSize * (pos + vec2.Ones) / 2;

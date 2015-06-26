@@ -134,6 +134,27 @@ namespace Game
         }
     }
 
+    public partial class CountMovingAttackingDyingStanding : SimShader
+    {
+        [FragmentShader]
+        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Units)
+        {
+            data data_here = Data[Here];
+            unit unit_here = Units[Here];
+
+            vec4 output = vec4.Zero;
+            if (Something(data_here) && IsUnit(unit_here))
+            {
+                output.x = data_here.change == Change.Moved ? _1 : _0;
+                output.y = unit_here.anim == Anim.Attack ? _1 : _0;
+                output.z = unit_here.anim == Anim.Die ? _1 : _0;
+                output.w = unit_here.anim == Anim.Stand ? _1 : _0;
+            }
+
+            return output;
+        }
+    }
+
     public partial class CountReduce_3byte1byte : SimShader
     {
         [FragmentShader]

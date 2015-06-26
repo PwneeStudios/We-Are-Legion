@@ -351,6 +351,7 @@ namespace Game
 
                 case 3:
                     UpdateAllPlayerUnitCounts();
+                    UpdateFoley();
                     break;
 
                 case 4:
@@ -515,6 +516,15 @@ namespace Game
                     if (PrevDragonLordPos[player] == vec2.Zero) PrevDragonLordPos[player] = CurDragonLordPos[player];
                 }
             }
+        }
+
+        void UpdateFoley()
+        {
+            // [x]: (m)ove  [y]: (a)ttack  [z]: (d)ie  [w]: (s)tand
+            var mads = DataGroup.DoActionCount(this);
+
+            float attacking = mads.y;
+            AmbientSounds.ambient1.Volume = attacking * (float)Math.Pow(CameraZoom / 80f, 1.25f);
         }
     }
 }

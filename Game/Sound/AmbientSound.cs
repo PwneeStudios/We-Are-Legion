@@ -53,6 +53,18 @@ namespace Game
         {
             instance.SetVolume(_Volume * GameClass.Game.CurrentConfig.SoundVolume);
         }
+
+        public void EaseIntoVolume(float volume)
+        {
+            if (volume > _Volume)
+            {
+                _Volume = .5f * _Volume + .5f * volume;
+            }
+            else
+            {
+                _Volume = .8f * _Volume + .2f * volume;
+            }
+        }
     }
 
     public class AmbientSounds

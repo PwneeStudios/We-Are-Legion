@@ -216,6 +216,7 @@ namespace FragSharpFramework
             Game.CountAllUnits.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/CountAllUnits_player=0.007843138");
             Game.CountAllUnits.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/CountAllUnits_player=0.01176471");
             Game.CountAllUnits.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/CountAllUnits_player=0.01568628");
+            Game.CountMovingAttackingDyingStanding.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountMovingAttackingDyingStanding");
             Game.CountReduce_3byte1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_3byte1byte");
             Game.SetSelectedAction.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/SetSelectedAction_player=0");
             Game.SetSelectedAction.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/SetSelectedAction_player=0.003921569");
@@ -3107,6 +3108,9 @@ namespace Game
             CompiledEffect.Parameters["fs_param_Path_size"].SetValue(FragSharpMarshal.Marshal(vec(Path.Width, Path.Height)));
             CompiledEffect.Parameters["fs_param_Path_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Path.Width, Path.Height)));
             CompiledEffect.Parameters["fs_param_blend"].SetValue(FragSharpMarshal.Marshal(blend));
+            CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
+            CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
+            CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
@@ -4934,6 +4938,52 @@ namespace Game
 
 namespace Game
 {
+    public partial class CountMovingAttackingDyingStanding
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D Data, Texture2D Units, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Units);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Data, Texture2D Units, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Units);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Data, Texture2D Units, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Units);
+        }
+        public static void Using(Texture2D Data, Texture2D Units, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Units);
+        }
+        public static void Using(Texture2D Data, Texture2D Units)
+        {
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
+            CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace Game
+{
     public partial class CountReduce_3byte1byte
     {
         public static Effect CompiledEffect;
@@ -5958,6 +6008,9 @@ namespace Game
             CompiledEffect.Parameters["fs_param_Texture_size"].SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
             CompiledEffect.Parameters["fs_param_Texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
             CompiledEffect.Parameters["fs_param_PercentSimStepComplete"].SetValue(FragSharpMarshal.Marshal(PercentSimStepComplete));
+            CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
+            CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
+            CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
@@ -6056,6 +6109,9 @@ namespace Game
             CompiledEffect.Parameters["fs_param_selection_blend"].SetValue(FragSharpMarshal.Marshal(selection_blend));
             CompiledEffect.Parameters["fs_param_selection_size"].SetValue(FragSharpMarshal.Marshal(selection_size));
             CompiledEffect.Parameters["fs_param_solid_blend"].SetValue(FragSharpMarshal.Marshal(solid_blend));
+            CompiledEffect.Parameters["fs_param_FarColor_Texture"].SetValue(FragSharpMarshal.Marshal(FarColor));
+            CompiledEffect.Parameters["fs_param_FarColor_size"].SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
+            CompiledEffect.Parameters["fs_param_FarColor_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

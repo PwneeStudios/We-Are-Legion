@@ -93,6 +93,20 @@ namespace Game
             return (int)(SimShader.unpack_val(count.xyz) + .5f);
         }
 
+        public color DoActionCount(World world)
+        {
+            //CountMovingAttackingDyingStanding.Apply(CurrentData, CurrentUnits, Output: Multigrid[0]);
+            CountMovingAttackingDyingStanding.Using(CurrentData, CurrentUnits, Output: Multigrid[0]);
+
+            world.DrawVisibleGrid(scale:1.25f);
+
+            color count = MultigridReduce(CountReduce_4x1byte.Apply);
+
+            Console.WriteLine("moving: {0}, attacking: {1}, dying: {2}, standing: {3})", count.x, count.y, count.z, count.w);
+
+            return count;
+        }
+        
         public delegate void HashFunc(Texture2D F, Texture2D Noise, RenderTarget2D Output);
         public string DoHash(RenderTarget2D input) { return DoHash(input, Hash.Apply); }
         public string DoHash(RenderTarget2D input, HashFunc hash_func)
