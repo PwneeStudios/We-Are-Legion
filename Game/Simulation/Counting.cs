@@ -134,7 +134,7 @@ namespace Game
         }
     }
 
-    public partial class CountMovingAttackingDyingStanding : SimShader
+    public partial class CountMovingAttackingDyingExploding : SimShader
     {
         [FragmentShader]
         vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Units)
@@ -148,7 +148,11 @@ namespace Game
                 output.x = data_here.change == Change.Moved ? _1 : _0;
                 output.y = unit_here.anim == Anim.Attack ? _1 : _0;
                 output.z = unit_here.anim == Anim.Die ? _1 : _0;
-                output.w = unit_here.anim == Anim.Stand ? _1 : _0;
+            }
+
+            if (Something(data_here) && IsBuilding(unit_here))
+            {
+                output.w = data_here.direction == Dir.StationaryDying ? _1 : _0;
             }
 
             return output;

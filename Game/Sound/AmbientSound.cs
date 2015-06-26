@@ -58,12 +58,14 @@ namespace Game
         {
             if (volume > _Volume)
             {
-                _Volume = .5f * _Volume + .5f * volume;
+                _Volume = .25f * _Volume + .75f * volume;
             }
             else
             {
-                _Volume = .8f * _Volume + .2f * volume;
+                _Volume = .5f * _Volume + .5f * volume;
             }
+
+            UpdateVolume();
         }
     }
 

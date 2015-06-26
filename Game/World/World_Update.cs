@@ -523,8 +523,15 @@ namespace Game
             // [x]: (m)ove  [y]: (a)ttack  [z]: (d)ie  [w]: (s)tand
             var mads = DataGroup.DoActionCount(this);
 
+            float zoom = (float)Math.Pow(CameraZoom / 80f, 1.25f);
+
             float attacking = mads.y;
-            AmbientSounds.ambient1.Volume = attacking * (float)Math.Pow(CameraZoom / 80f, 1.25f);
+            AmbientSounds.ambient1.EaseIntoVolume(attacking * zoom);
+
+            if (mads.w > 0)
+            {
+                SoundWad.Wad.FindByName("BuildingExplode").Play(1.25f * zoom);
+            }
         }
     }
 }

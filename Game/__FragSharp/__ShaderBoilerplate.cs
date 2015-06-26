@@ -216,7 +216,7 @@ namespace FragSharpFramework
             Game.CountAllUnits.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/CountAllUnits_player=0.007843138");
             Game.CountAllUnits.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/CountAllUnits_player=0.01176471");
             Game.CountAllUnits.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/CountAllUnits_player=0.01568628");
-            Game.CountMovingAttackingDyingStanding.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountMovingAttackingDyingStanding");
+            Game.CountMovingAttackingDyingExploding.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountMovingAttackingDyingExploding");
             Game.CountReduce_3byte1byte.CompiledEffect = Content.Load<Effect>("FragSharpShaders/CountReduce_3byte1byte");
             Game.SetSelectedAction.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/SetSelectedAction_player=0");
             Game.SetSelectedAction.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/SetSelectedAction_player=0.003921569");
@@ -4938,7 +4938,7 @@ namespace Game
 
 namespace Game
 {
-    public partial class CountMovingAttackingDyingStanding
+    public partial class CountMovingAttackingDyingExploding
     {
         public static Effect CompiledEffect;
 

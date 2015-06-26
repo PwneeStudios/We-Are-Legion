@@ -56,6 +56,8 @@ namespace Game
         {
             if (SoundWad.SuppressSounds) return;
 
+            volume = CoreMath.Restrict(0, 1, volume);
+
             try
             {
                 sound.Play(volume * GameClass.Game.CurrentConfig.SoundVolume * DefaultVolume, 0, 0);
@@ -68,6 +70,8 @@ namespace Game
         public void Play(float volume, float pitch, float pan)
         {
             if (SoundWad.SuppressSounds) return;
+
+            volume = CoreMath.Restrict(0, 1, volume);
 
             try
             {

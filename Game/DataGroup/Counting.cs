@@ -95,10 +95,9 @@ namespace Game
 
         public color DoActionCount(World world)
         {
-            //CountMovingAttackingDyingStanding.Apply(CurrentData, CurrentUnits, Output: Multigrid[0]);
-            CountMovingAttackingDyingStanding.Using(CurrentData, CurrentUnits, Output: Multigrid[0]);
+            CountMovingAttackingDyingExploding.Using(CurrentData, CurrentUnits, Output: Multigrid[0]);
 
-            world.DrawVisibleGrid(scale:1.25f);
+            world.DrawVisibleGrid(scale:1.5f);
 
             color count = MultigridReduce(CountReduce_4x1byte.Apply);
 
