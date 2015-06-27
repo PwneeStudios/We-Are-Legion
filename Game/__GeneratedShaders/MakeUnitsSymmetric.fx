@@ -22,14 +22,14 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Info, using register location 1
-float2 fs_param_Info_size;
-float2 fs_param_Info_dxdy;
+// Texture Sampler for fs_param_Units, using register location 1
+float2 fs_param_Units_size;
+float2 fs_param_Units_dxdy;
 
-Texture fs_param_Info_Texture;
-sampler fs_param_Info : register(s1) = sampler_state
+Texture fs_param_Units_Texture;
+sampler fs_param_Units : register(s1) = sampler_state
 {
-    texture   = <fs_param_Info_Texture>;
+    texture   = <fs_param_Units_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -68,19 +68,24 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 info = tex2D(fs_param_Info, psin.TexCoords + (float2(0, 0)) * fs_param_Info_dxdy);
-    float2 pos = psin.TexCoords * fs_param_Info_size;
-    if (all(pos < fs_param_Info_size / 2 - .001))
+    float4 info = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
+    float2 pos = psin.TexCoords * fs_param_Units_size;
+    if (all(pos < fs_param_Units_size / 2 - .001))
     {
         __FinalOutput.Color = info;
         return __FinalOutput;
     }
-    float4 copy = tex2D(fs_param_Info, psin.TexCoords + (float2(0, 0) - Game__MakeSymmetricBase__QuadMirror__Sampler__vec2(psin, fs_param_Info, fs_param_Info_size, fs_param_Info_dxdy, pos)) * fs_param_Info_dxdy);
-    if (pos.x > fs_param_Info_size.x / 2 + .001)
+    float4 copy = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0) - Game__MakeSymmetricBase__QuadMirror__Sampler__vec2(psin, fs_param_Units, fs_param_Units_size, fs_param_Units_dxdy, pos)) * fs_param_Units_dxdy);
+    if (abs(copy.g - 0.0) < .001)
+    {
+        __FinalOutput.Color = copy;
+        return __FinalOutput;
+    }
+    if (pos.x > fs_param_Units_size.x / 2 + .001)
     {
         copy.g += 0.003921569;
     }
-    if (pos.y > fs_param_Info_size.y / 2 + .001)
+    if (pos.y > fs_param_Units_size.y / 2 + .001)
     {
         copy.g += 0.007843138;
     }

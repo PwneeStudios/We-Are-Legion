@@ -707,6 +707,12 @@ namespace Game
             MakeSymmetric.Apply(DataGroup.Corpses, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Corpses);
 
+            FixBuildings.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
+
+            FixBuildings.Apply(DataGroup.PreviousData, DataGroup.PreviousUnits, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousData);
+
             PostPaintUpdate();
         }
 
