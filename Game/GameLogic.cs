@@ -21,7 +21,8 @@ namespace Game
         }
 
 #if DEBUG
-        GameState State = GameState.ToMap;
+        GameState State = GameState.ToEditor;
+        //GameState State = GameState.ToMap;
         //GameState State = GameState.TitleScreen;
 #else
         GameState State = GameState.TitleScreen;
@@ -91,6 +92,8 @@ namespace Game
 
                     World.MapEditor = true;
 
+                    Send("setMode", "map-editor");
+                    Send("setScreen", "none");
                     State = GameState.Game;
 
                     break;
@@ -263,14 +266,14 @@ namespace Game
             {
                 if (World.MapEditorActive)
                 {
-                    if (Keys.S.Pressed())
+                    if (Keys.S.Pressed() && Keys.LeftControl.Down())
                     {
-                        World.Save("TestSave.m3n");
+                        World.Save("SavedMap.m3n");
                     }
 
-                    if (Keys.L.Pressed())
+                    if (Keys.L.Pressed() && Keys.LeftControl.Down())
                     {
-                        World.Load("TestSave.m3n");
+                        World.Load("SavedMap.m3n");
                     }
                 }
 
@@ -359,7 +362,7 @@ namespace Game
 
         void GameOverLogic()
         {
-            if (World == null || !World.GameOver) return;
+            if (World == null || !World.GameOver || World.MapEditor) return;
 
             float dist = (World.DragonLordDeathPos - World.GameOverPos).Length();
             float PanTime = CoreMath.LerpRestrict(0, .5f, 1.35f, 2, dist);

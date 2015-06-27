@@ -52,6 +52,8 @@ namespace Game
 
         void UpdateParams()
         {
+            if (World.MyPlayerInfo == null && World.MapEditor) return;
+
             World.MyPlayerInfo.Update();
 
             var obj = new Dictionary<string, object>();

@@ -78,16 +78,18 @@ define(['lodash', 'react', 'interop', 'events',
 
         componentDidMount: function() {
             setMode('none');
-            //return;
 
             setMode('main-menu');
             setScreen('game-menu');
+
+            // Test menus
             //setScreen('options');
             //setScreen('game-lobby', {host:true});
             //setScreen('game-lobby', {host:false});
             //setScreen('manual');
             //setScreen('find-game');
 
+            // Test in-game
             //setMode('in-game');
             //setScreen('gameOver', {victory:false});
             //setScreen('gameOver', {victory:true});
@@ -181,6 +183,8 @@ define(['lodash', 'react', 'interop', 'events',
                 case 'confirm-leave-game': body = React.createElement(ConfirmLeaveGame, null); break;
                 case 'disconnected': body = React.createElement(Disconnected, null); break;
                 case 'waiting': body = React.createElement(Waiting, null); break;
+
+                case 'none': body = null; break;
             }
 
             if (body) {

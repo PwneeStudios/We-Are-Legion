@@ -449,7 +449,7 @@ namespace Game
         public float GameOverZoom;
         void EndOfGameCheck()
         {
-            if (GameOver) return;
+            if (GameOver || MapEditor) return;
 
             int alive_count = 0;
             int winning_team = -1;

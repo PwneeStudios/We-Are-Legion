@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 using FragSharpHelper;
@@ -261,6 +262,11 @@ namespace Game
             Action_PaintTiles.Apply(DataGroup.Tiles, DataGroup.SelectField, DataGroup.RandomField, tile, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
 
+            PostPaintUpdate();
+        }
+
+        void PostPaintUpdate()
+        {
             PaintTiles_UpdateData.Apply(DataGroup.Tiles, DataGroup.CurrentUnits, DataGroup.CurrentData, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
 
@@ -627,27 +633,16 @@ namespace Game
                 }
             }
 
-            if (CurUserMode != UserMode.Select) return;
-
             if (MapEditorActive)
             {
                 if (Keys.D5.Pressed())
                 {
-                    foreach (bool polarity in Vals.Bool)
-                    {
-                        PropagateFullGeoId(polarity);
-                    }
+                    FinalizeGeodesics();
+                }
 
-                    CalculatePolarDistance();
-
-                    foreach (bool polarity in Vals.Bool)
-                    {
-                        SetReducedGeoId(polarity);
-                        GrowGeo(polarity);
-                        MarkGeoBoundary(polarity);
-                    }
-
-                    DirwardExtend(false);
+                if (Keys.O.Pressed())
+                {
+                    MakeMapSymmetric();
                 }
 
                 if (Keys.Delete.Down() || Keys.Back.Down())
@@ -655,6 +650,8 @@ namespace Game
                     DeleteUnits();
                 }
             }
+
+            if (CurUserMode != UserMode.Select) return;
 
             if (NotPaused_UnitOrders)
             {
@@ -682,6 +679,54 @@ namespace Game
                            CurSelectionFilter != PrevSelectionFilter);
                 }
             }
+        }
+
+        private void MakeMapSymmetric()
+        {
+            MakeSymmetric.Apply(DataGroup.Tiles, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
+
+            MakeSymmetric.Apply(DataGroup.CurrentData, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
+
+            MakeSymmetric.Apply(DataGroup.PreviousData, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousData);
+
+            MakeUnitsSymmetric.Apply(DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
+
+            MakeUnitsSymmetric.Apply(DataGroup.PreviousUnits, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousUnits);
+
+            MakeSymmetric.Apply(DataGroup.Extra, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Extra);
+
+            MakeSymmetric.Apply(DataGroup.TargetData, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TargetData);
+
+            MakeSymmetric.Apply(DataGroup.Corpses, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Corpses);
+
+            PostPaintUpdate();
+        }
+
+        private void FinalizeGeodesics()
+        {
+            foreach (bool polarity in Vals.Bool)
+            {
+                PropagateFullGeoId(polarity);
+            }
+
+            CalculatePolarDistance();
+
+            foreach (bool polarity in Vals.Bool)
+            {
+                SetReducedGeoId(polarity);
+                GrowGeo(polarity);
+                MarkGeoBoundary(polarity);
+            }
+
+            DirwardExtend(false);
         }
 
         bool[] FilteredSummary(float filter)
