@@ -173,8 +173,14 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         },
 
         getInitialState: function() {
-            return {
-            };
+            if (!interop.InXna()) {
+                return {
+                    goldCost: 1000,
+                };
+            } else {
+                return {
+                };
+            }
         },
 
         render: function() {
@@ -197,6 +203,9 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             var action = Actions[this.props.name];
             
             var pStyle = {fontSize: '90%', textAlign: 'right'};
+            //8.5
+            var costY = 4.55 * window.w / window.h;
+            console.log(costY);
             
             return (
                 <Div pos={pos(0,0,'relative')} size={size(7,100)} style={{'float':'left','display':'inline-block'}}>
@@ -207,8 +216,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                     <Div nonBlocking pos={pos(0,0)}>
                         <UiImage nonBlocking pos={pos(-1 + (100-90*action.scale)/2,-0.5)} width={90*action.scale} image={action.image} />
                     </Div>
-
-                    <Div nonBlocking pos={pos(-16,8.5)} size={width(100)} style={pStyle}><Cost name={this.props.name} /></Div>
+                    <Div nonBlocking pos={pos(-16,costY)} size={width(100)} style={pStyle}><Cost name={this.props.name} /></Div>
                 </Div>
             );
         },
@@ -370,6 +378,8 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         render: function() {
             var players = this.state.ShowAllPlayers ? _.range(1,5) : [this.state.MyPlayerNumber];
 
+            var xOffset = 10 * window.w / window.h;
+
             return (
                 <div>
                     <Div pos={pos(0,0)}>
@@ -382,7 +392,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
                     <MenuButton pos={pos(0.5,0.4)} size={width(50)} />
 
-                    <Div pos={pos(15,0)}>
+                    <Div pos={pos(xOffset,0)}>
                         <Chat.ChatInput pos={pos(0.35,80)} size={width(49)} />
 
                         {/*<Chat.ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/}

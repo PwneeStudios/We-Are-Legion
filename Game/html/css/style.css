@@ -45,6 +45,10 @@ p {
     color:rgba(236,236,236,255)
 }
 
+h2 {
+    font-size: 3.1%;
+}
+
 .list-group-item {
     font-size: 1.4%;
     pointer-events:auto;
@@ -176,6 +180,10 @@ td.menu-cell-dropdown .dropdown-menu {
     width: 100%;
 }
 
+.menu-description {
+    font-size: 115%;
+}
+
 /* ------
    Dropdown
    ------ */
@@ -228,6 +236,20 @@ button.UiButton:active {
 }
 
 button { outline: none; }
+
+
+/* ----------
+   Map Picker
+   ---------- */
+
+.modal-content {
+    width: 100%;
+}
+
+.modal-primary {
+    margin-left: 15%;
+    margin-right: 40%;
+}
 
 
 /* -----

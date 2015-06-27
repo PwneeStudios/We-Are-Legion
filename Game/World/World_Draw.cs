@@ -542,12 +542,13 @@ namespace Game
 
         public void DrawMinimap()
         {
-            DrawMinimap(vec2.Zero, vec(.2f, .2f));
+            DrawMinimap(vec(.128f/CameraAspect,.865f), vec(.22f, .22f));
         }
 
         public void DrawMinimap(vec2 pos, vec2 size, bool ShowCameraBox = true, bool SolidColor = false)
         {
-            vec2 center = pos + vec(-CameraAspect, -1) + new vec2(size.x, size.y) * vec(1.1f, 1.15f);
+            //vec2 center = pos + vec(-CameraAspect, -1) + new vec2(size.x, size.y) * vec(1.1f, 1.15f);
+            vec2 center = pos * vec(2 * CameraAspect, -2) - vec(CameraAspect, -1);
             MinimapQuad.SetupVertices(center - size, center + size, vec(0, 0), vec(1, 1));
 
             vec2 _size = size * vec(1, 254f / 245f) * 1.12f;

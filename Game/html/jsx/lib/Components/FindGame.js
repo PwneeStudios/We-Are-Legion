@@ -113,13 +113,9 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             return (
                 <div>
                     <Div nonBlocking pos={pos(10,5)} size={width(80)}>
-                        <Panel>
-                            <h2>
-                                Game list
-                            </h2>
-                        </Panel>
-
-                        <Well style={{'height':'75%'}}>
+                        <Well style={{'height':'90%'}}>
+                            {/* Header */}
+                            <h2>Game list</h2>
 
                             {/* Game List */}
                             <Div className='game-list' pos={pos(3.3,16.9)} size={size(50,66.2)}

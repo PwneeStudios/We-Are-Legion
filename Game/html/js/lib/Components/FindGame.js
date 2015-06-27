@@ -113,13 +113,9 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             return (
                 React.createElement("div", null, 
                     React.createElement(Div, {nonBlocking: true, pos: pos(10,5), size: width(80)}, 
-                        React.createElement(Panel, null, 
-                            React.createElement("h2", null, 
-                                "Game list"
-                            )
-                        ), 
-
-                        React.createElement(Well, {style: {'height':'75%'}}, 
+                        React.createElement(Well, {style: {'height':'90%'}}, 
+                            /* Header */
+                            React.createElement("h2", null, "Game list"), 
 
                             /* Game List */
                             React.createElement(Div, {className: "game-list", pos: pos(3.3,16.9), size: size(50,66.2), 

@@ -52,7 +52,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         render: function() {
             return (
                 <tr style={{'background-color':'#1c1e22','pointer-events':'auto'}}>
-                    <td>{this.props.children}</td>
+                    <td className='menu-description'>{this.props.children}</td>
                     <td>
                         <input style={{'float':'right','width':'100%'}}
                             ref='slider'
@@ -96,7 +96,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
             return (
                 <tr style={{'background-color':'#1c1e22'}}>
-                    <td>{this.props.children}</td>
+                    <td className='menu-description'>{this.props.children}</td>
                     <td className='menu-cell-dropdown'>
                         <Dropdown
                             disabled={this.props.disabled}

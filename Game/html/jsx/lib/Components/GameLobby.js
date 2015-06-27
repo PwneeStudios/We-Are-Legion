@@ -348,20 +348,16 @@ function(_, React, ReactBootstrap, interop, events, ui,
             return (
                 <div>
                     <Div nonBlocking pos={pos(10,5)} size={width(80)}>
-                        <Panel>
-                            <h2>
-                                {this.state.name}
-                            </h2>
-                        </Panel>
-
-                        <Well style={{'height':'75%'}}>
+                        <Well style={{'height':'90%'}}>
+                            {/* Lobby name */}
+                            <h2>{this.state.name}</h2>
 
                             {/* Chat */}
-                            <Chat.ChatBox ref='chat' show full pos={pos(2, 17)} size={size(43,61)}/>
+                            <Chat.ChatBox ref='chat' show full pos={pos(2, 15.5)} size={size(43,62.5)}/>
                             <Chat.ChatInput show lobbyChat pos={pos(2,80)} size={width(43)} />
 
                             {/* Player Table */}
-                            <Div nonBlocking pos={pos(48,16.9)} size={width(50)} style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
+                            <Div nonBlocking pos={pos(48,53)} size={width(50)} style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
                                 <Table style={{width:'100%'}}><tbody>
                                     {_.map(_.range(1, 5), function(i) {
                                         return (
@@ -375,24 +371,9 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 </tbody></Table>
                             </Div>
 
-                            {/* Map */}
-                            <Div nonBlocking pos={pos(38,68)} size={width(60)}>
-                                <div style={{'float':'right', 'pointer-events':'auto'}}>
-                                    <p>
-                                        {this.props.params.host ? 
-                                            <ModalTrigger modal={<MapPicker maps={this.state.maps} onPick={this.onMapPick} />}>
-                                                <ui.Button disabled={disabled} bsStyle='primary' bsSize='large'>
-                                                    Choose map...
-                                                </ui.Button>
-                                            </ModalTrigger>
-                                            : null}
-                                    </p>
-                                </div>
-                            </Div>
-
                             {/* Game visibility type */}
                             {this.props.params.host ? 
-                                <Div pos={pos(48,43)} size={size(24,66.2)}>
+                                <Div pos={pos(48,5.2)} size={size(16.5,66.2)}>
                                     <OptionList disabled={disabled} options={visibility}
                                                 onSelect={this.onLobbyTypeSelect} value={this.props.params.type}/>
                                 </Div>
@@ -402,9 +383,20 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             <Div nonBlocking pos={pos(38,80)} size={width(60)}>
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
+                                        {/* Map */}
+                                        {this.props.params.host ? 
+                                            <ModalTrigger modal={<MapPicker maps={this.state.maps} onPick={this.onMapPick} />}>
+                                                <ui.Button disabled={disabled} bsStyle='primary'>
+                                                    Choose map...
+                                                </ui.Button>
+                                            </ModalTrigger>
+                                            : null}
+
+                                        &nbsp;
                                         {this.props.params.host ?
                                             <ui.Button disabled={preventStart} onClick={this.onClickStart}>Start Game</ui.Button>
                                             : null}
+
                                         &nbsp;
                                         <ui.Button disabled={disabled} onClick={this.leaveLobby}>Leave Lobby</ui.Button>
                                     </p>

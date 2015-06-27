@@ -21,9 +21,9 @@ namespace Game
         }
 
 #if DEBUG
-        GameState State = GameState.ToEditor;
+        //GameState State = GameState.ToEditor;
         //GameState State = GameState.ToMap;
-        //GameState State = GameState.TitleScreen;
+        GameState State = GameState.TitleScreen;
 #else
         GameState State = GameState.TitleScreen;
 #endif
@@ -176,8 +176,9 @@ namespace Game
 
                     if (DrawMapPreview && World != null && World.DataGroup != null)
                     {
-                        //MapPreviewPos = new vec2(2.66f, 0.554f);
-                        //MapPreviewSize = new vec2(.22f, .22f);
+                        MapPreviewPos = new vec2(0.76f, 0.32f);
+                        MapPreviewSize = new vec2(.4f, .4f);
+
                         bool UseSolidColor = MapLoading || World == BlankWorld;
                         World.DrawMinimap(MapPreviewPos, MapPreviewSize, ShowCameraBox: false, SolidColor: UseSolidColor);
                     }

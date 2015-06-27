@@ -348,20 +348,16 @@ function(_, React, ReactBootstrap, interop, events, ui,
             return (
                 React.createElement("div", null, 
                     React.createElement(Div, {nonBlocking: true, pos: pos(10,5), size: width(80)}, 
-                        React.createElement(Panel, null, 
-                            React.createElement("h2", null, 
-                                this.state.name
-                            )
-                        ), 
-
-                        React.createElement(Well, {style: {'height':'75%'}}, 
+                        React.createElement(Well, {style: {'height':'90%'}}, 
+                            /* Lobby name */
+                            React.createElement("h2", null, this.state.name), 
 
                             /* Chat */
-                            React.createElement(Chat.ChatBox, {ref: "chat", show: true, full: true, pos: pos(2, 17), size: size(43,61)}), 
+                            React.createElement(Chat.ChatBox, {ref: "chat", show: true, full: true, pos: pos(2, 15.5), size: size(43,62.5)}), 
                             React.createElement(Chat.ChatInput, {show: true, lobbyChat: true, pos: pos(2,80), size: width(43)}), 
 
                             /* Player Table */
-                            React.createElement(Div, {nonBlocking: true, pos: pos(48,16.9), size: width(50), style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
+                            React.createElement(Div, {nonBlocking: true, pos: pos(48,53), size: width(50), style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
                                 React.createElement(Table, {style: {width:'100%'}}, React.createElement("tbody", null, 
                                     _.map(_.range(1, 5), function(i) {
                                         return (
@@ -375,24 +371,9 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 ))
                             ), 
 
-                            /* Map */
-                            React.createElement(Div, {nonBlocking: true, pos: pos(38,68), size: width(60)}, 
-                                React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
-                                    React.createElement("p", null, 
-                                        this.props.params.host ? 
-                                            React.createElement(ModalTrigger, {modal: React.createElement(MapPicker, {maps: this.state.maps, onPick: this.onMapPick})}, 
-                                                React.createElement(ui.Button, {disabled: disabled, bsStyle: "primary", bsSize: "large"}, 
-                                                    "Choose map..."
-                                                )
-                                            )
-                                            : null
-                                    )
-                                )
-                            ), 
-
                             /* Game visibility type */
                             this.props.params.host ? 
-                                React.createElement(Div, {pos: pos(48,43), size: size(24,66.2)}, 
+                                React.createElement(Div, {pos: pos(48,5.2), size: size(16.5,66.2)}, 
                                     React.createElement(OptionList, {disabled: disabled, options: visibility, 
                                                 onSelect: this.onLobbyTypeSelect, value: this.props.params.type})
                                 )
@@ -402,9 +383,20 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             React.createElement(Div, {nonBlocking: true, pos: pos(38,80), size: width(60)}, 
                                 React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
                                     React.createElement("p", null, 
+                                        /* Map */
+                                        this.props.params.host ? 
+                                            React.createElement(ModalTrigger, {modal: React.createElement(MapPicker, {maps: this.state.maps, onPick: this.onMapPick})}, 
+                                                React.createElement(ui.Button, {disabled: disabled, bsStyle: "primary"}, 
+                                                    "Choose map..."
+                                                )
+                                            )
+                                            : null, 
+
+                                        " ", 
                                         this.props.params.host ?
                                             React.createElement(ui.Button, {disabled: preventStart, onClick: this.onClickStart}, "Start Game")
                                             : null, 
+
                                         " ", 
                                         React.createElement(ui.Button, {disabled: disabled, onClick: this.leaveLobby}, "Leave Lobby")
                                     )

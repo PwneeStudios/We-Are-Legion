@@ -52,7 +52,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         render: function() {
             return (
                 React.createElement("tr", {style: {'background-color':'#1c1e22','pointer-events':'auto'}}, 
-                    React.createElement("td", null, this.props.children), 
+                    React.createElement("td", {className: "menu-description"}, this.props.children), 
                     React.createElement("td", null, 
                         React.createElement("input", {style: {'float':'right','width':'100%'}, 
                             ref: "slider", 
@@ -96,7 +96,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
             return (
                 React.createElement("tr", {style: {'background-color':'#1c1e22'}}, 
-                    React.createElement("td", null, this.props.children), 
+                    React.createElement("td", {className: "menu-description"}, this.props.children), 
                     React.createElement("td", {className: "menu-cell-dropdown"}, 
                         React.createElement(Dropdown, {
                             disabled: this.props.disabled, 
