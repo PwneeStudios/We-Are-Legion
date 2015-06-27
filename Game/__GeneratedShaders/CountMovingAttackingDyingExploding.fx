@@ -99,13 +99,13 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0, 0, 0, 0);
     if (Game__SimShader__Something__data(data_here) && Game__SimShader__IsUnit__unit(unit_here))
     {
-        output.x = abs(data_here.g - 0.0) < .001 ? 0.003921569 : 0.0;
-        output.y = abs(unit_here.a - 0.04705882) < .001 ? 0.003921569 : 0.0;
-        output.z = abs(unit_here.a - 0.07058824) < .001 ? 0.003921569 : 0.0;
+        output.r = abs(data_here.g - 0.0) < .001 ? 0.003921569 : 0.0;
+        output.g = abs(unit_here.a - 0.04705882) < .001 ? 0.003921569 : 0.0;
+        output.b = abs(unit_here.a - 0.07058824) < .001 ? 0.003921569 : 0.0;
     }
     if (Game__SimShader__Something__data(data_here) && Game__SimShader__IsBuilding__unit(unit_here))
     {
-        output.w = abs(data_here.r - 0.02352941) < .001 ? 0.003921569 : 0.0;
+        output.a = abs(data_here.r - 0.02352941) < .001 ? 0.003921569 : 0.0;
     }
     __FinalOutput.Color = output;
     return __FinalOutput;

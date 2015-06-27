@@ -137,22 +137,22 @@ namespace Game
     public partial class CountMovingAttackingDyingExploding : SimShader
     {
         [FragmentShader]
-        vec4 FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Units)
+        ActionCount FragmentShader(VertexOut vertex, Field<data> Data, Field<unit> Units)
         {
             data data_here = Data[Here];
             unit unit_here = Units[Here];
 
-            vec4 output = vec4.Zero;
+            ActionCount output = ActionCount.Nothing;
             if (Something(data_here) && IsUnit(unit_here))
             {
-                output.x = data_here.change == Change.Moved ? _1 : _0;
-                output.y = unit_here.anim == Anim.Attack ? _1 : _0;
-                output.z = unit_here.anim == Anim.Die ? _1 : _0;
+                output.UnitsMoving = data_here.change == Change.Moved ? _1 : _0;
+                output.UnitsAttacking = unit_here.anim == Anim.Attack ? _1 : _0;
+                output.UnitsDying = unit_here.anim == Anim.Die ? _1 : _0;
             }
 
             if (Something(data_here) && IsBuilding(unit_here))
             {
-                output.w = data_here.direction == Dir.StationaryDying ? _1 : _0;
+                output.BuildingsExploding = data_here.direction == Dir.StationaryDying ? _1 : _0;
             }
 
             return output;

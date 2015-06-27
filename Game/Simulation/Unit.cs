@@ -174,6 +174,25 @@ namespace Game
     }
 
     /// <summary>
+    /// A 4-tuple storying an 8-bit value unit count for moving, attacking, dying, building exploding.
+    /// </summary>
+    [Copy(typeof(vec4), CastStyle.ImplicitCast)]
+    public partial struct ActionCount
+    {
+        [Hlsl("r")]
+        public float UnitsMoving { get { return r; } set { r = value; } }
+
+        [Hlsl("g")]
+        public float UnitsAttacking { get { return g; } set { g = value; } }
+
+        [Hlsl("b")]
+        public float UnitsDying { get { return b; } set { b = value; } }
+
+        [Hlsl("a")]
+        public float BuildingsExploding { get { return a; } set { a = value; } }
+    }
+
+    /// <summary>
     /// A 4-tuple storying an 8-bit value for Player One, Player Two, Player Three, and Player Four.
     /// </summary>
     [Copy(typeof(vec4), CastStyle.ImplicitCast)]

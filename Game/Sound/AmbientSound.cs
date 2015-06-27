@@ -34,7 +34,7 @@ namespace Game
             AmbientSounds.Sounds.Add(this);
         }
 
-        float _Volume = 1;
+        float _Volume = 0;
         public float Volume
         {
             get

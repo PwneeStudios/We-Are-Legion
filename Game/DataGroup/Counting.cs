@@ -93,15 +93,15 @@ namespace Game
             return (int)(SimShader.unpack_val(count.xyz) + .5f);
         }
 
-        public color DoActionCount(World world)
+        public ActionCount DoActionCount(World world)
         {
             CountMovingAttackingDyingExploding.Using(CurrentData, CurrentUnits, Output: Multigrid[0]);
 
             world.DrawVisibleGrid(scale:1.5f);
 
-            color count = MultigridReduce(CountReduce_4x1byte.Apply);
+            ActionCount count = (ActionCount)MultigridReduce(CountReduce_4x1byte.Apply);
 
-            Console.WriteLine("moving: {0}, attacking: {1}, dying: {2}, standing: {3})", count.x, count.y, count.z, count.w);
+            Console.WriteLine("moving: {0}, attacking: {1}, dying: {2}, exploding: {3})", count.UnitsMoving, count.UnitsAttacking, count.UnitsDying, count.BuildingsExploding);
 
             return count;
         }

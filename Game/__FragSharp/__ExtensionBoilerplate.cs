@@ -2191,6 +2191,204 @@ namespace Game
 namespace Game
 {
     [Hlsl("float4")]
+    public partial struct ActionCount : Convertible<vec4, ActionCount>
+    {
+        public ActionCount ConvertFrom(vec4 v)
+        {
+            return (ActionCount)v;
+        }
+
+        public vec4 ConvertTo()
+        {
+            return (vec4)this;
+        }
+
+        [Hlsl("float4")]
+        public ActionCount(float x, float y, float z, float w)
+        {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.w = w;
+        }
+
+        [Hlsl("x")]
+        public float x;
+
+        [Hlsl("y")]
+        public float y;
+
+        [Hlsl("z")]
+        public float z;
+
+        [Hlsl("w")]
+        public float w;
+
+        [Hlsl("xy")]
+        public vec2 xy { get { return new vec2(x, y); } set { x = value.x; y = value.y; } }
+
+        [Hlsl("zw")]
+        public vec2 zw { get { return new vec2(z, w); } set { z = value.x; w = value.y; } }
+
+        [Hlsl("xyz")]
+        public vec3 xyz { get { return new vec3(x, y, z); } set { x = value.x; y = value.y; z = value.z; } }
+
+        [Hlsl("yzw")]
+        public vec3 yzw { get { return new vec3(y, z, w); } set { y = value.x; z = value.y; w = value.z; } }
+
+        [Hlsl("r")]
+        public float r { get { return x; } set { x = value; } }
+
+        [Hlsl("g")]
+        public float g { get { return y; } set { y = value; } }
+
+        [Hlsl("b")]
+        public float b { get { return z; } set { z = value; } }
+
+        [Hlsl("a")]
+        public float a { get { return w; } set { w = value; } }
+
+        [Hlsl("rgb")]
+        public vec3 rgb { get { return xyz; } set { xyz = value; } }
+
+        [Hlsl("gba")]
+        public vec3 gba { get { return yzw; } set { yzw = value; } }
+
+        [Hlsl("rg")]
+        public vec2 rg { get { return xy; } set { xy = value; } }
+
+        [Hlsl("ba")]
+        public vec2 ba { get { return zw; } set { zw = value; } }
+
+        public float this[int index]
+        {
+            get
+            {
+                switch (index)
+                {
+                    case 0: return x;
+                    case 1: return y;
+                    case 2: return z;
+                    case 3: return w;
+                    default: throw new Exception("Invalid index.");
+                }
+            }
+        }
+
+        public static ActionCount operator *(float a, ActionCount v)
+        {
+            return new ActionCount(a * v.x, a * v.y, a * v.z, a * v.w);
+        }
+
+        public static ActionCount operator *(ActionCount v, float a)
+        {
+            return new ActionCount(a * v.x, a * v.y, a * v.z, a * v.w);
+        }
+
+        public static ActionCount operator /(float a, ActionCount v)
+        {
+            return new ActionCount(a / v.x, a / v.y, a / v.z, a / v.w);
+        }
+
+        public static ActionCount operator /(ActionCount v, float a)
+        {
+            return new ActionCount(v.x / a, v.y / a, v.z / a, v.w / a);
+        }
+
+        public static ActionCount operator +(ActionCount v, ActionCount w)
+        {
+            return new ActionCount(v.x + w.x, v.y + w.y, v.z + w.z, v.w + w.w);
+        }
+
+        public static ActionCount operator -(ActionCount v, ActionCount w)
+        {
+            return new ActionCount(v.x - w.x, v.y - w.y, v.z - w.z, v.w - w.w);
+        }
+
+        public static ActionCount operator *(ActionCount v, ActionCount w)
+        {
+            return new ActionCount(v.x * w.x, v.y * w.y, v.z * w.z, v.w * w.w);
+        }
+
+        public static ActionCount operator /(ActionCount v, ActionCount w)
+        {
+            return new ActionCount(v.x / w.x, v.y / w.y, v.z / w.z, v.w / w.w);
+        }
+
+        public static bool operator ==(ActionCount v, ActionCount w)
+        {
+            return
+                v.x == w.x &&
+                v.y == w.y &&
+                v.z == w.z &&
+                v.w == w.w;
+        }
+
+        public static bool operator !=(ActionCount v, ActionCount w)
+        {
+            return
+                v.x != w.x ||
+                v.y != w.y ||
+                v.z != w.z ||
+                v.w != w.w;
+        }
+
+        public override bool Equals(object o)
+        {
+            return o is ActionCount ? this == (ActionCount)o : false;
+        }
+
+        public bool Equals(ActionCount v)
+        {
+            return this == v;
+        }
+
+        public override int GetHashCode()
+        {
+            return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode() ^ w.GetHashCode();
+        }
+
+        public static ActionCount operator -(ActionCount v)
+        {
+            return new ActionCount(-v.x, -v.y, -v.z, -v.w);
+        }
+
+        public static implicit operator Vector4(ActionCount v)
+        {
+            return new Vector4(v.x, v.y, v.z, v.w);
+        }
+
+        public static implicit operator ActionCount(color v)
+        {
+            return new ActionCount(v.x, v.y, v.z, v.w);
+        }
+
+        public static explicit operator color(ActionCount v)
+        {
+            return new color(v.x, v.y, v.z, v.w);
+        }
+
+        public static explicit operator ActionCount(Vector4 v)
+        {
+            return new ActionCount(v.X, v.Y, v.Z, v.W);
+        }
+
+        public static explicit operator Color(ActionCount v)
+        {
+            return new Color(v.x, v.y, v.z, v.w);
+        }        
+
+        public static readonly ActionCount Zero    = new ActionCount(0, 0, 0, 0);
+        public static readonly ActionCount Nothing = new ActionCount(0, 0, 0, 0);
+
+        public static implicit operator ActionCount(vec4 v) { return new ActionCount(v.x, v.y, v.z, v.w); }
+        public static implicit operator vec4(ActionCount v) { return new vec4(v.x, v.y, v.z, v.w); }
+    }
+}
+
+namespace Game
+{
+    [Hlsl("float4")]
     public partial struct PlayerTuple : Convertible<vec4, PlayerTuple>
     {
         public PlayerTuple ConvertFrom(vec4 v)
