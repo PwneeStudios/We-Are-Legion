@@ -152,8 +152,8 @@ namespace Game
             GridHelper.Initialize(GraphicsDevice);
 
             Assets.Initialize();
+            Sounds.Initialize();
             Render.Initialize();
-
             Spells.Initialize();
             Networking.Start();
 

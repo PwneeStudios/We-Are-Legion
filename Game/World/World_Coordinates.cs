@@ -23,7 +23,7 @@ namespace Game
             }
         }
 
-        vec2 GridToWorldCood(vec2 pos)
+        public vec2 GridToWorldCood(vec2 pos)
         {
             pos = 2 * pos / DataGroup.GridSize - vec2.Ones;
             pos.y = -pos.y;
@@ -138,6 +138,19 @@ namespace Game
             shifted_cam.y = prev_worldcoord.y + pos.y / prev_camvec.w;
 
             return shifted_cam;
+        }
+
+        public bool GridPointInView(vec2 pos)
+        {
+            return InView(GridToWorldCood(pos));
+        }
+
+        public bool InView(vec2 pos)
+        {
+            vec2 tr = CameraPos + vec(CameraAspect, 1) / CameraZoom;
+            vec2 bl = CameraPos - vec(CameraAspect, 1) / CameraZoom;
+
+            return pos > bl && pos < tr;
         }
     }
 }

@@ -347,8 +347,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\CombinedSwordFight.wav">
-      <Name>CombinedSwordFight</Name>
+    <Compile Include="Sound\SwordFight_Level2.wav">
+      <Name>SwordFight_Level2</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
@@ -371,6 +371,13 @@
     </Compile>
     <Compile Include="Sound\SummonTerracotta.wav">
       <Name>SummonTerracotta</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sound\Spell_Fireball.wav">
+      <Name>Spell_Fireball</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>

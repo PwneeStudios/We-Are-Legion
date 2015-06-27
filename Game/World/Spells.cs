@@ -21,6 +21,8 @@ namespace Game
         public delegate void SpellExecution(int PlayerNumer, int TeamNumber, vec2 Pos);
         [JsonIgnore] public SpellExecution Apply;
 
+        public Sound ExecutionSound;
+
         public int JadeCost = 0, JadeCostIncrease = 0;
         public float TerritoryRange = float.MaxValue;
 
@@ -65,6 +67,7 @@ namespace Game
             spell.Apply = (p, t, v) => W.FireballApply(p, t, v);
             spell.JadeCost = 1000;
             spell.JadeCostIncrease = 0;
+            spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Fireball", FindStyle.NullIfNotFound);
 
             SkeletonArmy = spell = new Spell("Skeletons");
             spell.DrawCursor = SkeletonCursor;
@@ -72,6 +75,7 @@ namespace Game
             spell.Apply = (p, t, v) => W.RaiseSkeletonsApply(p, t, v, RaiseR);
             spell.JadeCost = 1000;
             spell.JadeCostIncrease = 0;
+            spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Skeletons", FindStyle.NullIfNotFound);
 
             Necromancer = spell = new Spell("Necromancer");
             spell.DrawCursor = () => NecroCursor(Necromancer.TerritoryRange);
@@ -80,6 +84,7 @@ namespace Game
             spell.JadeCost = 1000;
             spell.TerritoryRange = _64;
             spell.JadeCostIncrease = 500;
+            spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Necromancer", FindStyle.NullIfNotFound);
 
             TerracottaArmy = spell = new Spell("Terracotta");
             spell.DrawCursor = TerracottaCursor;
@@ -87,6 +92,7 @@ namespace Game
             spell.Apply = (p, t, v) => W.SummonTerracottaApply(p, t, v, TerracottaR);
             spell.JadeCost = 1000;
             spell.JadeCostIncrease = 1000;
+            spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Terracotta", FindStyle.NullIfNotFound);
         }
 
         static void SkeletonCursor()

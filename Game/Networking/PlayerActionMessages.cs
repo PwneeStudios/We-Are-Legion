@@ -89,6 +89,7 @@ namespace Game
 
         public override void Immediate()
         {
+            Sounds.GiveOrder.MaybePlay();
         }
 
         public override void Do()
@@ -120,6 +121,9 @@ namespace Game
         {
             if (Log.Do) Console.WriteLine("   Do place building at {0} : {1}", GameClass.World.SimStep, this);
             GameClass.World.PlaceBuildingApply(Action.PlayerNumber, Action.TeamNumber, Pos, Building);
+
+            if (GameClass.World.GridPointInView(Pos))
+                Sounds.PlaceBuilding.MaybePlay();
         }
     }
 
@@ -149,6 +153,9 @@ namespace Game
 
             GameClass.PlayerInfo[Action.PlayerNumber].BuySpell(spell);
             spell.Apply(Action.PlayerNumber, Action.TeamNumber, Pos);
+
+            if (GameClass.World.GridPointInView(Pos))
+                spell.ExecutionSound.MaybePlay();
         }
     }
 

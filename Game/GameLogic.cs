@@ -346,12 +346,14 @@ namespace Game
         public void Defeat(int winning_team)
         {
             GetNames();
+            Sounds.GameOver.MaybePlay();
             Send("setScreen", "game-over", new { victory = false, winningTeam = winning_team, info = World.PlayerInfo });
         }
 
         public void Victory(int winning_team)
         {
             GetNames();
+            Sounds.GameOver.MaybePlay();
             Send("setScreen", "game-over", new { victory = true, winningTeam = winning_team, info = World.PlayerInfo });
         }
 
@@ -370,10 +372,12 @@ namespace Game
             else if (T - World.GameOverTime < PanTime + 1.25)
             {
                 DeltaT *= .35f;
+                Sounds.DyingDragonLord.MaybePlay();
             }
             else
             {
                 World.Markers.Hide = false;
+                Sounds.ExplodingDragonLord.MaybePlay();
             }
 
             GameInputEnabled = false;

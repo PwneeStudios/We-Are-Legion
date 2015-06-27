@@ -101,7 +101,7 @@ namespace Game
 
             ActionCount count = (ActionCount)MultigridReduce(CountReduce_4x1byte.Apply);
 
-            Console.WriteLine("moving: {0}, attacking: {1}, dying: {2}, exploding: {3})", count.UnitsMoving, count.UnitsAttacking, count.UnitsDying, count.BuildingsExploding);
+            //Console.WriteLine("moving: {0}, attacking: {1}, dying: {2}, exploding: {3})", count.UnitsMoving, count.UnitsAttacking, count.UnitsDying, count.BuildingsExploding);
 
             return count;
         }

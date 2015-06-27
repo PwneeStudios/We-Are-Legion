@@ -138,6 +138,7 @@
     <Compile Include="Networking\Connection.cs" />
     <Compile Include="Song\Song.cs" />
     <Compile Include="Song\SongWad.cs" />
+    <Compile Include="Sound\Sounds.cs" />
     <Compile Include="Sound\AmbientSound.cs" />
     <Compile Include="Sound\Sound.cs" />
     <Compile Include="Sound\SoundWad.cs" />
@@ -279,7 +280,7 @@
     <PreBuildEvent>ECHO ON
 DIR
 
-IF $(ConfigurationName) EQU $(ConfigurationName) (
+IF $(ConfigurationName) EQU $(ConfigurationName)FALSE (
   ECHO Running FragSharp via the following command line invocation:
   ECHO "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)
   "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)

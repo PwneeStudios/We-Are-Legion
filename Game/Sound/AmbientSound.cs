@@ -25,9 +25,18 @@ namespace Game
 
         public AmbientSound(string name)
         {
-            instance = SoundWad.Wad.FindByName(name).sound.CreateInstance();
-            instance.IsLooped = true;
-            instance.Play();
+            var sound = SoundWad.Wad.FindByName(name, FindStyle.NullIfNotFound);
+
+            if (sound == null)
+            {
+                instance = null;
+            }
+            else
+            {
+                instance = sound.sound.CreateInstance();
+                instance.IsLooped = true;
+                instance.Play();
+            }
 
             UpdateVolume();
 
@@ -51,6 +60,8 @@ namespace Game
 
         public void UpdateVolume()
         {
+            if (instance == null) return;
+
             instance.SetVolume(_Volume * GameClass.Game.CurrentConfig.SoundVolume);
         }
 
@@ -71,12 +82,21 @@ namespace Game
 
     public class AmbientSounds
     {
-        public static AmbientSound ambient1;
+        public static AmbientSound
+            SwordFight_Level1, SwordFight_Level2, SwordFight_Level3,
+            Walking_Level1, Walking_Level2, Walking_Level3;
+
         public static List<AmbientSound> Sounds = new List<AmbientSound>();
 
         public static void StartAmbientSounds()
         {
-            ambient1 = new AmbientSound("CombinedSwordFight");
+            SwordFight_Level1 = new AmbientSound("SwordFight_Level2");
+            SwordFight_Level2 = new AmbientSound("SwordFight_Level2");
+            SwordFight_Level3 = new AmbientSound("SwordFight_Level2");
+
+            Walking_Level1 = new AmbientSound("Walking_Level1");
+            Walking_Level2 = new AmbientSound("Walking_Level2");
+            Walking_Level3 = new AmbientSound("Walking_Level3");
         }
         
         public static void UpdateVolumes()

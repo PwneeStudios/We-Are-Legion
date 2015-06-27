@@ -524,11 +524,52 @@ namespace Game
 
             float zoom = (float)Math.Pow(CameraZoom / 80f, 1.25f);
 
-            AmbientSounds.ambient1.EaseIntoVolume(count.UnitsAttacking * zoom);
+            ThreeLevelPlay(
+                AmbientSounds.SwordFight_Level1, _6,
+                AmbientSounds.SwordFight_Level2, _30,
+                AmbientSounds.SwordFight_Level3,
+                count.UnitsAttacking, count.UnitsAttacking * zoom);
+
+            ThreeLevelPlay(
+                AmbientSounds.Walking_Level1, _6,
+                AmbientSounds.Walking_Level2, _30,
+                AmbientSounds.Walking_Level3,
+                count.UnitsMoving, count.UnitsMoving * zoom);
 
             if (count.BuildingsExploding > 0)
             {
-                SoundWad.Wad.FindByName("BuildingExplode").Play(1.25f * zoom);
+                Sounds.BuildingExplode.MaybePlay(1.25f * zoom);
+            }
+
+            if (count.UnitsDying > 0 && count.UnitsDying < _3)
+            {
+                Sounds.DyingUnit.MaybePlay(1.25f * zoom);
+            }
+        }
+
+        private static void ThreeLevelPlay(
+            AmbientSound s1, float l1,
+            AmbientSound s2, float l2,
+            AmbientSound s3,
+            float count, float volume)
+        {
+            if (count < _6)
+            {
+                s1.EaseIntoVolume(volume);
+                s2.EaseIntoVolume(0);
+                s3.EaseIntoVolume(0);
+            }
+            else if (count < _30)
+            {
+                s1.EaseIntoVolume(0);
+                s2.EaseIntoVolume(volume);
+                s3.EaseIntoVolume(0);
+            }
+            else
+            {
+                s1.EaseIntoVolume(0);
+                s2.EaseIntoVolume(0);
+                s3.EaseIntoVolume(volume);
             }
         }
     }
