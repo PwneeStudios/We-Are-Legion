@@ -27,6 +27,7 @@ namespace FragSharpFramework
             Game.DrawAntiMagic.CompiledEffect_casting_team_0p01568628 = Content.Load<Effect>("FragSharpShaders/DrawAntiMagic_casting_team=0.01568628");
             Game.MakeSymmetric.CompiledEffect = Content.Load<Effect>("FragSharpShaders/MakeSymmetric");
             Game.MakeUnitsSymmetric.CompiledEffect = Content.Load<Effect>("FragSharpShaders/MakeUnitsSymmetric");
+            Game.MakeTargetSymmetric.CompiledEffect = Content.Load<Effect>("FragSharpShaders/MakeTargetSymmetric");
             Game.FixBuildings.CompiledEffect = Content.Load<Effect>("FragSharpShaders/FixBuildings");
             Game.DrawGeoInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawGeoInfo");
             Game.DrawDirwardInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawDirwardInfo");
@@ -472,6 +473,49 @@ namespace Game
             CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
             CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
             CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace Game
+{
+    public partial class MakeTargetSymmetric
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D Target, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Target);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Target, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Target);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Target, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Target);
+        }
+        public static void Using(Texture2D Target, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Target);
+        }
+        public static void Using(Texture2D Target)
+        {
+            CompiledEffect.Parameters["fs_param_Target_Texture"].SetValue(FragSharpMarshal.Marshal(Target));
+            CompiledEffect.Parameters["fs_param_Target_size"].SetValue(FragSharpMarshal.Marshal(vec(Target.Width, Target.Height)));
+            CompiledEffect.Parameters["fs_param_Target_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Target.Width, Target.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

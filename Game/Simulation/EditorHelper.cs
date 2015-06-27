@@ -4,7 +4,7 @@ namespace Game
 {
     public partial class MakeSymmetricBase : SimShader
     {
-        protected RelativeIndex QuadMirror(Sampler Info, vec2 pos)
+        protected RelativeIndex QuadMirrorShift(Sampler Info, vec2 pos)
         {
             vec2 shift = vec2.Zero;
 
@@ -18,6 +18,15 @@ namespace Game
 
             return new RelativeIndex(shift.x, shift.y);
         }
+
+        protected vec2 QuadMirrorTarget(Sampler Info, vec2 pos, vec2 target)
+        {
+            // Quads, with mirroring
+            if (pos.x > Info.Size.x / 2) target.x = Info.Size.x - target.x;
+            if (pos.y > Info.Size.y / 2) target.y = Info.Size.y - target.y;
+
+            return target;
+        }
     }
 
     public partial class MakeSymmetric : MakeSymmetricBase
@@ -30,7 +39,7 @@ namespace Game
 
             if (pos < Info.Size / 2) return info;
 
-            vec4 copy = Info[Here - QuadMirror(Info, pos)];
+            vec4 copy = Info[Here - QuadMirrorShift(Info, pos)];
 
             return copy;
         }
@@ -46,14 +55,35 @@ namespace Game
 
             if (pos < Units.Size / 2) return info;
 
-            unit copy = Units[Here - QuadMirror(Units, pos)];
+            unit copy = Units[Here - QuadMirrorShift(Units, pos)];
 
             if (copy.player == Player.None) return copy;
 
-            if (pos.x > Units.Size.x / 2) copy.player += _1;
-            if (pos.y > Units.Size.y / 2) copy.player += _2;
+            if (pos.x > Units.Size.x / 2) { copy.player += _1; copy.team += _1; }
+            if (pos.y > Units.Size.y / 2) { copy.player += _2; copy.team += _2; }
 
             if (copy.player > Player.Four) copy.player -= Player.Four;
+            if (copy.team > Team.Four) copy.team -= Team.Four;
+
+            return copy;
+        }
+    }
+
+    public partial class MakeTargetSymmetric : MakeSymmetricBase
+    {
+        [FragmentShader]
+        vec4 FragmentShader(VertexOut vertex, Field<vec4> Target)
+        {
+            vec4 info = Target[Here];
+            vec2 pos = vertex.TexCoords * Target.Size;
+
+            if (pos < Target.Size / 2) return info;
+
+            vec4 copy = Target[Here - QuadMirrorShift(Target, pos)];
+
+            vec2 target = unpack_vec2(copy);
+            target = QuadMirrorTarget(Target, pos, target);
+            copy = pack_vec2(target);
 
             return copy;
         }

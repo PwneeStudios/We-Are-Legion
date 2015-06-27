@@ -273,7 +273,8 @@ namespace Game
 
                     if (Keys.L.Pressed() && Keys.LeftControl.Down())
                     {
-                        World.Load("SavedMap.m3n");
+                        //World.Load("SavedMap.m3n");
+                        World.Load("Content/Maps/Beset.m3n");
                     }
                 }
 

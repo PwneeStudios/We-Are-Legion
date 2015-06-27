@@ -701,7 +701,7 @@ namespace Game
             MakeSymmetric.Apply(DataGroup.Extra, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Extra);
 
-            MakeSymmetric.Apply(DataGroup.TargetData, Output: DataGroup.Temp1);
+            MakeTargetSymmetric.Apply(DataGroup.TargetData, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TargetData);
 
             MakeSymmetric.Apply(DataGroup.Corpses, Output: DataGroup.Temp1);

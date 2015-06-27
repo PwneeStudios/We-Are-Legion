@@ -22,14 +22,14 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Info, using register location 1
-float2 fs_param_Info_size;
-float2 fs_param_Info_dxdy;
+// Texture Sampler for fs_param_Target, using register location 1
+float2 fs_param_Target_size;
+float2 fs_param_Target_dxdy;
 
-Texture fs_param_Info_Texture;
-sampler fs_param_Info : register(s1) = sampler_state
+Texture fs_param_Target_Texture;
+sampler fs_param_Target : register(s1) = sampler_state
 {
-    texture   = <fs_param_Info_Texture>;
+    texture   = <fs_param_Target_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
@@ -54,6 +54,50 @@ float2 Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2(VertexToPixel psi
     return float2(shift.x, shift.y);
 }
 
+float Game__SimShader__unpack_val__vec2(float2 packed)
+{
+    float coord = 0;
+    packed = floor(255.0 * packed + float2(0.5, 0.5));
+    coord = 256 * packed.x + packed.y;
+    return coord;
+}
+
+float2 Game__SimShader__unpack_vec2__vec4(float4 packed)
+{
+    float2 v = float2(0, 0);
+    v.x = Game__SimShader__unpack_val__vec2(packed.rg);
+    v.y = Game__SimShader__unpack_val__vec2(packed.ba);
+    return v;
+}
+
+float2 Game__MakeSymmetricBase__QuadMirrorTarget__Sampler__vec2__vec2(VertexToPixel psin, sampler Info, float2 Info_size, float2 Info_dxdy, float2 pos, float2 target)
+{
+    if (pos.x > Info_size.x / 2 + .001)
+    {
+        target.x = Info_size.x - target.x;
+    }
+    if (pos.y > Info_size.y / 2 + .001)
+    {
+        target.y = Info_size.y - target.y;
+    }
+    return target;
+}
+
+float2 Game__SimShader__pack_val_2byte__Single(float x)
+{
+    float2 packed = float2(0, 0);
+    packed.x = floor(x / 256.0);
+    packed.y = x - packed.x * 256.0;
+    return packed / 255.0;
+}
+
+float4 Game__SimShader__pack_vec2__vec2(float2 v)
+{
+    float2 packed_x = Game__SimShader__pack_val_2byte__Single(v.x);
+    float2 packed_y = Game__SimShader__pack_val_2byte__Single(v.y);
+    return float4(packed_x.x, packed_x.y, packed_y.x, packed_y.y);
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -68,14 +112,17 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 info = tex2D(fs_param_Info, psin.TexCoords + (float2(0, 0)) * fs_param_Info_dxdy);
-    float2 pos = psin.TexCoords * fs_param_Info_size;
-    if (all(pos < fs_param_Info_size / 2 - .001))
+    float4 info = tex2D(fs_param_Target, psin.TexCoords + (float2(0, 0)) * fs_param_Target_dxdy);
+    float2 pos = psin.TexCoords * fs_param_Target_size;
+    if (all(pos < fs_param_Target_size / 2 - .001))
     {
         __FinalOutput.Color = info;
         return __FinalOutput;
     }
-    float4 copy = tex2D(fs_param_Info, psin.TexCoords + (float2(0, 0) - Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2(psin, fs_param_Info, fs_param_Info_size, fs_param_Info_dxdy, pos)) * fs_param_Info_dxdy);
+    float4 copy = tex2D(fs_param_Target, psin.TexCoords + (float2(0, 0) - Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2(psin, fs_param_Target, fs_param_Target_size, fs_param_Target_dxdy, pos)) * fs_param_Target_dxdy);
+    float2 target = Game__SimShader__unpack_vec2__vec4(copy);
+    target = Game__MakeSymmetricBase__QuadMirrorTarget__Sampler__vec2__vec2(psin, fs_param_Target, fs_param_Target_size, fs_param_Target_dxdy, pos, target);
+    copy = Game__SimShader__pack_vec2__vec2(target);
     __FinalOutput.Color = copy;
     return __FinalOutput;
 }

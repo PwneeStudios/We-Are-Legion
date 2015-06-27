@@ -40,7 +40,7 @@ sampler fs_param_Units : register(s1) = sampler_state
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
 // The following methods are included because they are referenced by the fragment shader.
-float2 Game__MakeSymmetricBase__QuadMirror__Sampler__vec2(VertexToPixel psin, sampler Info, float2 Info_size, float2 Info_dxdy, float2 pos)
+float2 Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2(VertexToPixel psin, sampler Info, float2 Info_size, float2 Info_dxdy, float2 pos)
 {
     float2 shift = float2(0, 0);
     if (pos.x > Info_size.x / 2 + .001)
@@ -75,7 +75,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         __FinalOutput.Color = info;
         return __FinalOutput;
     }
-    float4 copy = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0) - Game__MakeSymmetricBase__QuadMirror__Sampler__vec2(psin, fs_param_Units, fs_param_Units_size, fs_param_Units_dxdy, pos)) * fs_param_Units_dxdy);
+    float4 copy = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0) - Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2(psin, fs_param_Units, fs_param_Units_size, fs_param_Units_dxdy, pos)) * fs_param_Units_dxdy);
     if (abs(copy.g - 0.0) < .001)
     {
         __FinalOutput.Color = copy;
@@ -84,14 +84,20 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     if (pos.x > fs_param_Units_size.x / 2 + .001)
     {
         copy.g += 0.003921569;
+        copy.b += 0.003921569;
     }
     if (pos.y > fs_param_Units_size.y / 2 + .001)
     {
         copy.g += 0.007843138;
+        copy.b += 0.007843138;
     }
     if (copy.g > 0.01568628 + .001)
     {
         copy.g -= 0.01568628;
+    }
+    if (copy.b > 0.01568628 + .001)
+    {
+        copy.b -= 0.01568628;
     }
     __FinalOutput.Color = copy;
     return __FinalOutput;
