@@ -375,10 +375,19 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             };
         },
         
+        lerp: function(x1, y1, x2, y2, t)
+        {
+            var width = x2 - x1;
+            s = (t - x1) / width;
+
+            return y2 * s + y1 * (1 - s);
+        },
+
         render: function() {
             var players = this.state.ShowAllPlayers ? _.range(1,5) : [this.state.MyPlayerNumber];
 
-            var xOffset = 10 * window.w / window.h;
+            var aspect = window.w / window.h;
+            var xOffset = this.lerp(1.6, 2, 1, 5.6, aspect);
 
             return (
                 <div>
@@ -392,13 +401,13 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
                     <MenuButton pos={pos(0.5,0.4)} size={width(50)} />
 
-                    <Div pos={pos(xOffset,0)}>
-                        <Chat.ChatInput pos={pos(0.35,80)} size={width(49)} />
+                    <Div pos={pos(15,0)}>
+                        <Chat.ChatInput pos={pos(0.35+xOffset,80)} size={width(49)} />
 
                         {/*<Chat.ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/}
-                        <Chat.ChatBox pos={pos(0.38, 78)} size={width(38)}/>
+                        <Chat.ChatBox pos={pos(0.38+xOffset, 78)} size={width(38)}/>
                         
-                        <Div pos={pos(0,85)}>
+                        <Div pos={pos(0+xOffset,85)}>
                             <ActionButton name='Fireball' />
                             <ActionButton name='Skeletons' />
                             <ActionButton name='Necromancer' />

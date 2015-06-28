@@ -90,10 +90,10 @@ define(['lodash', 'react', 'interop', 'events',
             //setScreen('find-game');
 
             // Test in-game
-            //setMode('in-game');
+            setMode('in-game');
             //setScreen('gameOver', {victory:false});
             //setScreen('gameOver', {victory:true});
-            //setScreen('in-game-ui');
+            setScreen('in-game-ui');
             //setScreen('in-game-menu');
             //setScreen('confirm-leave-game');
         },
