@@ -106,5 +106,13 @@ namespace Game
                 sound.UpdateVolume();
             }
         }
+
+        public static void EndAll()
+        {
+            foreach (var sound in Sounds)
+            {
+                sound.EaseIntoVolume(0);
+            }
+        }
     }
 }

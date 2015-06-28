@@ -109,6 +109,7 @@ namespace Game
 
                 case GameState.TitleScreen:
                     StartMenuMusicIfNeeded();
+                    AmbientSounds.EndAll();
 
                     // No mouse input to Awesomium
                     awesomium.AllowMouseEvents = false;
@@ -143,6 +144,7 @@ namespace Game
 
                 case GameState.MainMenu:
                     StartMenuMusicIfNeeded();
+                    AmbientSounds.EndAll();
 
                     if (!InputHelper.SomethingDown())
                     {
