@@ -115,6 +115,23 @@ namespace Game
 
         void SetMap(string map_name)
         {
+            Console.WriteLine("set map to {0}", map_name);
+
+            string full_name = map_name + ".m3n";
+
+            bool skip = false;
+            if ((SetMapThread == null || !SetMapThread.IsAlive) && GameMapName == full_name) skip = true;
+
+            if (!skip)
+            {
+                GameMapName = full_name;
+
+                PrevMapThread = SetMapThread;
+                SetMapThread = new Thread(() => SetMapThreadFunc(GameMapName));
+                SetMapThread.Priority = ThreadPriority.Highest;
+                SetMapThread.Start();
+            }
+
             if (SteamMatches.IsLobbyOwner())
             {
                 string current = SteamMatches.GetLobbyData("MapName");
@@ -129,19 +146,6 @@ namespace Game
                     SetLobbyInfo();
                 }
             }
-
-            Console.WriteLine("set map to {0}", map_name);
-
-            map_name += ".m3n";
-
-            if ((SetMapThread == null || !SetMapThread.IsAlive) && GameMapName == map_name) return;
-
-            GameMapName = map_name;
-
-            PrevMapThread = SetMapThread;
-            SetMapThread = new Thread(() => SetMapThreadFunc(GameMapName));
-            SetMapThread.Priority = ThreadPriority.Highest;
-            SetMapThread.Start();
         }
 
         World NewMap = null;
