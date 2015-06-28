@@ -640,9 +640,14 @@ namespace Game
                     FinalizeGeodesics();
                 }
 
+                if (Keys.OemOpenBrackets.Pressed())
+                {
+                    MakeMapSymmetric(SymmetryType.Octo, true);
+                }
+
                 if (Keys.O.Pressed())
                 {
-                    MakeMapSymmetric();
+                    MakeMapSymmetric(SymmetryType.Quad, false);
                 }
 
                 if (Keys.Delete.Down() || Keys.Back.Down())
@@ -681,36 +686,42 @@ namespace Game
             }
         }
 
-        private void MakeMapSymmetric()
+        private void MakeMapSymmetric(float type, bool convert_dragonlords)
         {
-            MakeSymmetric.Apply(DataGroup.Tiles, Output: DataGroup.Temp1);
+            MakeSymmetric.Apply(DataGroup.Tiles, type, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Tiles);
 
-            MakeSymmetric.Apply(DataGroup.CurrentData, Output: DataGroup.Temp1);
+            MakeSymmetric.Apply(DataGroup.CurrentData, type, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
 
-            MakeSymmetric.Apply(DataGroup.PreviousData, Output: DataGroup.Temp1);
+            MakeSymmetric.Apply(DataGroup.PreviousData, type, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousData);
 
-            MakeUnitsSymmetric.Apply(DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            MakeUnitsSymmetric.Apply(DataGroup.CurrentUnits, type, convert_dragonlords, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentUnits);
 
-            MakeUnitsSymmetric.Apply(DataGroup.PreviousUnits, Output: DataGroup.Temp1);
+            MakeUnitsSymmetric.Apply(DataGroup.PreviousUnits, type, convert_dragonlords, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousUnits);
 
-            MakeSymmetric.Apply(DataGroup.Extra, Output: DataGroup.Temp1);
+            MakeSymmetric.Apply(DataGroup.Extra, type, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Extra);
 
-            MakeTargetSymmetric.Apply(DataGroup.TargetData, Output: DataGroup.Temp1);
+            MakeTargetSymmetric.Apply(DataGroup.TargetData, type, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.TargetData);
 
-            MakeSymmetric.Apply(DataGroup.Corpses, Output: DataGroup.Temp1);
+            MakeSymmetric.Apply(DataGroup.Corpses, type, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Corpses);
 
-            FixBuildings.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            FixBuildings_1.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
 
-            FixBuildings.Apply(DataGroup.PreviousData, DataGroup.PreviousUnits, Output: DataGroup.Temp1);
+            FixBuildings_1.Apply(DataGroup.PreviousData, DataGroup.PreviousUnits, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousData);
+
+            FixBuildings_2.Apply(DataGroup.CurrentData, DataGroup.CurrentUnits, Output: DataGroup.Temp1);
+            CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
+
+            FixBuildings_2.Apply(DataGroup.PreviousData, DataGroup.PreviousUnits, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousData);
 
             PostPaintUpdate();

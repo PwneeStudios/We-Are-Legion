@@ -29,15 +29,14 @@ float2 fs_param_Info_dxdy;
 Texture fs_param_Info_Texture;
 sampler fs_param_Info : register(s1) = sampler_state
 {
-    texture = <fs_param_Info_Texture>;
+    texture   = <fs_param_Info_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU = Clamp;
-    AddressV = Clamp;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
-float fs_param_type;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
@@ -72,17 +71,17 @@ bool Game__MakeSymmetricBase__DoNothing__Sampler__vec2__Single(VertexToPixel psi
 float2 Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2__Single(VertexToPixel psin, sampler Info, float2 Info_size, float2 Info_dxdy, float2 pos, float type)
 {
     float2 shift = float2(0, 0);
-        if (abs(type - 0.0) < .001)
+    if (abs(type - 0.0) < .001)
+    {
+        if (pos.x > Info_size.x / 2 + .001)
         {
-            if (pos.x > Info_size.x / 2 + .001)
-            {
-                shift.x = 2 * pos.x - Info_size.x;
-            }
-            if (pos.y > Info_size.y / 2 + .001)
-            {
-                shift.y = 2 * pos.y - Info_size.y;
-            }
+            shift.x = 2 * pos.x - Info_size.x;
         }
+        if (pos.y > Info_size.y / 2 + .001)
+        {
+            shift.y = 2 * pos.y - Info_size.y;
+        }
+    }
     if (abs(type - 1.0) < .001)
     {
         if (pos.x > Info_size.x / 4 + .001)
@@ -112,14 +111,14 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 info = tex2D(fs_param_Info, psin.TexCoords + (float2(0, 0)) * fs_param_Info_dxdy);
-        float2 pos = psin.TexCoords * fs_param_Info_size;
-        if (Game__MakeSymmetricBase__DoNothing__Sampler__vec2__Single(psin, fs_param_Info, fs_param_Info_size, fs_param_Info_dxdy, pos, fs_param_type))
-        {
-            __FinalOutput.Color = info;
-            return __FinalOutput;
-        }
-    float4 copy = tex2D(fs_param_Info, psin.TexCoords + (float2(0, 0) - Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2__Single(psin, fs_param_Info, fs_param_Info_size, fs_param_Info_dxdy, pos, fs_param_type)) * fs_param_Info_dxdy);
-        __FinalOutput.Color = copy;
+    float2 pos = psin.TexCoords * fs_param_Info_size;
+    if (Game__MakeSymmetricBase__DoNothing__Sampler__vec2__Single(psin, fs_param_Info, fs_param_Info_size, fs_param_Info_dxdy, pos, 1))
+    {
+        __FinalOutput.Color = info;
+        return __FinalOutput;
+    }
+    float4 copy = tex2D(fs_param_Info, psin.TexCoords + (float2(0, 0) - Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2__Single(psin, fs_param_Info, fs_param_Info_size, fs_param_Info_dxdy, pos, 1)) * fs_param_Info_dxdy);
+    __FinalOutput.Color = copy;
     return __FinalOutput;
 }
 

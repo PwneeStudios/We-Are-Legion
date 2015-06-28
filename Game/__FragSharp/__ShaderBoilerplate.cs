@@ -25,10 +25,14 @@ namespace FragSharpFramework
             Game.DrawAntiMagic.CompiledEffect_casting_team_0p007843138 = Content.Load<Effect>("FragSharpShaders/DrawAntiMagic_casting_team=0.007843138");
             Game.DrawAntiMagic.CompiledEffect_casting_team_0p01176471 = Content.Load<Effect>("FragSharpShaders/DrawAntiMagic_casting_team=0.01176471");
             Game.DrawAntiMagic.CompiledEffect_casting_team_0p01568628 = Content.Load<Effect>("FragSharpShaders/DrawAntiMagic_casting_team=0.01568628");
-            Game.MakeSymmetric.CompiledEffect = Content.Load<Effect>("FragSharpShaders/MakeSymmetric");
-            Game.MakeUnitsSymmetric.CompiledEffect = Content.Load<Effect>("FragSharpShaders/MakeUnitsSymmetric");
-            Game.MakeTargetSymmetric.CompiledEffect = Content.Load<Effect>("FragSharpShaders/MakeTargetSymmetric");
-            Game.FixBuildings.CompiledEffect = Content.Load<Effect>("FragSharpShaders/FixBuildings");
+            Game.MakeSymmetric.CompiledEffect_type_0 = Content.Load<Effect>("FragSharpShaders/MakeSymmetric_type=0");
+            Game.MakeSymmetric.CompiledEffect_type_1 = Content.Load<Effect>("FragSharpShaders/MakeSymmetric_type=1");
+            Game.MakeUnitsSymmetric.CompiledEffect_type_0 = Content.Load<Effect>("FragSharpShaders/MakeUnitsSymmetric_type=0");
+            Game.MakeUnitsSymmetric.CompiledEffect_type_1 = Content.Load<Effect>("FragSharpShaders/MakeUnitsSymmetric_type=1");
+            Game.MakeTargetSymmetric.CompiledEffect_type_0 = Content.Load<Effect>("FragSharpShaders/MakeTargetSymmetric_type=0");
+            Game.MakeTargetSymmetric.CompiledEffect_type_1 = Content.Load<Effect>("FragSharpShaders/MakeTargetSymmetric_type=1");
+            Game.FixBuildings_1.CompiledEffect = Content.Load<Effect>("FragSharpShaders/FixBuildings_1");
+            Game.FixBuildings_2.CompiledEffect = Content.Load<Effect>("FragSharpShaders/FixBuildings_2");
             Game.DrawGeoInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawGeoInfo");
             Game.DrawDirwardInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawDirwardInfo");
             Game.DrawPolarInfo.CompiledEffect = Content.Load<Effect>("FragSharpShaders/DrawPolarInfo");
@@ -393,40 +397,49 @@ namespace Game
 }
 
 
+
 namespace Game
 {
     public partial class MakeSymmetric
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_type_0;
+        public static Effect CompiledEffect_type_1;
 
-        public static void Apply(Texture2D Info, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Info, float type, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Info);
+            Using(Info, type);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Info, RenderTarget2D Output)
+        public static void Apply(Texture2D Info, float type, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Info);
+            Using(Info, type);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Info, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Info, float type, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Info);
+            Using(Info, type);
         }
-        public static void Using(Texture2D Info, RenderTarget2D Output)
+        public static void Using(Texture2D Info, float type, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Info);
+            Using(Info, type);
         }
-        public static void Using(Texture2D Info)
+        public static void Using(Texture2D Info, float type)
         {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(type - 0)) < .001) CompiledEffect = CompiledEffect_type_0;
+            else if (abs((float)(type - 1)) < .001) CompiledEffect = CompiledEffect_type_1;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["fs_param_Info_Texture"].SetValue(FragSharpMarshal.Marshal(Info));
             CompiledEffect.Parameters["fs_param_Info_size"].SetValue(FragSharpMarshal.Marshal(vec(Info.Width, Info.Height)));
             CompiledEffect.Parameters["fs_param_Info_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Info.Width, Info.Height)));
@@ -436,83 +449,102 @@ namespace Game
 }
 
 
+
 namespace Game
 {
     public partial class MakeUnitsSymmetric
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_type_0;
+        public static Effect CompiledEffect_type_1;
 
-        public static void Apply(Texture2D Units, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Units, float type, bool convert_dragonlords, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Units);
+            Using(Units, type, convert_dragonlords);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Units, RenderTarget2D Output)
+        public static void Apply(Texture2D Units, float type, bool convert_dragonlords, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Units);
+            Using(Units, type, convert_dragonlords);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Units, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Units, float type, bool convert_dragonlords, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Units);
+            Using(Units, type, convert_dragonlords);
         }
-        public static void Using(Texture2D Units, RenderTarget2D Output)
+        public static void Using(Texture2D Units, float type, bool convert_dragonlords, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Units);
+            Using(Units, type, convert_dragonlords);
         }
-        public static void Using(Texture2D Units)
+        public static void Using(Texture2D Units, float type, bool convert_dragonlords)
         {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(type - 0)) < .001) CompiledEffect = CompiledEffect_type_0;
+            else if (abs((float)(type - 1)) < .001) CompiledEffect = CompiledEffect_type_1;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
             CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
             CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_convert_dragonlords"].SetValue(FragSharpMarshal.Marshal(convert_dragonlords));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
 }
 
 
+
 namespace Game
 {
     public partial class MakeTargetSymmetric
     {
-        public static Effect CompiledEffect;
+        public static Effect CompiledEffect_type_0;
+        public static Effect CompiledEffect_type_1;
 
-        public static void Apply(Texture2D Target, RenderTarget2D Output, Color Clear)
+        public static void Apply(Texture2D Target, float type, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Target);
+            Using(Target, type);
             GridHelper.DrawGrid();
         }
-        public static void Apply(Texture2D Target, RenderTarget2D Output)
+        public static void Apply(Texture2D Target, float type, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Target);
+            Using(Target, type);
             GridHelper.DrawGrid();
         }
-        public static void Using(Texture2D Target, RenderTarget2D Output, Color Clear)
+        public static void Using(Texture2D Target, float type, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Target);
+            Using(Target, type);
         }
-        public static void Using(Texture2D Target, RenderTarget2D Output)
+        public static void Using(Texture2D Target, float type, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Target);
+            Using(Target, type);
         }
-        public static void Using(Texture2D Target)
+        public static void Using(Texture2D Target, float type)
         {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(type - 0)) < .001) CompiledEffect = CompiledEffect_type_0;
+            else if (abs((float)(type - 1)) < .001) CompiledEffect = CompiledEffect_type_1;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
             CompiledEffect.Parameters["fs_param_Target_Texture"].SetValue(FragSharpMarshal.Marshal(Target));
             CompiledEffect.Parameters["fs_param_Target_size"].SetValue(FragSharpMarshal.Marshal(vec(Target.Width, Target.Height)));
             CompiledEffect.Parameters["fs_param_Target_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Target.Width, Target.Height)));
@@ -524,7 +556,53 @@ namespace Game
 
 namespace Game
 {
-    public partial class FixBuildings
+    public partial class FixBuildings_1
+    {
+        public static Effect CompiledEffect;
+
+        public static void Apply(Texture2D Data, Texture2D Units, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Units);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Data, Texture2D Units, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Units);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Data, Texture2D Units, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data, Units);
+        }
+        public static void Using(Texture2D Data, Texture2D Units, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data, Units);
+        }
+        public static void Using(Texture2D Data, Texture2D Units)
+        {
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
+            CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+namespace Game
+{
+    public partial class FixBuildings_2
     {
         public static Effect CompiledEffect;
 

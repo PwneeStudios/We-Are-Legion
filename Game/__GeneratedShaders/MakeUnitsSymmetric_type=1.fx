@@ -22,22 +22,22 @@ struct PixelToFrame
 // The following are variables used by the vertex shader (vertex parameters).
 
 // The following are variables used by the fragment shader (fragment parameters).
-// Texture Sampler for fs_param_Info, using register location 1
-float2 fs_param_Info_size;
-float2 fs_param_Info_dxdy;
+// Texture Sampler for fs_param_Units, using register location 1
+float2 fs_param_Units_size;
+float2 fs_param_Units_dxdy;
 
-Texture fs_param_Info_Texture;
-sampler fs_param_Info : register(s1) = sampler_state
+Texture fs_param_Units_Texture;
+sampler fs_param_Units : register(s1) = sampler_state
 {
-    texture = <fs_param_Info_Texture>;
+    texture   = <fs_param_Units_Texture>;
     MipFilter = Point;
     MagFilter = Point;
     MinFilter = Point;
-    AddressU = Clamp;
-    AddressV = Clamp;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
-float fs_param_type;
+bool fs_param_convert_dragonlords;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
 
@@ -72,17 +72,17 @@ bool Game__MakeSymmetricBase__DoNothing__Sampler__vec2__Single(VertexToPixel psi
 float2 Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2__Single(VertexToPixel psin, sampler Info, float2 Info_size, float2 Info_dxdy, float2 pos, float type)
 {
     float2 shift = float2(0, 0);
-        if (abs(type - 0.0) < .001)
+    if (abs(type - 0.0) < .001)
+    {
+        if (pos.x > Info_size.x / 2 + .001)
         {
-            if (pos.x > Info_size.x / 2 + .001)
-            {
-                shift.x = 2 * pos.x - Info_size.x;
-            }
-            if (pos.y > Info_size.y / 2 + .001)
-            {
-                shift.y = 2 * pos.y - Info_size.y;
-            }
+            shift.x = 2 * pos.x - Info_size.x;
         }
+        if (pos.y > Info_size.y / 2 + .001)
+        {
+            shift.y = 2 * pos.y - Info_size.y;
+        }
+    }
     if (abs(type - 1.0) < .001)
     {
         if (pos.x > Info_size.x / 4 + .001)
@@ -111,15 +111,42 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 info = tex2D(fs_param_Info, psin.TexCoords + (float2(0, 0)) * fs_param_Info_dxdy);
-        float2 pos = psin.TexCoords * fs_param_Info_size;
-        if (Game__MakeSymmetricBase__DoNothing__Sampler__vec2__Single(psin, fs_param_Info, fs_param_Info_size, fs_param_Info_dxdy, pos, fs_param_type))
-        {
-            __FinalOutput.Color = info;
-            return __FinalOutput;
-        }
-    float4 copy = tex2D(fs_param_Info, psin.TexCoords + (float2(0, 0) - Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2__Single(psin, fs_param_Info, fs_param_Info_size, fs_param_Info_dxdy, pos, fs_param_type)) * fs_param_Info_dxdy);
+    float4 info = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
+    float2 pos = psin.TexCoords * fs_param_Units_size;
+    if (Game__MakeSymmetricBase__DoNothing__Sampler__vec2__Single(psin, fs_param_Units, fs_param_Units_size, fs_param_Units_dxdy, pos, 1))
+    {
+        __FinalOutput.Color = info;
+        return __FinalOutput;
+    }
+    float4 copy = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0) - Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2__Single(psin, fs_param_Units, fs_param_Units_size, fs_param_Units_dxdy, pos, 1)) * fs_param_Units_dxdy);
+    if (abs(copy.g - 0.0) < .001)
+    {
         __FinalOutput.Color = copy;
+        return __FinalOutput;
+    }
+    if (pos.x > fs_param_Units_size.x / 2 + .001)
+    {
+        copy.g += 0.003921569;
+        copy.b += 0.003921569;
+    }
+    if (pos.y > fs_param_Units_size.y / 2 + .001)
+    {
+        copy.g += 0.007843138;
+        copy.b += 0.007843138;
+    }
+    if (copy.g > 0.01568628 + .001)
+    {
+        copy.g -= 0.01568628;
+    }
+    if (copy.b > 0.01568628 + .001)
+    {
+        copy.b -= 0.01568628;
+    }
+    if (fs_param_convert_dragonlords && abs(copy.r - 0.007843138) < .001)
+    {
+        copy.r = 0.003921569;
+    }
+    __FinalOutput.Color = copy;
     return __FinalOutput;
 }
 

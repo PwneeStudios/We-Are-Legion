@@ -21,9 +21,9 @@ namespace Game
         }
 
 #if DEBUG
-        //GameState State = GameState.ToEditor;
+        GameState State = GameState.ToEditor;
         //GameState State = GameState.ToMap;
-        GameState State = GameState.TitleScreen;
+        //GameState State = GameState.TitleScreen;
 #else
         GameState State = GameState.TitleScreen;
 #endif
@@ -271,13 +271,15 @@ namespace Game
                 {
                     if (Keys.S.Pressed() && Keys.LeftControl.Down())
                     {
-                        World.Save("SavedMap.m3n");
+                        World.Save("Choke Points.m3n");
+                        //World.Save("SavedMap.m3n");
                     }
 
                     if (Keys.L.Pressed() && Keys.LeftControl.Down())
                     {
                         //World.Load("SavedMap.m3n");
-                        World.Load("Content/Maps/Beset.m3n");
+                        //World.Load("Content/Maps/Beset.m3n");
+                        World.Load("Choke Points.m3n");
                     }
                 }
 
