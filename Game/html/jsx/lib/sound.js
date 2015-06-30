@@ -15,6 +15,7 @@ define(['lodash', 'interop'], function(_, interop) {
             listHover: onEvent('Menu_Back', 0.0),
             click: onEvent('Menu_Back', 0.3),
             back: onEvent('Menu_Back', 0.3),
+            slam: onEvent('Menu_Slam', 1),
         },
     };
     

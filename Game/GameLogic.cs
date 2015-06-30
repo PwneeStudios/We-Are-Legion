@@ -21,8 +21,8 @@ namespace Game
         }
 
 #if DEBUG
-        GameState State = GameState.ToEditor;
-        //GameState State = GameState.ToMap;
+        //GameState State = GameState.ToEditor;
+        GameState State = GameState.ToMap;
         //GameState State = GameState.TitleScreen;
 #else
         GameState State = GameState.TitleScreen;
@@ -381,17 +381,27 @@ namespace Game
             else if (T - World.GameOverTime < PanTime + 1.25)
             {
                 DeltaT *= .35f;
-                Sounds.DyingDragonLord.MaybePlay();
+
+                if (!World.End_PlayedDeathGroan && T - World.GameOverTime > PanTime + 0.0)
+                {
+                    Sounds.DyingDragonLord.MaybePlay();
+                    World.End_PlayedDeathGroan = true;
+                }
             }
             else
             {
                 World.Markers.Hide = false;
-                Sounds.ExplodingDragonLord.MaybePlay();
+
+                if (!World.End_PlayedDeathExplosion)
+                {
+                    Sounds.EndOfGameDyingDragonLord.MaybePlay();
+                    World.End_PlayedDeathExplosion = true;
+                }
             }
 
             GameInputEnabled = false;
 
-            float s = (float)Math.Min(1, (T - World.GameOverTime) / 1.25);
+            float s = (float)Math.Min(1, (T - World.GameOverTime) / PanTime);
             World.CameraPos = s * World.DragonLordDeathPos + (1 - s) * World.GameOverPos;
             World.CameraZoom = CoreMath.LogLerpRestrict((float)World.GameOverTime, World.GameOverZoom, (float)World.GameOverTime + 1.25f, 100, (float)T);
         }

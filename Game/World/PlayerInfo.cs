@@ -2,6 +2,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
+using FragSharpFramework;
+
 namespace Game
 {
     public class PlayerUnitInfo
@@ -49,6 +51,8 @@ namespace Game
             SpellCosts = new Dictionary<string, int>();
 
         public bool DragonLordAlive = false;
+        public bool CreateDragonLordDeathEffect = false;
+        public vec2 DragonLordDeathPos;
 
         public GameParameters Params;
         public PlayerInfo(int Number, GameParameters Params)

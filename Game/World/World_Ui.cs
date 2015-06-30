@@ -243,10 +243,11 @@ namespace Game
         public void DragonLordDeath(vec2 GridCoord, int PlayerNum)
         {
             vec2 Pos = GridToWorldCood(GridCoord + vec(1, 1));
+            vec2 Pos2 = GridToWorldCood(GridCoord - vec(0, 0));
             DragonLordDeathPos = Pos;
 
-            AddExplosion(Pos, vec(5, 5));
             AddSummonUnitEffect(GridCoord);
+            AddExplosion(Pos2, vec(5, 5));
             Message_PlayerDefeated(PlayerNum);
         }
 

@@ -202,12 +202,28 @@
       <Name>Beset</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Maps\Gilgamesh.m3n">
-      <Name>Gilgamesh</Name>
+    <None Include="Maps\Choke Points.m3n">
+      <Name>Choke Points</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Maps\Nice.m3n">
-      <Name>Nice</Name>
+    <None Include="Maps\Clash of Madness.m3n">
+      <Name>Clash of Madness</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Training\Easy.m3n">
+      <Name>Easy</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Training\Hard.m3n">
+      <Name>Hard</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Training\Medium.m3n">
+      <Name>Medium</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Training\Playground.m3n">
+      <Name>Playground</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
@@ -364,13 +380,8 @@
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\RaiseDead.wav">
-      <Name>RaiseDead</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-    <Compile Include="Sound\SummonTerracotta.wav">
-      <Name>SummonTerracotta</Name>
+    <Compile Include="Sound\Spell_Terracotta.wav">
+      <Name>Spell_Terracotta</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
@@ -378,6 +389,32 @@
   <ItemGroup>
     <Compile Include="Sound\Spell_Fireball.wav">
       <Name>Spell_Fireball</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sound\Spell_Skeletons.wav">
+      <Name>Spell_Skeletons</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sound\DyingDragonLord_1.wav">
+      <Name>DyingDragonLord_1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Sound\DyingDragonLord_2.wav">
+      <Name>DyingDragonLord_2</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sound\Menu_Slam.wav">
+      <Name>Menu_Slam</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>

@@ -1,6 +1,6 @@
-define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui',
+define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'sound',
         'Components/Chat', 'Components/MapPicker'],
-function(_, React, ReactBootstrap, interop, events, ui,
+function(_, React, ReactBootstrap, interop, events, ui, sound,
          Chat, MapPicker) {
 
     var Panel = ReactBootstrap.Panel;
@@ -49,7 +49,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
         
             return (
                 <tr>
-                    <td><p>{name}</p></td>
+                    <td><p style={{'font-family':'Verdana, Geneva, sans-serif'}}>{name}</p></td>
                     {this.item(Buildings.Barracks, 1.2,  this.props.info.Barracks.Count)}
                     {this.item(Units.Soldier,      0.85, this.props.info.Units)}
                     {this.item(Buildings.GoldMine, 2,    this.props.info.GoldMine.Count)}
@@ -65,6 +65,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
         mixins: [],
 
         show: function() {
+            sound.play.slam();
+
             this.setState({
                 show: true,
             });
@@ -72,7 +74,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
         getInitialState: function() {
             if (interop.InXna()) {
-                setTimeout(this.show, 4500);
+                setTimeout(this.show, 4700);
 
                 return {
                     show: false,
@@ -102,11 +104,15 @@ function(_, React, ReactBootstrap, interop, events, ui,
                 <div>
                     <Div nonBlocking pos={pos(10,10)} size={width(80)}>
                         <Well style={{'height':'80%'}}>
-                            <h1 style={{float:'left'}}>
-                                {this.props.params.victory ? 'Victory!' : 'Defeat!'}
-                                &nbsp;
-                                Team {this.props.params.winningTeam} wins!
-                            </h1>
+                            <Div pos={pos(5,2)} size={width(90)}>
+                                <h1 style={{float:'left',fontSize:52}}>
+                                    {this.props.params.victory ? 'Victory!' : 'Defeat!'}
+                                </h1>
+
+                                <h1 style={{float:'right',fontSize:30}}>
+                                    <span style={{float:'right'}}>Team {this.props.params.winningTeam} wins!</span>
+                                </h1>
+                            </Div>
 
                             {/* Info */}
                             <Div pos={pos(5,20)}>

@@ -7,7 +7,7 @@ namespace Game
 {
     public static class Sounds
     {
-        public static void MaybePlay(this Sound sound, float volume=1, float pitch=1, float pan=1)
+        public static void MaybePlay(this Sound sound, float volume=1, float pitch=0, float pan=0)
         {
             if (sound == null) return;
 
@@ -15,7 +15,7 @@ namespace Game
         }
 
         public static Sound
-            PlaceBuilding, BuildingExplode, DyingUnit, DyingDragonLord, ExplodingDragonLord, GameOver, GiveOrder;
+            PlaceBuilding, BuildingExplode, DyingUnit, DyingDragonLord, EndOfGameDyingDragonLord, GameOver, GiveOrder;
 
         public static void Initialize()
         {
@@ -24,8 +24,8 @@ namespace Game
             DyingUnit = SoundWad.Wad.FindByName("DyingUnit", FindStyle.NullIfNotFound);
             GameOver = SoundWad.Wad.FindByName("GameOver", FindStyle.NullIfNotFound);
             GiveOrder = SoundWad.Wad.FindByName("GiveOrder", FindStyle.NullIfNotFound);
-            DyingDragonLord = SoundWad.Wad.FindByName("DyingDragonLord", FindStyle.NullIfNotFound);
-            ExplodingDragonLord = SoundWad.Wad.FindByName("ExplodingDragonLord", FindStyle.NullIfNotFound);
+            DyingDragonLord = SoundWad.Wad.FindByName("DyingDragonLord_2", FindStyle.NullIfNotFound);
+            EndOfGameDyingDragonLord = SoundWad.Wad.FindByName("Spell_Skeletons", FindStyle.NullIfNotFound);
         }
     }
 }

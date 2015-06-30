@@ -182,5 +182,7 @@ namespace Game
                 return .2f * Scaled;
             }
         }
+
+        public bool End_PlayedDeathGroan, End_PlayedDeathExplosion;
     }
 }

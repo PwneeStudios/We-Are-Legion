@@ -335,6 +335,7 @@ namespace Game
                     DataGroup.DoDragonLordCount(PlayerInfo); // This should happen soon after CurrentUnit.anim is updated, so it can catch the death switch with low latency.
                     DragonLordDeathCheck();
                     EndOfGameCheck();
+                    AddDragonLordDeathEffects();
 
                     break;
 
@@ -406,6 +407,24 @@ namespace Game
             }
         }
 
+        void AddDragonLordDeathEffects()
+        {
+            for (int p = 1; p <= 4; p++)
+            {
+                var player = PlayerInfo[p];
+
+                if (player.CreateDragonLordDeathEffect)
+                {
+                    player.DragonLordDeathPos = CurDragonLordPos[p];
+                    DragonLordDeath(player.DragonLordDeathPos, p);
+
+                    if (!GameOver) Sounds.DyingDragonLord.MaybePlay();
+
+                    player.CreateDragonLordDeathEffect = false;
+                }
+            }
+        }
+
         void DragonLordDeathCheck()
         {
             for (int t = 1; t <= 4; t++)
@@ -426,8 +445,9 @@ namespace Game
 
                         if (!MapEditorActive)
                         {
-                            vec2 grid_coord = DataGroup.DragonLordDeathGridCoord();
-                            DragonLordDeath(grid_coord, p);
+                            player.CreateDragonLordDeathEffect = true;
+                            //player.DragonLordDeathPos = DataGroup.DragonLordDeathGridCoord();
+                            player.DragonLordDeathPos = CurDragonLordPos[p];
                         }
                     }
                 }
