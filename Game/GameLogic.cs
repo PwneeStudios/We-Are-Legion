@@ -21,8 +21,8 @@ namespace Game
         }
 
 #if DEBUG
-        //GameState State = GameState.ToEditor;
-        GameState State = GameState.ToMap;
+        GameState State = GameState.ToEditor;
+        //GameState State = GameState.ToMap;
         //GameState State = GameState.TitleScreen;
 #else
         GameState State = GameState.TitleScreen;
@@ -271,15 +271,24 @@ namespace Game
                 {
                     if (Keys.S.Pressed() && Keys.LeftControl.Down())
                     {
-                        World.Save("Choke Points.m3n");
+                        //World.Save("Choke Points.m3n");
+                        //World.Save("Beset.m3n");
                         //World.Save("SavedMap.m3n");
+                        //World.Save("I Am The Tyrant.m3n");
+                        //World.Save("Starfall.m3n");
+                        World.Save("Axis Mundi.m3n");
                     }
 
                     if (Keys.L.Pressed() && Keys.LeftControl.Down())
                     {
                         //World.Load("SavedMap.m3n");
                         //World.Load("Content/Maps/Beset.m3n");
-                        World.Load("Choke Points.m3n");
+
+                        //World.Load("Beset.m3n");
+                        //World.Load("Choke Points.m3n");
+                        //World.Load("I Am The Tyrant.m3n");
+                        //World.Load("Starfall.m3n");
+                        World.Load("Axis Mundi.m3n");
                     }
                 }
 

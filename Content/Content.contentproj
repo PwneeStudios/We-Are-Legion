@@ -198,6 +198,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Maps\Axis Mundi.m3n">
+      <Name>Axis Mundi</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Maps\Beset.m3n">
       <Name>Beset</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -208,6 +212,14 @@
     </None>
     <None Include="Maps\Clash of Madness.m3n">
       <Name>Clash of Madness</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Maps\I Am The Tyrant.m3n">
+      <Name>I Am The Tyrant</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Maps\Starfall.m3n">
+      <Name>Starfall</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Training\Easy.m3n">
