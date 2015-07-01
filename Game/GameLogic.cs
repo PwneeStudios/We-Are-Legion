@@ -289,7 +289,8 @@ namespace Game
                         //World.Save("SavedMap.m3n");
                         //World.Save("I Am The Tyrant.m3n");
                         //World.Save("Starfall.m3n");
-                        World.Save("Axis Mundi.m3n");
+                        //World.Save("Axis Mundi.m3n");
+                        World.Save("Easy.m3n");
                     }
 
                     if (Keys.L.Pressed() && Keys.LeftControl.Down())
@@ -301,7 +302,7 @@ namespace Game
                         //World.Load("Choke Points.m3n");
                         //World.Load("I Am The Tyrant.m3n");
                         //World.Load("Starfall.m3n");
-                        World.Load("Axis Mundi.m3n");
+                        World.Load("Easy.m3n");
                     }
                 }
 

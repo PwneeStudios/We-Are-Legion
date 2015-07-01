@@ -226,12 +226,12 @@
       <Name>Easy</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Training\Hard.m3n">
-      <Name>Hard</Name>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Training\Medium.m3n">
       <Name>Medium</Name>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Training\Hard.m3n">
+      <Name>Hard</Name>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Training\Playground.m3n">
