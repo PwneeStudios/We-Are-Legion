@@ -166,7 +166,7 @@ namespace Game
 
             try
             {
-                _NewMap.Load(Path.Combine("Content", Path.Combine("Maps", map)), Retries: 0, DataOnly: true);
+                _NewMap.Load(Path.Combine(MapDirectory, map), Retries: 0, DataOnly: true);
             }
             catch
             {
@@ -286,13 +286,33 @@ namespace Game
             Console.WriteLine("Failed connection attempt with {0}", Player);
         }
 
+        string MapDirectory
+        {
+            get
+            {
+                if (InTrainingLobby)
+                {
+                    return Path.Combine("Content", "Training");
+                }
+                else
+                {
+                    return Path.Combine("Content", "Maps");
+                }
+            }
+        }
+
         List<string> Maps;
         void BuildMapList()
         {
+            if (InTrainingLobby)
+            {
+                Maps = new List<string>(new string[] { "Easy", "Medium", "Hard", "Playground" });
+                return;
+            }
+
             Maps = new List<string>();
 
-            string path = Path.Combine("Content", "Maps");
-            foreach (string file in Directory.EnumerateFiles(path, "*.m3n", SearchOption.TopDirectoryOnly))
+            foreach (string file in Directory.EnumerateFiles(MapDirectory, "*.m3n", SearchOption.TopDirectoryOnly))
             {
                 string name = Path.GetFileNameWithoutExtension(file);
                 Maps.Add(name);

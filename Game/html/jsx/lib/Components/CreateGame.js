@@ -31,9 +31,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         render: function() {
             return (
                 <Menu>
-                    <MenuItem eventKey={1} to='game-lobby' params={{host:true, type:'public'}}>Public game</MenuItem>
-                    <MenuItem eventKey={2} to='game-lobby' params={{host:true, type:'friends'}}>Friends only</MenuItem>
-                    <MenuItem eventKey={3} to='game-lobby' params={{host:true, type:'private'}}>Invite only</MenuItem>
+                    <MenuItem eventKey={1} to='game-lobby' params={{host:true, type:'public', training:false}}>Public game</MenuItem>
+                    <MenuItem eventKey={2} to='game-lobby' params={{host:true, type:'friends', training:false}}>Friends only</MenuItem>
+                    <MenuItem eventKey={3} to='game-lobby' params={{host:true, type:'private', training:false}}>Invite only</MenuItem>
+                    <MenuItem eventKey={3} to='game-lobby' params={{host:true, type:'private', training:true}}>Training Map</MenuItem>
                     <MenuItem eventKey={4} to='back'>Back</MenuItem>
                 </Menu>
             );

@@ -45,9 +45,11 @@ namespace Game
             xnaObj.Bind("JoinLobby", JoinLobby);
         }
 
+        static bool InTrainingLobby = false;
         JSValue CreateLobby(object sender, JavascriptMethodEventArgs e)
         {
             int lobbyType = StringToLobbyType(e.Arguments[0]);
+            InTrainingLobby = bool.Parse(e.Arguments[1]);
 
             if (!SteamCore.SteamIsConnected())
             {
@@ -112,6 +114,8 @@ namespace Game
             }
 
             SetLobbyName();
+
+            if (InTrainingLobby) SteamMatches.SetLobbyJoinable(false);
 
             Console.WriteLine("Trying to join the created lobby.");
             SteamMatches.JoinCreatedLobby(OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);                

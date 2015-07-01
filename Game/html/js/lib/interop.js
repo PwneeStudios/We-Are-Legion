@@ -71,9 +71,9 @@ define(['lodash'], function(_) {
             }
         },
 
-        createLobby: function(type) {
+        createLobby: function(type, training) {
             if (interop.InXna()) {
-                xna.CreateLobby(type);
+                xna.CreateLobby(type, training);
             }
         },
 

@@ -203,7 +203,7 @@ namespace Game
                         Send("setScreen", "in-game-ui");
 
                         World = new World();
-                        World.Load(Path.Combine("Content", Path.Combine("Maps", ScenarioToLoad)));
+                        World.Load(Path.Combine(MapDirectory, ScenarioToLoad));
 
                         Program.WorldLoaded = true;
                         Networking.ToServer(new Message(MessageType.DoneLoading));

@@ -31,9 +31,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         render: function() {
             return (
                 React.createElement(Menu, null, 
-                    React.createElement(MenuItem, {eventKey: 1, to: "game-lobby", params: {host:true, type:'public'}}, "Public game"), 
-                    React.createElement(MenuItem, {eventKey: 2, to: "game-lobby", params: {host:true, type:'friends'}}, "Friends only"), 
-                    React.createElement(MenuItem, {eventKey: 3, to: "game-lobby", params: {host:true, type:'private'}}, "Invite only"), 
+                    React.createElement(MenuItem, {eventKey: 1, to: "game-lobby", params: {host:true, type:'public', training:false}}, "Public game"), 
+                    React.createElement(MenuItem, {eventKey: 2, to: "game-lobby", params: {host:true, type:'friends', training:false}}, "Friends only"), 
+                    React.createElement(MenuItem, {eventKey: 3, to: "game-lobby", params: {host:true, type:'private', training:false}}, "Invite only"), 
+                    React.createElement(MenuItem, {eventKey: 3, to: "game-lobby", params: {host:true, type:'private', training:true}}, "Training Map"), 
                     React.createElement(MenuItem, {eventKey: 4, to: "back"}, "Back")
                 )
             );

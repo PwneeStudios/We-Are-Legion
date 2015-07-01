@@ -231,7 +231,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
             }
 
             if (this.props.params.host) {
-                interop.createLobby(this.props.params.type);
+                interop.createLobby(this.props.params.type, this.props.params.training);
             } else {
                 interop.joinLobby(this.props.params.lobbyIndex);
             }
@@ -365,14 +365,14 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                                          player={i}
                                                          info={_this.state.lobbyInfo.Players[i-1]}
                                                          players={_this.state.lobbyInfo.Players}
-                                                         activePlayer={_this.state.activePlayer} />
+                                                         activePlayer={_this.props.params.training ? null : _this.state.activePlayer} />
                                          );
                                     })}
                                 </tbody></Table>
                             </Div>
 
                             {/* Game visibility type */}
-                            {this.props.params.host ? 
+                            {this.props.params.host && !this.props.params.training ? 
                                 <Div pos={pos(48,5.2)} size={size(16.5,66.2)}>
                                     <OptionList disabled={disabled} options={visibility}
                                                 onSelect={this.onLobbyTypeSelect} value={this.props.params.type}/>
@@ -385,7 +385,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                     <p>
                                         {/* Map */}
                                         {this.props.params.host ? 
-                                            <ModalTrigger modal={<MapPicker maps={this.state.maps} onPick={this.onMapPick} />}>
+                                            <ModalTrigger modal={<MapPicker maps={this.state.maps} onPick={this.onMapPick} training={this.props.params.training}/>}>
                                                 <ui.Button disabled={disabled} bsStyle='primary'>
                                                     Choose map...
                                                 </ui.Button>
