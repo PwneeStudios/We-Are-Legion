@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
+using Newtonsoft.Json;
+
 namespace Game
 {
     public static class Log
@@ -95,6 +97,9 @@ namespace Game
 
         public static string
             StartupMap = null;
+
+        public static GameParameters
+            StartupGameParams = null;
 
         public static int[]
             Teams = new int[] { -1,  1, 2, 3, 4 };
@@ -197,7 +202,7 @@ namespace Game
 
         public static void ParseOptions(string args)
         {
-            var parts = args.Split('"');
+            var parts = args.Split(MessageStr.Seperator);
 
             var argList = new List<string>();
             for (int i = 0; i < parts.Length; i += 2)
@@ -241,6 +246,13 @@ namespace Game
             {
                 int i = args.IndexOf("--map");
                 StartupMap = args[i + 1];
+            }
+
+            if (args.Contains("--params"))
+            {
+                int i = args.IndexOf("--params");
+                string game_params = args[i + 1];
+                StartupGameParams = (GameParameters)JsonConvert.DeserializeObject(game_params, typeof(GameParameters));
             }
 
             if (args.Contains("--server")) Server = true;

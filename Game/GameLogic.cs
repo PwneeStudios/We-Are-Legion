@@ -215,7 +215,9 @@ namespace Game
                         Send("setMode", "in-game");
                         Send("setScreen", "in-game-ui");
 
-                        World = new World();
+                        World = new World(GameParams: Program.StartupGameParams);
+                        
+                        World.LoadPlayerInfo = false;
                         World.Load(Path.Combine(MapDirectory, ScenarioToLoad));
 
                         Program.WorldLoaded = true;

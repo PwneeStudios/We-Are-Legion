@@ -45,12 +45,13 @@ namespace Game
     public class LobbyInfo
     {
         public List<PlayerLobbyInfo> Players = new List<PlayerLobbyInfo>(4);
-        public int Increment = 0;
+        public GameParameters Params = new GameParameters();
 
         public LobbyInfo()
         {
         }
 
+        private int Increment = 0;
         public void MarkAsChanged()
         {
             Increment++;

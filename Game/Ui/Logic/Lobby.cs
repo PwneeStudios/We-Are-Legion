@@ -342,6 +342,11 @@ namespace Game
             Send("lobby", obj);
         }
 
+        string Wrap(string s)
+        {
+            return MessageStr.Seperator + s + MessageStr.Seperator;
+        }
+
         void BuildArgs()
         {
             if (!SteamMatches.IsLobbyOwner()) return;
@@ -374,8 +379,9 @@ namespace Game
             {
                 string type = player.Host ? "--server" : "--client";
                 string networking = string.Format("{0} --steam-networking --steam-server {1} --steam-users {2}", type, server, users);
+                string game_params = Jsonify(LobbyInfo.Params);
 
-                player.Args = string.Format("{0} --p {1} --t {2} --n {3} --map \"{4}\"", networking, player.GamePlayer, teams, players, GameMapName);
+                player.Args = string.Format("{0} --p {1} --t {2} --n {3} --map {4} --params {5}", networking, player.GamePlayer, teams, players, Wrap(GameMapName), Wrap(game_params));
             }
         }
 

@@ -7,7 +7,7 @@ namespace Game
 {
     public partial class World : SimShader
     {
-        public World(bool Skeleton=false)
+        public World(bool Skeleton=false, GameParameters GameParams=null)
         {
             MyPlayerNumber = Program.StartupPlayerNumber;
             PlayerTeams = Program.Teams;
@@ -16,7 +16,15 @@ namespace Game
 
             CameraAspect = GameClass.ScreenAspect;
 
-            Params = new GameParameters();
+            if (GameParams != null)
+            {
+                Params = GameParams;
+            }
+            else
+            {
+                Params = new GameParameters();
+            }
+
             TeamInfo = new TeamInfo[5];
             PlayerInfo = new PlayerInfo[5];
             for (int i = 1; i <= 4; i++)
@@ -91,7 +99,7 @@ namespace Game
 
         public DataGroup DataGroup;
 
-        GameParameters Params;
+        public GameParameters Params;
         public TeamInfo[] TeamInfo;
         public PlayerInfo[] PlayerInfo;
 

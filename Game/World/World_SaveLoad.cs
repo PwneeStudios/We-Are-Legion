@@ -189,6 +189,7 @@ namespace Game
             //Migrate();
         }
 
+        public bool LoadPlayerInfo = false;
         public void Load(BinaryReader reader)
         {
             // Grid data
@@ -215,6 +216,8 @@ namespace Game
             CameraPos.x = reader.ReadSingle();
             CameraPos.y = reader.ReadSingle();
             CameraZoom = reader.ReadSingle();
+
+            if (!LoadPlayerInfo) return;
             for (int i = 1; i <= 4; i++) PlayerInfo[i].Read(reader);
         }
     }
