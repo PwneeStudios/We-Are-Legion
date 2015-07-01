@@ -22,7 +22,7 @@ namespace Game
             Swap(ref DistanceToOtherTeams, ref Temp1);
         }
 
-        void UpdateGradient_ToPlayers()
+        public void UpdateGradient_ToPlayers()
         {
             Pathfinding_ToPlayers.Apply(DistanceToPlayers, CurrentData, CurrentUnits, Output: Temp1);
             Swap(ref DistanceToPlayers, ref Temp1);

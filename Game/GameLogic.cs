@@ -21,9 +21,9 @@ namespace Game
         }
 
 #if DEBUG
-        GameState State = GameState.ToEditor;
+        //GameState State = GameState.ToEditor;
         //GameState State = GameState.ToMap;
-        //GameState State = GameState.TitleScreen;
+        GameState State = GameState.TitleScreen;
 #else
         GameState State = GameState.TitleScreen;
 #endif
@@ -168,7 +168,20 @@ namespace Game
                     Render.StandardRenderSetup();
                     if (DrawMapPreview && World != null && World.DataGroup != null)
                     {
+                        Render.UnsetDevice();
+                        try
+                        {
+                            World.DataGroup.UpdateGradient_ToPlayers();
+                            World.DataGroup.UpdateGradient_ToBuildings();
+                            World.DataGroup.UpdateGradient_ToPlayers();
+                            World.DataGroup.UpdateGradient_ToBuildings();
+                        }
+                        catch
+                        {
+                        }
+
                         World.UpdateMinimap();
+
                         GridHelper.GraphicsDevice.SetRenderTarget(null);
                     }
 
