@@ -184,11 +184,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Art\Screen-Instructions.png">
-      <Name>Screen-Instructions</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Art\Screen-Loading.png">
@@ -261,18 +256,6 @@
     </Compile>
     <Compile Include="Art\AoE_Terra.png">
       <Name>AoE_Terra</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Art\Screen-Scenarios.png">
-      <Name>Screen-Scenarios</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Art\Screen-Spells.png">
-      <Name>Screen-Spells</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

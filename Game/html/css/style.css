@@ -28,6 +28,7 @@ body {
 
 .carousel-indicators {
     bottom:30%;
+    visibility: hidden;
 }
 
 /* ------

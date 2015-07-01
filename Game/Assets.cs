@@ -14,7 +14,6 @@ namespace Game
     {
         public static Texture2D
             ScreenTitle, ScreenDark, ScreenLoading,
-            ScreenSpells, ScreenInstructions, ScreenScenarios,
 
             White, FarColors,
 
@@ -52,10 +51,6 @@ namespace Game
             ScreenTitle = LoadTexture("Screen-Title");
             ScreenLoading = LoadTexture("Screen-Loading");
             ScreenDark = LoadTexture("Screen-Paint");
-
-            ScreenSpells = LoadTexture("Screen-Spells");
-            ScreenInstructions = LoadTexture("Screen-Instructions");
-            ScreenScenarios = LoadTexture("Screen-Scenarios");
 
             White = LoadTexture("White");
             FarColors = LoadTexture("FarColors");

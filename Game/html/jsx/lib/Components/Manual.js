@@ -43,27 +43,15 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                     <Carousel activeIndex={this.state.index} direction={this.state.direction} onSelect={this.handleSelect}>
                         <CarouselItem style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
                             <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Instructions.png'}}/>
-
-                            <div className='carousel-caption'>
-                                <h3>First slide label</h3>
-                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                            </div>
                         </CarouselItem>
-                        <CarouselItem>
+                        <CarouselItem style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
+                            <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Getting-Started.png'}}/>
+                        </CarouselItem>
+                        <CarouselItem style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
+                            <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Dragonlords.png'}}/>
+                        </CarouselItem>
+                        <CarouselItem style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
                             <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Spells.png'}}/>
-
-                            <div className='carousel-caption'>
-                                <h3>Second slide label</h3>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                            </div>
-                        </CarouselItem>
-                        <CarouselItem>
-                            <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Instructions.png'}}/>
-
-                            <div className='carousel-caption'>
-                                <h3>Third slide label</h3>
-                                <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-                            </div>
                         </CarouselItem>
                     </Carousel>
 
