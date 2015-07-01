@@ -380,8 +380,9 @@ namespace Game
                 string type = player.Host ? "--server" : "--client";
                 string networking = string.Format("{0} --steam-networking --steam-server {1} --steam-users {2}", type, server, users);
                 string game_params = Jsonify(LobbyInfo.Params);
+                string spells = Jsonify(Spells.SpellInfoDict);
 
-                player.Args = string.Format("{0} --p {1} --t {2} --n {3} --map {4} --params {5}", networking, player.GamePlayer, teams, players, Wrap(GameMapName), Wrap(game_params));
+                player.Args = string.Format("{0} --p {1} --t {2} --n {3} --map {4} --params {5} --spells {6}", networking, player.GamePlayer, teams, players, Wrap(GameMapName), Wrap(game_params), Wrap(spells));
             }
         }
 

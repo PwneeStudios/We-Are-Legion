@@ -91,7 +91,7 @@ namespace Game
 
         public int SpellCost(Spell spell)
         {
-            return spell.JadeCost + spell.JadeCostIncrease * SpellCasts[spell.Name];
+            return spell.Info.JadeCost + spell.Info.JadeCostIncrease * SpellCasts[spell.Name];
         }
 
         public bool CanAffordBuilding(int type) { return CanAffordBuilding(_[type]); }

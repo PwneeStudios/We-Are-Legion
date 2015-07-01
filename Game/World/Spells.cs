@@ -10,6 +10,12 @@ using Newtonsoft.Json;
 
 namespace Game
 {
+    public class SpellInfo
+    {
+        public int JadeCost = 0, JadeCostIncrease = 0;
+        public float TerritoryRange = float.MaxValue;        
+    }
+
     public class Spell : SimShader
     {
         public readonly int id;
@@ -23,8 +29,13 @@ namespace Game
 
         public Sound ExecutionSound;
 
-        public int JadeCost = 0, JadeCostIncrease = 0;
-        public float TerritoryRange = float.MaxValue;
+        public SpellInfo Info
+        {
+            get
+            {
+                return Spells.SpellInfoDict[Name];
+            }
+        }
 
         static int next_id = 0;
         public Spell(string Name)
@@ -42,6 +53,7 @@ namespace Game
     {
         public static List<Spell> SpellList = new List<Spell>();
         public static Dictionary<string, Spell> SpellDict = new Dictionary<string, Spell>();
+        public static Dictionary<string, SpellInfo> SpellInfoDict = new Dictionary<string, SpellInfo>();
 
         static World W { get { return GameClass.World; } }
 
@@ -65,33 +77,33 @@ namespace Game
             spell.DrawCursor = FlameCursor;
             spell.Execute = () => W.Fireball();
             spell.Apply = (p, t, v) => W.FireballApply(p, t, v);
-            spell.JadeCost = 1000;
-            spell.JadeCostIncrease = 0;
+            spell.Info.JadeCost = 1000;
+            spell.Info.JadeCostIncrease = 0;
             spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Fireball", FindStyle.NullIfNotFound);
 
             SkeletonArmy = spell = new Spell("Skeletons");
             spell.DrawCursor = SkeletonCursor;
             spell.Execute = () => W.RaiseSkeletons(RaiseR);
             spell.Apply = (p, t, v) => W.RaiseSkeletonsApply(p, t, v, RaiseR);
-            spell.JadeCost = 1000;
-            spell.JadeCostIncrease = 0;
+            spell.Info.JadeCost = 1000;
+            spell.Info.JadeCostIncrease = 0;
             spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Skeletons", FindStyle.NullIfNotFound);
 
             Necromancer = spell = new Spell("Necromancer");
-            spell.DrawCursor = () => NecroCursor(Necromancer.TerritoryRange);
-            spell.Execute = () => W.SummonNecromancer(Necromancer.TerritoryRange);
+            spell.DrawCursor = () => NecroCursor(Necromancer.Info.TerritoryRange);
+            spell.Execute = () => W.SummonNecromancer(Necromancer.Info.TerritoryRange);
             spell.Apply = (p, t, v) => W.SummonNecromancerApply(p, t, v);
-            spell.JadeCost = 1000;
-            spell.TerritoryRange = _64;
-            spell.JadeCostIncrease = 500;
+            spell.Info.JadeCost = 1000;
+            spell.Info.TerritoryRange = _64;
+            spell.Info.JadeCostIncrease = 500;
             spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Necromancer", FindStyle.NullIfNotFound);
 
             TerracottaArmy = spell = new Spell("Terracotta");
             spell.DrawCursor = TerracottaCursor;
             spell.Execute = () => W.SummonTerracotta(TerracottaR);
             spell.Apply = (p, t, v) => W.SummonTerracottaApply(p, t, v, TerracottaR);
-            spell.JadeCost = 1000;
-            spell.JadeCostIncrease = 1000;
+            spell.Info.JadeCost = 1000;
+            spell.Info.JadeCostIncrease = 1000;
             spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Terracotta", FindStyle.NullIfNotFound);
         }
 
@@ -132,6 +144,7 @@ namespace Game
         {
             SpellList.Add(spell);
             SpellDict.Add(spell.Name, spell);
+            SpellInfoDict.Add(spell.Name, new SpellInfo());
         }
     }
 }

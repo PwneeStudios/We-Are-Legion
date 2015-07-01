@@ -707,13 +707,13 @@ namespace Game
             //DrawPolarInfo.Using(camvec, CameraAspect, DataGroup.Geo, DataGroup.GeoInfo, Assets.DebugTexture_Num); GridHelper.DrawGrid();
 
             // Territory and corpses
-            if ((CurUserMode == UserMode.PlaceBuilding || CurUserMode == UserMode.CastSpell && CurSpell.TerritoryRange < float.MaxValue)
+            if ((CurUserMode == UserMode.PlaceBuilding || CurUserMode == UserMode.CastSpell && CurSpell.Info.TerritoryRange < float.MaxValue)
                 && !MapEditorActive)
             {
                 float cutoff = _0;
                 
                 if (CurUserMode == UserMode.PlaceBuilding) cutoff = DrawTerritoryPlayer.TerritoryCutoff;
-                else if (CurUserMode == UserMode.CastSpell) cutoff = CurSpell.TerritoryRange;
+                else if (CurUserMode == UserMode.CastSpell) cutoff = CurSpell.Info.TerritoryRange;
 
                 DrawTerritoryPlayer.Using(camvec, CameraAspect, DataGroup.DistanceToPlayers, MyPlayerValue, cutoff);
                 GridHelper.DrawGrid();

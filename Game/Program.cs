@@ -255,6 +255,14 @@ namespace Game
                 StartupGameParams = (GameParameters)JsonConvert.DeserializeObject(game_params, typeof(GameParameters));
             }
 
+            if (args.Contains("--spells"))
+            {
+                int i = args.IndexOf("--spells");
+                string spells = args[i + 1];
+                Spells.SpellInfoDict = (Dictionary<string, SpellInfo>)
+                    JsonConvert.DeserializeObject(spells, typeof(Dictionary<string, SpellInfo>));
+            }
+
             if (args.Contains("--server")) Server = true;
             else if (args.Contains("--client")) Client = true;
 
