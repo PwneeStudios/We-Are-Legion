@@ -77,7 +77,7 @@ namespace Game
             spell.DrawCursor = FlameCursor;
             spell.Execute = () => W.Fireball();
             spell.Apply = (p, t, v) => W.FireballApply(p, t, v);
-            spell.Info.JadeCost = 1000;
+            spell.Info.JadeCost = 750;
             spell.Info.JadeCostIncrease = 0;
             spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Fireball", FindStyle.NullIfNotFound);
 
@@ -93,7 +93,7 @@ namespace Game
             spell.DrawCursor = () => NecroCursor(Necromancer.Info.TerritoryRange);
             spell.Execute = () => W.SummonNecromancer(Necromancer.Info.TerritoryRange);
             spell.Apply = (p, t, v) => W.SummonNecromancerApply(p, t, v);
-            spell.Info.JadeCost = 1000;
+            spell.Info.JadeCost = 1500;
             spell.Info.TerritoryRange = _64;
             spell.Info.JadeCostIncrease = 500;
             spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Necromancer", FindStyle.NullIfNotFound);
@@ -102,7 +102,7 @@ namespace Game
             spell.DrawCursor = TerracottaCursor;
             spell.Execute = () => W.SummonTerracotta(TerracottaR);
             spell.Apply = (p, t, v) => W.SummonTerracottaApply(p, t, v, TerracottaR);
-            spell.Info.JadeCost = 1000;
+            spell.Info.JadeCost = 2500;
             spell.Info.JadeCostIncrease = 1000;
             spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Terracotta", FindStyle.NullIfNotFound);
         }
