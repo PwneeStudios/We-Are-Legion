@@ -253,6 +253,7 @@ namespace Game
                 int i = args.IndexOf("--params");
                 string game_params = args[i + 1];
                 StartupGameParams = (GameParameters)JsonConvert.DeserializeObject(game_params, typeof(GameParameters));
+                StartupGameParams.Setup();
             }
 
             if (args.Contains("--spells"))

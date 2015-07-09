@@ -28,7 +28,7 @@ namespace Game
 
     public class GameParameters : SimShader
     {
-        public Dictionary<string, BuildingParameters> Buildings = new Dictionary<string, BuildingParameters>();
+        public Dictionary<string, BuildingParameters> Buildings;
 
         public BuildingParameters
             Barracks = new BuildingParameters(UnitType.Barracks, "Barracks", GoldCost: 250, CostIncrease: 50),
@@ -41,6 +41,12 @@ namespace Game
 
         public GameParameters()
         {
+            Setup();
+        }
+
+        public void Setup()
+        {
+            Buildings = new Dictionary<string, BuildingParameters>();
             Add(Barracks, GoldMine, JadeMine);
         }
 
