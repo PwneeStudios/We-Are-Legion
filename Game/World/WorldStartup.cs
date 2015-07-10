@@ -2,6 +2,34 @@ using FragSharpFramework;
 
 namespace Game
 {
+    public partial class RemoveDragonLordData : SimShader
+    {
+        [FragmentShader]
+        data FragmentShader(VertexOut vertex, Field<unit> Units, Field<data> Data, [Player.Vals] float player)
+        {
+            unit unit_here = Units[Here];
+            data data_here = Data[Here];
+
+            if (Something(data_here) && unit_here.player == player && unit_here.type == UnitType.DragonLord) return data.Nothing;
+
+            return data_here;
+        }
+    }
+
+    public partial class RemoveDragonLordUnit : SimShader
+    {
+        [FragmentShader]
+        unit FragmentShader(VertexOut vertex, Field<unit> Units, Field<data> Data, [Player.Vals] float player)
+        {
+            unit unit_here = Units[Here];
+            data data_here = Data[Here];
+
+            if (Something(data_here) && unit_here.player == player && unit_here.type == UnitType.DragonLord) return unit.Nothing;
+
+            return unit_here;
+        }
+    }
+
     public partial class SetTeams : SimShader
     {
         [FragmentShader]
@@ -23,6 +51,31 @@ namespace Game
         public void Startup()
         {
             Render.UnsetDevice();
+
+            int user_count = 0;
+            for (int p = 1; p <= 4; p++)
+            {
+                if (Program.SteamUsers[p - 1] != 0) user_count++;
+            }
+
+            if (RemoveComputerDragonLords && user_count > 1)
+            {
+                for (int p = 1; p <= 4; p++)
+                {
+                    if (Program.SteamUsers[p - 1] == 0)
+                    {
+                        RemoveDragonLordData.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Player.Vals[p], Output: DataGroup.Temp1);
+                        RemoveDragonLordUnit.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Player.Vals[p], Output: DataGroup.Temp2);
+                        CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
+                        CoreMath.Swap(ref DataGroup.Temp2, ref DataGroup.CurrentUnits);
+
+                        RemoveDragonLordData.Apply(DataGroup.PreviousUnits, DataGroup.PreviousData, Player.Vals[p], Output: DataGroup.Temp1);
+                        RemoveDragonLordUnit.Apply(DataGroup.PreviousUnits, DataGroup.PreviousData, Player.Vals[p], Output: DataGroup.Temp2);
+                        CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousData);
+                        CoreMath.Swap(ref DataGroup.Temp2, ref DataGroup.PreviousUnits);
+                    }
+                }
+            }
 
             // Set datagroup team data.
             SetTeams.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, PlayerTeamVals, Output: DataGroup.Temp1);

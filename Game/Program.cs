@@ -79,7 +79,8 @@ namespace Game
         public static bool
             Server = false,
             Client = false,
-            SteamNetworking = false;
+            SteamNetworking = false,
+            RemoveComputerDragonLords = false;
 
         public static UInt64 SteamServer = 0;
         public static UInt64[] SteamUsers = { 0, 0, 0, 0 };
@@ -266,6 +267,9 @@ namespace Game
 
             if (args.Contains("--server")) Server = true;
             else if (args.Contains("--client")) Client = true;
+
+            if (args.Contains("--remove-computer-dragonlords")) RemoveComputerDragonLords = true;
+            else RemoveComputerDragonLords = false;
 
             if (args.Contains("--steam-networking")) SteamNetworking = true;
 

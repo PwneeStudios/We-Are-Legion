@@ -129,6 +129,16 @@ namespace FragSharpFramework
             Game.Shift.CompiledEffect_dir_0p007843138 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.007843138");
             Game.Shift.CompiledEffect_dir_0p01176471 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.01176471");
             Game.Shift.CompiledEffect_dir_0p01568628 = Content.Load<Effect>("FragSharpShaders/Shift_dir=0.01568628");
+            Game.RemoveDragonLordData.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/RemoveDragonLordData_player=0");
+            Game.RemoveDragonLordData.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/RemoveDragonLordData_player=0.003921569");
+            Game.RemoveDragonLordData.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/RemoveDragonLordData_player=0.007843138");
+            Game.RemoveDragonLordData.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/RemoveDragonLordData_player=0.01176471");
+            Game.RemoveDragonLordData.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/RemoveDragonLordData_player=0.01568628");
+            Game.RemoveDragonLordUnit.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/RemoveDragonLordUnit_player=0");
+            Game.RemoveDragonLordUnit.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/RemoveDragonLordUnit_player=0.003921569");
+            Game.RemoveDragonLordUnit.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/RemoveDragonLordUnit_player=0.007843138");
+            Game.RemoveDragonLordUnit.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/RemoveDragonLordUnit_player=0.01176471");
+            Game.RemoveDragonLordUnit.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/RemoveDragonLordUnit_player=0.01568628");
             Game.SetTeams.CompiledEffect = Content.Load<Effect>("FragSharpShaders/SetTeams");
             Game.UnitMigrate.CompiledEffect = Content.Load<Effect>("FragSharpShaders/UnitMigrate");
             Game.BenchmarkTest_TextureLookup4x4.CompiledEffect = Content.Load<Effect>("FragSharpShaders/BenchmarkTest_TextureLookup4x4");
@@ -2855,6 +2865,134 @@ namespace Game
             CompiledEffect.Parameters["fs_param_Random_Texture"].SetValue(FragSharpMarshal.Marshal(Random));
             CompiledEffect.Parameters["fs_param_Random_size"].SetValue(FragSharpMarshal.Marshal(vec(Random.Width, Random.Height)));
             CompiledEffect.Parameters["fs_param_Random_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Random.Width, Random.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+
+
+
+
+namespace Game
+{
+    public partial class RemoveDragonLordData
+    {
+        public static Effect CompiledEffect_player_0;
+        public static Effect CompiledEffect_player_0p003921569;
+        public static Effect CompiledEffect_player_0p007843138;
+        public static Effect CompiledEffect_player_0p01176471;
+        public static Effect CompiledEffect_player_0p01568628;
+
+        public static void Apply(Texture2D Units, Texture2D Data, float player, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Units, Data, player);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Units, Texture2D Data, float player, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Units, Data, player);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Units, Texture2D Data, float player, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Units, Data, player);
+        }
+        public static void Using(Texture2D Units, Texture2D Data, float player, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Units, Data, player);
+        }
+        public static void Using(Texture2D Units, Texture2D Data, float player)
+        {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
+            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
+            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
+            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
+            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
+            CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
+            CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+
+
+
+
+namespace Game
+{
+    public partial class RemoveDragonLordUnit
+    {
+        public static Effect CompiledEffect_player_0;
+        public static Effect CompiledEffect_player_0p003921569;
+        public static Effect CompiledEffect_player_0p007843138;
+        public static Effect CompiledEffect_player_0p01176471;
+        public static Effect CompiledEffect_player_0p01568628;
+
+        public static void Apply(Texture2D Units, Texture2D Data, float player, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Units, Data, player);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Units, Texture2D Data, float player, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Units, Data, player);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Units, Texture2D Data, float player, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Units, Data, player);
+        }
+        public static void Using(Texture2D Units, Texture2D Data, float player, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Units, Data, player);
+        }
+        public static void Using(Texture2D Units, Texture2D Data, float player)
+        {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
+            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
+            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
+            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
+            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
+            CompiledEffect.Parameters["fs_param_Units_Texture"].SetValue(FragSharpMarshal.Marshal(Units));
+            CompiledEffect.Parameters["fs_param_Units_size"].SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Units_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

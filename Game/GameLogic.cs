@@ -215,7 +215,9 @@ namespace Game
                         Send("setMode", "in-game");
                         Send("setScreen", "in-game-ui");
 
-                        World = new World(GameParams: Program.StartupGameParams);
+                        World = new World(
+                            GameParams: Program.StartupGameParams,
+                            RemoveComputerDragonLords: Program.RemoveComputerDragonLords);
                         
                         World.LoadPlayerInfo = false;
                         World.Load(Path.Combine(MapDirectory, ScenarioToLoad));

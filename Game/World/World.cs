@@ -7,8 +7,10 @@ namespace Game
 {
     public partial class World : SimShader
     {
-        public World(bool Skeleton=false, GameParameters GameParams=null)
+        public World(bool Skeleton = false, GameParameters GameParams = null, bool RemoveComputerDragonLords = false)
         {
+            this.RemoveComputerDragonLords = RemoveComputerDragonLords;
+
             MyPlayerNumber = Program.StartupPlayerNumber;
             PlayerTeams = Program.Teams;
             PlayerTeamVals = vec(Team.Vals[PlayerTeams[1]], Team.Vals[PlayerTeams[2]], Team.Vals[PlayerTeams[3]], Team.Vals[PlayerTeams[4]]);
@@ -47,6 +49,8 @@ namespace Game
         //const double DelayBetweenUpdates = .01; // Super fast
         const double DelayBetweenUpdates = .3333; // Normal speed
         //const double DelayBetweenUpdates = 3; // Super slow
+
+        bool RemoveComputerDragonLords;
 
         bool _MapEditor = false;
         public bool MapEditor

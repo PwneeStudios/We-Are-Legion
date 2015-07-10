@@ -32,7 +32,7 @@ namespace Game
 
         public BuildingParameters
             Barracks = new BuildingParameters(UnitType.Barracks, "Barracks", GoldCost: 250, CostIncrease: 50),
-            GoldMine = new BuildingParameters(UnitType.GoldMine, "GoldMine", GoldCost: 250, CostIncrease: 250, GoldPerTick: 3),
+            GoldMine = new BuildingParameters(UnitType.GoldMine, "GoldMine", GoldCost: 200, CostIncrease: 200, GoldPerTick: 3),
             JadeMine = new BuildingParameters(UnitType.JadeMine, "JadeMine", GoldCost: 1000, CostIncrease: 500, JadePerTick: 2);
 
         public int
