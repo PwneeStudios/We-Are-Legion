@@ -103,7 +103,8 @@ namespace Game
             StartupGameParams = null;
 
         public static int[]
-            Teams = new int[] { -1,  1, 2, 3, 4 };
+            Teams = new int[] { -1,  1, 2, 3, 4 },
+            Kingdoms = new int[] { 1, 2, 3, 4 };
 
         public static bool
             GameStarted = false,
@@ -258,6 +259,16 @@ namespace Game
                 for (int i = 0; i < 4; i++)
                 {
                     Teams[i + 1] = int.Parse(teams[i].ToString());
+                }
+            }
+
+            if (args.Contains("--k"))
+            {
+                string kingdoms = args[args.IndexOf("--k") + 1];
+
+                for (int i = 0; i < 4; i++)
+                {
+                    Kingdoms[i] = int.Parse(kingdoms[i].ToString());
                 }
             }
 

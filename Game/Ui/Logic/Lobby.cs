@@ -353,15 +353,20 @@ namespace Game
 
             //"--server                --port 13000 --p 2 --t 1234 --n 1 --map Beset.m3n   --debug --w 1280 --h 720"
             var teams = new StringBuilder("0000");
-            int players = 0;
+            var kingdoms = new StringBuilder("0000");
+            int num_players = 0;
+            int i = 0;
             foreach (var player in LobbyInfo.Players)
             {
                 teams[player.GamePlayer - 1] = player.GameTeam.ToString()[0];
+                kingdoms[i] = player.GamePlayer.ToString()[0];
 
                 if (player.SteamID != 0)
                 {
-                    players++;
+                    num_players++;
                 }
+
+                i++;
             }
 
             string server = "", users = LobbyInfo.Players.Count.ToString();
@@ -383,7 +388,8 @@ namespace Game
                 string game_params = Jsonify(LobbyInfo.Params);
                 string spells = Jsonify(Spells.SpellInfoDict);
 
-                player.Args = string.Format("{0} --p {1} --t {2} --n {3} --map {4} --params {5} --spells {6} {7}", networking, player.GamePlayer, teams, players, Wrap(GameMapName), Wrap(game_params), Wrap(spells), options);
+                player.Args = string.Format("{0} --p {1} --k {2} --t {3} --n {4} --map {5} --params {6} --spells {7} {8}",
+                    networking, player.GamePlayer, kingdoms, teams, num_players, Wrap(GameMapName), Wrap(game_params), Wrap(spells), options);
             }
         }
 

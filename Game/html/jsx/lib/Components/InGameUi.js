@@ -333,14 +333,19 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         mixins: [events.UpdateMixin, events.ShowUpdateMixin],
 
         componentDidMount: function() {
+            this.enabled = true;
             interop.enableGameInput();
         },
 
         componentWillUpdate: function() {
-            interop.enableGameInput();
+            if (!this.enabled) {
+                this.enabled = true;
+                interop.enableGameInput();
+            }
         },
         
         componentWillUnmount: function() {
+            this.enabled = false;
             interop.disableGameInput();
         },
 

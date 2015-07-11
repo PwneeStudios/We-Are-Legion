@@ -369,13 +369,29 @@ namespace Game
 
             for (int player = 0; player < 4; player++)
             {
-                UInt64 user = Program.SteamUsers[player];
-                string name = new SteamPlayer(user).Name();
-
-                if (name != null && name.Length > 0)
+                for (int i = 0; i < 4; i++)
                 {
-                    World.PlayerInfo[player + 1].Name = name;
+                    if (Program.Kingdoms[i] == player + 1)
+                    {
+                        UInt64 user = Program.SteamUsers[i];
+                        if (user == 0) continue;
+
+                        string name = new SteamPlayer(user).Name();
+
+                        if (name != null && name.Length > 0)
+                        {
+                            World.PlayerInfo[player + 1].Name = name;
+                        }
+                    }
                 }
+
+                //UInt64 user = Program.SteamUsers[player];
+                //string name = new SteamPlayer(user).Name();
+
+                //if (name != null && name.Length > 0)
+                //{
+                //    World.PlayerInfo[player + 1].Name = name;
+                //}
             }
         }
 
