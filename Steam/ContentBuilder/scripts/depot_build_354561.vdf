@@ -15,5 +15,7 @@
   "FileExclusion" "*mario*"
   "FileExclusion" "*Mario*"
   
+  "FileExclusion" "config.txt"
+  
   "FileExclusion" "*Sound Track*"
 }

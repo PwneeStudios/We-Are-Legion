@@ -464,7 +464,14 @@ namespace Game
 
             if (!Program.Headless)
             {
-                DrawWorld();
+                try
+                {
+                    DrawWorld();
+                }
+                catch (Exception e)
+                { 
+                    
+                }
             }
             else
             {
@@ -516,12 +523,21 @@ namespace Game
             CameraZoom = 1;
             CameraAspect = 1;
 
-            GridHelper.GraphicsDevice.SetRenderTarget(Minimap);
-            DrawGrids();
+            try
+            {
+                GridHelper.GraphicsDevice.SetRenderTarget(Minimap);
+                DrawGrids();
+            }
+            catch (Exception e)
+            {
 
-            CameraAspect = hold_CameraAspect;
-            CameraPos = hold_CameraPos;
-            CameraZoom = hold_CameraZoom;
+            }
+            finally
+            {
+                CameraAspect = hold_CameraAspect;
+                CameraPos = hold_CameraPos;
+                CameraZoom = hold_CameraZoom;   
+            }
         }
 
         void DrawBox(vec2 p1, vec2 p2, float width)

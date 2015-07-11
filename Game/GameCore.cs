@@ -318,22 +318,36 @@ namespace Game
         {
             ActivateFakeFullScreen = false;
 
-            if (CurrentConfig.Fullscreen)
+            try
             {
-                Control.Location = new System.Drawing.Point(0, 0);
-                Form.TopMost = true;
-                Form.FormBorderStyle = Windows.FormBorderStyle.None;
+                if (CurrentConfig.Fullscreen)
+                {
+                    Control.Location = new System.Drawing.Point(0, 0);
+                    Form.TopMost = true;
+                    Form.FormBorderStyle = Windows.FormBorderStyle.None;
+                }
+                else
+                {
+                    Form.TopMost = true;
+                    Form.FormBorderStyle = Windows.FormBorderStyle.FixedSingle;
+                }
             }
-            else
+            catch (Exception e)
             {
-                Form.TopMost = true;
-                Form.FormBorderStyle = Windows.FormBorderStyle.FixedSingle;
+                
             }
         }
 
         void FakeMinimize()
         {
-            Form.TopMost = true;
+            try
+            {
+                Form.TopMost = true;
+            }
+            catch (Exception e)
+            {
+                
+            }
 
             /* If we actually want to minimize, do the following.
             if (FullScreen)
