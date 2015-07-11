@@ -68,14 +68,7 @@ namespace Game
             {
                 if (_CurrentConfig != null) return _CurrentConfig;
 
-                try
-                {
-                    LoadConfig();
-                }
-                catch
-                {
-                    _CurrentConfig = new Config();
-                }
+                LoadConfig();
 
                 return _CurrentConfig;
             }
@@ -88,8 +81,15 @@ namespace Game
 
         void LoadConfig()
         {
-            var config = File.ReadAllText(ConfigFilePath);
-            _CurrentConfig = (Config)JsonConvert.DeserializeObject(config, typeof(Config));
+            try
+            {
+                var config = File.ReadAllText(ConfigFilePath);
+                _CurrentConfig = (Config)JsonConvert.DeserializeObject(config, typeof(Config));
+            }
+            catch
+            {
+                _CurrentConfig = new Config();
+            }
         }
 
         void SaveConfig()
