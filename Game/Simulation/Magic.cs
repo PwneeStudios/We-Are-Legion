@@ -91,7 +91,7 @@ namespace Game
     /// </summary>
     public partial class PropagateAntiMagicAuro : SimShader
     {
-        const float AntiMagicRange = _30;
+        const float AntiMagicRange = _42;
 
         [FragmentShader]
         TeamTuple FragmentShader(VertexOut vertex, Field<TeamTuple> AntiMagic, Field<data> Data, Field<unit> Units)

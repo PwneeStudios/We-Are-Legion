@@ -115,7 +115,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 antimagic = FragSharpFramework__FragSharpStd__max__vec4__vec4__vec4__vec4(right, up, left, down) - float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
     if (abs(unit_here.r - 0.007843138) < .001)
     {
-        Game__SimShader__SetTeamVal__TeamTuple__Single__Single(antimagic, unit_here.b, 0.1176471);
+        Game__SimShader__SetTeamVal__TeamTuple__Single__Single(antimagic, unit_here.b, 0.1647059);
     }
     __FinalOutput.Color = antimagic;
     return __FinalOutput;

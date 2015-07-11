@@ -63,7 +63,7 @@ namespace Game
         public const int FlameRadius = 30;
         public static vec2 FlameR = vec(FlameRadius, FlameRadius);
 
-        public const int RaiseRadius = 85;
+        public const int RaiseRadius = 95;
         public static vec2 RaiseR = vec(RaiseRadius, RaiseRadius);
 
         public const int TerracottaRadius = 50;
@@ -102,8 +102,8 @@ namespace Game
             spell.DrawCursor = TerracottaCursor;
             spell.Execute = () => W.SummonTerracotta(TerracottaR);
             spell.Apply = (p, t, v) => W.SummonTerracottaApply(p, t, v, TerracottaR);
-            spell.Info.JadeCost = 2500;
-            spell.Info.JadeCostIncrease = 1000;
+            spell.Info.JadeCost = 3250;
+            spell.Info.JadeCostIncrease = 1250;
             spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Terracotta", FindStyle.NullIfNotFound);
         }
 
