@@ -133,6 +133,8 @@ namespace Game
         {
             Console.WriteLine("Starting up application.");
 
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             string args = null;
 
 #if DEBUG
@@ -199,6 +201,24 @@ namespace Game
             {
                 game.Run();
             }
+        }
+
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            LogDump(string.Format("{0}\nExceptionObject:\n{1}\nsender:\n{2}", "Exception on MainClass.CurrentDomain_UnhandledException",
+                e.ExceptionObject == null ? "" : e.ExceptionObject.ToString(),
+                sender == null ? "" : sender.ToString()));
+        }
+
+        public static void LogDump(string dump)
+        {
+            dump = string.Format("Dump report at {0}\n----------------------------------\n\n{1}", DateTime.Now, dump);
+
+            var stream = File.Open("dump", FileMode.OpenOrCreate, FileAccess.Write, FileShare.None);
+            var writer = new StreamWriter(stream);
+            writer.Write(dump);
+            writer.Close();
+            stream.Close();
         }
 
         public static void ParseOptions(string args)
