@@ -246,6 +246,7 @@ namespace Game
             return JSValue.Null;
         }
 
+        bool IsHost = false;
         void OnJoinLobby(bool result)
         {
             LobbyInfo = new LobbyInfo(4);
@@ -267,6 +268,8 @@ namespace Game
 
             string lobbyName = SteamMatches.GetLobbyData("name");
             Console.WriteLine("joined lobby {0}", lobbyName);
+
+            IsHost = SteamMatches.IsLobbyOwner();
 
             SendLobbyData();
             BuildLobbyInfo();
@@ -573,6 +576,12 @@ namespace Game
         void OnLobbyChatUpdate()
         {
             Console.WriteLine("lobby chat updated");
+
+            if (!IsHost && SteamMatches.IsLobbyOwner())
+            {
+                Console.WriteLine("lobby owner left");
+                GameClass.Game.Send("setScreen", "disconnected-from-lobby", new { message = "The lobby host has left. Tell them they suck." });
+            }
 
             BuildLobbyInfo();
         }
