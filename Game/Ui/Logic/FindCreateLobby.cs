@@ -83,6 +83,8 @@ namespace Game
 
         JSValue FindLobbies(object sender, JavascriptMethodEventArgs e)
         {
+            InTrainingLobby = false;
+
             if (!SteamCore.SteamIsConnected()) Offline();
 
             SteamMatches.FindLobbies(OnFindLobbies);
@@ -91,6 +93,8 @@ namespace Game
 
         JSValue FindFriendLobbies(object sender, JavascriptMethodEventArgs e)
         {
+            InTrainingLobby = false;
+
             if (!SteamCore.SteamIsConnected()) Offline();
 
             SteamMatches.FindFriendLobbies(OnFindLobbies);
@@ -99,6 +103,8 @@ namespace Game
 
         JSValue JoinLobby(object sender, JavascriptMethodEventArgs e)
         {
+            InTrainingLobby = false;
+
             int lobby = (int)e.Arguments[0];
             SteamMatches.JoinLobby(lobby, OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);
 

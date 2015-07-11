@@ -335,6 +335,10 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         componentDidMount: function() {
             interop.enableGameInput();
         },
+
+        componentWillUpdate: function() {
+            interop.enableGameInput();
+        },
         
         componentWillUnmount: function() {
             interop.disableGameInput();
