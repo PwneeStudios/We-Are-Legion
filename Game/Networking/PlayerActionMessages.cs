@@ -151,8 +151,11 @@ namespace Game
 
             var spell = Spells.SpellList[SpellIndex];
 
+            bool executed = spell.Apply(Action.PlayerNumber, Action.TeamNumber, Pos);
+
+            if (!executed) return;
+
             GameClass.PlayerInfo[Action.PlayerNumber].BuySpell(spell);
-            spell.Apply(Action.PlayerNumber, Action.TeamNumber, Pos);
 
             if (GameClass.World.GridPointInView(Pos))
                 spell.ExecutionSound.MaybePlay();

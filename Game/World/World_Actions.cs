@@ -75,8 +75,10 @@ namespace Game
             return Available;
         }
 
-        public void PlaceUnit(float unit_tpe, vec2 GridCoord, float PlayerValue, float TeamValue, float TerritoryRange = float.MaxValue)
+        public void PlaceUnit(ref bool placed, float unit_tpe, vec2 GridCoord, float PlayerValue, float TeamValue, float TerritoryRange = float.MaxValue)
         {
+            placed = false;
+
             Render.UnsetDevice();
 
             if (CellAvailable_1x1(GridCoord, TerritoryRange))
@@ -85,6 +87,7 @@ namespace Game
                 {
                     Create.PlaceUnit(DataGroup, GridCoord, unit_tpe, PlayerValue, TeamValue, SetPrevious: MapEditorActive);
 
+                    placed = true;
                     CanPlaceItem = false;
                 }
                 catch
@@ -210,19 +213,23 @@ namespace Game
 
         public void PlaceBuildingApply(int PlayerNum, int TeamNum, vec2 Pos, int Building)
         {
-            TryTillSuccess(() => PlaceBuilding(PlayerNum, TeamNum, Pos, _[Building]));
+            bool placed = false;
+            TryTillSuccess(() => PlaceBuilding(PlayerNum, TeamNum, Pos, _[Building], ref placed));
 
-            if (!MapEditorActive) PlayerInfo[PlayerNum].BuyBuilding(Building);
+            if (!MapEditorActive && placed) PlayerInfo[PlayerNum].BuyBuilding(Building);
             CanPlaceItem = false;
         }
 
-        public void PlaceBuilding(int PlayerNum, int TeamNum, vec2 GridCoord, float Building)
+        public void PlaceBuilding(int PlayerNum, int TeamNum, vec2 GridCoord, float Building, ref bool placed)
         {
+            placed = false;
+
             if (!CheckBuildingAvailability(GridCoord, PlayerNum, TeamNum, Building, TempCanPlace))
                 return;
 
             Render.UnsetDevice();
             Create.PlaceBuilding(DataGroup, GridCoord, Building, Player.Vals[PlayerNum], Team.Vals[TeamNum]);
+            placed = true;
 
             AddBuildBuildingEffect(GridCoord + vec(1, 1));
         }
@@ -460,7 +467,7 @@ namespace Game
             DataGroup.SelectInArea(Pos, Size, false, true, Player.Vals[PlayerNumber], false);
         }
 
-        public void FireballApply(int PlayerNumber, int TeamNumber, vec2 GridCoord)
+        public bool FireballApply(int PlayerNumber, int TeamNumber, vec2 GridCoord)
         {
             vec2 Pos = GridToWorldCood(GridCoord);
             vec2 Size = Spells.FlameR * CellSize;
@@ -471,6 +478,8 @@ namespace Game
 
             Kill.Apply(DataGroup.SelectField, DataGroup.Magic, DataGroup.AntiMagic, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
+
+            return true;
         }
 
         public bool RaiseSkeletons(vec2 area)
@@ -480,7 +489,7 @@ namespace Game
             return true;
         }
 
-        public void RaiseSkeletonsApply(int PlayerNumber, int TeamNumber, vec2 GridCoord, vec2 Area)
+        public bool RaiseSkeletonsApply(int PlayerNumber, int TeamNumber, vec2 GridCoord, vec2 Area)
         {
             vec2 Pos = GridToWorldCood(GridCoord);
             vec2 Size = Spells.RaiseR * CellSize;
@@ -490,6 +499,8 @@ namespace Game
             SetEffectArea(Pos, Size, PlayerNumber);
 
             SpawnUnits(GridCoord, Area, Player.Vals[PlayerNumber], Team.Vals[TeamNumber], UnitType.Skeleton, UnitDistribution.OnCorpses);
+
+            return true;
         }
 
         public bool SummonTerracotta(vec2 area)
@@ -499,7 +510,7 @@ namespace Game
             return true;
         }
 
-        public void SummonTerracottaApply(int PlayerNumber, int TeamNumber, vec2 GridCoord, vec2 Area)
+        public bool SummonTerracottaApply(int PlayerNumber, int TeamNumber, vec2 GridCoord, vec2 Area)
         {
             vec2 Pos = GridToWorldCood(GridCoord);
             vec2 Size = Spells.TerracottaR * CellSize;
@@ -509,6 +520,8 @@ namespace Game
             SetEffectArea(Pos, Size, PlayerNumber);
 
             SpawnUnits(GridCoord, Area, Player.Vals[PlayerNumber], Team.Vals[TeamNumber], UnitType.ClaySoldier, UnitDistribution.EveryOther);
+
+            return true;
         }
 
         public bool SummonNecromancer(float TerritoryRange)
@@ -526,11 +539,14 @@ namespace Game
             return true;
         }
 
-        public void SummonNecromancerApply(int PlayerNumber, int TeamNumber, vec2 GridCoord)
+        public bool SummonNecromancerApply(int PlayerNumber, int TeamNumber, vec2 GridCoord)
         {
             AddSummonUnitEffect(GridCoord);
 
-            TryTillSuccess(() => PlaceUnit(UnitType.Necromancer, GridCoord, Player.Vals[PlayerNumber], Team.Vals[TeamNumber]));
+            bool placed = false;
+            TryTillSuccess(() => PlaceUnit(ref placed, UnitType.Necromancer, GridCoord, Player.Vals[PlayerNumber], Team.Vals[TeamNumber]));
+
+            return placed;
         }
 
         public void SpawnUnits(vec2 grid_coord, vec2 size, float player, float team, float type, float distribution, bool raising = true)
@@ -539,7 +555,8 @@ namespace Game
 
             if (distribution == UnitDistribution.Single)
             {
-                PlaceUnit(type, grid_coord, player, team);
+                bool placed = false;
+                PlaceUnit(ref placed, type, grid_coord, player, team);
                 return;
             }
 

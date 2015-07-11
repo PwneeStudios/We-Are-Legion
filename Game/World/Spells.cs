@@ -24,7 +24,7 @@ namespace Game
         [JsonIgnore] public Action DrawCursor;
         [JsonIgnore] public Func<bool> Execute;
 
-        public delegate void SpellExecution(int PlayerNumer, int TeamNumber, vec2 Pos);
+        public delegate bool SpellExecution(int PlayerNumer, int TeamNumber, vec2 Pos);
         [JsonIgnore] public SpellExecution Apply;
 
         public Sound ExecutionSound;
