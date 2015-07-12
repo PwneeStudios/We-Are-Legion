@@ -50,6 +50,7 @@ namespace Game
         {
             int lobbyType = StringToLobbyType(e.Arguments[0]);
             InTrainingLobby = bool.Parse(e.Arguments[1]);
+            Program.GameStarted = false;
 
             if (!SteamCore.SteamIsConnected())
             {
@@ -105,6 +106,7 @@ namespace Game
         JSValue JoinLobby(object sender, JavascriptMethodEventArgs e)
         {
             InTrainingLobby = false;
+            Program.GameStarted = false;
 
             int lobby = (int)e.Arguments[0];
             SteamMatches.JoinLobby(lobby, OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);
@@ -119,6 +121,8 @@ namespace Game
                 Console.WriteLine("Failure during lobby creation.");
                 return;
             }
+
+            Program.GameStarted = false;
 
             SteamMatches.SetLobbyMemberLimit(4);
             SetLobbyName();

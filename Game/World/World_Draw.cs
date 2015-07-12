@@ -246,9 +246,8 @@ namespace Game
 
                     if (message.Type == MessageType.ServerLeft)
                     {
-                        if (!Program.Server)
+                        if (!Program.Server && !GameOver)
                         {
-                            //GameClass.Game.ReturnToMainMenu();
                             GameClass.Game.Send("setScreen", "disconnected", new { message = "The server has quit. Tell them they suck." });
                         }
                     }
@@ -290,7 +289,7 @@ namespace Game
             }
             else
             {
-                if (!ShowingWaiting && GameClass.Game.GameInputEnabled)
+                if (!ShowingWaiting && GameClass.Game.GameInputEnabled && !GameOver)
                 {
                     ShowingWaiting = true;
                     GameClass.Game.Send("setScreen", "waiting", new { canLeave = WaitingTime > 8 });

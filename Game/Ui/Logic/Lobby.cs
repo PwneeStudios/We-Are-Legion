@@ -549,6 +549,8 @@ namespace Game
 
         JSValue OnLobbyChatEnter(object sender, JavascriptMethodEventArgs e)
         {
+            if (Program.GameStarted) return JSValue.Null;
+
             string message = e.Arguments[0];
 
             if (message != null && message.Length > 0)
@@ -564,6 +566,8 @@ namespace Game
         {
             Console.WriteLine("lobby data updated");
 
+            if (Program.GameStarted) return;
+
             string map = SteamMatches.GetLobbyData("MapName");
             if (map != null && map.Length > 0)
             {
@@ -577,6 +581,8 @@ namespace Game
         {
             Console.WriteLine("lobby chat updated");
 
+            if (Program.GameStarted) return;
+
             if (!IsHost && SteamMatches.IsLobbyOwner())
             {
                 Console.WriteLine("lobby owner left");
@@ -589,6 +595,8 @@ namespace Game
         void OnLobbyChatMsg(string msg, UInt64 id, string name)
         {
             Console.WriteLine("chat msg = {0}", msg);
+
+            if (Program.GameStarted) return;
 
             if (!ProcessAsAction(msg, id, name))
             {
