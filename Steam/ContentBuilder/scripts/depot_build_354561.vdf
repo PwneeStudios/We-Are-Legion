@@ -17,6 +17,7 @@
   
   "FileExclusion" "config.txt"
   "FileExclusion" "dump"
+  "FileExclusion" "debug.log"
   
   "FileExclusion" "*Sound Track*"
 }
