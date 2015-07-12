@@ -70,8 +70,8 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                     React.createElement(Popover, {title: makeTooltip('Fireball', 'Fireball')}, 
                         React.createElement("div", null, 
                             React.createElement("p", null, "This is a p test."), 
-                            "Fire!Everything will ", React.createElement("em", null, "burrrrnnn"), ". Ahhh-hahaha." + ' ' +
-                            "Except dragonlords. They have anti-magic. Also, anything near a dragonlord. Again... uh, anti-magic. But, ", React.createElement("em", null, "everything else"), "... burrrrnnns.", 
+                            "Fire! Everything will ", React.createElement("em", null, "burrrrnnn"), ". Ahhh-hahaha." + ' ' +
+                            "Except dragonlords. They have anti-magic. Also, anything near a dragonlord. Also necromancers. Again... uh, anti-magic. But, ", React.createElement("em", null, "everything else"), "... burrrrnnns.", 
                             React.createElement("br", null), React.createElement("br", null), 
                             "That includes your own soldiers, so be careful. For real."
                         )
@@ -118,7 +118,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 scale:buildingScale,
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Build Gold Mine', 'GoldMine')}, 
-                        "Gooooolllld. Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign."
+                        "Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign."
                     ),
             },
             JadeMine: {
@@ -185,7 +185,12 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
         render: function() {
             return (
-                React.createElement("p", null, this.state.goldCost || this.state.jadeCost)
+                React.createElement("span", null, 
+                    React.createElement("p", null, 
+                        this.state.goldCost || this.state.jadeCost
+                    ), 
+                    React.createElement(UiImage, {nonBlocking: true, pos: pos(30,0.075), width: 16, image: this.state.goldCost ? GoldImage : JadeImage})
+                )
             );
         },
     });    

@@ -70,8 +70,8 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                     <Popover title={makeTooltip('Fireball', 'Fireball')}>
                         <div>
                             <p>This is a p test.</p>
-                            Fire!Everything will <em>burrrrnnn</em>. Ahhh-hahaha.
-                            Except dragonlords. They have anti-magic. Also, anything near a dragonlord. Again... uh, anti-magic. But, <em>everything else</em>... burrrrnnns.
+                            Fire!&nbsp;Everything will <em>burrrrnnn</em>. Ahhh-hahaha.
+                            Except dragonlords. They have anti-magic. Also, anything near a dragonlord. Also necromancers. Again... uh, anti-magic. But, <em>everything else</em>... burrrrnnns.
                             <br /><br />
                             That includes your own soldiers, so be careful. For real.
                         </div>
@@ -118,7 +118,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 scale:buildingScale,
                 tooltip:
                     <Popover title={makeTooltip('Build Gold Mine', 'GoldMine')}>
-                        Gooooolllld. Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign.
+                        Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign.
                     </Popover>,
             },
             JadeMine: {
@@ -185,7 +185,12 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
         render: function() {
             return (
-                <p>{this.state.goldCost || this.state.jadeCost}</p>
+                <span>
+                    <p>
+                        {this.state.goldCost || this.state.jadeCost}
+                    </p>
+                    <UiImage nonBlocking pos={pos(30,0.075)} width={16} image={this.state.goldCost ? GoldImage : JadeImage} />
+                </span>
             );
         },
     });    
