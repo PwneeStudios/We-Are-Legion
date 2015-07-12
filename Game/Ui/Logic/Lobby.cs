@@ -54,7 +54,14 @@ namespace Game
         {
             get
             {
-                return LobbyInfo.Players.Where(match => match.SteamID == SteamCore.PlayerId()).First();
+                try
+                {
+                    return LobbyInfo.Players.Where(match => match.SteamID == SteamCore.PlayerId()).First();
+                }
+                catch
+                {
+                    return null;
+                }
             }
         }
 

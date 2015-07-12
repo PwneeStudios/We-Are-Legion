@@ -49,12 +49,21 @@ namespace Game
 
         float ArgTo0to1(JSValue arg)
         {
-            float val = (float)double.Parse(arg.ToString());
-            
-            if (val < 0) val = 0;
-            if (val > 1) val = 1;
+            try
+            {
+                float val = (float)double.Parse(arg.ToString());
 
-            return val;
+                if (val < 0) val = 0;
+                if (val > 1) val = 1;
+
+                return val;
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            return 0;
         }
 
         JSValue SetSoundVolume(object sender, JavascriptMethodEventArgs e)
