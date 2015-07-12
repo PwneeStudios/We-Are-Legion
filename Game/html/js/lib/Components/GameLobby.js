@@ -181,7 +181,11 @@ function(_, React, ReactBootstrap, interop, events, ui,
     });
 
     return React.createClass({
-        mixins: [events.LobbyMixin, events.LobbyMapMixin],
+        mixins: [
+            events.LobbyMixin,
+            events.LobbyMapMixin,
+            //events.AllowBackMixin,
+        ],
 
         onLobbyUpdate: function(values) {
             if (!this.state.loading && values.LobbyLoading) {
@@ -258,6 +262,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
 
         componentDidMount: function() {
+            window.onEscape = this.leaveLobby;
             interop.lobbyUiCreated();
             this.drawMap();
         },

@@ -31,5 +31,17 @@ define(['lodash'], function(_) {
         SetModeMixin: makeEventMixin('setMode', 'onSetMode'),
         FindLobbiesMixin: makeEventMixin('lobbies', 'onFindLobbies'),
         WinningTeamMixin: makeEventMixin('winningTeam', 'onWinningTeam'),
+
+        AllowBackMixin: {
+            componentDidMount: function() {
+                window.onEscape = window.back;
+                window.allowBack();
+            },
+
+            componentWillUnmount: function() {
+                window.onEscape = null;
+                window.preventBack();
+            }
+        },
     };
 });

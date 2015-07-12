@@ -135,7 +135,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
     });
 
     return React.createClass({
-        mixins: [],
+        mixins: [events.AllowBackMixin],
                 
         getInitialState: function() {
             return {

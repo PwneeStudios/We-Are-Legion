@@ -51,7 +51,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
     });
 
     return React.createClass({
-        mixins: [events.FindLobbiesMixin],
+        mixins: [events.FindLobbiesMixin, events.AllowBackMixin],
 
         onFindLobbies: function(values) {
             console.log('found lobbies');

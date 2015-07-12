@@ -217,7 +217,7 @@ namespace AwesomiumXNA
                         alt = true;
 
                     //Console.WriteLine(lParam.WParam);
-                    if (WebView.FocusedElementType == FocusedElementType.TextInput)
+                    if (WebView.FocusedElementType == FocusedElementType.TextInput || (uint)lParam.WParam == 27)
                         WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam,
                             (shift ? Modifiers.ShiftKey : 0) | (ctrl ? Modifiers.ControlKey : 0) | (alt ? Modifiers.AltKey : 0)));
 
@@ -232,7 +232,7 @@ namespace AwesomiumXNA
                         alt = false;
 
                     //Console.WriteLine(lParam.WParam);
-                    if (WebView.FocusedElementType == FocusedElementType.TextInput)
+                    if (WebView.FocusedElementType == FocusedElementType.TextInput || (uint)lParam.WParam == 27)
                         WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam,
                             (shift ? Modifiers.ShiftKey : 0) | (ctrl ? Modifiers.ControlKey : 0) | (alt ? Modifiers.AltKey : 0)));
 

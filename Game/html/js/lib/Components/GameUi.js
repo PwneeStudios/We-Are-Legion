@@ -44,13 +44,27 @@ define(['lodash', 'react', 'interop', 'events',
             window.setScreen = this.setScreen;
             window.setMode = this.setMode;
             window.back = this.back;
+            window.canGoBack = this.canGoBack;
+            window.allowBack = this.allowBack;
+            window.preventBack = this.preventBack;
             window.refresh = this.refresh;
             window.removeMode = this.removeMode;
+
+            document.body.onkeydown = this.onKeyDown;
 
             window.modes = {};
             window.mode = null;
 
             return { };
+        },
+
+        onKeyDown: function(e) {
+            // When the user presses the escape key...
+            if (e.keyCode == 27) {
+                if (canGoBack() && window.onEscape) {
+                    window.onEscape();
+                }
+            }
         },
 
         dumpState: function() {
@@ -116,6 +130,18 @@ define(['lodash', 'react', 'interop', 'events',
             if (e) {
                 e.preventDefault();
             }
+        },
+
+        allowBack: function() {
+            this.backEnabled = true;
+        },
+
+        preventBack: function() {
+            this.backEnabled = false;
+        },
+
+        canGoBack: function() {
+            return this.backEnabled && this.screenHistory().length > 1;
         },
 
         back: function(e) {

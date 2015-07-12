@@ -22,7 +22,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var subImage = ui.subImage;
 
     return React.createClass({
-        mixins: [],
+        mixins: [events.AllowBackMixin],
 
         getInitialState: function() {
             return {
