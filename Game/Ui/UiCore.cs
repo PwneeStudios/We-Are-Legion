@@ -121,7 +121,9 @@ namespace Game
         void WebView_ConsoleMessage(object sender, ConsoleMessageEventArgs e)
         {
             // All JS errors will come here
-            throw new Exception(String.Format("Awesomium JS Error: {0}, {1} on line {2}", e.Message, e.Source, e.LineNumber));
+            string msg = String.Format("Awesomium JS Error: {0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);
+            Console.WriteLine(msg);
+            throw new Exception(msg);
         }
 
         /// <summary>

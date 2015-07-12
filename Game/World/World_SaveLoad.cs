@@ -192,6 +192,9 @@ namespace Game
         public bool LoadPlayerInfo = false;
         public void Load(BinaryReader reader)
         {
+            DrawCount = 0;
+            SimStep = 0;
+
             // Grid data
             DataGroup.CurrentData.SetData(reader.ReadTexture2D().GetData());
             DataGroup.CurrentUnits.SetData(reader.ReadTexture2D().GetData());

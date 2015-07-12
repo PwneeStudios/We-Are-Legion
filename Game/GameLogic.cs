@@ -21,9 +21,9 @@ namespace Game
         }
 
 #if DEBUG
-        //GameState State = GameState.ToEditor;
+        GameState State = GameState.ToEditor;
         //GameState State = GameState.ToMap;
-        GameState State = GameState.TitleScreen;
+        //GameState State = GameState.TitleScreen;
 #else
         GameState State = GameState.TitleScreen;
 #endif

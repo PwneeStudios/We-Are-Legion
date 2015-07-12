@@ -7,6 +7,7 @@ namespace Game
 {
     public partial class World : SimShader
     {
+        public void Message_DragonLordUnderAttack() { AddUserMessage("Your Dragon Lord is under attack!"); }
         public void Message_InsufficientGold() { AddUserMessage("Insufficient gold."); }
         public void Message_InsufficientJade() { AddUserMessage("Insufficient jade."); }
         public void Message_CanNotPlaceHere() { AddUserMessage("Can't place here."); }

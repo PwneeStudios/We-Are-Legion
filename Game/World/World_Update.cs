@@ -94,9 +94,23 @@ namespace Game
                 MaxZoomIn = 200f; // Full zoom-in, Partial zoom-out
             }
 
-            // Zoom all the way out
+            // Focus on player's dragon lord.
             if (!GameClass.Game.ShowChat && Keys.Space.Down())
-                CameraZoom = MaxZoomOut;
+            {
+                var dl_pos = CurDragonLordPos[MyPlayerNumber];
+
+                if (dl_pos > vec(1,1))
+                {
+                    CameraPos = GridToWorldCood(dl_pos);
+                    CameraZoom = 26;
+                }
+            }
+
+            // Zoom all the way out
+            //if (!GameClass.Game.ShowChat && Keys.Space.Down())
+            //{
+            //    CameraZoom = MaxZoomOut;
+            //}
 
             // Zoom in/out, into the location of the cursor
             var world_mouse_pos = ScreenToWorldCoord(Input.CurMousePos);
@@ -367,10 +381,15 @@ namespace Game
                 case 6:
                     DataGroup.UpdateRnd();
                     DataGroup.UpdateMagicAuras(); // 2nd auro update
+
                     break;
 
                 case 7:
-                    UpdateMinimap();
+                    if (SimStep % 2 == 0)
+                        UpdateDragonLordEngaged();
+                    else
+                        UpdateMinimap();
+
                     break;
 
                 default:

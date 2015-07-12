@@ -10,7 +10,7 @@ namespace Game
     public partial class DataGroup : SimShader
     {
         Color[] ReducedData = new Color[1];
-        color MultigridReduce(Action<Texture2D, RenderTarget2D> ReductionShader)
+        public color MultigridReduce(Action<Texture2D, RenderTarget2D> ReductionShader)
         {
             int n = Multigrid[0].Width;
             int level = 0;

@@ -174,8 +174,9 @@
     <Compile Include="Simulation\Magic.cs" />
     <Compile Include="Util\ShaderUtil.cs" />
     <Compile Include="Util\Ui.cs" />
+    <Compile Include="World\World_Events.cs" />
     <Compile Include="World\World_Util.cs" />
-    <Compile Include="World\WorldStartup.cs" />
+    <Compile Include="World\World_Startup.cs" />
     <Compile Include="World\Spells.cs" />
     <Compile Include="World\Migrate.cs" />
     <Compile Include="World\World_Update.cs" />
