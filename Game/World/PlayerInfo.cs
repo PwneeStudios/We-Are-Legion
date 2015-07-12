@@ -34,6 +34,7 @@ namespace Game
     {
         public string Name;
         public int Number;
+        public bool Defeated = false;
 
         public PlayerUnitInfo
             GoldMine = new PlayerUnitInfo(),

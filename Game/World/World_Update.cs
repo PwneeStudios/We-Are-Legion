@@ -102,7 +102,7 @@ namespace Game
                 if (dl_pos > vec(1,1))
                 {
                     CameraPos = GridToWorldCood(dl_pos);
-                    CameraZoom = 26;
+                    CameraZoom = 24;
                 }
             }
 
@@ -461,6 +461,7 @@ namespace Game
                     if (player.DragonLords == 0)
                     {
                         player.DragonLordAlive = false;
+                        player.Defeated = true;
 
                         if (!MapEditorActive)
                         {

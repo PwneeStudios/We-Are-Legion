@@ -119,7 +119,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
         }
     }
-    if (Game__SimShader__Something__data(data_here) && abs(unit_here.g - 0.01176471) < .001 && abs(unit_here.r - 0.007843138) < .001 && value < 0.172549 - .001)
+    if (Game__SimShader__Something__data(data_here) && abs(unit_here.g - 0.01176471) < .001 && abs(unit_here.r - 0.007843138) < .001 && value < 0.1411765 - .001)
     {
         __FinalOutput.Color = float4(1, 1, 1, 1);
         return __FinalOutput;

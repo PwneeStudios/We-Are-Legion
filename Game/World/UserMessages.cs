@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -11,7 +12,20 @@ namespace Game
         public void Message_InsufficientGold() { AddUserMessage("Insufficient gold."); }
         public void Message_InsufficientJade() { AddUserMessage("Insufficient jade."); }
         public void Message_CanNotPlaceHere() { AddUserMessage("Can't place here."); }
-        public void Message_PlayerDefeated(int PlayerNum) { AddUserMessage("Player {0} has been defeated!", PlayerNum); }
+        
+        public void Message_PlayerDefeated(int PlayerNum)
+        {
+            try
+            {
+                var player = PlayerInfo[PlayerNum];
+
+                AddUserMessage("{0} has been defeated!", player.Name);
+            }
+            catch (Exception e)
+            { 
+                
+            }
+        }
     }
 
     public class UserMessageList
