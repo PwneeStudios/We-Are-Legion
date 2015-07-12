@@ -373,7 +373,11 @@ namespace Game
                     case UserMode.CastSpell:
                         if (LeftMousePressed)
                         {
-                            if (MyPlayerInfo.CanAffordSpell(CurSpell))
+                            if (!MyPlayerInfo.DragonLordAlive)
+                            {
+                                Message_NoDragonLord();
+                            }
+                            else if (MyPlayerInfo.CanAffordSpell(CurSpell))
                             {
                                 CastSpell(CurSpell);
                             }

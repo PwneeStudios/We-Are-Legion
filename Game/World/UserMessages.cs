@@ -8,9 +8,10 @@ namespace Game
 {
     public partial class World : SimShader
     {
-        public void Message_DragonLordUnderAttack() { AddUserMessage(30, "Your Dragon Lord is under attack!"); }
+        public void Message_DragonLordUnderAttack() { AddUserMessage(50, "Your Dragon Lord is under attack!"); }
         public void Message_InsufficientGold() { AddUserMessage("Insufficient gold."); }
         public void Message_InsufficientJade() { AddUserMessage("Insufficient jade."); }
+        public void Message_NoDragonLord() { AddUserMessage(50, "Your Dragon Lord is dead and cannot cast magic."); }
         public void Message_CanNotPlaceHere() { AddUserMessage("Can't place here."); }
         
         public void Message_PlayerDefeated(int PlayerNum)
@@ -19,7 +20,7 @@ namespace Game
             {
                 var player = PlayerInfo[PlayerNum];
 
-                AddUserMessage(70, "{0} has been defeated!", player.Name);
+                AddUserMessage(110, "{0} has been defeated!", player.Name);
             }
             catch (Exception e)
             { 
