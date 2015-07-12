@@ -111,7 +111,11 @@ namespace Game
 
             if (LeftMousePressed)
             {
-                if (!CanPlaceItem)
+                if (!MyPlayerInfo.DragonLordAlive)
+                {
+                    Message_NoDragonLordConstruction();
+                }
+                else if (!CanPlaceItem)
                 {
                     Message_CanNotPlaceHere();
                 }

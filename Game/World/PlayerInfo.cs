@@ -54,6 +54,8 @@ namespace Game
         public bool DragonLordAlive = false;
         public bool CreateDragonLordDeathEffect = false;
         public vec2 DragonLordDeathPos;
+        public int DefeatedFrameStamp = 0;
+        public bool DestroyedAllBarracks = false;
 
         public GameParameters Params;
         public PlayerInfo(int Number, GameParameters Params)

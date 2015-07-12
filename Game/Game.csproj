@@ -282,7 +282,7 @@
     <PreBuildEvent>ECHO ON
 DIR
 
-IF $(ConfigurationName) EQU $(ConfigurationName)FALSE (
+IF $(ConfigurationName) EQU $(ConfigurationName) (
   ECHO Running FragSharp via the following command line invocation:
   ECHO "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)
   "C:\Users\Jordan\Desktop\Dir\Projects\FragSharp\FragSharp\bin\Release\FragSharp.exe" $(ProjectPath) $(TargetDir) $(ConfigurationName)

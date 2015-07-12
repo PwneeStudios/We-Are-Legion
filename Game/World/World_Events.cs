@@ -25,6 +25,29 @@ namespace Game
                 CountSinceDragonLordEngaged++;
             }
         }
+
+        void DestroyAllPlayerBuildings(float player)
+        {
+            DestroyAllBuildings.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, player, Output: DataGroup.Temp1);
+            DataGroup.Swap(ref DataGroup.CurrentData, ref DataGroup.Temp1);
+        }
+    }
+
+    public partial class DestroyAllBuildings : SimShader
+    {
+        [FragmentShader]
+        building FragmentShader(VertexOut vertex, Field<unit> Units, Field<building> Building, [Player.Vals] float player)
+        {
+            unit unit_here = Units[Here];
+            building building_here = Building[Here];
+
+            if (Something(building_here) && IsBuilding(unit_here) && unit_here.player == player)
+            {
+                building_here.direction = Dir.StationaryDead;
+            }
+
+            return building_here;
+        }
     }
 
     public partial class DragonLordEngaged : SimShader

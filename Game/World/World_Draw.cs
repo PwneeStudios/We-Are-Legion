@@ -375,7 +375,7 @@ namespace Game
                         {
                             if (!MyPlayerInfo.DragonLordAlive)
                             {
-                                Message_NoDragonLord();
+                                Message_NoDragonLordMagic();
                             }
                             else if (MyPlayerInfo.CanAffordSpell(CurSpell))
                             {

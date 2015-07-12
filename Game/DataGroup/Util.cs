@@ -32,7 +32,7 @@ namespace Game
             Identity.CopyFromTo(Source, ref Destination, ref Temp1);
         }
 
-        void Swap<T>(ref T a, ref T b)
+        public void Swap<T>(ref T a, ref T b)
         {
             T temp = a;
             a = b;

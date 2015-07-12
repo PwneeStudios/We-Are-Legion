@@ -456,17 +456,23 @@ namespace Game
                 var player = PlayerInfo[p];
                 var team = TeamInfo[PlayerTeams[p]];
 
+                if (player.Defeated && !player.DestroyedAllBarracks && player.DefeatedFrameStamp + 6 < SimStep)
+                {
+                    player.DestroyedAllBarracks = true;
+                    DestroyAllPlayerBuildings(Player.Vals[p]);
+                }
+
                 if (player.DragonLordAlive)
                 {
                     if (player.DragonLords == 0)
                     {
                         player.DragonLordAlive = false;
                         player.Defeated = true;
+                        player.DefeatedFrameStamp = SimStep;
 
                         if (!MapEditorActive)
                         {
                             player.CreateDragonLordDeathEffect = true;
-                            //player.DragonLordDeathPos = DataGroup.DragonLordDeathGridCoord();
                             player.DragonLordDeathPos = CurDragonLordPos[p];
                         }
                     }
