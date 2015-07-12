@@ -28,7 +28,7 @@ namespace Game
         GameState State = GameState.TitleScreen;
 #endif
 
-        double TimeSinceLoad = 0;
+        double TimeSinceLoad = 0, TimeLoading = 0;
         string ScenarioToLoad = null;
 
         bool MouseMovedSome = false;
@@ -38,6 +38,7 @@ namespace Game
             Program.WorldLoaded = false;
             ScenarioToLoad = name;
             State = GameState.Loading;
+            TimeLoading = 0;
         }
 
         bool ShouldStartMenuMusic = true;
@@ -218,7 +219,8 @@ namespace Game
                         World = new World(
                             GameParams: Program.StartupGameParams,
                             RemoveComputerDragonLords: Program.RemoveComputerDragonLords);
-                        
+
+                        TimeLoading = 0;
                         World.LoadPlayerInfo = false;
                         World.Load(Path.Combine(MapDirectory, ScenarioToLoad));
 
@@ -234,6 +236,13 @@ namespace Game
 
                     if (!Program.GameStarted)
                     {
+                        TimeLoading += DeltaT;
+
+                        if (TimeLoading > 20)
+                        {
+                            OnFailedToJoinGame();
+                        }
+
                         TimeSinceLoad = 0;
                         break;
                     }

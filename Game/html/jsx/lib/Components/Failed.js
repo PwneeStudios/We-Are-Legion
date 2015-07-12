@@ -34,7 +34,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return (
                 <Menu>
                     <MenuTitle>{this.props.params.message}</MenuTitle>
-                    <MenuItem eventKey={2} onClick={leaveGame}>OK</MenuItem>
+                    <MenuItem eventKey={2} onClick={back}>OK</MenuItem>
                 </Menu>
             );
         }

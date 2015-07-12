@@ -73,6 +73,14 @@ namespace Game
             return JSValue.Null;
         }
 
+        public void OnFailedToJoinGame()
+        {
+            ReturnToMainMenu();
+
+            Console.WriteLine("failed to join game");
+            GameClass.Game.Send("setScreen", "failed", new { message = "We Are Legion failed to join the game. Please try again." });
+        }
+
         public void ReturnToMainMenu()
         {
             Send("removeMode", "in-game");
