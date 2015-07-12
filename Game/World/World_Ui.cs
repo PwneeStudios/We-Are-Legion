@@ -290,5 +290,11 @@ namespace Game
             var FormattedMessage = string.Format(Message, p);
             UserMessages.Add(new UserMessage(this, FormattedMessage));
         }
+
+        void AddUserMessage(int ExtraLife, string Message, params object[] p)
+        {
+            var FormattedMessage = string.Format(Message, p);
+            UserMessages.Add(new UserMessage(this, FormattedMessage, extra_life:ExtraLife));
+        }
     }
 }

@@ -84,17 +84,7 @@ namespace Game
             switch (State)
             {
                 case GameState.ToEditor:
-                    World = new World();
-
-                    //World.Load("TestSave.m3n");
-                    //World.Load(Path.Combine("Content", Path.Combine("Maps", "Beset.m3n")));
-                    //World.Load(Path.Combine("Content", Path.Combine("Maps", "Gilgamesh.m3n")));
-                    //World.Load(Path.Combine("Content", Path.Combine("Maps", "Nice.m3n")));
-
-                    World.MapEditor = true;
-
-                    Send("setMode", "map-editor");
-                    Send("setScreen", "none");
+                    NewWorldEditor();
                     State = GameState.Game;
 
                     break;
@@ -287,6 +277,15 @@ namespace Game
 
                     break;
             }
+        }
+
+        private void NewWorldEditor()
+        {
+            World = new World();
+            World.MapEditor = true;
+
+            Send("setMode", "map-editor");
+            Send("setScreen", "none");
         }
 
         void DrawGame(GameTime gameTime)

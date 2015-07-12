@@ -8,7 +8,7 @@ namespace Game
 {
     public partial class World : SimShader
     {
-        public void Message_DragonLordUnderAttack() { AddUserMessage("Your Dragon Lord is under attack!"); }
+        public void Message_DragonLordUnderAttack() { AddUserMessage(30, "Your Dragon Lord is under attack!"); }
         public void Message_InsufficientGold() { AddUserMessage("Insufficient gold."); }
         public void Message_InsufficientJade() { AddUserMessage("Insufficient jade."); }
         public void Message_CanNotPlaceHere() { AddUserMessage("Can't place here."); }
@@ -19,7 +19,7 @@ namespace Game
             {
                 var player = PlayerInfo[PlayerNum];
 
-                AddUserMessage("{0} has been defeated!", player.Name);
+                AddUserMessage(70, "{0} has been defeated!", player.Name);
             }
             catch (Exception e)
             { 
@@ -64,7 +64,7 @@ namespace Game
     {
         public const int Duration = 43;
         public const float alpha_fade = -1.0f;
-        public static readonly vec2 Spacing = new vec2(0, 25);
+        public static readonly vec2 Spacing = new vec2(0, 38);
 
         public string Message = string.Empty;
 
@@ -73,17 +73,19 @@ namespace Game
 
         World world;
 
-        public UserMessage(World world, string message)
+        public UserMessage(World world, string message, int extra_life = 0)
         {
             this.world = world;
             this.Message = message;
+
+            age -= extra_life;
         }
 
         public bool Dead { get { return alpha <= 0; } }
 
         public void Draw(vec2 pos)
         {
-            Render.DrawText(Message, pos, 1, align : Alignment.Center, clr : new color(1f, 1f, 1f, alpha));
+            Render.DrawText(Message, pos, .785f, align : Alignment.Center, clr : new color(1f, 1f, 1f, alpha));
         }
 
         public void Update()
