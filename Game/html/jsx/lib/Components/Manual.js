@@ -39,7 +39,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
 
         render: function() {
             return (
-                <Div pos={pos(0,0)} size={size(100,100)} style={{'pointer-events':'auto'}}>
+                <Div pos={pos(0,0)} size={size(100,100)} style={{'pointer-events':'auto','background-color':'black'}}>
                     <Carousel activeIndex={this.state.index} direction={this.state.direction} onSelect={this.handleSelect}>
                         <CarouselItem style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
                             <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Instructions.png'}}/>
@@ -52,6 +52,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                         </CarouselItem>
                         <CarouselItem style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
                             <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Spells.png'}}/>
+                        </CarouselItem>
+                        <CarouselItem style={{'pointer-events':'auto', 'font-size': '1.4%;'}}>
+                            <UiImage width={100} image={{width:1920, height:1080, url:'css/Screen-Credits.png'}}/>
                         </CarouselItem>
                     </Carousel>
 

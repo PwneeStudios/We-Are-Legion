@@ -39,7 +39,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
 
         render: function() {
             return (
-                React.createElement(Div, {pos: pos(0,0), size: size(100,100), style: {'pointer-events':'auto'}}, 
+                React.createElement(Div, {pos: pos(0,0), size: size(100,100), style: {'pointer-events':'auto','background-color':'black'}}, 
                     React.createElement(Carousel, {activeIndex: this.state.index, direction: this.state.direction, onSelect: this.handleSelect}, 
                         React.createElement(CarouselItem, {style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
                             React.createElement(UiImage, {width: 100, image: {width:1920, height:1080, url:'css/Screen-Instructions.png'}})
@@ -52,6 +52,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                         ), 
                         React.createElement(CarouselItem, {style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
                             React.createElement(UiImage, {width: 100, image: {width:1920, height:1080, url:'css/Screen-Spells.png'}})
+                        ), 
+                        React.createElement(CarouselItem, {style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
+                            React.createElement(UiImage, {width: 100, image: {width:1920, height:1080, url:'css/Screen-Credits.png'}})
                         )
                     ), 
 
