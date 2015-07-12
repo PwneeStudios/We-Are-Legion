@@ -361,6 +361,9 @@ void SteamMatches::FindFriendLobbies( Action< bool >^ OnFind )
         if ( SteamFriends()->GetFriendGamePlayed( steamIDFriend, &friendGameInfo ) && friendGameInfo.m_steamIDLobby.IsValid() )
         {
             m_friendLobbies[SteamMatches::s_nFriendLobbiesFound++] = friendGameInfo.m_steamIDLobby;
+            SteamMatchmaking()->RequestLobbyData( friendGameInfo.m_steamIDLobby );
+            //int cap = SteamMatchmaking()->GetLobbyMemberLimit( friendGameInfo.m_steamIDLobby );
+            //Console::WriteLine("Found friend lobby with capacity {0}", cap);
         }
     }
 
@@ -550,6 +553,14 @@ int SteamMatches::GetLobbyCapacity( int Index )
 {
     CSteamID steamIDLobby = GetLobby( Index );
     return SteamMatchmaking()->GetLobbyMemberLimit( steamIDLobby );
+}
+
+bool SteamMatches::SetLobbyMemberLimit( int MaxMembers )
+{
+    if ( SteamCore::InOfflineMode() ) return false;
+    if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return false;
+
+    return SteamMatchmaking()->SetLobbyMemberLimit( *SteamMatches::s_CurrentLobby.m_handle, MaxMembers );
 }
 
 void SteamMatches::SetLobbyType( int LobbyType )

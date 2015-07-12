@@ -97,6 +97,7 @@ namespace Game
 
             if (!SteamCore.SteamIsConnected()) Offline();
 
+            SteamMatches.SetLobbyCallbacks(null, null, null, () => OnFindLobbies(false));
             SteamMatches.FindFriendLobbies(OnFindLobbies);
             return JSValue.Null;
         }
@@ -119,6 +120,7 @@ namespace Game
                 return;
             }
 
+            SteamMatches.SetLobbyMemberLimit(4);
             SetLobbyName();
 
             if (InTrainingLobby) SteamMatches.SetLobbyJoinable(false);
@@ -176,6 +178,8 @@ namespace Game
                 int capacity = SteamMatches.GetLobbyCapacity(i);
                 
                 Console.WriteLine("lobby {0} name: {1} members: {2}/{3}", i, lobby_name, member_count, capacity);
+
+                if (capacity <= 0) continue;
 
                 var lobby = new Dict();
                 lobby["Name"] = lobby_name;

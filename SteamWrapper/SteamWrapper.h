@@ -211,6 +211,7 @@ namespace SteamWrapper
         
         static int GetLobbyMemberCount( int Index );
         static int GetLobbyCapacity( int Index );
+        static bool SetLobbyMemberLimit( int MaxMembers );
         static void SetLobbyType( int LobbyType );
 
         static CSteamID GetLobby( int Index );
