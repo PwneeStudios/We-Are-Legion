@@ -24,7 +24,8 @@ namespace Game
             UpdateSim = false,
             Delays = false,
             Draws = false,
-            DoUpdates = false;
+            DoUpdates = false,
+            Hash = false;
     }
 
     public static class ConsoleHelper

@@ -401,7 +401,7 @@ namespace Game
             PostUpdateStep++;
         }
 
-        private void HashCheck()
+        private void HashCheck(bool Send = false)
         {
             if (SimStep % Program.LogPeriod == 0 && (Program.LogShortHash || Program.LogLongHash))
             {
@@ -412,16 +412,32 @@ namespace Game
                 string target_hash = DataGroup.DoHash(DataGroup.TargetData);
                 string extra_hash = DataGroup.DoHash(DataGroup.Extra);
 
+                string hash_string = "";
+                int hash = 0;
+
                 if (Program.LogLongHash)
                 {
-                    Console.WriteLine("Hash = {0} {1} {2} {3} {4} {5}", curdata_hash, prevdata_hash, curunit_hash, prevunit_hash, target_hash, extra_hash, target_hash, extra_hash);
+                    hash_string = string.Format("Hash = {0} {1} {2} {3} {4} {5}", curdata_hash, prevdata_hash, curunit_hash, prevunit_hash, target_hash, extra_hash, target_hash, extra_hash);
+                    hash = hash_string.GetHashCode();
                 }
                 else
                 {
-                    var short_hash = (curdata_hash + prevdata_hash + curunit_hash + prevunit_hash + target_hash + extra_hash);
-                    for (int i = 1; i <= 4; i++) short_hash += PlayerInfo[i].ToString();
-                    Console.WriteLine(short_hash);
-                    Console.WriteLine("Hash = {0}", short_hash.GetHashCode());
+                    hash_string = (curdata_hash + prevdata_hash + curunit_hash + prevunit_hash + target_hash + extra_hash);
+                    for (int i = 1; i <= 4; i++) hash_string += PlayerInfo[i].ToString();
+                }
+
+                hash = hash_string.GetHashCode();
+
+                if (Log.Hash)
+                {
+                    Console.WriteLine("Hash = {0}", hash_string);
+                    Console.WriteLine("Hash code = {0}", hash);
+                }
+
+                if (Send)
+                {
+                    Hashes[SimStep] = hash;
+                    Networking.ToServer(new MessageHash(SimStep, hash));
                 }
             }
         }

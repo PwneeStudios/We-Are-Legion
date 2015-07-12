@@ -127,6 +127,8 @@ namespace Game
             }
         }
 
+        public Dictionary<int, int> Hashes = new Dictionary<int, int>();
+
         public Dictionary<int, List<GenericMessage>> QueuedActions = new Dictionary<int, List<GenericMessage>>();
 
         void DeququeActions(int SimStep)
@@ -208,6 +210,11 @@ namespace Game
                 if (message != null)
                 {
                     if (message.Type == MessageType.StartingStep)
+                    {
+                        message.Innermost.Do();
+                    }
+
+                    if (message.Type == MessageType.Hash)
                     {
                         message.Innermost.Do();
                     }
@@ -436,7 +443,7 @@ namespace Game
 
                             SimulationUpdate();
                             
-                            HashCheck();
+                            HashCheck(Send:true);
                             
                             SentBookend = false;
                             Networking.ToServer(new MessageStartingStep(SimStep));
