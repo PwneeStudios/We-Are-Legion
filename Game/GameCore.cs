@@ -412,11 +412,6 @@ namespace Game
                 }
 
                 Input.Update();
-
-                if (Buttons.Back.Down())
-                {
-                    this.Exit();
-                }
             }
             else
             {
@@ -429,6 +424,8 @@ namespace Game
 
                 //base.Draw(gameTime);
                 //return;
+
+                Input.Update();
             }
 
             if (World == null) World = new World(Skeleton: true);
