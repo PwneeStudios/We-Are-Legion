@@ -35,9 +35,15 @@ namespace Game
             GoldMine = new BuildingParameters(UnitType.GoldMine, "GoldMine", GoldCost: 200, CostIncrease: 200, GoldPerTick: 3),
             JadeMine = new BuildingParameters(UnitType.JadeMine, "JadeMine", GoldCost: 1000, CostIncrease: 500, JadePerTick: 2);
 
+#if DEBUG
+        public int
+            StartGold = 12500,
+            StartJade = 7500;
+#else
         public int
             StartGold = 1250,
             StartJade = 750;
+#endif
 
         public GameParameters()
         {

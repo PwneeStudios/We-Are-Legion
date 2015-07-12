@@ -131,6 +131,11 @@ bool Game__SimShader__IsBuilding__unit(float4 u)
     return Game__SimShader__IsBuilding__Single(u.r);
 }
 
+bool Game__SimShader__UnitIsFireImmune__unit(float4 u)
+{
+    return abs(u.r - 0.01176471) < .001 || abs(u.r - 0.007843138) < .001;
+}
+
 // Compiled vertex shader
 VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords : TEXCOORD0, float4 inColor : COLOR0)
 {
@@ -184,7 +189,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
         }
     }
-    if (Game__SimShader__IsUnit__unit(unit_here) && abs(tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy).r - 0.003921569) < .001)
+    if (Game__SimShader__IsUnit__unit(unit_here) && abs(tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy).r - 0.003921569) < .001 && !(Game__SimShader__UnitIsFireImmune__unit(unit_here)))
     {
         unit_here.a = 0.07058824;
     }

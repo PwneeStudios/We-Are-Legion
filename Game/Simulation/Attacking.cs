@@ -61,7 +61,7 @@ namespace Game
                 }
             }
 
-            if (IsUnit(unit_here) && Magic[Here].kill == _true)
+            if (IsUnit(unit_here) && Magic[Here].kill == _true && !UnitIsFireImmune(unit_here))
             {
                 unit_here.anim = Anim.Die;
             }

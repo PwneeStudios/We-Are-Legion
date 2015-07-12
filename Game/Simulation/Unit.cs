@@ -832,6 +832,11 @@ namespace Game
             return d.direction < Dir.Stationary;
         }
 
+        protected static bool UnitIsFireImmune(unit u)
+        {
+            return u.type == UnitType.Necromancer || u.type == UnitType.DragonLord;
+        }
+
         protected static float RndFint(float rnd, float f1, float f2)
         {
             f2 += _1;     // Add _1 to make the range inclusive.
