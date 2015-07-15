@@ -346,6 +346,11 @@ namespace Game
             return v.ToString() + Seperator;
         }
 
+        public static string s(vec2 v)
+        {
+            return v.x.ToString() + ':' + v.y.ToString() + Seperator;
+        }
+
         public MessageStr(string str)
         {
             MyString = str;

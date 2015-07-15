@@ -60,17 +60,17 @@ namespace Game
 
             if (RemoveComputerDragonLords && user_count > 1)
             {
-                for (int p = 1; p <= 4; p++)
+                for (int player = 1; player <= 4; player++)
                 {
-                    if (Program.SteamUsers[p - 1] == 0)
+                    if (Program.PlayersSteamUser[player] == 0)
                     {
-                        RemoveDragonLordData.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Player.Vals[p], Output: DataGroup.Temp1);
-                        RemoveDragonLordUnit.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Player.Vals[p], Output: DataGroup.Temp2);
+                        RemoveDragonLordData.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Player.Vals[player], Output: DataGroup.Temp1);
+                        RemoveDragonLordUnit.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, Player.Vals[player], Output: DataGroup.Temp2);
                         CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.CurrentData);
                         CoreMath.Swap(ref DataGroup.Temp2, ref DataGroup.CurrentUnits);
 
-                        RemoveDragonLordData.Apply(DataGroup.PreviousUnits, DataGroup.PreviousData, Player.Vals[p], Output: DataGroup.Temp1);
-                        RemoveDragonLordUnit.Apply(DataGroup.PreviousUnits, DataGroup.PreviousData, Player.Vals[p], Output: DataGroup.Temp2);
+                        RemoveDragonLordData.Apply(DataGroup.PreviousUnits, DataGroup.PreviousData, Player.Vals[player], Output: DataGroup.Temp1);
+                        RemoveDragonLordUnit.Apply(DataGroup.PreviousUnits, DataGroup.PreviousData, Player.Vals[player], Output: DataGroup.Temp2);
                         CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.PreviousData);
                         CoreMath.Swap(ref DataGroup.Temp2, ref DataGroup.PreviousUnits);
                     }

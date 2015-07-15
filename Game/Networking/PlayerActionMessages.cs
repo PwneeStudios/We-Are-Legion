@@ -18,7 +18,9 @@ namespace Game
     {
         protected static vec2 PopVec2(ref string s)
         {
-            var parts = s.Split(',');
+            string vecString = Pop(ref s);
+
+            var parts = vecString.Split(':');
             return new vec2(CoreMath.ParseFloat(parts[0]), CoreMath.ParseFloat(parts[1]));
         }
 

@@ -104,8 +104,11 @@ namespace Game
             StartupGameParams = null;
 
         public static int[]
-            Teams = new int[] { -1,  1, 2, 3, 4 },
+            Teams = new int[] { -1, 1, 2, 3, 4 },
             Kingdoms = new int[] { 1, 2, 3, 4 };
+
+        public static UInt64[]
+            PlayersSteamUser = new UInt64[] { 0, 0, 0, 0, 0 };
 
         public static bool
             GameStarted = false,
@@ -358,6 +361,18 @@ namespace Game
 
             if (args.Contains("--double")) SetDouble(args);
             if (args.Contains("--quad")) SetQuad(args);
+
+            PlayersSteamUser = new UInt64[] { 0, 0, 0, 0, 0 };
+            for (int player = 1; player <= 4; player++)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    if (Program.Kingdoms[i] == player)
+                    {
+                        PlayersSteamUser[player] = Program.SteamUsers[i];
+                    }
+                }
+            }
         }
 
         private static void SetDouble(List<string> args)
