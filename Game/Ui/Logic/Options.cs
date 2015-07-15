@@ -49,7 +49,6 @@ namespace Game
 
         float ArgTo0to1(JSValue arg)
         {
-            float val = 0;
             string stringVal;
 
             try
@@ -61,30 +60,7 @@ namespace Game
                 return 0;
             }
 
-            try
-            {
-                val = (float)double.Parse(stringVal);
-            }
-            catch (Exception e1)
-            {
-                try
-                {
-                    stringVal.Replace('.', ',');
-                    val = (float)double.Parse(stringVal);
-                }
-                catch (Exception e2)
-                {
-                    try
-                    {
-                        stringVal.Replace(',', '.');
-                        val = (float)double.Parse(stringVal);
-                    }
-                    catch (Exception e3)
-                    {
-                        return 0;
-                    }
-                }
-            }
+            float val = (float)CoreMath.ParseDouble(stringVal);
 
             if (val < 0) val = 0;
             if (val > 1) val = 1;

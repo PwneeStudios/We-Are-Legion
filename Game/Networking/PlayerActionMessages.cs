@@ -18,12 +18,13 @@ namespace Game
     {
         protected static vec2 PopVec2(ref string s)
         {
-            return vec2.Parse(Pop(ref s));
+            var parts = s.Split(',');
+            return new vec2(CoreMath.ParseFloat(parts[0]), CoreMath.ParseFloat(parts[1]));
         }
 
         protected static float PopFloat(ref string s)
         {
-            return float.Parse(Pop(ref s));
+            return CoreMath.ParseFloat(Pop(ref s));
         }
 
         public MessagePlayerAction Action { get { return Outer as MessagePlayerAction; } }

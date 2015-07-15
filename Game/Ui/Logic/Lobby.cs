@@ -89,12 +89,12 @@ namespace Game
         public vec2 MapPreviewSize = vec2.Zero;
         JSValue DrawMapPreviewAt(object sender, JavascriptMethodEventArgs e)
         {
-            float x = float.Parse(e.Arguments[0].ToString());
-            float y = float.Parse(e.Arguments[1].ToString());
+            float x = CoreMath.ParseFloat(e.Arguments[0].ToString());
+            float y = CoreMath.ParseFloat(e.Arguments[1].ToString());
             MapPreviewPos = new vec2(x, y);
 
-            float width = float.Parse(e.Arguments[2].ToString());
-            float height = float.Parse(e.Arguments[3].ToString());
+            float width = CoreMath.ParseFloat(e.Arguments[2].ToString());
+            float height = CoreMath.ParseFloat(e.Arguments[3].ToString());
             MapPreviewSize = new vec2(width, height);
 
             DrawMapPreview = true;

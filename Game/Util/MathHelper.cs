@@ -405,9 +405,6 @@ namespace Game
             return apex.Y * (float)(q - Math.Pow(Math.Abs(t - apex.X), power)) / q;
         }
 
-
-
-
         public static Vector2 Reciprocal(Vector2 v)
         {
             return new Vector2(v.Y, -v.X);
@@ -418,6 +415,58 @@ namespace Game
             Vector2 e2 = CoreMath.DegreesToDir(Degrees + 90);
 
             v = v.X * e1 + v.Y * e2;
+        }
+
+        public static double ParseDouble(string s)
+        {
+            try
+            {
+                return (float)double.Parse(s);
+            }
+            catch (Exception e1)
+            {
+                try
+                {
+                    return (float)double.Parse(s.Replace('.', ','));
+                }
+                catch (Exception e2)
+                {
+                    try
+                    {
+                        return (float)double.Parse(s.Replace(',', '.'));
+                    }
+                    catch (Exception e3)
+                    {
+                        return 0;
+                    }
+                }
+            }
+        }
+
+        public static float ParseFloat(string s)
+        {
+            try
+            {
+                return (float)float.Parse(s);
+            }
+            catch (Exception e1)
+            {
+                try
+                {
+                    return (float)float.Parse(s.Replace('.', ','));
+                }
+                catch (Exception e2)
+                {
+                    try
+                    {
+                        return (float)float.Parse(s.Replace(',', '.'));
+                    }
+                    catch (Exception e3)
+                    {
+                        return 0;
+                    }
+                }
+            }
         }
     }
 }
