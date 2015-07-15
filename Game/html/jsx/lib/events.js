@@ -24,6 +24,7 @@ define(['lodash'], function(_) {
     return {
         UpdateMixin: makeEventMixin('update', 'onUpdate'),
         LobbyMixin: makeEventMixin('lobby', 'onLobbyUpdate'),
+        JoinFailedMixin: makeEventMixin('joinFailed', 'onJoinFailed'),
         LobbyMapMixin: makeEventMixin('lobbyMap', 'onLobbyMapUpdate'),
         OnChatMixin: makeEventMixin('addChatMessage', 'onChatMessage'),
         ShowUpdateMixin: makeEventMixin('show', 'onShowUpdate'),

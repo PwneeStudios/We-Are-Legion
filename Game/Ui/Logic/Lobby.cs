@@ -261,6 +261,10 @@ namespace Game
             if (result)
             {
                 Console.WriteLine("Failure joining the lobby.");
+                
+                Send("joinFailed");
+                SteamMatches.SetLobbyCallbacks(null, null, null, null);
+
                 return;
             }
 

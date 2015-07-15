@@ -183,6 +183,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
     return React.createClass({
         mixins: [
             events.LobbyMixin,
+            events.JoinFailedMixin,
             events.LobbyMapMixin,
             //events.AllowBackMixin,
         ],
@@ -208,6 +209,10 @@ function(_, React, ReactBootstrap, interop, events, ui,
                 maps: values.Maps || this.state.maps,
                 map: 'Beset',
             });
+        },
+
+        onJoinFailed: function() {
+            back();
         },
 
         onLobbyMapUpdate: function(values) {
