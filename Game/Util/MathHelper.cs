@@ -419,21 +419,23 @@ namespace Game
 
         public static double ParseDouble(string s)
         {
+            var style = System.Globalization.NumberStyles.Float;
+
             try
             {
-                return (float)double.Parse(s);
+                return (float)double.Parse(s, style);
             }
             catch (Exception e1)
             {
                 try
                 {
-                    return (float)double.Parse(s.Replace('.', ','));
+                    return (float)double.Parse(s.Replace('.', ','), style);
                 }
                 catch (Exception e2)
                 {
                     try
                     {
-                        return (float)double.Parse(s.Replace(',', '.'));
+                        return (float)double.Parse(s.Replace(',', '.'), style);
                     }
                     catch (Exception e3)
                     {
@@ -445,21 +447,23 @@ namespace Game
 
         public static float ParseFloat(string s)
         {
+            var style = System.Globalization.NumberStyles.Float;
+
             try
             {
-                return (float)float.Parse(s);
+                return (float)float.Parse(s, style);
             }
             catch (Exception e1)
             {
                 try
                 {
-                    return (float)float.Parse(s.Replace('.', ','));
+                    return (float)float.Parse(s.Replace('.', ','), style);
                 }
                 catch (Exception e2)
                 {
                     try
                     {
-                        return (float)float.Parse(s.Replace(',', '.'));
+                        return (float)float.Parse(s.Replace(',', '.'), style);
                     }
                     catch (Exception e3)
                     {
