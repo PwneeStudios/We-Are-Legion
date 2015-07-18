@@ -111,7 +111,34 @@ namespace Game
                 d.player = player;
 
                 // Note: Unlike other data and simulation shaders, we do need to set the alpha component for this channel.
-                // The reason is that we will be drawing multiple mouse datas onto the same render target, with potential overlapping.
+                // The reason is that we will be drawing multiple mouse datas onto the same render target, with potential overlap.
+                d.a = 1;
+            }
+
+            return (color)d;
+        }
+    }
+
+    public partial class DataDrawMouseCircle : SimShader
+    {
+        [FragmentShader]
+        color FragmentShader(VertexOut vertex, vec2 pos, float r2, [Player.Vals] float player, Field<data> Data)
+        {
+            unit d = unit.Nothing;
+
+            vec2 pos_here = vertex.TexCoords * Data.Size;
+            vec2 diff = pos_here - pos;
+
+            float distance = diff.x * diff.x + diff.y * diff.y;
+            bool in_range = distance < r2;
+
+            if (in_range)
+            {
+                d.type = UnitType.Footman;
+                d.player = player;
+
+                // Note: Unlike other data and simulation shaders, we do need to set the alpha component for this channel.
+                // The reason is that we will be drawing multiple mouse datas onto the same render target, with potential overlap.
                 d.a = 1;
             }
 

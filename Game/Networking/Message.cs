@@ -17,7 +17,7 @@ namespace Game
     public enum MessageType {
         DoneLoading, Start, LeaveGame, ServerLeft, RequestPause, RequestUnpause, Pause, Unpause,
         PlayerAction, PlayerActionAck, Bookend, StartingStep,
-        Hash,
+        Hash, StringHash,
     }
 
     public enum PlayerAction {
@@ -159,6 +159,7 @@ namespace Game
                 case MessageType.Bookend         : message.Inner = MessageBookend.Parse(s); break;
                 case MessageType.StartingStep    : message.Inner = MessageStartingStep.Parse(s); break;
                 case MessageType.Hash            : message.Inner = MessageHash.Parse(s); break;
+                case MessageType.StringHash      : message.Inner = MessageStringHash.Parse(s); break;
             }
 
             return message;
@@ -250,10 +251,11 @@ namespace Game
                 {
                     if (h[SimStep] == Hash)
                     {
-                        Console.WriteLine("Hash match");
+                        Console.WriteLine("Hash match {0} != {1}", Hash, h[SimStep]);
                     }
                     else
                     {
+                        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                         Console.WriteLine("Hash mismatch! {0} != {1}", Hash, h[SimStep]);
                     }
                 }
@@ -261,6 +263,52 @@ namespace Game
             else
             {
                 if (Log.Errors) Console.WriteLine("   WARNING!!!!! MessageHash should never be received by a client.");
+            }
+        }
+    }
+
+    public class MessageStringHash : MessageTail
+    {
+        public int SimStep;
+        public string Hash;
+
+        public MessageStringHash(int SimStep, string Hash)
+        {
+            this.SimStep = SimStep;
+            this.Hash = Hash;
+        }
+
+        public override MessageStr EncodeHead() { return _ | SimStep | Hash; }
+        public static MessageStringHash Parse(string s) { return new MessageStringHash(PopInt(ref s), Pop(ref s)); }
+        public override Message MakeFullMessage() { return new Message(MessageType.StringHash, this); }
+
+        public override void Do()
+        {
+            if (Program.Server)
+            {
+                var h = GameClass.World.StringHashes;
+
+                if (!h.ContainsKey(SimStep))
+                {
+                    Console.WriteLine("   WARNING!!!!! Server recieved hash from simstep it has not finished yet!");
+                }
+                else
+                {
+                    if (h[SimStep] == Hash)
+                    {
+                        //Console.WriteLine("Hash match {0} != {1}", Hash, h[SimStep]);
+                        Console.WriteLine("Hash match at step {0}", SimStep, Hash, h[SimStep]);
+                    }
+                    else
+                    {
+                        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+                        Console.WriteLine("Hash mismatch at step {0}! {1} != {2}", SimStep, Hash, h[SimStep]);
+                    }
+                }
+            }
+            else
+            {
+                if (Log.Errors) Console.WriteLine("   WARNING!!!!! MessageStringHash should never be received by a client.");
             }
         }
     }

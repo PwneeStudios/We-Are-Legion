@@ -60,14 +60,9 @@ namespace Game
         //enum Spell { None, Fireball, RaiseSkeletons, SummonNecromancer, RaiseTerracotta, Convert, Flamewall, Resurrect, CorpseExplode, }
         public static Spell Fireball, SkeletonArmy, TerracottaArmy, Necromancer;
 
-        public const int FlameRadius = 30;
-        public static vec2 FlameR = vec(FlameRadius, FlameRadius);
-
-        public const int RaiseRadius = 95;
-        public static vec2 RaiseR = vec(RaiseRadius, RaiseRadius);
-
-        public const int TerracottaRadius = 50;
-        public static vec2 TerracottaR = vec(TerracottaRadius, TerracottaRadius);
+        public const int FlameRadius = 15;
+        public const int RaiseRadius = 47;
+        public const int TerracottaRadius = 25;
 
         public static void Initialize()
         { 
@@ -83,8 +78,8 @@ namespace Game
 
             SkeletonArmy = spell = new Spell("Skeletons");
             spell.DrawCursor = SkeletonCursor;
-            spell.Execute = () => W.RaiseSkeletons(RaiseR);
-            spell.Apply = (p, t, v) => W.RaiseSkeletonsApply(p, t, v, RaiseR);
+            spell.Execute = () => W.RaiseSkeletons();
+            spell.Apply = (p, t, v) => W.RaiseSkeletonsApply(p, t, v, RaiseRadius);
             spell.Info.JadeCost = 1000;
             spell.Info.JadeCostIncrease = 0;
             spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Skeletons", FindStyle.NullIfNotFound);
@@ -100,8 +95,8 @@ namespace Game
 
             TerracottaArmy = spell = new Spell("Terracotta");
             spell.DrawCursor = TerracottaCursor;
-            spell.Execute = () => W.SummonTerracotta(TerracottaR);
-            spell.Apply = (p, t, v) => W.SummonTerracottaApply(p, t, v, TerracottaR);
+            spell.Execute = () => W.SummonTerracotta();
+            spell.Apply = (p, t, v) => W.SummonTerracottaApply(p, t, v, TerracottaRadius);
             spell.Info.JadeCost = 3250;
             spell.Info.JadeCostIncrease = 1250;
             spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Terracotta", FindStyle.NullIfNotFound);
@@ -109,18 +104,18 @@ namespace Game
 
         static void SkeletonCursor()
         {
-            float size = RaiseRadius + .5f * cos(2f * W.T);
+            float size = 2 * RaiseRadius + .5f * cos(2f * W.T);
             float angle = 0;
             W.DrawCursor(Assets.AoE_Skeleton, size * W.CellSize, angle);
         }
 
         static void TerracottaCursor()
         {
-            float size_1 = TerracottaRadius + .5f * sin(2f * W.T);
+            float size_1 = 2 * TerracottaRadius + .5f * sin(2f * W.T);
             float angle_1 = 3.5f * W.T;
             W.DrawCursor(Assets.AoE_Terra, size_1 * W.CellSize, angle_1);
 
-            float size_2 = 4.5f + TerracottaRadius + .5f * sin(-2f * W.T);
+            float size_2 = 4.5f + 2 * TerracottaRadius + .5f * sin(-2f * W.T);
             float angle_2 = -3.5f * W.T;
             W.DrawCursor(Assets.AoE_Terra, size_2 * W.CellSize, angle_2);
         }
@@ -135,7 +130,7 @@ namespace Game
 
         static void FlameCursor()
         {
-            float size = FlameRadius + .5f * cos(2f * W.T);
+            float size = 2 * FlameRadius + .5f * cos(2f * W.T);
             float angle = 0;
             W.DrawCursor(Assets.AoE_Fire, size * W.CellSize, angle);
         }

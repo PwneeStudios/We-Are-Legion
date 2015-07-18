@@ -82,7 +82,7 @@ namespace Game
             }
         }
 
-        public void SelectInArea(vec2 pos, vec2 size, bool Deselect, bool Selecting, float Player, bool EffectSelection, bool Fake = false)
+        public void SelectInAreaViaRasterize(vec2 pos, vec2 size, bool Deselect, bool Selecting, float Player, bool EffectSelection, bool Fake = false)
         {
             DataDrawMouse.Using(Assets.SelectCircle_Data, Player, Output: SelectField, Clear: Color.Transparent);
 
@@ -95,6 +95,13 @@ namespace Game
             {
                 SelectUnits(Player, Deselect, Fake);
             }
+        }
+
+        public void SelectInArea(vec2 pos, float radius, float Player)
+        {
+            float r2 = radius * radius;
+            DataDrawMouseCircle.Apply(pos, r2, Player, CurrentData, Output: Temp1);
+            Swap(ref Temp1, ref SelectField);
         }
 
         private void SelectUnits(float Player, bool Deselect, bool Fake = false)

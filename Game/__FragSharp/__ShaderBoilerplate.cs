@@ -97,6 +97,11 @@ namespace FragSharpFramework
             Game.DataDrawMouse.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0.007843138");
             Game.DataDrawMouse.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0.01176471");
             Game.DataDrawMouse.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/DataDrawMouse_player=0.01568628");
+            Game.DataDrawMouseCircle.CompiledEffect_player_0 = Content.Load<Effect>("FragSharpShaders/DataDrawMouseCircle_player=0");
+            Game.DataDrawMouseCircle.CompiledEffect_player_0p003921569 = Content.Load<Effect>("FragSharpShaders/DataDrawMouseCircle_player=0.003921569");
+            Game.DataDrawMouseCircle.CompiledEffect_player_0p007843138 = Content.Load<Effect>("FragSharpShaders/DataDrawMouseCircle_player=0.007843138");
+            Game.DataDrawMouseCircle.CompiledEffect_player_0p01176471 = Content.Load<Effect>("FragSharpShaders/DataDrawMouseCircle_player=0.01176471");
+            Game.DataDrawMouseCircle.CompiledEffect_player_0p01568628 = Content.Load<Effect>("FragSharpShaders/DataDrawMouseCircle_player=0.01568628");
             Game.ActionSpawn_Filter.CompiledEffect_distribution_1_AntiMagicTeam_0 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=1_AntiMagicTeam=0");
             Game.ActionSpawn_Filter.CompiledEffect_distribution_1_AntiMagicTeam_0p003921569 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=1_AntiMagicTeam=0.003921569");
             Game.ActionSpawn_Filter.CompiledEffect_distribution_1_AntiMagicTeam_0p007843138 = Content.Load<Effect>("FragSharpShaders/ActionSpawn_Filter_distribution=1_AntiMagicTeam=0.007843138");
@@ -2135,6 +2140,69 @@ namespace Game
             CompiledEffect.Parameters["fs_param_data_texture_Texture"].SetValue(FragSharpMarshal.Marshal(data_texture));
             CompiledEffect.Parameters["fs_param_data_texture_size"].SetValue(FragSharpMarshal.Marshal(vec(data_texture.Width, data_texture.Height)));
             CompiledEffect.Parameters["fs_param_data_texture_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(data_texture.Width, data_texture.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
+        }
+    }
+}
+
+
+
+
+
+
+namespace Game
+{
+    public partial class DataDrawMouseCircle
+    {
+        public static Effect CompiledEffect_player_0;
+        public static Effect CompiledEffect_player_0p003921569;
+        public static Effect CompiledEffect_player_0p007843138;
+        public static Effect CompiledEffect_player_0p01176471;
+        public static Effect CompiledEffect_player_0p01568628;
+
+        public static void Apply(vec2 pos, float r2, float player, Texture2D Data, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(pos, r2, player, Data);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(vec2 pos, float r2, float player, Texture2D Data, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(pos, r2, player, Data);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(vec2 pos, float r2, float player, Texture2D Data, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(pos, r2, player, Data);
+        }
+        public static void Using(vec2 pos, float r2, float player, Texture2D Data, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(pos, r2, player, Data);
+        }
+        public static void Using(vec2 pos, float r2, float player, Texture2D Data)
+        {
+            Effect CompiledEffect = null;
+
+            if (abs((float)(player - 0)) < .001) CompiledEffect = CompiledEffect_player_0;
+            else if (abs((float)(player - 0.003921569)) < .001) CompiledEffect = CompiledEffect_player_0p003921569;
+            else if (abs((float)(player - 0.007843138)) < .001) CompiledEffect = CompiledEffect_player_0p007843138;
+            else if (abs((float)(player - 0.01176471)) < .001) CompiledEffect = CompiledEffect_player_0p01176471;
+            else if (abs((float)(player - 0.01568628)) < .001) CompiledEffect = CompiledEffect_player_0p01568628;
+
+            if (CompiledEffect == null) throw new Exception("Parameters do not match any specified specialization.");
+
+            CompiledEffect.Parameters["fs_param_pos"].SetValue(FragSharpMarshal.Marshal(pos));
+            CompiledEffect.Parameters["fs_param_r2"].SetValue(FragSharpMarshal.Marshal(r2));
+            CompiledEffect.Parameters["fs_param_Data_Texture"].SetValue(FragSharpMarshal.Marshal(Data));
+            CompiledEffect.Parameters["fs_param_Data_size"].SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            CompiledEffect.Parameters["fs_param_Data_dxdy"].SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
             CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }

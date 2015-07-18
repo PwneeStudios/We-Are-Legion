@@ -245,7 +245,7 @@ namespace Game
             if (LeftMouseDown)
             {
                 if (UnitUserIsPlacing != UnitType.None)
-                    SpawnUnits(GridMousePos, SelectSize, MyPlayerValue, MyTeamValue, UnitUserIsPlacing, UnitPlaceStyle);
+                    SpawnUnits(GridMousePos, MyPlayerValue, MyTeamValue, UnitUserIsPlacing, UnitPlaceStyle);
 
                 if (MapEditorActive && TileUserIsPlacing != TileType.None)
                     PaintTiles();
@@ -466,19 +466,20 @@ namespace Game
             return true;
         }
 
-        void SetEffectArea(vec2 Pos, vec2 Size, int PlayerNumber)
+        void SetEffectArea(vec2 Pos, float Radius, int PlayerNumber)
         {
-            DataGroup.SelectInArea(Pos, Size, false, true, Player.Vals[PlayerNumber], false);
+            Pos.y -= .5f;
+
+            vec2 rounded_pos = floor(Pos + vec(.5f, .5f));
+
+            DataGroup.SelectInArea(rounded_pos, Radius, Player.Vals[PlayerNumber]);
         }
 
         public bool FireballApply(int PlayerNumber, int TeamNumber, vec2 GridCoord)
         {
-            vec2 Pos = GridToWorldCood(GridCoord);
-            vec2 Size = Spells.FlameR * CellSize;
+            AddExplosion(GridToWorldCood(GridCoord), 2 * vec(Spells.FlameRadius, Spells.FlameRadius));
 
-            AddExplosion(Pos, Spells.FlameR);
-
-            SetEffectArea(Pos, Size, PlayerNumber);
+            SetEffectArea(GridCoord, Spells.FlameRadius, PlayerNumber);
 
             Kill.Apply(DataGroup.SelectField, DataGroup.Magic, DataGroup.AntiMagic, Output: DataGroup.Temp1);
             CoreMath.Swap(ref DataGroup.Temp1, ref DataGroup.Magic);
@@ -486,44 +487,38 @@ namespace Game
             return true;
         }
 
-        public bool RaiseSkeletons(vec2 area)
+        public bool RaiseSkeletons()
         {
             EndSpellMode();
 
             return true;
         }
 
-        public bool RaiseSkeletonsApply(int PlayerNumber, int TeamNumber, vec2 GridCoord, vec2 Area)
+        public bool RaiseSkeletonsApply(int PlayerNumber, int TeamNumber, vec2 GridCoord, float Radius)
         {
-            vec2 Pos = GridToWorldCood(GridCoord);
-            vec2 Size = Spells.RaiseR * CellSize;
+            AddSummonAreaEffect(GridToWorldCood(GridCoord), 2 * vec(Radius, Radius));
 
-            AddSummonAreaEffect(Pos, Area);
+            SetEffectArea(GridCoord, Radius, PlayerNumber);
 
-            SetEffectArea(Pos, Size, PlayerNumber);
-
-            SpawnUnits(GridCoord, Area, Player.Vals[PlayerNumber], Team.Vals[TeamNumber], UnitType.Skeleton, UnitDistribution.OnCorpses);
+            SpawnUnits(GridCoord, Player.Vals[PlayerNumber], Team.Vals[TeamNumber], UnitType.Skeleton, UnitDistribution.OnCorpses);
 
             return true;
         }
 
-        public bool SummonTerracotta(vec2 area)
+        public bool SummonTerracotta()
         {
             EndSpellMode();
 
             return true;
         }
 
-        public bool SummonTerracottaApply(int PlayerNumber, int TeamNumber, vec2 GridCoord, vec2 Area)
+        public bool SummonTerracottaApply(int PlayerNumber, int TeamNumber, vec2 GridCoord, float Radius)
         {
-            vec2 Pos = GridToWorldCood(GridCoord);
-            vec2 Size = Spells.TerracottaR * CellSize;
+            AddSummonAreaEffect(GridToWorldCood(GridCoord), 2 * vec(Radius, Radius));
 
-            AddSummonAreaEffect(Pos, Area);
+            SetEffectArea(GridCoord, Radius, PlayerNumber);
 
-            SetEffectArea(Pos, Size, PlayerNumber);
-
-            SpawnUnits(GridCoord, Area, Player.Vals[PlayerNumber], Team.Vals[TeamNumber], UnitType.ClaySoldier, UnitDistribution.EveryOther);
+            SpawnUnits(GridCoord, Player.Vals[PlayerNumber], Team.Vals[TeamNumber], UnitType.ClaySoldier, UnitDistribution.EveryOther);
 
             return true;
         }
@@ -553,7 +548,7 @@ namespace Game
             return placed;
         }
 
-        public void SpawnUnits(vec2 grid_coord, vec2 size, float player, float team, float type, float distribution, bool raising = true)
+        public void SpawnUnits(vec2 grid_coord, float player, float team, float type, float distribution, bool raising = true)
         {
             if (MapEditorActive) raising = false;
 

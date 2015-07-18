@@ -128,6 +128,7 @@ namespace Game
         }
 
         public Dictionary<int, int> Hashes = new Dictionary<int, int>();
+        public Dictionary<int, string> StringHashes = new Dictionary<int, string>();
 
         public Dictionary<int, List<GenericMessage>> QueuedActions = new Dictionary<int, List<GenericMessage>>();
 

@@ -14,6 +14,19 @@ namespace Game
         public static bool
             Debug = true,
 
+            //SpeedMods = false,
+            //Errors = true,
+            //Receive = false,
+            //Send = false,
+            //Outbox = false,
+            //Processing = true,
+            //Do = true,
+            //UpdateSim = true,
+            //Delays = true,
+            //Draws = false,
+            //DoUpdates = true,
+            //Hash = false;
+
             SpeedMods = false,
             Errors = true,
             Receive = false,
