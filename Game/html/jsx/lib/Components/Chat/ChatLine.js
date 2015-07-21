@@ -30,7 +30,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
             if (this.props.willFadeOut) {
                 setTimeout(function() {
                     self.fadeOut();
-                }, 4500);
+                }, 5600);
             }
         },
         

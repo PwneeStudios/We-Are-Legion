@@ -208,9 +208,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             var action = Actions[this.props.name];
             
             var pStyle = {fontSize: '90%', textAlign: 'right'};
-            //8.5
             var costY = 4.55 * window.w / window.h;
-            console.log(costY);
             
             return (
                 <Div pos={pos(0,0,'relative')} size={size(7,100)} style={{'float':'left','display':'inline-block'}}>
