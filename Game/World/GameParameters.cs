@@ -41,9 +41,10 @@ namespace Game
             StartJade = 7500;
 #else
         public int
-            StartGold = 1250,
-            StartJade = 750;
-            //StartJade = 75000;
+            //StartGold = 1250,
+            //StartJade = 750;
+            StartGold = 125000,
+            StartJade = 75000;
 #endif
 
         public GameParameters()
