@@ -17,7 +17,7 @@
     <XnaCrossPlatformGroupID>3e4684b8-177a-42de-8271-e2c4253391a4</XnaCrossPlatformGroupID>
     <XnaOutputType>Game</XnaOutputType>
     <ApplicationIcon>Game.ico</ApplicationIcon>
-    <Thumbnail>GameThumbnail.png</Thumbnail>
+    <Thumbnail>WAL-Icon.png</Thumbnail>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -228,6 +228,7 @@
   <ItemGroup>
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png" />
+    <Content Include="WAL-Icon.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AwesomiumXNA\AwesomiumXNA.csproj">
