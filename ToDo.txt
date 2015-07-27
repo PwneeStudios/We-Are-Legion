@@ -1,0 +1,103 @@
+Small Bugs:
+	moving window makes preview black.
+	fullscreen on dual monitors is ganky, fullscreens to laptop
+
+Maybe:
+	add dl stories to the manual
+	more fair move update (randomize who goes first, top or bottom, left or right?, or alternate each frame)
+	add FlameRadius and friends to spellinfodict
+	move 'loading...' over a bit
+	confirm leave lobby (especially if you're the host)
+	ui tweaks: bigger buttons? map list width.
+	.info file: preferred teams, initial conditions
+	editor: change player of selected
+	Charts http://www.chartjs.org/docs/#advanced-usage http://jsfiddle.net/achudars/NXPhL/
+	invite to lobby
+	allow boots
+	more advanced victory/defeat screen: summed counts (just track deaths for all players in one update per simulation frame and add to total counts at end). graphs, etc.
+	better non-soldier unit colors
+	c++ redistributable
+	[x] remove unused players
+	ingame chat bug?	
+	wait for actual click to load map
+	steam/internet unavailable
+	clean hash up, place after postupdate    
+	periodic hash synch check, resynch if needed
+	cost increases linearly for spells and buildings
+	prevent minimization (custom winform?)
+	Save/Continue
+	zoom out when spell select
+	click on building/unit: give the name, and how much gold its making
+	tileset saturation?
+	Plague
+	switch between TextureSampler and PointSampler for unit drawing depending on distance
+	linear art for terrain?
+	FarColor color lookup (in debug mode) is not working.
+	ui immediate update on something changing, auto increase building count on creation
+	Port to MonoGame/Unit/UE4? Something stable.
+	Switch to grid of triangles with texture lookup for offsets, no geometry shading necessary.
+	Faster necro and lord area of effect: Convect reference: BuildingDist and maybe necro and lord references should convect, rather than just propagating
+	Network paint-to-select is too inefficient. While processing messages have a separate buffer for each player to draw too and only 'execute' the buffer if an action is take for a given player. 'Execute' always at end of message processing.
+	move mouse to keep world_coord stationary while zooming if needed, or, only enforce boundaries for zooming out and for motion
+	discretized selection coordinates for paint mode?
+	Selection polish: select (real and fake) for previous if moving into selected region and for current if moved out of selected region (prior_direction)
+	Must control land (no enemies) to build
+	Density bonus to units. Two bonus levels, every other, and full packed.
+	Barracks cost upkeep? or every rax/mine costs 50 gold more
+	Bigger buildings?		
+	Map editor (saveas dialog, pattern fills: dense, every other, 5x5 ranks)		
+	some selection under buildings?
+	touch up zoom out colors?
+	Casualty messages (or other numeric messages) when casting spells. "23,916 eviscerated!"
+	Same thickness of territory outline, regardless of zoom level
+	More interesting distribution of tile types. recursive block overlays, with different distribution types inside?
+	Force tiles on edges to match with trees.cc
+	Smarter enemy chasing. Prefer target direction if decreases gradient	
+	Better kill logic (if attacker or attacked has changed pos, less likely to die, otherwise more likely)
+	Optimize draw code (put into a single draw call?)
+	Tab button, to switch between units and barrackses
+	shortcut to send barracks to edge of screen in one direction
+	vertex displacement!? http://robertwrose.com/2005/05/vertex-texture-sampling-notes.html http://docs.unity3d.com/Manual/SL-SurfaceShaderTessellation.html
+	Regular RTS mouse select. Gamepad controls?
+	Split screen!?
+	Pathfinding: fill in the convex hull of trees and potentially react differently if your destination is there
+	Randomize which direction gets preference for moving into a grid cell.
+	Tileset: rock and water
+	AA--pathfinding with-a-biased. eg, right edge pathfinding with an upward bias, means that moving down has a +2 distance instead of +1, OR, even better, moving upwards has a +0 (or maybe +0.1) distance rather than +1.
+	barracks: spawn in random direction if preferred direction is clogged, or always random
+	Fade corpses into uniform-color semi-transparent corpse over time
+	Draw unit pattern before placing in map editor?
+	Pull out color[4] arrays into a single color lookup texture? Add texture hotswapping?
+	Switch to meso-zoom color-box-units a bit sooner on zoom out
+	Construction anim
+	Better zoom in/out colors. Team colors aren't mapping well at meso-zoom.
+	Warcraft art? Geometry shader?
+	Two-Stage draw code: First draw unit data to each pixel (or just draw_texture texture coordinates), then 2nd pass for each pixel lookup the lookup coordinates, and do again shifted dy down if sprites have a height of 2.
+	Draw selection separate?
+	Graphs and data, real time and post-mortem. Like in Dota.
+	Update selected unit types periodically (since they may have died)
+	Fake jade/gold
+	For zoom levels, get rid of the z variable and work with zooms directly.
+	Make zoom work properly for bigger/smaller maps.
+	Auto-create temp fields of a given size wheneve a new size is created
+	Field typed wrappers of RenderTargets. Holds type info which is checked. Makes swapping easier, because its just the contained rendertarget that is swapped (works for swapping out an array index element, for instance)
+	absorb swap
+	absorb GridHelper.DrawGrid();
+	absorb (camvec, CameraAspect) parameters as auto pulled out params (static variables somewhere)
+	Cleanup variable names, warnings, etc and add comments for GpuSim and FragSharp.
+	Selection code is drawing a buffer twice per frame, plus an initial draw to the "SelectionField". Can we just draw directly to CurrentData? For PC click-and-drag just store the boundaries of the drag while dragging and feed that into the draw code for "pre-select", and only update at the end of sim frame if selection is actually executed.
+	Spread out simulation cost, optimize
+	Switch place building pre-place code entirely on GPU. Only do CPU check when placing building?
+	Only do unit count periodically, interpolate between, update player's whenever the selection might have changed.
+	Combine draw layers into single shader? Or at least grass and buildings?
+	Is it faster to keep textures in the same sampler?
+	
+Spells:
+	firewall as a string of fireballs that recast each frame
+	transumute
+	plague, firestorm, raise skels, raise terra, necro, convert, flamewall, resurect, corpse explode, master necromancer dragonlord, 
+	Summon beast, summon neutral necromancer, summon blob, explosion, summon plague, raise all skeletons, create army "transmute army", summon barracks, convert barracks [must be under attack], convert group, zombie infrastructure [converts building into neutral zombie barracks]
+	Stasis field, horizontal beam, 
+
+Mobile:
+	Choose unit directions only?
