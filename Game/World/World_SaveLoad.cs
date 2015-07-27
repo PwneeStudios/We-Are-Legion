@@ -1,4 +1,5 @@
 using System.IO;
+using System.IO.Compression;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -6,6 +7,40 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Game
 {
+    public static class ByteZip
+    {
+        private static int BUFFER_SIZE = 4 * 1024 * 1024; // 4MB
+
+        public static byte[] Compress(byte[] inputData)
+        {
+            using (var compressIntoMs = new MemoryStream())
+            {
+                using (var gzs = new BufferedStream(new GZipStream(compressIntoMs, CompressionMode.Compress), BUFFER_SIZE))
+                {
+                    gzs.Write(inputData, 0, inputData.Length);
+                }
+
+                return compressIntoMs.ToArray();
+            }
+        }
+
+        public static byte[] Decompress(byte[] inputData)
+        {
+            using (var compressedMs = new MemoryStream(inputData))
+            {
+                using (var decompressedMs = new MemoryStream())
+                {
+                    using (var gzs = new BufferedStream(new GZipStream(compressedMs, CompressionMode.Decompress), BUFFER_SIZE))
+                    {
+                        gzs.CopyTo(decompressedMs);
+                    }
+
+                    return decompressedMs.ToArray();
+                }
+            }
+        }
+    }
+
     public static class BinaryWriterExtension
     {
         public static void Write(this BinaryWriter writer, Texture2D texture)
@@ -79,7 +114,7 @@ namespace Game
 
     public partial class World
     {
-        static byte[] bytes;
+        public static byte[] WorldBytes;
 
         public void SaveInBuffer()
         {
@@ -88,9 +123,24 @@ namespace Game
 
             Save(writer);
 
-            bytes = ms.GetBuffer();
+            WorldBytes = ms.GetBuffer();
 
             writer.Close();
+            ms.Close();
+        }
+
+        public void SaveCurrentStateInBuffer()
+        {
+            var ms = new MemoryStream();
+            var zip = new GZipStream(ms, CompressionMode.Compress);
+            var writer = new BinaryWriter(zip);
+
+            SaveCurrentState(writer);
+
+            WorldBytes = ms.GetBuffer();
+
+            writer.Close();
+            zip.Close();
             ms.Close();
         }
 
@@ -134,16 +184,44 @@ namespace Game
             for (int i = 1; i <= 4; i++) PlayerInfo[i].Write(writer);
         }
 
+        public void SaveCurrentState(BinaryWriter writer)
+        {
+            // Grid data
+            writer.Write(DataGroup.CurrentData);
+            writer.Write(DataGroup.CurrentUnits);
+            writer.Write(DataGroup.Extra);
+            writer.Write(DataGroup.TargetData);
+            writer.Write(DataGroup.Corpses);
+
+            // Info
+            for (int i = 1; i <= 4; i++) PlayerInfo[i].Write(writer);
+        }
+
         public void LoadFromBuffer()
         {
             Render.UnsetDevice();
 
-            var ms = new MemoryStream(bytes);
+            var ms = new MemoryStream(WorldBytes);
             var reader = new BinaryReader(ms);
 
             Load(reader);
 
             reader.Close();
+            ms.Close();
+        }
+
+        public void LoadCurrentStateFromBuffer()
+        {
+            Render.UnsetDevice();
+
+            var ms = new MemoryStream(WorldBytes);
+            var zip = new GZipStream(ms, CompressionMode.Decompress);
+            var reader = new BinaryReader(zip);
+
+            LoadCurrentState(reader);
+
+            reader.Close();
+            zip.Close();
             ms.Close();
         }
 
@@ -218,6 +296,19 @@ namespace Game
             CameraZoom = reader.ReadSingle();
 
             if (!LoadPlayerInfo) return;
+            for (int i = 1; i <= 4; i++) PlayerInfo[i].Read(reader);
+        }
+
+        public void LoadCurrentState(BinaryReader reader)
+        {
+            // Grid data
+            DataGroup.CurrentData.SetData(reader.ReadTexture2D().GetData());
+            DataGroup.CurrentUnits.SetData(reader.ReadTexture2D().GetData());
+            DataGroup.Extra.SetData(reader.ReadTexture2D().GetData());
+            DataGroup.TargetData.SetData(reader.ReadTexture2D().GetData());
+            DataGroup.Corpses.SetData(reader.ReadTexture2D().GetData());
+
+            // Info
             for (int i = 1; i <= 4; i++) PlayerInfo[i].Read(reader);
         }
     }
