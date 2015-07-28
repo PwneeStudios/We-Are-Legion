@@ -18,9 +18,13 @@ namespace Game
             var mstream = new MemoryStream();
             Png.ToPng(texture, mstream);
             
-            byte[] b = mstream.GetBuffer();
+            byte[] b = mstream.ToArray();
+
+            Console.WriteLine("Array size is {0}", b.Length);
             writer.Write(b.Length);
             writer.Write(b);
+
+            mstream.Close();
         }
     }
 
@@ -29,11 +33,15 @@ namespace Game
         public static Texture2D ReadTexture2D(this BinaryReader reader)
         {
             int length = reader.ReadInt32();
+            Console.WriteLine("Array read size is {0}", length);
             byte[] b = new byte[length];
             reader.Read(b, 0, length);
 
             var mstream = new MemoryStream(b);
             var texture = Png.FromPng(mstream);
+            
+            mstream.Close();
+            
             return texture;
         }
     }
@@ -93,7 +101,7 @@ namespace Game
 
             Save(writer);
 
-            WorldBytes = ms.GetBuffer();
+            WorldBytes = ms.ToArray();
 
             writer.Close();
             ms.Close();
@@ -102,16 +110,16 @@ namespace Game
         public void SaveCurrentStateInBuffer()
         {
             var ms = new MemoryStream();
-            var zip = new GZipStream(ms, CompressionMode.Compress);
-            var writer = new BinaryWriter(zip);
+            var writer = new BinaryWriter(ms);
 
             SaveCurrentState(writer);
 
-            WorldBytes = ms.GetBuffer();
+            var bytes = ms.ToArray();
 
             writer.Close();
-            zip.Close();
             ms.Close();
+
+            WorldBytes = bytes.Compress();
         }
 
         public void Save(string FileName)
@@ -184,14 +192,14 @@ namespace Game
         {
             Render.UnsetDevice();
 
-            var ms = new MemoryStream(WorldBytes);
-            var zip = new GZipStream(ms, CompressionMode.Decompress);
-            var reader = new BinaryReader(zip);
+            var uncompressedBytes = bytes.Explode();
+
+            var ms = new MemoryStream(uncompressedBytes);
+            var reader = new BinaryReader(ms);
 
             LoadCurrentState(reader);
 
             reader.Close();
-            zip.Close();
             ms.Close();
         }
 
@@ -200,7 +208,7 @@ namespace Game
             LoadStateFromBuffer(World.WorldBytes);
         }
 
-        public void Reload(byte[] bytes)
+        public void Reload(int step, byte[] bytes)
         {
             vec2 HoldCamPos = CameraPos;
             float HoldCamZoom = CameraZoom;
@@ -215,6 +223,14 @@ namespace Game
 
             CameraPos = HoldCamPos;
             CameraZoom = HoldCamZoom;
+
+            QueuedActions.Clear();
+
+            SimStep = ServerSimStep = AckSimStep = MinClientSimStep = step;
+
+            SentBookend = false;
+            PostUpdateFinished = false;
+            PostUpdateStep = 0;
         }
 
         public string Name, MapFileName;

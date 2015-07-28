@@ -292,7 +292,7 @@ namespace Game
             SimStep = 0,
             /// The simulation step the server is on or is nearly on.
             ServerSimStep = 0,
-            /// The simulatin step that any acknowledged actions should occur on.
+            /// The simulation step that any acknowledged actions should occur on.
             AckSimStep = 0,
             /// The minimum simulation step of any client/server.
             MinClientSimStep = 0;
@@ -301,13 +301,13 @@ namespace Game
         /// After the simulation updates there are additional updates that must occur.
         /// These are broken into phases. This variable trackes which phase we are currently in.
         /// </summary>
-        int PostUpdateStep;
+        int PostUpdateStep = 0;
 
         /// <summary>
         /// After the simulation updates there are additional updates that must occur.
         /// This flag is true once these additional updates have finished.
         /// </summary>
-        bool PostUpdateFinished;
+        bool PostUpdateFinished = false;
 
         void SimulationUpdate()
         {

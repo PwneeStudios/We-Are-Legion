@@ -172,6 +172,7 @@
     <Compile Include="Drawing\GameColors.cs" />
     <Compile Include="Simulation\Hash.cs" />
     <Compile Include="Simulation\Magic.cs" />
+    <Compile Include="Util\StringHelper.cs" />
     <Compile Include="Util\ShaderUtil.cs" />
     <Compile Include="Util\Ui.cs" />
     <Compile Include="World\World_Events.cs" />

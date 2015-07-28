@@ -259,8 +259,27 @@ namespace Game
                             GameClass.Game.Send("setScreen", "disconnected", new { message = "The server has quit. Tell them they suck." });
                         }
                     }
+
+                    if (message.Type == MessageType.NetworkDesync)
+                    {
+                        DesyncPause = true;
+                        GameClass.Game.Send("setScreen", "desync");
+                    }
+
+                    if (message.Type == MessageType.GameState)
+                    {
+                        message.Inner.Do();
+                    }
                 }
             }
+        }
+
+        public void SynchronizeNetwork()
+        {
+            SaveCurrentStateInBuffer();
+
+            Networking.ToClients(new Message(MessageType.NetworkDesync));
+            Networking.ToClients(new MessageGameState(SimStep, WorldBytes));   
         }
 
         void CheckIfShouldPause()

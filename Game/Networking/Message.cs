@@ -17,6 +17,7 @@ namespace Game
     public enum MessageType {
         DoneLoading, Start, LeaveGame, ServerLeft, RequestPause, RequestUnpause, Pause, Unpause,
         PlayerAction, PlayerActionAck, Bookend, StartingStep,
+        NetworkDesync, GameState,
         Hash, StringHash,
     }
 
@@ -86,6 +87,12 @@ namespace Game
         protected static T ToEnum<T>(string s)
         {
             return (T)Enum.Parse(typeof(T), s);
+        }
+
+        protected static byte[] RestBytes(ref string s)
+        {
+            byte[] bytes = StringHelper.GetBytes(s);
+            return bytes;
         }
 
         protected static string Pop(ref string s)
@@ -382,6 +389,49 @@ namespace Game
         }
     }
 
+    public class MessageNetworkDesync : MessageTail
+    {
+        public int SimStep;
+
+        public MessageNetworkDesync(int SimStep)
+        {
+            this.SimStep = SimStep;
+        }
+
+        public override MessageStr EncodeHead() { return _ | SimStep; }
+        public static MessageNetworkDesync Parse(string s) { return new MessageNetworkDesync(PopInt(ref s)); }
+        public override Message MakeFullMessage() { return new Message(MessageType.NetworkDesync, this); }
+
+        public override void Do()
+        {
+            if (Log.DoUpdates) Console.WriteLine("   NetworkDesync identified at step {0} from server. We're at step {1}", SimStep, GameClass.World.SimStep);
+        }
+    }
+
+    public class MessageGameState : MessageTail
+    {
+        public int SimStep;
+        public byte[] Bytes;
+
+        public MessageGameState(int SimStep, byte[] Bytes)
+        {
+            this.SimStep = SimStep;
+            this.Bytes = Bytes;
+        }
+
+        public override MessageStr EncodeHead() { return _ | SimStep | Bytes; }
+        public static MessageGameState Parse(string s) { return new MessageGameState(PopInt(ref s), RestBytes(ref s)); }
+        public override Message MakeFullMessage() { return new Message(MessageType.GameState, this); }
+
+        public override void Do()
+        {
+            if (Log.DoUpdates) Console.WriteLine("   GameState received from server at step {0} from server. We're at step {1}", SimStep, GameClass.World.SimStep);
+
+            GameClass.World.Reload(SimStep, Bytes);
+            GameClass.Game.Send("back");
+        }
+    }
+
     public class MessageStr
     {
         public string MyString = "";
@@ -418,8 +468,13 @@ namespace Game
         {
             if (str == null) return m;
 
-            //return new MessageStr(m.MyString + (char)14 + str + (char)15);
             return new MessageStr(m.MyString + s(str));
+        }
+
+        public static MessageStr operator |(MessageStr m, byte[] bytes)
+        {
+            string str = StringHelper.GetString(bytes);
+            return new MessageStr(m.MyString + str);
         }
 
         public static MessageStr operator |(MessageStr m, vec2 v)

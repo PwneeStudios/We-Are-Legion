@@ -53,4 +53,4 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             );
         }
     });
-}); 
+});

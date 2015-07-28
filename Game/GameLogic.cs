@@ -292,7 +292,7 @@ namespace Game
         {
             if (GameClass.GameActive && GameClass.HasFocus)
             {
-#if DEBUG
+//#if DEBUG
                 if (Keys.S.Pressed() && Keys.LeftControl.Down())
                 {
                     World.SaveCurrentStateInBuffer();
@@ -302,9 +302,14 @@ namespace Game
                 if (Keys.L.Pressed() && Keys.LeftControl.Down())
                 {
                     //World.LoadStateFromBuffer();
-                    World.Reload(World.WorldBytes);
+                    World.Reload(World.SimStep, World.WorldBytes);
                 }
-#endif
+//#endif
+                if (Keys.D.Pressed() && Keys.LeftControl.Down())
+                {
+                    World.SynchronizeNetwork();
+                }
+
                 if (World.MapEditorActive)
                 {
                     if (Keys.S.Pressed() && Keys.LeftControl.Down())

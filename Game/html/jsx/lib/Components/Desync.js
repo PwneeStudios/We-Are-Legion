@@ -44,7 +44,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
 
             return (
                 <Menu>
-                    <MenuTitle>Waiting to connect...</MenuTitle>
+                    <MenuTitle>The network is resynchronizing...</MenuTitle>
                     <MenuItem disabled={disabled} eventKey={1}
                               onClick={disabled ? null : leaveGame}>
                               Leave Game

@@ -43,13 +43,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             var disabled = !this.state.canLeave;
 
             return (
-                <Menu>
-                    <MenuTitle>Waiting to connect...</MenuTitle>
-                    <MenuItem disabled={disabled} eventKey={1}
-                              onClick={disabled ? null : leaveGame}>
-                              Leave Game
-                    </MenuItem>
-                </Menu>
+                React.createElement(Menu, null, 
+                    React.createElement(MenuTitle, null, "The network is resynchronizing..."), 
+                    React.createElement(MenuItem, {disabled: disabled, eventKey: 1, 
+                              onClick: disabled ? null : leaveGame}, 
+                              "Leave Game"
+                    )
+                )
             );
         }
     });
