@@ -1,46 +1,16 @@
+using System;
 using System.IO;
 using System.IO.Compression;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
+
 using Microsoft.Xna.Framework.Graphics;
+
+using FragSharpFramework;
 
 namespace Game
 {
-    public static class ByteZip
-    {
-        private static int BUFFER_SIZE = 4 * 1024 * 1024; // 4MB
-
-        public static byte[] Compress(byte[] inputData)
-        {
-            using (var compressIntoMs = new MemoryStream())
-            {
-                using (var gzs = new BufferedStream(new GZipStream(compressIntoMs, CompressionMode.Compress), BUFFER_SIZE))
-                {
-                    gzs.Write(inputData, 0, inputData.Length);
-                }
-
-                return compressIntoMs.ToArray();
-            }
-        }
-
-        public static byte[] Decompress(byte[] inputData)
-        {
-            using (var compressedMs = new MemoryStream(inputData))
-            {
-                using (var decompressedMs = new MemoryStream())
-                {
-                    using (var gzs = new BufferedStream(new GZipStream(compressedMs, CompressionMode.Decompress), BUFFER_SIZE))
-                    {
-                        gzs.CopyTo(decompressedMs);
-                    }
-
-                    return decompressedMs.ToArray();
-                }
-            }
-        }
-    }
-
     public static class BinaryWriterExtension
     {
         public static void Write(this BinaryWriter writer, Texture2D texture)
@@ -112,7 +82,7 @@ namespace Game
         }
     }
 
-    public partial class World
+    public partial class World : SimShader
     {
         public static byte[] WorldBytes;
 
@@ -210,7 +180,7 @@ namespace Game
             ms.Close();
         }
 
-        public void LoadCurrentStateFromBuffer()
+        public void LoadStateFromBuffer(byte[] bytes)
         {
             Render.UnsetDevice();
 
@@ -225,16 +195,44 @@ namespace Game
             ms.Close();
         }
 
-        public string Name;
+        public void LoadStateFromBuffer()
+        {
+            LoadStateFromBuffer(World.WorldBytes);
+        }
+
+        public void Reload(byte[] bytes)
+        {
+            vec2 HoldCamPos = CameraPos;
+            float HoldCamZoom = CameraZoom;
+
+            Load(MapFileName);
+
+            RepeatTry(() =>
+            {
+                LoadStateFromBuffer(bytes);
+                GameClass.Data.DoUnitSummary(MyPlayerValue, true);
+            });
+
+            CameraPos = HoldCamPos;
+            CameraZoom = HoldCamZoom;
+        }
+
+        public string Name, MapFileName;
         public void Load(string FileName, int Retries = 10000, bool DataOnly = false)
         {
+            MapFileName = FileName;
             Name = Path.GetFileName(FileName);
 
+            RepeatTry(() => _Load(FileName, DataOnly: DataOnly), Retries);
+        }
+
+        private void RepeatTry(Action Do, int Retries = 10, int Delay = 100)
+        {
             do
             {
                 try
                 {
-                    _Load(FileName, DataOnly:DataOnly);
+                    Do();
                     return;
                 }
                 catch (IOException e)
@@ -242,7 +240,7 @@ namespace Game
                     System.Console.WriteLine(e);
                 }
 
-                System.Threading.Thread.Sleep(100);
+                System.Threading.Thread.Sleep(Delay);
             }
             while (Retries-- > 0);
         }

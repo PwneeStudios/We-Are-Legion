@@ -301,8 +301,8 @@ namespace Game
 
                 if (Keys.L.Pressed() && Keys.LeftControl.Down())
                 {
-                    World.LoadCurrentStateFromBuffer();
-                    //File.WriteAllBytes("TestDump", World.WorldBytes);
+                    //World.LoadStateFromBuffer();
+                    World.Reload(World.WorldBytes);
                 }
 #endif
                 if (World.MapEditorActive)
