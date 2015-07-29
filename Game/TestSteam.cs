@@ -98,13 +98,13 @@ namespace Game
 
             while (true)
             {
-                //SteamP2P.SendMessage(new SteamPlayer(SteamCore.PlayerId()), "Hello");
-                SteamP2P.SendMessage(new SteamPlayer(76561198060676433), "Hello to 76561198060676433");
-                SteamP2P.SendMessage(new SteamPlayer(76561198201081585), "Hello to 76561198201081585");
+                //Networking.SendString(new SteamPlayer(SteamCore.PlayerId()), "Hello");
+                Networking.SendString(new SteamPlayer(76561198060676433), "Hello to 76561198060676433");
+                Networking.SendString(new SteamPlayer(76561198201081585), "Hello to 76561198201081585");
 
                 while (SteamP2P.MessageAvailable())
                 {
-                    var msg = SteamP2P.ReadMessage();
+                    var msg = Networking.ReceiveString();
                     Console.WriteLine("got message! {0}", msg);
                 }
             }

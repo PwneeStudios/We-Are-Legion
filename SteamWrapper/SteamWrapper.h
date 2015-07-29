@@ -237,8 +237,12 @@ namespace SteamWrapper
 
         static void SendMessage( SteamPlayer User, String^ Message );
         static void SendMessage( CSteamID User, String^ Message );
+        static void SendBytes( SteamPlayer User, cli::array<byte>^ Bytes );
+        static void SendBytes( CSteamID User, cli::array<byte>^ Bytes );
+
         static bool MessageAvailable();
         static Tuple< UInt64, String^ >^ ReadMessage();
+        static Tuple< UInt64, cli::array<byte>^ >^ ReadBytes();
 
         static void SetOnP2PSessionRequest( Action< uint64 >^ OnRequest );
         static void SetOnP2PSessionConnectFail( Action< uint64 >^ OnConnectionFail );

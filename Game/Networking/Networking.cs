@@ -8,6 +8,8 @@ using System.Threading;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 
+using SteamWrapper;
+
 namespace Game
 {
     public static class Networking
@@ -19,6 +21,26 @@ namespace Game
             Outbox = new ConcurrentQueue<Tuple<int, Message>>();
 
         static MessageStr _ = new MessageStr("");
+
+        public static void SendString(SteamPlayer player, string s)
+        {
+            //SteamP2P.SendMessage(player, s); return;
+
+            var bytes = StringHelper.GetBytes(s);
+            SteamP2P.SendBytes(player, bytes);
+        }
+
+        public static Tuple<ulong, string> ReceiveString()
+        {
+            //return SteamP2P.ReadMessage();
+
+            var tuple = SteamP2P.ReadBytes();
+            var bytes = tuple.Item2;
+
+            var s = StringHelper.GetString(bytes);
+
+            return new Tuple<ulong, string>(tuple.Item1, s);
+        }
 
         public static void ToServer(Message message)
         {

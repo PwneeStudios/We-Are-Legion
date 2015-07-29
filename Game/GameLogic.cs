@@ -222,6 +222,18 @@ namespace Game
                         DrawFullScreen(Assets.ScreenLoading);
 
                         GetNames();
+
+
+                        //World.SaveCurrentStateInBuffer();
+                        ////var m = new MessageGameState(World.SimStep, World.WorldBytes);
+                        //var m = new Message(MessageType.DoneLoading);
+                        //var s = m.Encode();
+                        
+                        //Networking.SendString(new SteamPlayer(SteamCore.PlayerId()), s);
+                        //var t = Networking.ReceiveString();
+                        //var _s = t.Item2;
+
+                        //Console.WriteLine("!");
                     }
 
                     if (!Program.GameStarted)

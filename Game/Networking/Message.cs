@@ -164,6 +164,7 @@ namespace Game
                 case MessageType.PlayerAction    : message.Inner = MessagePlayerAction.Parse(s); break;
                 case MessageType.PlayerActionAck : message.Inner = MessagePlayerActionAck.Parse(s); break;
                 case MessageType.Bookend         : message.Inner = MessageBookend.Parse(s); break;
+                case MessageType.GameState       : message.Inner = MessageGameState.Parse(s); break;
                 case MessageType.StartingStep    : message.Inner = MessageStartingStep.Parse(s); break;
                 case MessageType.Hash            : message.Inner = MessageHash.Parse(s); break;
                 case MessageType.StringHash      : message.Inner = MessageStringHash.Parse(s); break;
@@ -438,6 +439,7 @@ namespace Game
 
         //public static char Seperator = ' ';
         public static char Seperator = (char)14;
+        //public static char Seperator = '|';
 
         public static string s<T>(T v)
         {

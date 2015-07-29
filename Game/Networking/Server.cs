@@ -146,7 +146,7 @@ namespace Game
         {
             while (SteamP2P.MessageAvailable())
             {
-                var msg = SteamP2P.ReadMessage();
+                var msg = Networking.ReceiveString();
 
                 foreach (var client in Clients)
                 {
@@ -189,7 +189,7 @@ namespace Game
                 SteamPlayer player = new SteamPlayer(user);
                 Clients.Add(new ClientSteamConnection(player, count++));
 
-                SteamP2P.SendMessage(player, "Implicit connection acceptance.");
+                Networking.SendString(player, "Implicit connection acceptance.");
 
                 Console.WriteLine("Connected!");
             }

@@ -3,6 +3,9 @@ Small Bugs:
 	fullscreen on dual monitors is ganky, fullscreens to laptop
 
 Maybe:
+	shift + place building = place multiple
+	better highlighting of where action is when zoomed out. flashing red? dunno.
+	better necromaner highlighting (shit, better dl highlighting too? maybe brighter edge of circle?)
 	add dl stories to the manual
 	more fair move update (randomize who goes first, top or bottom, left or right?, or alternate each frame)
 	add FlameRadius and friends to spellinfodict

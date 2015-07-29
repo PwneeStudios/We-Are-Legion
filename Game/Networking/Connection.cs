@@ -110,7 +110,7 @@ namespace Game
 
         public override List<string> GetMessages()
         {
-            var message = SteamP2P.ReadMessage();
+            var message = Networking.ReceiveString();
             
             var list = new List<string>();
             list.Add(message.Item2);
@@ -120,7 +120,7 @@ namespace Game
 
         public override void Send(string message)
         {
-            SteamP2P.SendMessage(User, message);
+            Networking.SendString(User, message);
         }
 
         public override void Close()
@@ -154,7 +154,7 @@ namespace Game
 
         public override void Send(string message)
         {
-            SteamP2P.SendMessage(User, message);
+            Networking.SendString(User, message);
         }
 
         public override void Close()

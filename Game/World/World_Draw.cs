@@ -268,7 +268,7 @@ namespace Game
 
                     if (message.Type == MessageType.GameState)
                     {
-                        message.Inner.Do();
+                        message.Innermost.Do();
                     }
                 }
             }

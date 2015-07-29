@@ -653,8 +653,6 @@ void SteamMatches::SetLobbyJoinable( bool Joinable )
 
 void SteamP2P::SendMessage( SteamPlayer User, String^ Message )
 {
-    Console::WriteLine( "Send message {0} {1}", User.Id(), Message );
-
     SendMessage( *User.m_handle, Message );
 }
 
@@ -664,7 +662,37 @@ void SteamP2P::SendMessage( CSteamID User, String^ Message )
     char const * pchMsg = context.marshal_as< char const * >( Message );
     
     SteamNetworking()->SendP2PPacket( User, pchMsg, Message->Length, k_EP2PSendReliable );
-    //SteamNetworking()->SendP2PPacket( User, pchMsg, Message->Length, k_EP2PSendUnreliable );
+}
+
+void SteamP2P::SendBytes( SteamPlayer User, cli::array<byte>^ Bytes )
+{
+    SendBytes( *User.m_handle, Bytes );
+}
+
+void SteamP2P::SendBytes( CSteamID User, cli::array<byte>^ Bytes )
+{
+    int len = Bytes->Length;
+
+    byte * const pchMsg = new byte[ len ];
+    for (int i = 0; i < len; i++ )
+    {
+        pchMsg[i] = Bytes[i];
+    }
+
+    //int count = 0;
+    //byte * const pchMsg = new byte[len];
+    //for (int i = 0; i < len; i++)
+    //{
+    //    if (Bytes[i] == 0) continue;
+
+    //    pchMsg[count] = Bytes[i];
+    //    count++;
+    //}
+    //len = count;
+
+    SteamNetworking()->SendP2PPacket( User, pchMsg, len, k_EP2PSendReliable );
+
+    delete[] pchMsg;
 }
 
 bool SteamP2P::MessageAvailable()
@@ -694,7 +722,6 @@ Tuple< UInt64, String^ >^ SteamP2P::ReadMessage()
     uint32 bytesRead = 0;
     
     String^ msg = nullptr;
-    Tuple< UInt64, String^ > tuple();
     if ( SteamNetworking()->ReadP2PPacket( packet, msgSize, &bytesRead, &steamIDRemote ) )
     {
         msg = gcnew System::String( packet );
@@ -703,6 +730,33 @@ Tuple< UInt64, String^ >^ SteamP2P::ReadMessage()
     free( packet );
 
     return gcnew Tuple< UInt64, String^ >( steamIDRemote.ConvertToUint64(), msg );
+}
+
+Tuple< UInt64, cli::array<byte>^ >^ SteamP2P::ReadBytes()
+{
+    uint32 msgSize = 0;
+    bool result = SteamNetworking()->IsP2PPacketAvailable( &msgSize );
+
+    if (!result) {
+        return nullptr;
+    }
+
+    byte * const packet = (byte *)malloc(msgSize);
+    CSteamID steamIDRemote;
+    uint32 bytesRead = 0;
+
+    cli::array<byte>^ Bytes = gcnew cli::array<byte>( msgSize );
+    if ( SteamNetworking()->ReadP2PPacket( packet, msgSize, &bytesRead, &steamIDRemote ) )
+    {
+        for ( int i = 0; i < msgSize; i++ )
+        {
+            Bytes[ i ] = packet[ i ];
+        }
+    }
+
+    free(packet);
+
+    return gcnew Tuple< UInt64, cli::array<byte>^ >( steamIDRemote.ConvertToUint64(), Bytes );
 }
 
 void SteamP2P::SetOnP2PSessionRequest( Action< uint64 >^ OnRequest )
