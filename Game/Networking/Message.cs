@@ -304,13 +304,13 @@ namespace Game
                 {
                     if (h[SimStep] == Hash)
                     {
-                        //Console.WriteLine("Hash match {0} != {1}", Hash, h[SimStep]);
-                        Console.WriteLine("Hash match at step {0}", SimStep, Hash, h[SimStep]);
+                        //Console.WriteLine("Hash match at step {0}", SimStep, Hash, h[SimStep]);
                     }
                     else
                     {
-                        Console.WriteLine("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
                         Console.WriteLine("Hash mismatch at step {0}! {1} != {2}", SimStep, Hash, h[SimStep]);
+                        Console.WriteLine("Resynchronizing network.");
+                        GameClass.World.SynchronizeNetwork();
                     }
                 }
             }

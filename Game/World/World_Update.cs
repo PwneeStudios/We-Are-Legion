@@ -403,49 +403,36 @@ namespace Game
 
         private void HashCheck(bool Send = false)
         {
-            if (SimStep % Program.LogPeriod == 0 && (Program.LogShortHash || Program.LogLongHash))
+            string hash_string = "";
+            int hash = 0;
+
+            //string curdata_hash = DataGroup.DoHash(DataGroup.CurrentData, DataHash.Apply);
+            //string prevdata_hash = DataGroup.DoHash(DataGroup.PreviousData, DataHash.Apply);
+            //string curunit_hash = DataGroup.DoHash(DataGroup.CurrentUnits);
+            //string prevunit_hash = DataGroup.DoHash(DataGroup.PreviousUnits);
+            //string target_hash = DataGroup.DoHash(DataGroup.TargetData);
+            //string extra_hash = DataGroup.DoHash(DataGroup.Extra);
+            //hash_string = string.Format("Hash = {0} {1} {2} {3} {4} {5}", curdata_hash, prevdata_hash, curunit_hash, prevunit_hash, target_hash, extra_hash, target_hash, extra_hash);
+            //hash_string = curdata_hash;
+            //hash_string = curunit_hash;
+            //for (int i = 1; i <= 4; i++) hash_string += PlayerInfo[i].ToString();
+            for (int i = 1; i <= 4; i++) hash_string += PlayerInfo[i].Units.ToString() + '|';
+            
+            hash = hash_string.GetHashCode();
+
+            if (Log.Hash)
             {
-                //string curdata_hash = DataGroup.DoHash(DataGroup.CurrentData, DataHash.Apply);
-                //string prevdata_hash = DataGroup.DoHash(DataGroup.PreviousData, DataHash.Apply);
-                //string curunit_hash = DataGroup.DoHash(DataGroup.CurrentUnits);
-                //string prevunit_hash = DataGroup.DoHash(DataGroup.PreviousUnits);
-                //string target_hash = DataGroup.DoHash(DataGroup.TargetData);
-                //string extra_hash = DataGroup.DoHash(DataGroup.Extra);
+                Console.WriteLine("Hash = {0}", hash_string);
+                Console.WriteLine("Hash code = {0}", hash);
+            }
 
-                string hash_string = "";
-                int hash = 0;
+            if (Send)
+            {
+                //Hashes[SimStep] = hash;
+                //Networking.ToServer(new MessageHash(SimStep, hash));
 
-                if (Program.LogLongHash)
-                {
-                    //hash_string = string.Format("Hash = {0} {1} {2} {3} {4} {5}", curdata_hash, prevdata_hash, curunit_hash, prevunit_hash, target_hash, extra_hash, target_hash, extra_hash);
-                    //hash_string = curdata_hash;
-                    //hash_string = curunit_hash;
-                    hash_string = "";
-                }
-                else
-                {
-                    //hash_string = (curdata_hash + prevdata_hash + curunit_hash + prevunit_hash + target_hash + extra_hash);
-                    for (int i = 1; i <= 4; i++) hash_string += PlayerInfo[i].ToString();
-                    //hash_string = curdata_hash;
-                    //hash_string = curunit_hash;
-                }
-
-                hash = hash_string.GetHashCode();
-
-                if (Log.Hash)
-                {
-                    Console.WriteLine("Hash = {0}", hash_string);
-                    Console.WriteLine("Hash code = {0}", hash);
-                }
-
-                if (Send)
-                {
-                    //Hashes[SimStep] = hash;
-                    //Networking.ToServer(new MessageHash(SimStep, hash));
-
-                    StringHashes[SimStep] = hash_string;
-                    Networking.ToServer(new MessageStringHash(SimStep, hash_string));
-                }
+                StringHashes[SimStep] = hash_string;
+                Networking.ToServer(new MessageStringHash(SimStep, hash_string));
             }
         }
 

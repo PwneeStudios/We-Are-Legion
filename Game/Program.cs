@@ -135,9 +135,6 @@ namespace Game
             MaxFps = false,
             HasConsole = false;
 
-        public static int
-            LogPeriod = 1;
-
         static void Start(string options)
         {
             var dir = Directory.GetCurrentDirectory();
@@ -346,13 +343,9 @@ namespace Game
 
             if (args.Contains("--always-active")) { AlwaysActive = true; }
             if (args.Contains("--disable-edge")) { DisableScreenEdge = true; }
-            if (args.Contains("--logshorthash")) { LogShortHash = true; }
-            if (args.Contains("--loglonghash")) { LogLongHash = true; }
             if (args.Contains("--headless")) { Headless = true; }
             if (args.Contains("--maxfps")) { MaxFps = true; }
             if (args.Contains("--console")) { HasConsole = true; }
-
-            if (args.Contains("--logperiod")) { int i = args.IndexOf("--logperiod"); LogPeriod = int.Parse(args[i + 1]); }
 
             if (args.Contains("--w")) { int i = args.IndexOf("--w"); Width = int.Parse(args[i + 1]); }
             if (args.Contains("--h")) { int i = args.IndexOf("--h"); Height = int.Parse(args[i + 1]); }
@@ -366,8 +359,6 @@ namespace Game
             if (Server) Console.WriteLine("We Are Legion Server. Player {0}", StartupPlayerNumber);
             if (Client) Console.WriteLine("We Are Legion Client. Player {0}", StartupPlayerNumber);
 
-            if (LogShortHash) Console.WriteLine("Logging short hashes enabled");
-            if (LogLongHash) Console.WriteLine("Logging long hashes enabled");
             if (Headless) Console.WriteLine("Headless enabled");
             if (MaxFps) Console.WriteLine("Max fps enabled");
             if (HasConsole) { Console.WriteLine("Console enabled"); ConsoleHelper.CreateConsole(); }
