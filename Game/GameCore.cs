@@ -250,38 +250,59 @@ namespace Game
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            base.Update(gameTime);
+            try
+            {
+                base.Update(gameTime);
+            }
+            catch (Exception e)
+            {
+                Program.LogDump(e);
+            }
         }
 
         protected override void OnDeactivated(object sender, EventArgs args)
         {
-            // The following seems to prevent context loss from WinKey + D.
-            // If you want to be even more aggressive, set TopMost = true and return.
-            Form.TopMost = true;
-            Form.TopMost = false;
+            try
+            {
+                // The following seems to prevent context loss from WinKey + D.
+                // If you want to be even more aggressive, set TopMost = true and return.
+                Form.TopMost = true;
+                Form.TopMost = false;
 
-            // Don't do the default behavior.
-            //base.OnDeactivated(sender, args);
+                // Don't do the default behavior.
+                //base.OnDeactivated(sender, args);
+            }
+            catch (Exception e)
+            {
+                Program.LogDump(e);
+            }
         }
 
         void DeactivatedEvent(object sender, EventArgs args)
         {
-            // The following code saves the game state to a buffer
-            // so it can be retrieved if context is lost.
-            // There doesn't seem to be a way to call this soon enough
-            // before the context is lost, however.
-            // Currently this is not called, because we do not call
-            // base.OnDeactivated in our override OnDeactivated method.
-
-            Render.UnsetDevice();
-
-            if (AutoSaveOnTab && !FocusSaved && World != null)
+            try
             {
-                World.SaveInBuffer();
-                FocusSaved = true;
-            }
+                // The following code saves the game state to a buffer
+                // so it can be retrieved if context is lost.
+                // There doesn't seem to be a way to call this soon enough
+                // before the context is lost, however.
+                // Currently this is not called, because we do not call
+                // base.OnDeactivated in our override OnDeactivated method.
 
-            FakeMinimize();
+                Render.UnsetDevice();
+
+                if (AutoSaveOnTab && !FocusSaved && World != null)
+                {
+                    World.SaveInBuffer();
+                    FocusSaved = true;
+                }
+
+                FakeMinimize();
+            }
+            catch (Exception e)
+            {
+                Program.LogDump(e);
+            }
         }
 
         bool ActivateFakeFullScreen = false;
@@ -334,7 +355,7 @@ namespace Game
             }
             catch (Exception e)
             {
-                
+                Program.LogDump(e);
             }
         }
 
@@ -346,7 +367,7 @@ namespace Game
             }
             catch (Exception e)
             {
-                
+                Program.LogDump(e);
             }
 
             /* If we actually want to minimize, do the following.
@@ -378,6 +399,18 @@ namespace Game
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
+        {
+            try
+            {
+                _Draw(gameTime);
+            }
+            catch (Exception e)
+            {
+                Program.LogDump(e);
+            }
+        }
+
+        void _Draw(GameTime gameTime)
         {
             DeltaT = gameTime.ElapsedGameTime.TotalSeconds;
             T = gameTime.TotalGameTime.TotalSeconds;

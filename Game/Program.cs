@@ -225,6 +225,11 @@ namespace Game
                 sender == null ? "" : sender.ToString()));
         }
 
+        public static void LogDump(Exception e)
+        {
+            LogDump(e.ToString() + '\n' + e.StackTrace);
+        }
+
         public static void LogDump(string dump)
         {
             dump = string.Format("Dump report at {0}\n----------------------------------\n\n{1}", DateTime.Now, dump);
