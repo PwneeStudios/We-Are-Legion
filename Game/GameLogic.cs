@@ -304,23 +304,23 @@ namespace Game
         {
             if (GameClass.GameActive && GameClass.HasFocus)
             {
-//#if DEBUG
-                if (Keys.S.Pressed() && Keys.LeftControl.Down())
-                {
-                    World.SaveCurrentStateInBuffer();
-                    File.WriteAllBytes("TestDump", World.WorldBytes);
-                }
+////#if DEBUG
+//                if (Keys.S.Pressed() && Keys.LeftControl.Down())
+//                {
+//                    World.SaveCurrentStateInBuffer();
+//                    File.WriteAllBytes("TestDump", World.WorldBytes);
+//                }
 
-                if (Keys.L.Pressed() && Keys.LeftControl.Down())
-                {
-                    //World.LoadStateFromBuffer();
-                    World.Reload(World.SimStep, World.WorldBytes);
-                }
-//#endif
-                if (Keys.D.Pressed() && Keys.LeftControl.Down())
-                {
-                    World.SynchronizeNetwork();
-                }
+//                if (Keys.L.Pressed() && Keys.LeftControl.Down())
+//                {
+//                    //World.LoadStateFromBuffer();
+//                    World.Reload(World.SimStep, World.WorldBytes);
+//                }
+////#endif
+//                if (Keys.D.Pressed() && Keys.LeftControl.Down())
+//                {
+//                    World.SynchronizeNetwork();
+//                }
 
                 if (World.MapEditorActive)
                 {

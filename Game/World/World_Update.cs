@@ -71,7 +71,7 @@ namespace Game
         int ChatInhibitor = 0;
         public void Update()
         {
-            if (!GameClass.Game.GameInputEnabled) return;
+            if (!GameClass.Game.GameInputEnabled || DesyncPause) return;
 
             EditorUpdate();
 

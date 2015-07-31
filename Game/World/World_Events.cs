@@ -5,13 +5,14 @@ namespace Game
     public partial class World
     {
         int CountSinceDragonLordEngaged = 9999;
+        public int PreventDragonLordMessageCount = 20;
         void UpdateDragonLordEngaged()
         {
             DragonLordEngaged.Apply(DataGroup.CurrentUnits, DataGroup.CurrentData, DataGroup.DistanceToOtherTeams, MyPlayerValue, Output: DataGroup.Multigrid[0]);
             var _engaged = (vec4)DataGroup.MultigridReduce(CountReduce_4x1byte.Apply);
             bool engaged = _engaged.r > .5f;
 
-            if (engaged && SimStep > 20)
+            if (engaged && PreventDragonLordMessageCount <= 0)
             {
                 if (CountSinceDragonLordEngaged > 20)
                 {
@@ -24,6 +25,9 @@ namespace Game
             {
                 CountSinceDragonLordEngaged++;
             }
+
+            if (PreventDragonLordMessageCount > 0)
+                PreventDragonLordMessageCount--;
         }
 
         void DestroyAllPlayerBuildings(float player)

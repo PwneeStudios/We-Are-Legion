@@ -20,16 +20,22 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             message.index = this.state.counter++;
             
             self.state.messages.push(message);
-            self.setState({
-                messages: self.state.messages
-            });
+            
+            if (this.isMounted()) {
+                self.setState({
+                    messages: self.state.messages
+                });
+            }
         },
 
         remove: function(message) {
             _.remove(this.state.messages, function(e) {
                 return e.index === message.index;
             });
-            this.setState({messages: this.state.messages});
+
+            if (this.isMounted()) {
+                this.setState({messages: this.state.messages});
+            }
         },
         
         getInitialState: function() {
@@ -43,6 +49,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         componentDidMount: function() {
             var self = this;
             return;
+
             setInterval(function() {
                 self.onChatMessage({name:'player 1', message:'hello there again ' + self.state.counter});
             }, 1000);

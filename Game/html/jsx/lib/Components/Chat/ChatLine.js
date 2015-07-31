@@ -30,7 +30,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
             if (this.props.willFadeOut) {
                 setTimeout(function() {
                     self.fadeOut();
-                }, 5600);
+                }, 6200);
             }
         },
         
@@ -42,7 +42,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                 setTimeout(this.fadeIn, 16);
             }
             
-            this.getDOMNode().style.opacity = this.alpha;
+            if (this.isMounted()) {
+                this.getDOMNode().style.opacity = this.alpha;
+            }
         },
 
         fadeOut: function() {
@@ -51,7 +53,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                 this.alpha = 0;
                 this.props.remove(this.props.message);
             } else {
-                this.getDOMNode().style.opacity = this.alpha;
+                if (this.isMounted()) {
+                    this.getDOMNode().style.opacity = this.alpha;
+                }
+
                 setTimeout(this.fadeOut, 16);
             }
         },

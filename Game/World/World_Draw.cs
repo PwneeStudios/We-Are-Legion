@@ -260,7 +260,12 @@ namespace Game
                     if (message.Type == MessageType.NetworkDesync)
                     {
                         DesyncPause = true;
-                        GameClass.Game.Send("setScreen", "desync");
+                        if (!Program.Server)
+                        {
+                            // The server has already put up its desync UI,
+                            // so only do this for clients.
+                            GameClass.Game.Send("setScreen", "desync");
+                        }
                     }
 
                     if (message.Type == MessageType.GameState)
@@ -273,10 +278,12 @@ namespace Game
 
         public void SynchronizeNetwork()
         {
+            GameClass.Game.Send("setScreen", "desync");
+
             SaveCurrentStateInBuffer();
 
             Networking.ToClients(new Message(MessageType.NetworkDesync));
-            Networking.ToClients(new MessageGameState(SimStep, WorldBytes));   
+            Networking.ToClients(new MessageGameState(SimStep, WorldBytes));
         }
 
         void CheckIfShouldPause()
@@ -339,10 +346,13 @@ namespace Game
 
             double PreviousSecondsSinceLastUpdate = SecondsSinceLastUpdate;
 
-            CheckIfShouldPause();
-            CheckIfShouldShowWaiting();
+            if (!DesyncPause)
+            {
+                CheckIfShouldPause();
+                CheckIfShouldShowWaiting();
+            }
 
-            if (GameClass.GameActive && !ServerPaused)
+            if (GameClass.GameActive && !ServerPaused && !DesyncPause)
             {
                 if (NotPaused_SimulationUpdate)
                 {
@@ -664,7 +674,7 @@ namespace Game
         {
             CanPlaceItem = false;
 
-            if (!GameClass.Game.GameInputEnabled)
+            if (!GameClass.Game.GameInputEnabled || DesyncPause)
             {
                 if (AfterUi) DrawArrowCursor();
                 return;

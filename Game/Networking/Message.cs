@@ -430,6 +430,11 @@ namespace Game
 
             GameClass.World.Reload(SimStep, Bytes);
             GameClass.Game.Send("back");
+
+            GameClass.World.DesyncPause = false;
+            GameClass.World.PreventDragonLordMessageCount = 20;
+            
+            GameClass.Game.ToggleChat(Toggle.Off);
         }
     }
 
