@@ -31,7 +31,7 @@ namespace Game
         public Dictionary<string, BuildingParameters> Buildings;
 
         public BuildingParameters
-            Barracks = new BuildingParameters(UnitType.Barracks, "Barracks", GoldCost: 250, CostIncrease: 50),
+            Barracks = new BuildingParameters(UnitType.Barracks, "Barracks", GoldCost: 250, CostIncrease: 40),
             GoldMine = new BuildingParameters(UnitType.GoldMine, "GoldMine", GoldCost: 200, CostIncrease: 200, GoldPerTick: 4),
             JadeMine = new BuildingParameters(UnitType.JadeMine, "JadeMine", GoldCost: 1000, CostIncrease: 500, JadePerTick: 2);
 

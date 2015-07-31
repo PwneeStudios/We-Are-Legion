@@ -82,7 +82,8 @@ namespace Game
             }
 
             if (Something(data_here) && unit_here.player == player &&
-                unit_here.type == UnitType.DragonLord && value < _36) return vec(1,1,1,1);
+                //unit_here.type == UnitType.DragonLord && value < _36) return vec(1,1,1,1);
+                unit_here.type == UnitType.DragonLord && value < _46) return vec(1, 1, 1, 1);
 
             return vec4.Zero;
         }

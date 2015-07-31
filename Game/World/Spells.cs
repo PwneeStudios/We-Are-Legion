@@ -73,7 +73,7 @@ namespace Game
             spell.Execute = () => W.Fireball();
             spell.Apply = (p, t, v) => W.FireballApply(p, t, v);
             spell.Info.JadeCost = 750;
-            spell.Info.JadeCostIncrease = 0;
+            spell.Info.JadeCostIncrease = 50;
             spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Fireball", FindStyle.NullIfNotFound);
 
             SkeletonArmy = spell = new Spell("Skeletons");
@@ -81,7 +81,7 @@ namespace Game
             spell.Execute = () => W.RaiseSkeletons();
             spell.Apply = (p, t, v) => W.RaiseSkeletonsApply(p, t, v, RaiseRadius);
             spell.Info.JadeCost = 1000;
-            spell.Info.JadeCostIncrease = 0;
+            spell.Info.JadeCostIncrease = 150;
             spell.ExecutionSound = SoundWad.Wad.FindByName("Spell_Skeletons", FindStyle.NullIfNotFound);
 
             Necromancer = spell = new Spell("Necromancer");
