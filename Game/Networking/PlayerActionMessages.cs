@@ -123,7 +123,7 @@ namespace Game
         public override void Do()
         {
             // Use this to test quick desyncing.
-            if (!Program.Server) return;
+            //if (!Program.Server) return;
 
             if (Log.Do) Console.WriteLine("   Do place building at {0} : {1}", GameClass.World.SimStep, this);
             GameClass.World.PlaceBuildingApply(Action.PlayerNumber, Action.TeamNumber, Pos, Building);

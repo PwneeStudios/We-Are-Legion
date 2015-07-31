@@ -7,6 +7,11 @@ using Microsoft.Xna.Framework.Graphics;
 using FragSharpHelper;
 using FragSharpFramework;
 
+using Awesomium.Core;
+using Awesomium.Core.Data;
+using Awesomium.Core.Dynamic;
+using AwesomiumXNA;
+
 namespace Game
 {
     public partial class World : SimShader
@@ -279,6 +284,15 @@ namespace Game
         public void SynchronizeNetwork()
         {
             GameClass.Game.Send("setScreen", "desync");
+
+            for (int i = 0; i < 10; i++)
+                try
+                {
+                    WebCore.Update();
+                }
+                catch (Exception e)
+                {
+                }
 
             SaveCurrentStateInBuffer();
 

@@ -124,7 +124,8 @@ namespace Game
             string msg = String.Format("Awesomium JS Error: {0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);
             
             Console.WriteLine(msg);
-            throw new Exception(msg);
+            Program.LogDump(msg);
+            //throw new Exception(msg);
         }
 
         /// <summary>
