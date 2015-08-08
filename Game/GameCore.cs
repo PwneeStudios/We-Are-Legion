@@ -400,6 +400,14 @@ namespace Game
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
+            // Sometimes the fullscreen is misconfigured at initial load.
+            // Check if window is off center and recenter if necessary.
+            if (DrawCount % 100 == 0 && CurrentConfig.Fullscreen && (Form.Location.X < 0 || Form.Location.Y < 0))
+            {
+                Console.WriteLine("Form is outside bounds of monitor, moving form now. Draw count {0}", DrawCount);
+                Form.Location = new System.Drawing.Point(0, 0);
+            }
+
             try
             {
                 _Draw(gameTime);
