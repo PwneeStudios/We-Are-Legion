@@ -92,6 +92,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             var visibility = [
                 {name:'Public games', value:'public'},
                 {name:'Friend games', value:'friends'},
+                {name:'Refresh', value:'refresh'},
             ];
 
             var view = null;
