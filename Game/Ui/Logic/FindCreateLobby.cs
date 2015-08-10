@@ -175,23 +175,28 @@ namespace Game
             obj["NumLobbies"] = num_lobbies;
 
             var lobby_list = new List<Dict>(num_lobbies);
+            var lobby_names = new List<String>(num_lobbies);
             for (int i = 0; i < num_lobbies; i++)
             {
                 string lobby_name = SteamMatches.GetLobbyData(i, "name");
-                int member_count = SteamMatches.GetLobbyMemberCount(i);
-                int capacity = SteamMatches.GetLobbyCapacity(i);
-                
-                Console.WriteLine("lobby {0} name: {1} members: {2}/{3}", i, lobby_name, member_count, capacity);
+                if (!lobby_names.Contains(lobby_name))
+                {
+                    int member_count = SteamMatches.GetLobbyMemberCount(i);
+                    int capacity = SteamMatches.GetLobbyCapacity(i);
 
-                if (capacity <= 0) continue;
+                    Console.WriteLine("lobby {0} name: {1} members: {2}/{3}", i, lobby_name, member_count, capacity);
 
-                var lobby = new Dict();
-                lobby["Name"] = lobby_name;
-                lobby["Index"] = i;
-                lobby["MemberCount"] = member_count;
-                lobby["Capacity"] = capacity;
+                    if (capacity <= 0) continue;
 
-                lobby_list.Add(lobby);
+                    var lobby = new Dict();
+                    lobby["Name"] = lobby_name;
+                    lobby["Index"] = i;
+                    lobby["MemberCount"] = member_count;
+                    lobby["Capacity"] = capacity;
+
+                    lobby_names.Add(lobby_name);
+                    lobby_list.Add(lobby);
+                }
             }
 
             obj["Lobbies"] = lobby_list;
