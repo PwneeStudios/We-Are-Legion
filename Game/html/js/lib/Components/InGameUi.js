@@ -60,11 +60,13 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
     };
 
     var setActions = function() {
-        var buildingScale = 0.85;
+        var buildingScale = 0.835;
+        var buildingY = 0.75;
         window.Actions = {
             Fireball: {
                 image:Spells.Fireball,
                 scale:1,
+                hotkey:'1',
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Fireball', 'Fireball', '1')}, 
                         React.createElement("div", null, 
@@ -79,6 +81,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             Skeletons: {
                 image:Spells.Skeletons,
                 scale:1,
+                hotkey:'2',
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Raise Skeletal Army', 'Skeletons', '2')}, 
                         "Command the dead! Raise an army of the dead. All corpses not being stomped on will rise up and fight for your cause in the area you select."
@@ -87,6 +90,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             Necromancer: {
                 image:Spells.Necromancer,
                 scale:1,
+                hotkey:'3',
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Summon Necromancer', 'Necromancer', '3')}, 
                         "Have ", React.createElement("em", null, "someone else"), " command the dead! Summon forth a single, skillful necromancer at a given location." + ' ' +
@@ -96,6 +100,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             Terracotta: {
                 image:Spells.Terracotta,
                 scale:1,
+                hotkey:'4',
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Raise Terracotta Army', 'Terracotta', '4')}, 
                         "Clay soldiers! Yesssss. Mother Earth says: take my earth-warrior-children things! Use them to slay the filthy humans and/or animals!" + ' ' +
@@ -107,6 +112,8 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             Barracks: {
                 image:Buildings.Barracks,
                 scale:buildingScale,
+                y:buildingY,
+                hotkey:'B',
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Build Barracks', 'Barracks', 'B')}, 
                         "The engine of war. This building that dudes hang out in and train for battle and stuff. Also where new 'recruits' magically appear, ready for battle."
@@ -115,6 +122,8 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             GoldMine: {
                 image:Buildings.GoldMine,
                 scale:buildingScale,
+                y:buildingY,
+                hotkey:'G',
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Build Gold Mine', 'GoldMine', 'G')}, 
                         "Place this on a gold source on the map. Once built the mine will continuously generate gold for your mastermind campaign."
@@ -123,6 +132,8 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             JadeMine: {
                 image:Buildings.JadeMine,
                 scale:buildingScale,
+                y:buildingY,
+                hotkey:'J',
                 tooltip:
                     React.createElement(Popover, {title: makeTooltip('Build Jade Mine', 'JadeMine', 'J')}, 
                         "Green is the color of... MAGIC. From Jade flows all magic, both real and imaginary. Place this jade mine on a jade source on the map." + ' ' +
@@ -208,6 +219,12 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             
             var pStyle = {fontSize: '90%', textAlign: 'right'};
             var costY = 4.55 * window.w / window.h;
+
+            var hotkeyStyle = {
+                //'text-shadow': '1px 1px #555',
+                'fontSize': '1%',
+                'color': 'rgba(255, 255, 255, 0.71)',
+            };
             
             return (
                 React.createElement(Div, {pos: pos(0,0,'relative'), size: size(7,100), style: {'float':'left','display':'inline-block'}}, 
@@ -216,9 +233,16 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                      overlay: action.tooltip}), 
                     
                     React.createElement(Div, {nonBlocking: true, pos: pos(0,0)}, 
-                        React.createElement(UiImage, {nonBlocking: true, pos: pos(-1 + (100-90*action.scale)/2,-0.5), width: 90*action.scale, image: action.image})
+                        React.createElement(UiImage, {nonBlocking: true, pos: pos(-1 + (100-90*action.scale)/2,-0.5+action.y), width: 90*action.scale, image: action.image})
                     ), 
-                    React.createElement(Div, {nonBlocking: true, pos: pos(-16,costY), size: width(100), style: pStyle}, React.createElement(Cost, {name: this.props.name}))
+
+                    React.createElement(Div, {nonBlocking: true, pos: pos(-16,costY), size: width(100), style: pStyle}, React.createElement(Cost, {name: this.props.name})), 
+
+                    React.createElement(Div, {pos: pos(76,0.8)}, 
+                        React.createElement("p", {style: hotkeyStyle}, 
+                            action.hotkey
+                        )
+                    )
                 )
             );
         },
