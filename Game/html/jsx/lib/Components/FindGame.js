@@ -68,14 +68,26 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             lobbies: [],
         },
 
-        findLobbies: function(friends) {
-            interop.findLobbies(friends);
+        refreshLobbies: function() {
+            this.refresh();
+            this.refs.refreshButton.getDOMNode().blur();
+        },
 
-            this.setState(this.loadingState);
+        findLobbies: function(friendsFlag) {
+            var _this = this;
+
+            console.log('hola');
+            this.refresh = function() {
+                interop.findLobbies(friendsFlag);
+                _this.setState(_this.loadingState);
+            };
+            
+            this.refresh();
+
         },
                 
         getInitialState: function() {
-            interop.findLobbies(false);
+            this.findLobbies(false);
 
             return this.loadingState;
         },
@@ -92,7 +104,6 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             var visibility = [
                 {name:'Public games', value:'public'},
                 {name:'Friend games', value:'friends'},
-                {name:'Refresh', value:'refresh'},
             ];
 
             var view = null;
@@ -127,6 +138,15 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                             {/* Game visibility type */}
                             <Div pos={pos(55.3,16.9)} size={size(30,66.2)}>
                                 <OptionList options={visibility} onSelect={this.onVisibilityChange} />
+
+                                {/* Refresh */}
+                                <div style={{'pointer-events':'auto'}}>
+                                    <p>
+                                        <Button ref='refreshButton' onClick={this.refreshLobbies}>
+                                            Refresh
+                                        </Button>
+                                    </p>
+                                </div>
                             </Div>
 
                             {/* Buttons */}

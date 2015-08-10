@@ -68,14 +68,26 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             lobbies: [],
         },
 
-        findLobbies: function(friends) {
-            interop.findLobbies(friends);
+        refreshLobbies: function() {
+            this.refresh();
+            this.refs.refreshButton.getDOMNode().blur();
+        },
 
-            this.setState(this.loadingState);
+        findLobbies: function(friendsFlag) {
+            var _this = this;
+
+            console.log('hola');
+            this.refresh = function() {
+                interop.findLobbies(friendsFlag);
+                _this.setState(_this.loadingState);
+            };
+            
+            this.refresh();
+
         },
                 
         getInitialState: function() {
-            interop.findLobbies(false);
+            this.findLobbies(false);
 
             return this.loadingState;
         },
@@ -125,7 +137,16 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
                             /* Game visibility type */
                             React.createElement(Div, {pos: pos(55.3,16.9), size: size(30,66.2)}, 
-                                React.createElement(OptionList, {options: visibility, onSelect: this.onVisibilityChange})
+                                React.createElement(OptionList, {options: visibility, onSelect: this.onVisibilityChange}), 
+
+                                /* Refresh */
+                                React.createElement("div", {style: {'pointer-events':'auto'}}, 
+                                    React.createElement("p", null, 
+                                        React.createElement(Button, {ref: "refreshButton", onClick: this.refreshLobbies}, 
+                                            "Refresh"
+                                        )
+                                    )
+                                )
                             ), 
 
                             /* Buttons */
