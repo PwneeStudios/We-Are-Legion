@@ -99,6 +99,7 @@ namespace Game
         }
 
         bool NeedsApplication = false;
+        /*
         void ApplyConfig(bool Activate=true)
         {
             if (CurrentConfig.Fullscreen)
@@ -114,6 +115,36 @@ namespace Game
                 graphics.PreferredBackBufferHeight = CurrentConfig.Height;
 
                 ApplyConfigToForm();
+            }
+
+            AmbientSounds.UpdateVolumes();
+
+            if (Activate)
+            {
+                NeedsApplication = true;
+            }
+        }
+        */
+
+        void ApplyConfig(bool Activate = true)
+        {
+            if (CurrentConfig.Fullscreen)
+            {
+                ApplyConfigToForm();
+
+                var s = Windows.Screen.FromControl(Control).Bounds;
+                graphics.PreferredBackBufferWidth = s.Width;
+                graphics.PreferredBackBufferHeight = s.Height;
+
+                graphics.ApplyChanges();
+            }
+            else
+            {
+                ApplyConfigToForm();
+
+                graphics.PreferredBackBufferWidth = CurrentConfig.Width;
+                graphics.PreferredBackBufferHeight = CurrentConfig.Height;
+                graphics.ApplyChanges();
             }
 
             AmbientSounds.UpdateVolumes();
