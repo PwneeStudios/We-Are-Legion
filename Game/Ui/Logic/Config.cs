@@ -99,32 +99,6 @@ namespace Game
         }
 
         bool NeedsApplication = false;
-        /*
-        void ApplyConfig(bool Activate=true)
-        {
-            if (CurrentConfig.Fullscreen)
-            {
-                graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-                graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-
-                ApplyConfigToForm();
-            }
-            else
-            {
-                graphics.PreferredBackBufferWidth = CurrentConfig.Width;
-                graphics.PreferredBackBufferHeight = CurrentConfig.Height;
-
-                ApplyConfigToForm();
-            }
-
-            AmbientSounds.UpdateVolumes();
-
-            if (Activate)
-            {
-                NeedsApplication = true;
-            }
-        }
-        */
 
         void ApplyConfig(bool Activate = true)
         {

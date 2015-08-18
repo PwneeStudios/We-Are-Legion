@@ -21,8 +21,8 @@ namespace Game
         }
 
 #if DEBUG
-        //GameState State = GameState.ToEditor;
-        GameState State = GameState.ToMap;
+        GameState State = GameState.ToEditor;
+        //GameState State = GameState.ToMap;
         //GameState State = GameState.TitleScreen;
 #else
         GameState State = GameState.TitleScreen;
@@ -296,8 +296,10 @@ namespace Game
             World = new World();
             World.MapEditor = true;
 
-            Send("setMode", "map-editor");
-            Send("setScreen", "none");
+            Send("setMode", "in-game");
+            Send("setScreen", "editor-ui");
+
+            UpdateEditorJsData();
         }
 
         void DrawGame(GameTime gameTime)

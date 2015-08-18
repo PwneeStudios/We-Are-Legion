@@ -1,7 +1,11 @@
 define(['lodash', 'react', 'interop', 'events',
-        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual', 'Components/GameOver', 'Components/GamePaused', 'Components/ConfirmLeaveGame', 'Components/Disconnected', 'Components/Waiting', 'Components/DisconnectedFromLobby', 'Components/Failed', 'Components/Desync'],
+        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual',
+        'Components/GameOver', 'Components/GamePaused', 'Components/ConfirmLeaveGame', 'Components/Disconnected', 'Components/Waiting', 'Components/DisconnectedFromLobby', 'Components/Failed', 'Components/Desync',
+        'Components/EditorUi'],
     function(_, React, interop, events,
-            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual, GameOver, GamePaused, ConfirmLeaveGame, Disconnected, Waiting, DisconnectedFromLobby, Failed, Desync) {
+            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual,
+            GameOver, GamePaused, ConfirmLeaveGame, Disconnected, Waiting, DisconnectedFromLobby, Failed, Desync,
+            EditorUi) {
  
     return React.createClass({
         mixins: [events.SetModeMixin],
@@ -104,10 +108,11 @@ define(['lodash', 'react', 'interop', 'events',
             //setScreen('find-game');
 
             // Test in-game
-            //setMode('in-game');
+            setMode('in-game');
             //setScreen('game-over', {victory:false});
             //setScreen('game-over', {victory:true});
             //setScreen('in-game-ui');
+            setScreen('editor-ui');
             //setScreen('in-game-menu');
             //setScreen('confirm-leave-game');
         },
@@ -203,6 +208,7 @@ define(['lodash', 'react', 'interop', 'events',
                 case 'game-lobby': body = <GameLobby />; break;
                 
                 case 'in-game-ui': body = <InGameUi />; break;
+                case 'editor-ui': body = <EditorUi />; break;
                 case 'game-over': body = <GameOver />; break;
                 case 'in-game-menu': body = <InGameMenu />; break;
                 case 'game-paused': body = <GamePaused />; break;

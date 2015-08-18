@@ -675,11 +675,11 @@ namespace Game
                             s += "\nUnit: " + UnitType.Name(UnitUserIsPlacing) + ", " + UnitDistribution.Name(UnitPlaceStyle);
                     }
                     
-                    Render.DrawText(s, vec(0, 0), 1);
+                    Render.DrawText(s, vec(0, 200), 1);
                 }
                 else
                 {
-                    Render.DrawText("Map Editor, Playing", vec(0, 0), 1);
+                    Render.DrawText("Map Editor, Playing", vec(0, 200), 1);
                 }
             }
         }

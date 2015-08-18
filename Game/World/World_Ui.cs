@@ -30,7 +30,16 @@ namespace Game
             float building_scale = 1.4f;
             float building_shift = building_selected ? (building_scale - 1) * 2 * size.x : 0;
             vec2 shift = vec(-size.x, 0);
-            vec2 start = vec(CameraAspect, -1) + vec(-.1f, .21f);
+            vec2 start;
+            if (MapEditor)
+            {
+                start = vec(CameraAspect, -1) + vec(-.1f, .46f);
+            }
+            else
+            {
+                start = vec(CameraAspect, -1) + vec(-.1f, .21f);
+            }
+            
             vec2 cur_pos = start - vec(building_shift, 0);
 
             for (int i = Int(UnitType.Count) - 1; i>= 0 ; i--)

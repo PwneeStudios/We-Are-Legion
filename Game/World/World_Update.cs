@@ -16,7 +16,6 @@ namespace Game
 
             if (!MapEditorActive) return;
 
-            //if (Keys.P.Pressed()) Editor_TogglePause();
             if (Keys.D0.Pressed()) Editor_SwitchPlayer(0);
             if (Keys.D1.Pressed()) Editor_SwitchPlayer(1);
             if (Keys.D2.Pressed()) Editor_SwitchPlayer(2);
@@ -24,10 +23,11 @@ namespace Game
             if (Keys.D4.Pressed()) Editor_SwitchPlayer(4);
         }
 
-        void Editor_SwitchPlayer(int player)
+        public void Editor_SwitchPlayer(int player)
         {
             MyPlayerValue = Fint(player);
             MyTeamValue = Fint(player);
+            GameClass.Game.UpdateEditorJsData();
         }
 
         void Editor_TogglePause()
@@ -40,7 +40,7 @@ namespace Game
             DrawGridLines = !DrawGridLines;
         }
 
-        void Editor_ToggleMapEditor()
+        public void Editor_ToggleMapEditor()
         {
             MapEditorActive = !MapEditorActive;
 
@@ -48,6 +48,8 @@ namespace Game
             {
                 MyPlayerNumber = 1;
             }
+
+            GameClass.Game.UpdateEditorJsData();
         }
 
         bool LeftMouseDown
@@ -239,23 +241,61 @@ namespace Game
             // Switch to unit placement (editor only)
             if (MapEditorActive)
             {
-                if (Keys.R.Down()) { TileUserIsPlacing = TileType.None; UnitUserIsPlacing = UnitType.Footman; CurUserMode = UserMode.Painting; UnselectAll = true; }
-                if (Keys.T.Down()) { TileUserIsPlacing = TileType.None; UnitUserIsPlacing = UnitType.DragonLord; CurUserMode = UserMode.Painting; UnselectAll = true; }
-                if (Keys.Y.Down()) { TileUserIsPlacing = TileType.None; UnitUserIsPlacing = UnitType.Necromancer; CurUserMode = UserMode.Painting; UnselectAll = true; }
-                if (Keys.U.Down()) { TileUserIsPlacing = TileType.None; UnitUserIsPlacing = UnitType.Skeleton; CurUserMode = UserMode.Painting; UnselectAll = true; }
-                if (Keys.I.Down()) { TileUserIsPlacing = TileType.None; UnitUserIsPlacing = UnitType.ClaySoldier; CurUserMode = UserMode.Painting; UnselectAll = true; }
+                if (Keys.R.Down()) StartUnitPaint(UnitType.Footman);
+                if (Keys.T.Down()) StartUnitPaint(UnitType.DragonLord);
+                if (Keys.Y.Down()) StartUnitPaint(UnitType.Necromancer);
+                if (Keys.U.Down()) StartUnitPaint(UnitType.Skeleton);
+                if (Keys.I.Down()) StartUnitPaint(UnitType.ClaySoldier);
 
-                if (Keys.C.Down()) { UnitUserIsPlacing = UnitType.None; TileUserIsPlacing = TileType.Dirt; CurUserMode = UserMode.Painting; UnselectAll = true; }
-                if (Keys.V.Down()) { UnitUserIsPlacing = UnitType.None; TileUserIsPlacing = TileType.Grass; CurUserMode = UserMode.Painting; UnselectAll = true; }
-                if (Keys.N.Down()) { UnitUserIsPlacing = UnitType.None; TileUserIsPlacing = TileType.Trees; CurUserMode = UserMode.Painting; UnselectAll = true; }
+                if (Keys.C.Down()) StartTilePaint(TileType.Dirt);
+                if (Keys.V.Down()) StartTilePaint(TileType.Grass);
+                if (Keys.N.Down()) StartTilePaint(TileType.Trees);
 
                 if (Keys.Tab.Pressed())
                 {
-                    UnitPlaceStyle++;
-                    if (UnitPlaceStyle >= UnitDistribution.Last) UnitPlaceStyle = UnitDistribution.First;
+                    SetUnitPlaceStyle((int)Math.Round(UnitPlaceStyle) + 1);
                 }
             }
         }
+
+        public void SetUnitPlaceStyle(int style)
+        {
+            UnitPlaceStyle = style;
+            
+            if (UnitPlaceStyle < UnitDistribution.Last || UnitPlaceStyle >= UnitDistribution.Last)
+            {
+                UnitPlaceStyle = UnitDistribution.First;
+            }
+
+            GameClass.Game.UpdateEditorJsData();
+        }
+
+        public void SetUnitPaint(int type)
+        {
+            StartUnitPaint(_[type]);
+        }
+        public void StartUnitPaint(float type)
+        {
+            TileUserIsPlacing = TileType.None;
+            UnitUserIsPlacing = type;
+            CurUserMode = UserMode.Painting;
+            UnselectAll = true;
+            GameClass.Game.UpdateEditorJsData();
+        }
+
+        public void SetTilePaint(int type)
+        {
+            StartTilePaint(_[type]);
+        }
+        public void StartTilePaint(float type)
+        {
+            UnitUserIsPlacing = UnitType.None;
+            TileUserIsPlacing = type;
+            CurUserMode = UserMode.Painting;
+            UnselectAll = true;
+            GameClass.Game.UpdateEditorJsData();
+        }
+
 
         public void Start(string name)
         {

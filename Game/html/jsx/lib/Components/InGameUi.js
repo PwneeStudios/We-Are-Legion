@@ -1,4 +1,4 @@
-define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, sound, React, ReactBootstrap, interop, events, ui, Chat) {
+define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat', 'Components/InGameUtil'], function(_, sound, React, ReactBootstrap, interop, events, ui, Chat, InGameUtil) {
     var Input = ReactBootstrap.Input;
     var Popover = ReactBootstrap.Popover;
     var Button = ReactBootstrap.Button;
@@ -15,49 +15,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
     var width = ui.width;
     var subImage = ui.subImage;
 
-    var setGlobalImages = function() {
-        window.SpellsSpritesheet = {width:300, height:300, dim:[1,4], url:'css/SpellIcons.png'};
-        window.BuildingsSpritesheet = {width:96, height:96, dim:[5,10], url:'css/Buildings_1.png'};
-        window.UnitSpritesheet = {width:32, height:32, dim:[32,96], url:'css/Soldier_1.png'};
-
-        window.Spells = {
-            Fireball: subImage(SpellsSpritesheet, [0,0]),
-            Skeletons: subImage(SpellsSpritesheet, [0,1]),
-            Necromancer: subImage(SpellsSpritesheet, [0,2]),
-            Terracotta: subImage(SpellsSpritesheet, [0,3]),
-        };
-
-        window.GoldImage = {width:20, height:22, url:'css/Gold.png'};
-        window.JadeImage = {width:20, height:22, url:'css/Jade.png'};
-    };
-
-    var getPlayerImages = function(player) {
-        var i = player - 1;
-        
-        return {        
-            Buildings: {
-                Barracks: subImage(BuildingsSpritesheet, [i+1,1]),
-                GoldMine: subImage(BuildingsSpritesheet, [i+1,3]),
-                JadeMine: subImage(BuildingsSpritesheet, [i+1,5]),
-            },
-            
-            Units: {
-                Soldier: subImage(UnitSpritesheet, [0,4*i]),
-            },
-        };
-    };
-    
-    var makeTooltip = function(name, key, hotkey) {
-        return (
-            <span>
-                {name}
-
-                <span style={{'float':'right','font-size':'60%'}}>
-                    (Hot key {hotkey})
-                </span>
-            </span>
-        );
-    };
+    makeTooltip = InGameUtil.makeTooltip;
 
     var setActions = function() {
         var buildingScale = 0.835;
@@ -70,7 +28,6 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 tooltip:
                     <Popover title={makeTooltip('Fireball', 'Fireball', '1')}>
                         <div>
-                            <p>This is a p test.</p>
                             Fire!&nbsp;Everything will <em>burrrrnnn</em>. Ahhh-hahaha.
                             Except dragonlords. They have anti-magic. Also, anything near a dragonlord. Also necromancers. Again... uh, anti-magic. But, <em>everything else</em>... burrrrnnns.
                             <br /><br />
@@ -142,21 +99,16 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             },
         };
     };
-    
-    var setPlayerImages = function() {
-        window.playerImages = _.map(_.range(5), function(player) { return getPlayerImages(player); });
-    };
-    
+        
     var setPlayer = function(player) {
         _.assign(window, window.playerImages[player]);
         setActions();
     };
     
-    setGlobalImages();
-    setPlayerImages();
+    InGameUtil.setGlobalImages();
+    InGameUtil.setPlayerImages();
     setPlayer(1);
     
-
     var Cost = React.createClass({
         mixins: [events.SetParamsMixin],
 
@@ -248,75 +200,6 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         },
     });
         
-    var UnitBar = React.createClass({
-        mixins: [RenderAtMixin, events.UpdateMixin],
-                
-        onUpdate: function(values) {
-            this.setState({
-                info: values.MyPlayerInfo,
-            });
-        },
-                
-        getInitialState: function() {
-            return {
-                info: null,
-            };
-        },
-        
-        item: function(p, image, scale, image_pos, data) {
-            return (
-                <Div nonBlocking pos={p}>
-                    <UiImage nonBlocking pos={image_pos} width={4.2*scale} image={image} />
-                    <p style={{paddingLeft:'5%', 'pointer-events': 'none'}}>
-                        {data}
-                    </p>
-                </Div>
-            );
-        },
-        
-        renderAt: function() {
-            var x = 2;
-            var small = 13.2, big = 17.2;
-            
-            var Images = playerImages[this.props.MyPlayerNumber];
-            var Buildings = Images.Buildings;
-            var Units = Images.Units;
-        
-            return (
-                <div>
-                    <UiImage width={100} image={{width:869, height:60, url:'css/UnitBar.png'}} />
-                    <Div nonBlocking pos={pos(0,0.92)}>
-                        {this.item(pos(x,0),        Buildings.Barracks, 1,    pos(0,0),     this.state.info ? this.state.info.Barracks.Count : 0)}
-                        {this.item(pos(x+=small,0), Units.Soldier,      0.85, pos(0.4,0),   this.state.info ? this.state.info.Units : 0)}
-                        {this.item(pos(x+=big,0),   Buildings.GoldMine, 1,    pos(0,0),     this.state.info ? this.state.info.GoldMine.Count : 0)}
-                        {this.item(pos(x+=small,0), GoldImage,          0.67, pos(1.2,0.5), this.state.info ? this.state.info.Gold : 0)}
-                        {this.item(pos(x+=big,0),   Buildings.JadeMine, 1,    pos(0,0),     this.state.info ? this.state.info.JadeMine.Count : 0)}
-                        {this.item(pos(x+=small,0), JadeImage,          0.67, pos(1.2,0.5), this.state.info ? this.state.info.Jade : 0)}
-                    </Div>
-                </div>
-            );
-        },
-    });
-
-    var MenuButton = React.createClass({
-        mixins: [RenderAtMixin],
-                        
-        renderAt: function() {
-            var pStyle = {fontSize: '90%', textAlign: 'right'};
-
-            return (
-                <div>
-                    <Div nonBlocking pos={pos(0,0,'absolute')} style={{'float':'right', 'pointer-events':'auto'}}>
-                        <Button style={{position:'absolute', 'pointer-events':'auto'}}
-                                onClick={function() { window.setScreen('in-game-menu'); sound.play.click(); }}>
-                            <Glyphicon glyph='arrow-up' />
-                        </Button>
-                    </Div>
-                </div>
-            );
-        },
-    });
-
     var Minimap = React.createClass({
         mixins: [RenderAtMixin],
         
@@ -325,31 +208,6 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 <div>
                     <UiImage pos={pos(0,0)} width={100} image={{width:245, height:254, url:'css/Minimap.png'}} />
                     <UiImage pos={pos(3.5,0.35)} width={91} image={{width:245, height:254, url:'css/FakeMinimap.png'}} style={{position:'absolute',left:0,top:0,visibility:'hidden'}}/>
-                </div>
-            );
-        },
-    });
-
-    var UnitBox = React.createClass({
-        mixins: [RenderAtMixin, events.UpdateMixin],
-
-        onUpdate: function(values) {
-            this.setState({
-                value: values.UnitCount,
-            });
-        },
-
-        getInitialState: function() {
-            return {
-                value: 0,
-            };
-        },
-        
-        renderAt: function() {
-            return (
-                <div>
-                    <UiImage pos={pos(0,0)} width={100} image={{width:502, height:157, url:'css/UnitBox.png'}} />
-                    <Div nonBlocking pos={pos(-6,5)}><p style={{fontSize: '3.3%', textAlign: 'right'}}>{this.state.value}</p></Div>
                 </div>
             );
         },
@@ -428,13 +286,13 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 <div>
                     <Div pos={pos(0,0)}>
                         {_.map(players, function(player, index) {
-                            return <UnitBar MyPlayerNumber={player} pos={pos(50.5,0.4 + index*4.2)} size={width(50)} />;
+                            return <InGameUtil.UnitBar MyPlayerNumber={player} pos={pos(50.5,0.4 + index*4.2)} size={width(50)} />;
                         })}
                     </Div>
                                         
                     {/*<Minimap pos={pos(.2,79)} size={width(11)} />*/}
 
-                    <MenuButton pos={pos(0.5,0.4)} size={width(50)} />
+                    <InGameUtil.MenuButton pos={pos(0.5,0.4)} size={width(50)} />
 
                     <Div pos={pos(15,0)}>
                         <Chat.ChatInput pos={pos(0.35+xOffset,80)} size={width(49)} />
@@ -455,7 +313,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                             <ActionButton name='JadeMine' />
                         </Div>
                         
-                        <UnitBox pos={pos(58,85)} size={width(25)} />
+                        <InGameUtil.UnitBox pos={pos(58,85)} size={width(25)} />
                     </Div>
                 </div>
             );

@@ -82,7 +82,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                          onChange: this.onTextChange, onKeyDown: this.onKeyDown, 
                          onMouseOver: interop.onOver, onMouseLeave: interop.onLeave, 
                          onBlur: this.focus})
-                     )
+                    )
                 );
             } else {
                 return (

@@ -20,6 +20,7 @@ packages/
 *.psess
 *.vsp
 
+Steam/ContentBuilder/builder
 Steam/ContentBuilder/builder/logs/
 Steam/ContentBuilder/builder/appcache/
 Steam/ContentBuilder/builder/config/

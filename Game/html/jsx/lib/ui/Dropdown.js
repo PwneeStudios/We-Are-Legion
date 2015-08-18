@@ -44,7 +44,8 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'ui/Item'], function(_, s
             return (
                 <div style={style}>
                     <DropdownButton className={className} disabled={this.props.disabled} title={item.selectedName || item.name}
-                                    onMouseEnter={this.props.disabled ? null : sound.play.hover}>
+                                    onMouseEnter={this.props.disabled ? null : sound.play.hover}
+                                    dropup={this.props.dropup}>
                         {_.map(this.props.choices, function(choice) {
                             return (
                                 <Item disabled={choice.taken}

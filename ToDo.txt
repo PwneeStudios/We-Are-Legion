@@ -96,6 +96,9 @@ Maybe:
 	Is it faster to keep textures in the same sampler?
 	
 Spells:
+	lava field
+	water field (slows units down)
+	summon archers
 	firewall as a string of fireballs that recast each frame
 	transumute
 	plague, firestorm, raise skels, raise terra, necro, convert, flamewall, resurect, corpse explode, master necromancer dragonlord, 

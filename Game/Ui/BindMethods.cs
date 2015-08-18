@@ -44,6 +44,7 @@ namespace Game
             BindMethods_Options();
 
             BindMethods_InGame();
+            BindMethods_Editor();
         }
     }
 }

@@ -107,6 +107,36 @@ define(['lodash'], function(_) {
             }
         },
 
+        toggleEditor: function(index) {
+            if (interop.InXna()) {
+                xna.PlayButtonPressed();
+            }
+        },
+
+        setUnitPaint: function(type) {
+            if (interop.InXna()) {
+                xna.SetUnitPaint(type);
+            }
+        },
+
+        setTilePaint: function(type) {
+            if (interop.InXna()) {
+                xna.SetTilePaint(type);
+            }
+        },
+
+        setPlayer: function(player) {
+            if (interop.InXna()) {
+                xna.SetPlayer(player);
+            }
+        },
+
+        setPaintChoice: function(choice) {
+            if (interop.InXna()) {
+                xna.SetPaintChoice(choice);
+            }
+        },
+
         playSound: function(sound, vol) {
             if (interop.InXna()) {
                 if (typeof vol === 'undefined') {

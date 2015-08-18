@@ -175,7 +175,7 @@ namespace Game
         float BuildingUserIsPlacing = UnitType.GoldMine;
         float UnitUserIsPlacing = UnitType.Footman;
         float TileUserIsPlacing = TileType.Grass;
-        float UnitPlaceStyle = UnitDistribution.EveryOther;
+        public float UnitPlaceStyle = UnitDistribution.EveryOther;
         bool UnselectAll = false;
         bool SkipNextSelectionUpdate = false;
 
