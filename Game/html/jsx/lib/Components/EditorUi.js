@@ -377,8 +377,10 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
         },
 
         getInitialState: function() {
+            var maps = [];
+
             if (!interop.InXna()) {
-                Maps = [
+                maps = [
                     {
                         name:'CUSTOM',
                         list:['__map1','__map2','__map3']
@@ -401,7 +403,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
             return {
                 MyPlayerNumber: 1,
                 ShowAllPlayers: false,
-                Maps:Maps,
+                Maps:maps,
             };
         },
         
