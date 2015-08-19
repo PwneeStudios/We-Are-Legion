@@ -262,7 +262,7 @@ namespace Game
         {
             UnitPlaceStyle = style;
             
-            if (UnitPlaceStyle < UnitDistribution.Last || UnitPlaceStyle >= UnitDistribution.Last)
+            if (UnitPlaceStyle < UnitDistribution.First || UnitPlaceStyle >= UnitDistribution.Last)
             {
                 UnitPlaceStyle = UnitDistribution.First;
             }

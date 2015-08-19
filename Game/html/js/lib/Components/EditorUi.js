@@ -1,9 +1,13 @@
-define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat', 'Components/InGameUtil'], function(_, sound, React, ReactBootstrap, interop, events, ui, Chat, InGameUtil) {
+define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui',
+        'Components/Chat', 'Components/InGameUtil', 'Components/MapPicker'],
+function(_, sound, React, ReactBootstrap, interop, events, ui,
+         Chat, InGameUtil, MapPicker) {
     var Input = ReactBootstrap.Input;
     var Popover = ReactBootstrap.Popover;
     var Button = ReactBootstrap.Button;
     var Glyphicon = ReactBootstrap.Glyphicon;
     var OverlayTrigger = ReactBootstrap.OverlayTrigger;
+    var ModalTrigger = ReactBootstrap.ModalTrigger;
     
     var Div = ui.Div;
     var Gap = ui.Gap;
@@ -373,9 +377,31 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         },
 
         getInitialState: function() {
+            if (!interop.InXna()) {
+                Maps = [
+                    {
+                        name:'CUSTOM',
+                        list:['__map1','__map2','__map3']
+                    },
+                    'Beset',
+                    'Clash of Madness',
+                    'Nice',
+                    {
+                        name:'DOWNLOADS',
+                        list:['map1','map2',
+                        {
+                            name:'CUSTOM',
+                            list:['__map1','__map2','__map3']
+                        },
+                        'map3',]
+                    }
+                ];
+            }
+
             return {
                 MyPlayerNumber: 1,
                 ShowAllPlayers: false,
+                Maps:Maps,
             };
         },
         
@@ -395,11 +421,34 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             interop.setPaintChoice(item.value);
         },
 
+        onMapPick: function(map) {
+            console.log(map);
+            interop.loadMap(map);
+        },
+
         render: function() {
             var players = this.state.ShowAllPlayers ? _.range(1,5) : [this.state.MyPlayerNumber];
 
             var aspect = window.w / window.h;
             var xOffset = this.lerp(1.6, 2, 1, 5.6, aspect);
+
+            var mapPicker = (
+                React.createElement(MapPicker, {
+                    showPath: true, 
+                    maps: this.state.Maps, 
+                    confirm: "Load", 
+                    onConfirm: this.onMapPick}
+                  )
+            );
+
+            var saveAs = (
+                React.createElement(MapPicker, {
+                    showPath: true, saveAs: true, 
+                    maps: this.state.Maps, 
+                    confirm: "Save", 
+                    onConfirm: this.onMapPick}
+                  )
+            );
 
             return (
                 React.createElement("div", null, 
@@ -415,8 +464,15 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                         React.createElement(Gap, {width: "0.2"}), 
                         React.createElement(TopButton, {tooltip: "New Map", hotkey: "Ctrl-N", size: width(50)}, React.createElement(Glyphicon, {glyph: "new-window"})), 
                         React.createElement(TopButton, {tooltip: "Save", hotkey: "Ctrl-S", size: width(50)}, React.createElement(Glyphicon, {glyph: "floppy-save"})), 
-                        React.createElement(TopButton, {tooltip: "Save as...", hotkey: "Shift-Ctrl-S", size: width(50)}, React.createElement(Glyphicon, {glyph: "floppy-saved"})), 
-                        React.createElement(TopButton, {tooltip: "Load...", hotkey: "Ctrl-L", size: width(50)}, React.createElement(Glyphicon, {glyph: "open"})), 
+
+                        React.createElement(ModalTrigger, {modal: saveAs}, 
+                            React.createElement(TopButton, {tooltip: "Save as...", hotkey: "Shift-Ctrl-S", size: width(50)}, React.createElement(Glyphicon, {glyph: "floppy-saved"}))
+                        ), 
+
+                        React.createElement(ModalTrigger, {modal: mapPicker}, 
+                            React.createElement(TopButton, {tooltip: "Load...", hotkey: "Ctrl-L", size: width(50)}, React.createElement(Glyphicon, {glyph: "open"}))
+                        ), 
+
                         React.createElement(Gap, {width: "0.2"}), 
                         React.createElement(MapName, {size: width(20)})
                     ), 
