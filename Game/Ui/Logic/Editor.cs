@@ -41,6 +41,8 @@ namespace Game
             xnaObj.Bind("SetTilePaint", (sender, e) => { World.SetTilePaint((int)e.Arguments[0]); return JSValue.Null; });
             xnaObj.Bind("SetPlayer", (sender, e) => { World.Editor_SwitchPlayer((int)e.Arguments[0]); return JSValue.Null; });
             xnaObj.Bind("SetPaintChoice", (sender, e) => { World.SetUnitPlaceStyle((int)e.Arguments[0]); return JSValue.Null; });
+
+            xnaObj.Bind("GetMaps", GetMaps);
         }
 
         public void UpdateEditorJsData()
@@ -59,6 +61,33 @@ namespace Game
             GameClass.World.Editor_ToggleMapEditor();
 
             return JSValue.Null;
+        }
+
+        object _GetMaps(string path)
+        {
+            var Maps = new List<object>();
+
+            foreach (string file in Directory.EnumerateDirectories(path, "*", SearchOption.TopDirectoryOnly))
+            {
+                string name = Path.GetFileNameWithoutExtension(file);
+                Maps.Add(new {
+                    name = name,
+                    list = _GetMaps(Path.Combine(path, name)),
+                });
+            }
+
+            foreach (string file in Directory.EnumerateFiles(path, "*.m3n", SearchOption.TopDirectoryOnly))
+            {
+                string name = Path.GetFileNameWithoutExtension(file);
+                Maps.Add(name);
+            }
+
+            return Maps;
+        }
+
+        JSValue GetMaps(object sender, JavascriptMethodEventArgs e)
+        {
+            return Jsonify(_GetMaps(MapDirectory));
         }
     }
 }

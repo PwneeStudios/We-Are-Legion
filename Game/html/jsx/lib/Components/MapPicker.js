@@ -1,4 +1,5 @@
 define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, React, ReactBootstrap, interop, events, ui, Chat) {
+    var Glyphicon = ReactBootstrap.Glyphicon;
     var Input = ReactBootstrap.Input;
     var Panel = ReactBootstrap.Panel;
     var Button = ReactBootstrap.Button;
@@ -24,7 +25,12 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var MapEntry = React.createClass({
         render: function() {
             return (
-                <ListGroupItem href='#' onClick={this.props.onPick}>{this.props.name}</ListGroupItem>
+                <ListGroupItem href='#' onClick={this.props.onPick}>
+                    {this.props.directory ?
+                        <span><Glyphicon glyph='folder-open' />&nbsp;&nbsp;</span>
+                        : null}
+                    {this.props.name}
+                </ListGroupItem>
             );
         },
     });
@@ -94,7 +100,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     };
 
                     return (
-                        <MapEntry name={directory.name} onPick={onPick} />
+                        <MapEntry directory name={directory.name} onPick={onPick} />
                     );
                 } else {
                     var onPick = function() {
@@ -129,6 +135,12 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                         <div className='chat-background' style={{'width':'100%','overflow-y':'scroll','height':'100%','pointer-events':'auto'}}>
                             <ListGroup style={{'pointer-events':'auto','font-size': '1.4%'}}>
                                 {mapEntrees}
+                                
+                                {this.state.up && this.state.up.length > 0 ? 
+                                    <ListGroupItem href='#' onClick={this.back}>
+                                        <Glyphicon glyph='arrow-left' />
+                                    </ListGroupItem>
+                                    : null}
                             </ListGroup>
                         </div>
                     </div>
@@ -143,13 +155,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             </div>
                             : null}
 
-                        <Button onClick={this.props.onRequestHide}>Close</Button>
-                        {this.state.up ? 
-                            <Button onClick={this.back}>Back</Button>
-                            : null}
                         {this.props.confirm ? 
                             <Button onClick={this.onConfirm}>{this.props.confirm}</Button>
                             : null}
+                        <Button onClick={this.props.onRequestHide}>Close</Button>
                     </div>
                 </Modal>
             );

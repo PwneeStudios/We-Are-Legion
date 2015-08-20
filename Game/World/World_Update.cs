@@ -267,6 +267,9 @@ namespace Game
                 UnitPlaceStyle = UnitDistribution.First;
             }
 
+            if (UnitPlaceStyle == UnitDistribution.OnCorpses)
+                UnitPlaceStyle = UnitDistribution.Single;
+
             GameClass.Game.UpdateEditorJsData();
         }
 

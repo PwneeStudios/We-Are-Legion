@@ -400,6 +400,8 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                 ];
             }
 
+            maps = interop.getMaps();
+
             return {
                 MyPlayerNumber: 1,
                 ShowAllPlayers: false,

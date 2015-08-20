@@ -558,7 +558,7 @@ namespace Game
 
             Render.StartText();
                 DrawUiText();
-                MapEditorUiText();
+                //MapEditorUiText();
             Render.EndText();
         }
 

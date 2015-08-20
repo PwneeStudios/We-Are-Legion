@@ -1,4 +1,5 @@
 define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, React, ReactBootstrap, interop, events, ui, Chat) {
+    var Glyphicon = ReactBootstrap.Glyphicon;
     var Input = ReactBootstrap.Input;
     var Panel = ReactBootstrap.Panel;
     var Button = ReactBootstrap.Button;
@@ -24,7 +25,12 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var MapEntry = React.createClass({displayName: "MapEntry",
         render: function() {
             return (
-                React.createElement(ListGroupItem, {href: "#", onClick: this.props.onPick}, this.props.name)
+                React.createElement(ListGroupItem, {href: "#", onClick: this.props.onPick}, 
+                    this.props.directory ?
+                        React.createElement("span", null, React.createElement(Glyphicon, {glyph: "folder-open"}), "  ")
+                        : null, 
+                    this.props.name
+                )
             );
         },
     });
@@ -94,7 +100,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     };
 
                     return (
-                        React.createElement(MapEntry, {name: directory.name, onPick: onPick})
+                        React.createElement(MapEntry, {directory: true, name: directory.name, onPick: onPick})
                     );
                 } else {
                     var onPick = function() {
@@ -128,7 +134,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     React.createElement("div", {className: "modal-body", style: {'height':0.5*window.h + 'px'}}, 
                         React.createElement("div", {className: "chat-background", style: {'width':'100%','overflow-y':'scroll','height':'100%','pointer-events':'auto'}}, 
                             React.createElement(ListGroup, {style: {'pointer-events':'auto','font-size': '1.4%'}}, 
-                                mapEntrees
+                                mapEntrees, 
+                                
+                                this.state.up && this.state.up.length > 0 ? 
+                                    React.createElement(ListGroupItem, {href: "#", onClick: this.back}, 
+                                        React.createElement(Glyphicon, {glyph: "arrow-left"})
+                                    )
+                                    : null
                             )
                         )
                     ), 
@@ -143,13 +155,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                             )
                             : null, 
 
-                        React.createElement(Button, {onClick: this.props.onRequestHide}, "Close"), 
-                        this.state.up ? 
-                            React.createElement(Button, {onClick: this.back}, "Back")
-                            : null, 
                         this.props.confirm ? 
                             React.createElement(Button, {onClick: this.onConfirm}, this.props.confirm)
-                            : null
+                            : null, 
+                        React.createElement(Button, {onClick: this.props.onRequestHide}, "Close")
                     )
                 )
             );

@@ -137,6 +137,14 @@ define(['lodash'], function(_) {
             }
         },
 
+        getMaps: function() {
+            if (interop.InXna()) {
+                return JSON.parse(xna.GetMaps());
+            } else {
+                return ['Hello!'];
+            }
+        },
+
         playSound: function(sound, vol) {
             if (interop.InXna()) {
                 if (typeof vol === 'undefined') {

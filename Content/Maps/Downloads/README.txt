@@ -1,0 +1,1 @@
+The downloads folder contains all maps you've downloaded while playing WAL.
