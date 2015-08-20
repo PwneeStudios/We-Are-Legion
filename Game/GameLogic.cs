@@ -291,9 +291,15 @@ namespace Game
             }
         }
 
-        private void NewWorldEditor()
+        private void NewWorldEditor(string path = null)
         {
             World = new World();
+
+            if (path != null)
+            {
+                World.Load(path, Retries:5);
+            }
+
             World.MapEditor = true;
 
             Send("setMode", "in-game");

@@ -43,6 +43,7 @@ namespace Game
             xnaObj.Bind("SetPaintChoice", (sender, e) => { World.SetUnitPlaceStyle((int)e.Arguments[0]); return JSValue.Null; });
 
             xnaObj.Bind("GetMaps", GetMaps);
+            xnaObj.Bind("LoadMap", LoadMap);
         }
 
         public void UpdateEditorJsData()
@@ -88,6 +89,17 @@ namespace Game
         JSValue GetMaps(object sender, JavascriptMethodEventArgs e)
         {
             return Jsonify(_GetMaps(MapDirectory));
+        }
+
+        JSValue LoadMap(object sender, JavascriptMethodEventArgs e)
+        {
+            string path = e.Arguments[0];
+
+            path = Path.Combine(MapDirectory, path);
+            path = Path.ChangeExtension(path, "m3n");
+            NewWorldEditor(path);
+
+            return JSValue.Null;
         }
     }
 }

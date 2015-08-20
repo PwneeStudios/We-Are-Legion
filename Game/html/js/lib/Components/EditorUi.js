@@ -379,29 +379,6 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
         getInitialState: function() {
             var maps = [];
 
-            if (!interop.InXna()) {
-                maps = [
-                    {
-                        name:'CUSTOM',
-                        list:['__map1','__map2','__map3']
-                    },
-                    'Beset',
-                    'Clash of Madness',
-                    'Nice',
-                    {
-                        name:'DOWNLOADS',
-                        list:['map1','map2',
-                        {
-                            name:'CUSTOM',
-                            list:['__map1','__map2','__map3']
-                        },
-                        'map3',]
-                    }
-                ];
-            }
-
-            maps = interop.getMaps();
-
             return {
                 MyPlayerNumber: 1,
                 ShowAllPlayers: false,
@@ -439,7 +416,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
             var mapPicker = (
                 React.createElement(MapPicker, {
                     showPath: true, 
-                    maps: this.state.Maps, 
+                    getMaps: interop.getMaps, 
                     confirm: "Load", 
                     onConfirm: this.onMapPick}
                   )
@@ -448,7 +425,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
             var saveAs = (
                 React.createElement(MapPicker, {
                     showPath: true, saveAs: true, 
-                    maps: this.state.Maps, 
+                    getMaps: interop.getMaps, 
                     confirm: "Save", 
                     onConfirm: this.onMapPick}
                   )

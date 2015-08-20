@@ -141,7 +141,7 @@ define(['lodash'], function(_) {
             if (interop.InXna()) {
                 return JSON.parse(xna.GetMaps());
             } else {
-                return ['Hello!'];
+                return maps = [{name:'CUSTOM',list:['__map1','__map2','__map3']},'Beset','Clash of Madness','Nice',{name:'DOWNLOADS',list:['map1','map2',{name:'CUSTOM',list:['__map1','__map2','__map3']},'map3',]}];
             }
         },
 
@@ -152,6 +152,12 @@ define(['lodash'], function(_) {
                 }
 
                 xna.PlaySound(sound, vol);
+            }
+        },
+
+        loadMap: function(path) {
+            if (interop.InXna()) {
+                xna.LoadMap(path);
             }
         },
     };

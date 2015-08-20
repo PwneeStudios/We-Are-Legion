@@ -25,7 +25,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var MapEntry = React.createClass({displayName: "MapEntry",
         render: function() {
             return (
-                React.createElement(ListGroupItem, {href: "#", onClick: this.props.onPick}, 
+                React.createElement(ListGroupItem, {href: "#", onClick: this.props.onPick, onDoubleClick: this.props.onConfirm}, 
                     this.props.directory ?
                         React.createElement("span", null, React.createElement(Glyphicon, {glyph: "folder-open"}), "  ")
                         : null, 
@@ -37,6 +37,10 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
 
     return React.createClass({
         getInitialState: function() {
+            if (this.props.getMaps) {
+                this.props.maps = this.props.getMaps();
+            }
+
             return {
                 up: [],
                 maps: this.props.maps,
@@ -70,15 +74,17 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         path: function() {
             var title = '';
             for (var i = 0; i < this.state.path.length; i++) {
-                title += '/' + this.state.path[i];
+                title += this.state.path[i] + '/';
             }
 
             return title;
         },
 
         onConfirm: function() {
-            var map = this.path() + '/' + this.state.file;
+            var map = this.path() + this.state.file;
             this.props.onConfirm(map);
+
+            this.props.onRequestHide();
         },
 
         render: function() {
@@ -108,7 +114,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     };
 
                     return (
-                        React.createElement(MapEntry, {name: map, onPick: onPick})
+                        React.createElement(MapEntry, {name: map, onPick: onPick, onConfirm: _this.onConfirm})
                     );
                 }
             });
