@@ -102,6 +102,11 @@ namespace Game
                 Networking.SendString(new SteamPlayer(76561198060676433), "Hello to 76561198060676433");
                 Networking.SendString(new SteamPlayer(76561198201081585), "Hello to 76561198201081585");
 
+                var bytes = File.ReadAllBytes("Content/Maps/Beset.m3n");
+                var s = new MessageGameState(0, bytes).MakeFullMessage().ToString();
+                s = s.Substring(0, 100);
+                Networking.SendString(new SteamPlayer(76561198060676433), s);
+
                 while (SteamP2P.MessageAvailable())
                 {
                     var msg = Networking.ReceiveString();
