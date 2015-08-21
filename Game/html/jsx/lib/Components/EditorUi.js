@@ -402,11 +402,6 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
             interop.setPaintChoice(item.value);
         },
 
-        onMapPick: function(map) {
-            console.log(map);
-            interop.loadMap(map);
-        },
-
         render: function() {
             var players = this.state.ShowAllPlayers ? _.range(1,5) : [this.state.MyPlayerNumber];
 
@@ -418,7 +413,8 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                     showPath
                     getMaps={interop.getMaps}
                     confirm='Load'
-                    onConfirm={this.onMapPick}
+                    onConfirm={interop.loadMap}
+                    directory=''
                   />
             );
 
@@ -427,7 +423,8 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                     showPath saveAs
                     getMaps={interop.getMaps}
                     confirm='Save'
-                    onConfirm={this.onMapPick}
+                    onConfirm={interop.saveMap}
+                    directory='Custom'
                   />
             );
 

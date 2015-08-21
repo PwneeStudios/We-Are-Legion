@@ -1,6 +1,5 @@
 define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, React, ReactBootstrap, interop, events, ui, Chat) {
     var Glyphicon = ReactBootstrap.Glyphicon;
-    var Input = ReactBootstrap.Input;
     var Panel = ReactBootstrap.Panel;
     var Button = ReactBootstrap.Button;
     var Well = ReactBootstrap.Well;
@@ -16,6 +15,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var UiButton = ui.UiButton;
     var Dropdown = ui.Dropdown;
     var RenderAtMixin = ui.RenderAtMixin;
+    var Input = ui.Input;
     
     var pos = ui.pos;
     var size = ui.size;
@@ -38,7 +38,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     return React.createClass({
         getInitialState: function() {
             if (this.props.getMaps) {
-                this.props.maps = this.props.getMaps();
+                this.props.maps = this.props.getMaps(this.props.directory);
             }
 
             return {
@@ -73,6 +73,11 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
 
         path: function() {
             var title = '';
+
+            if (this.props.directory) {
+                title = this.props.directory + '/';
+            }
+
             for (var i = 0; i < this.state.path.length; i++) {
                 title += this.state.path[i] + '/';
             }
@@ -81,7 +86,17 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         },
 
         onConfirm: function() {
-            var map = this.path() + this.state.file;
+            var file = this.state.file;
+            if (this.refs.input) {
+                file = this.refs.input.state.value;
+            }
+            
+            if (file === null || file.length === 0) {
+                return;
+            }
+            
+            var map = this.path() + file;
+
             this.props.onConfirm(map);
 
             this.props.onRequestHide();
@@ -130,11 +145,6 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 );
             }
 
-            var inputStyle = {
-                'pointer-events':'auto',
-                'background-color':'lightgray',
-            };
-
             return (
                 <Modal {...this.props} bsStyle='primary' title={title} animation={false} >
                     <div className='modal-body' style={{'height':0.5*window.h + 'px'}}>
@@ -154,10 +164,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     <div className='modal-footer' style={{'font-size':'1.4%'}}>
                         {this.props.saveAs ?
                             <div style={{'width':'56%','display':'inline-block','float':'left'}}>
-                                <Input value={this.state.file} ref="input" type="text"
-                                    addonBefore='Name'
-                                    style={inputStyle}
-                                  />
+                                <Input value={this.state.file} ref='input' prefix='Name' />
                             </div>
                             : null}
 

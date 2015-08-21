@@ -1,5 +1,5 @@
-define(['lodash', 'sound', 'react', 'react-bootstrap', 'ui/Div', 'ui/Gap', 'ui/RenderAtMixin', 'ui/UiImage', 'ui/UiButton', 'ui/Dropdown', 'ui/Item', 'ui/MenuItem', 'ui/Menu', 'ui/OptionList', 'ui/MenuTitle', 'ui/util'],
-function(_, sound, React, ReactBootstrap, Div, Gap, RenderAtMixin, UiImage, UiButton, Dropdown, Item, MenuItem, Menu, OptionList, MenuTitle, util) {
+define(['lodash', 'sound', 'react', 'react-bootstrap', 'ui/Div', 'ui/Gap', 'ui/RenderAtMixin', 'ui/UiImage', 'ui/UiButton', 'ui/Dropdown', 'ui/Item', 'ui/MenuItem', 'ui/Menu', 'ui/OptionList', 'ui/MenuTitle', 'ui/Input', 'ui/util'],
+function(_, sound, React, ReactBootstrap, Div, Gap, RenderAtMixin, UiImage, UiButton, Dropdown, Item, MenuItem, Menu, OptionList, MenuTitle, Input, util) {
     var Button = ReactBootstrap.Button;
 
     var ui = {
@@ -15,6 +15,8 @@ function(_, sound, React, ReactBootstrap, Div, Gap, RenderAtMixin, UiImage, UiBu
         Menu: Menu,
         MenuItem: MenuItem,
         MenuTitle: MenuTitle,
+
+        Input: Input,
 
         OptionList: OptionList,
 

@@ -137,11 +137,23 @@ define(['lodash'], function(_) {
             }
         },
 
-        getMaps: function() {
+        getMaps: function(directory) {
             if (interop.InXna()) {
-                return JSON.parse(xna.GetMaps());
+                return JSON.parse(xna.GetMaps(directory));
             } else {
                 return maps = [{name:'CUSTOM',list:['__map1','__map2','__map3']},'Beset','Clash of Madness','Nice',{name:'DOWNLOADS',list:['map1','map2',{name:'CUSTOM',list:['__map1','__map2','__map3']},'map3',]}];
+            }
+        },
+
+        loadMap: function(path) {
+            if (interop.InXna()) {
+                xna.LoadMap(path);
+            }
+        },
+
+        saveMap: function(path) {
+            if (interop.InXna()) {
+                xna.SaveMap(path);
             }
         },
 
@@ -152,12 +164,6 @@ define(['lodash'], function(_) {
                 }
 
                 xna.PlaySound(sound, vol);
-            }
-        },
-
-        loadMap: function(path) {
-            if (interop.InXna()) {
-                xna.LoadMap(path);
             }
         },
     };
