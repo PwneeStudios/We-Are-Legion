@@ -111,7 +111,7 @@ namespace Game
 
             if (LeftMousePressed)
             {
-                if (!MyPlayerInfo.DragonLordAlive)
+                if (!MyPlayerInfo.DragonLordAlive && !MapEditorActive)
                 {
                     Message_NoDragonLordConstruction();
                 }
@@ -649,7 +649,7 @@ namespace Game
                 }
             }
 
-            if (MapEditorActive)
+            if (MapEditorActive && !GameClass.Game.ShowChat)
             {
                 if (Keys.D5.Pressed())
                 {
