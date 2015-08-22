@@ -22,6 +22,13 @@ namespace Game
         bool ShouldStop = false;
         bool ShouldStopWhenEmpty = false;
 
+        public void TemporaryJoin()
+        {
+            if (ServerThread == null) return;
+
+            ServerThread.Join(300);
+        }
+
         public void FinalSend()
         {
             if (ServerThread == null) return;

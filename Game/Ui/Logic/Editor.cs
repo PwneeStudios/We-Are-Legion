@@ -51,11 +51,14 @@ namespace Game
 
         public void UpdateEditorJsData()
         {
+            if (!World.MapEditor) return;
+
             Send("updateEditor",
                 new
                 {
                     EditorActive = World.MapEditorActive,
                     UnitPlaceStyle = (int)Math.Round(World.UnitPlaceStyle),
+                    MapName = Path.GetFileNameWithoutExtension(World.MapFilePath),
                 }
             );
         }

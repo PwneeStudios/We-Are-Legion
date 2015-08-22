@@ -125,6 +125,7 @@ namespace Game
         public void Save(string path)
         {
             MapFilePath = path;
+            GameClass.Game.UpdateEditorJsData();
 
             var stream = new FileStream(path, FileMode.Create);
             var writer = new BinaryWriter(stream);
@@ -240,6 +241,7 @@ namespace Game
         {
             MapFilePath = path;
             Name = Path.GetFileName(path);
+            GameClass.Game.UpdateEditorJsData();
 
             RepeatTry(() => _Load(path, DataOnly: DataOnly), Retries);
         }

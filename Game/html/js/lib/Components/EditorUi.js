@@ -258,7 +258,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
 
             return (
                 React.createElement("div", {style: {'width':'43%'}}, 
-                    React.createElement(Input, {value: "Clash of Madness", ref: "input", type: "text", 
+                    React.createElement(Input, {value: this.props.name, ref: "input", type: "text", 
                         addonBefore: "Map", 
                         style: style}
                       )
@@ -376,6 +376,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
         },
 
         onUpdateEditor: function(values) {
+            //console.log(JSON.stringify(values));
             this.setState(values);
         },
 
@@ -460,7 +461,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                         ), 
 
                         React.createElement(Gap, {width: "0.2"}), 
-                        React.createElement(MapName, {size: width(20)})
+                        React.createElement(MapName, {name: this.state.MapName, size: width(20)})
                     ), 
 
                     React.createElement(Div, {pos: pos(15,0)}, 

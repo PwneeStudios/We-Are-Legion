@@ -293,6 +293,8 @@ namespace Game
 
         private void NewWorldEditor(string path = null)
         {
+            Networking._Server.TemporaryJoin();
+
             World = new World();
 
             if (path != null)
@@ -301,6 +303,8 @@ namespace Game
             }
 
             World.MapEditor = true;
+
+            Console.WriteLine("Making new map editor level.");
 
             Send("setMode", "in-game");
             Send("setScreen", "editor-ui");

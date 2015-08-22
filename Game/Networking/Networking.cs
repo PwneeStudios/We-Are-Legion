@@ -94,8 +94,8 @@ namespace Game
             ToClients(message.MakeFullMessage());
         }
 
-        static Server _Server;
-        static Client _Client;
+        public static Server _Server;
+        public static Client _Client;
 
         public static void Start()
         {
