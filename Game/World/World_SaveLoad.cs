@@ -122,9 +122,11 @@ namespace Game
             WorldBytes = bytes.Compress();
         }
 
-        public void Save(string FileName)
+        public void Save(string path)
         {
-            var stream = new FileStream(FileName, FileMode.Create);
+            MapFilePath = path;
+
+            var stream = new FileStream(path, FileMode.Create);
             var writer = new BinaryWriter(stream);
 
             Save(writer);
@@ -213,7 +215,7 @@ namespace Game
             vec2 HoldCamPos = CameraPos;
             float HoldCamZoom = CameraZoom;
 
-            Load(MapFileName);
+            Load(MapFilePath);
 
             RepeatTry(() =>
             {
@@ -233,13 +235,13 @@ namespace Game
             PostUpdateStep = 0;
         }
 
-        public string Name, MapFileName;
-        public void Load(string FileName, int Retries = 10000, bool DataOnly = false)
+        public string Name, MapFilePath;
+        public void Load(string path, int Retries = 10000, bool DataOnly = false)
         {
-            MapFileName = FileName;
-            Name = Path.GetFileName(FileName);
+            MapFilePath = path;
+            Name = Path.GetFileName(path);
 
-            RepeatTry(() => _Load(FileName, DataOnly: DataOnly), Retries);
+            RepeatTry(() => _Load(path, DataOnly: DataOnly), Retries);
         }
 
         private void RepeatTry(Action Do, int Retries = 10, int Delay = 100)

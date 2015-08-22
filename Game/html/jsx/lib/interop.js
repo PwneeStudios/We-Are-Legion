@@ -157,6 +157,12 @@ define(['lodash'], function(_) {
             }
         },
 
+        createNewMap: function(path) {
+            if (interop.InXna()) {
+                xna.CreateNewMap(path);
+            }
+        },
+
         playSound: function(sound, vol) {
             if (interop.InXna()) {
                 if (typeof vol === 'undefined') {

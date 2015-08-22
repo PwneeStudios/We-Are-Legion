@@ -440,8 +440,8 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                     React.createElement(Div, {pos: pos(3.5,0.4)}, 
                         React.createElement(TopButton, {onClick: interop.toggleEditor, size: width(50)}, this.state.EditorActive ? 'Play Test' : 'Edit'), 
                         React.createElement(Gap, {width: "0.2"}), 
-                        React.createElement(TopButton, {tooltip: "New Map", hotkey: "Ctrl-N", size: width(50)}, React.createElement(Glyphicon, {glyph: "new-window"})), 
-                        React.createElement(TopButton, {tooltip: "Save", hotkey: "Ctrl-S", size: width(50)}, React.createElement(Glyphicon, {glyph: "floppy-save"})), 
+                        React.createElement(TopButton, {onClick: interop.createNewMap, tooltip: "New Map", hotkey: "Ctrl-N", size: width(50)}, React.createElement(Glyphicon, {glyph: "new-window"})), 
+                        React.createElement(TopButton, {onClick: interop.saveMap, tooltip: "Save", hotkey: "Ctrl-S", size: width(50)}, React.createElement(Glyphicon, {glyph: "floppy-save"})), 
 
                         React.createElement(ModalTrigger, {modal: saveAs}, 
                             React.createElement(TopButton, {tooltip: "Save as...", hotkey: "Shift-Ctrl-S", size: width(50)}, React.createElement(Glyphicon, {glyph: "floppy-saved"}))

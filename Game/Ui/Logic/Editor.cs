@@ -45,6 +45,7 @@ namespace Game
             xnaObj.Bind("GetMaps", GetMaps);
             xnaObj.Bind("LoadMap", LoadMap);
             xnaObj.Bind("SaveMap", SaveMap);
+            xnaObj.Bind("CreateNewMap", CreateNewMap);
         }
 
         public void UpdateEditorJsData()
@@ -102,6 +103,8 @@ namespace Game
 
             path = Path.Combine(MapDirectory, path);
             path = Path.ChangeExtension(path, "m3n");
+
+            Console.WriteLine("Loading map {0}...", path);
             NewWorldEditor(path);
 
             return JSValue.Null;
@@ -109,12 +112,33 @@ namespace Game
 
         JSValue SaveMap(object sender, JavascriptMethodEventArgs e)
         {
-            string path = e.Arguments[0];
-            path.Replace('/', '\\');
+            string path;
+            if (e.Arguments.Length == 0 || e.Arguments[0] == JSValue.Undefined)
+            {
+                path = World.MapFilePath;
+                if (path == null || path.Length == 0) return JSValue.Null;
+            }
+            else
+            {
+                path = e.Arguments[0];
+                path.Replace('/', '\\');
 
-            path = Path.Combine(MapDirectory, path);
-            path = Path.ChangeExtension(path, "m3n");
+                if (path == null || path.Length == 0) return JSValue.Null;
+
+                path = Path.Combine(MapDirectory, path);
+                path = Path.ChangeExtension(path, "m3n");
+            }
+
+            Console.WriteLine("Saving map {0}...", path);
+
             World.Save(path);
+
+            return JSValue.Null;
+        }
+
+        JSValue CreateNewMap(object sender, JavascriptMethodEventArgs e)
+        {
+            NewWorldEditor();
 
             return JSValue.Null;
         }

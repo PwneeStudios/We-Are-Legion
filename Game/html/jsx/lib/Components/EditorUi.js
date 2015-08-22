@@ -440,8 +440,8 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                     <Div pos={pos(3.5,0.4)}>
                         <TopButton onClick={interop.toggleEditor} size={width(50)}>{this.state.EditorActive ? 'Play Test' : 'Edit'}</TopButton>
                         <Gap width='0.2' />
-                        <TopButton tooltip='New Map' hotkey='Ctrl-N' size={width(50)}><Glyphicon glyph='new-window' /></TopButton>
-                        <TopButton tooltip='Save' hotkey='Ctrl-S' size={width(50)}><Glyphicon glyph='floppy-save' /></TopButton>
+                        <TopButton onClick={interop.createNewMap} tooltip='New Map' hotkey='Ctrl-N' size={width(50)}><Glyphicon glyph='new-window' /></TopButton>
+                        <TopButton onClick={interop.saveMap} tooltip='Save' hotkey='Ctrl-S' size={width(50)}><Glyphicon glyph='floppy-save' /></TopButton>
 
                         <ModalTrigger modal={saveAs}>
                             <TopButton tooltip='Save as...' hotkey='Shift-Ctrl-S' size={width(50)}><Glyphicon glyph='floppy-saved' /></TopButton>
