@@ -64,6 +64,11 @@ namespace Game
             );
         }
 
+        public void SendCommand(string command)
+        {
+            Send("command", command);
+        }
+
         JSValue PlayButtonPressed(object sender, JavascriptMethodEventArgs e)
         {
             World.Editor_ToggleMapEditor();
@@ -145,7 +150,13 @@ namespace Game
             if (e.Arguments.Length == 0 || e.Arguments[0] == JSValue.Undefined)
             {
                 path = World.MapFilePath;
+                
                 if (path == null || path.Length == 0) return JSValue.Null;
+
+                path = Path.GetFileName(path);
+                path = Path.Combine("Custom", path);
+                path = Path.Combine(MapDirectory, path);
+                path = Path.ChangeExtension(path, "m3n");
             }
             else
             {

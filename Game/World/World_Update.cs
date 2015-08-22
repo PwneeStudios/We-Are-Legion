@@ -172,7 +172,7 @@ namespace Game
             }
 
             // Move the camera via: Keyboard or Gamepad
-            if (!GameClass.Game.ShowChat)
+            if (!GameClass.Game.ShowChat && !(MapEditorActive && InputHelper.CtrlDown()))
             {
                 var dir = Input.Direction();
 

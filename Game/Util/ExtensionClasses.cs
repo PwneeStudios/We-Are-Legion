@@ -11,6 +11,21 @@ namespace Game
 {
     public static class InputHelper
     {
+        public static bool ShiftDown()
+        {
+            return Keys.LeftShift.Down() || Keys.RightShift.Down();
+        }
+
+        public static bool CtrlDown()
+        {
+            return Keys.LeftControl.Down() || Keys.RightControl.Down();
+        }
+
+        public static bool AltDown()
+        {
+            return Keys.LeftAlt.Down() || Keys.RightAlt.Down();
+        }
+
         public static bool SomethingPressed()
         {
             return Input.CurKeyboard.GetPressedKeys().Length > 0 && Input.PrevKeyboard.GetPressedKeys().Length == 0 ||

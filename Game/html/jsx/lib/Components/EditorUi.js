@@ -329,7 +329,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
     ];
 
     return React.createClass({
-        mixins: [events.UpdateMixin, events.UpdateEditorMixin, events.ShowUpdateMixin],
+        mixins: [events.UpdateMixin, events.UpdateEditorMixin, events.ShowUpdateMixin, events.Command],
 
         componentDidMount: function() {
             this.enabled = true;
@@ -378,6 +378,17 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
         onUpdateEditor: function(values) {
             //console.log(JSON.stringify(values));
             this.setState(values);
+        },
+
+        onCommand: function(command) {
+            console.log(command);
+            if (command === 'save-as') {
+                this.refs.saveAs.getDOMNode().click();
+            } else if (command === 'save') {
+                this.refs.save.getDOMNode().click();
+            } else if (command === 'load') {
+                this.refs.load.getDOMNode().click();
+            }
         },
 
         getInitialState: function() {
@@ -450,13 +461,13 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                         </TopButton>
                         <Gap width='0.2' />
                         <TopButton onClick={interop.createNewMap} tooltip='New Map' hotkey='Ctrl-N' size={width(50)}><Glyphicon glyph='new-window' /></TopButton>
-                        <TopButton onClick={interop.saveMap} tooltip='Save' hotkey='Ctrl-S' size={width(50)}><Glyphicon glyph='floppy-save' /></TopButton>
+                        <TopButton onClick={interop.saveMap} ref='save' tooltip='Save' hotkey='Ctrl-S' size={width(50)}><Glyphicon glyph='floppy-save' /></TopButton>
 
-                        <ModalTrigger modal={saveAs}>
+                        <ModalTrigger modal={saveAs} ref='saveAs'>
                             <TopButton tooltip='Save as...' hotkey='Shift-Ctrl-S' size={width(50)}><Glyphicon glyph='floppy-saved' /></TopButton>
                         </ModalTrigger>
 
-                        <ModalTrigger modal={mapPicker}>
+                        <ModalTrigger modal={mapPicker} ref='load'>
                             <TopButton tooltip='Load...' hotkey='Ctrl-L' size={width(50)}><Glyphicon glyph='open' /></TopButton>
                         </ModalTrigger>
 

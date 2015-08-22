@@ -336,27 +336,17 @@ namespace Game
 
                 if (World.MapEditorActive)
                 {
-                    if (Keys.S.Pressed() && Keys.LeftControl.Down())
+                    if (Keys.S.Pressed() && InputHelper.CtrlDown() && InputHelper.ShiftDown())
                     {
-                        //World.Save("Choke Points.m3n");
-                        //World.Save("Beset.m3n");
-                        //World.Save("SavedMap.m3n");
-                        //World.Save("I Am The Tyrant.m3n");
-                        //World.Save("Starfall.m3n");
-                        //World.Save("Axis Mundi.m3n");
-                        World.Save("Easy.m3n");
+                        SendCommand("save-as");
                     }
-
-                    if (Keys.L.Pressed() && Keys.LeftControl.Down())
+                    else if (Keys.S.Pressed() && InputHelper.CtrlDown())
                     {
-                        //World.Load("SavedMap.m3n");
-                        //World.Load("Content/Maps/Beset.m3n");
-
-                        //World.Load("Beset.m3n");
-                        //World.Load("Choke Points.m3n");
-                        //World.Load("I Am The Tyrant.m3n");
-                        //World.Load("Starfall.m3n");
-                        World.Load("Easy.m3n");
+                        SendCommand("save");
+                    }
+                    else if (Keys.L.Pressed() && InputHelper.CtrlDown())
+                    {
+                        SendCommand("load");
                     }
                 }
 
