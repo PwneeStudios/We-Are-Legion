@@ -37,6 +37,7 @@ namespace Game
         {
             xnaObj.Bind("PlayButtonPressed", PlayButtonPressed);
             xnaObj.Bind("EditorUiClicked", EditorUiClicked);
+            xnaObj.Bind("ToggleChat", ToggleChat);
 
             xnaObj.Bind("SetUnitPaint", (sender, e) => { World.SetUnitPaint((int)e.Arguments[0]); return JSValue.Null; });
             xnaObj.Bind("SetTilePaint", (sender, e) => { World.SetTilePaint((int)e.Arguments[0]); return JSValue.Null; });
@@ -76,6 +77,21 @@ namespace Game
 
             World.SetModeToSelect();
 
+            return JSValue.Null;
+        }
+
+        JSValue ToggleChat(object sender, JavascriptMethodEventArgs e)
+        {
+            bool state = e.Arguments[0];
+            if (state)
+            {
+                GameClass.Game.ToggleChat(Toggle.On);
+            }
+            else
+            {
+                GameClass.Game.ToggleChat(Toggle.Off);
+            }
+            
             return JSValue.Null;
         }
 

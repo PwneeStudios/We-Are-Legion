@@ -171,6 +171,12 @@ define(['lodash'], function(_) {
             }
         },
 
+        toggleChat: function(state) {
+            if (interop.InXna()) {
+                xna.ToggleChat(state);
+            }
+        },
+
         playSound: function(sound, vol) {
             if (interop.InXna()) {
                 if (typeof vol === 'undefined') {

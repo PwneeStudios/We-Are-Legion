@@ -49,6 +49,26 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             };
         },
 
+        componentDidMount: function() {
+            this.enabled = false;
+            //interop.disableGameInput();
+            interop.toggleChat(true);
+        },
+
+        componentWillUpdate: function() {
+            if (this.enabled) {
+                this.enabled = false;
+                //interop.disableGameInput();
+                interop.toggleChat(true);
+            }
+        },
+        
+        componentWillUnmount: function() {
+            this.enabled = true;
+            //interop.enableGameInput();
+            interop.toggleChat(false);
+        },
+
         onPick: function(map) {
             this.setState({
                 file: map,
