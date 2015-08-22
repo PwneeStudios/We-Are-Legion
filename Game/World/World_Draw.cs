@@ -688,7 +688,7 @@ namespace Game
         {
             CanPlaceItem = false;
 
-            if (!GameClass.Game.GameInputEnabled || DesyncPause)
+            if (!GameClass.Game.GameInputEnabled || DesyncPause || (MapEditorActive && GameClass.Game.MouseOverHud))
             {
                 if (AfterUi) DrawArrowCursor();
                 return;

@@ -221,7 +221,8 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
         renderAt: function() {
             var button = (
                 <Button style={{'pointer-events':'auto', 'float':'left','display':'inline-block'}}
-                        onClick={this.onClick}>
+                        onClick={this.onClick}
+                        onMouseEnter={interop.onOver} onMouseLeave={interop.onLeave} >
                     {this.props.children}
                 </Button>
             );

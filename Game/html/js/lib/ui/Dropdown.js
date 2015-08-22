@@ -1,4 +1,4 @@
-define(['lodash', 'sound', 'react', 'react-bootstrap', 'ui/Item'], function(_, sound, React, ReactBootstrap, Item) {
+define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'ui/Item'], function(_, sound, React, ReactBootstrap, interop, Item) {
     var DropdownButton = ReactBootstrap.DropdownButton;
 
     return React.createClass({
@@ -30,6 +30,14 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'ui/Item'], function(_, s
             }
         },
         
+        onOver: function() {
+            if (!this.props.disabled) {
+                sound.play.hover();
+            }
+
+            interop.onOver();
+        },
+
         render: function() {
             var self = this;
 
@@ -44,14 +52,15 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'ui/Item'], function(_, s
             return (
                 React.createElement("div", {style: style}, 
                     React.createElement(DropdownButton, {className: className, disabled: this.props.disabled, title: item.selectedName || item.name, 
-                                    onMouseEnter: this.props.disabled ? null : sound.play.hover, 
+                                    onMouseEnter: this.onOver, onMouseLeave: interop.onLeave, 
                                     dropup: this.props.dropup}, 
                         _.map(this.props.choices, function(choice) {
                             return (
                                 React.createElement(Item, {disabled: choice.taken, 
                                       item: choice, 
                                       name: choice.name, 
-                                      onSelect: choice.taken ? null : self.onSelect})
+                                      onSelect: choice.taken ? null : self.onSelect, 
+                                      onMouseEnter: self.onOver, onMouseLeave: interop.onLeave})
                             );
                         })
                     )

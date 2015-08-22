@@ -9,12 +9,14 @@ define(['lodash'], function(_) {
         },
         
         onOver: function() {
+            console.log('over');
             if (interop.InXna()) {
                 xna.OnMouseOver();
             }
         },
 
         onLeave: function() {
+            console.log('leave');
             if (interop.InXna()) {
                 xna.OnMouseLeave();
             }
