@@ -33,9 +33,9 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
             Soldier: {
                 image:Units.Soldier,
                 scale:1,
-                hotkey:'1',
+                hotkey:'R',
                 tooltip:
-                    React.createElement(Popover, {title: makeTooltip('Soldier', 'Soldier', '1')}, 
+                    React.createElement(Popover, {title: makeTooltip('Soldier', 'Soldier', 'R')}, 
                         React.createElement("div", null, 
                             "One of many. This is the stock soldier unit that comprises any proper Legion."
                         )
@@ -44,9 +44,9 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
             DragonLord: {
                 image:Units.DragonLord,
                 scale:1,
-                hotkey:'2',
+                hotkey:'T',
                 tooltip:
-                    React.createElement(Popover, {title: makeTooltip('Dragon Lord', 'Dragonlord', '2')}, 
+                    React.createElement(Popover, {title: makeTooltip('Dragon Lord', 'Dragonlord', 'T')}, 
                         "The king piece of your Legion. Your Dragon Lord is the source of your magic casting." + ' ' +
                         "He also has an anti-magic radius that prevents harmful spells from taking effect near him." + ' ' +
                         "In Regicide mode if he is killed you lose the match."
@@ -55,27 +55,27 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
             Necromancer: {
                 image:Units.Necromancer,
                 scale:1,
-                hotkey:'3',
+                hotkey:'Y',
                 tooltip:
-                    React.createElement(Popover, {title: makeTooltip('Necromancer', 'Necromancer', '3')}, 
+                    React.createElement(Popover, {title: makeTooltip('Necromancer', 'Necromancer', 'Y')}, 
                         "This lord of death will raise any corpse near them into a skeletal warrior ready to thirst for blood and brains."
                     ),
             },
             Skeleton: {
                 image:Units.Skeleton,
                 scale:1,
-                hotkey:'B',
+                hotkey:'U',
                 tooltip:
-                    React.createElement(Popover, {title: makeTooltip('Skeleton', 'Skeleton', '5')}, 
+                    React.createElement(Popover, {title: makeTooltip('Skeleton', 'Skeleton', 'U')}, 
                         "Skeletons are the resurrected warriors of the fallen masses. They do not leave corpses for further resurrection when they die."
                     ),
             },
             Terracotta: {
                 image:Units.Terracotta,
                 scale:1,
-                hotkey:'4',
+                hotkey:'I',
                 tooltip:
-                    React.createElement(Popover, {title: makeTooltip('Terracotta Soldier', 'Terracotta', '4')}, 
+                    React.createElement(Popover, {title: makeTooltip('Terracotta Soldier', 'Terracotta', 'I')}, 
                         "This clay warrior is summoned forth directly from the earth beneath your Dragon Lord's feet to fight for your masses."
                     ),
             },
@@ -128,7 +128,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                 y:tileY,
                 hotkey:'V',
                 tooltip:
-                    React.createElement(Popover, {title: makeTooltip('Grass', 'Grass', 'C')}, 
+                    React.createElement(Popover, {title: makeTooltip('Grass', 'Grass', 'V')}, 
                         "Grass tile. Units can walk on this tile type."
                     ),
             },
@@ -237,7 +237,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                 );
 
                 return (
-                    React.createElement(OverlayTrigger, {placement: "bottom", overlay: overlay, delayShow: 420, delayHide: 50}, 
+                    React.createElement(OverlayTrigger, {placement: this.props.placement || 'bottom', overlay: overlay, delayShow: 420, delayHide: 50}, 
                         button
                     )
                 );
@@ -441,7 +441,12 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                                         
                     React.createElement(InGameUtil.MenuButton, {pos: pos(0.5,0.4), size: width(50)}), 
                     React.createElement(Div, {pos: pos(3.5,0.4)}, 
-                        React.createElement(TopButton, {onClick: interop.toggleEditor, size: width(50)}, this.state.EditorActive ? 'Play Test' : 'Edit'), 
+                        React.createElement(TopButton, {onClick: interop.toggleEditor, size: width(50), 
+                            hotkey: "P", 
+                            placement: "right", 
+                            tooltip: this.state.EditorActive ? 'Return to editor' : 'Play test this map'}, 
+                            this.state.EditorActive ? 'Play Test' : 'Edit'
+                        ), 
                         React.createElement(Gap, {width: "0.2"}), 
                         React.createElement(TopButton, {onClick: interop.createNewMap, tooltip: "New Map", hotkey: "Ctrl-N", size: width(50)}, React.createElement(Glyphicon, {glyph: "new-window"})), 
                         React.createElement(TopButton, {onClick: interop.saveMap, tooltip: "Save", hotkey: "Ctrl-S", size: width(50)}, React.createElement(Glyphicon, {glyph: "floppy-save"})), 

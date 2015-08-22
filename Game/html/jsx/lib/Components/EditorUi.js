@@ -33,9 +33,9 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
             Soldier: {
                 image:Units.Soldier,
                 scale:1,
-                hotkey:'1',
+                hotkey:'R',
                 tooltip:
-                    <Popover title={makeTooltip('Soldier', 'Soldier', '1')}>
+                    <Popover title={makeTooltip('Soldier', 'Soldier', 'R')}>
                         <div>
                             One of many. This is the stock soldier unit that comprises any proper Legion.
                         </div>
@@ -44,9 +44,9 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
             DragonLord: {
                 image:Units.DragonLord,
                 scale:1,
-                hotkey:'2',
+                hotkey:'T',
                 tooltip:
-                    <Popover title={makeTooltip('Dragon Lord', 'Dragonlord', '2')}>
+                    <Popover title={makeTooltip('Dragon Lord', 'Dragonlord', 'T')}>
                         The king piece of your Legion. Your Dragon Lord is the source of your magic casting.
                         He also has an anti-magic radius that prevents harmful spells from taking effect near him.
                         In Regicide mode if he is killed you lose the match.
@@ -55,27 +55,27 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
             Necromancer: {
                 image:Units.Necromancer,
                 scale:1,
-                hotkey:'3',
+                hotkey:'Y',
                 tooltip:
-                    <Popover title={makeTooltip('Necromancer', 'Necromancer', '3')}>
+                    <Popover title={makeTooltip('Necromancer', 'Necromancer', 'Y')}>
                         This lord of death will raise any corpse near them into a skeletal warrior ready to thirst for blood and brains.
                     </Popover>,
             },
             Skeleton: {
                 image:Units.Skeleton,
                 scale:1,
-                hotkey:'B',
+                hotkey:'U',
                 tooltip:
-                    <Popover title={makeTooltip('Skeleton', 'Skeleton', '5')}>
+                    <Popover title={makeTooltip('Skeleton', 'Skeleton', 'U')}>
                         Skeletons are the resurrected warriors of the fallen masses. They do not leave corpses for further resurrection when they die.
                     </Popover>,
             },
             Terracotta: {
                 image:Units.Terracotta,
                 scale:1,
-                hotkey:'4',
+                hotkey:'I',
                 tooltip:
-                    <Popover title={makeTooltip('Terracotta Soldier', 'Terracotta', '4')}>
+                    <Popover title={makeTooltip('Terracotta Soldier', 'Terracotta', 'I')}>
                         This clay warrior is summoned forth directly from the earth beneath your Dragon Lord's feet to fight for your masses.
                     </Popover>,
             },
@@ -128,7 +128,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                 y:tileY,
                 hotkey:'V',
                 tooltip:
-                    <Popover title={makeTooltip('Grass', 'Grass', 'C')}>
+                    <Popover title={makeTooltip('Grass', 'Grass', 'V')}>
                         Grass tile. Units can walk on this tile type.
                     </Popover>,
             },
@@ -237,7 +237,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                 );
 
                 return (
-                    <OverlayTrigger placement="bottom" overlay={overlay} delayShow={420} delayHide={50}>
+                    <OverlayTrigger placement={this.props.placement || 'bottom'} overlay={overlay} delayShow={420} delayHide={50}>
                         {button}
                     </OverlayTrigger>
                 );
@@ -441,7 +441,12 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                                         
                     <InGameUtil.MenuButton pos={pos(0.5,0.4)} size={width(50)} />
                     <Div pos={pos(3.5,0.4)}>
-                        <TopButton onClick={interop.toggleEditor} size={width(50)}>{this.state.EditorActive ? 'Play Test' : 'Edit'}</TopButton>
+                        <TopButton onClick={interop.toggleEditor} size={width(50)}
+                            hotkey='P'
+                            placement='right'
+                            tooltip={this.state.EditorActive ? 'Return to editor' : 'Play test this map'} >
+                            {this.state.EditorActive ? 'Play Test' : 'Edit'}
+                        </TopButton>
                         <Gap width='0.2' />
                         <TopButton onClick={interop.createNewMap} tooltip='New Map' hotkey='Ctrl-N' size={width(50)}><Glyphicon glyph='new-window' /></TopButton>
                         <TopButton onClick={interop.saveMap} tooltip='Save' hotkey='Ctrl-S' size={width(50)}><Glyphicon glyph='floppy-save' /></TopButton>
