@@ -215,6 +215,8 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
             if (this.props.onClick) {
                 this.props.onClick();
             }
+
+            interop.editorUiClicked();
             sound.play.click();
         },
                         

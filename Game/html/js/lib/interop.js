@@ -9,14 +9,14 @@ define(['lodash'], function(_) {
         },
         
         onOver: function() {
-            console.log('over');
+            //console.log('over');
             if (interop.InXna()) {
                 xna.OnMouseOver();
             }
         },
 
         onLeave: function() {
-            console.log('leave');
+            //console.log('leave');
             if (interop.InXna()) {
                 xna.OnMouseLeave();
             }
@@ -162,6 +162,12 @@ define(['lodash'], function(_) {
         createNewMap: function(path) {
             if (interop.InXna()) {
                 xna.CreateNewMap(path);
+            }
+        },
+
+        editorUiClicked: function() {
+            if (interop.InXna()) {
+                xna.EditorUiClicked();
             }
         },
 

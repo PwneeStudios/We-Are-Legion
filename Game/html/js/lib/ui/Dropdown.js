@@ -53,6 +53,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'ui/Item'], fu
                 React.createElement("div", {style: style}, 
                     React.createElement(DropdownButton, {className: className, disabled: this.props.disabled, title: item.selectedName || item.name, 
                                     onMouseEnter: this.onOver, onMouseLeave: interop.onLeave, 
+                                    onMouseUp: interop.editorUiClicked, 
                                     dropup: this.props.dropup}, 
                         _.map(this.props.choices, function(choice) {
                             return (

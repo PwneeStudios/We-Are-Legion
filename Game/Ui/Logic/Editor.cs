@@ -36,6 +36,7 @@ namespace Game
         void BindMethods_Editor()
         {
             xnaObj.Bind("PlayButtonPressed", PlayButtonPressed);
+            xnaObj.Bind("EditorUiClicked", EditorUiClicked);
 
             xnaObj.Bind("SetUnitPaint", (sender, e) => { World.SetUnitPaint((int)e.Arguments[0]); return JSValue.Null; });
             xnaObj.Bind("SetTilePaint", (sender, e) => { World.SetTilePaint((int)e.Arguments[0]); return JSValue.Null; });
@@ -61,7 +62,16 @@ namespace Game
 
         JSValue PlayButtonPressed(object sender, JavascriptMethodEventArgs e)
         {
-            GameClass.World.Editor_ToggleMapEditor();
+            World.Editor_ToggleMapEditor();
+
+            return JSValue.Null;
+        }
+
+        JSValue EditorUiClicked(object sender, JavascriptMethodEventArgs e)
+        {
+            if (!World.MapEditorActive) return JSValue.Null;
+
+            World.SetModeToSelect();
 
             return JSValue.Null;
         }

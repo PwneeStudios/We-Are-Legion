@@ -1,4 +1,4 @@
-define(['lodash', 'sound', 'react', 'react-bootstrap'], function(_, sound, React, ReactBootstrap) {
+define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop'], function(_, sound, React, ReactBootstrap, interop) {
     var MenuItem = ReactBootstrap.MenuItem;
 
     return React.createClass({
@@ -15,6 +15,14 @@ define(['lodash', 'sound', 'react', 'react-bootstrap'], function(_, sound, React
             }
         },
 
+        onOver: function() {
+            if (!this.props.disabled) {
+                sound.play.listHover();
+            }
+
+            interop.onOver();
+        },
+
         render: function() {
             var className = null;
             if (this.props.disabled) {
@@ -23,7 +31,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap'], function(_, sound, React
 
             return (
                 React.createElement(MenuItem, {className: className, onClick: this.onSelect, width: "1000px", 
-                          onMouseEnter: this.props.disabled ? null : sound.play.listHover}, 
+                          onMouseEnter: this.onOver, onMouseLeave: interop.onLeave}, 
                     this.props.name
                 )
             );

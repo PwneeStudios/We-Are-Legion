@@ -21,7 +21,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop'], function(_, s
             }
 
             interop.onOver();
-        }
+        },
 
         render: function() {
             var className = null;

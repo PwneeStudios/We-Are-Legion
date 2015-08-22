@@ -231,11 +231,7 @@ namespace Game
             // Switch to standard select
             if (Keys.Escape.Down() || Keys.Back.Down() || Input.RightMousePressed)
             {
-                if (CurUserMode == UserMode.PlaceBuilding || CurUserMode == UserMode.CastSpell)
-                    SkipNextSelectionUpdate = true;
-
-                CurUserMode = UserMode.Select;
-                SkipDeselect = true;
+                SetModeToSelect();
             }
 
             // Switch to unit placement (editor only)
@@ -256,6 +252,15 @@ namespace Game
                     SetUnitPlaceStyle((int)Math.Round(UnitPlaceStyle) + 1);
                 }
             }
+        }
+
+        public void SetModeToSelect()
+        {
+            if (CurUserMode == UserMode.PlaceBuilding || CurUserMode == UserMode.CastSpell)
+                SkipNextSelectionUpdate = true;
+
+            CurUserMode = UserMode.Select;
+            SkipDeselect = true;
         }
 
         public void SetUnitPlaceStyle(int style)
