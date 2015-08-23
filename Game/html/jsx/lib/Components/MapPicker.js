@@ -117,9 +117,8 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             
             var map = this.path() + file;
 
-            this.props.onConfirm(map);
-
             this.props.onRequestHide();
+            this.props.onConfirm(map);
         },
 
         render: function() {

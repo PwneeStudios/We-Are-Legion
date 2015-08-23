@@ -8,6 +8,8 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
     var Glyphicon = ReactBootstrap.Glyphicon;
     var OverlayTrigger = ReactBootstrap.OverlayTrigger;
     var ModalTrigger = ReactBootstrap.ModalTrigger;
+    var Modal = ReactBootstrap.Modal;
+    var OverlayMixin = ReactBootstrap.OverlayMixin;
     
     var Div = ui.Div;
     var Gap = ui.Gap;
@@ -329,7 +331,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
     ];
 
     return React.createClass({
-        mixins: [events.UpdateMixin, events.UpdateEditorMixin, events.ShowUpdateMixin, events.Command],
+        mixins: [OverlayMixin, events.UpdateMixin, events.UpdateEditorMixin, events.ShowUpdateMixin, events.Command],
 
         componentDidMount: function() {
             this.enabled = true;
@@ -398,6 +400,8 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                 MyPlayerNumber: 1,
                 ShowAllPlayers: false,
                 Maps:maps,
+
+                isModalOpen: false,
             };
         },
         
@@ -415,6 +419,55 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
 
         setPaintChoice: function(item) {
             interop.setPaintChoice(item.value);
+        },
+
+        handleToggle: function() {
+            this.setState({
+                isModalOpen: !this.state.isModalOpen
+            });
+        },
+
+        doNothing: function() {
+
+        },
+
+        renderOverlay: function() {
+            if (!this.state.isModalOpen) {
+                return React.createElement("span", null);
+            }
+
+            return (
+                React.createElement(Modal, {bsStyle: "primary", onRequestHide: this.doNothing}, 
+                    React.createElement("div", {className: "modal-body"}, 
+                        React.createElement("h3", null, 
+                            "Your map is being saved..."
+                        )
+                    )
+                )
+            );
+        },
+
+        save: function(map) {
+            var _this = this;
+
+            this.setState({
+                isModalOpen: true,
+            });
+
+            if (interop.InXna()) {
+                var wait = 1000;
+            } else {
+                // If we're not in-game then we will simulate a save time.
+                var wait = 1000;
+            }
+
+            setTimeout(function() {
+                interop.saveMap(map);
+
+                _this.setState({
+                    isModalOpen: false,
+                });
+            }, wait);
         },
 
         render: function() {
@@ -438,7 +491,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                     showPath: true, saveAs: true, 
                     getMaps: interop.getMaps, 
                     confirm: "Save", 
-                    onConfirm: interop.saveMap, 
+                    onConfirm: this.save, 
                     directory: "Custom"}
                   )
             );
@@ -461,7 +514,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
                         ), 
                         React.createElement(Gap, {width: "0.2"}), 
                         React.createElement(TopButton, {onClick: interop.createNewMap, tooltip: "New Map", hotkey: "Ctrl-N", size: width(50)}, React.createElement(Glyphicon, {glyph: "new-window"})), 
-                        React.createElement(TopButton, {onClick: interop.saveMap, ref: "save", tooltip: "Save", hotkey: "Ctrl-S", size: width(50)}, React.createElement(Glyphicon, {glyph: "floppy-save"})), 
+                        React.createElement(TopButton, {onClick: this.save, ref: "save", tooltip: "Save", hotkey: "Ctrl-S", size: width(50)}, React.createElement(Glyphicon, {glyph: "floppy-save"})), 
 
                         React.createElement(ModalTrigger, {modal: saveAs, ref: "saveAs"}, 
                             React.createElement(TopButton, {tooltip: "Save as...", hotkey: "Shift-Ctrl-S", size: width(50)}, React.createElement(Glyphicon, {glyph: "floppy-saved"}))
