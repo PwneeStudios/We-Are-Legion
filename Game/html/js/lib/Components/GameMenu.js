@@ -27,12 +27,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return {
             };
         },
-        
+
         render: function() {
             return (
                 React.createElement(Menu, null, 
                     React.createElement(MenuItem, {eventKey: 1, to: "create-game"}, "Create game"), 
                     React.createElement(MenuItem, {eventKey: 2, to: "find-game"}, "Find game"), 
+                    React.createElement(MenuItem, {eventKey: 2, onClick: interop.startEditor}, "Map Editor"), 
                     React.createElement(MenuItem, {eventKey: 4, to: "options"}, "Options"), 
                     React.createElement(MenuItem, {eventKey: 5, to: "manual"}, "Manual"), 
                     React.createElement(MenuItem, {eventKey: 6, onClick: quitApp}, "Quit Game")

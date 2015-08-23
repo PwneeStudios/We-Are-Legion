@@ -35,6 +35,8 @@ namespace Game
     {
         void BindMethods_Editor()
         {
+            xnaObj.Bind("StartEditor", StartEditor);
+
             xnaObj.Bind("PlayButtonPressed", PlayButtonPressed);
             xnaObj.Bind("EditorUiClicked", EditorUiClicked);
             xnaObj.Bind("ToggleChat", ToggleChat);
@@ -69,9 +71,21 @@ namespace Game
             Send("command", command);
         }
 
+        JSValue StartEditor(object sender, JavascriptMethodEventArgs e)
+        {
+            State = GameState.ToEditor;
+
+            return JSValue.Null;
+        }
+
         JSValue PlayButtonPressed(object sender, JavascriptMethodEventArgs e)
         {
             World.Editor_ToggleMapEditor();
+
+            if (!World.MapEditorActive)
+            {
+                World.FinalizeGeodesics();
+            }
 
             return JSValue.Null;
         }
@@ -169,8 +183,10 @@ namespace Game
                 path = Path.ChangeExtension(path, "m3n");
             }
 
-            Console.WriteLine("Saving map {0}...", path);
+            Console.WriteLine("Finalizing geodesics...", path);
+            World.FinalizeGeodesics();
 
+            Console.WriteLine("Saving map {0}...", path);
             World.Save(path);
 
             return JSValue.Null;

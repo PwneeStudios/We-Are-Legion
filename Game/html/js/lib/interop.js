@@ -177,6 +177,12 @@ define(['lodash'], function(_) {
             }
         },
 
+        startEditor: function() {
+            if (interop.InXna()) {
+                xna.StartEditor();
+            }
+        },
+
         playSound: function(sound, vol) {
             if (interop.InXna()) {
                 if (typeof vol === 'undefined') {

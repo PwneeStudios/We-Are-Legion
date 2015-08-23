@@ -743,7 +743,7 @@ namespace Game
             PostPaintUpdate();
         }
 
-        private void FinalizeGeodesics()
+        public void FinalizeGeodesics()
         {
             foreach (bool polarity in Vals.Bool)
             {

@@ -27,12 +27,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             return {
             };
         },
-        
+
         render: function() {
             return (
                 <Menu>
                     <MenuItem eventKey={1} to='create-game'>Create game</MenuItem>
                     <MenuItem eventKey={2} to='find-game'>Find game</MenuItem>
+                    <MenuItem eventKey={2} onClick={interop.startEditor}>Map Editor</MenuItem>
                     <MenuItem eventKey={4} to='options'>Options</MenuItem>
                     <MenuItem eventKey={5} to='manual'>Manual</MenuItem>
                     <MenuItem eventKey={6} onClick={quitApp}>Quit Game</MenuItem>
