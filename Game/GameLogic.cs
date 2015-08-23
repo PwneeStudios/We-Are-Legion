@@ -298,7 +298,13 @@ namespace Game
         {
             InTrainingLobby = false;
 
-            //Networking._Server.TemporaryJoin();
+            if (Networking._Server != null)
+            {
+                Console.WriteLine("Ending previous server.");
+                Networking._Server.TemporaryJoin();
+                Networking.FinalSend();
+            }
+            
             Program.Server = true;
             Program.Client = false;
             Program.SteamNetworking = true;

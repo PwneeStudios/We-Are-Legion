@@ -26,7 +26,7 @@ namespace Game
         {
             if (ServerThread == null) return;
 
-            ServerThread.Join(300);
+            ServerThread.Join(600);
         }
 
         public void FinalSend()
