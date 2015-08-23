@@ -17,10 +17,10 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
     makeTooltip = InGameUtil.makeTooltip;
 
-    var setActions = function() {
+    var setUiActions = function() {
         var buildingScale = 0.835;
         var buildingY = 0.75;
-        window.Actions = {
+        window.UiActions = {
             Fireball: {
                 image:Spells.Fireball,
                 scale:1,
@@ -102,7 +102,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         
     var setPlayer = function(player) {
         _.assign(window, window.playerImages[player]);
-        setActions();
+        setUiActions();
     };
     
     InGameUtil.setGlobalImages();
@@ -167,7 +167,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         },
 
         renderAt: function() {
-            var action = Actions[this.props.name];
+            var action = UiActions[this.props.name];
             
             var pStyle = {fontSize: '90%', textAlign: 'right'};
             var costY = 4.55 * window.w / window.h;

@@ -462,6 +462,7 @@ namespace Game
 
                 // Check if we need to do a simulation update
                 //if (true)
+                //Console.WriteLine(ServerSimStep);
                 if (GameClass.UnlimitedSpeed || SecondsSinceLastUpdate > DelayBetweenUpdates || SimStep + 2 < ServerSimStep)
                 {
                     if (SimStep < ServerSimStep && !(Program.Server && MinClientSimStep + 2 < ServerSimStep))
