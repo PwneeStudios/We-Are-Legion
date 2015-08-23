@@ -296,7 +296,15 @@ namespace Game
 
         private void NewWorldEditor(string path = null)
         {
-            Networking._Server.TemporaryJoin();
+            InTrainingLobby = false;
+
+            //Networking._Server.TemporaryJoin();
+            Program.Server = true;
+            Program.Client = false;
+            Program.SteamNetworking = true;
+            Program.SteamUsers = new ulong[] { SteamCore.PlayerId(), 0, 0, 0 };
+            Program.SteamServer = SteamCore.PlayerId();
+            Networking.Start();
 
             World = new World();
 
