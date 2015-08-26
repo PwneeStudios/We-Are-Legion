@@ -126,6 +126,7 @@ namespace Game
         public static bool
             GameStarted = false,
             WorldLoaded = false,
+            Spectate = false,
 
             AlwaysActive = false,
             DisableScreenEdge = false,
@@ -263,6 +264,8 @@ namespace Game
 
         public static void ParseOptions(List<string> args)
         {
+            Spectate = false;
+
             GameStarted = false;
             WorldLoaded = false;
             Server = false;

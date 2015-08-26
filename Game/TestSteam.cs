@@ -76,7 +76,7 @@ namespace Game
             Console.WriteLine("data updated");
         }
 
-        void Test_OnLobbyChatUpdate()
+        void Test_OnLobbyChatUpdate(int StateChange, UInt64 id)
         {
             Console.WriteLine("chat updated");
         }

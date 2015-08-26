@@ -183,6 +183,12 @@ define(['lodash'], function(_) {
             }
         },
 
+        watchGame: function(lobby) {
+            if (interop.InXna()) {
+                xna.WatchGame(lobby);
+            }
+        },
+
         playSound: function(sound, vol) {
             if (interop.InXna()) {
                 if (typeof vol === 'undefined') {

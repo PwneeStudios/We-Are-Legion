@@ -239,11 +239,18 @@ namespace Game
                         //Console.WriteLine("!");
                     }
 
-                    if (!Program.GameStarted)
+                    if (Program.GameStarted)
+                    {
+                        if (Program.Spectate)
+                        {
+                            State = GameState.Game;
+                        }
+                    }
+                    else
                     {
                         TimeLoading += DeltaT;
 
-                        if (TimeLoading > 20)
+                        if (TimeLoading > 25)
                         {
                             OnFailedToJoinGame();
                         }
@@ -252,22 +259,7 @@ namespace Game
                         break;
                     }
 
-#if DEBUG
-                    const float LoadTime = .3f;
-#else
-                    const float LoadTime = 2.7f;
-#endif
-                    const float FadeLength = .7f;
-
-                    if (TimeSinceLoad > LoadTime)
-                    {
-                        BlackOverlay((float)(TimeSinceLoad - LoadTime) / FadeLength);
-                    }
-
-                    if (TimeSinceLoad > LoadTime + FadeLength)
-                    {
-                        State = GameState.Game;
-                    }
+                    FadeOutLoading();
 
                     break;
 
@@ -281,16 +273,51 @@ namespace Game
 
                     DrawGame(gameTime);
 
-                    DrawWebView();
-
-                    World.DrawUi();
-
-                    if (TimeSinceLoad < 1.5f)
+                    if (Program.Spectate && ShouldDrawFading())
                     {
-                        BlackOverlay(1f - (float)(TimeSinceLoad - 1.3f) / .2f);
+                        Render.StandardRenderSetup();
+                        DrawFullScreen(Assets.ScreenLoading);
+
+                        FadeOutLoading();
+                    }
+                    else
+                    {
+                        DrawWebView();
+
+                        World.DrawUi();
+
+                        if (TimeSinceLoad < 1.5f)
+                        {
+                            BlackOverlay(1f - (float)(TimeSinceLoad - 1.3f) / .2f);
+                        }
                     }
 
                     break;
+            }
+        }
+
+#if DEBUG
+        const float MinLoadTime = .3f;
+#else
+        const float MinLoadTime = 2.7f;
+#endif
+        const float LoadingFadeLength = .7f;
+
+        private bool ShouldDrawFading()
+        {
+            return TimeSinceLoad <= MinLoadTime + LoadingFadeLength;
+        }
+
+        private void FadeOutLoading()
+        {
+            if (TimeSinceLoad > MinLoadTime)
+            {
+                BlackOverlay((float)(TimeSinceLoad - MinLoadTime) / LoadingFadeLength);
+            }
+
+            if (TimeSinceLoad > MinLoadTime + LoadingFadeLength)
+            {
+                State = GameState.Game;
             }
         }
 
@@ -310,6 +337,7 @@ namespace Game
             Program.SteamNetworking = true;
             Program.SteamUsers = new ulong[] { SteamCore.PlayerId(), 0, 0, 0 };
             Program.SteamServer = SteamCore.PlayerId();
+            Program.Spectate = false;
             Networking.Start();
 
             World = new World();
@@ -400,7 +428,7 @@ namespace Game
             {
                 if (Log.Processing) Console.WriteLine("  -Processing {0}", message);
 
-                if (message.Type == MessageType.Start)
+                if (message.Type == MessageType.Start || message.Type == MessageType.NetworkDesync)
                 {
                     Program.GameStarted = true;
                 }

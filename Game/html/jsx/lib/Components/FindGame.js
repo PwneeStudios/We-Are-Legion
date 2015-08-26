@@ -29,10 +29,14 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         },
         
         onClick: function() {
-            setScreen('game-lobby', {
-                host: false,
-                lobbyIndex: this.props.data.Index,
-            });
+            if (this.props.data.GameStarted) {
+                interop.watchGame(this.props.data.Index);
+            } else {
+                setScreen('game-lobby', {
+                    host: false,
+                    lobbyIndex: this.props.data.Index,
+                });
+            }
         },
 
         render: function() {
@@ -42,7 +46,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                     <td>{this.props.data.MemberCount} / {this.props.data.Capacity}</td>
                     <td>
                         <Button onClick={this.onClick}>
-                            Join
+                            {this.props.data.GameStarted ? 'Watch' : 'Join'}
                         </Button>
                     </td>
                 </tr>

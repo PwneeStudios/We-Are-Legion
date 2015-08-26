@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Linq;
 
 using SteamWrapper;
 
@@ -176,6 +177,11 @@ namespace Game
             ServerThread.Start();
         }
 
+        public void AcceptSteamPlayer(SteamPlayer player)
+        {
+            Networking.SendString(player, "Implicit connection acceptance.");
+        }
+
         void StartSteamServer()
         {
             int count = 1;
@@ -195,13 +201,37 @@ namespace Game
 
                 SteamPlayer player = new SteamPlayer(user);
                 Clients.Add(new ClientSteamConnection(player, count++));
-
-                Networking.SendString(player, "Implicit connection acceptance.");
+                AcceptSteamPlayer(player);
 
                 Console.WriteLine("Connected!");
             }
 
             StartServerThread();
+        }
+
+        public void AddSpectator(ulong user)
+        {
+            foreach (var connection in Clients)
+            {
+                var steam_connection = connection as SteamConnection;
+                if (null != steam_connection)
+                {
+                    if (user == steam_connection.User.Id())
+                    {
+                        // User already exists so do nothing.
+                        return;
+                    }
+                }
+            }
+
+            int max_index = Clients.Max(client => client.Index);
+            if (max_index <= 4) max_index = 5;
+
+            SteamPlayer player = new SteamPlayer(user);
+            Clients.Add(new ClientSteamConnection(player, max_index));
+            AcceptSteamPlayer(player);
+
+            Console.WriteLine("Connected!");
         }
 
         void StartTcpServer()

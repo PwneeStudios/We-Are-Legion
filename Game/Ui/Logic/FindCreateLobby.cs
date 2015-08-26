@@ -43,6 +43,7 @@ namespace Game
             xnaObj.Bind("FindLobbies", FindLobbies);
             xnaObj.Bind("FindFriendLobbies", FindFriendLobbies);
             xnaObj.Bind("JoinLobby", JoinLobby);
+            xnaObj.Bind("WatchGame", WatchGame);
         }
 
         static bool InTrainingLobby = false;
@@ -114,6 +115,13 @@ namespace Game
             return JSValue.Null;
         }
 
+        JSValue WatchGame(object sender, JavascriptMethodEventArgs e)
+        {
+            JoinLobby(sender, e);
+
+            return JSValue.Null;
+        }
+
         void OnCreateLobby(bool result)
         {
             if (result)
@@ -179,7 +187,9 @@ namespace Game
             for (int i = 0; i < num_lobbies; i++)
             {
                 string lobby_name = SteamMatches.GetLobbyData(i, "name");
-                if (!lobby_names.Contains(lobby_name))
+                string game_started = SteamMatches.GetLobbyData(i, "GameStarted");
+                string countdown_started = SteamMatches.GetLobbyData(i, "CountDownStarted");
+                if (!lobby_names.Contains(lobby_name) && !(countdown_started == "true" && game_started != "true"))
                 {
                     int member_count = SteamMatches.GetLobbyMemberCount(i);
                     int capacity = SteamMatches.GetLobbyCapacity(i);
@@ -193,6 +203,7 @@ namespace Game
                     lobby["Index"] = i;
                     lobby["MemberCount"] = member_count;
                     lobby["Capacity"] = capacity;
+                    lobby["GameStarted"] = game_started;
 
                     lobby_names.Add(lobby_name);
                     lobby_list.Add(lobby);

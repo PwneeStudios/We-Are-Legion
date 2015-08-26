@@ -178,7 +178,20 @@ void CallbackClass::OnChatUpdate( LobbyChatUpdate_t * pCallback )
 {
     if ( SteamMatches::s_OnChatUpdate )
     {
-        SteamMatches::s_OnChatUpdate->Invoke();
+        int ChatMemberStateChange = 0;
+        auto state = pCallback->m_rgfChatMemberStateChange;
+        if (state & EChatMemberStateChange::k_EChatMemberStateChangeBanned)
+            ChatMemberStateChange = SteamMatches::ChatMember_Banned;
+        else if (state & EChatMemberStateChange::k_EChatMemberStateChangeDisconnected)
+            ChatMemberStateChange = SteamMatches::ChatMember_Disconnected;
+        else if (state & EChatMemberStateChange::k_EChatMemberStateChangeEntered)
+            ChatMemberStateChange = SteamMatches::ChatMember_Entered;
+        else if (state & EChatMemberStateChange::k_EChatMemberStateChangeKicked)
+            ChatMemberStateChange = SteamMatches::ChatMember_Kicked;
+        else if (state & EChatMemberStateChange::k_EChatMemberStateChangeLeft)
+            ChatMemberStateChange = SteamMatches::ChatMember_Left;
+
+        SteamMatches::s_OnChatUpdate->Invoke( ChatMemberStateChange, pCallback->m_ulSteamIDUserChanged );
     }
 }
 
@@ -418,7 +431,7 @@ System::String^ SteamMatches::GetLobbyData( int Index, System::String^ Key )
 
 void SteamMatches::JoinCreatedLobby(
     Action< bool >^ OnJoinLobby,
-    Action^ OnChatUpdate,
+    Action< int, uint64 >^ OnChatUpdate,
     Action< String^, uint64, String^ >^ OnChatMsg,
     Action^ OnDataUpdate )
 {
@@ -436,7 +449,7 @@ void SteamMatches::JoinCreatedLobby(
 
 void SteamMatches::JoinLobby( int Index,
     Action< bool >^ OnJoinLobby,
-    Action^ OnChatUpdate,
+    Action< int, uint64 >^ OnChatUpdate,
     Action< String^, uint64, String^ >^ OnChatMsg,
     Action^ OnDataUpdate )
 {
@@ -446,7 +459,7 @@ void SteamMatches::JoinLobby( int Index,
 
 void SteamMatches::JoinLobby( CSteamID LobbyID,
     Action< bool >^ OnJoinLobby,
-    Action^ OnChatUpdate,
+    Action< int, uint64 >^ OnChatUpdate,
     Action< String^, uint64, String^ >^ OnChatMsg,
     Action^ OnDataUpdate )
 {
@@ -458,7 +471,7 @@ void SteamMatches::JoinLobby( CSteamID LobbyID,
 
 void SteamMatches::SetLobbyCallbacks(
     Action< bool >^ OnJoinLobby,
-    Action^ OnChatUpdate,
+    Action< int, uint64 >^ OnChatUpdate,
     Action< String^, uint64, String^ >^ OnChatMsg,
     Action^ OnDataUpdate)
 {
@@ -599,7 +612,7 @@ int SteamMatches::GetLobbyMemberCount()
     return SteamMatchmaking()->GetNumLobbyMembers( *SteamMatches::s_CurrentLobby.m_handle );
 }
 
-String^ SteamMatches::GetMememberName( int Index )
+String^ SteamMatches::GetMemberName( int Index )
 {
     if ( SteamCore::InOfflineMode() )
     {
@@ -614,7 +627,7 @@ String^ SteamMatches::GetMememberName( int Index )
     return gcnew System::String( pchName );
 }
 
-UInt64 SteamMatches::GetMememberId( int Index )
+UInt64 SteamMatches::GetMemberId( int Index )
 {
     if ( SteamCore::InOfflineMode() )
     {

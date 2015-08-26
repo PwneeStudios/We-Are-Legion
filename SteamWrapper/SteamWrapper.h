@@ -175,7 +175,7 @@ namespace SteamWrapper
         static Action< bool >^ s_OnFindLobbies;
         static Action< bool >^ s_OnJoinLobby;
         static Action< bool >^ s_OnCreateLobby;
-        static Action^ s_OnChatUpdate;
+        static Action< int, uint64 >^ s_OnChatUpdate;
         static Action< String^, uint64, String^ >^ s_OnChatMsg;
         static Action^ s_OnDataUpdate;
 
@@ -192,15 +192,22 @@ namespace SteamWrapper
             LobbyType_FriendsOnly = 1,
             LobbyType_Private = 2;
 
+        static const int
+            ChatMember_Entered = 1,		 // This user has joined or is joining the chat room
+            ChatMember_Left = 2,		 // This user has left or is leaving the chat room
+            ChatMember_Disconnected = 3, // User disconnected without leaving the chat first
+            ChatMember_Kicked = 4,		 // User kicked
+            ChatMember_Banned = 5;		 // User kicked and banned
+
         static void FindLobbies( Action< bool >^ OnFind );
         static void FindFriendLobbies( Action< bool >^ OnFind );
         
         static int const NumLobbies();
         static String^ GetLobbyData( int Index, String^ Key );
-        static void JoinCreatedLobby(            Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^, uint64, String^ >^ OnChatMsg, Action^ OnDataUpdate );
-        static void JoinLobby( int Index,        Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^, uint64, String^ >^ OnChatMsg, Action^ OnDataUpdate );
-        static void JoinLobby( CSteamID LobbyID, Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^, uint64, String^ >^ OnChatMsg, Action^ OnDataUpdate );
-        static void SetLobbyCallbacks( Action< bool >^ OnJoinLobby, Action^ OnChatUpdate, Action< String^, uint64, String^ >^ OnChatMsg, Action^ OnDataUpdate );
+        static void JoinCreatedLobby(            Action< bool >^ OnJoinLobby, Action< int, uint64 >^ OnChatUpdate, Action< String^, uint64, String^ >^ OnChatMsg, Action^ OnDataUpdate );
+        static void JoinLobby( int Index,        Action< bool >^ OnJoinLobby, Action< int, uint64 >^ OnChatUpdate, Action< String^, uint64, String^ >^ OnChatMsg, Action^ OnDataUpdate );
+        static void JoinLobby( CSteamID LobbyID, Action< bool >^ OnJoinLobby, Action< int, uint64 >^ OnChatUpdate, Action< String^, uint64, String^ >^ OnChatMsg, Action^ OnDataUpdate );
+        static void SetLobbyCallbacks( Action< bool >^ OnJoinLobby, Action< int, uint64 >^ OnChatUpdate, Action< String^, uint64, String^ >^ OnChatMsg, Action^ OnDataUpdate );
 
         static void CreateLobby(Action< bool >^ OnCreateLobby, int LobbyType );
 
@@ -216,8 +223,8 @@ namespace SteamWrapper
 
         static CSteamID GetLobby( int Index );
         static int GetLobbyMemberCount();
-        static String^ GetMememberName( int Index );
-        static UInt64 GetMememberId(int Index);
+        static String^ GetMemberName( int Index );
+        static UInt64 GetMemberId(int Index);
 
         static bool IsLobbyOwner();
 

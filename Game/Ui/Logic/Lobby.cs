@@ -185,6 +185,13 @@ namespace Game
 
         JSValue StartGame(object sender, JavascriptMethodEventArgs e)
         {
+            _StartGame();
+
+            return JSValue.Null;
+        }
+
+        void _StartGame()
+        {
             //Program.ParseOptions("--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double");
             //Program.ParseOptions("--server                --port 13000 --p 1 --t 1234 --n 1 --map Beset.m3n   --debug");
             
@@ -192,12 +199,24 @@ namespace Game
             var lobby = JsonConvert.DeserializeObject(lobby_data, typeof(LobbyInfo));
             LobbyInfo = (LobbyInfo)lobby;
 
-            Program.ParseOptions(ThisPlayer.Args);
+            string game_started = SteamMatches.GetLobbyData("GameStarted");
+            if (game_started == "true")
+            {
+                var player = LobbyInfo.Players.Where(match => match.SteamID != 0).First();
+                Program.ParseOptions(player.Args);
+                Program.Spectate = true;
+                Program.Server = false;
+                Program.Client = true;
+            }
+            else
+            {
+                Program.ParseOptions(ThisPlayer.Args);
+            }
 
             SetScenarioToLoad(Program.StartupMap);
             Networking.Start();
 
-            return JSValue.Null;
+            SteamMatches.SetLobbyData("GameStarted", "true");
         }
 
         JSValue StartGameCountdown(object sender, JavascriptMethodEventArgs e)
@@ -205,7 +224,9 @@ namespace Game
             // Only the lobby owner can start the match.
             if (!SteamMatches.IsLobbyOwner()) return JSValue.Null;
 
-            SteamMatches.SetLobbyJoinable(false);
+            // We never set the lobby to unjoinable.
+            //SteamMatches.SetLobbyJoinable(false);
+
             SteamMatches.SetLobbyData("CountDownStarted", "true");
 
             return JSValue.Null;
@@ -287,6 +308,12 @@ namespace Game
 
             SteamP2P.SetOnP2PSessionRequest(OnP2PSessionRequest);
             SteamP2P.SetOnP2PSessionConnectFail(OnP2PSessionConnectFail);
+
+            string game_started = SteamMatches.GetLobbyData("GameStarted");
+            if (game_started == "true")
+            {
+                _StartGame();
+            }
         }
 
         void OnP2PSessionRequest(UInt64 Player)
@@ -418,7 +445,7 @@ namespace Game
             for (int i = 0; i < members; i++)
             {
                 var player = LobbyInfo.Players[i];
-                player.SteamID = SteamMatches.GetMememberId(i);
+                player.SteamID = SteamMatches.GetMemberId(i);
 
                 // If a match from the previous info exists for this player,
                 // use the previous data, otherwise use defaults.
@@ -433,7 +460,7 @@ namespace Game
                     player = LobbyInfo.Players[i] = match;
                 }
 
-                player.Name = SteamMatches.GetMememberName(i);
+                player.Name = SteamMatches.GetMemberName(i);
             }
 
             // For every player that doesn't have a kingdom/team set,
@@ -588,19 +615,30 @@ namespace Game
             SendLobbyData();
         }
 
-        void OnLobbyChatUpdate()
+        void OnLobbyChatUpdate(int StateChange, UInt64 id)
         {
             Console.WriteLine("lobby chat updated");
 
-            if (Program.GameStarted) return;
-
-            if (!IsHost && SteamMatches.IsLobbyOwner())
+            if (Program.GameStarted)
             {
-                Console.WriteLine("lobby owner left");
-                GameClass.Game.Send("setScreen", "disconnected-from-lobby", new { message = "The lobby host has left. Tell them they suck." });
+                // Game is already started so add player to the spectator list.
+                if (Program.Server)
+                {
+                    Networking._Server.AddSpectator(id);
+                    Console.WriteLine("Spectator joined, resynchronizing network.");
+                    GameClass.World.SynchronizeNetwork();
+                }
             }
+            else
+            {
+                if (!IsHost && SteamMatches.IsLobbyOwner())
+                {
+                    Console.WriteLine("lobby owner left");
+                    GameClass.Game.Send("setScreen", "disconnected-from-lobby", new { message = "The lobby host has left. Tell them they suck." });
+                }
 
-            BuildLobbyInfo();
+                BuildLobbyInfo();
+            }
         }
 
         void OnLobbyChatMsg(string msg, UInt64 id, string name)
