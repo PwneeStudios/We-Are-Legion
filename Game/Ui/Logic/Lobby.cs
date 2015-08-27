@@ -207,7 +207,7 @@ namespace Game
                 Program.Spectate = true;
                 Program.Server = false;
                 Program.Client = true;
-                Program.StartupPlayerNumber = 2;
+                Program.StartupPlayerNumber = 0;
             }
             else
             {

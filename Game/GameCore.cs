@@ -408,10 +408,10 @@ namespace Game
                 Form.Location = new System.Drawing.Point(0, 0);
             }
             
-            _Draw(gameTime);
+            //_Draw(gameTime);
             try
             {
-                //_Draw(gameTime);
+                _Draw(gameTime);
             }
             catch (Exception e)
             {

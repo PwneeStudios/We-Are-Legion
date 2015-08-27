@@ -316,7 +316,10 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                             : null
                         }
                         
-                        <InGameUtil.UnitBox pos={pos(58,85)} size={width(25)} />
+                        {this.state.MyPlayerNumber > 0 ?
+                            <InGameUtil.UnitBox pos={pos(58,85)} size={width(25)} />
+                            : null
+                        }
                     </Div>
                 </div>
             );

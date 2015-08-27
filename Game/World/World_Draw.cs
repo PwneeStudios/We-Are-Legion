@@ -561,7 +561,7 @@ namespace Game
         {
             Render.StandardRenderSetup();
 
-            if (GameClass.Game.UnitDisplayEnabled) DrawSelectedInfo();
+            if (GameClass.Game.UnitDisplayEnabled && MyPlayerValue != 0) DrawSelectedInfo();
             DrawMouseUi(AfterUi: true);
 
             if (MyPlayerNumber == 0) return;
