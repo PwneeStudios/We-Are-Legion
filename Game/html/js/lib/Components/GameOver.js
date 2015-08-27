@@ -98,6 +98,12 @@ function(_, React, ReactBootstrap, interop, events, ui, sound,
                 );
             }
 
+            if (this.props.params.spectator) {
+                var message = 'Match Over';
+            } else {
+                var message = this.props.params.victory ? 'Victory!' : 'Defeat!';
+            }
+
             var players = _.range(1,5);
 
             return (
@@ -106,7 +112,7 @@ function(_, React, ReactBootstrap, interop, events, ui, sound,
                         React.createElement(Well, {style: {'height':'80%'}}, 
                             React.createElement(Div, {pos: pos(5,2), size: width(90)}, 
                                 React.createElement("h1", {style: {float:'left',fontSize:52}}, 
-                                    this.props.params.victory ? 'Victory!' : 'Defeat!'
+                                    message
                                 ), 
 
                                 React.createElement("h1", {style: {float:'right',fontSize:30}}, 

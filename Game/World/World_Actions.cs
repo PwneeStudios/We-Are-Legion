@@ -109,7 +109,7 @@ namespace Game
                 CanPlaceItem = false;
             }
 
-            if (LeftMousePressed)
+            if (LeftMousePressed && MyPlayerInfo != null)
             {
                 if (!MyPlayerInfo.DragonLordAlive && !MapEditorActive)
                 {

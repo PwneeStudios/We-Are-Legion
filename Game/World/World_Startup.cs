@@ -89,12 +89,21 @@ namespace Game
             {
                 DataGroup.UpdateGradient_ToOtherTeams();
             }
-        
-            // Focus camera on a dragon lord.
-            vec2 pos = DataGroup.DragonLordPos(MyPlayerValue);
-            
-            CameraPos = GridToWorldCood(pos);
-            CameraZoom = 80f;
+
+            if (MyPlayerNumber > 0)
+            {
+                // Focus camera on a dragon lord.
+                vec2 pos = DataGroup.DragonLordPos(MyPlayerValue);
+
+                CameraPos = GridToWorldCood(pos);
+                CameraZoom = 80f;
+            }
+            else
+            {
+                // We're a spectator, so choose netural position.
+                CameraPos = vec2.Zero;
+                CameraZoom = 1.45f;
+            }
 
             Render.UnsetDevice();
         }

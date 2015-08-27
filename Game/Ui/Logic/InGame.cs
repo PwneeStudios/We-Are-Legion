@@ -52,7 +52,7 @@ namespace Game
 
         void UpdateParams()
         {
-            if (World.MyPlayerInfo == null && World.MapEditor) return;
+            if (World.MyPlayerInfo == null || World.MapEditor) return;
 
             World.MyPlayerInfo.Update();
 

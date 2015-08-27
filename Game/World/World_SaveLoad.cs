@@ -180,15 +180,18 @@ namespace Game
 
         public void LoadFromBuffer()
         {
-            Render.UnsetDevice();
+            lock (DataGroup)
+            {
+                Render.UnsetDevice();
 
-            var ms = new MemoryStream(WorldBytes);
-            var reader = new BinaryReader(ms);
+                var ms = new MemoryStream(WorldBytes);
+                var reader = new BinaryReader(ms);
 
-            Load(reader);
+                Load(reader);
 
-            reader.Close();
-            ms.Close();
+                reader.Close();
+                ms.Close();
+            }
         }
 
         public void LoadStateFromBuffer(byte[] bytes)
@@ -221,7 +224,11 @@ namespace Game
             RepeatTry(() =>
             {
                 LoadStateFromBuffer(bytes);
-                GameClass.Data.DoUnitSummary(MyPlayerValue, true);
+
+                if (MyPlayerNumber > 0)
+                {
+                    GameClass.Data.DoUnitSummary(MyPlayerValue, true);
+                }
             });
 
             CameraPos = HoldCamPos;
@@ -234,6 +241,8 @@ namespace Game
             SentBookend = false;
             PostUpdateFinished = false;
             PostUpdateStep = 0;
+
+            SecondsSinceLastUpdate = 0;
         }
 
         public string Name, MapFilePath;
@@ -267,21 +276,23 @@ namespace Game
 
         void _Load(string FileName, bool DataOnly = false)
         {
-            Render.UnsetDevice();
-
-            var stream = new FileStream(FileName, FileMode.Open);
-            var reader = new BinaryReader(stream);
-
-            Load(reader);
-
-            reader.Close();
-            stream.Close();
-
-            if (!DataOnly)
+            lock (DataGroup)
             {
-                Startup();
-            }
+                Render.UnsetDevice();
 
+                var stream = new FileStream(FileName, FileMode.Open);
+                var reader = new BinaryReader(stream);
+
+                Load(reader);
+
+                reader.Close();
+                stream.Close();
+
+                if (!DataOnly)
+                {
+                    Startup();
+                }
+            }
             //Migrate();
         }
 

@@ -426,7 +426,7 @@ namespace Game
                         break;
 
                     case UserMode.CastSpell:
-                        if (LeftMousePressed)
+                        if (LeftMousePressed && MyPlayerInfo != null)
                         {
                             if (!MyPlayerInfo.DragonLordAlive)
                             {
@@ -491,8 +491,11 @@ namespace Game
                             HashCheck();
 
                             SimulationUpdate();
-                            
-                            HashCheck(Send:true);
+
+                            if (!Program.Spectate || Program.Spectate && SimStep % 15 == 0)
+                            {
+                                HashCheck(Send: true);
+                            }
                             
                             SentBookend = false;
                             Networking.ToServer(new MessageStartingStep(SimStep));

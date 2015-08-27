@@ -168,7 +168,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
         renderAt: function() {
             var action = UiActions[this.props.name];
-            
+
             var pStyle = {fontSize: '90%', textAlign: 'right'};
             var costY = 4.55 * window.w / window.h;
 
@@ -300,18 +300,21 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                         {/*<Chat.ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/}
                         <Chat.ChatBox pos={pos(0.38+xOffset, 78)} size={width(38)}/>
                         
-                        <Div pos={pos(0+xOffset,85)}>
-                            <ActionButton name='Fireball' />
-                            <ActionButton name='Skeletons' />
-                            <ActionButton name='Necromancer' />
-                            <ActionButton name='Terracotta' />
-                            
-                            <Gap width='1' />
-                            
-                            <ActionButton name='Barracks' />
-                            <ActionButton name='GoldMine' />
-                            <ActionButton name='JadeMine' />
-                        </Div>
+                        {this.state.MyPlayerNumber > 0 ?
+                            <Div pos={pos(0+xOffset,85)}>
+                                <ActionButton name='Fireball' />
+                                <ActionButton name='Skeletons' />
+                                <ActionButton name='Necromancer' />
+                                <ActionButton name='Terracotta' />
+                                
+                                <Gap width='1' />
+                                
+                                <ActionButton name='Barracks' />
+                                <ActionButton name='GoldMine' />
+                                <ActionButton name='JadeMine' />
+                            </Div>
+                            : null
+                        }
                         
                         <InGameUtil.UnitBox pos={pos(58,85)} size={width(25)} />
                     </Div>

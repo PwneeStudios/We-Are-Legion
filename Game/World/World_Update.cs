@@ -580,7 +580,11 @@ namespace Game
                 GameOverPos = CameraPos;
                 GameOverZoom = CameraZoom;
 
-                if (MyTeamInfo.Defeated)
+                if (MyTeamInfo == null)
+                {
+                    GameClass.Game.GameOver(winning_team);
+                }
+                else if (MyTeamInfo.Defeated)
                 {
                     GameClass.Game.Defeat(winning_team);
                 }

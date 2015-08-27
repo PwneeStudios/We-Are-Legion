@@ -407,10 +407,11 @@ namespace Game
                 Console.WriteLine("Form is outside bounds of monitor, moving form now. Draw count {0}", DrawCount);
                 Form.Location = new System.Drawing.Point(0, 0);
             }
-
+            
+            _Draw(gameTime);
             try
             {
-                _Draw(gameTime);
+                //_Draw(gameTime);
             }
             catch (Exception e)
             {

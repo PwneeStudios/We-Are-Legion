@@ -101,6 +101,12 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         },
         
         renderAt: function() {
+            if (this.props.MyPlayerNumber <= 0) {
+                return (
+                    React.createElement("div", null)
+                );
+            }
+
             var x = 2;
             var small = 13.2, big = 17.2;
             

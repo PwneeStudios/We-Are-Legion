@@ -168,7 +168,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
         renderAt: function() {
             var action = UiActions[this.props.name];
-            
+
             var pStyle = {fontSize: '90%', textAlign: 'right'};
             var costY = 4.55 * window.w / window.h;
 
@@ -300,18 +300,21 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                         /*<Chat.ChatBox pos={pos(.38, this.state.ShowChat ? 80 : 85)} size={width(38)}/>*/
                         React.createElement(Chat.ChatBox, {pos: pos(0.38+xOffset, 78), size: width(38)}), 
                         
-                        React.createElement(Div, {pos: pos(0+xOffset,85)}, 
-                            React.createElement(ActionButton, {name: "Fireball"}), 
-                            React.createElement(ActionButton, {name: "Skeletons"}), 
-                            React.createElement(ActionButton, {name: "Necromancer"}), 
-                            React.createElement(ActionButton, {name: "Terracotta"}), 
-                            
-                            React.createElement(Gap, {width: "1"}), 
-                            
-                            React.createElement(ActionButton, {name: "Barracks"}), 
-                            React.createElement(ActionButton, {name: "GoldMine"}), 
-                            React.createElement(ActionButton, {name: "JadeMine"})
-                        ), 
+                        this.state.MyPlayerNumber > 0 ?
+                            React.createElement(Div, {pos: pos(0+xOffset,85)}, 
+                                React.createElement(ActionButton, {name: "Fireball"}), 
+                                React.createElement(ActionButton, {name: "Skeletons"}), 
+                                React.createElement(ActionButton, {name: "Necromancer"}), 
+                                React.createElement(ActionButton, {name: "Terracotta"}), 
+                                
+                                React.createElement(Gap, {width: "1"}), 
+                                
+                                React.createElement(ActionButton, {name: "Barracks"}), 
+                                React.createElement(ActionButton, {name: "GoldMine"}), 
+                                React.createElement(ActionButton, {name: "JadeMine"})
+                            )
+                            : null, 
+                        
                         
                         React.createElement(InGameUtil.UnitBox, {pos: pos(58,85), size: width(25)})
                     )

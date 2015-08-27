@@ -135,7 +135,10 @@ namespace Game
 
             set
             {
-                MyPlayerValue = Player.Vals[value];
+                if (value < 0)
+                    MyPlayerValue = 0;
+                else
+                    MyPlayerValue = Player.Vals[value];
             }
         }
 
@@ -149,7 +152,10 @@ namespace Game
 
             set
             {
-                MyTeamValue = Team.Vals[value];
+                if (value < 0)
+                    MyTeamValue = Team.None;
+                else
+                    MyTeamValue = Team.Vals[value];
             }
         }
 
@@ -157,6 +163,8 @@ namespace Game
         {
             get
             {
+                if (MyPlayerNumber <= 0) return null;
+
                 return PlayerInfo[MyPlayerNumber];
             }
         }
