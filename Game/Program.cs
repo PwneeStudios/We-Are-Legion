@@ -110,6 +110,11 @@ namespace Game
             PosX = -1,
             PosY = -1;
 
+        public const int
+            MaxPlayers = 4,
+            SpectatorIndex = MaxPlayers + 1;
+
+
         public static string
             StartupMap = null;
 

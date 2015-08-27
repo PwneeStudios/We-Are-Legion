@@ -186,6 +186,12 @@ namespace Game
                         }
                         else
                         {
+                            if (message.Source.Index > 4)
+                            {
+                                Console.WriteLine("Warning! Action message from spectator, possibly malicious.");
+                                continue;
+                            }
+
                             Networking.ToClients(ack);
                         }
                     }

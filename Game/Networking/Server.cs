@@ -53,70 +53,75 @@ namespace Game
 
             while (!ShouldStop)
             {
-                PreprocessMessages();
-
-                // Receive
-                foreach (var client in Clients)
+                lock (Clients)
                 {
-                    if (client.IsServer) continue;
+                    PreprocessMessages();
 
-                    if (client.MessageAvailable())
+                    // Receive
+                    foreach (var client in Clients)
                     {
-                        var messages = client.GetMessages();
+                        if (client.IsServer) continue;
 
-                        foreach (var s in messages)
+                        if (client.MessageAvailable())
                         {
-                            try
-                            {
-                                var message = Message.Parse(s);
-                                message.Source = client;
+                            var messages = client.GetMessages();
 
-                                Networking.Inbox.Enqueue(message);
-                                if (Log.Receive) Console.WriteLine("(Server) Received: {0}", message);
-                            }
-                            catch
+                            foreach (var s in messages)
                             {
-                                if (Log.Errors) Console.WriteLine("(Server) Received Malformed: {0}", s);
+                                //Console.WriteLine("----------------- (Server) Received: {0}", s);
+
+                                try
+                                {
+                                    var message = Message.Parse(s);
+                                    message.Source = client;
+
+                                    Networking.Inbox.Enqueue(message);
+                                    if (Log.Receive) Console.WriteLine("(Server) Received: {0}", message);
+                                }
+                                catch
+                                {
+                                    if (Log.Errors) Console.WriteLine("(Server) Received Malformed: {0}", s);
+                                }
                             }
                         }
                     }
-                }
 
-                // Send
-                if (Networking.Outbox.TryDequeue(out package))
-                {
-                    int index    = package.Item1;
-                    var message  = package.Item2;
-                    var encoding = message.Encode();
-
-                    Connection client;
-                    if (index < 0)
+                    // Send
+                    if (Networking.Outbox.TryDequeue(out package))
                     {
-                        client = Connection.Server;
+                        int index = package.Item1;
+                        var message = package.Item2;
+                        var encoding = message.Encode();
+
+                        Connection client;
+                        if (index < 0)
+                        {
+                            client = Connection.Server;
+                        }
+                        else
+                        {
+                            client = Clients.Find(match => match.Index == index);
+                            if (client == null) continue;
+                        }
+
+                        if (client.IsServer)
+                        {
+                            message.Source = Connection.Server;
+                            Networking.Inbox.Enqueue(message);
+                        }
+                        else
+                        {
+                            client.Send(encoding);
+                        }
+
+                        if (Log.Send) Console.WriteLine("(Server) Sent to {0}: {1}", index, encoding);
                     }
                     else
                     {
-                        client = Clients.Find(match => match.Index == index);
-                        if (client == null) continue;
-                    }
-
-                    if (client.IsServer)
-                    {
-                        message.Source = Connection.Server;
-                        Networking.Inbox.Enqueue(message);
-                    }
-                    else
-                    {                            
-                        client.Send(encoding);
-                    }
-
-                    if (Log.Send) Console.WriteLine("(Server) Sent to {0}: {1}", index, encoding);
-                }
-                else
-                {
-                    if (ShouldStopWhenEmpty)
-                    {
-                        ShouldStop = true;
+                        if (ShouldStopWhenEmpty)
+                        {
+                            ShouldStop = true;
+                        }
                     }
                 }
 
@@ -211,27 +216,26 @@ namespace Game
 
         public void AddSpectator(ulong user)
         {
-            foreach (var connection in Clients)
+            lock (Clients)
             {
-                var steam_connection = connection as SteamConnection;
-                if (null != steam_connection)
+                // Remove identical users before adding user back in.
+                Clients.RemoveAll(connection =>
                 {
-                    if (user == steam_connection.User.Id())
-                    {
-                        // User already exists so do nothing.
-                        return;
-                    }
-                }
+                    var steam_connection = connection as SteamConnection;
+                    return null != steam_connection && steam_connection.User.Id() == user;
+                });
+
+                // Make sure the user's index.
+                int max_index = Clients.Max(client => client.Index);
+                if (max_index <= Program.MaxPlayers) max_index = Program.SpectatorIndex;
+
+                // Add the new player.
+                SteamPlayer player = new SteamPlayer(user);
+                Clients.Add(new ClientSteamConnection(player, max_index));
+                AcceptSteamPlayer(player);
+
+                Console.WriteLine("Connected!");
             }
-
-            int max_index = Clients.Max(client => client.Index);
-            if (max_index <= 4) max_index = 5;
-
-            SteamPlayer player = new SteamPlayer(user);
-            Clients.Add(new ClientSteamConnection(player, max_index));
-            AcceptSteamPlayer(player);
-
-            Console.WriteLine("Connected!");
         }
 
         void StartTcpServer()

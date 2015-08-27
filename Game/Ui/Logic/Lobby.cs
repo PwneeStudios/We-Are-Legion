@@ -207,6 +207,7 @@ namespace Game
                 Program.Spectate = true;
                 Program.Server = false;
                 Program.Client = true;
+                Program.StartupPlayerNumber = 2;
             }
             else
             {
@@ -622,8 +623,9 @@ namespace Game
             if (Program.GameStarted)
             {
                 // Game is already started so add player to the spectator list.
-                if (Program.Server)
+                if (Program.Server && StateChange == SteamMatches.ChatMember_Entered)
                 {
+                    Thread.Sleep(500);
                     Networking._Server.AddSpectator(id);
                     Console.WriteLine("Spectator joined, resynchronizing network.");
                     GameClass.World.SynchronizeNetwork();

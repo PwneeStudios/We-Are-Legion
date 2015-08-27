@@ -219,7 +219,7 @@ namespace Game
                 Source.SimStep = SimStep;
                 
                 GameClass.World.MinClientSimStep = Server.Clients
-                    .Where(client => !client.HasLeft)
+                    .Where(client => !client.HasLeft && client.Index <= 4)
                     .Min(client => client.SimStep);
 
                 if (Log.DoUpdates) Console.WriteLine("   Do StartingStep. Client {0} is now at step {1}. We're at step {2}:{3}. Min is {2}", Source.Index, SimStep, GameClass.World.SimStep, GameClass.World.ServerSimStep, GameClass.World.MinClientSimStep);
@@ -383,6 +383,7 @@ namespace Game
                 case PlayerAction.AttackMove: message.Inner = MessageAttackMove.Parse(s); break;
                 case PlayerAction.PlaceBuilding: message.Inner = MessagePlaceBuilding.Parse(s); break;
                 case PlayerAction.CastSpell: message.Inner = MessageCastSpell.Parse(s); break;
+                
                 case PlayerAction.ChatMessage: message.Inner = MessageChat.Parse(s); break;
             }
 

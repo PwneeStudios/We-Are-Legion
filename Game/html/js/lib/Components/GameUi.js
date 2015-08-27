@@ -150,7 +150,7 @@ define(['lodash', 'react', 'interop', 'events',
         },
 
         back: function(e) {
-            if (this.screenHistory().length > 0) {
+            if (this.screenHistory().length > 1) {
                 this.screenHistory().pop();
 
                 var prev = this.screenHistory().pop();
@@ -178,6 +178,8 @@ define(['lodash', 'react', 'interop', 'events',
                 modes[mode] = [];
             }
 
+            console.log('setting mode to ' + newMode);
+
             this.refresh();
         },
 
@@ -192,6 +194,8 @@ define(['lodash', 'react', 'interop', 'events',
                 screen:screen,
                 params:params,
             });
+
+            console.log('setting screen to ' + screen);
         },
 
         render: function() {

@@ -198,6 +198,9 @@ namespace Game
 
         public void Send(string function, params object[] args)
         {
+            if (function == "back")
+                Console.WriteLine("going back!");
+
             string s = "";
             bool first = true;
 
