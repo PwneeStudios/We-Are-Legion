@@ -201,11 +201,28 @@ function(_, React, ReactBootstrap, interop, events, ui,
                 this.startStartGameCountdown();
             }
 
+            var lobbyInfo = values.LobbyInfo ? JSON.parse(values.LobbyInfo) : this.state.lobbyInfo || null;
+            var player = null;
+            if (lobbyInfo) {
+                for (var i = 0; i < 4; i++) {
+                    if (lobbyInfo.Players[i].SteamID === values.SteamID) {
+                        player = lobbyInfo.Players[i];
+                    }
+                }
+
+                for (var i = 0; i < lobbyInfo.Spectators.length; i++) {
+                    if (lobbyInfo.Spectators[i].SteamID === values.SteamID) {
+                        player = lobbyInfo.Spectators[i];
+                    }
+                }
+            }
+
             this.setState({
                 loading: values.LobbyLoading || false,
                 name: values.LobbyName || this.state.name || '',
-                lobbyInfo: values.LobbyInfo ? JSON.parse(values.LobbyInfo) : this.state.lobbyInfo || null,
+                lobbyInfo: lobbyInfo,
                 activePlayer: values.SteamID || this.state.activePlayer,
+                player: player,
                 maps: values.Maps || this.state.maps,
                 map: 'Beset',
             });
@@ -230,7 +247,11 @@ function(_, React, ReactBootstrap, interop, events, ui,
         joinLobby: function() {
             if (!interop.InXna()) {
                 values =
-                    {"SteamID":100410705,"LobbyName":"Cookin' Ash's lobby","Maps":['Beset', 'Clash of Madness', 'Nice'],"LobbyInfo":"{\"Players\":[{\"LobbyIndex\":0,\"Name\":\"Cookin' Ash\",\"SteamID\":100410705,\"GamePlayer\":1,\"GameTeam\":1},{\"LobbyIndex\":0,\"Name\":\"other player\",\"SteamID\":12,\"GamePlayer\":2,\"GameTeam\":3},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0}]}","LobbyLoading":false};
+                    {"SteamID":100410705,"LobbyName":"Cookin' Ash's lobby","Maps":['Beset', 'Clash of Madness', 'Nice'],
+                    "LobbyInfo":
+                    "{\"Players\":[{\"LobbyIndex\":0,\"Name\":\"Cookin' Ash\",\"SteamID\":9100410705,\"GamePlayer\":1,\"GameTeam\":1},{\"LobbyIndex\":0,\"Name\":\"other player\",\"SteamID\":12,\"GamePlayer\":2,\"GameTeam\":3},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0}],\"Spectators\":[{\"Spectator\":true,\"LobbyIndex\":0,\"Name\":\"Cookin' Ash\",\"SteamID\":100410705,\"GamePlayer\":1,\"GameTeam\":1},{\"LobbyIndex\":0,\"Name\":\"other player\",\"SteamID\":12,\"GamePlayer\":2,\"GameTeam\":3}]}",
+                    "LobbyLoading":false,
+                };
 
                 setTimeout(function() {
                     window.lobby(values);
@@ -336,6 +357,14 @@ function(_, React, ReactBootstrap, interop, events, ui,
             interop.setLobbyType(item.value);
         },
 
+        join: function() {
+            interop.join();
+        },
+
+        spectate: function() {
+            interop.spectate();
+        },
+
         render: function() {
             var _this = this;
 
@@ -354,13 +383,26 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
             var disabled = this.state.starting;
             var preventStart = this.state.starting || this.state.mapLoading;
+            var spectate = this.state.player && this.state.player.Spectator;
+
+            if (this.state.lobbyInfo.Spectators.length === 1) {
+                var spectators = '1 watcher';
+            } else if (this.state.lobbyInfo.Spectators.length > 1) {
+                var spectators = this.state.lobbyInfo.Spectators.length + ' watchers';
+            }
 
             return (
                 React.createElement("div", null, 
                     React.createElement(Div, {nonBlocking: true, pos: pos(10,5), size: width(80)}, 
                         React.createElement(Well, {style: {'height':'90%'}}, 
                             /* Lobby name */
-                            React.createElement("h2", null, this.state.name), 
+                            React.createElement("h2", null, 
+                                this.state.name
+                            ), 
+                            spectate ?
+                                React.createElement("h4", null, spectators, " (You are spectating)")
+                                : null, 
+                            
 
                             /* Chat */
                             React.createElement(Chat.ChatBox, {ref: "chat", show: true, full: true, pos: pos(2, 15.5), size: size(43,62.5)}), 
@@ -389,7 +431,22 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                 )
                                 : null, 
 
-                            /* Buttons */
+                            /* Left Buttons */
+                            this.state.player ?
+                                React.createElement(Div, {nonBlocking: true, pos: pos(48,80), size: width(60)}, 
+                                    React.createElement("div", {style: {'float':'left', 'pointer-events':'auto'}}, 
+                                        React.createElement("p", null, 
+                                            spectate ?
+                                                React.createElement(ui.Button, {disabled: disabled, onClick: this.join}, "Join") :
+                                                React.createElement(ui.Button, {disabled: disabled, onClick: this.Spectate}, "Spectate")
+                                            
+                                        )
+                                    )
+                                )
+                                : null, 
+                            
+
+                            /* Right Buttons */
                             React.createElement(Div, {nonBlocking: true, pos: pos(38,80), size: width(60)}, 
                                 React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
                                     React.createElement("p", null, 

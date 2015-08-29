@@ -400,15 +400,17 @@ namespace Game
             int i = 0;
             foreach (var player in LobbyInfo.Players)
             {
-                teams[player.GamePlayer - 1] = player.GameTeam.ToString()[0];
-                kingdoms[i] = player.GamePlayer.ToString()[0];
+                if (!player.Spectator)
+                {
+                    teams[player.GamePlayer - 1] = player.GameTeam.ToString()[0];
+                    kingdoms[i] = player.GamePlayer.ToString()[0];
+                    i++;
+                }
 
                 if (player.SteamID != 0)
                 {
                     num_players++;
                 }
-
-                i++;
             }
 
             string server = "", users = LobbyInfo.Players.Count.ToString();
@@ -422,11 +424,22 @@ namespace Game
                 users += ' ' + player.SteamID.ToString();
             }
 
+            string spectators = LobbyInfo.Spectators.Count.ToString();
+            foreach (var player in LobbyInfo.Spectators)
+            {
+                if (player.Host)
+                {
+                    server = player.SteamID.ToString();
+                }
+
+                users += ' ' + player.SteamID.ToString();
+            }
+
             foreach (var player in LobbyInfo.Players)
             {
                 string type = player.Host ? "--server" : "--client";
                 string options = InTrainingLobby ? "--keep-computer-dragonlords" : "--remove-computer-dragonlords";
-                string networking = string.Format("{0} --steam-networking --steam-server {1} --steam-users {2}", type, server, users);
+                string networking = string.Format("{0} --steam-networking --steam-server {1} --steam-users {2} --steam-spectators", type, server, users, spectators);
                 string game_params = Jsonify(LobbyInfo.Params);
                 string spells = Jsonify(Spells.SpellInfoDict);
 
@@ -445,23 +458,29 @@ namespace Game
             int members = SteamMatches.GetLobbyMemberCount();
             for (int i = 0; i < members; i++)
             {
-                var player = LobbyInfo.Players[i];
-                player.SteamID = SteamMatches.GetMemberId(i);
+                ulong SteamID = SteamMatches.GetMemberId(i);
+                PlayerLobbyInfo player = new PlayerLobbyInfo();
+                player.Spectator = true;
 
-                // If a match from the previous info exists for this player,
-                // use the previous data, otherwise use defaults.
-                var match = PrevInfo.Players.Find(_match => _match.SteamID == player.SteamID);
-                if (match == null)
+                int index = 0;
+                foreach (var prev_player in PrevInfo.Players)
                 {
-                    player.GamePlayer = -1;
-                    player.GameTeam = -1;
-                }
-                else
-                {
-                    player = LobbyInfo.Players[i] = match;
+                    if (prev_player.SteamID == SteamID)
+                    {
+                        player = LobbyInfo.Players[index] = prev_player;
+                        player.Spectator = false;
+                    }
+
+                    index++;
                 }
 
                 player.Name = SteamMatches.GetMemberName(i);
+
+                if (player.Spectator)
+                {
+                    player.SteamID = SteamMatches.GetMemberId(i);
+                    LobbyInfo.Spectators.Add(player);
+                }
             }
 
             // For every player that doesn't have a kingdom/team set,
@@ -691,7 +710,17 @@ namespace Game
                 }
 
                 // Get the info for the player sending the message.
-                var player = LobbyInfo.Players.Where(_player => _player.SteamID == id).First();
+                PlayerLobbyInfo player = null;
+                try
+                {
+                    player = LobbyInfo.Players.Where(_player => _player.SteamID == id).First();
+                    player.Spectator = false;
+                }
+                catch
+                {
+                    player = LobbyInfo.Spectators.Where(_player => _player.SteamID == id).First();
+                    player.Spectator = true;
+                }
 
                 // The third character in the message stores the numeric value.
                 // Parse it and store in this variable.
@@ -715,20 +744,18 @@ namespace Game
                 }
 
                 // Update the player's info.
-                if (msg[1] == 'k')
+                if (msg[1] == 'k' && !player.Spectator)
                 {
                     if (KingdomAvailableTo(value, player))
                     {
-                        //GameClass.Game.AddChatMessage(name, "Has changed kingdoms!");
                         SendAnnouncement(name + " has changed kingdoms!");
                         player.GamePlayer = value;
                     }
                 }
-                else if (msg[1] == 't')
+                else if (msg[1] == 't' && !player.Spectator)
                 {
                     if (TeamAvailableTo(value, player))
                     {
-                        //GameClass.Game.AddChatMessage(name, "Has changed teams!");
                         SendAnnouncement(name + " has changed teams!");
                         player.GameTeam = value;
                     }

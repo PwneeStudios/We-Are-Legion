@@ -31,6 +31,8 @@ namespace Game
 {
     public class PlayerLobbyInfo
     {
+        public bool Spectator;
+
         public int LobbyIndex;
         public string Name;
         public UInt64 SteamID;
@@ -45,6 +47,7 @@ namespace Game
     public class LobbyInfo
     {
         public List<PlayerLobbyInfo> Players = new List<PlayerLobbyInfo>(4);
+        public List<PlayerLobbyInfo> Spectators = new List<PlayerLobbyInfo>();
         public GameParameters Params = new GameParameters();
 
         public LobbyInfo()

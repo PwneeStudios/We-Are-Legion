@@ -189,6 +189,18 @@ define(['lodash'], function(_) {
             }
         },
 
+        join: function() {
+            if (interop.InXna()) {
+                xna.join();
+            }
+        },
+
+        spectate: function() {
+            if (interop.InXna()) {
+                xna.spectate();
+            }
+        },
+
         playSound: function(sound, vol) {
             if (interop.InXna()) {
                 if (typeof vol === 'undefined') {

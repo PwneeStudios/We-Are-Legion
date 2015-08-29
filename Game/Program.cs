@@ -277,7 +277,16 @@ namespace Game
             Client = false;
             SteamNetworking = false;
 
-            if (args.Contains("--p")) { int i = args.IndexOf("--p"); StartupPlayerNumber = int.Parse(args[i + 1]); }
+            if (args.Contains("--p"))
+            { 
+                int i = args.IndexOf("--p");
+                StartupPlayerNumber = int.Parse(args[i + 1]);
+
+                if (StartupPlayerNumber == 0)
+                {
+                    Spectate = true;
+                }
+            }
 
             if (args.Contains("--t"))
             {
