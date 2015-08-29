@@ -47,6 +47,8 @@ namespace Game
             xnaObj.Bind("SendChat", SendChat);
             xnaObj.Bind("SelectTeam", SelectTeam);
             xnaObj.Bind("SelectKingdom", SelectKingdom);
+            xnaObj.Bind("Join", Join);
+            xnaObj.Bind("Spectate", Spectate);
             xnaObj.Bind("OnLobbyChatEnter", OnLobbyChatEnter);
         }
 
@@ -60,7 +62,14 @@ namespace Game
                 }
                 catch
                 {
-                    return null;
+                    try
+                    {
+                        return LobbyInfo.Spectators.Where(match => match.SteamID == SteamCore.PlayerId()).First();
+                    }
+                    catch
+                    {
+                        return null;
+                    }
                 }
             }
         }
@@ -190,20 +199,39 @@ namespace Game
             return JSValue.Null;
         }
 
+        LobbyInfo GetLobbyInfo()
+        {
+            LobbyInfo info = new LobbyInfo();
+
+            var players = SteamMatches.GetLobbyData("Players");
+            info.Players = (List<PlayerLobbyInfo>)JsonConvert.DeserializeObject(players, typeof(List<PlayerLobbyInfo>));
+
+            var spectators = SteamMatches.GetLobbyData("Spectators");
+            info.Spectators = (List<PlayerLobbyInfo>)JsonConvert.DeserializeObject(spectators, typeof(List<PlayerLobbyInfo>));
+
+            var game_params = SteamMatches.GetLobbyData("Params");
+            info.Params = (GameParameters)JsonConvert.DeserializeObject(game_params, typeof(GameParameters));
+
+            info.CommonArgs = SteamMatches.GetLobbyData("CommonArgs");
+
+            return info;
+        }
+
         void _StartGame()
         {
-            //Program.ParseOptions("--client --ip 127.0.0.1 --port 13000 --p 1 --t 1234 --n 2 --map Beset.m3n   --debug --double");
-            //Program.ParseOptions("--server                --port 13000 --p 1 --t 1234 --n 1 --map Beset.m3n   --debug");
-            
-            var lobby_data = SteamMatches.GetLobbyData("LobbyInfo");
-            var lobby = JsonConvert.DeserializeObject(lobby_data, typeof(LobbyInfo));
-            LobbyInfo = (LobbyInfo)lobby;
+            //var lobby_data = SteamMatches.GetLobbyData("LobbyInfo");
+            //var lobby = JsonConvert.DeserializeObject(lobby_data, typeof(LobbyInfo));
+            //LobbyInfo = (LobbyInfo)lobby;
+
+            LobbyInfo = GetLobbyInfo();
 
             string game_started = SteamMatches.GetLobbyData("GameStarted");
             if (game_started == "true")
             {
                 var player = LobbyInfo.Players.Where(match => match.SteamID != 0).First();
-                Program.ParseOptions(player.Args);
+                var args = player.Args + ' ' + LobbyInfo.CommonArgs;
+
+                Program.ParseOptions(args);
                 Program.Spectate = true;
                 Program.Server = false;
                 Program.Client = true;
@@ -211,7 +239,9 @@ namespace Game
             }
             else
             {
-                Program.ParseOptions(ThisPlayer.Args);
+                var args = ThisPlayer.Args + ' ' + LobbyInfo.CommonArgs;
+
+                Program.ParseOptions(args);
             }
 
             SetScenarioToLoad(Program.StartupMap);
@@ -271,6 +301,20 @@ namespace Game
             string msg = string.Format("%k{0}", kingdom);
 
             SteamMatches.SendChatMsg(msg);
+
+            return JSValue.Null;
+        }
+
+        JSValue Join(object sender, JavascriptMethodEventArgs e)
+        {
+            SteamMatches.SendChatMsg("%j1");
+
+            return JSValue.Null;
+        }
+
+        JSValue Spectate(object sender, JavascriptMethodEventArgs e)
+        {
+            SteamMatches.SendChatMsg("%j0");
 
             return JSValue.Null;
         }
@@ -368,7 +412,9 @@ namespace Game
             obj["Maps"] = Maps;
 
             string lobby_name = SteamMatches.GetLobbyData("name");
-            string lobby_info = SteamMatches.GetLobbyData("LobbyInfo");
+            //string lobby_info = SteamMatches.GetLobbyData("LobbyInfo");
+            string lobby_info = Jsonify(GetLobbyInfo());
+            
             if (lobby_info != null && lobby_info.Length > 0 && lobby_name.Length > 0)
             {
                 obj["LobbyInfo"] = lobby_info;
@@ -432,20 +478,41 @@ namespace Game
                     server = player.SteamID.ToString();
                 }
 
-                users += ' ' + player.SteamID.ToString();
+                spectators += ' ' + player.SteamID.ToString();
             }
 
             foreach (var player in LobbyInfo.Players)
             {
-                string type = player.Host ? "--server" : "--client";
-                string options = InTrainingLobby ? "--keep-computer-dragonlords" : "--remove-computer-dragonlords";
-                string networking = string.Format("{0} --steam-networking --steam-server {1} --steam-users {2} --steam-spectators", type, server, users, spectators);
-                string game_params = Jsonify(LobbyInfo.Params);
-                string spells = Jsonify(Spells.SpellInfoDict);
-
-                player.Args = string.Format("{0} --p {1} --k {2} --t {3} --n {4} --map {5} --params {6} --spells {7} {8}",
-                    networking, player.GamePlayer, kingdoms, teams, num_players, Wrap(GameMapName), Wrap(game_params), Wrap(spells), options);
+                ConstructArgs(teams, kingdoms, num_players, server, users, spectators, player, spectator: false);
             }
+
+            foreach (var player in LobbyInfo.Spectators)
+            {
+                player.GameTeam = 0;
+                player.GamePlayer = 0;
+
+                ConstructArgs(teams, kingdoms, num_players, server, users, spectators, player, spectator: true);
+            }
+
+            ConstructCommonArgs(teams, kingdoms, num_players, server, users, spectators);
+        }
+
+        private void ConstructCommonArgs(StringBuilder teams, StringBuilder kingdoms, int num_players, string server, string users, string spectators)
+        {
+            string options = InTrainingLobby ? "--keep-computer-dragonlords" : "--remove-computer-dragonlords";
+            string networking = string.Format("--steam-networking --steam-server {0} --steam-users {1} --steam-spectators {2}", server, users, spectators);
+            string game_params = Jsonify(LobbyInfo.Params);
+            string spells = Jsonify(Spells.SpellInfoDict);
+
+            LobbyInfo.CommonArgs = string.Format("{0} --k {1} --t {2} --n {3} --map {4} --params {5} --spells {6} {7}",
+                networking, kingdoms, teams, num_players, Wrap(GameMapName), Wrap(game_params), Wrap(spells), options);
+        }
+
+        private void ConstructArgs(StringBuilder teams, StringBuilder kingdoms, int num_players, string server, string users, string spectators, PlayerLobbyInfo player, bool spectator)
+        {
+            string type = player.Host ? "--server" : "--client";
+
+            player.Args = string.Format("{0} --p {1}", type, player.GamePlayer);
         }
 
         void BuildLobbyInfo()
@@ -500,17 +567,8 @@ namespace Game
             }
 
             // Set the current player to be the host.
-            foreach (var player in LobbyInfo.Players)
-            {
-                if (player.SteamID == SteamCore.PlayerId())
-                {
-                    player.Host = true;
-                }
-                else
-                {
-                    player.Host = false;
-                }
-            }
+            LobbyInfo.Players.ForEach(player => player.Host = player.SteamID == SteamCore.PlayerId());
+            LobbyInfo.Spectators.ForEach(player => player.Host = player.SteamID == SteamCore.PlayerId());
 
             BuildArgs();
             SetLobbyInfo();
@@ -601,8 +659,13 @@ namespace Game
             SetLobbyName();
             BuildArgs();
 
-            string lobby_info = Jsonify(LobbyInfo);
-            SteamMatches.SetLobbyData("LobbyInfo", lobby_info);
+            //string lobby_info = Jsonify(LobbyInfo);
+            //SteamMatches.SetLobbyData("LobbyInfo", lobby_info);
+
+            SteamMatches.SetLobbyData("Players", Jsonify(LobbyInfo.Players));
+            SteamMatches.SetLobbyData("Spectators", Jsonify(LobbyInfo.Spectators));
+            SteamMatches.SetLobbyData("Params", Jsonify(LobbyInfo.Params));
+            SteamMatches.SetLobbyData("CommonArgs", LobbyInfo.CommonArgs);
         }
 
         JSValue OnLobbyChatEnter(object sender, JavascriptMethodEventArgs e)
@@ -737,23 +800,82 @@ namespace Game
                     return false;
                 }
 
-                // The numeric value for team/player must be one of 1, 2, 3, 4.
-                if (value <= 0 || value > 4)
+                // Join message.
+                if (msg[1] == 'j')
                 {
-                    return false;
-                }
+                    // The numeric value for joining/spectating is 1/0.
+                    if (value != 0 && value != 1) return false;
 
-                // Update the player's info.
-                if (msg[1] == 'k' && !player.Spectator)
+                    if (value == 0) // Player wants to Spectate.
+                    {
+                        //LobbyInfo.Spectators.Add(new PlayerLobbyInfo());
+                        
+                        if (player.Spectator) return false;
+
+                        for (int i = 0; i < LobbyInfo.Players.Count; i++)
+                        {
+                            if (LobbyInfo.Players[i].SteamID == player.SteamID)
+                            {
+                                LobbyInfo.Players[i] = new PlayerLobbyInfo();
+                            }
+                        }
+
+                        player.Spectator = true;
+                        LobbyInfo.Spectators.RemoveAll(_player => _player.SteamID == player.SteamID);
+                        LobbyInfo.Spectators.Add(player);
+
+                        SendAnnouncement(name + " likes to watch.");
+                    }
+                    else // Player wants to Join.
+                    {
+                        if (!player.Spectator) return false;
+
+                        if (!LobbyInfo.Players.Exists(_player => _player.SteamID == 0)) return false;
+
+                        var kingdom = FirstKingdomAvailableTo(player);
+                        var team = FirstTeamAvailableTo(player);
+                        if (kingdom <= 0) return false;
+
+                        player.GamePlayer = kingdom;
+                        player.GameTeam = team;
+                        player.Spectator = false;
+
+                        bool found_a_spot = false;
+                        for (int i = 0; i < LobbyInfo.Players.Count; i++)
+                        {
+                            if (LobbyInfo.Players[i].SteamID == 0)
+                            {
+                                LobbyInfo.Players[i] = player;
+                                found_a_spot = true;
+                                break;
+                            }
+                        }
+
+                        if (!found_a_spot) return false;
+
+                        LobbyInfo.Spectators.RemoveAll(_player => _player.SteamID == player.SteamID);
+
+                        SendAnnouncement(name + " has joined the melee!");
+                    }
+                }
+                // Change kingdom message.
+                else if (msg[1] == 'k' && !player.Spectator)
                 {
+                    // The numeric value for player (kingdom) must be one of 1, 2, 3, 4.
+                    if (value <= 0 || value > 4) return false;
+
                     if (KingdomAvailableTo(value, player))
                     {
                         SendAnnouncement(name + " has changed kingdoms!");
                         player.GamePlayer = value;
                     }
                 }
+                // Change team message.
                 else if (msg[1] == 't' && !player.Spectator)
                 {
+                    // The numeric value for team must be one of 1, 2, 3, 4.
+                    if (value <= 0 || value > 4) return false;
+
                     if (TeamAvailableTo(value, player))
                     {
                         SendAnnouncement(name + " has changed teams!");

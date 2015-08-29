@@ -9,6 +9,19 @@ using namespace msclr::interop;
 using namespace SteamWrapper;
 using namespace System::Collections::Generic;
 
+char const * toPch( System::String^ s )
+{
+    char * pch = new char[ s->Length + 1 ];
+    for ( int i = 0; i < s->Length; i++ )
+    {
+        pch[i] = s[i];
+    }
+
+    pch[ s->Length ] = 0;
+
+    return pch;
+}
+
 bool SteamCore::RestartViaSteamIfNecessary( uint32 AppId )
 {
     bool result = SteamAPI_RestartAppIfNecessary( AppId );
@@ -528,6 +541,7 @@ void SteamMatches::SetLobbyData( System::String^ Key, System::String^ Value )
     marshal_context context;
     const char* pchKey = context.marshal_as< const char* >( Key );
     const char* pchVal = context.marshal_as< const char* >( Value );
+    //char const * pchVal = toPch( Value );
 
     SteamMatchmaking()->SetLobbyData( *SteamMatches::s_CurrentLobby.m_handle, pchKey, pchVal );
 }

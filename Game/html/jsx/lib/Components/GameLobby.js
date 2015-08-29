@@ -193,27 +193,29 @@ function(_, React, ReactBootstrap, interop, events, ui,
                 return;
             }
 
-            //console.log('values');
-            //console.log(JSON.stringify(values));
-            //console.log('---');
-
             if (values.CountDownStarted && !this.state.starting) {
                 this.startStartGameCountdown();
             }
 
             var lobbyInfo = values.LobbyInfo ? JSON.parse(values.LobbyInfo) : this.state.lobbyInfo || null;
             var player = null;
-            if (lobbyInfo) {
+            if (lobbyInfo && lobbyInfo.Players) {
                 for (var i = 0; i < 4; i++) {
                     if (lobbyInfo.Players[i].SteamID === values.SteamID) {
                         player = lobbyInfo.Players[i];
+                        console.log('found the player in players');
                     }
                 }
 
-                for (var i = 0; i < lobbyInfo.Spectators.length; i++) {
-                    if (lobbyInfo.Spectators[i].SteamID === values.SteamID) {
-                        player = lobbyInfo.Spectators[i];
+                if (lobbyInfo.Spectators) {
+                    for (var i = 0; i < lobbyInfo.Spectators.length; i++) {
+                        if (lobbyInfo.Spectators[i].SteamID === values.SteamID) {
+                            player = lobbyInfo.Spectators[i];
+                            console.log('found the player in spectators');
+                        }
                     }
+                } else {
+                    console.log('no spectators found');
                 }
             }
 
@@ -368,7 +370,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
         render: function() {
             var _this = this;
 
-            if (this.state.loading) {
+            if (this.state.loading || !this.state.lobbyInfo || !this.state.lobbyInfo.Players) {
                 return (
                     <div>
                     </div>
@@ -385,10 +387,18 @@ function(_, React, ReactBootstrap, interop, events, ui,
             var preventStart = this.state.starting || this.state.mapLoading;
             var spectate = this.state.player && this.state.player.Spectator;
 
-            if (this.state.lobbyInfo.Spectators.length === 1) {
-                var spectators = '1 watcher';
-            } else if (this.state.lobbyInfo.Spectators.length > 1) {
-                var spectators = this.state.lobbyInfo.Spectators.length + ' watchers';
+            if (spectate) {
+                console.log('we are spectating');
+            } else {
+                console.log('we are in the game');
+            }            
+
+            if (this.state.lobbyInfo.Spectators) {
+                if (this.state.lobbyInfo.Spectators.length === 1) {
+                    var spectators = '1 watcher';
+                } else if (this.state.lobbyInfo.Spectators.length > 1) {
+                    var spectators = this.state.lobbyInfo.Spectators.length + ' watchers';
+                }
             }
 
             return (
@@ -438,7 +448,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                                         <p>
                                             {spectate ?
                                                 <ui.Button disabled={disabled} onClick={this.join}>Join</ui.Button> :
-                                                <ui.Button disabled={disabled} onClick={this.Spectate}>Spectate</ui.Button>
+                                                <ui.Button disabled={disabled} onClick={this.spectate}>Spectate</ui.Button>
                                             }
                                         </p>
                                     </div>

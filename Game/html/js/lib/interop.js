@@ -191,13 +191,13 @@ define(['lodash'], function(_) {
 
         join: function() {
             if (interop.InXna()) {
-                xna.join();
+                xna.Join();
             }
         },
 
         spectate: function() {
             if (interop.InXna()) {
-                xna.spectate();
+                xna.Spectate();
             }
         },
 

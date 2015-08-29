@@ -33,7 +33,6 @@ namespace Game
     {
         public bool Spectator;
 
-        public int LobbyIndex;
         public string Name;
         public UInt64 SteamID;
         public int GamePlayer;
@@ -49,12 +48,13 @@ namespace Game
         public List<PlayerLobbyInfo> Players = new List<PlayerLobbyInfo>(4);
         public List<PlayerLobbyInfo> Spectators = new List<PlayerLobbyInfo>();
         public GameParameters Params = new GameParameters();
+        public string CommonArgs = "";
 
         public LobbyInfo()
         {
         }
 
-        private int Increment = 0;
+        public int Increment = 0;
         public void MarkAsChanged()
         {
             Increment++;
