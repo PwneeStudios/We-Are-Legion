@@ -40,10 +40,19 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         },
 
         render: function() {
+            console.log('a wild lobby');
+            console.log(JSON.stringify(this.props.data));
+
+            var info = this.props.data.NumPlayers + ' / ' + this.props.data.MaxPlayers;
+            if (this.props.data.NumSpectators) {
+                info = React.createElement("span", null, info, "    ", '+' + JSON.stringify(this.props.data.NumSpectators));
+            }
+
             return (
                 React.createElement("tr", null, 
                     React.createElement("td", null, this.props.data.Name), 
-                    React.createElement("td", null, this.props.data.MemberCount, " / ", this.props.data.Capacity), 
+                    /*<td>{this.props.data.MemberCount} / {this.props.data.Capacity}</td>*/
+                    React.createElement("td", null, info), 
                     React.createElement("td", null, 
                         React.createElement(Button, {onClick: this.onClick}, 
                             this.props.data.GameStarted ? 'Watch' : 'Join'

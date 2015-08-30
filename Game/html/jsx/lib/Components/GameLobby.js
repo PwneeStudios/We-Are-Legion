@@ -411,7 +411,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             </h2>
                             {spectate ?
                                 <h4>{spectators} (You are spectating)</h4>
-                                : null
+                                :
+                                <h4>{spectators}</h4>
                             }
 
                             {/* Chat */}

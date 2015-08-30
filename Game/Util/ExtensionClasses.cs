@@ -9,6 +9,21 @@ using FragSharpHelper;
 
 namespace Game
 {
+    public static class Parse
+    {
+        public static int MaybeInt(this string s, int fallback = 0)
+        {
+            try
+            {
+                return int.Parse(s);
+            }
+            catch
+            {
+                return fallback;
+            }
+        }
+    }
+
     public static class InputHelper
     {
         public static bool ShiftDown()

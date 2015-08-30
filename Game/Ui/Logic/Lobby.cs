@@ -349,7 +349,7 @@ namespace Game
             IsHost = SteamMatches.IsLobbyOwner();
 
             SendLobbyData();
-            BuildLobbyInfo();
+            BuildLobbyInfo(joining_player_id:SteamCore.PlayerId());
 
             SteamP2P.SetOnP2PSessionRequest(OnP2PSessionRequest);
             SteamP2P.SetOnP2PSessionConnectFail(OnP2PSessionConnectFail);
@@ -515,9 +515,11 @@ namespace Game
             player.Args = string.Format("{0} --p {1}", type, player.GamePlayer);
         }
 
-        void BuildLobbyInfo()
+        void BuildLobbyInfo(ulong joining_player_id = 0)
         {
             if (!SteamMatches.IsLobbyOwner()) return;
+
+            PlayerLobbyInfo joining_player = null;
 
             var PrevInfo = LobbyInfo;
             LobbyInfo = new LobbyInfo(4);
@@ -548,6 +550,11 @@ namespace Game
                     player.SteamID = SteamMatches.GetMemberId(i);
                     LobbyInfo.Spectators.Add(player);
                 }
+
+                if (player.SteamID == joining_player_id)
+                {
+                    joining_player = player;
+                }
             }
 
             // For every player that doesn't have a kingdom/team set,
@@ -569,6 +576,14 @@ namespace Game
             // Set the current player to be the host.
             LobbyInfo.Players.ForEach(player => player.Host = player.SteamID == SteamCore.PlayerId());
             LobbyInfo.Spectators.ForEach(player => player.Host = player.SteamID == SteamCore.PlayerId());
+
+            // If there is a joinging player try to add them and then rebuild.
+            if (joining_player_id != 0 && joining_player != null)
+            {
+                TryToJoin(joining_player.Name, joining_player);
+                BuildLobbyInfo();
+                return;
+            }
 
             BuildArgs();
             SetLobbyInfo();
@@ -666,6 +681,10 @@ namespace Game
             SteamMatches.SetLobbyData("Spectators", Jsonify(LobbyInfo.Spectators));
             SteamMatches.SetLobbyData("Params", Jsonify(LobbyInfo.Params));
             SteamMatches.SetLobbyData("CommonArgs", LobbyInfo.CommonArgs);
+
+            SteamMatches.SetLobbyData("NumPlayers", LobbyInfo.Players.Count(_player => _player.SteamID != 0).ToString());
+            SteamMatches.SetLobbyData("NumSpectators", LobbyInfo.Spectators.Count.ToString());
+            SteamMatches.SetLobbyData("MaxPlayers", "2");//Program.MaxPlayers.ToString());
         }
 
         JSValue OnLobbyChatEnter(object sender, JavascriptMethodEventArgs e)
@@ -721,7 +740,15 @@ namespace Game
                     GameClass.Game.Send("setScreen", "disconnected-from-lobby", new { message = "The lobby host has left. Tell them they suck." });
                 }
 
-                BuildLobbyInfo();
+                if (StateChange == SteamMatches.ChatMember_Entered)
+                {
+                    BuildLobbyInfo(id);
+                }
+                else
+                {
+                    BuildLobbyInfo();
+                }
+                
             }
         }
 
@@ -808,8 +835,6 @@ namespace Game
 
                     if (value == 0) // Player wants to Spectate.
                     {
-                        //LobbyInfo.Spectators.Add(new PlayerLobbyInfo());
-                        
                         if (player.Spectator) return false;
 
                         for (int i = 0; i < LobbyInfo.Players.Count; i++)
@@ -828,34 +853,7 @@ namespace Game
                     }
                     else // Player wants to Join.
                     {
-                        if (!player.Spectator) return false;
-
-                        if (!LobbyInfo.Players.Exists(_player => _player.SteamID == 0)) return false;
-
-                        var kingdom = FirstKingdomAvailableTo(player);
-                        var team = FirstTeamAvailableTo(player);
-                        if (kingdom <= 0) return false;
-
-                        player.GamePlayer = kingdom;
-                        player.GameTeam = team;
-                        player.Spectator = false;
-
-                        bool found_a_spot = false;
-                        for (int i = 0; i < LobbyInfo.Players.Count; i++)
-                        {
-                            if (LobbyInfo.Players[i].SteamID == 0)
-                            {
-                                LobbyInfo.Players[i] = player;
-                                found_a_spot = true;
-                                break;
-                            }
-                        }
-
-                        if (!found_a_spot) return false;
-
-                        LobbyInfo.Spectators.RemoveAll(_player => _player.SteamID == player.SteamID);
-
-                        SendAnnouncement(name + " has joined the melee!");
+                        TryToJoin(name, player);
                     }
                 }
                 // Change kingdom message.
@@ -889,6 +887,39 @@ namespace Game
             }
 
             SetLobbyInfo();
+            return true;
+        }
+
+        private bool TryToJoin(string name, PlayerLobbyInfo player)
+        {
+            if (!player.Spectator) return false;
+
+            if (!LobbyInfo.Players.Exists(_player => _player.SteamID == 0)) return false;
+
+            var kingdom = FirstKingdomAvailableTo(player);
+            var team = FirstTeamAvailableTo(player);
+            if (kingdom <= 0) return false;
+
+            player.GamePlayer = kingdom;
+            player.GameTeam = team;
+            player.Spectator = false;
+
+            bool found_a_spot = false;
+            for (int i = 0; i < LobbyInfo.Players.Count; i++)
+            {
+                if (LobbyInfo.Players[i].SteamID == 0)
+                {
+                    LobbyInfo.Players[i] = player;
+                    found_a_spot = true;
+                    break;
+                }
+            }
+
+            if (!found_a_spot) return false;
+
+            LobbyInfo.Spectators.RemoveAll(_player => _player.SteamID == player.SteamID);
+
+            SendAnnouncement(name + " has joined the melee!");
             return true;
         }
     }

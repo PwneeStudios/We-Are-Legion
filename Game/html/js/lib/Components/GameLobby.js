@@ -411,7 +411,8 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             ), 
                             spectate ?
                                 React.createElement("h4", null, spectators, " (You are spectating)")
-                                : null, 
+                                :
+                                React.createElement("h4", null, spectators), 
                             
 
                             /* Chat */

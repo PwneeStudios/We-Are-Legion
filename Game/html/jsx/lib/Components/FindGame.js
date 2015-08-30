@@ -40,10 +40,19 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         },
 
         render: function() {
+            console.log('a wild lobby');
+            console.log(JSON.stringify(this.props.data));
+
+            var info = this.props.data.NumPlayers + ' / ' + this.props.data.MaxPlayers;
+            if (this.props.data.NumSpectators) {
+                info = <span>{info} &nbsp;&nbsp; {'+' + JSON.stringify(this.props.data.NumSpectators)}</span>;
+            }
+
             return (
                 <tr>
                     <td>{this.props.data.Name}</td>
-                    <td>{this.props.data.MemberCount} / {this.props.data.Capacity}</td>
+                    {/*<td>{this.props.data.MemberCount} / {this.props.data.Capacity}</td>*/}
+                    <td>{info}</td>
                     <td>
                         <Button onClick={this.onClick}>
                             {this.props.data.GameStarted ? 'Watch' : 'Join'}

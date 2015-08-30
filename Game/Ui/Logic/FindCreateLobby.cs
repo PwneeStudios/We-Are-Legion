@@ -132,8 +132,11 @@ namespace Game
 
             Program.GameStarted = false;
 
-            SteamMatches.SetLobbyMemberLimit(4);
+            SteamMatches.SetLobbyMemberLimit(64);
             SetLobbyName();
+            SteamMatches.SetLobbyData("NumPlayers", "1");
+            SteamMatches.SetLobbyData("NumSpectators", "0");
+            SteamMatches.SetLobbyData("MaxPlayers", "4");
 
             if (InTrainingLobby) SteamMatches.SetLobbyJoinable(false);
 
@@ -204,6 +207,10 @@ namespace Game
                     lobby["MemberCount"] = member_count;
                     lobby["Capacity"] = capacity;
                     lobby["GameStarted"] = game_started;
+
+                    lobby["NumPlayers"] = SteamMatches.GetLobbyData(i, "NumPlayers").MaybeInt();
+                    lobby["NumSpectators"] = SteamMatches.GetLobbyData(i, "NumSpectators").MaybeInt();
+                    lobby["MaxPlayers"] = SteamMatches.GetLobbyData(i, "MaxPlayers").MaybeInt();
 
                     lobby_names.Add(lobby_name);
                     lobby_list.Add(lobby);
