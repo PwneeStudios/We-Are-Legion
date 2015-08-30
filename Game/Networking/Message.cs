@@ -219,7 +219,7 @@ namespace Game
                 Source.SimStep = SimStep;
                 
                 GameClass.World.MinClientSimStep = Server.Clients
-                    .Where(client => !client.HasLeft && client.Index <= 4)
+                    .Where(client => !client.HasLeft && (!client.Spectator || client.IsServer))
                     .Min(client => client.SimStep);
 
                 if (Log.DoUpdates) Console.WriteLine("   Do StartingStep. Client {0} is now at step {1}. We're at step {2}:{3}. Min is {2}", Source.Index, SimStep, GameClass.World.SimStep, GameClass.World.ServerSimStep, GameClass.World.MinClientSimStep);

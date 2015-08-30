@@ -22,6 +22,7 @@ namespace Game
         public bool IsServer = false;
         public bool HasLoaded = false;
 
+        public bool Spectator = false;
         public bool HasLeft = false;
         public bool RequestingPause = false;
 

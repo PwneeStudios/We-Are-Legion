@@ -198,6 +198,7 @@ namespace Game
                 if (user == Program.SteamServer)
                 {
                     Connection.Server.Index = count++;
+                    Connection.Server.Spectator = false;
                     Clients.Add(Connection.Server);
                     Console.WriteLine("Server connected to self!");
 
@@ -209,6 +210,21 @@ namespace Game
                 AcceptSteamPlayer(player);
 
                 Console.WriteLine("Connected!");
+            }
+
+            foreach (UInt64 user in Program.SteamSpectators)
+            {
+                if (user == Program.SteamServer)
+                {
+                    Connection.Server.Index = GetNextSpectatorIndex();
+                    Connection.Server.Spectator = true;
+                    Clients.Add(Connection.Server);
+                    Console.WriteLine("Server connected to self!");
+
+                    continue;
+                }
+
+                AddSpectator(user);
             }
 
             StartServerThread();
@@ -226,16 +242,32 @@ namespace Game
                 });
 
                 // Make sure the user's index.
-                int max_index = Clients.Max(client => client.Index);
-                if (max_index <= Program.MaxPlayers) max_index = Program.SpectatorIndex;
+                int max_index = GetNextSpectatorIndex();
 
                 // Add the new player.
                 SteamPlayer player = new SteamPlayer(user);
-                Clients.Add(new ClientSteamConnection(player, max_index));
+                var client_connection = new ClientSteamConnection(player, max_index);
+                client_connection.Spectator = true;
+
+                Clients.Add(client_connection);
                 AcceptSteamPlayer(player);
 
                 Console.WriteLine("Connected!");
             }
+        }
+
+        private static int GetNextSpectatorIndex()
+        {
+            int max_index = Program.SpectatorIndex;
+
+            try
+            {
+                max_index = Clients.Max(client => client.Index);
+            }
+            catch { }
+
+            if (max_index <= Program.MaxPlayers) max_index = Program.SpectatorIndex;
+            return max_index;
         }
 
         void StartTcpServer()

@@ -439,7 +439,7 @@ namespace Game
                     {
                         message.Source.HasLoaded = true;
 
-                        if (!Program.GameStarted && Server.Clients.Count(client => client.HasLoaded) == Program.NumPlayers)
+                        if (!Program.GameStarted && Server.Clients.Count(client => client.HasLoaded && !client.Spectator) == Program.NumPlayers)
                         {
                             Networking.ToClients(new Message(MessageType.Start));
                         }

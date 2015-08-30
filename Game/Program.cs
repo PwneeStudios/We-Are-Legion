@@ -98,6 +98,7 @@ namespace Game
 
         public static UInt64 SteamServer = 0;
         public static UInt64[] SteamUsers = { 0, 0, 0, 0 };
+        public static List<UInt64> SteamSpectators;
 
         public static int Port = 13000;
         public static string IpAddress = "127.0.0.1";
@@ -349,6 +350,19 @@ namespace Game
                 {
                     string user = args[index + i + 2];
                     SteamUsers[i] = UInt64.Parse(user);
+                }
+            }
+
+            SteamSpectators = new List<ulong>();
+            if (args.Contains("--steam-spectators"))
+            {
+                int index = args.IndexOf("--steam-spectators");
+                int count = int.Parse(args[index + 1]);
+
+                for (int i = 0; i < count; i++)
+                {
+                    string user = args[index + i + 2];
+                    SteamSpectators.Add(UInt64.Parse(user));
                 }
             }
 
