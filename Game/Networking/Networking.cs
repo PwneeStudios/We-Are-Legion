@@ -110,12 +110,22 @@ namespace Game
             if (_Server != null) { _Server.FinalSend(); }
             if (_Client != null) { _Client.FinalSend(); }
             GameClass.World.ProcessInbox();
+
+            CreateBoxes();
         }
 
         public static void Cleanup()
         {
             if (_Server != null) { _Server.Cleanup(); _Server = null; }
             if (_Client != null) { _Client.Cleanup(); _Client = null; }
+
+            CreateBoxes();
+        }
+
+        public static void CreateBoxes()
+        {
+            lock (Outbox) Outbox = new ConcurrentQueue<Tuple<int, Message>>();
+            lock (Inbox) Inbox = new ConcurrentQueue<Message>();
         }
 
         public static bool Send(this NetworkStream stream, string message)

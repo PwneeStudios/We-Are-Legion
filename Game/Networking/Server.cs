@@ -241,7 +241,6 @@ namespace Game
                     return null != steam_connection && steam_connection.User.Id() == user;
                 });
 
-                // Make sure the user's index.
                 int max_index = GetNextSpectatorIndex();
 
                 // Add the new player.
@@ -267,7 +266,7 @@ namespace Game
             catch { }
 
             if (max_index <= Program.MaxPlayers) max_index = Program.SpectatorIndex;
-            return max_index;
+            return max_index + 1;
         }
 
         void StartTcpServer()

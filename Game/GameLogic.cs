@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
@@ -337,6 +338,7 @@ namespace Game
             Program.SteamNetworking = true;
             Program.SteamUsers = new ulong[] { SteamCore.PlayerId(), 0, 0, 0 };
             Program.SteamServer = SteamCore.PlayerId();
+            Program.SteamSpectators = new List<ulong>();
             Program.Spectate = false;
             Networking.Start();
 
@@ -469,14 +471,6 @@ namespace Game
                         }
                     }
                 }
-
-                //UInt64 user = Program.SteamUsers[player];
-                //string name = new SteamPlayer(user).Name();
-
-                //if (name != null && name.Length > 0)
-                //{
-                //    World.PlayerInfo[player + 1].Name = name;
-                //}
             }
         }
 
