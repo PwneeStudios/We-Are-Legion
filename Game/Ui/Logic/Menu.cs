@@ -38,6 +38,7 @@ namespace Game
         void BindMethods_Menu()
         {
             xnaObj.Bind("LeaveGame", LeaveGame);
+            xnaObj.Bind("ReturnToLobby", ReturnToLobby);
             xnaObj.Bind("QuitApp", QuitApp);
             xnaObj.Bind("DumpState", DumpState);
 
@@ -53,7 +54,27 @@ namespace Game
             return JSValue.Null;
         }
 
+        JSValue ReturnToLobby(object sender, JavascriptMethodEventArgs e)
+        {
+            LeaveGameNetwork();
+
+            GameClass.Game.Send("back");
+
+            return JSValue.Null;
+        }
+
         JSValue LeaveGame(object sender, JavascriptMethodEventArgs e)
+        {
+            LeaveGameNetwork();
+
+            SteamMatches.LeaveLobby();
+
+            ReturnToMainMenu();
+
+            return JSValue.Null;
+        }
+
+        private static void LeaveGameNetwork()
         {
             if (Program.Server)
             {
@@ -63,14 +84,8 @@ namespace Game
             {
                 Networking.ToServer(new Message(MessageType.LeaveGame));
             }
-            
+
             Networking.FinalSend();
-
-            SteamMatches.LeaveLobby();
-
-            ReturnToMainMenu();
-
-            return JSValue.Null;
         }
 
         public void OnFailedToJoinGame()

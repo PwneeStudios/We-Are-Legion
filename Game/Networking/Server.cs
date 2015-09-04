@@ -238,7 +238,12 @@ namespace Game
                 Clients.RemoveAll(connection =>
                 {
                     var steam_connection = connection as SteamConnection;
-                    return null != steam_connection && steam_connection.User.Id() == user;
+                    if (null != steam_connection) return steam_connection.User.Id() == user;
+
+                    var client_steam_connection = connection as ClientSteamConnection;
+                    if (null != client_steam_connection) return client_steam_connection.User.Id() == user;
+
+                    return false;
                 });
 
                 int index = GetNextSpectatorIndex();

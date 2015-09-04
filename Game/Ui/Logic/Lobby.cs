@@ -737,16 +737,15 @@ namespace Game
                     Console.WriteLine("lobby owner left");
                     GameClass.Game.Send("setScreen", "disconnected-from-lobby", new { message = "The lobby host has left. Tell them they suck." });
                 }
+            }
 
-                if (StateChange == SteamMatches.ChatMember_Entered)
-                {
-                    BuildLobbyInfo(id);
-                }
-                else
-                {
-                    BuildLobbyInfo();
-                }
-                
+            if (StateChange == SteamMatches.ChatMember_Entered)
+            {
+                BuildLobbyInfo(id);
+            }
+            else
+            {
+                BuildLobbyInfo();
             }
         }
 
