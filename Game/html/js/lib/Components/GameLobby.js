@@ -200,7 +200,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
             var lobbyInfo = values.LobbyInfo ? JSON.parse(values.LobbyInfo) : this.state.lobbyInfo || null;
             var player = null;
             if (lobbyInfo && lobbyInfo.Players) {
-                for (var i = 0; i < 4; i++) {
+                for (var i = 0; i < lobbyInfo.Players.length; i++) {
                     if (lobbyInfo.Players[i].SteamID === values.SteamID) {
                         player = lobbyInfo.Players[i];
                         console.log('found the player in players');

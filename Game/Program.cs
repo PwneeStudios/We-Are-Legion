@@ -113,8 +113,8 @@ namespace Game
 
         public const int
             MaxPlayers = 4,
+            MaxTeams = 4,
             SpectatorIndex = MaxPlayers + 1;
-
 
         public static string
             StartupMap = null;

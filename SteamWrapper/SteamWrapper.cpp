@@ -523,7 +523,7 @@ void SteamMatches::CreateLobby( Action< bool >^ OnCreateLobby, int LobbyType )
 
     ELobbyType type = IntToLobbyType( LobbyType );
 
-    SteamAPICall_t hSteamAPICall = SteamMatchmaking()->CreateLobby( type, 4 );
+    SteamAPICall_t hSteamAPICall = SteamMatchmaking()->CreateLobby( type, 64 );
     g_CallResultLobbyCreated.Set( hSteamAPICall, g_CallbackClassInstance, &CallbackClass::OnLobbyCreated );
 }
 

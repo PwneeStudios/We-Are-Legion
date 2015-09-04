@@ -103,7 +103,7 @@ define(['lodash', 'react', 'interop', 'events',
             // Test menus
             //setScreen('options');
             //setScreen('game-lobby', {host:true});
-            setScreen('game-lobby', {host:false});
+            //setScreen('game-lobby', {host:false});
             //setScreen('manual');
             //setScreen('find-game');
 

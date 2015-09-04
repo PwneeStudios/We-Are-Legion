@@ -322,7 +322,7 @@ namespace Game
         bool IsHost = false;
         void OnJoinLobby(bool result)
         {
-            LobbyInfo = new LobbyInfo(4);
+            LobbyInfo = new LobbyInfo(Program.MaxPlayers);
 
             if (result)
             {
@@ -522,7 +522,7 @@ namespace Game
             PlayerLobbyInfo joining_player = null;
 
             var PrevInfo = LobbyInfo;
-            LobbyInfo = new LobbyInfo(4);
+            LobbyInfo = new LobbyInfo(Program.MaxPlayers);
 
             int members = SteamMatches.GetLobbyMemberCount();
             for (int i = 0; i < members; i++)
@@ -561,12 +561,12 @@ namespace Game
             // choose an available initial value.
             foreach (var player in LobbyInfo.Players)
             {
-                if (player.GamePlayer <= 0 || player.GamePlayer > 4)
+                if (player.GamePlayer <= 0 || player.GamePlayer > Program.MaxPlayers)
                 {
                     player.GamePlayer = FirstKingdomAvailableTo(player);
                 }
 
-                if (player.GameTeam <= 0 || player.GameTeam > 4)
+                if (player.GameTeam <= 0 || player.GameTeam > Program.MaxTeams)
                 {
                     player.GameTeam = FirstTeamAvailableTo(player);
                     player.HasPickedTeam = true;
@@ -591,7 +591,7 @@ namespace Game
 
         int FirstTeamAvailableTo(PlayerLobbyInfo player)
         {
-            for (int team = 1; team <= 4; team++)
+            for (int team = 1; team <= Program.MaxTeams; team++)
             {
                 if (TeamAvailableTo(team, player))
                 {
@@ -604,7 +604,7 @@ namespace Game
 
         int FirstKingdomAvailableTo(PlayerLobbyInfo player)
         {
-            for (int kingdom = 1; kingdom <= 4; kingdom++)
+            for (int kingdom = 1; kingdom <= Program.MaxPlayers; kingdom++)
             {
                 if (KingdomAvailableTo(kingdom, player))
                 {
@@ -674,9 +674,6 @@ namespace Game
             SetLobbyName();
             BuildArgs();
 
-            //string lobby_info = Jsonify(LobbyInfo);
-            //SteamMatches.SetLobbyData("LobbyInfo", lobby_info);
-
             SteamMatches.SetLobbyData("Players", Jsonify(LobbyInfo.Players));
             SteamMatches.SetLobbyData("Spectators", Jsonify(LobbyInfo.Spectators));
             SteamMatches.SetLobbyData("Params", Jsonify(LobbyInfo.Params));
@@ -684,7 +681,7 @@ namespace Game
 
             SteamMatches.SetLobbyData("NumPlayers", LobbyInfo.Players.Count(_player => _player.SteamID != 0).ToString());
             SteamMatches.SetLobbyData("NumSpectators", LobbyInfo.Spectators.Count.ToString());
-            SteamMatches.SetLobbyData("MaxPlayers", "2");//Program.MaxPlayers.ToString());
+            SteamMatches.SetLobbyData("MaxPlayers", Program.MaxPlayers.ToString());
         }
 
         JSValue OnLobbyChatEnter(object sender, JavascriptMethodEventArgs e)
@@ -860,7 +857,7 @@ namespace Game
                 else if (msg[1] == 'k' && !player.Spectator)
                 {
                     // The numeric value for player (kingdom) must be one of 1, 2, 3, 4.
-                    if (value <= 0 || value > 4) return false;
+                    if (value <= 0 || value > Program.MaxPlayers) return false;
 
                     if (KingdomAvailableTo(value, player))
                     {
@@ -872,7 +869,7 @@ namespace Game
                 else if (msg[1] == 't' && !player.Spectator)
                 {
                     // The numeric value for team must be one of 1, 2, 3, 4.
-                    if (value <= 0 || value > 4) return false;
+                    if (value <= 0 || value > Program.MaxTeams) return false;
 
                     if (TeamAvailableTo(value, player))
                     {
