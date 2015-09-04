@@ -425,14 +425,17 @@ namespace Game
 
         void PreGame()
         {
+            if (Program.GameStarted) return;
+
             Message message;
             while (Networking.Inbox.TryDequeue(out message))
             {
-                if (Log.Processing) Console.WriteLine("  -Processing {0}", message);
+                if (Log.Processing) Console.WriteLine("  -Pre Game Processing {0}", message);
 
                 if (message.Type == MessageType.Start || message.Type == MessageType.NetworkDesync)
                 {
                     Program.GameStarted = true;
+                    break;
                 }
 
                 if (Program.Server)

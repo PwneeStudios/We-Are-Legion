@@ -155,7 +155,7 @@ namespace Game
             Message message;
             while (Networking.Inbox.TryDequeue(out message))
             {
-                if (Log.Processing) Console.WriteLine("  -Processing {0}", message);
+                if (Log.Processing) Console.WriteLine("  -In Game Processing {0}", message);
 
                 if (Program.Server)
                 {

@@ -241,11 +241,11 @@ namespace Game
                     return null != steam_connection && steam_connection.User.Id() == user;
                 });
 
-                int max_index = GetNextSpectatorIndex();
+                int index = GetNextSpectatorIndex();
 
                 // Add the new player.
                 SteamPlayer player = new SteamPlayer(user);
-                var client_connection = new ClientSteamConnection(player, max_index);
+                var client_connection = new ClientSteamConnection(player, index);
                 client_connection.Spectator = true;
 
                 Clients.Add(client_connection);

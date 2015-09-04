@@ -1,3 +1,5 @@
+using System;
+
 using FragSharpFramework;
 
 using Microsoft.Xna.Framework;
@@ -7,8 +9,12 @@ namespace Game
 {
     public partial class World : SimShader
     {
+        public int Guid = 0;
+
         public World(bool Skeleton = false, GameParameters GameParams = null, bool RemoveComputerDragonLords = false)
         {
+            Guid = new Random().Next();
+
             this.RemoveComputerDragonLords = RemoveComputerDragonLords;
 
             MyPlayerNumber = Program.StartupPlayerNumber;

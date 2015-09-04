@@ -141,7 +141,9 @@ function(_, React, ReactBootstrap, interop, events, ui,
             if (this.props.info.Name) {
                 var myTeamChoices = arrayClone(teamChoices);
                 var myKingdomChoices = arrayClone(kingdomChoices);
-                for (i = 1; i < 5; i++) {
+                var numPlayers = this.props.player.length + 1;
+
+                for (i = 1; i < numPlayers; i++) {
                     if (i === this.props.player) continue;
 
                     var player = this.props.players[i-1];
@@ -386,6 +388,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
             var disabled = this.state.starting;
             var preventStart = this.state.starting || this.state.mapLoading;
             var spectate = this.state.player && this.state.player.Spectator;
+            var numPlayers = this.state.lobbyInfo.Players.length;
 
             if (spectate) {
                 console.log('we are spectating');
@@ -422,13 +425,15 @@ function(_, React, ReactBootstrap, interop, events, ui,
                             /* Player Table */
                             React.createElement(Div, {nonBlocking: true, pos: pos(48,53), size: width(50), style: {'pointer-events':'auto', 'font-size': '1.4%;'}}, 
                                 React.createElement(Table, {style: {width:'100%'}}, React.createElement("tbody", null, 
-                                    _.map(_.range(1, 5), function(i) {
+                                    _.map(_.range(1, numPlayers+1), function(i) {
                                         return (
-                                            React.createElement(PlayerEntry, {disabled: disabled, 
-                                                         player: i, 
-                                                         info: _this.state.lobbyInfo.Players[i-1], 
-                                                         players: _this.state.lobbyInfo.Players, 
-                                                         activePlayer: _this.props.params.training ? null : _this.state.activePlayer})
+                                            React.createElement(PlayerEntry, {
+                                                disabled: disabled, 
+                                                player: i, 
+                                                info: _this.state.lobbyInfo.Players[i-1], 
+                                                players: _this.state.lobbyInfo.Players, 
+                                                activePlayer: _this.props.params.training ? null : _this.state.activePlayer}
+                                            )
                                          );
                                     })
                                 ))

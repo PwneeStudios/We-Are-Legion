@@ -345,6 +345,7 @@ namespace Game
             /// The minimum simulation step of any client/server.
             MinClientSimStep = 0;
 
+
         /// <summary>
         /// After the simulation updates there are additional updates that must occur.
         /// These are broken into phases. This variable trackes which phase we are currently in.

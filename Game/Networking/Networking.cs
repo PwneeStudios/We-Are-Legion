@@ -24,8 +24,6 @@ namespace Game
 
         public static void SendString(SteamPlayer player, string s)
         {
-            //SteamP2P.SendMessage(player, s); return;
-
             var bytes = StringHelper.GetBytes(s);
             SteamP2P.SendBytes(player, bytes);
         }

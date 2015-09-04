@@ -363,6 +363,7 @@ namespace Game
 
         void OnP2PSessionRequest(UInt64 Player)
         {
+            Console.WriteLine("Accept session with {0}", Player);
             SteamP2P.AcceptP2PSessionWithPlayer(new SteamPlayer(Player));
             GetNames();
         }
