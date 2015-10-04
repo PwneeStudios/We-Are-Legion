@@ -135,7 +135,7 @@ function(_, React, ReactBootstrap, interop, events, ui, sound,
                             React.createElement(Div, {nonBlocking: true, pos: pos(36,72), size: width(60)}, 
                                 React.createElement("div", {style: {'float':'right', 'pointer-events':'auto'}}, 
                                     React.createElement("p", null, 
-                                        React.createElement(Button, {onClick: leaveGame}, "Leave Game")
+                                        React.createElement(Button, {onClick: interop.returnToLobby}, "Return to Lobby")
                                     )
                                 )
                             )

@@ -58,13 +58,25 @@ namespace Game
         {
             LeaveGameNetwork();
 
-            GameClass.Game.Send("back");
+            ResetLobby();
+
+            Send("removeMode", "in-game");
+            Send("setMode", "main-menu");
+
+            State = GameState.MainMenu;
+            awesomium.AllowMouseEvents = true;
+            
+            SetMapThreadFunc(GameMapName);
 
             return JSValue.Null;
         }
 
         JSValue LeaveGame(object sender, JavascriptMethodEventArgs e)
         {
+            // Use this if you want leaving a game to return you to the lobby,
+            // rather than returning you to the main menu.
+            //return ReturnToLobby(sender, e);
+
             LeaveGameNetwork();
 
             SteamMatches.LeaveLobby();

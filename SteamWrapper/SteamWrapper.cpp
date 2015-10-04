@@ -663,11 +663,24 @@ bool SteamMatches::IsLobbyOwner()
     return SteamUser()->GetSteamID() == SteamMatchmaking()->GetLobbyOwner( *SteamMatches::s_CurrentLobby.m_handle );
 }
 
+bool SteamMatches::InLobby()
+{
+    return SteamMatches::s_CurrentLobby.m_handle != NULL;
+}
+
 void SteamMatches::LeaveLobby()
 {
     if ( SteamMatches::s_CurrentLobby.m_handle == NULL ) return;
 
-    SteamMatchmaking()->LeaveLobby( *SteamMatches::s_CurrentLobby.m_handle );
+    try
+    {
+        SteamMatchmaking()->LeaveLobby( *SteamMatches::s_CurrentLobby.m_handle );
+    }
+    catch (Exception^ e)
+    {
+        
+    }
+
     SteamMatches::s_CurrentLobby.m_handle = NULL;
 }
 

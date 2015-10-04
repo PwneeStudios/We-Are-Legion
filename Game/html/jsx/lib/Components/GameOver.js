@@ -135,7 +135,7 @@ function(_, React, ReactBootstrap, interop, events, ui, sound,
                             <Div nonBlocking pos={pos(36,72)} size={width(60)}>
                                 <div style={{'float':'right', 'pointer-events':'auto'}}>
                                     <p>
-                                        <Button onClick={leaveGame}>Leave Game</Button>
+                                        <Button onClick={interop.returnToLobby}>Return to Lobby</Button>
                                     </p>
                                 </div>
                             </Div>

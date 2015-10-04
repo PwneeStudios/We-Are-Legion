@@ -129,6 +129,7 @@ define(['lodash', 'react', 'interop', 'events',
             if (this.screenHistory().length > 0) {
                 var prev = this.screenHistory().pop();
 
+                prev.params.fromRefresh = true;
                 this.setScreen(prev.screen, prev.params);
             }
 

@@ -227,6 +227,7 @@ namespace SteamWrapper
         static UInt64 GetMemberId(int Index);
 
         static bool IsLobbyOwner();
+        static bool InLobby();
 
         static void LeaveLobby();
         static void SetLobbyJoinable( bool Joinable );

@@ -191,12 +191,37 @@ function(_, React, ReactBootstrap, interop, events, ui,
         ],
 
         onLobbyUpdate: function(values) {
+            console.log('lobby update!');
+
             if (!this.state.loading && values.LobbyLoading) {
                 return;
             }
 
-            if (values.CountDownStarted && !this.state.starting) {
+            console.log('should we startStartGameCountdown?');
+            console.log(JSON.stringify(values));
+            console.log(values.CountDownStarted);
+            console.log(values.GameStarted);
+            console.log(this.state.starting);
+            console.log(!this.state.starting);
+            console.log(values.CountDownStarted && !this.state.starting);
+            console.log(values.CountDownStarted && !this.state.starting && !values.GameStarted);
+            console.log('----------');
+            console.log(values.CountDownStarted);
+            console.log(values.GameStarted);
+            console.log(this.state.starting);
+            console.log(!this.state.starting);
+            console.log(values.CountDownStarted && !this.state.starting);
+            console.log(values.CountDownStarted && !this.state.starting && !values.GameStarted);
+            console.log('----------');
+
+            if (values.CountDownStarted && !this.state.starting && !values.GameStarted) {
+                console.log('startStartGameCountdown');
+                console.log(JSON.stringify(values));
+                console.log(values.CountDownStarted);
+                console.log(values.GameStarted);
+                console.log(this.state.starting);
                 this.startStartGameCountdown();
+                console.log(values.CountDownStarted && !this.state.starting && !values.GameStarted);
             }
 
             var lobbyInfo = values.LobbyInfo ? JSON.parse(values.LobbyInfo) : this.state.lobbyInfo || null;
@@ -310,12 +335,16 @@ function(_, React, ReactBootstrap, interop, events, ui,
         },
 
         onClickStart: function() {
+            console.log('click start');
+
             if (interop.InXna()) {
                 xna.StartGameCountdown();
             } else {
                 setTimeout(function() {
+                    console.log('do lobby update with');
                     window.lobby({
-                        CountDownStarted:true
+                        CountDownStarted:true,
+                        GameStarted:false,
                     });
                 }, 100);
             }

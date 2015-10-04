@@ -250,6 +250,14 @@ namespace Game
             SteamMatches.SetLobbyData("GameStarted", "true");
         }
 
+        void ResetLobby()
+        {
+            if (!SteamMatches.IsLobbyOwner()) return;
+
+            SteamMatches.SetLobbyData("CountDownStarted", "");
+            SteamMatches.SetLobbyData("GameStarted", "");
+        }
+
         JSValue StartGameCountdown(object sender, JavascriptMethodEventArgs e)
         {
             // Only the lobby owner can start the match.
@@ -259,6 +267,7 @@ namespace Game
             //SteamMatches.SetLobbyJoinable(false);
 
             SteamMatches.SetLobbyData("CountDownStarted", "true");
+            SteamMatches.SetLobbyData("GameStarted", "");
 
             return JSValue.Null;
         }

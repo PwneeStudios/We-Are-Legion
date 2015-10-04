@@ -91,6 +91,12 @@ define(['lodash'], function(_) {
             }
         },
 
+        returnToLobby: function() {
+            if (interop.InXna()) {
+                xna.ReturnToLobby();
+            }
+        },
+
         setLobbyType: function(type) {
             if (interop.InXna()) {
                 xna.SetLobbyType(type);

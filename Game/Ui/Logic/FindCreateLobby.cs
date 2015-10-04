@@ -58,6 +58,9 @@ namespace Game
                 SteamCore.SetOfflineMode(true);
             }
 
+            if (SteamMatches.InLobby()) return JSValue.Null;
+
+            try { SteamMatches.LeaveLobby(); } catch { };
             SteamMatches.CreateLobby(OnCreateLobby, lobbyType);
 
             return JSValue.Null;
@@ -108,6 +111,10 @@ namespace Game
         {
             InTrainingLobby = false;
             Program.GameStarted = false;
+
+            if (SteamMatches.InLobby()) return JSValue.Null;
+            
+            try { SteamMatches.LeaveLobby(); } catch { };
 
             int lobby = (int)e.Arguments[0];
             SteamMatches.JoinLobby(lobby, OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);
