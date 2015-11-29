@@ -19,6 +19,7 @@ packages/
 *.userprefs
 *.psess
 *.vsp
+*.pdb
 
 Steam/ContentBuilder/builder
 Steam/ContentBuilder/builder/logs/

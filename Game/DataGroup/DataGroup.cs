@@ -19,8 +19,13 @@ namespace Game
                 Units[_i * GridHeight + _j] = (Color) new unit(type, player, team, 0);
                 Data[_i * GridHeight + _j]  = (Color) new data(Dir.Stationary, _[_j - j], 0, _[_i - i]);
 
+                // Set the target vector to the provided coordinate.
                 vec4 packed_coord = pack_vec2(coord);
                 TargetData[_i * GridHeight + _j] = (Color)packed_coord;
+
+                // Randomize the target vector for the buildings tiles.
+                // This makes units coming from this building head in random directions.
+                // Otherwise units will naturally pile up around the building until an order is given.
                 //TargetData[_i * GridHeight + _j] = new Color(rnd.Next(0, 4), rnd.Next(0, 256), rnd.Next(0, 4), rnd.Next(0, 256));
             }
         }
