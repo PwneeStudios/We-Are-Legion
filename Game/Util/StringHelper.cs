@@ -1,10 +1,6 @@
 using System;
 using System.IO;
 using System.Text;
-using Microsoft.Xna.Framework;
-
-using FragSharpHelper;
-using FragSharpFramework;
 
 namespace Game
 {

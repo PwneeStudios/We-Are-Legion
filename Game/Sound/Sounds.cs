@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-using Microsoft.Xna.Framework.Audio;
-
-namespace Game
+﻿namespace Game
 {
     public static class Sounds
     {

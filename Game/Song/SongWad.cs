@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using Microsoft.Xna.Framework;
 using XnaMedia = Microsoft.Xna.Framework.Media;
 
 namespace Game

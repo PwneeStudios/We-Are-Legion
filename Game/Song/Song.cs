@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-
-using Microsoft.Xna.Framework;
-using XnaAudio = Microsoft.Xna.Framework.Audio;
 using XnaMedia = Microsoft.Xna.Framework.Media;
 
 namespace Game

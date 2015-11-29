@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.IO.Compression;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
