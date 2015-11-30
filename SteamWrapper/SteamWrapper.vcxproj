@@ -65,6 +65,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>"sdk\public\steam\lib\win32\sdkencryptedappticket.lib";"sdk\redistributable_bin\steam_api.lib";%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>sdk\redistributable_bin;sdk\public\steam;sdk\public\steam\lib\win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

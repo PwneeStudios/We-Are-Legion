@@ -241,13 +241,17 @@
       <XnaReferenceType>Content</XnaReferenceType>
       <Project>{3B7C433E-A48C-4456-ACAE-C63EC83E631C}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Hjg.Pngcs\Hjg.Pngcs.csproj">
+      <Project>{fd3b0d50-46b3-4a83-9a6d-c641569142cf}</Project>
+      <Name>Hjg.Pngcs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SteamWrapper\SteamWrapper.vcxproj">
       <Project>{a36eedb7-1111-47af-9862-a2a36583897a}</Project>
       <Name>SteamWrapper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6,Profile=Client">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 Client Profile %28x86 and x64%29</ProductName>
       <Install>true</Install>
@@ -298,10 +302,13 @@ IF $(ConfigurationName) EQU Release (
   ECHO $(ProjectDir)html
   ECHO $(TargetDir)html
   xcopy "$(ProjectDir)html" "$(TargetDir)html\" /E /D /Y
+)
 
+IF $(ConfigurationName) EQU ReleaseFALSE (
   ECHO Running PngToCsData
   "$(SolutionDir)PngToCsData\PngToCsData\bin\Release\PngToCsData.exe" "$(ProjectDir)Drawing/GameColors.cs" "$(SolutionDir)Content/Art/FarColors.png"
 )
+
 </PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>

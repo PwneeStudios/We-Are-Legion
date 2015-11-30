@@ -103,13 +103,13 @@ namespace Game
             {
                 Console.WriteLine("Using Steam, checking if restart is needed.");
 
-                //if (SteamCore.RestartViaSteamIfNecessary(354560))
-                //{
-                //    Console.WriteLine("Restart is needed.");
+                if (SteamCore.RestartViaSteamIfNecessary(354560))
+                {
+                    Console.WriteLine("Restart is needed.");
 
-                //    Exit();
-                //    return;
-                //}
+                    Exit();
+                    return;
+                }
 
                 Console.WriteLine("Initializing Steam.");
                 SteamInitialized = SteamCore.Initialize();

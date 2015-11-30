@@ -4,6 +4,9 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
+using Hjg.Pngcs;
+using Hjg.Pngcs.Chunks;
+
 using Microsoft.Xna.Framework.Graphics;
 
 using FragSharpFramework;
@@ -29,6 +32,20 @@ namespace Game
 
     public static class BinaryReaderExtension
     {
+        public static Texture2D ReadTextureData(this BinaryReader reader, Texture2D texture)
+        {
+            int length = reader.ReadInt32();
+            Console.WriteLine("Array read size is {0}", length);
+            byte[] b = new byte[length];
+            reader.Read(b, 0, length);
+
+            var mstream = new MemoryStream(b);
+            Png.FromPng(mstream, texture);
+            mstream.Close();
+
+            return texture;
+        }
+
         public static Texture2D ReadTexture2D(this BinaryReader reader)
         {
             int length = reader.ReadInt32();
@@ -67,7 +84,58 @@ namespace Game
             }
         }
 
-        public static Texture2D FromPng(Stream stream)
+        public static Texture2D FromPng(Stream stream, Texture2D texture = null)
+        {
+            var pngr = new PngReader(stream);
+
+            var ms = new MemoryStream();
+            var pngw = new PngWriter(ms, pngr.ImgInfo);
+
+            Console.WriteLine(pngr.ToString());                // Just information.
+            int chunkBehav = ChunkCopyBehaviour.COPY_ALL_SAFE; // Tell to copy all 'safe' chunks.
+            pngw.CopyChunksFirst(pngr, chunkBehav);            // Copy some metadata from reader.
+
+            int channels = pngr.ImgInfo.Channels;
+            int w = pngr.ImgInfo.Cols;
+            int h = pngr.ImgInfo.Rows;
+            var bytes = new byte[w * h * channels];
+
+            int count = 0;
+            for (int row = 0; row < pngr.ImgInfo.Rows; row++)
+            {
+                ImageLine l1 = pngr.ReadRowInt(row);           // Format: RGBRGB... or RGBARGBA...
+                for (int j = 0; j < pngr.ImgInfo.Cols; j++)
+                {
+                    byte R = (byte)l1.Scanline[j * channels];
+                    byte G = (byte)l1.Scanline[j * channels + 1];
+                    byte B = (byte)l1.Scanline[j * channels + 2];
+                    byte A = (byte)l1.Scanline[j * channels + 3];
+
+                    bytes[count++] = B;
+                    bytes[count++] = G;
+                    bytes[count++] = R;
+                    bytes[count++] = A;
+
+                    //Console.WriteLine("Pixel value: {0} {1} {2} {3}");
+                }
+
+                pngw.WriteRow(l1, row);
+            }
+
+            pngw.End();
+            ms.Close();
+            pngr.End();
+
+            if (texture == null) {
+                texture = new Texture2D(GameClass.Graphics, w, h);
+            }
+            
+            texture.SetData(bytes);
+
+            return texture;
+        }
+
+        public static Texture2D _FromPng(Stream stream)
         {
             using (Bitmap bitmap = new Bitmap(stream))
             {
@@ -299,24 +367,24 @@ namespace Game
         public void Load(BinaryReader reader)
         {
             // Grid data
-            DataGroup.CurrentData.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.CurrentUnits.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.PreviousData.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.PreviousUnits.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.Extra.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.TargetData.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.Tiles.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.Corpses.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.Magic.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.Necromancy.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.AntiMagic.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.DistanceToOtherTeams.SetData(reader.ReadTexture2D().GetData());
+            reader.ReadTextureData(DataGroup.CurrentData);
+            reader.ReadTextureData(DataGroup.CurrentUnits);
+            reader.ReadTextureData(DataGroup.PreviousData);
+            reader.ReadTextureData(DataGroup.PreviousUnits);
+            reader.ReadTextureData(DataGroup.Extra);
+            reader.ReadTextureData(DataGroup.TargetData);
+            reader.ReadTextureData(DataGroup.Tiles);
+            reader.ReadTextureData(DataGroup.Corpses);
+            reader.ReadTextureData(DataGroup.Magic);
+            reader.ReadTextureData(DataGroup.Necromancy);
+            reader.ReadTextureData(DataGroup.AntiMagic);
+            reader.ReadTextureData(DataGroup.DistanceToOtherTeams);
 
-            DataGroup.RandomField.SetData(reader.ReadTexture2D().GetData());
+            reader.ReadTextureData(DataGroup.RandomField);
 
-            DataGroup.Geo.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.AntiGeo.SetData(reader.ReadTexture2D().GetData());
-            foreach (var dir in Dir.Vals) DataGroup.Dirward[dir].SetData(reader.ReadTexture2D().GetData());
+            reader.ReadTextureData(DataGroup.Geo);
+            reader.ReadTextureData(DataGroup.AntiGeo);
+            foreach (var dir in Dir.Vals) reader.ReadTextureData(DataGroup.Dirward[dir]);
 
             // Info
             CameraPos.x = reader.ReadSingle();
