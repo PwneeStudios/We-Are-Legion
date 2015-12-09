@@ -39,27 +39,12 @@ sampler fs_param_CurrentData : register(s1) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_PreviousData, using register location 2
-float2 fs_param_PreviousData_size;
-float2 fs_param_PreviousData_dxdy;
-
-Texture fs_param_PreviousData_Texture;
-sampler fs_param_PreviousData : register(s2) = sampler_state
-{
-    texture   = <fs_param_PreviousData_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-// Texture Sampler for fs_param_CurrentUnit, using register location 3
+// Texture Sampler for fs_param_CurrentUnit, using register location 2
 float2 fs_param_CurrentUnit_size;
 float2 fs_param_CurrentUnit_dxdy;
 
 Texture fs_param_CurrentUnit_Texture;
-sampler fs_param_CurrentUnit : register(s3) = sampler_state
+sampler fs_param_CurrentUnit : register(s2) = sampler_state
 {
     texture   = <fs_param_CurrentUnit_Texture>;
     MipFilter = Point;
@@ -69,45 +54,14 @@ sampler fs_param_CurrentUnit : register(s3) = sampler_state
     AddressV  = Clamp;
 };
 
-// Texture Sampler for fs_param_PreviousUnit, using register location 4
-float2 fs_param_PreviousUnit_size;
-float2 fs_param_PreviousUnit_dxdy;
-
-Texture fs_param_PreviousUnit_Texture;
-sampler fs_param_PreviousUnit : register(s4) = sampler_state
-{
-    texture   = <fs_param_PreviousUnit_Texture>;
-    MipFilter = Point;
-    MagFilter = Point;
-    MinFilter = Point;
-    AddressU  = Clamp;
-    AddressV  = Clamp;
-};
-
-// Texture Sampler for fs_param_Texture, using register location 5
-float2 fs_param_Texture_size;
-float2 fs_param_Texture_dxdy;
-
-Texture fs_param_Texture_Texture;
-sampler fs_param_Texture : register(s5) = sampler_state
-{
-    texture   = <fs_param_Texture_Texture>;
-    MipFilter = Linear;
-    MagFilter = Linear;
-    MinFilter = Linear;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
-};
-
-float fs_param_PercentSimStepComplete;
 
 // The following variables are included because they are referenced but are not function parameters. Their values will be set at call time.
-// Texture Sampler for fs_param_FarColor, using register location 6
+// Texture Sampler for fs_param_FarColor, using register location 3
 float2 fs_param_FarColor_size;
 float2 fs_param_FarColor_dxdy;
 
 Texture fs_param_FarColor_Texture;
-sampler fs_param_FarColor : register(s6) = sampler_state
+sampler fs_param_FarColor : register(s3) = sampler_state
 {
     texture   = <fs_param_FarColor_Texture>;
     MipFilter = Point;

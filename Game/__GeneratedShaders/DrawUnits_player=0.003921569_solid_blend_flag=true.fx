@@ -95,8 +95,8 @@ sampler fs_param_UnitTexture : register(s5) = sampler_state
     MipFilter = Linear;
     MagFilter = Linear;
     MinFilter = Linear;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 // Texture Sampler for fs_param_ShadowTexture, using register location 6
@@ -110,8 +110,8 @@ sampler fs_param_ShadowTexture : register(s6) = sampler_state
     MipFilter = Linear;
     MagFilter = Linear;
     MinFilter = Linear;
-    AddressU  = Wrap;
-    AddressV  = Wrap;
+    AddressU  = Clamp;
+    AddressV  = Clamp;
 };
 
 float fs_param_s;

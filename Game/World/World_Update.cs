@@ -379,6 +379,8 @@ namespace Game
 
         void PostSimulationUpdate()
         {
+            Render.UnsetDevice();
+
             switch (PostUpdateStep)
             {
                 case 0:

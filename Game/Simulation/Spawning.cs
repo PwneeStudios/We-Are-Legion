@@ -78,21 +78,24 @@ namespace Game
             unit unit_here = Unit[Here];
             magic magic_here = Magic[Here];
 
-            if (Something(data_here) && data_here.action == UnitAction.Spawning)
+            if (Something(data_here))
             {
-                unit barracks = Unit[dir_to_vec(Reverse(data_here.direction))];
-                unit_here.player = barracks.player;
-                unit_here.team   = barracks.team;
-                unit_here.type   = UnitType.Footman;
-                unit_here.anim   = Anim.Stand;
-            }
+                if (data_here.action == UnitAction.Spawning)
+                {
+                    unit barracks = Unit[dir_to_vec(Reverse(data_here.direction))];
+                    unit_here.player = barracks.player;
+                    unit_here.team = barracks.team;
+                    unit_here.type = UnitType.Footman;
+                    unit_here.anim = Anim.Stand;
+                }
 
-            if (Something(data_here) && data_here.action == UnitAction.Raising)
-            {
-                unit_here.player = magic_here.raising_player;
-                unit_here.team = GetPlayerVal(Teams, magic_here.raising_player);
-                unit_here.type = UnitType.Skeleton;
-                unit_here.anim = Anim.StartRaise;
+                if (data_here.action == UnitAction.Raising)
+                {
+                    unit_here.player = magic_here.raising_player;
+                    unit_here.team = GetPlayerVal(Teams, magic_here.raising_player);
+                    unit_here.type = UnitType.Skeleton;
+                    unit_here.anim = Anim.StartRaise;
+                }
             }
 
             return unit_here;

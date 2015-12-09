@@ -471,7 +471,7 @@ namespace Game
             Render.UnsetDevice();
         }
 
-        static void DrawFullScreen(Texture2D texture)
+        public static void DrawFullScreen(Texture2D texture)
         {
             float a = 1920f / 1080f;
             var q = new RectangleQuad();

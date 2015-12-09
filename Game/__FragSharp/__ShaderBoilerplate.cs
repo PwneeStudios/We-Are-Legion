@@ -14771,19 +14771,9 @@ namespace Game
         private static EffectParameter param_player_0_fs_param_CurrentData_Texture;
         private static EffectParameter param_player_0_fs_param_CurrentData_size;
         private static EffectParameter param_player_0_fs_param_CurrentData_dxdy;
-        private static EffectParameter param_player_0_fs_param_PreviousData_Texture;
-        private static EffectParameter param_player_0_fs_param_PreviousData_size;
-        private static EffectParameter param_player_0_fs_param_PreviousData_dxdy;
         private static EffectParameter param_player_0_fs_param_CurrentUnit_Texture;
         private static EffectParameter param_player_0_fs_param_CurrentUnit_size;
         private static EffectParameter param_player_0_fs_param_CurrentUnit_dxdy;
-        private static EffectParameter param_player_0_fs_param_PreviousUnit_Texture;
-        private static EffectParameter param_player_0_fs_param_PreviousUnit_size;
-        private static EffectParameter param_player_0_fs_param_PreviousUnit_dxdy;
-        private static EffectParameter param_player_0_fs_param_Texture_Texture;
-        private static EffectParameter param_player_0_fs_param_Texture_size;
-        private static EffectParameter param_player_0_fs_param_Texture_dxdy;
-        private static EffectParameter param_player_0_fs_param_PercentSimStepComplete;
         private static EffectParameter param_player_0_fs_param_FarColor_Texture;
         private static EffectParameter param_player_0_fs_param_FarColor_size;
         private static EffectParameter param_player_0_fs_param_FarColor_dxdy;
@@ -14793,19 +14783,9 @@ namespace Game
         private static EffectParameter param_player_0p003921569_fs_param_CurrentData_Texture;
         private static EffectParameter param_player_0p003921569_fs_param_CurrentData_size;
         private static EffectParameter param_player_0p003921569_fs_param_CurrentData_dxdy;
-        private static EffectParameter param_player_0p003921569_fs_param_PreviousData_Texture;
-        private static EffectParameter param_player_0p003921569_fs_param_PreviousData_size;
-        private static EffectParameter param_player_0p003921569_fs_param_PreviousData_dxdy;
         private static EffectParameter param_player_0p003921569_fs_param_CurrentUnit_Texture;
         private static EffectParameter param_player_0p003921569_fs_param_CurrentUnit_size;
         private static EffectParameter param_player_0p003921569_fs_param_CurrentUnit_dxdy;
-        private static EffectParameter param_player_0p003921569_fs_param_PreviousUnit_Texture;
-        private static EffectParameter param_player_0p003921569_fs_param_PreviousUnit_size;
-        private static EffectParameter param_player_0p003921569_fs_param_PreviousUnit_dxdy;
-        private static EffectParameter param_player_0p003921569_fs_param_Texture_Texture;
-        private static EffectParameter param_player_0p003921569_fs_param_Texture_size;
-        private static EffectParameter param_player_0p003921569_fs_param_Texture_dxdy;
-        private static EffectParameter param_player_0p003921569_fs_param_PercentSimStepComplete;
         private static EffectParameter param_player_0p003921569_fs_param_FarColor_Texture;
         private static EffectParameter param_player_0p003921569_fs_param_FarColor_size;
         private static EffectParameter param_player_0p003921569_fs_param_FarColor_dxdy;
@@ -14815,19 +14795,9 @@ namespace Game
         private static EffectParameter param_player_0p007843138_fs_param_CurrentData_Texture;
         private static EffectParameter param_player_0p007843138_fs_param_CurrentData_size;
         private static EffectParameter param_player_0p007843138_fs_param_CurrentData_dxdy;
-        private static EffectParameter param_player_0p007843138_fs_param_PreviousData_Texture;
-        private static EffectParameter param_player_0p007843138_fs_param_PreviousData_size;
-        private static EffectParameter param_player_0p007843138_fs_param_PreviousData_dxdy;
         private static EffectParameter param_player_0p007843138_fs_param_CurrentUnit_Texture;
         private static EffectParameter param_player_0p007843138_fs_param_CurrentUnit_size;
         private static EffectParameter param_player_0p007843138_fs_param_CurrentUnit_dxdy;
-        private static EffectParameter param_player_0p007843138_fs_param_PreviousUnit_Texture;
-        private static EffectParameter param_player_0p007843138_fs_param_PreviousUnit_size;
-        private static EffectParameter param_player_0p007843138_fs_param_PreviousUnit_dxdy;
-        private static EffectParameter param_player_0p007843138_fs_param_Texture_Texture;
-        private static EffectParameter param_player_0p007843138_fs_param_Texture_size;
-        private static EffectParameter param_player_0p007843138_fs_param_Texture_dxdy;
-        private static EffectParameter param_player_0p007843138_fs_param_PercentSimStepComplete;
         private static EffectParameter param_player_0p007843138_fs_param_FarColor_Texture;
         private static EffectParameter param_player_0p007843138_fs_param_FarColor_size;
         private static EffectParameter param_player_0p007843138_fs_param_FarColor_dxdy;
@@ -14837,19 +14807,9 @@ namespace Game
         private static EffectParameter param_player_0p01176471_fs_param_CurrentData_Texture;
         private static EffectParameter param_player_0p01176471_fs_param_CurrentData_size;
         private static EffectParameter param_player_0p01176471_fs_param_CurrentData_dxdy;
-        private static EffectParameter param_player_0p01176471_fs_param_PreviousData_Texture;
-        private static EffectParameter param_player_0p01176471_fs_param_PreviousData_size;
-        private static EffectParameter param_player_0p01176471_fs_param_PreviousData_dxdy;
         private static EffectParameter param_player_0p01176471_fs_param_CurrentUnit_Texture;
         private static EffectParameter param_player_0p01176471_fs_param_CurrentUnit_size;
         private static EffectParameter param_player_0p01176471_fs_param_CurrentUnit_dxdy;
-        private static EffectParameter param_player_0p01176471_fs_param_PreviousUnit_Texture;
-        private static EffectParameter param_player_0p01176471_fs_param_PreviousUnit_size;
-        private static EffectParameter param_player_0p01176471_fs_param_PreviousUnit_dxdy;
-        private static EffectParameter param_player_0p01176471_fs_param_Texture_Texture;
-        private static EffectParameter param_player_0p01176471_fs_param_Texture_size;
-        private static EffectParameter param_player_0p01176471_fs_param_Texture_dxdy;
-        private static EffectParameter param_player_0p01176471_fs_param_PercentSimStepComplete;
         private static EffectParameter param_player_0p01176471_fs_param_FarColor_Texture;
         private static EffectParameter param_player_0p01176471_fs_param_FarColor_size;
         private static EffectParameter param_player_0p01176471_fs_param_FarColor_dxdy;
@@ -14859,19 +14819,9 @@ namespace Game
         private static EffectParameter param_player_0p01568628_fs_param_CurrentData_Texture;
         private static EffectParameter param_player_0p01568628_fs_param_CurrentData_size;
         private static EffectParameter param_player_0p01568628_fs_param_CurrentData_dxdy;
-        private static EffectParameter param_player_0p01568628_fs_param_PreviousData_Texture;
-        private static EffectParameter param_player_0p01568628_fs_param_PreviousData_size;
-        private static EffectParameter param_player_0p01568628_fs_param_PreviousData_dxdy;
         private static EffectParameter param_player_0p01568628_fs_param_CurrentUnit_Texture;
         private static EffectParameter param_player_0p01568628_fs_param_CurrentUnit_size;
         private static EffectParameter param_player_0p01568628_fs_param_CurrentUnit_dxdy;
-        private static EffectParameter param_player_0p01568628_fs_param_PreviousUnit_Texture;
-        private static EffectParameter param_player_0p01568628_fs_param_PreviousUnit_size;
-        private static EffectParameter param_player_0p01568628_fs_param_PreviousUnit_dxdy;
-        private static EffectParameter param_player_0p01568628_fs_param_Texture_Texture;
-        private static EffectParameter param_player_0p01568628_fs_param_Texture_size;
-        private static EffectParameter param_player_0p01568628_fs_param_Texture_dxdy;
-        private static EffectParameter param_player_0p01568628_fs_param_PercentSimStepComplete;
         private static EffectParameter param_player_0p01568628_fs_param_FarColor_Texture;
         private static EffectParameter param_player_0p01568628_fs_param_FarColor_size;
         private static EffectParameter param_player_0p01568628_fs_param_FarColor_dxdy;
@@ -14884,19 +14834,9 @@ namespace Game
             param_player_0_fs_param_CurrentData_Texture = CompiledEffect_player_0.Parameters["fs_param_CurrentData_Texture"];
             param_player_0_fs_param_CurrentData_size = CompiledEffect_player_0.Parameters["fs_param_CurrentData_size"];
             param_player_0_fs_param_CurrentData_dxdy = CompiledEffect_player_0.Parameters["fs_param_CurrentData_dxdy"];
-            param_player_0_fs_param_PreviousData_Texture = CompiledEffect_player_0.Parameters["fs_param_PreviousData_Texture"];
-            param_player_0_fs_param_PreviousData_size = CompiledEffect_player_0.Parameters["fs_param_PreviousData_size"];
-            param_player_0_fs_param_PreviousData_dxdy = CompiledEffect_player_0.Parameters["fs_param_PreviousData_dxdy"];
             param_player_0_fs_param_CurrentUnit_Texture = CompiledEffect_player_0.Parameters["fs_param_CurrentUnit_Texture"];
             param_player_0_fs_param_CurrentUnit_size = CompiledEffect_player_0.Parameters["fs_param_CurrentUnit_size"];
             param_player_0_fs_param_CurrentUnit_dxdy = CompiledEffect_player_0.Parameters["fs_param_CurrentUnit_dxdy"];
-            param_player_0_fs_param_PreviousUnit_Texture = CompiledEffect_player_0.Parameters["fs_param_PreviousUnit_Texture"];
-            param_player_0_fs_param_PreviousUnit_size = CompiledEffect_player_0.Parameters["fs_param_PreviousUnit_size"];
-            param_player_0_fs_param_PreviousUnit_dxdy = CompiledEffect_player_0.Parameters["fs_param_PreviousUnit_dxdy"];
-            param_player_0_fs_param_Texture_Texture = CompiledEffect_player_0.Parameters["fs_param_Texture_Texture"];
-            param_player_0_fs_param_Texture_size = CompiledEffect_player_0.Parameters["fs_param_Texture_size"];
-            param_player_0_fs_param_Texture_dxdy = CompiledEffect_player_0.Parameters["fs_param_Texture_dxdy"];
-            param_player_0_fs_param_PercentSimStepComplete = CompiledEffect_player_0.Parameters["fs_param_PercentSimStepComplete"];
             param_player_0_fs_param_FarColor_Texture = CompiledEffect_player_0.Parameters["fs_param_FarColor_Texture"];
             param_player_0_fs_param_FarColor_size = CompiledEffect_player_0.Parameters["fs_param_FarColor_size"];
             param_player_0_fs_param_FarColor_dxdy = CompiledEffect_player_0.Parameters["fs_param_FarColor_dxdy"];
@@ -14906,19 +14846,9 @@ namespace Game
             param_player_0p003921569_fs_param_CurrentData_Texture = CompiledEffect_player_0p003921569.Parameters["fs_param_CurrentData_Texture"];
             param_player_0p003921569_fs_param_CurrentData_size = CompiledEffect_player_0p003921569.Parameters["fs_param_CurrentData_size"];
             param_player_0p003921569_fs_param_CurrentData_dxdy = CompiledEffect_player_0p003921569.Parameters["fs_param_CurrentData_dxdy"];
-            param_player_0p003921569_fs_param_PreviousData_Texture = CompiledEffect_player_0p003921569.Parameters["fs_param_PreviousData_Texture"];
-            param_player_0p003921569_fs_param_PreviousData_size = CompiledEffect_player_0p003921569.Parameters["fs_param_PreviousData_size"];
-            param_player_0p003921569_fs_param_PreviousData_dxdy = CompiledEffect_player_0p003921569.Parameters["fs_param_PreviousData_dxdy"];
             param_player_0p003921569_fs_param_CurrentUnit_Texture = CompiledEffect_player_0p003921569.Parameters["fs_param_CurrentUnit_Texture"];
             param_player_0p003921569_fs_param_CurrentUnit_size = CompiledEffect_player_0p003921569.Parameters["fs_param_CurrentUnit_size"];
             param_player_0p003921569_fs_param_CurrentUnit_dxdy = CompiledEffect_player_0p003921569.Parameters["fs_param_CurrentUnit_dxdy"];
-            param_player_0p003921569_fs_param_PreviousUnit_Texture = CompiledEffect_player_0p003921569.Parameters["fs_param_PreviousUnit_Texture"];
-            param_player_0p003921569_fs_param_PreviousUnit_size = CompiledEffect_player_0p003921569.Parameters["fs_param_PreviousUnit_size"];
-            param_player_0p003921569_fs_param_PreviousUnit_dxdy = CompiledEffect_player_0p003921569.Parameters["fs_param_PreviousUnit_dxdy"];
-            param_player_0p003921569_fs_param_Texture_Texture = CompiledEffect_player_0p003921569.Parameters["fs_param_Texture_Texture"];
-            param_player_0p003921569_fs_param_Texture_size = CompiledEffect_player_0p003921569.Parameters["fs_param_Texture_size"];
-            param_player_0p003921569_fs_param_Texture_dxdy = CompiledEffect_player_0p003921569.Parameters["fs_param_Texture_dxdy"];
-            param_player_0p003921569_fs_param_PercentSimStepComplete = CompiledEffect_player_0p003921569.Parameters["fs_param_PercentSimStepComplete"];
             param_player_0p003921569_fs_param_FarColor_Texture = CompiledEffect_player_0p003921569.Parameters["fs_param_FarColor_Texture"];
             param_player_0p003921569_fs_param_FarColor_size = CompiledEffect_player_0p003921569.Parameters["fs_param_FarColor_size"];
             param_player_0p003921569_fs_param_FarColor_dxdy = CompiledEffect_player_0p003921569.Parameters["fs_param_FarColor_dxdy"];
@@ -14928,19 +14858,9 @@ namespace Game
             param_player_0p007843138_fs_param_CurrentData_Texture = CompiledEffect_player_0p007843138.Parameters["fs_param_CurrentData_Texture"];
             param_player_0p007843138_fs_param_CurrentData_size = CompiledEffect_player_0p007843138.Parameters["fs_param_CurrentData_size"];
             param_player_0p007843138_fs_param_CurrentData_dxdy = CompiledEffect_player_0p007843138.Parameters["fs_param_CurrentData_dxdy"];
-            param_player_0p007843138_fs_param_PreviousData_Texture = CompiledEffect_player_0p007843138.Parameters["fs_param_PreviousData_Texture"];
-            param_player_0p007843138_fs_param_PreviousData_size = CompiledEffect_player_0p007843138.Parameters["fs_param_PreviousData_size"];
-            param_player_0p007843138_fs_param_PreviousData_dxdy = CompiledEffect_player_0p007843138.Parameters["fs_param_PreviousData_dxdy"];
             param_player_0p007843138_fs_param_CurrentUnit_Texture = CompiledEffect_player_0p007843138.Parameters["fs_param_CurrentUnit_Texture"];
             param_player_0p007843138_fs_param_CurrentUnit_size = CompiledEffect_player_0p007843138.Parameters["fs_param_CurrentUnit_size"];
             param_player_0p007843138_fs_param_CurrentUnit_dxdy = CompiledEffect_player_0p007843138.Parameters["fs_param_CurrentUnit_dxdy"];
-            param_player_0p007843138_fs_param_PreviousUnit_Texture = CompiledEffect_player_0p007843138.Parameters["fs_param_PreviousUnit_Texture"];
-            param_player_0p007843138_fs_param_PreviousUnit_size = CompiledEffect_player_0p007843138.Parameters["fs_param_PreviousUnit_size"];
-            param_player_0p007843138_fs_param_PreviousUnit_dxdy = CompiledEffect_player_0p007843138.Parameters["fs_param_PreviousUnit_dxdy"];
-            param_player_0p007843138_fs_param_Texture_Texture = CompiledEffect_player_0p007843138.Parameters["fs_param_Texture_Texture"];
-            param_player_0p007843138_fs_param_Texture_size = CompiledEffect_player_0p007843138.Parameters["fs_param_Texture_size"];
-            param_player_0p007843138_fs_param_Texture_dxdy = CompiledEffect_player_0p007843138.Parameters["fs_param_Texture_dxdy"];
-            param_player_0p007843138_fs_param_PercentSimStepComplete = CompiledEffect_player_0p007843138.Parameters["fs_param_PercentSimStepComplete"];
             param_player_0p007843138_fs_param_FarColor_Texture = CompiledEffect_player_0p007843138.Parameters["fs_param_FarColor_Texture"];
             param_player_0p007843138_fs_param_FarColor_size = CompiledEffect_player_0p007843138.Parameters["fs_param_FarColor_size"];
             param_player_0p007843138_fs_param_FarColor_dxdy = CompiledEffect_player_0p007843138.Parameters["fs_param_FarColor_dxdy"];
@@ -14950,19 +14870,9 @@ namespace Game
             param_player_0p01176471_fs_param_CurrentData_Texture = CompiledEffect_player_0p01176471.Parameters["fs_param_CurrentData_Texture"];
             param_player_0p01176471_fs_param_CurrentData_size = CompiledEffect_player_0p01176471.Parameters["fs_param_CurrentData_size"];
             param_player_0p01176471_fs_param_CurrentData_dxdy = CompiledEffect_player_0p01176471.Parameters["fs_param_CurrentData_dxdy"];
-            param_player_0p01176471_fs_param_PreviousData_Texture = CompiledEffect_player_0p01176471.Parameters["fs_param_PreviousData_Texture"];
-            param_player_0p01176471_fs_param_PreviousData_size = CompiledEffect_player_0p01176471.Parameters["fs_param_PreviousData_size"];
-            param_player_0p01176471_fs_param_PreviousData_dxdy = CompiledEffect_player_0p01176471.Parameters["fs_param_PreviousData_dxdy"];
             param_player_0p01176471_fs_param_CurrentUnit_Texture = CompiledEffect_player_0p01176471.Parameters["fs_param_CurrentUnit_Texture"];
             param_player_0p01176471_fs_param_CurrentUnit_size = CompiledEffect_player_0p01176471.Parameters["fs_param_CurrentUnit_size"];
             param_player_0p01176471_fs_param_CurrentUnit_dxdy = CompiledEffect_player_0p01176471.Parameters["fs_param_CurrentUnit_dxdy"];
-            param_player_0p01176471_fs_param_PreviousUnit_Texture = CompiledEffect_player_0p01176471.Parameters["fs_param_PreviousUnit_Texture"];
-            param_player_0p01176471_fs_param_PreviousUnit_size = CompiledEffect_player_0p01176471.Parameters["fs_param_PreviousUnit_size"];
-            param_player_0p01176471_fs_param_PreviousUnit_dxdy = CompiledEffect_player_0p01176471.Parameters["fs_param_PreviousUnit_dxdy"];
-            param_player_0p01176471_fs_param_Texture_Texture = CompiledEffect_player_0p01176471.Parameters["fs_param_Texture_Texture"];
-            param_player_0p01176471_fs_param_Texture_size = CompiledEffect_player_0p01176471.Parameters["fs_param_Texture_size"];
-            param_player_0p01176471_fs_param_Texture_dxdy = CompiledEffect_player_0p01176471.Parameters["fs_param_Texture_dxdy"];
-            param_player_0p01176471_fs_param_PercentSimStepComplete = CompiledEffect_player_0p01176471.Parameters["fs_param_PercentSimStepComplete"];
             param_player_0p01176471_fs_param_FarColor_Texture = CompiledEffect_player_0p01176471.Parameters["fs_param_FarColor_Texture"];
             param_player_0p01176471_fs_param_FarColor_size = CompiledEffect_player_0p01176471.Parameters["fs_param_FarColor_size"];
             param_player_0p01176471_fs_param_FarColor_dxdy = CompiledEffect_player_0p01176471.Parameters["fs_param_FarColor_dxdy"];
@@ -14972,50 +14882,40 @@ namespace Game
             param_player_0p01568628_fs_param_CurrentData_Texture = CompiledEffect_player_0p01568628.Parameters["fs_param_CurrentData_Texture"];
             param_player_0p01568628_fs_param_CurrentData_size = CompiledEffect_player_0p01568628.Parameters["fs_param_CurrentData_size"];
             param_player_0p01568628_fs_param_CurrentData_dxdy = CompiledEffect_player_0p01568628.Parameters["fs_param_CurrentData_dxdy"];
-            param_player_0p01568628_fs_param_PreviousData_Texture = CompiledEffect_player_0p01568628.Parameters["fs_param_PreviousData_Texture"];
-            param_player_0p01568628_fs_param_PreviousData_size = CompiledEffect_player_0p01568628.Parameters["fs_param_PreviousData_size"];
-            param_player_0p01568628_fs_param_PreviousData_dxdy = CompiledEffect_player_0p01568628.Parameters["fs_param_PreviousData_dxdy"];
             param_player_0p01568628_fs_param_CurrentUnit_Texture = CompiledEffect_player_0p01568628.Parameters["fs_param_CurrentUnit_Texture"];
             param_player_0p01568628_fs_param_CurrentUnit_size = CompiledEffect_player_0p01568628.Parameters["fs_param_CurrentUnit_size"];
             param_player_0p01568628_fs_param_CurrentUnit_dxdy = CompiledEffect_player_0p01568628.Parameters["fs_param_CurrentUnit_dxdy"];
-            param_player_0p01568628_fs_param_PreviousUnit_Texture = CompiledEffect_player_0p01568628.Parameters["fs_param_PreviousUnit_Texture"];
-            param_player_0p01568628_fs_param_PreviousUnit_size = CompiledEffect_player_0p01568628.Parameters["fs_param_PreviousUnit_size"];
-            param_player_0p01568628_fs_param_PreviousUnit_dxdy = CompiledEffect_player_0p01568628.Parameters["fs_param_PreviousUnit_dxdy"];
-            param_player_0p01568628_fs_param_Texture_Texture = CompiledEffect_player_0p01568628.Parameters["fs_param_Texture_Texture"];
-            param_player_0p01568628_fs_param_Texture_size = CompiledEffect_player_0p01568628.Parameters["fs_param_Texture_size"];
-            param_player_0p01568628_fs_param_Texture_dxdy = CompiledEffect_player_0p01568628.Parameters["fs_param_Texture_dxdy"];
-            param_player_0p01568628_fs_param_PercentSimStepComplete = CompiledEffect_player_0p01568628.Parameters["fs_param_PercentSimStepComplete"];
             param_player_0p01568628_fs_param_FarColor_Texture = CompiledEffect_player_0p01568628.Parameters["fs_param_FarColor_Texture"];
             param_player_0p01568628_fs_param_FarColor_size = CompiledEffect_player_0p01568628.Parameters["fs_param_FarColor_size"];
             param_player_0p01568628_fs_param_FarColor_dxdy = CompiledEffect_player_0p01568628.Parameters["fs_param_FarColor_dxdy"];
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float player, float PercentSimStepComplete, RenderTarget2D Output, Color Clear)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D CurrentUnit, float player, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnit, PreviousUnit, Texture, player, PercentSimStepComplete);
+            Using(cameraPos, cameraAspect, CurrentData, CurrentUnit, player);
             GridHelper.DrawGrid();
         }
-        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float player, float PercentSimStepComplete, RenderTarget2D Output)
+        public static void Apply(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D CurrentUnit, float player, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnit, PreviousUnit, Texture, player, PercentSimStepComplete);
+            Using(cameraPos, cameraAspect, CurrentData, CurrentUnit, player);
             GridHelper.DrawGrid();
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float player, float PercentSimStepComplete, RenderTarget2D Output, Color Clear)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D CurrentUnit, float player, RenderTarget2D Output, Color Clear)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Clear);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnit, PreviousUnit, Texture, player, PercentSimStepComplete);
+            Using(cameraPos, cameraAspect, CurrentData, CurrentUnit, player);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float player, float PercentSimStepComplete, RenderTarget2D Output)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D CurrentUnit, float player, RenderTarget2D Output)
         {
             GridHelper.GraphicsDevice.SetRenderTarget(Output);
             GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(cameraPos, cameraAspect, CurrentData, PreviousData, CurrentUnit, PreviousUnit, Texture, player, PercentSimStepComplete);
+            Using(cameraPos, cameraAspect, CurrentData, CurrentUnit, player);
         }
-        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnit, Texture2D PreviousUnit, Texture2D Texture, float player, float PercentSimStepComplete)
+        public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D CurrentUnit, float player)
         {
             if (abs((float)(player - 0)) < .001)
             {
@@ -15024,19 +14924,9 @@ namespace Game
                 if (param_player_0_fs_param_CurrentData_Texture != null) param_player_0_fs_param_CurrentData_Texture.SetValue(FragSharpMarshal.Marshal(CurrentData));
                 if (param_player_0_fs_param_CurrentData_size != null) param_player_0_fs_param_CurrentData_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentData.Width, CurrentData.Height)));
                 if (param_player_0_fs_param_CurrentData_dxdy != null) param_player_0_fs_param_CurrentData_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentData.Width, CurrentData.Height)));
-                if (param_player_0_fs_param_PreviousData_Texture != null) param_player_0_fs_param_PreviousData_Texture.SetValue(FragSharpMarshal.Marshal(PreviousData));
-                if (param_player_0_fs_param_PreviousData_size != null) param_player_0_fs_param_PreviousData_size.SetValue(FragSharpMarshal.Marshal(vec(PreviousData.Width, PreviousData.Height)));
-                if (param_player_0_fs_param_PreviousData_dxdy != null) param_player_0_fs_param_PreviousData_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousData.Width, PreviousData.Height)));
                 if (param_player_0_fs_param_CurrentUnit_Texture != null) param_player_0_fs_param_CurrentUnit_Texture.SetValue(FragSharpMarshal.Marshal(CurrentUnit));
                 if (param_player_0_fs_param_CurrentUnit_size != null) param_player_0_fs_param_CurrentUnit_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentUnit.Width, CurrentUnit.Height)));
                 if (param_player_0_fs_param_CurrentUnit_dxdy != null) param_player_0_fs_param_CurrentUnit_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentUnit.Width, CurrentUnit.Height)));
-                if (param_player_0_fs_param_PreviousUnit_Texture != null) param_player_0_fs_param_PreviousUnit_Texture.SetValue(FragSharpMarshal.Marshal(PreviousUnit));
-                if (param_player_0_fs_param_PreviousUnit_size != null) param_player_0_fs_param_PreviousUnit_size.SetValue(FragSharpMarshal.Marshal(vec(PreviousUnit.Width, PreviousUnit.Height)));
-                if (param_player_0_fs_param_PreviousUnit_dxdy != null) param_player_0_fs_param_PreviousUnit_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousUnit.Width, PreviousUnit.Height)));
-                if (param_player_0_fs_param_Texture_Texture != null) param_player_0_fs_param_Texture_Texture.SetValue(FragSharpMarshal.Marshal(Texture));
-                if (param_player_0_fs_param_Texture_size != null) param_player_0_fs_param_Texture_size.SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
-                if (param_player_0_fs_param_Texture_dxdy != null) param_player_0_fs_param_Texture_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
-                if (param_player_0_fs_param_PercentSimStepComplete != null) param_player_0_fs_param_PercentSimStepComplete.SetValue(FragSharpMarshal.Marshal(PercentSimStepComplete));
                 if (param_player_0_fs_param_FarColor_Texture != null) param_player_0_fs_param_FarColor_Texture.SetValue(FragSharpMarshal.Marshal(FarColor));
                 if (param_player_0_fs_param_FarColor_size != null) param_player_0_fs_param_FarColor_size.SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
                 if (param_player_0_fs_param_FarColor_dxdy != null) param_player_0_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
@@ -15049,19 +14939,9 @@ namespace Game
                 if (param_player_0p003921569_fs_param_CurrentData_Texture != null) param_player_0p003921569_fs_param_CurrentData_Texture.SetValue(FragSharpMarshal.Marshal(CurrentData));
                 if (param_player_0p003921569_fs_param_CurrentData_size != null) param_player_0p003921569_fs_param_CurrentData_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentData.Width, CurrentData.Height)));
                 if (param_player_0p003921569_fs_param_CurrentData_dxdy != null) param_player_0p003921569_fs_param_CurrentData_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentData.Width, CurrentData.Height)));
-                if (param_player_0p003921569_fs_param_PreviousData_Texture != null) param_player_0p003921569_fs_param_PreviousData_Texture.SetValue(FragSharpMarshal.Marshal(PreviousData));
-                if (param_player_0p003921569_fs_param_PreviousData_size != null) param_player_0p003921569_fs_param_PreviousData_size.SetValue(FragSharpMarshal.Marshal(vec(PreviousData.Width, PreviousData.Height)));
-                if (param_player_0p003921569_fs_param_PreviousData_dxdy != null) param_player_0p003921569_fs_param_PreviousData_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousData.Width, PreviousData.Height)));
                 if (param_player_0p003921569_fs_param_CurrentUnit_Texture != null) param_player_0p003921569_fs_param_CurrentUnit_Texture.SetValue(FragSharpMarshal.Marshal(CurrentUnit));
                 if (param_player_0p003921569_fs_param_CurrentUnit_size != null) param_player_0p003921569_fs_param_CurrentUnit_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentUnit.Width, CurrentUnit.Height)));
                 if (param_player_0p003921569_fs_param_CurrentUnit_dxdy != null) param_player_0p003921569_fs_param_CurrentUnit_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentUnit.Width, CurrentUnit.Height)));
-                if (param_player_0p003921569_fs_param_PreviousUnit_Texture != null) param_player_0p003921569_fs_param_PreviousUnit_Texture.SetValue(FragSharpMarshal.Marshal(PreviousUnit));
-                if (param_player_0p003921569_fs_param_PreviousUnit_size != null) param_player_0p003921569_fs_param_PreviousUnit_size.SetValue(FragSharpMarshal.Marshal(vec(PreviousUnit.Width, PreviousUnit.Height)));
-                if (param_player_0p003921569_fs_param_PreviousUnit_dxdy != null) param_player_0p003921569_fs_param_PreviousUnit_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousUnit.Width, PreviousUnit.Height)));
-                if (param_player_0p003921569_fs_param_Texture_Texture != null) param_player_0p003921569_fs_param_Texture_Texture.SetValue(FragSharpMarshal.Marshal(Texture));
-                if (param_player_0p003921569_fs_param_Texture_size != null) param_player_0p003921569_fs_param_Texture_size.SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
-                if (param_player_0p003921569_fs_param_Texture_dxdy != null) param_player_0p003921569_fs_param_Texture_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
-                if (param_player_0p003921569_fs_param_PercentSimStepComplete != null) param_player_0p003921569_fs_param_PercentSimStepComplete.SetValue(FragSharpMarshal.Marshal(PercentSimStepComplete));
                 if (param_player_0p003921569_fs_param_FarColor_Texture != null) param_player_0p003921569_fs_param_FarColor_Texture.SetValue(FragSharpMarshal.Marshal(FarColor));
                 if (param_player_0p003921569_fs_param_FarColor_size != null) param_player_0p003921569_fs_param_FarColor_size.SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
                 if (param_player_0p003921569_fs_param_FarColor_dxdy != null) param_player_0p003921569_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
@@ -15074,19 +14954,9 @@ namespace Game
                 if (param_player_0p007843138_fs_param_CurrentData_Texture != null) param_player_0p007843138_fs_param_CurrentData_Texture.SetValue(FragSharpMarshal.Marshal(CurrentData));
                 if (param_player_0p007843138_fs_param_CurrentData_size != null) param_player_0p007843138_fs_param_CurrentData_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentData.Width, CurrentData.Height)));
                 if (param_player_0p007843138_fs_param_CurrentData_dxdy != null) param_player_0p007843138_fs_param_CurrentData_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentData.Width, CurrentData.Height)));
-                if (param_player_0p007843138_fs_param_PreviousData_Texture != null) param_player_0p007843138_fs_param_PreviousData_Texture.SetValue(FragSharpMarshal.Marshal(PreviousData));
-                if (param_player_0p007843138_fs_param_PreviousData_size != null) param_player_0p007843138_fs_param_PreviousData_size.SetValue(FragSharpMarshal.Marshal(vec(PreviousData.Width, PreviousData.Height)));
-                if (param_player_0p007843138_fs_param_PreviousData_dxdy != null) param_player_0p007843138_fs_param_PreviousData_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousData.Width, PreviousData.Height)));
                 if (param_player_0p007843138_fs_param_CurrentUnit_Texture != null) param_player_0p007843138_fs_param_CurrentUnit_Texture.SetValue(FragSharpMarshal.Marshal(CurrentUnit));
                 if (param_player_0p007843138_fs_param_CurrentUnit_size != null) param_player_0p007843138_fs_param_CurrentUnit_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentUnit.Width, CurrentUnit.Height)));
                 if (param_player_0p007843138_fs_param_CurrentUnit_dxdy != null) param_player_0p007843138_fs_param_CurrentUnit_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentUnit.Width, CurrentUnit.Height)));
-                if (param_player_0p007843138_fs_param_PreviousUnit_Texture != null) param_player_0p007843138_fs_param_PreviousUnit_Texture.SetValue(FragSharpMarshal.Marshal(PreviousUnit));
-                if (param_player_0p007843138_fs_param_PreviousUnit_size != null) param_player_0p007843138_fs_param_PreviousUnit_size.SetValue(FragSharpMarshal.Marshal(vec(PreviousUnit.Width, PreviousUnit.Height)));
-                if (param_player_0p007843138_fs_param_PreviousUnit_dxdy != null) param_player_0p007843138_fs_param_PreviousUnit_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousUnit.Width, PreviousUnit.Height)));
-                if (param_player_0p007843138_fs_param_Texture_Texture != null) param_player_0p007843138_fs_param_Texture_Texture.SetValue(FragSharpMarshal.Marshal(Texture));
-                if (param_player_0p007843138_fs_param_Texture_size != null) param_player_0p007843138_fs_param_Texture_size.SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
-                if (param_player_0p007843138_fs_param_Texture_dxdy != null) param_player_0p007843138_fs_param_Texture_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
-                if (param_player_0p007843138_fs_param_PercentSimStepComplete != null) param_player_0p007843138_fs_param_PercentSimStepComplete.SetValue(FragSharpMarshal.Marshal(PercentSimStepComplete));
                 if (param_player_0p007843138_fs_param_FarColor_Texture != null) param_player_0p007843138_fs_param_FarColor_Texture.SetValue(FragSharpMarshal.Marshal(FarColor));
                 if (param_player_0p007843138_fs_param_FarColor_size != null) param_player_0p007843138_fs_param_FarColor_size.SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
                 if (param_player_0p007843138_fs_param_FarColor_dxdy != null) param_player_0p007843138_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
@@ -15099,19 +14969,9 @@ namespace Game
                 if (param_player_0p01176471_fs_param_CurrentData_Texture != null) param_player_0p01176471_fs_param_CurrentData_Texture.SetValue(FragSharpMarshal.Marshal(CurrentData));
                 if (param_player_0p01176471_fs_param_CurrentData_size != null) param_player_0p01176471_fs_param_CurrentData_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentData.Width, CurrentData.Height)));
                 if (param_player_0p01176471_fs_param_CurrentData_dxdy != null) param_player_0p01176471_fs_param_CurrentData_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentData.Width, CurrentData.Height)));
-                if (param_player_0p01176471_fs_param_PreviousData_Texture != null) param_player_0p01176471_fs_param_PreviousData_Texture.SetValue(FragSharpMarshal.Marshal(PreviousData));
-                if (param_player_0p01176471_fs_param_PreviousData_size != null) param_player_0p01176471_fs_param_PreviousData_size.SetValue(FragSharpMarshal.Marshal(vec(PreviousData.Width, PreviousData.Height)));
-                if (param_player_0p01176471_fs_param_PreviousData_dxdy != null) param_player_0p01176471_fs_param_PreviousData_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousData.Width, PreviousData.Height)));
                 if (param_player_0p01176471_fs_param_CurrentUnit_Texture != null) param_player_0p01176471_fs_param_CurrentUnit_Texture.SetValue(FragSharpMarshal.Marshal(CurrentUnit));
                 if (param_player_0p01176471_fs_param_CurrentUnit_size != null) param_player_0p01176471_fs_param_CurrentUnit_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentUnit.Width, CurrentUnit.Height)));
                 if (param_player_0p01176471_fs_param_CurrentUnit_dxdy != null) param_player_0p01176471_fs_param_CurrentUnit_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentUnit.Width, CurrentUnit.Height)));
-                if (param_player_0p01176471_fs_param_PreviousUnit_Texture != null) param_player_0p01176471_fs_param_PreviousUnit_Texture.SetValue(FragSharpMarshal.Marshal(PreviousUnit));
-                if (param_player_0p01176471_fs_param_PreviousUnit_size != null) param_player_0p01176471_fs_param_PreviousUnit_size.SetValue(FragSharpMarshal.Marshal(vec(PreviousUnit.Width, PreviousUnit.Height)));
-                if (param_player_0p01176471_fs_param_PreviousUnit_dxdy != null) param_player_0p01176471_fs_param_PreviousUnit_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousUnit.Width, PreviousUnit.Height)));
-                if (param_player_0p01176471_fs_param_Texture_Texture != null) param_player_0p01176471_fs_param_Texture_Texture.SetValue(FragSharpMarshal.Marshal(Texture));
-                if (param_player_0p01176471_fs_param_Texture_size != null) param_player_0p01176471_fs_param_Texture_size.SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
-                if (param_player_0p01176471_fs_param_Texture_dxdy != null) param_player_0p01176471_fs_param_Texture_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
-                if (param_player_0p01176471_fs_param_PercentSimStepComplete != null) param_player_0p01176471_fs_param_PercentSimStepComplete.SetValue(FragSharpMarshal.Marshal(PercentSimStepComplete));
                 if (param_player_0p01176471_fs_param_FarColor_Texture != null) param_player_0p01176471_fs_param_FarColor_Texture.SetValue(FragSharpMarshal.Marshal(FarColor));
                 if (param_player_0p01176471_fs_param_FarColor_size != null) param_player_0p01176471_fs_param_FarColor_size.SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
                 if (param_player_0p01176471_fs_param_FarColor_dxdy != null) param_player_0p01176471_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
@@ -15124,19 +14984,9 @@ namespace Game
                 if (param_player_0p01568628_fs_param_CurrentData_Texture != null) param_player_0p01568628_fs_param_CurrentData_Texture.SetValue(FragSharpMarshal.Marshal(CurrentData));
                 if (param_player_0p01568628_fs_param_CurrentData_size != null) param_player_0p01568628_fs_param_CurrentData_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentData.Width, CurrentData.Height)));
                 if (param_player_0p01568628_fs_param_CurrentData_dxdy != null) param_player_0p01568628_fs_param_CurrentData_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentData.Width, CurrentData.Height)));
-                if (param_player_0p01568628_fs_param_PreviousData_Texture != null) param_player_0p01568628_fs_param_PreviousData_Texture.SetValue(FragSharpMarshal.Marshal(PreviousData));
-                if (param_player_0p01568628_fs_param_PreviousData_size != null) param_player_0p01568628_fs_param_PreviousData_size.SetValue(FragSharpMarshal.Marshal(vec(PreviousData.Width, PreviousData.Height)));
-                if (param_player_0p01568628_fs_param_PreviousData_dxdy != null) param_player_0p01568628_fs_param_PreviousData_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousData.Width, PreviousData.Height)));
                 if (param_player_0p01568628_fs_param_CurrentUnit_Texture != null) param_player_0p01568628_fs_param_CurrentUnit_Texture.SetValue(FragSharpMarshal.Marshal(CurrentUnit));
                 if (param_player_0p01568628_fs_param_CurrentUnit_size != null) param_player_0p01568628_fs_param_CurrentUnit_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentUnit.Width, CurrentUnit.Height)));
                 if (param_player_0p01568628_fs_param_CurrentUnit_dxdy != null) param_player_0p01568628_fs_param_CurrentUnit_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentUnit.Width, CurrentUnit.Height)));
-                if (param_player_0p01568628_fs_param_PreviousUnit_Texture != null) param_player_0p01568628_fs_param_PreviousUnit_Texture.SetValue(FragSharpMarshal.Marshal(PreviousUnit));
-                if (param_player_0p01568628_fs_param_PreviousUnit_size != null) param_player_0p01568628_fs_param_PreviousUnit_size.SetValue(FragSharpMarshal.Marshal(vec(PreviousUnit.Width, PreviousUnit.Height)));
-                if (param_player_0p01568628_fs_param_PreviousUnit_dxdy != null) param_player_0p01568628_fs_param_PreviousUnit_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PreviousUnit.Width, PreviousUnit.Height)));
-                if (param_player_0p01568628_fs_param_Texture_Texture != null) param_player_0p01568628_fs_param_Texture_Texture.SetValue(FragSharpMarshal.Marshal(Texture));
-                if (param_player_0p01568628_fs_param_Texture_size != null) param_player_0p01568628_fs_param_Texture_size.SetValue(FragSharpMarshal.Marshal(vec(Texture.Width, Texture.Height)));
-                if (param_player_0p01568628_fs_param_Texture_dxdy != null) param_player_0p01568628_fs_param_Texture_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Texture.Width, Texture.Height)));
-                if (param_player_0p01568628_fs_param_PercentSimStepComplete != null) param_player_0p01568628_fs_param_PercentSimStepComplete.SetValue(FragSharpMarshal.Marshal(PercentSimStepComplete));
                 if (param_player_0p01568628_fs_param_FarColor_Texture != null) param_player_0p01568628_fs_param_FarColor_Texture.SetValue(FragSharpMarshal.Marshal(FarColor));
                 if (param_player_0p01568628_fs_param_FarColor_size != null) param_player_0p01568628_fs_param_FarColor_size.SetValue(FragSharpMarshal.Marshal(vec(FarColor.Width, FarColor.Height)));
                 if (param_player_0p01568628_fs_param_FarColor_dxdy != null) param_player_0p01568628_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));

@@ -5,9 +5,7 @@ namespace Game
     public partial class DrawUnitsZoomedOutBlur : DrawUnits
     {
         [FragmentShader]
-        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<data> PreviousData, Field<unit> CurrentUnit, Field<unit> PreviousUnit, TextureSampler Texture,
-            [Player.Vals] float player,
-            float PercentSimStepComplete)
+        color FragmentShader(VertexOut vertex, Field<data> CurrentData, Field<unit> CurrentUnit, [Player.Vals] float player)
         {
             color output = color.TransparentBlack;
 

@@ -832,9 +832,7 @@ namespace Game
             }
             else
             {
-                DrawUnitsZoomedOutBlur.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.PreviousData, DataGroup.CurrentUnits, DataGroup.PreviousUnits, UnitsSprite,
-                    MyPlayerValue,
-                    PercentSimStepComplete);
+                DrawUnitsZoomedOutBlur.Using(camvec, CameraAspect, DataGroup.CurrentData, DataGroup.CurrentUnits, MyPlayerValue);
             }
             GridHelper.DrawGrid();
 
@@ -857,7 +855,7 @@ namespace Game
 
             // Markers
             Markers.Draw(DrawOrder.AfterUnits);
-
+            
             // Building icons
             if (CameraZoom <= z / 4)
             {
