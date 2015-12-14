@@ -85,6 +85,9 @@
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="Steamworks.NET">
+      <HintPath>..\Steam\Steamworks.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
@@ -116,6 +119,7 @@
     <Compile Include="Sound\AmbientSound.cs" />
     <Compile Include="Sound\Sound.cs" />
     <Compile Include="Sound\SoundWad.cs" />
+    <Compile Include="Steam.cs" />
     <Compile Include="TestSteam.cs" />
     <Compile Include="GameLogic.cs" />
     <Compile Include="Ui\Logic\Editor.cs" />
