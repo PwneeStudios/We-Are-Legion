@@ -17,8 +17,9 @@ namespace Game
         public vec2 DragonLordPos(float player)
         {
             DragonLordGridCoord.Apply(CurrentUnits, player, Output: Multigrid[0]);
+
             color packed = MultigridReduce(_PreferTl.Apply);
-            
+
             vec2 pos = SimShader.unpack_vec2_corrected(packed);
 
             return pos + vec(0.5f, 0.75f);

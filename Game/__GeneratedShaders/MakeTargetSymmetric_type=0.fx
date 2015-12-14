@@ -43,9 +43,9 @@ sampler fs_param_Target : register(s1) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__MakeSymmetricBase__DoNothing__Sampler__vec2__Single(VertexToPixel psin, sampler Units, float2 Units_size, float2 Units_dxdy, float2 pos, float type)
 {
-    if (abs(type - 0.0) < .001)
+    if (abs(type - 0.0) < .0019)
     {
-        if (all(pos < Units_size / 2 - .001))
+        if (all(pos < Units_size / 2 - .0019))
         {
             return true;
         }
@@ -54,9 +54,9 @@ bool Game__MakeSymmetricBase__DoNothing__Sampler__vec2__Single(VertexToPixel psi
             return false;
         }
     }
-    if (abs(type - 1.0) < .001)
+    if (abs(type - 1.0) < .0019)
     {
-        if (all(pos < Units_size / 4 - .001))
+        if (all(pos < Units_size / 4 - .0019))
         {
             return true;
         }
@@ -71,24 +71,24 @@ bool Game__MakeSymmetricBase__DoNothing__Sampler__vec2__Single(VertexToPixel psi
 float2 Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2__Single(VertexToPixel psin, sampler Info, float2 Info_size, float2 Info_dxdy, float2 pos, float type)
 {
     float2 shift = float2(0, 0);
-    if (abs(type - 0.0) < .001)
+    if (abs(type - 0.0) < .0019)
     {
-        if (pos.x > Info_size.x / 2 + .001)
+        if (pos.x > Info_size.x / 2 + .0019)
         {
             shift.x = 2 * pos.x - Info_size.x;
         }
-        if (pos.y > Info_size.y / 2 + .001)
+        if (pos.y > Info_size.y / 2 + .0019)
         {
             shift.y = 2 * pos.y - Info_size.y;
         }
     }
-    if (abs(type - 1.0) < .001)
+    if (abs(type - 1.0) < .0019)
     {
-        if (pos.x > Info_size.x / 4 + .001)
+        if (pos.x > Info_size.x / 4 + .0019)
         {
             shift.x = 2 * pos.x - Info_size.x / 2;
         }
-        if (pos.y > Info_size.y / 4 + .001)
+        if (pos.y > Info_size.y / 4 + .0019)
         {
             shift.y = 2 * pos.y - Info_size.y / 2;
         }
@@ -114,24 +114,24 @@ float2 Game__SimShader__unpack_vec2__vec4(float4 packed)
 
 float2 Game__MakeSymmetricBase__QuadMirrorTarget__Sampler__vec2__vec2__Single(VertexToPixel psin, sampler Info, float2 Info_size, float2 Info_dxdy, float2 pos, float2 target, float type)
 {
-    if (abs(type - 0.0) < .001)
+    if (abs(type - 0.0) < .0019)
     {
-        if (pos.x > Info_size.x / 2 + .001)
+        if (pos.x > Info_size.x / 2 + .0019)
         {
             target.x = Info_size.x - target.x;
         }
-        if (pos.y > Info_size.y / 2 + .001)
+        if (pos.y > Info_size.y / 2 + .0019)
         {
             target.y = Info_size.y - target.y;
         }
     }
-    if (abs(type - 1.0) < .001)
+    if (abs(type - 1.0) < .0019)
     {
-        if (pos.x > Info_size.x / 4 + .001)
+        if (pos.x > Info_size.x / 4 + .0019)
         {
             target.x = Info_size.x / 2 - target.x;
         }
-        if (pos.y > Info_size.y / 4 + .001)
+        if (pos.y > Info_size.y / 4 + .0019)
         {
             target.y = Info_size.y / 2 - target.y;
         }
@@ -168,14 +168,14 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 info = tex2D(fs_param_Target, psin.TexCoords + (float2(0, 0)) * fs_param_Target_dxdy);
+    float4 info = tex2D(fs_param_Target, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Target_dxdy);
     float2 pos = psin.TexCoords * fs_param_Target_size;
     if (Game__MakeSymmetricBase__DoNothing__Sampler__vec2__Single(psin, fs_param_Target, fs_param_Target_size, fs_param_Target_dxdy, pos, 0))
     {
         __FinalOutput.Color = info;
         return __FinalOutput;
     }
-    float4 copy = tex2D(fs_param_Target, psin.TexCoords + (float2(0, 0) - Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2__Single(psin, fs_param_Target, fs_param_Target_size, fs_param_Target_dxdy, pos, 0)) * fs_param_Target_dxdy);
+    float4 copy = tex2D(fs_param_Target, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0) - Game__MakeSymmetricBase__QuadMirrorShift__Sampler__vec2__Single(psin, fs_param_Target, fs_param_Target_size, fs_param_Target_dxdy, pos, 0)) * fs_param_Target_dxdy);
     float2 target = Game__SimShader__unpack_vec2__vec4(copy);
     target = Game__MakeSymmetricBase__QuadMirrorTarget__Sampler__vec2__vec2__Single(psin, fs_param_Target, fs_param_Target_size, fs_param_Target_dxdy, pos, target, 0);
     copy = Game__SimShader__pack_vec2__vec2(target);

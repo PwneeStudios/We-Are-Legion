@@ -42,13 +42,13 @@ sampler fs_param_Data : register(s1) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
-    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
+    return 0.1254902 <= val + .0019 && val < 0.5019608 - .0019;
 }
 
 bool Game__SimShader__SomethingFakeSelected__data(float4 u)
@@ -86,7 +86,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float2 uv = psin.TexCoords * fs_param_Data_size;
-    __FinalOutput.Color = Game__SimShader__SomethingFakeSelected__data(tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy)) ? Game__SimShader__pack_vec2__vec2(uv) : float4(0, 0, 0, 0);
+    __FinalOutput.Color = Game__SimShader__SomethingFakeSelected__data(tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy)) ? Game__SimShader__pack_vec2__vec2(uv) : float4(0, 0, 0, 0);
     return __FinalOutput;
 }
 

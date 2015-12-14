@@ -73,7 +73,7 @@ sampler fs_param_PathToOtherTeams : register(s3) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 // Compiled vertex shader
@@ -90,36 +90,36 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 path = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (float2(0, 0)) * fs_param_PathToOtherTeams_dxdy);
+    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Units_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    float4 path = tex2D(fs_param_PathToOtherTeams, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_PathToOtherTeams_dxdy);
     float value = 1;
-    if (abs(unit_here.b - 0.003921569) < .001)
+    if (abs(unit_here.b - 0.003921569) < .0019)
     {
         value = path.x;
     }
     else
     {
-        if (abs(unit_here.b - 0.007843138) < .001)
+        if (abs(unit_here.b - 0.007843138) < .0019)
         {
             value = path.y;
         }
         else
         {
-            if (abs(unit_here.b - 0.01176471) < .001)
+            if (abs(unit_here.b - 0.01176471) < .0019)
             {
                 value = path.z;
             }
             else
             {
-                if (abs(unit_here.b - 0.01568628) < .001)
+                if (abs(unit_here.b - 0.01568628) < .0019)
                 {
                     value = path.w;
                 }
             }
         }
     }
-    if (Game__SimShader__Something__data(data_here) && abs(unit_here.g - 0.01568628) < .001 && abs(unit_here.r - 0.007843138) < .001 && value < 0.1803922 - .001)
+    if (Game__SimShader__Something__data(data_here) && abs(unit_here.g - 0.01568628) < .0019 && abs(unit_here.r - 0.007843138) < .0019 && value < 0.1803922 - .0019)
     {
         __FinalOutput.Color = float4(1, 1, 1, 1);
         return __FinalOutput;

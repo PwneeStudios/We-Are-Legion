@@ -76,22 +76,22 @@ float2 fs_param_Destination;
 bool Game__SimShader__selected__data(float4 u)
 {
     float val = u.b;
-    return val >= 0.3764706 - .001;
+    return val >= 0.3764706 - .0019;
 }
 
 bool Game__SimShader__IsUnit__Single(float type)
 {
-    return type >= 0.003921569 - .001 && type < 0.02352941 - .001;
+    return type >= 0.003921569 - .0019 && type < 0.02352941 - .0019;
 }
 
 bool Game__SimShader__IsBuilding__Single(float type)
 {
-    return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
+    return type >= 0.02352941 - .0019 && type < 0.07843138 - .0019;
 }
 
 bool Game__SimShader__IsSpecialUnit__Single(float type)
 {
-    return abs(type - 0.007843138) < .001 || abs(type - 0.01176471) < .001;
+    return abs(type - 0.007843138) < .0019 || abs(type - 0.01176471) < .0019;
 }
 
 bool Game__SimShader__IsSoldierUnit__Single(float type)
@@ -101,23 +101,23 @@ bool Game__SimShader__IsSoldierUnit__Single(float type)
 
 bool Game__SelectionFilter__FilterHasUnit__Single__Single(float filter, float type)
 {
-    if (abs(filter - 0.0) < .001)
+    if (abs(filter - 0.0) < .0019)
     {
         return true;
     }
-    if (abs(filter - 1.0) < .001)
+    if (abs(filter - 1.0) < .0019)
     {
         return Game__SimShader__IsUnit__Single(type);
     }
-    if (abs(filter - 2.0) < .001)
+    if (abs(filter - 2.0) < .0019)
     {
         return Game__SimShader__IsBuilding__Single(type);
     }
-    if (abs(filter - 3.0) < .001)
+    if (abs(filter - 3.0) < .0019)
     {
         return Game__SimShader__IsSoldierUnit__Single(type);
     }
-    if (abs(filter - 4.0) < .001)
+    if (abs(filter - 4.0) < .0019)
     {
         return Game__SimShader__IsSpecialUnit__Single(type);
     }
@@ -138,10 +138,10 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    float4 extra_here = tex2D(fs_param_Extra, psin.TexCoords + (float2(0, 0)) * fs_param_Extra_dxdy);
-    if (abs(0.01176471 - unit_here.g) < .001 && Game__SimShader__selected__data(data_here) && Game__SelectionFilter__FilterHasUnit__Single__Single(3, unit_here.r))
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Unit_dxdy);
+    float4 extra_here = tex2D(fs_param_Extra, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Extra_dxdy);
+    if (abs(0.01176471 - unit_here.g) < .0019 && Game__SimShader__selected__data(data_here) && Game__SelectionFilter__FilterHasUnit__Single__Single(3, unit_here.r))
     {
         extra_here = float4(0, 0, 0, 0);
     }

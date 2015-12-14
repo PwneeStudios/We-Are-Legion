@@ -70,31 +70,31 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy), right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 0)) * fs_param_Geo_dxdy), up = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 1)) * fs_param_Geo_dxdy), left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 0)) * fs_param_Geo_dxdy), down = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, -(1))) * fs_param_Geo_dxdy);
-    float4 dirward_here = tex2D(fs_param_Dirward, psin.TexCoords + (float2(0, 0)) * fs_param_Dirward_dxdy), dirward_right = tex2D(fs_param_Dirward, psin.TexCoords + (float2(1, 0)) * fs_param_Dirward_dxdy), dirward_up = tex2D(fs_param_Dirward, psin.TexCoords + (float2(0, 1)) * fs_param_Dirward_dxdy), dirward_left = tex2D(fs_param_Dirward, psin.TexCoords + (float2(-(1), 0)) * fs_param_Dirward_dxdy), dirward_down = tex2D(fs_param_Dirward, psin.TexCoords + (float2(0, -(1))) * fs_param_Dirward_dxdy);
-    if (abs(here.r - 0.0) < .001)
+    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Geo_dxdy), right = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Geo_dxdy), up = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Geo_dxdy), left = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Geo_dxdy), down = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Geo_dxdy);
+    float4 dirward_here = tex2D(fs_param_Dirward, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Dirward_dxdy), dirward_right = tex2D(fs_param_Dirward, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Dirward_dxdy), dirward_up = tex2D(fs_param_Dirward, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Dirward_dxdy), dirward_left = tex2D(fs_param_Dirward, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Dirward_dxdy), dirward_down = tex2D(fs_param_Dirward, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Dirward_dxdy);
+    if (abs(here.r - 0.0) < .0019)
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;
     }
-    if (abs(dirward_here.g - 0.0) < .001)
+    if (abs(dirward_here.g - 0.0) < .0019)
     {
-        if (all(abs(right.gba - here.gba) < .001) && abs(dirward_right.g - 0.003921569) < .001)
+        if (all(abs(right.gba - here.gba) < .0019) && abs(dirward_right.g - 0.003921569) < .0019)
         {
             dirward_here.a = dirward_right.a;
             dirward_here.g = 0.003921569;
         }
-        if (all(abs(left.gba - here.gba) < .001) && abs(dirward_left.g - 0.003921569) < .001)
+        if (all(abs(left.gba - here.gba) < .0019) && abs(dirward_left.g - 0.003921569) < .0019)
         {
             dirward_here.a = dirward_left.a;
             dirward_here.g = 0.003921569;
         }
-        if (all(abs(up.gba - here.gba) < .001) && abs(dirward_up.g - 0.003921569) < .001)
+        if (all(abs(up.gba - here.gba) < .0019) && abs(dirward_up.g - 0.003921569) < .0019)
         {
             dirward_here.a = dirward_up.a;
             dirward_here.g = 0.003921569;
         }
-        if (all(abs(down.gba - here.gba) < .001) && abs(dirward_down.g - 0.003921569) < .001)
+        if (all(abs(down.gba - here.gba) < .0019) && abs(dirward_down.g - 0.003921569) < .0019)
         {
             dirward_here.a = dirward_down.a;
             dirward_here.g = 0.003921569;

@@ -59,7 +59,7 @@ sampler fs_param_Units : register(s2) = sampler_state
 bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
-    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
+    return 0.1254902 <= val + .0019 && val < 0.5019608 - .0019;
 }
 
 // Compiled vertex shader
@@ -76,14 +76,14 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    if (abs(0.01176471 - 0.0) > .001 && abs(unit_here.g - 0.01176471) > .001 || false && !(Game__SimShader__fake_selected__data(data_here)))
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Units_dxdy);
+    if (abs(0.01176471 - 0.0) > .0019 && abs(unit_here.g - 0.01176471) > .0019 || false && !(Game__SimShader__fake_selected__data(data_here)))
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;
     }
-    __FinalOutput.Color = float4(abs(unit_here.r - 0.003921569) < .001 ? 1.0 : 0, abs(unit_here.r - 0.007843138) < .001 ? 1.0 : 0, abs(unit_here.r - 0.01176471) < .001 ? 1.0 : 0, abs(unit_here.r - 0.01568628) < .001 ? 1.0 : 0);
+    __FinalOutput.Color = float4(abs(unit_here.r - 0.003921569) < .0019 ? 1.0 : 0, abs(unit_here.r - 0.007843138) < .0019 ? 1.0 : 0, abs(unit_here.r - 0.01176471) < .0019 ? 1.0 : 0, abs(unit_here.r - 0.01568628) < .0019 ? 1.0 : 0);
     return __FinalOutput;
 }
 

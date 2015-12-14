@@ -549,9 +549,10 @@ namespace Game
             );
         }
 
+        readonly vec2 lookup_shift = new vec2(-0.25f, -0.25f);
         protected vec2 get_subcell_pos(VertexOut vertex, vec2 grid_size)
         {
-            vec2 coords = vertex.TexCoords * grid_size;
+            vec2 coords = vertex.TexCoords * grid_size + lookup_shift;
             float i = floor(coords.x);
             float j = floor(coords.y);
 
@@ -560,7 +561,7 @@ namespace Game
 
         protected vec2 get_subcell_pos(VertexOut vertex, vec2 grid_size, vec2 grid_shift)
         {
-            vec2 coords = vertex.TexCoords * grid_size + grid_shift;
+            vec2 coords = vertex.TexCoords * grid_size + grid_shift + lookup_shift;
             float i = floor(coords.x);
             float j = floor(coords.y);
 

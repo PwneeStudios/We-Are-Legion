@@ -57,7 +57,7 @@ sampler fs_param_Units : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__IsBuilding__Single(float type)
 {
-    return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
+    return type >= 0.02352941 - .0019 && type < 0.07843138 - .0019;
 }
 
 bool Game__SimShader__IsBuilding__unit(float4 u)
@@ -67,7 +67,7 @@ bool Game__SimShader__IsBuilding__unit(float4 u)
 
 bool Game__SimShader__IsCenter__building(float4 b)
 {
-    return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
+    return abs(b.g - 0.003921569) < .0019 && abs(b.a - 0.003921569) < .0019;
 }
 
 // Compiled vertex shader
@@ -84,43 +84,43 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (float2(1, 0)) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (float2(1, 0)) * fs_param_Data_dxdy)))
+    float4 here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Data_dxdy)))
     {
         here.g = 0.0;
         here.a = 0.003921569;
     }
-    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (float2(-(1), 0)) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (float2(-(1), 0)) * fs_param_Data_dxdy)))
+    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Data_dxdy)))
     {
         here.g = 0.007843138;
         here.a = 0.003921569;
     }
-    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (float2(0, 1)) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (float2(0, 1)) * fs_param_Data_dxdy)))
+    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Data_dxdy)))
     {
         here.g = 0.003921569;
         here.a = 0.0;
     }
-    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (float2(0, -(1))) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (float2(0, -(1))) * fs_param_Data_dxdy)))
+    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Data_dxdy)))
     {
         here.g = 0.003921569;
         here.a = 0.007843138;
     }
-    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (float2(1, 1)) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (float2(1, 1)) * fs_param_Data_dxdy)))
+    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 1)) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 1)) * fs_param_Data_dxdy)))
     {
         here.g = 0.0;
         here.a = 0.0;
     }
-    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (float2(1, -(1))) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (float2(1, -(1))) * fs_param_Data_dxdy)))
+    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(1, -(1))) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(1, -(1))) * fs_param_Data_dxdy)))
     {
         here.g = 0.0;
         here.a = 0.007843138;
     }
-    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (float2(-(1), 1)) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (float2(-(1), 1)) * fs_param_Data_dxdy)))
+    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 1)) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 1)) * fs_param_Data_dxdy)))
     {
         here.g = 0.007843138;
         here.a = 0.0;
     }
-    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Data_dxdy)))
+    if (Game__SimShader__IsBuilding__unit(tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), -(1))) * fs_param_Units_dxdy)) && Game__SimShader__IsCenter__building(tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), -(1))) * fs_param_Data_dxdy)))
     {
         here.g = 0.007843138;
         here.a = 0.007843138;

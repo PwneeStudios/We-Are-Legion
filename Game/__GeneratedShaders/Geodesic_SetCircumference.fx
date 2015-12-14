@@ -117,9 +117,9 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 info_here = tex2D(fs_param_Info, psin.TexCoords + (float2(0, 0)) * fs_param_Info_dxdy);
-    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy);
-    if (abs(here.r - 0.0) < .001)
+    float4 info_here = tex2D(fs_param_Info, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Info_dxdy);
+    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Geo_dxdy);
+    if (abs(here.r - 0.0) < .0019)
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;
@@ -127,23 +127,23 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 pos_here = psin.TexCoords * fs_param_Geo_size;
     float2 start_pos = Game__SimShader__geo_pos_id__geo(here);
     float2 GeoStart = (start_pos - pos_here);
-    float4 right = tex2D(fs_param_Geo, psin.TexCoords + (GeoStart + float2(1, 0)) * fs_param_Geo_dxdy), up = tex2D(fs_param_Geo, psin.TexCoords + (GeoStart + float2(0, 1)) * fs_param_Geo_dxdy), left = tex2D(fs_param_Geo, psin.TexCoords + (GeoStart + float2(-(1), 0)) * fs_param_Geo_dxdy), down = tex2D(fs_param_Geo, psin.TexCoords + (GeoStart + float2(0, -(1))) * fs_param_Geo_dxdy);
+    float4 right = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + GeoStart + float2(1, 0)) * fs_param_Geo_dxdy), up = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + GeoStart + float2(0, 1)) * fs_param_Geo_dxdy), left = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + GeoStart + float2(-(1), 0)) * fs_param_Geo_dxdy), down = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + GeoStart + float2(0, -(1))) * fs_param_Geo_dxdy);
     float circum = 0;
-    if (all(abs(right.gba - here.gba) < .001))
+    if (all(abs(right.gba - here.gba) < .0019))
     {
-        circum = max(circum, Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(1, 0)) * fs_param_Info_dxdy)));
+        circum = max(circum, Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (-float2(0.25,0.25) + GeoStart + float2(1, 0)) * fs_param_Info_dxdy)));
     }
-    if (all(abs(up.gba - here.gba) < .001))
+    if (all(abs(up.gba - here.gba) < .0019))
     {
-        circum = max(circum, Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(0, 1)) * fs_param_Info_dxdy)));
+        circum = max(circum, Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (-float2(0.25,0.25) + GeoStart + float2(0, 1)) * fs_param_Info_dxdy)));
     }
-    if (all(abs(left.gba - here.gba) < .001))
+    if (all(abs(left.gba - here.gba) < .0019))
     {
-        circum = max(circum, Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(-(1), 0)) * fs_param_Info_dxdy)));
+        circum = max(circum, Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (-float2(0.25,0.25) + GeoStart + float2(-(1), 0)) * fs_param_Info_dxdy)));
     }
-    if (all(abs(down.gba - here.gba) < .001))
+    if (all(abs(down.gba - here.gba) < .0019))
     {
-        circum = max(circum, Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (GeoStart + float2(0, -(1))) * fs_param_Info_dxdy)));
+        circum = max(circum, Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (-float2(0.25,0.25) + GeoStart + float2(0, -(1))) * fs_param_Info_dxdy)));
     }
     Game__SimShader__set_circumference__geo_info__Single(info_here, circum);
     __FinalOutput.Color = info_here;

@@ -84,7 +84,7 @@ namespace Game
             }
         }
 
-        public static Texture2D FromPng(Stream stream, Texture2D texture = null)
+        public static Texture2D _FromPng(Stream stream, Texture2D texture = null)
         {
             var pngr = new PngReader(stream);
 
@@ -135,13 +135,17 @@ namespace Game
             return texture;
         }
 
-        public static Texture2D _FromPng(Stream stream)
+        public static Texture2D FromPng(Stream stream, Texture2D texture = null)
         {
             using (Bitmap bitmap = new Bitmap(stream))
             {
                 int w = bitmap.Width, h = bitmap.Height;
                 byte[] textureData = new byte[4 * w * h];
-                Texture2D texture = new Texture2D(GameClass.Graphics, w, h);
+
+                if (texture == null)
+                {
+                    texture = new Texture2D(GameClass.Graphics, w, h);
+                }
 
                 Rectangle rect = new Rectangle(0, 0, w, h);
                 var bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);

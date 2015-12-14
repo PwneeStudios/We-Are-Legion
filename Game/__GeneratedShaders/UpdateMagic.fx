@@ -102,12 +102,12 @@ sampler fs_param_Necromancy : register(s5) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__CorpsePresent__corpse(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 // Compiled vertex shader
@@ -124,32 +124,32 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy);
-    float4 corpse_here = tex2D(fs_param_Corpses, psin.TexCoords + (float2(0, 0)) * fs_param_Corpses_dxdy);
-    float4 necromancy = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(0, 0)) * fs_param_Necromancy_dxdy);
-    float4 cur_data = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy), prev_data = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousData_dxdy);
+    float4 here = tex2D(fs_param_Magic, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Magic_dxdy);
+    float4 corpse_here = tex2D(fs_param_Corpses, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Corpses_dxdy);
+    float4 necromancy = tex2D(fs_param_Necromancy, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Necromancy_dxdy);
+    float4 cur_data = tex2D(fs_param_CurrentData, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_CurrentData_dxdy), prev_data = tex2D(fs_param_PreviousData, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_PreviousData_dxdy);
     here.r = 0.0;
     here.g = 0.0;
     if (Game__SimShader__CorpsePresent__corpse(corpse_here) && !(Game__SimShader__Something__data(cur_data)) && !(Game__SimShader__Something__data(prev_data)))
     {
         float player = 0.0;
         float necro = 0.0;
-        if (necromancy.r > necro + .001)
+        if (necromancy.r > necro + .0019)
         {
             necro = necromancy.r;
             player = 0.003921569;
         }
-        if (necromancy.g > necro + .001)
+        if (necromancy.g > necro + .0019)
         {
             necro = necromancy.g;
             player = 0.007843138;
         }
-        if (necromancy.b > necro + .001)
+        if (necromancy.b > necro + .0019)
         {
             necro = necromancy.b;
             player = 0.01176471;
         }
-        if (necromancy.a > necro + .001)
+        if (necromancy.a > necro + .0019)
         {
             necro = necromancy.a;
             player = 0.01568628;

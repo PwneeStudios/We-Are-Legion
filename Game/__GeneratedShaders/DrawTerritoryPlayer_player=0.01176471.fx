@@ -46,19 +46,19 @@ float fs_param_cutoff;
 // The following methods are included because they are referenced by the fragment shader.
 float Game__SimShader__GetPlayerVal__PlayerTuple__Single(float4 tuple, float player)
 {
-    if (abs(player - 0.003921569) < .001)
+    if (abs(player - 0.003921569) < .0019)
     {
         return tuple.r;
     }
-    if (abs(player - 0.007843138) < .001)
+    if (abs(player - 0.007843138) < .0019)
     {
         return tuple.g;
     }
-    if (abs(player - 0.01176471) < .001)
+    if (abs(player - 0.01176471) < .0019)
     {
         return tuple.b;
     }
-    if (abs(player - 0.01568628) < .001)
+    if (abs(player - 0.01568628) < .0019)
     {
         return tuple.a;
     }
@@ -82,9 +82,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 here = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 0)) * fs_param_Path_dxdy);
+    float4 here = tex2D(fs_param_Path, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Path_dxdy);
     float dist = Game__SimShader__GetPlayerVal__PlayerTuple__Single(here, 0.01176471);
-    bool controlled = dist < fs_param_cutoff - .001;
+    bool controlled = dist < fs_param_cutoff - .0019;
     float4 clr = controlled ? float4(0.0, 0.0, 0.0, 0.0) : float4(0.0, 0.0, 0.0, 0.65);
     clr.rgb *= clr.a;
     __FinalOutput.Color = clr;

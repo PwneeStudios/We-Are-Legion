@@ -58,7 +58,7 @@ sampler fs_param_Noise : register(s2) = sampler_state
 bool Game__SimShader__selected__data(float4 u)
 {
     float val = u.b;
-    return val >= 0.3764706 - .001;
+    return val >= 0.3764706 - .0019;
 }
 
 float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
@@ -93,7 +93,7 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 d = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float4 d = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
     if (Game__SimShader__selected__data(d))
     {
         Game__SimShader__set_select_state__data__Single(d, 0.3764706);
@@ -102,7 +102,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         Game__SimShader__set_select_state__data__Single(d, 0.0);
     }
-    float4 n = tex2D(fs_param_Noise, psin.TexCoords + (float2(0, 0)) * fs_param_Noise_dxdy);
+    float4 n = tex2D(fs_param_Noise, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Noise_dxdy);
     __FinalOutput.Color = tex2D(fs_param_Noise, tex2D(fs_param_Noise, d.xy + n.xy).xy + d.zw);
     return __FinalOutput;
 }

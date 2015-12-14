@@ -43,7 +43,7 @@ sampler fs_param_Tiles : register(s1) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__IsBlockingTile__tile(float4 t)
 {
-    return t.r >= 0.01176471 - .001 || abs(t.r - 0.003921569) < .001 && abs(t.b - 0.1215686) > .001;
+    return t.r >= 0.01176471 - .0019 || abs(t.r - 0.003921569) < .0019 && abs(t.b - 0.1215686) > .0019;
 }
 
 // Compiled vertex shader
@@ -60,7 +60,7 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 0)) * fs_param_Tiles_dxdy), right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, 0)) * fs_param_Tiles_dxdy), up = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 1)) * fs_param_Tiles_dxdy), left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), 0)) * fs_param_Tiles_dxdy), down = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, -(1))) * fs_param_Tiles_dxdy), up_right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, 1)) * fs_param_Tiles_dxdy), up_left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), 1)) * fs_param_Tiles_dxdy), down_right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, -(1))) * fs_param_Tiles_dxdy), down_left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Tiles_dxdy);
+    float4 here = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Tiles_dxdy), right = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Tiles_dxdy), up = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Tiles_dxdy), left = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Tiles_dxdy), down = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Tiles_dxdy), up_right = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 1)) * fs_param_Tiles_dxdy), up_left = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 1)) * fs_param_Tiles_dxdy), down_right = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(1, -(1))) * fs_param_Tiles_dxdy), down_left = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), -(1))) * fs_param_Tiles_dxdy);
     if (Game__SimShader__IsBlockingTile__tile(here))
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
@@ -188,7 +188,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 output = float4(0, 0, 0, 0);
     output.r = dir;
     int surround_count = (Game__SimShader__IsBlockingTile__tile(up) ? 1 : 0) + (Game__SimShader__IsBlockingTile__tile(left) ? 1 : 0) + (Game__SimShader__IsBlockingTile__tile(down) ? 1 : 0) + (Game__SimShader__IsBlockingTile__tile(right) ? 1 : 0);
-    if (output.r > 0.0 + .001 && abs(surround_count - 3) < .001)
+    if (output.r > 0.0 + .0019 && abs(surround_count - 3) < .0019)
     {
         output.a = 0.003921569;
     }

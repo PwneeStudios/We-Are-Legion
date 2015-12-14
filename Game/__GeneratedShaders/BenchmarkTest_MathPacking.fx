@@ -62,7 +62,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0, 0, 0, 0);
-    float4 right = tex2D(fs_param_s, psin.TexCoords + (float2(1, 0)) * fs_param_s_dxdy), up = tex2D(fs_param_s, psin.TexCoords + (float2(0, 1)) * fs_param_s_dxdy), left = tex2D(fs_param_s, psin.TexCoords + (float2(-(1), 0)) * fs_param_s_dxdy), down = tex2D(fs_param_s, psin.TexCoords + (float2(0, -(1))) * fs_param_s_dxdy);
+    float4 right = tex2D(fs_param_s, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_s_dxdy), up = tex2D(fs_param_s, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_s_dxdy), left = tex2D(fs_param_s, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_s_dxdy), down = tex2D(fs_param_s, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_s_dxdy);
     output.r = Game__BenchmarkTest_MathPacking__MathPacking__Single(right.r) + Game__BenchmarkTest_MathPacking__MathPacking__Single(right.g) + Game__BenchmarkTest_MathPacking__MathPacking__Single(right.b) + Game__BenchmarkTest_MathPacking__MathPacking__Single(right.a);
     output.g = Game__BenchmarkTest_MathPacking__MathPacking__Single(left.r) + Game__BenchmarkTest_MathPacking__MathPacking__Single(left.g) + Game__BenchmarkTest_MathPacking__MathPacking__Single(left.b) + Game__BenchmarkTest_MathPacking__MathPacking__Single(left.a);
     output.b = Game__BenchmarkTest_MathPacking__MathPacking__Single(up.r) + Game__BenchmarkTest_MathPacking__MathPacking__Single(up.g) + Game__BenchmarkTest_MathPacking__MathPacking__Single(up.b) + Game__BenchmarkTest_MathPacking__MathPacking__Single(up.a);

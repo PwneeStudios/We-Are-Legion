@@ -87,7 +87,7 @@ sampler fs_param_Magic : register(s4) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__IsUnit__Single(float type)
 {
-    return type >= 0.003921569 - .001 && type < 0.02352941 - .001;
+    return type >= 0.003921569 - .0019 && type < 0.02352941 - .0019;
 }
 
 bool Game__SimShader__IsUnit__unit(float4 u)
@@ -97,17 +97,17 @@ bool Game__SimShader__IsUnit__unit(float4 u)
 
 bool Game__SimShader__IsStationary__data(float4 d)
 {
-    return d.r >= 0.01960784 - .001;
+    return d.r >= 0.01960784 - .0019;
 }
 
 bool Game__SimShader__Stayed__data(float4 u)
 {
-    return Game__SimShader__IsStationary__data(u) || abs(u.g - 0.003921569) < .001;
+    return Game__SimShader__IsStationary__data(u) || abs(u.g - 0.003921569) < .0019;
 }
 
 bool Game__SimShader__IsValid__Single(float direction)
 {
-    return direction > 0 + .001;
+    return direction > 0 + .0019;
 }
 
 float2 Game__SimShader__dir_to_vec__Single(float direction)
@@ -118,12 +118,12 @@ float2 Game__SimShader__dir_to_vec__Single(float direction)
 
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__IsBuilding__Single(float type)
 {
-    return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
+    return type >= 0.02352941 - .0019 && type < 0.07843138 - .0019;
 }
 
 bool Game__SimShader__IsBuilding__unit(float4 u)
@@ -133,7 +133,7 @@ bool Game__SimShader__IsBuilding__unit(float4 u)
 
 bool Game__SimShader__UnitIsFireImmune__unit(float4 u)
 {
-    return abs(u.r - 0.01176471) < .001 || abs(u.r - 0.007843138) < .001;
+    return abs(u.r - 0.01176471) < .0019 || abs(u.r - 0.007843138) < .0019;
 }
 
 // Compiled vertex shader
@@ -150,10 +150,10 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Unit_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
     bool DoRaiseAnim = false;
-    if (abs(unit_here.a - 0.2352941) < .001)
+    if (abs(unit_here.a - 0.2352941) < .0019)
     {
         DoRaiseAnim = true;
     }
@@ -161,22 +161,22 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     {
         unit_here.a = 0.0;
     }
-    if (Game__SimShader__Stayed__data(data_here) && abs(unit_here.b - 0.0) > .001)
+    if (Game__SimShader__Stayed__data(data_here) && abs(unit_here.b - 0.0) > .0019)
     {
-        if (Game__SimShader__IsUnit__unit(unit_here) && abs(data_here.a - 0.007843138) < .001)
+        if (Game__SimShader__IsUnit__unit(unit_here) && abs(data_here.a - 0.007843138) < .0019)
         {
-            float4 facing = tex2D(fs_param_Unit, psin.TexCoords + (Game__SimShader__dir_to_vec__Single(data_here.r)) * fs_param_Unit_dxdy);
-            if (abs(facing.b - unit_here.b) > .001 && abs(facing.b - 0.0) > .001)
+            float4 facing = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + Game__SimShader__dir_to_vec__Single(data_here.r)) * fs_param_Unit_dxdy);
+            if (abs(facing.b - unit_here.b) > .0019 && abs(facing.b - 0.0) > .0019)
             {
                 unit_here.a = 0.04705882;
             }
         }
-        float4 data_right = tex2D(fs_param_Data, psin.TexCoords + (float2(1, 0)) * fs_param_Data_dxdy), data_up = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 1)) * fs_param_Data_dxdy), data_left = tex2D(fs_param_Data, psin.TexCoords + (float2(-(1), 0)) * fs_param_Data_dxdy), data_down = tex2D(fs_param_Data, psin.TexCoords + (float2(0, -(1))) * fs_param_Data_dxdy);
-        float4 unit_right = tex2D(fs_param_Unit, psin.TexCoords + (float2(1, 0)) * fs_param_Unit_dxdy), unit_up = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 1)) * fs_param_Unit_dxdy), unit_left = tex2D(fs_param_Unit, psin.TexCoords + (float2(-(1), 0)) * fs_param_Unit_dxdy), unit_down = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, -(1))) * fs_param_Unit_dxdy);
-        float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
-        if (abs(unit_here.r - 0.007843138) > .001 && rnd.x > 0.7 + .001 || rnd.x > 0.915 + .001)
+        float4 data_right = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Data_dxdy), data_up = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Data_dxdy), data_left = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Data_dxdy), data_down = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Data_dxdy);
+        float4 unit_right = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Unit_dxdy), unit_up = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Unit_dxdy), unit_left = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Unit_dxdy), unit_down = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Unit_dxdy);
+        float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Random_dxdy);
+        if (abs(unit_here.r - 0.007843138) > .0019 && rnd.x > 0.7 + .0019 || rnd.x > 0.915 + .0019)
         {
-            if (Game__SimShader__Something__data(data_right) && abs(unit_right.b - unit_here.b) > .001 && abs(unit_right.b - 0.0) > .001 && abs(data_right.r - 0.01176471) < .001 && abs(data_right.a - 0.007843138) < .001 && abs(data_right.g - 0.003921569) < .001 || Game__SimShader__Something__data(data_left) && abs(unit_left.b - unit_here.b) > .001 && abs(unit_left.b - 0.0) > .001 && abs(data_left.r - 0.003921569) < .001 && abs(data_left.a - 0.007843138) < .001 && abs(data_left.g - 0.003921569) < .001 || Game__SimShader__Something__data(data_up) && abs(unit_up.b - unit_here.b) > .001 && abs(unit_up.b - 0.0) > .001 && abs(data_up.r - 0.01568628) < .001 && abs(data_up.a - 0.007843138) < .001 && abs(data_up.g - 0.003921569) < .001 || Game__SimShader__Something__data(data_down) && abs(unit_down.b - unit_here.b) > .001 && abs(unit_down.b - 0.0) > .001 && abs(data_down.r - 0.007843138) < .001 && abs(data_down.a - 0.007843138) < .001 && abs(data_down.g - 0.003921569) < .001)
+            if (Game__SimShader__Something__data(data_right) && abs(unit_right.b - unit_here.b) > .0019 && abs(unit_right.b - 0.0) > .0019 && abs(data_right.r - 0.01176471) < .0019 && abs(data_right.a - 0.007843138) < .0019 && abs(data_right.g - 0.003921569) < .0019 || Game__SimShader__Something__data(data_left) && abs(unit_left.b - unit_here.b) > .0019 && abs(unit_left.b - 0.0) > .0019 && abs(data_left.r - 0.003921569) < .0019 && abs(data_left.a - 0.007843138) < .0019 && abs(data_left.g - 0.003921569) < .0019 || Game__SimShader__Something__data(data_up) && abs(unit_up.b - unit_here.b) > .0019 && abs(unit_up.b - 0.0) > .0019 && abs(data_up.r - 0.01568628) < .0019 && abs(data_up.a - 0.007843138) < .0019 && abs(data_up.g - 0.003921569) < .0019 || Game__SimShader__Something__data(data_down) && abs(unit_down.b - unit_here.b) > .0019 && abs(unit_down.b - 0.0) > .0019 && abs(data_down.r - 0.007843138) < .0019 && abs(data_down.a - 0.007843138) < .0019 && abs(data_down.g - 0.003921569) < .0019)
             {
                 if (Game__SimShader__IsBuilding__unit(unit_here))
                 {
@@ -189,7 +189,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
             }
         }
     }
-    if (Game__SimShader__IsUnit__unit(unit_here) && abs(tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy).r - 0.003921569) < .001 && !(Game__SimShader__UnitIsFireImmune__unit(unit_here)))
+    if (Game__SimShader__IsUnit__unit(unit_here) && abs(tex2D(fs_param_Magic, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Magic_dxdy).r - 0.003921569) < .0019 && !(Game__SimShader__UnitIsFireImmune__unit(unit_here)))
     {
         unit_here.a = 0.07058824;
     }

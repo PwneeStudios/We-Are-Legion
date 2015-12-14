@@ -89,50 +89,50 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy), right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 0)) * fs_param_Geo_dxdy), up = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 1)) * fs_param_Geo_dxdy), left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 0)) * fs_param_Geo_dxdy), down = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, -(1))) * fs_param_Geo_dxdy), up_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 1)) * fs_param_Geo_dxdy), up_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 1)) * fs_param_Geo_dxdy), down_right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, -(1))) * fs_param_Geo_dxdy), down_left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Geo_dxdy);
-    if (abs(here.r - 0.0) < .001)
+    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Geo_dxdy), right = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Geo_dxdy), up = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Geo_dxdy), left = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Geo_dxdy), down = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Geo_dxdy), up_right = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 1)) * fs_param_Geo_dxdy), up_left = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 1)) * fs_param_Geo_dxdy), down_right = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(1, -(1))) * fs_param_Geo_dxdy), down_left = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), -(1))) * fs_param_Geo_dxdy);
+    if (abs(here.r - 0.0) < .0019)
     {
         __FinalOutput.Color = here;
         return __FinalOutput;
     }
     float2 extr_here = Game__SimShader__geo_pos_id__geo(here), extr_right = Game__SimShader__geo_pos_id__geo(right), extr_up = Game__SimShader__geo_pos_id__geo(up), extr_left = Game__SimShader__geo_pos_id__geo(left), extr_down = Game__SimShader__geo_pos_id__geo(down), extr_up_right = Game__SimShader__geo_pos_id__geo(up_right), extr_up_left = Game__SimShader__geo_pos_id__geo(up_left), extr_down_right = Game__SimShader__geo_pos_id__geo(down_right), extr_down_left = Game__SimShader__geo_pos_id__geo(down_left);
     float val_here = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_here), val_right = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_right), val_up = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_up), val_left = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_left), val_down = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_down), val_up_right = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_up_right), val_up_left = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_up_left), val_down_right = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_down_right), val_down_left = Game__Geodesic_ExtremityPropagation__flatten__vec2(extr_down_left);
-    if (val_here < val_right - .001)
+    if (val_here < val_right - .0019)
     {
         here.gba = right.gba;
         val_here = val_right;
     }
-    if (val_here < val_up - .001)
+    if (val_here < val_up - .0019)
     {
         here.gba = up.gba;
         val_here = val_up;
     }
-    if (val_here < val_left - .001)
+    if (val_here < val_left - .0019)
     {
         here.gba = left.gba;
         val_here = val_left;
     }
-    if (val_here < val_down - .001)
+    if (val_here < val_down - .0019)
     {
         here.gba = down.gba;
         val_here = val_down;
     }
-    if (val_here < val_up_right - .001)
+    if (val_here < val_up_right - .0019)
     {
         here.gba = up_right.gba;
         val_here = val_up_right;
     }
-    if (val_here < val_up_left - .001)
+    if (val_here < val_up_left - .0019)
     {
         here.gba = up_left.gba;
         val_here = val_up_left;
     }
-    if (val_here < val_down_right - .001)
+    if (val_here < val_down_right - .0019)
     {
         here.gba = down_right.gba;
         val_here = val_down_right;
     }
-    if (val_here < val_down_left - .001)
+    if (val_here < val_down_left - .0019)
     {
         here.gba = down_left.gba;
         val_here = val_down_left;

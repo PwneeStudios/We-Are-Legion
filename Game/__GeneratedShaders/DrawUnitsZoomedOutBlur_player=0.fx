@@ -74,65 +74,65 @@ sampler fs_param_FarColor : register(s3) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__IsStationary__data(float4 d)
 {
-    return d.r >= 0.01960784 - .001;
+    return d.r >= 0.01960784 - .0019;
 }
 
 bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
-    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
+    return 0.1254902 <= val + .0019 && val < 0.5019608 - .0019;
 }
 
 float4 Game__SelectedUnitColor__Get__Single(VertexToPixel psin, float player)
 {
-    if (abs(player - 0.003921569) < .001)
+    if (abs(player - 0.003921569) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(1-0.25,-0.25+ 1 + (int)player) * fs_param_FarColor_dxdy);
     }
-    if (abs(player - 0.007843138) < .001)
+    if (abs(player - 0.007843138) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(1-0.25,-0.25+ 2 + (int)player) * fs_param_FarColor_dxdy);
     }
-    if (abs(player - 0.01176471) < .001)
+    if (abs(player - 0.01176471) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(1-0.25,-0.25+ 3 + (int)player) * fs_param_FarColor_dxdy);
     }
-    if (abs(player - 0.01568628) < .001)
+    if (abs(player - 0.01568628) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(1+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(1-0.25,-0.25+ 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
 float4 Game__UnitColor__Get__Single(VertexToPixel psin, float player)
 {
-    if (abs(player - 0.003921569) < .001)
+    if (abs(player - 0.003921569) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(0-0.25,-0.25+ 1 + (int)player) * fs_param_FarColor_dxdy);
     }
-    if (abs(player - 0.007843138) < .001)
+    if (abs(player - 0.007843138) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(0-0.25,-0.25+ 2 + (int)player) * fs_param_FarColor_dxdy);
     }
-    if (abs(player - 0.01176471) < .001)
+    if (abs(player - 0.01176471) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(0-0.25,-0.25+ 3 + (int)player) * fs_param_FarColor_dxdy);
     }
-    if (abs(player - 0.01568628) < .001)
+    if (abs(player - 0.01568628) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(0+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(0-0.25,-0.25+ 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
 
 float4 Game__DrawUnits__SolidColor__Single__data__unit(VertexToPixel psin, float player, float4 data, float4 unit)
 {
-    return abs(unit.g - player) < .001 && Game__SimShader__fake_selected__data(data) ? Game__SelectedUnitColor__Get__Single(psin, unit.g) : Game__UnitColor__Get__Single(psin, unit.g);
+    return abs(unit.g - player) < .0019 && Game__SimShader__fake_selected__data(data) ? Game__SelectedUnitColor__Get__Single(psin, unit.g) : Game__UnitColor__Get__Single(psin, unit.g);
 }
 
 float4 Game__DrawUnits__Presence__Single__data__unit(VertexToPixel psin, float player, float4 data, float4 unit)
@@ -157,8 +157,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 data_right = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(1, 0)) * fs_param_CurrentData_dxdy), data_up = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 1)) * fs_param_CurrentData_dxdy), data_left = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(-(1), 0)) * fs_param_CurrentData_dxdy), data_down = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, -(1))) * fs_param_CurrentData_dxdy), data_here = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy);
-    float4 unit_right = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(1, 0)) * fs_param_CurrentUnit_dxdy), unit_up = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(0, 1)) * fs_param_CurrentUnit_dxdy), unit_left = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(-(1), 0)) * fs_param_CurrentUnit_dxdy), unit_down = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(0, -(1))) * fs_param_CurrentUnit_dxdy), unit_here = tex2D(fs_param_CurrentUnit, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentUnit_dxdy);
+    float4 data_right = tex2D(fs_param_CurrentData, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_CurrentData_dxdy), data_up = tex2D(fs_param_CurrentData, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_CurrentData_dxdy), data_left = tex2D(fs_param_CurrentData, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_CurrentData_dxdy), data_down = tex2D(fs_param_CurrentData, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_CurrentData_dxdy), data_here = tex2D(fs_param_CurrentData, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_CurrentData_dxdy);
+    float4 unit_right = tex2D(fs_param_CurrentUnit, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_CurrentUnit_dxdy), unit_up = tex2D(fs_param_CurrentUnit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_CurrentUnit_dxdy), unit_left = tex2D(fs_param_CurrentUnit, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_CurrentUnit_dxdy), unit_down = tex2D(fs_param_CurrentUnit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_CurrentUnit_dxdy), unit_here = tex2D(fs_param_CurrentUnit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_CurrentUnit_dxdy);
     output = 0.5 * 0.25 * (Game__DrawUnits__Presence__Single__data__unit(psin, 0, data_right, unit_right) + Game__DrawUnits__Presence__Single__data__unit(psin, 0, data_up, unit_up) + Game__DrawUnits__Presence__Single__data__unit(psin, 0, data_left, unit_left) + Game__DrawUnits__Presence__Single__data__unit(psin, 0, data_down, unit_down)) + 0.5 * Game__DrawUnits__Presence__Single__data__unit(psin, 0, data_here, unit_here);
     __FinalOutput.Color = output;
     return __FinalOutput;

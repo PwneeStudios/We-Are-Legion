@@ -77,19 +77,19 @@ float4 FragSharpFramework__FragSharpStd__max__vec4__vec4__vec4__vec4(float4 a, f
 
 void Game__SimShader__SetPlayerVal__PlayerTuple__Single__Single(inout float4 tuple, float player, float value)
 {
-    if (abs(player - 0.003921569) < .001)
+    if (abs(player - 0.003921569) < .0019)
     {
         tuple.r = value;
     }
-    if (abs(player - 0.007843138) < .001)
+    if (abs(player - 0.007843138) < .0019)
     {
         tuple.g = value;
     }
-    if (abs(player - 0.01176471) < .001)
+    if (abs(player - 0.01176471) < .0019)
     {
         tuple.b = value;
     }
-    if (abs(player - 0.01568628) < .001)
+    if (abs(player - 0.01568628) < .0019)
     {
         tuple.a = value;
     }
@@ -109,11 +109,11 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    float4 right = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(1, 0)) * fs_param_Necromancy_dxdy), up = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(0, 1)) * fs_param_Necromancy_dxdy), left = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(-(1), 0)) * fs_param_Necromancy_dxdy), down = tex2D(fs_param_Necromancy, psin.TexCoords + (float2(0, -(1))) * fs_param_Necromancy_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Units_dxdy);
+    float4 right = tex2D(fs_param_Necromancy, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Necromancy_dxdy), up = tex2D(fs_param_Necromancy, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Necromancy_dxdy), left = tex2D(fs_param_Necromancy, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Necromancy_dxdy), down = tex2D(fs_param_Necromancy, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Necromancy_dxdy);
     float4 necromancy = FragSharpFramework__FragSharpStd__max__vec4__vec4__vec4__vec4(right, up, left, down) - float4(0.003921569, 0.003921569, 0.003921569, 0.003921569);
-    if (abs(unit_here.r - 0.01176471) < .001)
+    if (abs(unit_here.r - 0.01176471) < .0019)
     {
         Game__SimShader__SetPlayerVal__PlayerTuple__Single__Single(necromancy, unit_here.g, 0.07843138);
     }

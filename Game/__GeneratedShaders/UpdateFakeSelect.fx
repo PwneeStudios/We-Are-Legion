@@ -77,27 +77,27 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
     float state = Game__SimShader__select_state__data(data_here);
-    if (abs(state - 0.2509804) < .001)
+    if (abs(state - 0.2509804) < .0019)
     {
         state = 0.1254902;
     }
     else
     {
-        if (abs(state - 0.1254902) < .001)
+        if (abs(state - 0.1254902) < .0019)
         {
             state = 0.0;
         }
         else
         {
-            if (abs(state - 0.627451) < .001)
+            if (abs(state - 0.627451) < .0019)
             {
                 state = 0.5019608;
             }
             else
             {
-                if (abs(state - 0.5019608) < .001)
+                if (abs(state - 0.5019608) < .0019)
                 {
                     state = 0.3764706;
                 }

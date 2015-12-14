@@ -102,6 +102,25 @@ namespace Game
 
     public static class Texture2dExtension
     {
+        public static bool CheckForNonZero(this Texture2D Texture)
+        {
+            var data = Texture.GetData();
+            for (int i = 0; i < Texture.Width; i++)
+            {
+                for (int j = 0; j < Texture.Height; j++)
+                {
+                    var pixel = data[i * Texture.Height + j];
+                    if (pixel.R != 0 || pixel.G != 0 || pixel.B != 0 || pixel.A != 0)
+                    {
+                        Console.WriteLine($"Non-zero value at ({i}, {j}) = {pixel}");
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public static vec2 UnitSize(this Texture2D Texture)
         {
             return new vec2(1, (float)Texture.Height / (float)Texture.Width);

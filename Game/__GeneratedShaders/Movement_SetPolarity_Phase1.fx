@@ -100,10 +100,10 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 extra_here = tex2D(fs_param_Extra, psin.TexCoords + (float2(0, 0)) * fs_param_Extra_dxdy);
-    float4 geo_here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy);
-    if (data_here.g >= 0.3921569 - .001)
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    float4 extra_here = tex2D(fs_param_Extra, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Extra_dxdy);
+    float4 geo_here = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Geo_dxdy);
+    if (data_here.g >= 0.3921569 - .0019)
     {
         extra_here.rg = geo_here.ba;
         extra_here.b = 0.003921569;
@@ -111,7 +111,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     else
     {
-        if (data_here.g >= 0.03921569 - .001)
+        if (data_here.g >= 0.03921569 - .0019)
         {
             extra_here.rg = geo_here.ba;
             extra_here.b = 0.003921569;

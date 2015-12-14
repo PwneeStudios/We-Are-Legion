@@ -72,12 +72,12 @@ sampler fs_param_Unit : register(s3) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__IsBuilding__Single(float type)
 {
-    return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
+    return type >= 0.02352941 - .0019 && type < 0.07843138 - .0019;
 }
 
 bool Game__SimShader__IsBuilding__unit(float4 u)
@@ -125,16 +125,16 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0, 0, 0, 0);
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    if (Game__SimShader__Something__data(data_here) && (Game__SimShader__IsBuilding__unit(unit_here) || abs(unit_here.r - 0.007843138) < .001 || abs(unit_here.r - 0.01176471) < .001))
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Unit_dxdy);
+    if (Game__SimShader__Something__data(data_here) && (Game__SimShader__IsBuilding__unit(unit_here) || abs(unit_here.r - 0.007843138) < .0019 || abs(unit_here.r - 0.01176471) < .0019))
     {
         float type = unit_here.r;
-        if (abs(type - 0.007843138) < .001)
+        if (abs(type - 0.007843138) < .0019)
         {
             type = 0.03529412;
         }
-        if (abs(type - 0.01176471) < .001)
+        if (abs(type - 0.01176471) < .0019)
         {
             type = 0.03921569;
         }
@@ -145,27 +145,27 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     else
     {
-        float4 right = tex2D(fs_param_Path, psin.TexCoords + (float2(1, 0)) * fs_param_Path_dxdy), up = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 1)) * fs_param_Path_dxdy), left = tex2D(fs_param_Path, psin.TexCoords + (float2(-(1), 0)) * fs_param_Path_dxdy), down = tex2D(fs_param_Path, psin.TexCoords + (float2(0, -(1))) * fs_param_Path_dxdy);
+        float4 right = tex2D(fs_param_Path, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Path_dxdy), up = tex2D(fs_param_Path, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Path_dxdy), left = tex2D(fs_param_Path, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Path_dxdy), down = tex2D(fs_param_Path, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Path_dxdy);
         float min_dist = 1.0;
-        if (left.a < min_dist - .001)
+        if (left.a < min_dist - .0019)
         {
             output.b = left.b;
             min_dist = left.a;
             output.rg = left.rg - float2(0.003921569, 0.0);
         }
-        if (down.a < min_dist - .001)
+        if (down.a < min_dist - .0019)
         {
             output.b = down.b;
             min_dist = down.a;
             output.rg = down.rg - float2(0.0, 0.003921569);
         }
-        if (right.a < min_dist - .001)
+        if (right.a < min_dist - .0019)
         {
             output.b = right.b;
             min_dist = right.a;
             output.rg = right.rg + float2(0.003921569, 0.0);
         }
-        if (up.a < min_dist - .001)
+        if (up.a < min_dist - .0019)
         {
             output.b = up.b;
             min_dist = up.a;

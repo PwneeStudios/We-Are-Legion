@@ -123,22 +123,22 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 geo_here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy), geo_shift = tex2D(fs_param_ShiftedGeo, psin.TexCoords + (float2(0, 0)) * fs_param_ShiftedGeo_dxdy);
-    if (abs(geo_here.r - 0.0) < .001)
+    float4 geo_here = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Geo_dxdy), geo_shift = tex2D(fs_param_ShiftedGeo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_ShiftedGeo_dxdy);
+    if (abs(geo_here.r - 0.0) < .0019)
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;
     }
-    float4 info_here = tex2D(fs_param_Info, psin.TexCoords + (float2(0, 0)) * fs_param_Info_dxdy), info_shift = tex2D(fs_param_ShiftedInfo, psin.TexCoords + (float2(0, 0)) * fs_param_ShiftedInfo_dxdy);
-    if (any(abs(geo_here.gba - geo_shift.gba) > .001))
+    float4 info_here = tex2D(fs_param_Info, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Info_dxdy), info_shift = tex2D(fs_param_ShiftedInfo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_ShiftedInfo_dxdy);
+    if (any(abs(geo_here.gba - geo_shift.gba) > .0019))
     {
-        __FinalOutput.Color = tex2D(fs_param_Dirward, psin.TexCoords + (float2(0, 0)) * fs_param_Dirward_dxdy);
+        __FinalOutput.Color = tex2D(fs_param_Dirward, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Dirward_dxdy);
         return __FinalOutput;
     }
     float dist_here = Game__SimShader__unpack_val__vec2(info_here.xy), dist_shift = Game__SimShader__unpack_val__vec2(info_shift.xy), circum = Game__SimShader__unpack_val__vec2(info_here.zw);
     float diff = dist_here - dist_shift;
     float clockwise = 0, counterclockwise = 0;
-    if (diff > 0 + .001)
+    if (diff > 0 + .0019)
     {
         clockwise = diff;
         counterclockwise = circum - diff;
@@ -149,7 +149,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         counterclockwise = -(diff);
     }
     float4 output = float4(0, 0, 0, 0);
-    output.a = clockwise > counterclockwise + .001 ? 0 : 1;
+    output.a = clockwise > counterclockwise + .0019 ? 0 : 1;
     output.g = 0.003921569;
     __FinalOutput.Color = output;
     return __FinalOutput;

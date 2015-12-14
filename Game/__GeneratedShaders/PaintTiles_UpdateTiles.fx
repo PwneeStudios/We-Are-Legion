@@ -57,11 +57,11 @@ sampler fs_param_Select : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__tile__tile__tile__tile__tile(inout float4 here, inout float4 right, inout float4 up, inout float4 left, inout float4 down, inout float4 up_right, inout float4 up_left, inout float4 down_right, inout float4 down_left)
 {
-    bool grass_on_left = abs(left.r - 0.003921569) < .001 || abs(up_left.r - 0.003921569) < .001 || abs(down_left.r - 0.003921569) < .001;
-    bool grass_on_right = abs(right.r - 0.003921569) < .001 || abs(up_right.r - 0.003921569) < .001 || abs(down_right.r - 0.003921569) < .001;
-    bool grass_on_top = abs(up_left.r - 0.003921569) < .001 || abs(up.r - 0.003921569) < .001 || abs(up_right.r - 0.003921569) < .001;
-    bool grass_on_bottom = abs(down_left.r - 0.003921569) < .001 || abs(down.r - 0.003921569) < .001 || abs(down_right.r - 0.003921569) < .001;
-    if (abs(left.r - 0.003921569) < .001 && abs(right.r - 0.003921569) < .001 || abs(up.r - 0.003921569) < .001 && abs(down.r - 0.003921569) < .001 || abs(up.r - 0.01960784) < .001 || abs(right.r - 0.01960784) < .001 || abs(down.r - 0.01960784) < .001 || abs(left.r - 0.01960784) < .001)
+    bool grass_on_left = abs(left.r - 0.003921569) < .0019 || abs(up_left.r - 0.003921569) < .0019 || abs(down_left.r - 0.003921569) < .0019;
+    bool grass_on_right = abs(right.r - 0.003921569) < .0019 || abs(up_right.r - 0.003921569) < .0019 || abs(down_right.r - 0.003921569) < .0019;
+    bool grass_on_top = abs(up_left.r - 0.003921569) < .0019 || abs(up.r - 0.003921569) < .0019 || abs(up_right.r - 0.003921569) < .0019;
+    bool grass_on_bottom = abs(down_left.r - 0.003921569) < .0019 || abs(down.r - 0.003921569) < .0019 || abs(down_right.r - 0.003921569) < .0019;
+    if (abs(left.r - 0.003921569) < .0019 && abs(right.r - 0.003921569) < .0019 || abs(up.r - 0.003921569) < .0019 && abs(down.r - 0.003921569) < .0019 || abs(up.r - 0.01960784) < .0019 || abs(right.r - 0.01960784) < .0019 || abs(down.r - 0.01960784) < .0019 || abs(left.r - 0.01960784) < .0019)
     {
         here.r = 0.003921569;
         here.g = 0.0;
@@ -69,7 +69,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
     }
     else
     {
-        if (abs(left.r - 0.003921569) < .001 && abs(up.r - 0.003921569) < .001)
+        if (abs(left.r - 0.003921569) < .0019 && abs(up.r - 0.003921569) < .0019)
         {
             here.r = 0.007843138;
             here.g = 0.007843138;
@@ -77,7 +77,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
         }
         else
         {
-            if (abs(up.r - 0.003921569) < .001 && abs(right.r - 0.003921569) < .001)
+            if (abs(up.r - 0.003921569) < .0019 && abs(right.r - 0.003921569) < .0019)
             {
                 here.r = 0.007843138;
                 here.g = 0.0;
@@ -85,7 +85,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
             }
             else
             {
-                if (abs(right.r - 0.003921569) < .001 && abs(down.r - 0.003921569) < .001)
+                if (abs(right.r - 0.003921569) < .0019 && abs(down.r - 0.003921569) < .0019)
                 {
                     here.r = 0.007843138;
                     here.g = 0.01568628;
@@ -93,7 +93,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
                 }
                 else
                 {
-                    if (abs(down.r - 0.003921569) < .001 && abs(left.r - 0.003921569) < .001)
+                    if (abs(down.r - 0.003921569) < .0019 && abs(left.r - 0.003921569) < .0019)
                     {
                         here.r = 0.007843138;
                         here.g = 0.02352941;
@@ -101,7 +101,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
                     }
                     else
                     {
-                        if (grass_on_left && abs(right.r - 0.003921569) < .001 || grass_on_right && abs(left.r - 0.003921569) < .001 || grass_on_top && abs(down.r - 0.003921569) < .001 || grass_on_bottom && abs(up.r - 0.003921569) < .001)
+                        if (grass_on_left && abs(right.r - 0.003921569) < .0019 || grass_on_right && abs(left.r - 0.003921569) < .0019 || grass_on_top && abs(down.r - 0.003921569) < .0019 || grass_on_bottom && abs(up.r - 0.003921569) < .0019)
                         {
                             here.r = 0.003921569;
                             here.g = 0.0;
@@ -109,7 +109,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
                         }
                         else
                         {
-                            if (abs(right.r - 0.003921569) < .001)
+                            if (abs(right.r - 0.003921569) < .0019)
                             {
                                 here.r = 0.007843138;
                                 here.g = 0.0;
@@ -117,7 +117,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
                             }
                             else
                             {
-                                if (abs(up.r - 0.003921569) < .001)
+                                if (abs(up.r - 0.003921569) < .0019)
                                 {
                                     here.r = 0.007843138;
                                     here.g = 0.01176471;
@@ -125,7 +125,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
                                 }
                                 else
                                 {
-                                    if (abs(left.r - 0.003921569) < .001)
+                                    if (abs(left.r - 0.003921569) < .0019)
                                     {
                                         here.r = 0.007843138;
                                         here.g = 0.02352941;
@@ -133,7 +133,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
                                     }
                                     else
                                     {
-                                        if (abs(down.r - 0.003921569) < .001)
+                                        if (abs(down.r - 0.003921569) < .0019)
                                         {
                                             here.r = 0.007843138;
                                             here.g = 0.03529412;
@@ -141,7 +141,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
                                         }
                                         else
                                         {
-                                            if (abs(down_left.r - 0.003921569) < .001)
+                                            if (abs(down_left.r - 0.003921569) < .0019)
                                             {
                                                 here.r = 0.007843138;
                                                 here.g = 0.0;
@@ -149,7 +149,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
                                             }
                                             else
                                             {
-                                                if (abs(down_right.r - 0.003921569) < .001)
+                                                if (abs(down_right.r - 0.003921569) < .0019)
                                                 {
                                                     here.r = 0.007843138;
                                                     here.g = 0.007843138;
@@ -157,7 +157,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
                                                 }
                                                 else
                                                 {
-                                                    if (abs(up_left.r - 0.003921569) < .001)
+                                                    if (abs(up_left.r - 0.003921569) < .0019)
                                                     {
                                                         here.r = 0.007843138;
                                                         here.g = 0.01568628;
@@ -165,7 +165,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
                                                     }
                                                     else
                                                     {
-                                                        if (abs(up_right.r - 0.003921569) < .001)
+                                                        if (abs(up_right.r - 0.003921569) < .0019)
                                                         {
                                                             here.r = 0.007843138;
                                                             here.g = 0.02352941;
@@ -173,7 +173,7 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
                                                         }
                                                         else
                                                         {
-                                                            if (abs(here.b - 0.1176471) > .001)
+                                                            if (abs(here.b - 0.1176471) > .0019)
                                                             {
                                                                 here.g = 0.0;
                                                                 here.b = 0.1176471;
@@ -196,11 +196,11 @@ void Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__t
 
 void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__tile__tile__tile__tile__tile(inout float4 here, inout float4 right, inout float4 up, inout float4 left, inout float4 down, inout float4 up_right, inout float4 up_left, inout float4 down_right, inout float4 down_left)
 {
-    if (abs(here.r - 0.01960784) < .001)
+    if (abs(here.r - 0.01960784) < .0019)
     {
-        if (abs(left.r - 0.01960784) < .001 && abs(right.r - 0.01960784) < .001 || abs(up_left.r - 0.01960784) < .001 && abs(up_right.r - 0.01960784) < .001)
+        if (abs(left.r - 0.01960784) < .0019 && abs(right.r - 0.01960784) < .0019 || abs(up_left.r - 0.01960784) < .0019 && abs(up_right.r - 0.01960784) < .0019)
         {
-            if (abs(up_left.r - 0.01960784) < .001 && abs(up.r - 0.01960784) < .001 && abs(up_right.r - 0.01960784) < .001)
+            if (abs(up_left.r - 0.01960784) < .0019 && abs(up.r - 0.01960784) < .0019 && abs(up_right.r - 0.01960784) < .0019)
             {
                 here.r = 0.01960784;
                 here.g = 0.0;
@@ -208,7 +208,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
             }
             else
             {
-                if (abs(up_left.r - 0.01960784) > .001 && abs(up.r - 0.01960784) < .001 && abs(up_right.r - 0.01960784) < .001)
+                if (abs(up_left.r - 0.01960784) > .0019 && abs(up.r - 0.01960784) < .0019 && abs(up_right.r - 0.01960784) < .0019)
                 {
                     here.r = 0.01960784;
                     here.g = 0.0;
@@ -216,7 +216,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
                 }
                 else
                 {
-                    if (abs(up_left.r - 0.01960784) < .001 && abs(up.r - 0.01960784) < .001 && abs(up_right.r - 0.01960784) > .001)
+                    if (abs(up_left.r - 0.01960784) < .0019 && abs(up.r - 0.01960784) < .0019 && abs(up_right.r - 0.01960784) > .0019)
                     {
                         here.r = 0.01960784;
                         here.g = 0.01176471;
@@ -224,7 +224,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
                     }
                     else
                     {
-                        if (abs(up_left.r - 0.01960784) > .001 && abs(up.r - 0.01960784) < .001 && abs(up_right.r - 0.01960784) > .001)
+                        if (abs(up_left.r - 0.01960784) > .0019 && abs(up.r - 0.01960784) < .0019 && abs(up_right.r - 0.01960784) > .0019)
                         {
                             here.r = 0.01960784;
                             here.g = 0.02352941;
@@ -242,7 +242,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
         }
         else
         {
-            if (abs(right.r - 0.01960784) < .001 && abs(up.r - 0.01960784) > .001)
+            if (abs(right.r - 0.01960784) < .0019 && abs(up.r - 0.01960784) > .0019)
             {
                 here.r = 0.01960784;
                 here.g = 0.0;
@@ -250,7 +250,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
             }
             else
             {
-                if (abs(left.r - 0.01960784) < .001 && abs(up.r - 0.01960784) > .001)
+                if (abs(left.r - 0.01960784) < .0019 && abs(up.r - 0.01960784) > .0019)
                 {
                     here.r = 0.01960784;
                     here.g = 0.007843138;
@@ -258,7 +258,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
                 }
                 else
                 {
-                    if ((abs(right.r - 0.01960784) < .001 || abs(up_right.r - 0.01960784) < .001) && abs(up.r - 0.01960784) < .001)
+                    if ((abs(right.r - 0.01960784) < .0019 || abs(up_right.r - 0.01960784) < .0019) && abs(up.r - 0.01960784) < .0019)
                     {
                         here.r = 0.01960784;
                         here.g = 0.0;
@@ -266,7 +266,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
                     }
                     else
                     {
-                        if ((abs(left.r - 0.01960784) < .001 || abs(up_left.r - 0.01960784) < .001) && abs(up.r - 0.01960784) < .001)
+                        if ((abs(left.r - 0.01960784) < .0019 || abs(up_left.r - 0.01960784) < .0019) && abs(up.r - 0.01960784) < .0019)
                         {
                             here.r = 0.01960784;
                             here.g = 0.007843138;
@@ -274,7 +274,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
                         }
                         else
                         {
-                            if (abs(up.r - 0.01960784) > .001)
+                            if (abs(up.r - 0.01960784) > .0019)
                             {
                                 here.r = 0.01960784;
                                 here.g = 0.0;
@@ -282,7 +282,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
                             }
                             else
                             {
-                                if (abs(up.r - 0.01960784) < .001)
+                                if (abs(up.r - 0.01960784) < .0019)
                                 {
                                     here.r = 0.01960784;
                                     here.g = 0.003921569;
@@ -297,9 +297,9 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
     }
     else
     {
-        if (abs(here.r - 0.003921569) < .001)
+        if (abs(here.r - 0.003921569) < .0019)
         {
-            if (abs(up_left.r - 0.01960784) < .001 && abs(up.r - 0.01960784) < .001 && abs(up_right.r - 0.01960784) < .001)
+            if (abs(up_left.r - 0.01960784) < .0019 && abs(up.r - 0.01960784) < .0019 && abs(up_right.r - 0.01960784) < .0019)
             {
                 here.r = 0.003921569;
                 here.g = 0.0;
@@ -307,7 +307,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
             }
             else
             {
-                if (abs(up_left.r - 0.01960784) > .001 && abs(up.r - 0.01960784) < .001 && abs(up_right.r - 0.01960784) < .001)
+                if (abs(up_left.r - 0.01960784) > .0019 && abs(up.r - 0.01960784) < .0019 && abs(up_right.r - 0.01960784) < .0019)
                 {
                     here.r = 0.003921569;
                     here.g = 0.01568628;
@@ -315,7 +315,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
                 }
                 else
                 {
-                    if (abs(up_left.r - 0.01960784) < .001 && abs(up.r - 0.01960784) < .001 && abs(up_right.r - 0.01960784) > .001)
+                    if (abs(up_left.r - 0.01960784) < .0019 && abs(up.r - 0.01960784) < .0019 && abs(up_right.r - 0.01960784) > .0019)
                     {
                         here.r = 0.003921569;
                         here.g = 0.02352941;
@@ -323,7 +323,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
                     }
                     else
                     {
-                        if (abs(up_left.r - 0.01960784) > .001 && abs(up.r - 0.01960784) < .001 && abs(up_right.r - 0.01960784) > .001)
+                        if (abs(up_left.r - 0.01960784) > .0019 && abs(up.r - 0.01960784) < .0019 && abs(up_right.r - 0.01960784) > .0019)
                         {
                             here.r = 0.003921569;
                             here.g = 0.0;
@@ -331,7 +331,7 @@ void Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__t
                         }
                         else
                         {
-                            if (abs(here.b - 0.1215686) > .001)
+                            if (abs(here.b - 0.1215686) > .0019)
                             {
                                 here.g = 0.0;
                                 here.b = 0.1215686;
@@ -358,16 +358,16 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 0)) * fs_param_Tiles_dxdy);
-    float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    float4 right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, 0)) * fs_param_Tiles_dxdy), up = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 1)) * fs_param_Tiles_dxdy), left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), 0)) * fs_param_Tiles_dxdy), down = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, -(1))) * fs_param_Tiles_dxdy), up_right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, 1)) * fs_param_Tiles_dxdy), up_left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), 1)) * fs_param_Tiles_dxdy), down_right = tex2D(fs_param_Tiles, psin.TexCoords + (float2(1, -(1))) * fs_param_Tiles_dxdy), down_left = tex2D(fs_param_Tiles, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Tiles_dxdy);
-    if (abs(here.r - 0.007843138) < .001)
+    float4 here = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Tiles_dxdy);
+    float4 select = tex2D(fs_param_Select, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Select_dxdy);
+    float4 right = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Tiles_dxdy), up = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Tiles_dxdy), left = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Tiles_dxdy), down = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Tiles_dxdy), up_right = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 1)) * fs_param_Tiles_dxdy), up_left = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 1)) * fs_param_Tiles_dxdy), down_right = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(1, -(1))) * fs_param_Tiles_dxdy), down_left = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), -(1))) * fs_param_Tiles_dxdy);
+    if (abs(here.r - 0.007843138) < .0019)
     {
         Game__PaintTiles_UpdateTiles__DirtGrassInterface__tile__tile__tile__tile__tile__tile__tile__tile__tile(here, right, up, left, down, up_right, up_left, down_right, down_left);
     }
     else
     {
-        if (abs(here.r - 0.003921569) < .001 || abs(here.r - 0.01960784) < .001)
+        if (abs(here.r - 0.003921569) < .0019 || abs(here.r - 0.01960784) < .0019)
         {
             Game__PaintTiles_UpdateTiles__GrassTreeInterface__tile__tile__tile__tile__tile__tile__tile__tile__tile(here, right, up, left, down, up_right, up_left, down_right, down_left);
         }

@@ -40,6 +40,22 @@ namespace Game
         }
     }
 
+    public partial class _CountUnitTypeForAllPlayers : SimShader
+    {
+        [FragmentShader]
+        vec4 FragmentShader(VertexOut vertex, Field<data> Data)
+        {
+            if (Something(Data[Here]) || Something(Data[RightOne]) || Something(Data[DownOne]) || Something(Data[DownRight]))
+            {
+                return vec(_200, _200, _200, _200);
+            }
+            else
+            {
+                return vec(_0, _0, _0, _0);
+            }
+        }
+    }
+
     public partial class CountUnitTypeForAllPlayers : SimShader
     {
         [FragmentShader]
@@ -54,10 +70,10 @@ namespace Game
 
                 if (unit_here.type == type && !(IsUnit(type) && unit_here.anim == Anim.Die) && !(IsBuilding(type) && !IsCenter((building)(vec4)data_here)))
                 {
-                    if (unit_here.player == Player.One)   output.x = _1;
-                    if (unit_here.player == Player.Two)   output.y = _1;
+                    if (unit_here.player == Player.One) output.x = _1;
+                    if (unit_here.player == Player.Two) output.y = _1;
                     if (unit_here.player == Player.Three) output.z = _1;
-                    if (unit_here.player == Player.Four)  output.w = _1;
+                    if (unit_here.player == Player.Four) output.w = _1;
                 }
             }
 

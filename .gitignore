@@ -17,6 +17,7 @@ packages/
 *.spa
 *.spa.h
 *.userprefs
+*.user
 *.psess
 *.vsp
 *.pdb

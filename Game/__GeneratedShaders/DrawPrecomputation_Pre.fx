@@ -58,17 +58,17 @@ sampler fs_param_Previous : register(s2) = sampler_state
 bool Game__SimShader__selected__data(float4 u)
 {
     float val = u.b;
-    return val >= 0.3764706 - .001;
+    return val >= 0.3764706 - .0019;
 }
 
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__IsValid__Single(float direction)
 {
-    return direction > 0 + .001;
+    return direction > 0 + .0019;
 }
 
 float2 Game__SimShader__direction_to_vec__Single(float direction)
@@ -92,12 +92,12 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 cur = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
-    float4 pre = tex2D(fs_param_Previous, psin.TexCoords + (float2(0, 0)) * fs_param_Previous_dxdy);
+    float4 cur = tex2D(fs_param_Current, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Current_dxdy);
+    float4 pre = tex2D(fs_param_Previous, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Previous_dxdy);
     float selected_offset = Game__SimShader__selected__data(pre) ? 0.01568628 : 0.0;
     float anim = 0;
     float2 vel = float2(0, 0);
-    if (Game__SimShader__Something__data(cur) && abs(cur.g - 0.003921569) < .001)
+    if (Game__SimShader__Something__data(cur) && abs(cur.g - 0.003921569) < .0019)
     {
         __FinalOutput.Color = float4(0.0, 0.0, 0.0, 0.0);
         return __FinalOutput;

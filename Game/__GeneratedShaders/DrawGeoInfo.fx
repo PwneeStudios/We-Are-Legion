@@ -59,7 +59,7 @@ sampler fs_param_Texture : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, float2 grid_size)
 {
-    float2 coords = vertex.TexCoords * grid_size;
+    float2 coords = vertex.TexCoords * grid_size + float2(-(0.25), -(0.25));
     float i = floor(coords.x);
     float j = floor(coords.y);
     return coords - float2(i, j);
@@ -73,7 +73,7 @@ float2 FragSharpFramework__FragSharpStd__fmod__vec2__Single(float2 dividend, flo
 float4 Game__DrawDebugInfo__DrawDebugInfoTile__Single__Single__vec2__PointSampler__vec2(VertexToPixel psin, float index_x, float index_y, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float2 SpriteSize)
 {
     float4 clr = float4(0.0, 0.0, 0.0, 0.0);
-    if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
+    if (pos.x > 1 + .0019 || pos.y > 1 + .0019 || pos.x < 0 - .0019 || pos.y < 0 - .0019)
     {
         return clr;
     }
@@ -112,9 +112,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy);
+    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Geo_dxdy);
     float2 subcell_pos = Game__SimShader__get_subcell_pos__VertexOut__vec2(psin, fs_param_Geo_size);
-    if (here.r > 0.0 + .001)
+    if (here.r > 0.0 + .0019)
     {
         float2 guid = FragSharpFramework__FragSharpStd__fmod__vec2__Single(here.ba * 1293.418, 1.0);
         output.r += guid.x;

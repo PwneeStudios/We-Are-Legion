@@ -59,7 +59,7 @@ sampler fs_param_Texture : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, float2 grid_size)
 {
-    float2 coords = vertex.TexCoords * grid_size;
+    float2 coords = vertex.TexCoords * grid_size + float2(-(0.25), -(0.25));
     float i = floor(coords.x);
     float j = floor(coords.y);
     return coords - float2(i, j);
@@ -67,7 +67,7 @@ float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, f
 
 bool Game__SimShader__ValidDirward__dirward(float4 d)
 {
-    return any(abs(d - float4(0, 0, 0, 0)) > .001);
+    return any(abs(d - float4(0, 0, 0, 0)) > .0019);
 }
 
 float2 FragSharpFramework__FragSharpStd__fmod__vec2__Single(float2 dividend, float divider)
@@ -92,7 +92,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 here = tex2D(fs_param_Dirward, psin.TexCoords + (float2(0, 0)) * fs_param_Dirward_dxdy);
+    float4 here = tex2D(fs_param_Dirward, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Dirward_dxdy);
     float2 subcell_pos = Game__SimShader__get_subcell_pos__VertexOut__vec2(psin, fs_param_Dirward_size);
     if (Game__SimShader__ValidDirward__dirward(here))
     {
@@ -104,7 +104,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     if (Game__SimShader__ValidDirward__dirward(here))
     {
-        __FinalOutput.Color = (float4)(here.a > 0.5 + .001 ? float4(1, 0, 0, 1) : float4(0, 1, 0, 1));
+        __FinalOutput.Color = (float4)(here.a > 0.5 + .0019 ? float4(1, 0, 0, 1) : float4(0, 1, 0, 1));
         return __FinalOutput;
     }
     __FinalOutput.Color = output;

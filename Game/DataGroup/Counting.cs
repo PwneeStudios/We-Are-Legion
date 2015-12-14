@@ -13,7 +13,15 @@ namespace Game
 
         public void DoGoldMineCount(PlayerInfo[] PlayerInfo)
         {
+            //Render.UnsetDevice();
+            //for (int i = 0; i < 1024; i++)
+            //    for (int j = 0; j < 1024; j++)
+            //        Create.PlaceUnit(this, vec(i, j), UnitType.DragonLord, Player.One, Team.One, true);
+            //var cell = CurrentData.GetData()[0];
+
             CountUnitTypeForAllPlayers.Apply(CurrentData, CurrentUnits, UnitType.GoldMine, Output: Multigrid[0]);
+            //CountUnitTypeForAllPlayers.Apply(CurrentData, Output: Multigrid[0]);
+            //_CountUnitTypeForAllPlayers.Apply(CurrentData, CurrentUnits, UnitType.GoldMine, Output: Multigrid[0]);
 
             var count = (PlayerTuple)MultigridReduce(CountReduce_4x1byte.Apply);
 
@@ -21,11 +29,14 @@ namespace Game
             PlayerInfo[2][UnitType.GoldMine].Count = Int(count.PlayerTwo);
             PlayerInfo[3][UnitType.GoldMine].Count = Int(count.PlayerThree);
             PlayerInfo[4][UnitType.GoldMine].Count = Int(count.PlayerFour);
+
+            Render.UnsetDevice();
         }
 
         public void DoJadeMineCount(PlayerInfo[] PlayerInfo)
         {
             CountUnitTypeForAllPlayers.Apply(CurrentData, CurrentUnits, UnitType.JadeMine, Output: Multigrid[0]);
+            //CountUnitTypeForAllPlayers.Apply(CurrentData, Output: Multigrid[0]);
 
             var count = (PlayerTuple)MultigridReduce(CountReduce_4x1byte.Apply);
 
@@ -38,6 +49,7 @@ namespace Game
         public void DoDragonLordCount(PlayerInfo[] PlayerInfo)
         {
             CountUnitTypeForAllPlayers.Apply(CurrentData, CurrentUnits, UnitType.DragonLord, Output: Multigrid[0]);
+            //CountUnitTypeForAllPlayers.Apply(CurrentData, Output: Multigrid[0]);
 
             var count = (PlayerTuple)MultigridReduce(CountReduce_4x1byte.Apply);
 
@@ -45,6 +57,8 @@ namespace Game
             PlayerInfo[2].DragonLords = Int(count.PlayerTwo);
             PlayerInfo[3].DragonLords = Int(count.PlayerThree);
             PlayerInfo[4].DragonLords = Int(count.PlayerFour);
+
+            PlayerInfo[1].DragonLords = 1;
         }
 
         public bool[]

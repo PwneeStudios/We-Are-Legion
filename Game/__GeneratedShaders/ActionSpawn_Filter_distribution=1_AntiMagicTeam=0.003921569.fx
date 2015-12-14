@@ -103,27 +103,27 @@ sampler fs_param_AntiMagic : register(s5) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__CorpsePresent__corpse(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__UnitDistribution__Contains__Single__vec2__Field(VertexToPixel psin, float distribution, float2 v, sampler Corpses, float2 Corpses_size, float2 Corpses_dxdy)
 {
-    if (abs(distribution - 1.0) < .001)
+    if (abs(distribution - 1.0) < .0019)
     {
         return true;
     }
-    if (abs(distribution - 2.0) < .001)
+    if (abs(distribution - 2.0) < .0019)
     {
-        return abs((int)(v.x) % 2 - 0) < .001 && abs((int)(v.y) % 2 - 0) < .001;
+        return abs((int)(v.x) % 2 - 0) < .0019 && abs((int)(v.y) % 2 - 0) < .0019;
     }
-    if (abs(distribution - 3.0) < .001)
+    if (abs(distribution - 3.0) < .0019)
     {
-        return Game__SimShader__CorpsePresent__corpse(tex2D(Corpses, psin.TexCoords + (float2(0, 0)) * Corpses_dxdy));
+        return Game__SimShader__CorpsePresent__corpse(tex2D(Corpses, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * Corpses_dxdy));
     }
     return false;
 }
@@ -142,25 +142,25 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    float4 here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 antimagic = tex2D(fs_param_AntiMagic, psin.TexCoords + (float2(0, 0)) * fs_param_AntiMagic_dxdy);
-    if (antimagic.r > 0.0 + .001 && abs(0.003921569 - 0.003921569) > .001)
+    float4 select = tex2D(fs_param_Select, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Select_dxdy);
+    float4 here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    float4 antimagic = tex2D(fs_param_AntiMagic, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_AntiMagic_dxdy);
+    if (antimagic.r > 0.0 + .0019 && abs(0.003921569 - 0.003921569) > .0019)
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;
     }
-    if (antimagic.g > 0.0 + .001 && abs(0.003921569 - 0.007843138) > .001)
+    if (antimagic.g > 0.0 + .0019 && abs(0.003921569 - 0.007843138) > .0019)
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;
     }
-    if (antimagic.b > 0.0 + .001 && abs(0.003921569 - 0.01176471) > .001)
+    if (antimagic.b > 0.0 + .0019 && abs(0.003921569 - 0.01176471) > .0019)
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;
     }
-    if (antimagic.a > 0.0 + .001 && abs(0.003921569 - 0.01568628) > .001)
+    if (antimagic.a > 0.0 + .0019 && abs(0.003921569 - 0.01568628) > .0019)
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;

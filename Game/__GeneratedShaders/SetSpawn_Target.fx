@@ -87,12 +87,12 @@ sampler fs_param_Magic : register(s4) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__IsValid__Single(float direction)
 {
-    return direction > 0 + .001;
+    return direction > 0 + .0019;
 }
 
 float2 Game__SimShader__dir_to_vec__Single(float direction)
@@ -104,7 +104,7 @@ float2 Game__SimShader__dir_to_vec__Single(float direction)
 float Game__SimShader__Reverse__Single(float dir)
 {
     dir += 2 * 0.003921569;
-    if (dir > 0.01568628 + .001)
+    if (dir > 0.01568628 + .0019)
     {
         dir -= 4 * 0.003921569;
     }
@@ -140,15 +140,15 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 target = tex2D(fs_param_Target, psin.TexCoords + (float2(0, 0)) * fs_param_Target_dxdy);
-    if (Game__SimShader__Something__data(data_here) && abs(data_here.a - 0.01568628) < .001)
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    float4 target = tex2D(fs_param_Target, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Target_dxdy);
+    if (Game__SimShader__Something__data(data_here) && abs(data_here.a - 0.01568628) < .0019)
     {
-        target = tex2D(fs_param_Target, psin.TexCoords + (Game__SimShader__dir_to_vec__Single(Game__SimShader__Reverse__Single(data_here.r))) * fs_param_Target_dxdy);
+        target = tex2D(fs_param_Target, psin.TexCoords + (-float2(0.25,0.25) + Game__SimShader__dir_to_vec__Single(Game__SimShader__Reverse__Single(data_here.r))) * fs_param_Target_dxdy);
     }
-    if (Game__SimShader__Something__data(data_here) && abs(data_here.a - 0.01960784) < .001)
+    if (Game__SimShader__Something__data(data_here) && abs(data_here.a - 0.01960784) < .0019)
     {
-        float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
+        float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Random_dxdy);
         float2 pos = fs_param_Target_size * rnd.xy;
         target = Game__SimShader__pack_vec2__vec2(pos);
     }

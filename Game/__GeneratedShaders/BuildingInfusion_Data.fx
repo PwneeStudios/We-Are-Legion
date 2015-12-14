@@ -57,12 +57,12 @@ sampler fs_param_Building : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__building(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__IsBuilding__Single(float type)
 {
-    return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
+    return type >= 0.02352941 - .0019 && type < 0.07843138 - .0019;
 }
 
 bool Game__SimShader__IsBuilding__unit(float4 u)
@@ -72,13 +72,13 @@ bool Game__SimShader__IsBuilding__unit(float4 u)
 
 bool Game__SimShader__IsCenter__building(float4 b)
 {
-    return abs(b.g - 0.003921569) < .001 && abs(b.a - 0.003921569) < .001;
+    return abs(b.g - 0.003921569) < .0019 && abs(b.a - 0.003921569) < .0019;
 }
 
 bool Game__SimShader__selected__data(float4 u)
 {
     float val = u.b;
-    return val >= 0.3764706 - .001;
+    return val >= 0.3764706 - .0019;
 }
 
 bool Game__SimShader__selected__building(float4 u)
@@ -107,7 +107,7 @@ float Game__SimShader__select_state__data(float4 u)
 bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
-    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
+    return 0.1254902 <= val + .0019 && val < 0.5019608 - .0019;
 }
 
 void Game__SimShader__set_selected__data__Boolean(inout float4 u, bool selected)
@@ -145,18 +145,18 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 0)) * fs_param_Building_dxdy);
-    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
+    float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Building_dxdy);
+    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Unit_dxdy);
     if (Game__SimShader__Something__building(building_here) && Game__SimShader__IsBuilding__unit(unit_here) && Game__SimShader__IsCenter__building(building_here))
     {
-        if (building_here.r >= 0.02745098 - .001)
+        if (building_here.r >= 0.02745098 - .0019)
         {
             building_here.r += 0.003921569;
             __FinalOutput.Color = building_here;
             return __FinalOutput;
         }
-        float4 right = tex2D(fs_param_Building, psin.TexCoords + (float2(1, 0)) * fs_param_Building_dxdy), up = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 1)) * fs_param_Building_dxdy), left = tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 0)) * fs_param_Building_dxdy), down = tex2D(fs_param_Building, psin.TexCoords + (float2(0, -(1))) * fs_param_Building_dxdy), up_right = tex2D(fs_param_Building, psin.TexCoords + (float2(1, 1)) * fs_param_Building_dxdy), up_left = tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), 1)) * fs_param_Building_dxdy), down_right = tex2D(fs_param_Building, psin.TexCoords + (float2(1, -(1))) * fs_param_Building_dxdy), down_left = tex2D(fs_param_Building, psin.TexCoords + (float2(-(1), -(1))) * fs_param_Building_dxdy);
-        if (abs(right.r - 0.02352941) < .001 || abs(up.r - 0.02352941) < .001 || abs(left.r - 0.02352941) < .001 || abs(down.r - 0.02352941) < .001 || abs(up_right.r - 0.02352941) < .001 || abs(up_left.r - 0.02352941) < .001 || abs(down_right.r - 0.02352941) < .001 || abs(down_left.r - 0.02352941) < .001)
+        float4 right = tex2D(fs_param_Building, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Building_dxdy), up = tex2D(fs_param_Building, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Building_dxdy), left = tex2D(fs_param_Building, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Building_dxdy), down = tex2D(fs_param_Building, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Building_dxdy), up_right = tex2D(fs_param_Building, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 1)) * fs_param_Building_dxdy), up_left = tex2D(fs_param_Building, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 1)) * fs_param_Building_dxdy), down_right = tex2D(fs_param_Building, psin.TexCoords + (-float2(0.25,0.25) + float2(1, -(1))) * fs_param_Building_dxdy), down_left = tex2D(fs_param_Building, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), -(1))) * fs_param_Building_dxdy);
+        if (abs(right.r - 0.02352941) < .0019 || abs(up.r - 0.02352941) < .0019 || abs(left.r - 0.02352941) < .0019 || abs(down.r - 0.02352941) < .0019 || abs(up_right.r - 0.02352941) < .0019 || abs(up_left.r - 0.02352941) < .0019 || abs(down_right.r - 0.02352941) < .0019 || abs(down_left.r - 0.02352941) < .0019)
         {
             building_here.r = 0.02745098;
         }

@@ -126,10 +126,7 @@ namespace Game
                 SetupHotswap();
 #endif
 
-            if (Program.PosX >= 0 && Program.PosY >= 0)
-            {
-                Form.Location = new System.Drawing.Point(Program.PosX - 14, Program.PosY);
-            }
+            EnsureFormPosition();
 
             FragSharp.Initialize(Content, GraphicsDevice);
             GridHelper.Initialize(GraphicsDevice);
@@ -145,12 +142,73 @@ namespace Game
             Activated += ActivatedEvent;
             Deactivated += DeactivatedEvent;
 
-            Form.MinimizeBox = false;
-            Form.MaximizeBox = false;
+            SetFormOptions();
 
             BlankWorld = new World();
 
             base.Initialize();
+        }
+
+        private const bool DoWinFormSetting = false;
+        private void SetFormOptions()
+        {
+            if (!DoWinFormSetting) return;
+
+            Form.MinimizeBox = false;
+            Form.MaximizeBox = false;
+        }
+
+        private void EnsureFormPosition()
+        {
+            if (!DoWinFormSetting) return;
+
+            if (Program.PosX >= 0 && Program.PosY >= 0)
+            {
+                Form.Location = new System.Drawing.Point(Program.PosX - 14, Program.PosY);
+            }
+        }
+
+        private void SetFormTopMost()
+        {
+            if (!DoWinFormSetting) return;
+
+            Form.TopMost = true;
+        }
+
+        private void SetFormWindowed()
+        {
+            if (!DoWinFormSetting) return;
+
+            Form.TopMost = true;
+            Form.FormBorderStyle = Windows.FormBorderStyle.FixedSingle;
+        }
+
+        private void SetFormFullscreen()
+        {
+            if (!DoWinFormSetting) return;
+
+            Control.Location = new System.Drawing.Point(0, 0);
+            Form.TopMost = true;
+            Form.FormBorderStyle = Windows.FormBorderStyle.None;
+        }
+
+        private void CycleFormTopMost()
+        {
+            if (!DoWinFormSetting) return;
+
+            Form.TopMost = true;
+            Form.TopMost = false;
+        }
+
+        private void EnsureFormPos()
+        {
+            if (!DoWinFormSetting) return;
+
+            if (DrawCount % 100 == 0 && CurrentConfig.Fullscreen && (Form.Location.X < 0 || Form.Location.Y < 0))
+            {
+                Console.WriteLine("Form is outside bounds of monitor, moving form now. Draw count {0}", DrawCount);
+                Form.Location = new System.Drawing.Point(0, 0);
+            }
         }
 
 #if DEBUG
@@ -249,8 +307,7 @@ namespace Game
             {
                 // The following seems to prevent context loss from WinKey + D.
                 // If you want to be even more aggressive, set TopMost = true and return.
-                Form.TopMost = true;
-                Form.TopMost = false;
+                CycleFormTopMost();
 
                 // Don't do the default behavior.
                 //base.OnDeactivated(sender, args);
@@ -326,14 +383,11 @@ namespace Game
             {
                 if (CurrentConfig.Fullscreen)
                 {
-                    Control.Location = new System.Drawing.Point(0, 0);
-                    Form.TopMost = true;
-                    Form.FormBorderStyle = Windows.FormBorderStyle.None;
+                    SetFormFullscreen();
                 }
                 else
                 {
-                    Form.TopMost = true;
-                    Form.FormBorderStyle = Windows.FormBorderStyle.FixedSingle;
+                    SetFormWindowed();
                 }
             }
             catch (Exception e)
@@ -346,7 +400,7 @@ namespace Game
         {
             try
             {
-                Form.TopMost = true;
+                SetFormTopMost();
             }
             catch (Exception e)
             {
@@ -385,12 +439,8 @@ namespace Game
         {
             // Sometimes the fullscreen is misconfigured at initial load.
             // Check if window is off center and recenter if necessary.
-            if (DrawCount % 100 == 0 && CurrentConfig.Fullscreen && (Form.Location.X < 0 || Form.Location.Y < 0))
-            {
-                Console.WriteLine("Form is outside bounds of monitor, moving form now. Draw count {0}", DrawCount);
-                Form.Location = new System.Drawing.Point(0, 0);
-            }
-            
+            EnsureFormPos();
+
             //_Draw(gameTime);
             try
             {

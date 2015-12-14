@@ -70,7 +70,7 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 TL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy), TR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy), BL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy), BR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy);
+    float4 TL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_PreviousLevel_dxdy), TR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_PreviousLevel_dxdy), BL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_PreviousLevel_dxdy), BR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 1)) * fs_param_PreviousLevel_dxdy);
     __FinalOutput.Color = tex2D(fs_param_Noise, tex2D(fs_param_Noise, tex2D(fs_param_Noise, tex2D(fs_param_Noise, TL.xy).xy + TR.xy).xy + BL.xy).xy + BR.xy);
     return __FinalOutput;
 }

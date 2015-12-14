@@ -44,6 +44,8 @@ namespace Game
     {
         public static void CreateConsole()
         {
+            return; // This is only needed for leet console debugging sessions.
+
             AllocConsole();
 
             // stdout's handle seems to always be equal to 7

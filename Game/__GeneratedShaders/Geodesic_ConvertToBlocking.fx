@@ -57,7 +57,7 @@ sampler fs_param_Geo : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__IsValid__Single(float direction)
 {
-    return direction > 0 + .001;
+    return direction > 0 + .0019;
 }
 
 // Compiled vertex shader
@@ -74,8 +74,8 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 tile_here = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 0)) * fs_param_Tiles_dxdy);
-    float4 geo_here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy);
+    float4 tile_here = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Tiles_dxdy);
+    float4 geo_here = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Geo_dxdy);
     if (Game__SimShader__IsValid__Single(geo_here.r))
     {
         tile_here.r = 0.01960784;

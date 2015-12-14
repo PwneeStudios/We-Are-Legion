@@ -55,16 +55,16 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    if (abs(unit_here.r - 0.007843138) < .001)
+    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Units_dxdy);
+    if (abs(unit_here.r - 0.007843138) < .0019)
     {
         unit_here.r = 0.02352941;
     }
-    if (abs(unit_here.r - 0.01176471) < .001)
+    if (abs(unit_here.r - 0.01176471) < .0019)
     {
         unit_here.r = 0.02745098;
     }
-    if (abs(unit_here.r - 0.01568628) < .001)
+    if (abs(unit_here.r - 0.01568628) < .0019)
     {
         unit_here.r = 0.03137255;
     }

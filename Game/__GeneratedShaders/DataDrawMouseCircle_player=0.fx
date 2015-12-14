@@ -63,7 +63,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 pos_here = psin.TexCoords * fs_param_Data_size;
     float2 diff = pos_here - fs_param_pos;
     float distance = diff.x * diff.x + diff.y * diff.y;
-    bool in_range = distance < fs_param_r2 - .001;
+    bool in_range = distance < fs_param_r2 - .0019;
     if (in_range)
     {
         d.r = 0.003921569;

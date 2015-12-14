@@ -70,8 +70,8 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 f = tex2D(fs_param_F, psin.TexCoords + (float2(0, 0)) * fs_param_F_dxdy);
-    float4 n = tex2D(fs_param_Noise, psin.TexCoords + (float2(0, 0)) * fs_param_Noise_dxdy);
+    float4 f = tex2D(fs_param_F, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_F_dxdy);
+    float4 n = tex2D(fs_param_Noise, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Noise_dxdy);
     __FinalOutput.Color = tex2D(fs_param_Noise, tex2D(fs_param_Noise, f.xy + n.xy).xy + f.zw);
     return __FinalOutput;
 }

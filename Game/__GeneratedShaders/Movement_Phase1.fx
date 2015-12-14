@@ -57,12 +57,12 @@ sampler fs_param_Random : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__IsStationary__data(float4 d)
 {
-    return d.r >= 0.01960784 - .001;
+    return d.r >= 0.01960784 - .0019;
 }
 
 float FragSharpFramework__FragSharpStd__fint_floor__Single(float v)
@@ -93,7 +93,7 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy), output = float4(0, 0, 0, 0);
+    float4 here = tex2D(fs_param_Current, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Current_dxdy), output = float4(0, 0, 0, 0);
     if (Game__SimShader__Something__data(here))
     {
         output = here;
@@ -104,86 +104,86 @@ PixelToFrame FragmentShader(VertexToPixel psin)
         __FinalOutput.Color = output;
         return __FinalOutput;
     }
-    float4 right = tex2D(fs_param_Current, psin.TexCoords + (float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (float2(0, -(1))) * fs_param_Current_dxdy);
-    float rnd = Game__SimShader__RndFint__Single__Single__Single(tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy).x, 0.0, 0.01176471);
-    if (abs(rnd - 0.0) < .001)
+    float4 right = tex2D(fs_param_Current, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Current_dxdy), up = tex2D(fs_param_Current, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Current_dxdy), left = tex2D(fs_param_Current, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Current_dxdy), down = tex2D(fs_param_Current, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Current_dxdy);
+    float rnd = Game__SimShader__RndFint__Single__Single__Single(tex2D(fs_param_Random, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Random_dxdy).x, 0.0, 0.01176471);
+    if (abs(rnd - 0.0) < .0019)
     {
-        if (abs(right.a - 0.0) > .001 && abs(right.a - 0.01176471) > .001 && abs(right.r - 0.01176471) < .001)
+        if (abs(right.a - 0.0) > .0019 && abs(right.a - 0.01176471) > .0019 && abs(right.r - 0.01176471) < .0019)
         {
             output = right;
         }
-        if (abs(up.a - 0.0) > .001 && abs(up.a - 0.01176471) > .001 && abs(up.r - 0.01568628) < .001)
+        if (abs(up.a - 0.0) > .0019 && abs(up.a - 0.01176471) > .0019 && abs(up.r - 0.01568628) < .0019)
         {
             output = up;
         }
-        if (abs(left.a - 0.0) > .001 && abs(left.a - 0.01176471) > .001 && abs(left.r - 0.003921569) < .001)
+        if (abs(left.a - 0.0) > .0019 && abs(left.a - 0.01176471) > .0019 && abs(left.r - 0.003921569) < .0019)
         {
             output = left;
         }
-        if (abs(down.a - 0.0) > .001 && abs(down.a - 0.01176471) > .001 && abs(down.r - 0.007843138) < .001)
+        if (abs(down.a - 0.0) > .0019 && abs(down.a - 0.01176471) > .0019 && abs(down.r - 0.007843138) < .0019)
         {
             output = down;
         }
     }
     else
     {
-        if (abs(rnd - 0.003921569) < .001)
+        if (abs(rnd - 0.003921569) < .0019)
         {
-            if (abs(down.a - 0.0) > .001 && abs(down.a - 0.01176471) > .001 && abs(down.r - 0.007843138) < .001)
+            if (abs(down.a - 0.0) > .0019 && abs(down.a - 0.01176471) > .0019 && abs(down.r - 0.007843138) < .0019)
             {
                 output = down;
             }
-            if (abs(right.a - 0.0) > .001 && abs(right.a - 0.01176471) > .001 && abs(right.r - 0.01176471) < .001)
+            if (abs(right.a - 0.0) > .0019 && abs(right.a - 0.01176471) > .0019 && abs(right.r - 0.01176471) < .0019)
             {
                 output = right;
             }
-            if (abs(up.a - 0.0) > .001 && abs(up.a - 0.01176471) > .001 && abs(up.r - 0.01568628) < .001)
+            if (abs(up.a - 0.0) > .0019 && abs(up.a - 0.01176471) > .0019 && abs(up.r - 0.01568628) < .0019)
             {
                 output = up;
             }
-            if (abs(left.a - 0.0) > .001 && abs(left.a - 0.01176471) > .001 && abs(left.r - 0.003921569) < .001)
+            if (abs(left.a - 0.0) > .0019 && abs(left.a - 0.01176471) > .0019 && abs(left.r - 0.003921569) < .0019)
             {
                 output = left;
             }
         }
         else
         {
-            if (abs(rnd - 0.007843138) < .001)
+            if (abs(rnd - 0.007843138) < .0019)
             {
-                if (abs(left.a - 0.0) > .001 && abs(left.a - 0.01176471) > .001 && abs(left.r - 0.003921569) < .001)
+                if (abs(left.a - 0.0) > .0019 && abs(left.a - 0.01176471) > .0019 && abs(left.r - 0.003921569) < .0019)
                 {
                     output = left;
                 }
-                if (abs(down.a - 0.0) > .001 && abs(down.a - 0.01176471) > .001 && abs(down.r - 0.007843138) < .001)
+                if (abs(down.a - 0.0) > .0019 && abs(down.a - 0.01176471) > .0019 && abs(down.r - 0.007843138) < .0019)
                 {
                     output = down;
                 }
-                if (abs(right.a - 0.0) > .001 && abs(right.a - 0.01176471) > .001 && abs(right.r - 0.01176471) < .001)
+                if (abs(right.a - 0.0) > .0019 && abs(right.a - 0.01176471) > .0019 && abs(right.r - 0.01176471) < .0019)
                 {
                     output = right;
                 }
-                if (abs(up.a - 0.0) > .001 && abs(up.a - 0.01176471) > .001 && abs(up.r - 0.01568628) < .001)
+                if (abs(up.a - 0.0) > .0019 && abs(up.a - 0.01176471) > .0019 && abs(up.r - 0.01568628) < .0019)
                 {
                     output = up;
                 }
             }
             else
             {
-                if (abs(rnd - 0.01176471) < .001)
+                if (abs(rnd - 0.01176471) < .0019)
                 {
-                    if (abs(up.a - 0.0) > .001 && abs(up.a - 0.01176471) > .001 && abs(up.r - 0.01568628) < .001)
+                    if (abs(up.a - 0.0) > .0019 && abs(up.a - 0.01176471) > .0019 && abs(up.r - 0.01568628) < .0019)
                     {
                         output = up;
                     }
-                    if (abs(left.a - 0.0) > .001 && abs(left.a - 0.01176471) > .001 && abs(left.r - 0.003921569) < .001)
+                    if (abs(left.a - 0.0) > .0019 && abs(left.a - 0.01176471) > .0019 && abs(left.r - 0.003921569) < .0019)
                     {
                         output = left;
                     }
-                    if (abs(down.a - 0.0) > .001 && abs(down.a - 0.01176471) > .001 && abs(down.r - 0.007843138) < .001)
+                    if (abs(down.a - 0.0) > .0019 && abs(down.a - 0.01176471) > .0019 && abs(down.r - 0.007843138) < .0019)
                     {
                         output = down;
                     }
-                    if (abs(right.a - 0.0) > .001 && abs(right.a - 0.01176471) > .001 && abs(right.r - 0.01176471) < .001)
+                    if (abs(right.a - 0.0) > .0019 && abs(right.a - 0.01176471) > .0019 && abs(right.r - 0.01176471) < .0019)
                     {
                         output = right;
                     }

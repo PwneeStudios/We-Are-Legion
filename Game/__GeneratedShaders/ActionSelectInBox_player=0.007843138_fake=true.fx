@@ -64,13 +64,13 @@ bool fs_param_deselect;
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__BlockingTileHere__unit(float4 u)
 {
-    return u.r >= 0.07843138 - .001;
+    return u.r >= 0.07843138 - .0019;
 }
 
 bool Game__SimShader__selected__data(float4 u)
 {
     float val = u.b;
-    return val >= 0.3764706 - .001;
+    return val >= 0.3764706 - .0019;
 }
 
 float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
@@ -110,7 +110,7 @@ float Game__SimShader__select_state__data(float4 u)
 bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
-    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
+    return 0.1254902 <= val + .0019 && val < 0.5019608 - .0019;
 }
 
 void Game__SimShader__set_selected__data__Boolean(inout float4 u, bool selected)
@@ -141,15 +141,15 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    if (abs(unit_here.g - 0.007843138) > .001 || Game__SimShader__BlockingTileHere__unit(unit_here))
+    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Unit_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    if (abs(unit_here.g - 0.007843138) > .0019 || Game__SimShader__BlockingTileHere__unit(unit_here))
     {
         __FinalOutput.Color = data_here;
         return __FinalOutput;
     }
     float2 pos = psin.TexCoords * fs_param_Data_size;
-    bool select = all(fs_param_bl < pos - .001) && all(pos < fs_param_tr - .001);
+    bool select = all(fs_param_bl < pos - .0019) && all(pos < fs_param_tr - .0019);
     if (select)
     {
         if (true)

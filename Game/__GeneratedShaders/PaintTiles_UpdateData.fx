@@ -72,12 +72,12 @@ sampler fs_param_Data : register(s3) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__IsBlockingTile__tile(float4 t)
 {
-    return t.r >= 0.01176471 - .001 || abs(t.r - 0.003921569) < .001 && abs(t.b - 0.1215686) > .001;
+    return t.r >= 0.01176471 - .0019 || abs(t.r - 0.003921569) < .0019 && abs(t.b - 0.1215686) > .0019;
 }
 
 bool Game__SimShader__BlockingTileHere__unit(float4 u)
 {
-    return u.r >= 0.07843138 - .001;
+    return u.r >= 0.07843138 - .0019;
 }
 
 // Compiled vertex shader
@@ -94,9 +94,9 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 tile_here = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 0)) * fs_param_Tiles_dxdy);
-    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
+    float4 tile_here = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Tiles_dxdy);
+    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Units_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
     if (Game__SimShader__IsBlockingTile__tile(tile_here))
     {
         data_here = float4(0, 0, 0, 0);

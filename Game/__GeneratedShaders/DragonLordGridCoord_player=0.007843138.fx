@@ -71,8 +71,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float2 uv = psin.TexCoords * fs_param_CurrentUnits_size + float2(0.5, 0.5);
-    float4 here = tex2D(fs_param_CurrentUnits, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentUnits_dxdy);
-    if (abs(here.g - 0.007843138) < .001 && abs(here.r - 0.007843138) < .001)
+    float4 here = tex2D(fs_param_CurrentUnits, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_CurrentUnits_dxdy);
+    if (abs(here.g - 0.007843138) < .0019 && abs(here.r - 0.007843138) < .0019)
     {
         __FinalOutput.Color = Game__SimShader__pack_vec2_corrected__vec2(uv);
         return __FinalOutput;

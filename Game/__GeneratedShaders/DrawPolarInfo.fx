@@ -74,7 +74,7 @@ sampler fs_param_Texture : register(s3) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, float2 grid_size)
 {
-    float2 coords = vertex.TexCoords * grid_size;
+    float2 coords = vertex.TexCoords * grid_size + float2(-(0.25), -(0.25));
     float i = floor(coords.x);
     float j = floor(coords.y);
     return coords - float2(i, j);
@@ -83,7 +83,7 @@ float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, f
 float4 Game__DrawDebugInfo__DrawDebugInfoTile__Single__Single__vec2__PointSampler__vec2(VertexToPixel psin, float index_x, float index_y, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy, float2 SpriteSize)
 {
     float4 clr = float4(0.0, 0.0, 0.0, 0.0);
-    if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
+    if (pos.x > 1 + .0019 || pos.y > 1 + .0019 || pos.x < 0 - .0019 || pos.y < 0 - .0019)
     {
         return clr;
     }
@@ -125,33 +125,33 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy);
+    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Geo_dxdy);
     float dist = 0;
     float2 subcell_pos = Game__SimShader__get_subcell_pos__VertexOut__vec2(psin, fs_param_Geo_size);
-    if (here.r > 0.0 + .001)
+    if (here.r > 0.0 + .0019)
     {
-        if (all(subcell_pos > float2(0.5, 0.5) + .001))
+        if (all(subcell_pos > float2(0.5, 0.5) + .0019))
         {
             float2 subcell_pos_1 = Game__SimShader__get_subcell_pos__VertexOut__vec2(psin, fs_param_Geo_size * 2);
-            output += Game__DrawDebugInfo__DrawDebugNum__Single__vec2__PointSampler(psin, Game__SimShader__unpack_val__vec2(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).xy), subcell_pos_1, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy) * float4(1, 0.5019608, 0.5019608, 1.0);
+            output += Game__DrawDebugInfo__DrawDebugNum__Single__vec2__PointSampler(psin, Game__SimShader__unpack_val__vec2(tex2D(fs_param_PolarDistance, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_PolarDistance_dxdy).xy), subcell_pos_1, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy) * float4(1, 0.5019608, 0.5019608, 1.0);
         }
-        if (all(subcell_pos < float2(0.5, 0.5) - .001))
+        if (all(subcell_pos < float2(0.5, 0.5) - .0019))
         {
             float2 subcell_pos_2 = Game__SimShader__get_subcell_pos__VertexOut__vec2(psin, fs_param_Geo_size * 2);
-            output += Game__DrawDebugInfo__DrawDebugNum__Single__vec2__PointSampler(psin, Game__SimShader__unpack_val__vec2(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).zw), subcell_pos_2, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy) * float4(1, 0.5019608, 0.5019608, 1.0);
+            output += Game__DrawDebugInfo__DrawDebugNum__Single__vec2__PointSampler(psin, Game__SimShader__unpack_val__vec2(tex2D(fs_param_PolarDistance, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_PolarDistance_dxdy).zw), subcell_pos_2, fs_param_Texture, fs_param_Texture_size, fs_param_Texture_dxdy) * float4(1, 0.5019608, 0.5019608, 1.0);
         }
         __FinalOutput.Color = output;
         return __FinalOutput;
     }
-    if (subcell_pos.y > 0.5 + .001)
+    if (subcell_pos.y > 0.5 + .0019)
     {
-        dist = Game__SimShader__unpack_val__vec2(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).xy);
+        dist = Game__SimShader__unpack_val__vec2(tex2D(fs_param_PolarDistance, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_PolarDistance_dxdy).xy);
     }
     else
     {
-        dist = Game__SimShader__unpack_val__vec2(tex2D(fs_param_PolarDistance, psin.TexCoords + (float2(0, 0)) * fs_param_PolarDistance_dxdy).zw);
+        dist = Game__SimShader__unpack_val__vec2(tex2D(fs_param_PolarDistance, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_PolarDistance_dxdy).zw);
     }
-    if (here.r > 0.0 + .001)
+    if (here.r > 0.0 + .0019)
     {
         dist = dist / 1024.0;
         output = float4(dist, dist, dist, 1.0);

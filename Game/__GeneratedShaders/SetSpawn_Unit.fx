@@ -74,12 +74,12 @@ float4 fs_param_Teams;
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__IsValid__Single(float direction)
 {
-    return direction > 0 + .001;
+    return direction > 0 + .0019;
 }
 
 float2 Game__SimShader__dir_to_vec__Single(float direction)
@@ -91,7 +91,7 @@ float2 Game__SimShader__dir_to_vec__Single(float direction)
 float Game__SimShader__Reverse__Single(float dir)
 {
     dir += 2 * 0.003921569;
-    if (dir > 0.01568628 + .001)
+    if (dir > 0.01568628 + .0019)
     {
         dir -= 4 * 0.003921569;
     }
@@ -100,19 +100,19 @@ float Game__SimShader__Reverse__Single(float dir)
 
 float Game__SimShader__GetPlayerVal__PlayerTuple__Single(float4 tuple, float player)
 {
-    if (abs(player - 0.003921569) < .001)
+    if (abs(player - 0.003921569) < .0019)
     {
         return tuple.r;
     }
-    if (abs(player - 0.007843138) < .001)
+    if (abs(player - 0.007843138) < .0019)
     {
         return tuple.g;
     }
-    if (abs(player - 0.01176471) < .001)
+    if (abs(player - 0.01176471) < .0019)
     {
         return tuple.b;
     }
-    if (abs(player - 0.01568628) < .001)
+    if (abs(player - 0.01568628) < .0019)
     {
         return tuple.a;
     }
@@ -133,20 +133,20 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Unit_dxdy);
+    float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Magic_dxdy);
     if (Game__SimShader__Something__data(data_here))
     {
-        if (abs(data_here.a - 0.01568628) < .001)
+        if (abs(data_here.a - 0.01568628) < .0019)
         {
-            float4 barracks = tex2D(fs_param_Unit, psin.TexCoords + (Game__SimShader__dir_to_vec__Single(Game__SimShader__Reverse__Single(data_here.r))) * fs_param_Unit_dxdy);
+            float4 barracks = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + Game__SimShader__dir_to_vec__Single(Game__SimShader__Reverse__Single(data_here.r))) * fs_param_Unit_dxdy);
             unit_here.g = barracks.g;
             unit_here.b = barracks.b;
             unit_here.r = 0.003921569;
             unit_here.a = 0.0;
         }
-        if (abs(data_here.a - 0.01960784) < .001)
+        if (abs(data_here.a - 0.01960784) < .0019)
         {
             unit_here.g = magic_here.g;
             unit_here.b = Game__SimShader__GetPlayerVal__PlayerTuple__Single(fs_param_Teams, magic_here.g);

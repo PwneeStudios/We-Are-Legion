@@ -102,12 +102,12 @@ sampler fs_param_Magic : register(s5) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__IsValid__Single(float direction)
 {
-    return direction > 0 + .001;
+    return direction > 0 + .0019;
 }
 
 float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
@@ -131,7 +131,7 @@ float Game__SimShader__select_state__data(float4 u)
 bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
-    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
+    return 0.1254902 <= val + .0019 && val < 0.5019608 - .0019;
 }
 
 void Game__SimShader__set_selected__data__Boolean(inout float4 u, bool selected)
@@ -167,27 +167,27 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 cur_data = tex2D(fs_param_CurrentData, psin.TexCoords + (float2(0, 0)) * fs_param_CurrentData_dxdy), prev_data = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousData_dxdy);
-    float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
-    float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy);
-    if (!(Game__SimShader__Something__data(cur_data)) && !(Game__SimShader__Something__data(prev_data)) && rnd.x > 0.93 + .001)
+    float4 cur_data = tex2D(fs_param_CurrentData, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_CurrentData_dxdy), prev_data = tex2D(fs_param_PreviousData, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_PreviousData_dxdy);
+    float4 rnd = tex2D(fs_param_Random, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Random_dxdy);
+    float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Magic_dxdy);
+    if (!(Game__SimShader__Something__data(cur_data)) && !(Game__SimShader__Something__data(prev_data)) && rnd.x > 0.93 + .0019)
     {
-        float4 unit_right = tex2D(fs_param_Unit, psin.TexCoords + (float2(1, 0)) * fs_param_Unit_dxdy), unit_up = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 1)) * fs_param_Unit_dxdy), unit_left = tex2D(fs_param_Unit, psin.TexCoords + (float2(-(1), 0)) * fs_param_Unit_dxdy), unit_down = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, -(1))) * fs_param_Unit_dxdy);
-        float4 data_right = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousData_dxdy), data_up = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousData_dxdy), data_left = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(-(1), 0)) * fs_param_PreviousData_dxdy), data_down = tex2D(fs_param_PreviousData, psin.TexCoords + (float2(0, -(1))) * fs_param_PreviousData_dxdy);
+        float4 unit_right = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Unit_dxdy), unit_up = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Unit_dxdy), unit_left = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Unit_dxdy), unit_down = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Unit_dxdy);
+        float4 data_right = tex2D(fs_param_PreviousData, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_PreviousData_dxdy), data_up = tex2D(fs_param_PreviousData, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_PreviousData_dxdy), data_left = tex2D(fs_param_PreviousData, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_PreviousData_dxdy), data_down = tex2D(fs_param_PreviousData, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_PreviousData_dxdy);
         float spawn_dir = 0.0;
-        if (abs(unit_left.r - 0.02352941) < .001)
+        if (abs(unit_left.r - 0.02352941) < .0019)
         {
             spawn_dir = 0.003921569;
         }
-        if (abs(unit_right.r - 0.02352941) < .001)
+        if (abs(unit_right.r - 0.02352941) < .0019)
         {
             spawn_dir = 0.01176471;
         }
-        if (abs(unit_up.r - 0.02352941) < .001)
+        if (abs(unit_up.r - 0.02352941) < .0019)
         {
             spawn_dir = 0.01568628;
         }
-        if (abs(unit_down.r - 0.02352941) < .001)
+        if (abs(unit_down.r - 0.02352941) < .0019)
         {
             spawn_dir = 0.007843138;
         }
@@ -202,7 +202,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     }
     else
     {
-        if (!(Game__SimShader__Something__data(cur_data)) && abs(magic_here.g - 0.0) > .001)
+        if (!(Game__SimShader__Something__data(cur_data)) && abs(magic_here.g - 0.0) > .0019)
         {
             cur_data.r = 0.003921569;
             cur_data.a = 0.01960784;

@@ -57,7 +57,7 @@ sampler fs_param_Corpses : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 // Compiled vertex shader
@@ -74,8 +74,8 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    float4 here = tex2D(fs_param_Corpses, psin.TexCoords + (float2(0, 0)) * fs_param_Corpses_dxdy);
+    float4 select = tex2D(fs_param_Select, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Select_dxdy);
+    float4 here = tex2D(fs_param_Corpses, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Corpses_dxdy);
     if (Game__SimShader__Something__data(select))
     {
         here = float4(0, 0, 0, 0);

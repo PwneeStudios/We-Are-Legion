@@ -55,14 +55,14 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    if (data_here.g >= 0.3921569 - .001)
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    if (data_here.g >= 0.3921569 - .0019)
     {
         data_here.g -= 0.3921569;
     }
     else
     {
-        if (data_here.g >= 0.03921569 - .001)
+        if (data_here.g >= 0.03921569 - .0019)
         {
             data_here.g -= 0.03921569;
         }

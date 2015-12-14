@@ -57,12 +57,12 @@ sampler fs_param_Next : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__IsStationary__data(float4 d)
 {
-    return d.r >= 0.01960784 - .001;
+    return d.r >= 0.01960784 - .0019;
 }
 
 bool Game__SimShader__IsValid__Single(float direction)
 {
-    return direction > 0 + .001;
+    return direction > 0 + .0019;
 }
 
 float2 Game__SimShader__dir_to_vec__Single(float direction)
@@ -108,15 +108,15 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 next = tex2D(fs_param_Next, psin.TexCoords + (float2(0, 0)) * fs_param_Next_dxdy);
-    float4 here = tex2D(fs_param_Current, psin.TexCoords + (float2(0, 0)) * fs_param_Current_dxdy);
+    float4 next = tex2D(fs_param_Next, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Next_dxdy);
+    float4 here = tex2D(fs_param_Current, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Current_dxdy);
     if (Game__SimShader__IsStationary__data(next))
     {
         __FinalOutput.Color = next;
         return __FinalOutput;
     }
-    float4 ahead = tex2D(fs_param_Next, psin.TexCoords + (Game__SimShader__dir_to_vec__Single(here.r)) * fs_param_Next_dxdy);
-    if (abs(ahead.g - 0.0) < .001 && abs(ahead.r - here.r) < .001)
+    float4 ahead = tex2D(fs_param_Next, psin.TexCoords + (-float2(0.25,0.25) + Game__SimShader__dir_to_vec__Single(here.r)) * fs_param_Next_dxdy);
+    if (abs(ahead.g - 0.0) < .0019 && abs(ahead.r - here.r) < .0019)
     {
         next = float4(0, 0, 0, 0);
     }

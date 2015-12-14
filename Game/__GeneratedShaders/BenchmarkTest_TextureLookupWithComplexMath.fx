@@ -55,7 +55,7 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_s, psin.TexCoords + (float2(0, 0)) * fs_param_s_dxdy);
+    float4 here = tex2D(fs_param_s, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_s_dxdy);
     float4 output = float4(sin(cos(here.x) * sin(sin(here.y))), cos(sin(here.y) * here.z), sin(cos(here.z + here.w)), cos(sin(here.x + here.y) * 0.125));
     __FinalOutput.Color = output;
     return __FinalOutput;

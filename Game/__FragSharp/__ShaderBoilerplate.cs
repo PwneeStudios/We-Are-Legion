@@ -115,6 +115,7 @@ namespace FragSharpFramework
             Game.UpdateRandomField.Init();
             Game.DoUnitSummary_1.Init();
             Game.DoUnitSummary_2.Init();
+            Game._CountUnitTypeForAllPlayers.Init();
             Game.CountUnitTypeForAllPlayers.Init();
             Game.CountReduce_4x1byte.Init();
             Game.CountUnits.Init();
@@ -240,7 +241,7 @@ namespace Game
         }
         public static void Using(vec4 cameraPos, float cameraAspect, Texture2D AntiMagic, float casting_team)
         {
-            if (abs((float)(casting_team - 0)) < .001)
+            if (abs((float)(casting_team - 0)) < .0019)
             {
                 if (param_casting_team_0_vs_param_cameraPos != null) param_casting_team_0_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_casting_team_0_vs_param_cameraAspect != null) param_casting_team_0_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -249,7 +250,7 @@ namespace Game
                 if (param_casting_team_0_fs_param_AntiMagic_dxdy != null) param_casting_team_0_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_casting_team_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(casting_team - 0.003921569)) < .001)
+            else if (abs((float)(casting_team - 0.003921569)) < .0019)
             {
                 if (param_casting_team_0p003921569_vs_param_cameraPos != null) param_casting_team_0p003921569_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_casting_team_0p003921569_vs_param_cameraAspect != null) param_casting_team_0p003921569_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -258,7 +259,7 @@ namespace Game
                 if (param_casting_team_0p003921569_fs_param_AntiMagic_dxdy != null) param_casting_team_0p003921569_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_casting_team_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(casting_team - 0.007843138)) < .001)
+            else if (abs((float)(casting_team - 0.007843138)) < .0019)
             {
                 if (param_casting_team_0p007843138_vs_param_cameraPos != null) param_casting_team_0p007843138_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_casting_team_0p007843138_vs_param_cameraAspect != null) param_casting_team_0p007843138_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -267,7 +268,7 @@ namespace Game
                 if (param_casting_team_0p007843138_fs_param_AntiMagic_dxdy != null) param_casting_team_0p007843138_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_casting_team_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(casting_team - 0.01176471)) < .001)
+            else if (abs((float)(casting_team - 0.01176471)) < .0019)
             {
                 if (param_casting_team_0p01176471_vs_param_cameraPos != null) param_casting_team_0p01176471_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_casting_team_0p01176471_vs_param_cameraAspect != null) param_casting_team_0p01176471_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -276,7 +277,7 @@ namespace Game
                 if (param_casting_team_0p01176471_fs_param_AntiMagic_dxdy != null) param_casting_team_0p01176471_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_casting_team_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(casting_team - 0.01568628)) < .001)
+            else if (abs((float)(casting_team - 0.01568628)) < .0019)
             {
                 if (param_casting_team_0p01568628_vs_param_cameraPos != null) param_casting_team_0p01568628_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_casting_team_0p01568628_vs_param_cameraAspect != null) param_casting_team_0p01568628_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -344,14 +345,14 @@ namespace Game
         }
         public static void Using(Texture2D Info, float type)
         {
-            if (abs((float)(type - 0)) < .001)
+            if (abs((float)(type - 0)) < .0019)
             {
                 if (param_type_0_fs_param_Info_Texture != null) param_type_0_fs_param_Info_Texture.SetValue(FragSharpMarshal.Marshal(Info));
                 if (param_type_0_fs_param_Info_size != null) param_type_0_fs_param_Info_size.SetValue(FragSharpMarshal.Marshal(vec(Info.Width, Info.Height)));
                 if (param_type_0_fs_param_Info_dxdy != null) param_type_0_fs_param_Info_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Info.Width, Info.Height)));
                 CompiledEffect_type_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(type - 1)) < .001)
+            else if (abs((float)(type - 1)) < .0019)
             {
                 if (param_type_1_fs_param_Info_Texture != null) param_type_1_fs_param_Info_Texture.SetValue(FragSharpMarshal.Marshal(Info));
                 if (param_type_1_fs_param_Info_size != null) param_type_1_fs_param_Info_size.SetValue(FragSharpMarshal.Marshal(vec(Info.Width, Info.Height)));
@@ -421,7 +422,7 @@ namespace Game
         }
         public static void Using(Texture2D Units, float type, bool convert_dragonlords)
         {
-            if (abs((float)(type - 0)) < .001)
+            if (abs((float)(type - 0)) < .0019)
             {
                 if (param_type_0_fs_param_Units_Texture != null) param_type_0_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_type_0_fs_param_Units_size != null) param_type_0_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -429,7 +430,7 @@ namespace Game
                 if (param_type_0_fs_param_convert_dragonlords != null) param_type_0_fs_param_convert_dragonlords.SetValue(FragSharpMarshal.Marshal(convert_dragonlords));
                 CompiledEffect_type_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(type - 1)) < .001)
+            else if (abs((float)(type - 1)) < .0019)
             {
                 if (param_type_1_fs_param_Units_Texture != null) param_type_1_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_type_1_fs_param_Units_size != null) param_type_1_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -496,14 +497,14 @@ namespace Game
         }
         public static void Using(Texture2D Target, float type)
         {
-            if (abs((float)(type - 0)) < .001)
+            if (abs((float)(type - 0)) < .0019)
             {
                 if (param_type_0_fs_param_Target_Texture != null) param_type_0_fs_param_Target_Texture.SetValue(FragSharpMarshal.Marshal(Target));
                 if (param_type_0_fs_param_Target_size != null) param_type_0_fs_param_Target_size.SetValue(FragSharpMarshal.Marshal(vec(Target.Width, Target.Height)));
                 if (param_type_0_fs_param_Target_dxdy != null) param_type_0_fs_param_Target_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Target.Width, Target.Height)));
                 CompiledEffect_type_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(type - 1)) < .001)
+            else if (abs((float)(type - 1)) < .0019)
             {
                 if (param_type_1_fs_param_Target_Texture != null) param_type_1_fs_param_Target_Texture.SetValue(FragSharpMarshal.Marshal(Target));
                 if (param_type_1_fs_param_Target_size != null) param_type_1_fs_param_Target_size.SetValue(FragSharpMarshal.Marshal(vec(Target.Width, Target.Height)));
@@ -1807,7 +1808,7 @@ namespace Game
         }
         public static void Using(Texture2D Dirward, Texture2D Geo, Texture2D ShiftedGeo, Texture2D Info, Texture2D ShiftedInfo, float dir)
         {
-            if (abs((float)(dir - 0.003921569)) < .001)
+            if (abs((float)(dir - 0.003921569)) < .0019)
             {
                 if (param_dir_0p003921569_fs_param_Dirward_Texture != null) param_dir_0p003921569_fs_param_Dirward_Texture.SetValue(FragSharpMarshal.Marshal(Dirward));
                 if (param_dir_0p003921569_fs_param_Dirward_size != null) param_dir_0p003921569_fs_param_Dirward_size.SetValue(FragSharpMarshal.Marshal(vec(Dirward.Width, Dirward.Height)));
@@ -1826,7 +1827,7 @@ namespace Game
                 if (param_dir_0p003921569_fs_param_ShiftedInfo_dxdy != null) param_dir_0p003921569_fs_param_ShiftedInfo_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(ShiftedInfo.Width, ShiftedInfo.Height)));
                 CompiledEffect_dir_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(dir - 0.007843138)) < .001)
+            else if (abs((float)(dir - 0.007843138)) < .0019)
             {
                 if (param_dir_0p007843138_fs_param_Dirward_Texture != null) param_dir_0p007843138_fs_param_Dirward_Texture.SetValue(FragSharpMarshal.Marshal(Dirward));
                 if (param_dir_0p007843138_fs_param_Dirward_size != null) param_dir_0p007843138_fs_param_Dirward_size.SetValue(FragSharpMarshal.Marshal(vec(Dirward.Width, Dirward.Height)));
@@ -1845,7 +1846,7 @@ namespace Game
                 if (param_dir_0p007843138_fs_param_ShiftedInfo_dxdy != null) param_dir_0p007843138_fs_param_ShiftedInfo_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(ShiftedInfo.Width, ShiftedInfo.Height)));
                 CompiledEffect_dir_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(dir - 0.01176471)) < .001)
+            else if (abs((float)(dir - 0.01176471)) < .0019)
             {
                 if (param_dir_0p01176471_fs_param_Dirward_Texture != null) param_dir_0p01176471_fs_param_Dirward_Texture.SetValue(FragSharpMarshal.Marshal(Dirward));
                 if (param_dir_0p01176471_fs_param_Dirward_size != null) param_dir_0p01176471_fs_param_Dirward_size.SetValue(FragSharpMarshal.Marshal(vec(Dirward.Width, Dirward.Height)));
@@ -1864,7 +1865,7 @@ namespace Game
                 if (param_dir_0p01176471_fs_param_ShiftedInfo_dxdy != null) param_dir_0p01176471_fs_param_ShiftedInfo_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(ShiftedInfo.Width, ShiftedInfo.Height)));
                 CompiledEffect_dir_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(dir - 0.01568628)) < .001)
+            else if (abs((float)(dir - 0.01568628)) < .0019)
             {
                 if (param_dir_0p01568628_fs_param_Dirward_Texture != null) param_dir_0p01568628_fs_param_Dirward_Texture.SetValue(FragSharpMarshal.Marshal(Dirward));
                 if (param_dir_0p01568628_fs_param_Dirward_size != null) param_dir_0p01568628_fs_param_Dirward_size.SetValue(FragSharpMarshal.Marshal(vec(Dirward.Width, Dirward.Height)));
@@ -2123,7 +2124,7 @@ namespace Game
         }
         public static void Using(Texture2D Tiles, Texture2D Geo, Texture2D Dirward, float dir)
         {
-            if (abs((float)(dir - 0.003921569)) < .001)
+            if (abs((float)(dir - 0.003921569)) < .0019)
             {
                 if (param_dir_0p003921569_fs_param_Tiles_Texture != null) param_dir_0p003921569_fs_param_Tiles_Texture.SetValue(FragSharpMarshal.Marshal(Tiles));
                 if (param_dir_0p003921569_fs_param_Tiles_size != null) param_dir_0p003921569_fs_param_Tiles_size.SetValue(FragSharpMarshal.Marshal(vec(Tiles.Width, Tiles.Height)));
@@ -2136,7 +2137,7 @@ namespace Game
                 if (param_dir_0p003921569_fs_param_Dirward_dxdy != null) param_dir_0p003921569_fs_param_Dirward_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Dirward.Width, Dirward.Height)));
                 CompiledEffect_dir_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(dir - 0.007843138)) < .001)
+            else if (abs((float)(dir - 0.007843138)) < .0019)
             {
                 if (param_dir_0p007843138_fs_param_Tiles_Texture != null) param_dir_0p007843138_fs_param_Tiles_Texture.SetValue(FragSharpMarshal.Marshal(Tiles));
                 if (param_dir_0p007843138_fs_param_Tiles_size != null) param_dir_0p007843138_fs_param_Tiles_size.SetValue(FragSharpMarshal.Marshal(vec(Tiles.Width, Tiles.Height)));
@@ -2149,7 +2150,7 @@ namespace Game
                 if (param_dir_0p007843138_fs_param_Dirward_dxdy != null) param_dir_0p007843138_fs_param_Dirward_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Dirward.Width, Dirward.Height)));
                 CompiledEffect_dir_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(dir - 0.01176471)) < .001)
+            else if (abs((float)(dir - 0.01176471)) < .0019)
             {
                 if (param_dir_0p01176471_fs_param_Tiles_Texture != null) param_dir_0p01176471_fs_param_Tiles_Texture.SetValue(FragSharpMarshal.Marshal(Tiles));
                 if (param_dir_0p01176471_fs_param_Tiles_size != null) param_dir_0p01176471_fs_param_Tiles_size.SetValue(FragSharpMarshal.Marshal(vec(Tiles.Width, Tiles.Height)));
@@ -2162,7 +2163,7 @@ namespace Game
                 if (param_dir_0p01176471_fs_param_Dirward_dxdy != null) param_dir_0p01176471_fs_param_Dirward_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Dirward.Width, Dirward.Height)));
                 CompiledEffect_dir_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(dir - 0.01568628)) < .001)
+            else if (abs((float)(dir - 0.01568628)) < .0019)
             {
                 if (param_dir_0p01568628_fs_param_Tiles_Texture != null) param_dir_0p01568628_fs_param_Tiles_Texture.SetValue(FragSharpMarshal.Marshal(Tiles));
                 if (param_dir_0p01568628_fs_param_Tiles_size != null) param_dir_0p01568628_fs_param_Tiles_size.SetValue(FragSharpMarshal.Marshal(vec(Tiles.Width, Tiles.Height)));
@@ -2456,7 +2457,7 @@ namespace Game
         }
         public static void Using(Texture2D Tiles, Texture2D Select, Texture2D Random, float type)
         {
-            if (abs((float)(type - 0.003921569)) < .001)
+            if (abs((float)(type - 0.003921569)) < .0019)
             {
                 if (param_type_0p003921569_fs_param_Tiles_Texture != null) param_type_0p003921569_fs_param_Tiles_Texture.SetValue(FragSharpMarshal.Marshal(Tiles));
                 if (param_type_0p003921569_fs_param_Tiles_size != null) param_type_0p003921569_fs_param_Tiles_size.SetValue(FragSharpMarshal.Marshal(vec(Tiles.Width, Tiles.Height)));
@@ -2469,7 +2470,7 @@ namespace Game
                 if (param_type_0p003921569_fs_param_Random_dxdy != null) param_type_0p003921569_fs_param_Random_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Random.Width, Random.Height)));
                 CompiledEffect_type_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(type - 0.007843138)) < .001)
+            else if (abs((float)(type - 0.007843138)) < .0019)
             {
                 if (param_type_0p007843138_fs_param_Tiles_Texture != null) param_type_0p007843138_fs_param_Tiles_Texture.SetValue(FragSharpMarshal.Marshal(Tiles));
                 if (param_type_0p007843138_fs_param_Tiles_size != null) param_type_0p007843138_fs_param_Tiles_size.SetValue(FragSharpMarshal.Marshal(vec(Tiles.Width, Tiles.Height)));
@@ -2482,7 +2483,7 @@ namespace Game
                 if (param_type_0p007843138_fs_param_Random_dxdy != null) param_type_0p007843138_fs_param_Random_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Random.Width, Random.Height)));
                 CompiledEffect_type_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(type - 0.01960784)) < .001)
+            else if (abs((float)(type - 0.01960784)) < .0019)
             {
                 if (param_type_0p01960784_fs_param_Tiles_Texture != null) param_type_0p01960784_fs_param_Tiles_Texture.SetValue(FragSharpMarshal.Marshal(Tiles));
                 if (param_type_0p01960784_fs_param_Tiles_size != null) param_type_0p01960784_fs_param_Tiles_size.SetValue(FragSharpMarshal.Marshal(vec(Tiles.Width, Tiles.Height)));
@@ -3067,7 +3068,7 @@ namespace Game
         }
         public static void Using(Texture2D Data, Texture2D Unit, Texture2D Select, float player, bool deselect, bool fake)
         {
-            if (abs((float)(player - 0)) < .001 && fake == true)
+            if (abs((float)(player - 0)) < .0019 && fake == true)
             {
                 if (param_player_0_fake_true_fs_param_Data_Texture != null) param_player_0_fake_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_fake_true_fs_param_Data_size != null) param_player_0_fake_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3081,7 +3082,7 @@ namespace Game
                 if (param_player_0_fake_true_fs_param_deselect != null) param_player_0_fake_true_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0_fake_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && fake == false)
+            else if (abs((float)(player - 0)) < .0019 && fake == false)
             {
                 if (param_player_0_fake_false_fs_param_Data_Texture != null) param_player_0_fake_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_fake_false_fs_param_Data_size != null) param_player_0_fake_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3095,7 +3096,7 @@ namespace Game
                 if (param_player_0_fake_false_fs_param_deselect != null) param_player_0_fake_false_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0_fake_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && fake == true)
+            else if (abs((float)(player - 0.003921569)) < .0019 && fake == true)
             {
                 if (param_player_0p003921569_fake_true_fs_param_Data_Texture != null) param_player_0p003921569_fake_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_fake_true_fs_param_Data_size != null) param_player_0p003921569_fake_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3109,7 +3110,7 @@ namespace Game
                 if (param_player_0p003921569_fake_true_fs_param_deselect != null) param_player_0p003921569_fake_true_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p003921569_fake_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && fake == false)
+            else if (abs((float)(player - 0.003921569)) < .0019 && fake == false)
             {
                 if (param_player_0p003921569_fake_false_fs_param_Data_Texture != null) param_player_0p003921569_fake_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_fake_false_fs_param_Data_size != null) param_player_0p003921569_fake_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3123,7 +3124,7 @@ namespace Game
                 if (param_player_0p003921569_fake_false_fs_param_deselect != null) param_player_0p003921569_fake_false_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p003921569_fake_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && fake == true)
+            else if (abs((float)(player - 0.007843138)) < .0019 && fake == true)
             {
                 if (param_player_0p007843138_fake_true_fs_param_Data_Texture != null) param_player_0p007843138_fake_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_fake_true_fs_param_Data_size != null) param_player_0p007843138_fake_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3137,7 +3138,7 @@ namespace Game
                 if (param_player_0p007843138_fake_true_fs_param_deselect != null) param_player_0p007843138_fake_true_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p007843138_fake_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && fake == false)
+            else if (abs((float)(player - 0.007843138)) < .0019 && fake == false)
             {
                 if (param_player_0p007843138_fake_false_fs_param_Data_Texture != null) param_player_0p007843138_fake_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_fake_false_fs_param_Data_size != null) param_player_0p007843138_fake_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3151,7 +3152,7 @@ namespace Game
                 if (param_player_0p007843138_fake_false_fs_param_deselect != null) param_player_0p007843138_fake_false_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p007843138_fake_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && fake == true)
+            else if (abs((float)(player - 0.01176471)) < .0019 && fake == true)
             {
                 if (param_player_0p01176471_fake_true_fs_param_Data_Texture != null) param_player_0p01176471_fake_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_fake_true_fs_param_Data_size != null) param_player_0p01176471_fake_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3165,7 +3166,7 @@ namespace Game
                 if (param_player_0p01176471_fake_true_fs_param_deselect != null) param_player_0p01176471_fake_true_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p01176471_fake_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && fake == false)
+            else if (abs((float)(player - 0.01176471)) < .0019 && fake == false)
             {
                 if (param_player_0p01176471_fake_false_fs_param_Data_Texture != null) param_player_0p01176471_fake_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_fake_false_fs_param_Data_size != null) param_player_0p01176471_fake_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3179,7 +3180,7 @@ namespace Game
                 if (param_player_0p01176471_fake_false_fs_param_deselect != null) param_player_0p01176471_fake_false_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p01176471_fake_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && fake == true)
+            else if (abs((float)(player - 0.01568628)) < .0019 && fake == true)
             {
                 if (param_player_0p01568628_fake_true_fs_param_Data_Texture != null) param_player_0p01568628_fake_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_fake_true_fs_param_Data_size != null) param_player_0p01568628_fake_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3193,7 +3194,7 @@ namespace Game
                 if (param_player_0p01568628_fake_true_fs_param_deselect != null) param_player_0p01568628_fake_true_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p01568628_fake_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && fake == false)
+            else if (abs((float)(player - 0.01568628)) < .0019 && fake == false)
             {
                 if (param_player_0p01568628_fake_false_fs_param_Data_Texture != null) param_player_0p01568628_fake_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_fake_false_fs_param_Data_size != null) param_player_0p01568628_fake_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3458,7 +3459,7 @@ namespace Game
         }
         public static void Using(Texture2D Data, Texture2D Unit, vec2 bl, vec2 tr, float player, bool deselect, bool fake)
         {
-            if (abs((float)(player - 0)) < .001 && fake == true)
+            if (abs((float)(player - 0)) < .0019 && fake == true)
             {
                 if (param_player_0_fake_true_fs_param_Data_Texture != null) param_player_0_fake_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_fake_true_fs_param_Data_size != null) param_player_0_fake_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3471,7 +3472,7 @@ namespace Game
                 if (param_player_0_fake_true_fs_param_deselect != null) param_player_0_fake_true_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0_fake_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && fake == false)
+            else if (abs((float)(player - 0)) < .0019 && fake == false)
             {
                 if (param_player_0_fake_false_fs_param_Data_Texture != null) param_player_0_fake_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_fake_false_fs_param_Data_size != null) param_player_0_fake_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3484,7 +3485,7 @@ namespace Game
                 if (param_player_0_fake_false_fs_param_deselect != null) param_player_0_fake_false_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0_fake_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && fake == true)
+            else if (abs((float)(player - 0.003921569)) < .0019 && fake == true)
             {
                 if (param_player_0p003921569_fake_true_fs_param_Data_Texture != null) param_player_0p003921569_fake_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_fake_true_fs_param_Data_size != null) param_player_0p003921569_fake_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3497,7 +3498,7 @@ namespace Game
                 if (param_player_0p003921569_fake_true_fs_param_deselect != null) param_player_0p003921569_fake_true_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p003921569_fake_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && fake == false)
+            else if (abs((float)(player - 0.003921569)) < .0019 && fake == false)
             {
                 if (param_player_0p003921569_fake_false_fs_param_Data_Texture != null) param_player_0p003921569_fake_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_fake_false_fs_param_Data_size != null) param_player_0p003921569_fake_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3510,7 +3511,7 @@ namespace Game
                 if (param_player_0p003921569_fake_false_fs_param_deselect != null) param_player_0p003921569_fake_false_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p003921569_fake_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && fake == true)
+            else if (abs((float)(player - 0.007843138)) < .0019 && fake == true)
             {
                 if (param_player_0p007843138_fake_true_fs_param_Data_Texture != null) param_player_0p007843138_fake_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_fake_true_fs_param_Data_size != null) param_player_0p007843138_fake_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3523,7 +3524,7 @@ namespace Game
                 if (param_player_0p007843138_fake_true_fs_param_deselect != null) param_player_0p007843138_fake_true_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p007843138_fake_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && fake == false)
+            else if (abs((float)(player - 0.007843138)) < .0019 && fake == false)
             {
                 if (param_player_0p007843138_fake_false_fs_param_Data_Texture != null) param_player_0p007843138_fake_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_fake_false_fs_param_Data_size != null) param_player_0p007843138_fake_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3536,7 +3537,7 @@ namespace Game
                 if (param_player_0p007843138_fake_false_fs_param_deselect != null) param_player_0p007843138_fake_false_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p007843138_fake_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && fake == true)
+            else if (abs((float)(player - 0.01176471)) < .0019 && fake == true)
             {
                 if (param_player_0p01176471_fake_true_fs_param_Data_Texture != null) param_player_0p01176471_fake_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_fake_true_fs_param_Data_size != null) param_player_0p01176471_fake_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3549,7 +3550,7 @@ namespace Game
                 if (param_player_0p01176471_fake_true_fs_param_deselect != null) param_player_0p01176471_fake_true_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p01176471_fake_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && fake == false)
+            else if (abs((float)(player - 0.01176471)) < .0019 && fake == false)
             {
                 if (param_player_0p01176471_fake_false_fs_param_Data_Texture != null) param_player_0p01176471_fake_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_fake_false_fs_param_Data_size != null) param_player_0p01176471_fake_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3562,7 +3563,7 @@ namespace Game
                 if (param_player_0p01176471_fake_false_fs_param_deselect != null) param_player_0p01176471_fake_false_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p01176471_fake_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && fake == true)
+            else if (abs((float)(player - 0.01568628)) < .0019 && fake == true)
             {
                 if (param_player_0p01568628_fake_true_fs_param_Data_Texture != null) param_player_0p01568628_fake_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_fake_true_fs_param_Data_size != null) param_player_0p01568628_fake_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3575,7 +3576,7 @@ namespace Game
                 if (param_player_0p01568628_fake_true_fs_param_deselect != null) param_player_0p01568628_fake_true_fs_param_deselect.SetValue(FragSharpMarshal.Marshal(deselect));
                 CompiledEffect_player_0p01568628_fake_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && fake == false)
+            else if (abs((float)(player - 0.01568628)) < .0019 && fake == false)
             {
                 if (param_player_0p01568628_fake_false_fs_param_Data_Texture != null) param_player_0p01568628_fake_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_fake_false_fs_param_Data_size != null) param_player_0p01568628_fake_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -3674,35 +3675,35 @@ namespace Game
         }
         public static void Using(Texture2D data_texture, float player)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_fs_param_data_texture_Texture != null) param_player_0_fs_param_data_texture_Texture.SetValue(FragSharpMarshal.Marshal(data_texture));
                 if (param_player_0_fs_param_data_texture_size != null) param_player_0_fs_param_data_texture_size.SetValue(FragSharpMarshal.Marshal(vec(data_texture.Width, data_texture.Height)));
                 if (param_player_0_fs_param_data_texture_dxdy != null) param_player_0_fs_param_data_texture_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(data_texture.Width, data_texture.Height)));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_fs_param_data_texture_Texture != null) param_player_0p003921569_fs_param_data_texture_Texture.SetValue(FragSharpMarshal.Marshal(data_texture));
                 if (param_player_0p003921569_fs_param_data_texture_size != null) param_player_0p003921569_fs_param_data_texture_size.SetValue(FragSharpMarshal.Marshal(vec(data_texture.Width, data_texture.Height)));
                 if (param_player_0p003921569_fs_param_data_texture_dxdy != null) param_player_0p003921569_fs_param_data_texture_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(data_texture.Width, data_texture.Height)));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_fs_param_data_texture_Texture != null) param_player_0p007843138_fs_param_data_texture_Texture.SetValue(FragSharpMarshal.Marshal(data_texture));
                 if (param_player_0p007843138_fs_param_data_texture_size != null) param_player_0p007843138_fs_param_data_texture_size.SetValue(FragSharpMarshal.Marshal(vec(data_texture.Width, data_texture.Height)));
                 if (param_player_0p007843138_fs_param_data_texture_dxdy != null) param_player_0p007843138_fs_param_data_texture_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(data_texture.Width, data_texture.Height)));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_fs_param_data_texture_Texture != null) param_player_0p01176471_fs_param_data_texture_Texture.SetValue(FragSharpMarshal.Marshal(data_texture));
                 if (param_player_0p01176471_fs_param_data_texture_size != null) param_player_0p01176471_fs_param_data_texture_size.SetValue(FragSharpMarshal.Marshal(vec(data_texture.Width, data_texture.Height)));
                 if (param_player_0p01176471_fs_param_data_texture_dxdy != null) param_player_0p01176471_fs_param_data_texture_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(data_texture.Width, data_texture.Height)));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_fs_param_data_texture_Texture != null) param_player_0p01568628_fs_param_data_texture_Texture.SetValue(FragSharpMarshal.Marshal(data_texture));
                 if (param_player_0p01568628_fs_param_data_texture_size != null) param_player_0p01568628_fs_param_data_texture_size.SetValue(FragSharpMarshal.Marshal(vec(data_texture.Width, data_texture.Height)));
@@ -3815,7 +3816,7 @@ namespace Game
         }
         public static void Using(vec2 pos, float r2, float player, Texture2D Data)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_fs_param_pos != null) param_player_0_fs_param_pos.SetValue(FragSharpMarshal.Marshal(pos));
                 if (param_player_0_fs_param_r2 != null) param_player_0_fs_param_r2.SetValue(FragSharpMarshal.Marshal(r2));
@@ -3824,7 +3825,7 @@ namespace Game
                 if (param_player_0_fs_param_Data_dxdy != null) param_player_0_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_fs_param_pos != null) param_player_0p003921569_fs_param_pos.SetValue(FragSharpMarshal.Marshal(pos));
                 if (param_player_0p003921569_fs_param_r2 != null) param_player_0p003921569_fs_param_r2.SetValue(FragSharpMarshal.Marshal(r2));
@@ -3833,7 +3834,7 @@ namespace Game
                 if (param_player_0p003921569_fs_param_Data_dxdy != null) param_player_0p003921569_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_fs_param_pos != null) param_player_0p007843138_fs_param_pos.SetValue(FragSharpMarshal.Marshal(pos));
                 if (param_player_0p007843138_fs_param_r2 != null) param_player_0p007843138_fs_param_r2.SetValue(FragSharpMarshal.Marshal(r2));
@@ -3842,7 +3843,7 @@ namespace Game
                 if (param_player_0p007843138_fs_param_Data_dxdy != null) param_player_0p007843138_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_fs_param_pos != null) param_player_0p01176471_fs_param_pos.SetValue(FragSharpMarshal.Marshal(pos));
                 if (param_player_0p01176471_fs_param_r2 != null) param_player_0p01176471_fs_param_r2.SetValue(FragSharpMarshal.Marshal(r2));
@@ -3851,7 +3852,7 @@ namespace Game
                 if (param_player_0p01176471_fs_param_Data_dxdy != null) param_player_0p01176471_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_fs_param_pos != null) param_player_0p01568628_fs_param_pos.SetValue(FragSharpMarshal.Marshal(pos));
                 if (param_player_0p01568628_fs_param_r2 != null) param_player_0p01568628_fs_param_r2.SetValue(FragSharpMarshal.Marshal(r2));
@@ -4396,7 +4397,7 @@ namespace Game
         }
         public static void Using(Texture2D Select, Texture2D Data, Texture2D Units, Texture2D Corpses, Texture2D AntiMagic, float distribution, float AntiMagicTeam)
         {
-            if (abs((float)(distribution - 1)) < .001 && abs((float)(AntiMagicTeam - 0)) < .001)
+            if (abs((float)(distribution - 1)) < .0019 && abs((float)(AntiMagicTeam - 0)) < .0019)
             {
                 if (param_distribution_1_AntiMagicTeam_0_fs_param_Select_Texture != null) param_distribution_1_AntiMagicTeam_0_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_1_AntiMagicTeam_0_fs_param_Select_size != null) param_distribution_1_AntiMagicTeam_0_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4415,7 +4416,7 @@ namespace Game
                 if (param_distribution_1_AntiMagicTeam_0_fs_param_AntiMagic_dxdy != null) param_distribution_1_AntiMagicTeam_0_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_1_AntiMagicTeam_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 1)) < .001 && abs((float)(AntiMagicTeam - 0.003921569)) < .001)
+            else if (abs((float)(distribution - 1)) < .0019 && abs((float)(AntiMagicTeam - 0.003921569)) < .0019)
             {
                 if (param_distribution_1_AntiMagicTeam_0p003921569_fs_param_Select_Texture != null) param_distribution_1_AntiMagicTeam_0p003921569_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_1_AntiMagicTeam_0p003921569_fs_param_Select_size != null) param_distribution_1_AntiMagicTeam_0p003921569_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4434,7 +4435,7 @@ namespace Game
                 if (param_distribution_1_AntiMagicTeam_0p003921569_fs_param_AntiMagic_dxdy != null) param_distribution_1_AntiMagicTeam_0p003921569_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_1_AntiMagicTeam_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 1)) < .001 && abs((float)(AntiMagicTeam - 0.007843138)) < .001)
+            else if (abs((float)(distribution - 1)) < .0019 && abs((float)(AntiMagicTeam - 0.007843138)) < .0019)
             {
                 if (param_distribution_1_AntiMagicTeam_0p007843138_fs_param_Select_Texture != null) param_distribution_1_AntiMagicTeam_0p007843138_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_1_AntiMagicTeam_0p007843138_fs_param_Select_size != null) param_distribution_1_AntiMagicTeam_0p007843138_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4453,7 +4454,7 @@ namespace Game
                 if (param_distribution_1_AntiMagicTeam_0p007843138_fs_param_AntiMagic_dxdy != null) param_distribution_1_AntiMagicTeam_0p007843138_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_1_AntiMagicTeam_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 1)) < .001 && abs((float)(AntiMagicTeam - 0.01176471)) < .001)
+            else if (abs((float)(distribution - 1)) < .0019 && abs((float)(AntiMagicTeam - 0.01176471)) < .0019)
             {
                 if (param_distribution_1_AntiMagicTeam_0p01176471_fs_param_Select_Texture != null) param_distribution_1_AntiMagicTeam_0p01176471_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_1_AntiMagicTeam_0p01176471_fs_param_Select_size != null) param_distribution_1_AntiMagicTeam_0p01176471_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4472,7 +4473,7 @@ namespace Game
                 if (param_distribution_1_AntiMagicTeam_0p01176471_fs_param_AntiMagic_dxdy != null) param_distribution_1_AntiMagicTeam_0p01176471_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_1_AntiMagicTeam_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 1)) < .001 && abs((float)(AntiMagicTeam - 0.01568628)) < .001)
+            else if (abs((float)(distribution - 1)) < .0019 && abs((float)(AntiMagicTeam - 0.01568628)) < .0019)
             {
                 if (param_distribution_1_AntiMagicTeam_0p01568628_fs_param_Select_Texture != null) param_distribution_1_AntiMagicTeam_0p01568628_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_1_AntiMagicTeam_0p01568628_fs_param_Select_size != null) param_distribution_1_AntiMagicTeam_0p01568628_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4491,7 +4492,7 @@ namespace Game
                 if (param_distribution_1_AntiMagicTeam_0p01568628_fs_param_AntiMagic_dxdy != null) param_distribution_1_AntiMagicTeam_0p01568628_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_1_AntiMagicTeam_0p01568628.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 2)) < .001 && abs((float)(AntiMagicTeam - 0)) < .001)
+            else if (abs((float)(distribution - 2)) < .0019 && abs((float)(AntiMagicTeam - 0)) < .0019)
             {
                 if (param_distribution_2_AntiMagicTeam_0_fs_param_Select_Texture != null) param_distribution_2_AntiMagicTeam_0_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_2_AntiMagicTeam_0_fs_param_Select_size != null) param_distribution_2_AntiMagicTeam_0_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4510,7 +4511,7 @@ namespace Game
                 if (param_distribution_2_AntiMagicTeam_0_fs_param_AntiMagic_dxdy != null) param_distribution_2_AntiMagicTeam_0_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_2_AntiMagicTeam_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 2)) < .001 && abs((float)(AntiMagicTeam - 0.003921569)) < .001)
+            else if (abs((float)(distribution - 2)) < .0019 && abs((float)(AntiMagicTeam - 0.003921569)) < .0019)
             {
                 if (param_distribution_2_AntiMagicTeam_0p003921569_fs_param_Select_Texture != null) param_distribution_2_AntiMagicTeam_0p003921569_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_2_AntiMagicTeam_0p003921569_fs_param_Select_size != null) param_distribution_2_AntiMagicTeam_0p003921569_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4529,7 +4530,7 @@ namespace Game
                 if (param_distribution_2_AntiMagicTeam_0p003921569_fs_param_AntiMagic_dxdy != null) param_distribution_2_AntiMagicTeam_0p003921569_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_2_AntiMagicTeam_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 2)) < .001 && abs((float)(AntiMagicTeam - 0.007843138)) < .001)
+            else if (abs((float)(distribution - 2)) < .0019 && abs((float)(AntiMagicTeam - 0.007843138)) < .0019)
             {
                 if (param_distribution_2_AntiMagicTeam_0p007843138_fs_param_Select_Texture != null) param_distribution_2_AntiMagicTeam_0p007843138_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_2_AntiMagicTeam_0p007843138_fs_param_Select_size != null) param_distribution_2_AntiMagicTeam_0p007843138_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4548,7 +4549,7 @@ namespace Game
                 if (param_distribution_2_AntiMagicTeam_0p007843138_fs_param_AntiMagic_dxdy != null) param_distribution_2_AntiMagicTeam_0p007843138_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_2_AntiMagicTeam_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 2)) < .001 && abs((float)(AntiMagicTeam - 0.01176471)) < .001)
+            else if (abs((float)(distribution - 2)) < .0019 && abs((float)(AntiMagicTeam - 0.01176471)) < .0019)
             {
                 if (param_distribution_2_AntiMagicTeam_0p01176471_fs_param_Select_Texture != null) param_distribution_2_AntiMagicTeam_0p01176471_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_2_AntiMagicTeam_0p01176471_fs_param_Select_size != null) param_distribution_2_AntiMagicTeam_0p01176471_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4567,7 +4568,7 @@ namespace Game
                 if (param_distribution_2_AntiMagicTeam_0p01176471_fs_param_AntiMagic_dxdy != null) param_distribution_2_AntiMagicTeam_0p01176471_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_2_AntiMagicTeam_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 2)) < .001 && abs((float)(AntiMagicTeam - 0.01568628)) < .001)
+            else if (abs((float)(distribution - 2)) < .0019 && abs((float)(AntiMagicTeam - 0.01568628)) < .0019)
             {
                 if (param_distribution_2_AntiMagicTeam_0p01568628_fs_param_Select_Texture != null) param_distribution_2_AntiMagicTeam_0p01568628_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_2_AntiMagicTeam_0p01568628_fs_param_Select_size != null) param_distribution_2_AntiMagicTeam_0p01568628_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4586,7 +4587,7 @@ namespace Game
                 if (param_distribution_2_AntiMagicTeam_0p01568628_fs_param_AntiMagic_dxdy != null) param_distribution_2_AntiMagicTeam_0p01568628_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_2_AntiMagicTeam_0p01568628.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 3)) < .001 && abs((float)(AntiMagicTeam - 0)) < .001)
+            else if (abs((float)(distribution - 3)) < .0019 && abs((float)(AntiMagicTeam - 0)) < .0019)
             {
                 if (param_distribution_3_AntiMagicTeam_0_fs_param_Select_Texture != null) param_distribution_3_AntiMagicTeam_0_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_3_AntiMagicTeam_0_fs_param_Select_size != null) param_distribution_3_AntiMagicTeam_0_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4605,7 +4606,7 @@ namespace Game
                 if (param_distribution_3_AntiMagicTeam_0_fs_param_AntiMagic_dxdy != null) param_distribution_3_AntiMagicTeam_0_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_3_AntiMagicTeam_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 3)) < .001 && abs((float)(AntiMagicTeam - 0.003921569)) < .001)
+            else if (abs((float)(distribution - 3)) < .0019 && abs((float)(AntiMagicTeam - 0.003921569)) < .0019)
             {
                 if (param_distribution_3_AntiMagicTeam_0p003921569_fs_param_Select_Texture != null) param_distribution_3_AntiMagicTeam_0p003921569_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_3_AntiMagicTeam_0p003921569_fs_param_Select_size != null) param_distribution_3_AntiMagicTeam_0p003921569_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4624,7 +4625,7 @@ namespace Game
                 if (param_distribution_3_AntiMagicTeam_0p003921569_fs_param_AntiMagic_dxdy != null) param_distribution_3_AntiMagicTeam_0p003921569_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_3_AntiMagicTeam_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 3)) < .001 && abs((float)(AntiMagicTeam - 0.007843138)) < .001)
+            else if (abs((float)(distribution - 3)) < .0019 && abs((float)(AntiMagicTeam - 0.007843138)) < .0019)
             {
                 if (param_distribution_3_AntiMagicTeam_0p007843138_fs_param_Select_Texture != null) param_distribution_3_AntiMagicTeam_0p007843138_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_3_AntiMagicTeam_0p007843138_fs_param_Select_size != null) param_distribution_3_AntiMagicTeam_0p007843138_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4643,7 +4644,7 @@ namespace Game
                 if (param_distribution_3_AntiMagicTeam_0p007843138_fs_param_AntiMagic_dxdy != null) param_distribution_3_AntiMagicTeam_0p007843138_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_3_AntiMagicTeam_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 3)) < .001 && abs((float)(AntiMagicTeam - 0.01176471)) < .001)
+            else if (abs((float)(distribution - 3)) < .0019 && abs((float)(AntiMagicTeam - 0.01176471)) < .0019)
             {
                 if (param_distribution_3_AntiMagicTeam_0p01176471_fs_param_Select_Texture != null) param_distribution_3_AntiMagicTeam_0p01176471_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_3_AntiMagicTeam_0p01176471_fs_param_Select_size != null) param_distribution_3_AntiMagicTeam_0p01176471_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -4662,7 +4663,7 @@ namespace Game
                 if (param_distribution_3_AntiMagicTeam_0p01176471_fs_param_AntiMagic_dxdy != null) param_distribution_3_AntiMagicTeam_0p01176471_fs_param_AntiMagic_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(AntiMagic.Width, AntiMagic.Height)));
                 CompiledEffect_distribution_3_AntiMagicTeam_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(distribution - 3)) < .001 && abs((float)(AntiMagicTeam - 0.01568628)) < .001)
+            else if (abs((float)(distribution - 3)) < .0019 && abs((float)(AntiMagicTeam - 0.01568628)) < .0019)
             {
                 if (param_distribution_3_AntiMagicTeam_0p01568628_fs_param_Select_Texture != null) param_distribution_3_AntiMagicTeam_0p01568628_fs_param_Select_Texture.SetValue(FragSharpMarshal.Marshal(Select));
                 if (param_distribution_3_AntiMagicTeam_0p01568628_fs_param_Select_size != null) param_distribution_3_AntiMagicTeam_0p01568628_fs_param_Select_size.SetValue(FragSharpMarshal.Marshal(vec(Select.Width, Select.Height)));
@@ -5594,28 +5595,28 @@ namespace Game
         }
         public static void Using(Texture2D Random, float dir)
         {
-            if (abs((float)(dir - 0.003921569)) < .001)
+            if (abs((float)(dir - 0.003921569)) < .0019)
             {
                 if (param_dir_0p003921569_fs_param_Random_Texture != null) param_dir_0p003921569_fs_param_Random_Texture.SetValue(FragSharpMarshal.Marshal(Random));
                 if (param_dir_0p003921569_fs_param_Random_size != null) param_dir_0p003921569_fs_param_Random_size.SetValue(FragSharpMarshal.Marshal(vec(Random.Width, Random.Height)));
                 if (param_dir_0p003921569_fs_param_Random_dxdy != null) param_dir_0p003921569_fs_param_Random_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Random.Width, Random.Height)));
                 CompiledEffect_dir_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(dir - 0.007843138)) < .001)
+            else if (abs((float)(dir - 0.007843138)) < .0019)
             {
                 if (param_dir_0p007843138_fs_param_Random_Texture != null) param_dir_0p007843138_fs_param_Random_Texture.SetValue(FragSharpMarshal.Marshal(Random));
                 if (param_dir_0p007843138_fs_param_Random_size != null) param_dir_0p007843138_fs_param_Random_size.SetValue(FragSharpMarshal.Marshal(vec(Random.Width, Random.Height)));
                 if (param_dir_0p007843138_fs_param_Random_dxdy != null) param_dir_0p007843138_fs_param_Random_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Random.Width, Random.Height)));
                 CompiledEffect_dir_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(dir - 0.01176471)) < .001)
+            else if (abs((float)(dir - 0.01176471)) < .0019)
             {
                 if (param_dir_0p01176471_fs_param_Random_Texture != null) param_dir_0p01176471_fs_param_Random_Texture.SetValue(FragSharpMarshal.Marshal(Random));
                 if (param_dir_0p01176471_fs_param_Random_size != null) param_dir_0p01176471_fs_param_Random_size.SetValue(FragSharpMarshal.Marshal(vec(Random.Width, Random.Height)));
                 if (param_dir_0p01176471_fs_param_Random_dxdy != null) param_dir_0p01176471_fs_param_Random_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Random.Width, Random.Height)));
                 CompiledEffect_dir_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(dir - 0.01568628)) < .001)
+            else if (abs((float)(dir - 0.01568628)) < .0019)
             {
                 if (param_dir_0p01568628_fs_param_Random_Texture != null) param_dir_0p01568628_fs_param_Random_Texture.SetValue(FragSharpMarshal.Marshal(Random));
                 if (param_dir_0p01568628_fs_param_Random_size != null) param_dir_0p01568628_fs_param_Random_size.SetValue(FragSharpMarshal.Marshal(vec(Random.Width, Random.Height)));
@@ -5738,7 +5739,7 @@ namespace Game
         }
         public static void Using(Texture2D Units, Texture2D Building, float player)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_fs_param_Units_Texture != null) param_player_0_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0_fs_param_Units_size != null) param_player_0_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -5748,7 +5749,7 @@ namespace Game
                 if (param_player_0_fs_param_Building_dxdy != null) param_player_0_fs_param_Building_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Building.Width, Building.Height)));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_fs_param_Units_Texture != null) param_player_0p003921569_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p003921569_fs_param_Units_size != null) param_player_0p003921569_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -5758,7 +5759,7 @@ namespace Game
                 if (param_player_0p003921569_fs_param_Building_dxdy != null) param_player_0p003921569_fs_param_Building_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Building.Width, Building.Height)));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_fs_param_Units_Texture != null) param_player_0p007843138_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p007843138_fs_param_Units_size != null) param_player_0p007843138_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -5768,7 +5769,7 @@ namespace Game
                 if (param_player_0p007843138_fs_param_Building_dxdy != null) param_player_0p007843138_fs_param_Building_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Building.Width, Building.Height)));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_fs_param_Units_Texture != null) param_player_0p01176471_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p01176471_fs_param_Units_size != null) param_player_0p01176471_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -5778,7 +5779,7 @@ namespace Game
                 if (param_player_0p01176471_fs_param_Building_dxdy != null) param_player_0p01176471_fs_param_Building_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Building.Width, Building.Height)));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_fs_param_Units_Texture != null) param_player_0p01568628_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p01568628_fs_param_Units_size != null) param_player_0p01568628_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -5934,7 +5935,7 @@ namespace Game
         }
         public static void Using(Texture2D Units, Texture2D Data, Texture2D PathToOtherTeams, float player)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_fs_param_Units_Texture != null) param_player_0_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0_fs_param_Units_size != null) param_player_0_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -5947,7 +5948,7 @@ namespace Game
                 if (param_player_0_fs_param_PathToOtherTeams_dxdy != null) param_player_0_fs_param_PathToOtherTeams_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PathToOtherTeams.Width, PathToOtherTeams.Height)));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_fs_param_Units_Texture != null) param_player_0p003921569_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p003921569_fs_param_Units_size != null) param_player_0p003921569_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -5960,7 +5961,7 @@ namespace Game
                 if (param_player_0p003921569_fs_param_PathToOtherTeams_dxdy != null) param_player_0p003921569_fs_param_PathToOtherTeams_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PathToOtherTeams.Width, PathToOtherTeams.Height)));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_fs_param_Units_Texture != null) param_player_0p007843138_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p007843138_fs_param_Units_size != null) param_player_0p007843138_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -5973,7 +5974,7 @@ namespace Game
                 if (param_player_0p007843138_fs_param_PathToOtherTeams_dxdy != null) param_player_0p007843138_fs_param_PathToOtherTeams_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PathToOtherTeams.Width, PathToOtherTeams.Height)));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_fs_param_Units_Texture != null) param_player_0p01176471_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p01176471_fs_param_Units_size != null) param_player_0p01176471_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -5986,7 +5987,7 @@ namespace Game
                 if (param_player_0p01176471_fs_param_PathToOtherTeams_dxdy != null) param_player_0p01176471_fs_param_PathToOtherTeams_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(PathToOtherTeams.Width, PathToOtherTeams.Height)));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_fs_param_Units_Texture != null) param_player_0p01568628_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p01568628_fs_param_Units_size != null) param_player_0p01568628_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -6115,7 +6116,7 @@ namespace Game
         }
         public static void Using(Texture2D Units, Texture2D Data, float player)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_fs_param_Units_Texture != null) param_player_0_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0_fs_param_Units_size != null) param_player_0_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -6125,7 +6126,7 @@ namespace Game
                 if (param_player_0_fs_param_Data_dxdy != null) param_player_0_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_fs_param_Units_Texture != null) param_player_0p003921569_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p003921569_fs_param_Units_size != null) param_player_0p003921569_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -6135,7 +6136,7 @@ namespace Game
                 if (param_player_0p003921569_fs_param_Data_dxdy != null) param_player_0p003921569_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_fs_param_Units_Texture != null) param_player_0p007843138_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p007843138_fs_param_Units_size != null) param_player_0p007843138_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -6145,7 +6146,7 @@ namespace Game
                 if (param_player_0p007843138_fs_param_Data_dxdy != null) param_player_0p007843138_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_fs_param_Units_Texture != null) param_player_0p01176471_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p01176471_fs_param_Units_size != null) param_player_0p01176471_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -6155,7 +6156,7 @@ namespace Game
                 if (param_player_0p01176471_fs_param_Data_dxdy != null) param_player_0p01176471_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_fs_param_Units_Texture != null) param_player_0p01568628_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p01568628_fs_param_Units_size != null) param_player_0p01568628_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -6281,7 +6282,7 @@ namespace Game
         }
         public static void Using(Texture2D Units, Texture2D Data, float player)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_fs_param_Units_Texture != null) param_player_0_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0_fs_param_Units_size != null) param_player_0_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -6291,7 +6292,7 @@ namespace Game
                 if (param_player_0_fs_param_Data_dxdy != null) param_player_0_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_fs_param_Units_Texture != null) param_player_0p003921569_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p003921569_fs_param_Units_size != null) param_player_0p003921569_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -6301,7 +6302,7 @@ namespace Game
                 if (param_player_0p003921569_fs_param_Data_dxdy != null) param_player_0p003921569_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_fs_param_Units_Texture != null) param_player_0p007843138_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p007843138_fs_param_Units_size != null) param_player_0p007843138_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -6311,7 +6312,7 @@ namespace Game
                 if (param_player_0p007843138_fs_param_Data_dxdy != null) param_player_0p007843138_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_fs_param_Units_Texture != null) param_player_0p01176471_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p01176471_fs_param_Units_size != null) param_player_0p01176471_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -6321,7 +6322,7 @@ namespace Game
                 if (param_player_0p01176471_fs_param_Data_dxdy != null) param_player_0p01176471_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_fs_param_Units_Texture != null) param_player_0p01568628_fs_param_Units_Texture.SetValue(FragSharpMarshal.Marshal(Units));
                 if (param_player_0p01568628_fs_param_Units_size != null) param_player_0p01568628_fs_param_Units_size.SetValue(FragSharpMarshal.Marshal(vec(Units.Width, Units.Height)));
@@ -6963,7 +6964,7 @@ namespace Game
         }
         public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Path, float player, float cutoff)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_vs_param_cameraPos != null) param_player_0_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0_vs_param_cameraAspect != null) param_player_0_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -6973,7 +6974,7 @@ namespace Game
                 if (param_player_0_fs_param_cutoff != null) param_player_0_fs_param_cutoff.SetValue(FragSharpMarshal.Marshal(cutoff));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_vs_param_cameraPos != null) param_player_0p003921569_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p003921569_vs_param_cameraAspect != null) param_player_0p003921569_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -6983,7 +6984,7 @@ namespace Game
                 if (param_player_0p003921569_fs_param_cutoff != null) param_player_0p003921569_fs_param_cutoff.SetValue(FragSharpMarshal.Marshal(cutoff));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_vs_param_cameraPos != null) param_player_0p007843138_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p007843138_vs_param_cameraAspect != null) param_player_0p007843138_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -6993,7 +6994,7 @@ namespace Game
                 if (param_player_0p007843138_fs_param_cutoff != null) param_player_0p007843138_fs_param_cutoff.SetValue(FragSharpMarshal.Marshal(cutoff));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_vs_param_cameraPos != null) param_player_0p01176471_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p01176471_vs_param_cameraAspect != null) param_player_0p01176471_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -7003,7 +7004,7 @@ namespace Game
                 if (param_player_0p01176471_fs_param_cutoff != null) param_player_0p01176471_fs_param_cutoff.SetValue(FragSharpMarshal.Marshal(cutoff));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_vs_param_cameraPos != null) param_player_0p01568628_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p01568628_vs_param_cameraAspect != null) param_player_0p01568628_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -7300,7 +7301,7 @@ namespace Game
         }
         public static void Using(vec4 cameraPos, float cameraAspect, Texture2D BuildingDistances, Texture2D Data, Texture2D Unit, float blend, float radius, float player)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_vs_param_cameraPos != null) param_player_0_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0_vs_param_cameraAspect != null) param_player_0_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -7320,7 +7321,7 @@ namespace Game
                 if (param_player_0_fs_param_FarColor_dxdy != null) param_player_0_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_vs_param_cameraPos != null) param_player_0p003921569_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p003921569_vs_param_cameraAspect != null) param_player_0p003921569_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -7340,7 +7341,7 @@ namespace Game
                 if (param_player_0p003921569_fs_param_FarColor_dxdy != null) param_player_0p003921569_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_vs_param_cameraPos != null) param_player_0p007843138_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p007843138_vs_param_cameraAspect != null) param_player_0p007843138_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -7360,7 +7361,7 @@ namespace Game
                 if (param_player_0p007843138_fs_param_FarColor_dxdy != null) param_player_0p007843138_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_vs_param_cameraPos != null) param_player_0p01176471_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p01176471_vs_param_cameraAspect != null) param_player_0p01176471_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -7380,7 +7381,7 @@ namespace Game
                 if (param_player_0p01176471_fs_param_FarColor_dxdy != null) param_player_0p01176471_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_vs_param_cameraPos != null) param_player_0p01568628_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p01568628_vs_param_cameraAspect != null) param_player_0p01568628_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -7606,7 +7607,7 @@ namespace Game
         }
         public static void Using(vec4 cameraPos, float cameraAspect, Texture2D Buildings, Texture2D Units, Texture2D Texture, Texture2D Explosion, float player, float s)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_vs_param_cameraPos != null) param_player_0_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0_vs_param_cameraAspect != null) param_player_0_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -7625,7 +7626,7 @@ namespace Game
                 if (param_player_0_fs_param_s != null) param_player_0_fs_param_s.SetValue(FragSharpMarshal.Marshal(s));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_vs_param_cameraPos != null) param_player_0p003921569_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p003921569_vs_param_cameraAspect != null) param_player_0p003921569_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -7644,7 +7645,7 @@ namespace Game
                 if (param_player_0p003921569_fs_param_s != null) param_player_0p003921569_fs_param_s.SetValue(FragSharpMarshal.Marshal(s));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_vs_param_cameraPos != null) param_player_0p007843138_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p007843138_vs_param_cameraAspect != null) param_player_0p007843138_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -7663,7 +7664,7 @@ namespace Game
                 if (param_player_0p007843138_fs_param_s != null) param_player_0p007843138_fs_param_s.SetValue(FragSharpMarshal.Marshal(s));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_vs_param_cameraPos != null) param_player_0p01176471_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p01176471_vs_param_cameraAspect != null) param_player_0p01176471_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -7682,7 +7683,7 @@ namespace Game
                 if (param_player_0p01176471_fs_param_s != null) param_player_0p01176471_fs_param_s.SetValue(FragSharpMarshal.Marshal(s));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_vs_param_cameraPos != null) param_player_0p01568628_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p01568628_vs_param_cameraAspect != null) param_player_0p01568628_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -8268,35 +8269,35 @@ namespace Game
         }
         public static void Using(Texture2D CurrentUnits, float player)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_fs_param_CurrentUnits_Texture != null) param_player_0_fs_param_CurrentUnits_Texture.SetValue(FragSharpMarshal.Marshal(CurrentUnits));
                 if (param_player_0_fs_param_CurrentUnits_size != null) param_player_0_fs_param_CurrentUnits_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentUnits.Width, CurrentUnits.Height)));
                 if (param_player_0_fs_param_CurrentUnits_dxdy != null) param_player_0_fs_param_CurrentUnits_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentUnits.Width, CurrentUnits.Height)));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_fs_param_CurrentUnits_Texture != null) param_player_0p003921569_fs_param_CurrentUnits_Texture.SetValue(FragSharpMarshal.Marshal(CurrentUnits));
                 if (param_player_0p003921569_fs_param_CurrentUnits_size != null) param_player_0p003921569_fs_param_CurrentUnits_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentUnits.Width, CurrentUnits.Height)));
                 if (param_player_0p003921569_fs_param_CurrentUnits_dxdy != null) param_player_0p003921569_fs_param_CurrentUnits_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentUnits.Width, CurrentUnits.Height)));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_fs_param_CurrentUnits_Texture != null) param_player_0p007843138_fs_param_CurrentUnits_Texture.SetValue(FragSharpMarshal.Marshal(CurrentUnits));
                 if (param_player_0p007843138_fs_param_CurrentUnits_size != null) param_player_0p007843138_fs_param_CurrentUnits_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentUnits.Width, CurrentUnits.Height)));
                 if (param_player_0p007843138_fs_param_CurrentUnits_dxdy != null) param_player_0p007843138_fs_param_CurrentUnits_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentUnits.Width, CurrentUnits.Height)));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_fs_param_CurrentUnits_Texture != null) param_player_0p01176471_fs_param_CurrentUnits_Texture.SetValue(FragSharpMarshal.Marshal(CurrentUnits));
                 if (param_player_0p01176471_fs_param_CurrentUnits_size != null) param_player_0p01176471_fs_param_CurrentUnits_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentUnits.Width, CurrentUnits.Height)));
                 if (param_player_0p01176471_fs_param_CurrentUnits_dxdy != null) param_player_0p01176471_fs_param_CurrentUnits_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(CurrentUnits.Width, CurrentUnits.Height)));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_fs_param_CurrentUnits_Texture != null) param_player_0p01568628_fs_param_CurrentUnits_Texture.SetValue(FragSharpMarshal.Marshal(CurrentUnits));
                 if (param_player_0p01568628_fs_param_CurrentUnits_size != null) param_player_0p01568628_fs_param_CurrentUnits_size.SetValue(FragSharpMarshal.Marshal(vec(CurrentUnits.Width, CurrentUnits.Height)));
@@ -9658,7 +9659,7 @@ namespace Game
         }
         public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected)
         {
-            if (abs((float)(player - 0)) < .001 && only_selected == true)
+            if (abs((float)(player - 0)) < .0019 && only_selected == true)
             {
                 if (param_player_0_only_selected_true_fs_param_Data_Texture != null) param_player_0_only_selected_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_only_selected_true_fs_param_Data_size != null) param_player_0_only_selected_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9668,7 +9669,7 @@ namespace Game
                 if (param_player_0_only_selected_true_fs_param_Units_dxdy != null) param_player_0_only_selected_true_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0_only_selected_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && only_selected == false)
+            else if (abs((float)(player - 0)) < .0019 && only_selected == false)
             {
                 if (param_player_0_only_selected_false_fs_param_Data_Texture != null) param_player_0_only_selected_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_only_selected_false_fs_param_Data_size != null) param_player_0_only_selected_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9678,7 +9679,7 @@ namespace Game
                 if (param_player_0_only_selected_false_fs_param_Units_dxdy != null) param_player_0_only_selected_false_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0_only_selected_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && only_selected == true)
+            else if (abs((float)(player - 0.003921569)) < .0019 && only_selected == true)
             {
                 if (param_player_0p003921569_only_selected_true_fs_param_Data_Texture != null) param_player_0p003921569_only_selected_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_only_selected_true_fs_param_Data_size != null) param_player_0p003921569_only_selected_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9688,7 +9689,7 @@ namespace Game
                 if (param_player_0p003921569_only_selected_true_fs_param_Units_dxdy != null) param_player_0p003921569_only_selected_true_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p003921569_only_selected_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && only_selected == false)
+            else if (abs((float)(player - 0.003921569)) < .0019 && only_selected == false)
             {
                 if (param_player_0p003921569_only_selected_false_fs_param_Data_Texture != null) param_player_0p003921569_only_selected_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_only_selected_false_fs_param_Data_size != null) param_player_0p003921569_only_selected_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9698,7 +9699,7 @@ namespace Game
                 if (param_player_0p003921569_only_selected_false_fs_param_Units_dxdy != null) param_player_0p003921569_only_selected_false_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p003921569_only_selected_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && only_selected == true)
+            else if (abs((float)(player - 0.007843138)) < .0019 && only_selected == true)
             {
                 if (param_player_0p007843138_only_selected_true_fs_param_Data_Texture != null) param_player_0p007843138_only_selected_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_only_selected_true_fs_param_Data_size != null) param_player_0p007843138_only_selected_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9708,7 +9709,7 @@ namespace Game
                 if (param_player_0p007843138_only_selected_true_fs_param_Units_dxdy != null) param_player_0p007843138_only_selected_true_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p007843138_only_selected_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && only_selected == false)
+            else if (abs((float)(player - 0.007843138)) < .0019 && only_selected == false)
             {
                 if (param_player_0p007843138_only_selected_false_fs_param_Data_Texture != null) param_player_0p007843138_only_selected_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_only_selected_false_fs_param_Data_size != null) param_player_0p007843138_only_selected_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9718,7 +9719,7 @@ namespace Game
                 if (param_player_0p007843138_only_selected_false_fs_param_Units_dxdy != null) param_player_0p007843138_only_selected_false_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p007843138_only_selected_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && only_selected == true)
+            else if (abs((float)(player - 0.01176471)) < .0019 && only_selected == true)
             {
                 if (param_player_0p01176471_only_selected_true_fs_param_Data_Texture != null) param_player_0p01176471_only_selected_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_only_selected_true_fs_param_Data_size != null) param_player_0p01176471_only_selected_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9728,7 +9729,7 @@ namespace Game
                 if (param_player_0p01176471_only_selected_true_fs_param_Units_dxdy != null) param_player_0p01176471_only_selected_true_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p01176471_only_selected_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && only_selected == false)
+            else if (abs((float)(player - 0.01176471)) < .0019 && only_selected == false)
             {
                 if (param_player_0p01176471_only_selected_false_fs_param_Data_Texture != null) param_player_0p01176471_only_selected_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_only_selected_false_fs_param_Data_size != null) param_player_0p01176471_only_selected_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9738,7 +9739,7 @@ namespace Game
                 if (param_player_0p01176471_only_selected_false_fs_param_Units_dxdy != null) param_player_0p01176471_only_selected_false_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p01176471_only_selected_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && only_selected == true)
+            else if (abs((float)(player - 0.01568628)) < .0019 && only_selected == true)
             {
                 if (param_player_0p01568628_only_selected_true_fs_param_Data_Texture != null) param_player_0p01568628_only_selected_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_only_selected_true_fs_param_Data_size != null) param_player_0p01568628_only_selected_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9748,7 +9749,7 @@ namespace Game
                 if (param_player_0p01568628_only_selected_true_fs_param_Units_dxdy != null) param_player_0p01568628_only_selected_true_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p01568628_only_selected_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && only_selected == false)
+            else if (abs((float)(player - 0.01568628)) < .0019 && only_selected == false)
             {
                 if (param_player_0p01568628_only_selected_false_fs_param_Data_Texture != null) param_player_0p01568628_only_selected_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_only_selected_false_fs_param_Data_size != null) param_player_0p01568628_only_selected_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9949,7 +9950,7 @@ namespace Game
         }
         public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected)
         {
-            if (abs((float)(player - 0)) < .001 && only_selected == true)
+            if (abs((float)(player - 0)) < .0019 && only_selected == true)
             {
                 if (param_player_0_only_selected_true_fs_param_Data_Texture != null) param_player_0_only_selected_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_only_selected_true_fs_param_Data_size != null) param_player_0_only_selected_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9959,7 +9960,7 @@ namespace Game
                 if (param_player_0_only_selected_true_fs_param_Units_dxdy != null) param_player_0_only_selected_true_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0_only_selected_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && only_selected == false)
+            else if (abs((float)(player - 0)) < .0019 && only_selected == false)
             {
                 if (param_player_0_only_selected_false_fs_param_Data_Texture != null) param_player_0_only_selected_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_only_selected_false_fs_param_Data_size != null) param_player_0_only_selected_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9969,7 +9970,7 @@ namespace Game
                 if (param_player_0_only_selected_false_fs_param_Units_dxdy != null) param_player_0_only_selected_false_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0_only_selected_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && only_selected == true)
+            else if (abs((float)(player - 0.003921569)) < .0019 && only_selected == true)
             {
                 if (param_player_0p003921569_only_selected_true_fs_param_Data_Texture != null) param_player_0p003921569_only_selected_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_only_selected_true_fs_param_Data_size != null) param_player_0p003921569_only_selected_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9979,7 +9980,7 @@ namespace Game
                 if (param_player_0p003921569_only_selected_true_fs_param_Units_dxdy != null) param_player_0p003921569_only_selected_true_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p003921569_only_selected_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && only_selected == false)
+            else if (abs((float)(player - 0.003921569)) < .0019 && only_selected == false)
             {
                 if (param_player_0p003921569_only_selected_false_fs_param_Data_Texture != null) param_player_0p003921569_only_selected_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_only_selected_false_fs_param_Data_size != null) param_player_0p003921569_only_selected_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9989,7 +9990,7 @@ namespace Game
                 if (param_player_0p003921569_only_selected_false_fs_param_Units_dxdy != null) param_player_0p003921569_only_selected_false_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p003921569_only_selected_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && only_selected == true)
+            else if (abs((float)(player - 0.007843138)) < .0019 && only_selected == true)
             {
                 if (param_player_0p007843138_only_selected_true_fs_param_Data_Texture != null) param_player_0p007843138_only_selected_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_only_selected_true_fs_param_Data_size != null) param_player_0p007843138_only_selected_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -9999,7 +10000,7 @@ namespace Game
                 if (param_player_0p007843138_only_selected_true_fs_param_Units_dxdy != null) param_player_0p007843138_only_selected_true_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p007843138_only_selected_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && only_selected == false)
+            else if (abs((float)(player - 0.007843138)) < .0019 && only_selected == false)
             {
                 if (param_player_0p007843138_only_selected_false_fs_param_Data_Texture != null) param_player_0p007843138_only_selected_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_only_selected_false_fs_param_Data_size != null) param_player_0p007843138_only_selected_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10009,7 +10010,7 @@ namespace Game
                 if (param_player_0p007843138_only_selected_false_fs_param_Units_dxdy != null) param_player_0p007843138_only_selected_false_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p007843138_only_selected_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && only_selected == true)
+            else if (abs((float)(player - 0.01176471)) < .0019 && only_selected == true)
             {
                 if (param_player_0p01176471_only_selected_true_fs_param_Data_Texture != null) param_player_0p01176471_only_selected_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_only_selected_true_fs_param_Data_size != null) param_player_0p01176471_only_selected_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10019,7 +10020,7 @@ namespace Game
                 if (param_player_0p01176471_only_selected_true_fs_param_Units_dxdy != null) param_player_0p01176471_only_selected_true_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p01176471_only_selected_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && only_selected == false)
+            else if (abs((float)(player - 0.01176471)) < .0019 && only_selected == false)
             {
                 if (param_player_0p01176471_only_selected_false_fs_param_Data_Texture != null) param_player_0p01176471_only_selected_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_only_selected_false_fs_param_Data_size != null) param_player_0p01176471_only_selected_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10029,7 +10030,7 @@ namespace Game
                 if (param_player_0p01176471_only_selected_false_fs_param_Units_dxdy != null) param_player_0p01176471_only_selected_false_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p01176471_only_selected_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && only_selected == true)
+            else if (abs((float)(player - 0.01568628)) < .0019 && only_selected == true)
             {
                 if (param_player_0p01568628_only_selected_true_fs_param_Data_Texture != null) param_player_0p01568628_only_selected_true_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_only_selected_true_fs_param_Data_size != null) param_player_0p01568628_only_selected_true_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10039,7 +10040,7 @@ namespace Game
                 if (param_player_0p01568628_only_selected_true_fs_param_Units_dxdy != null) param_player_0p01568628_only_selected_true_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_player_0p01568628_only_selected_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && only_selected == false)
+            else if (abs((float)(player - 0.01568628)) < .0019 && only_selected == false)
             {
                 if (param_player_0p01568628_only_selected_false_fs_param_Data_Texture != null) param_player_0p01568628_only_selected_false_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_only_selected_false_fs_param_Data_size != null) param_player_0p01568628_only_selected_false_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10050,6 +10051,59 @@ namespace Game
                 CompiledEffect_player_0p01568628_only_selected_false.CurrentTechnique.Passes[0].Apply();
             }
             else throw new Exception("Parameters do not match any specified specialization.");
+        }
+    }
+}
+
+
+namespace Game
+{
+    public partial class _CountUnitTypeForAllPlayers
+    {
+        private static Effect CompiledEffect;
+        private static EffectParameter param_fs_param_Data_Texture;
+        private static EffectParameter param_fs_param_Data_size;
+        private static EffectParameter param_fs_param_Data_dxdy;
+
+        public static void Init()
+        {
+            CompiledEffect = FragSharp.Content.Load<Effect>("FragSharpShaders/_CountUnitTypeForAllPlayers");
+            param_fs_param_Data_Texture = CompiledEffect.Parameters["fs_param_Data_Texture"];
+            param_fs_param_Data_size = CompiledEffect.Parameters["fs_param_Data_size"];
+            param_fs_param_Data_dxdy = CompiledEffect.Parameters["fs_param_Data_dxdy"];
+        }
+        public static void Apply(Texture2D Data, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data);
+            GridHelper.DrawGrid();
+        }
+        public static void Apply(Texture2D Data, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data);
+            GridHelper.DrawGrid();
+        }
+        public static void Using(Texture2D Data, RenderTarget2D Output, Color Clear)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Clear);
+            Using(Data);
+        }
+        public static void Using(Texture2D Data, RenderTarget2D Output)
+        {
+            GridHelper.GraphicsDevice.SetRenderTarget(Output);
+            GridHelper.GraphicsDevice.Clear(Color.Transparent);
+            Using(Data);
+        }
+        public static void Using(Texture2D Data)
+        {
+            if (param_fs_param_Data_Texture != null) param_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
+            if (param_fs_param_Data_size != null) param_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
+            if (param_fs_param_Data_dxdy != null) param_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
+            CompiledEffect.CurrentTechnique.Passes[0].Apply();
         }
     }
 }
@@ -10210,7 +10264,7 @@ namespace Game
         }
         public static void Using(Texture2D Data, Texture2D Units, float type)
         {
-            if (abs((float)(type - 0.003921569)) < .001)
+            if (abs((float)(type - 0.003921569)) < .0019)
             {
                 if (param_type_0p003921569_fs_param_Data_Texture != null) param_type_0p003921569_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_type_0p003921569_fs_param_Data_size != null) param_type_0p003921569_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10220,7 +10274,7 @@ namespace Game
                 if (param_type_0p003921569_fs_param_Units_dxdy != null) param_type_0p003921569_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_type_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(type - 0.007843138)) < .001)
+            else if (abs((float)(type - 0.007843138)) < .0019)
             {
                 if (param_type_0p007843138_fs_param_Data_Texture != null) param_type_0p007843138_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_type_0p007843138_fs_param_Data_size != null) param_type_0p007843138_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10230,7 +10284,7 @@ namespace Game
                 if (param_type_0p007843138_fs_param_Units_dxdy != null) param_type_0p007843138_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_type_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(type - 0.01176471)) < .001)
+            else if (abs((float)(type - 0.01176471)) < .0019)
             {
                 if (param_type_0p01176471_fs_param_Data_Texture != null) param_type_0p01176471_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_type_0p01176471_fs_param_Data_size != null) param_type_0p01176471_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10240,7 +10294,7 @@ namespace Game
                 if (param_type_0p01176471_fs_param_Units_dxdy != null) param_type_0p01176471_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_type_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(type - 0.01568628)) < .001)
+            else if (abs((float)(type - 0.01568628)) < .0019)
             {
                 if (param_type_0p01568628_fs_param_Data_Texture != null) param_type_0p01568628_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_type_0p01568628_fs_param_Data_size != null) param_type_0p01568628_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10250,7 +10304,7 @@ namespace Game
                 if (param_type_0p01568628_fs_param_Units_dxdy != null) param_type_0p01568628_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_type_0p01568628.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(type - 0.01960784)) < .001)
+            else if (abs((float)(type - 0.01960784)) < .0019)
             {
                 if (param_type_0p01960784_fs_param_Data_Texture != null) param_type_0p01960784_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_type_0p01960784_fs_param_Data_size != null) param_type_0p01960784_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10260,7 +10314,7 @@ namespace Game
                 if (param_type_0p01960784_fs_param_Units_dxdy != null) param_type_0p01960784_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_type_0p01960784.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(type - 0.02352941)) < .001)
+            else if (abs((float)(type - 0.02352941)) < .0019)
             {
                 if (param_type_0p02352941_fs_param_Data_Texture != null) param_type_0p02352941_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_type_0p02352941_fs_param_Data_size != null) param_type_0p02352941_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10270,7 +10324,7 @@ namespace Game
                 if (param_type_0p02352941_fs_param_Units_dxdy != null) param_type_0p02352941_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_type_0p02352941.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(type - 0.02745098)) < .001)
+            else if (abs((float)(type - 0.02745098)) < .0019)
             {
                 if (param_type_0p02745098_fs_param_Data_Texture != null) param_type_0p02745098_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_type_0p02745098_fs_param_Data_size != null) param_type_0p02745098_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10280,7 +10334,7 @@ namespace Game
                 if (param_type_0p02745098_fs_param_Units_dxdy != null) param_type_0p02745098_fs_param_Units_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Units.Width, Units.Height)));
                 CompiledEffect_type_0p02745098.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(type - 0.03137255)) < .001)
+            else if (abs((float)(type - 0.03137255)) < .0019)
             {
                 if (param_type_0p03137255_fs_param_Data_Texture != null) param_type_0p03137255_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_type_0p03137255_fs_param_Data_size != null) param_type_0p03137255_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10469,7 +10523,7 @@ namespace Game
         }
         public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_fs_param_Data_Texture != null) param_player_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_fs_param_Data_size != null) param_player_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10480,7 +10534,7 @@ namespace Game
                 if (param_player_0_fs_param_only_selected != null) param_player_0_fs_param_only_selected.SetValue(FragSharpMarshal.Marshal(only_selected));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_fs_param_Data_Texture != null) param_player_0p003921569_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_fs_param_Data_size != null) param_player_0p003921569_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10491,7 +10545,7 @@ namespace Game
                 if (param_player_0p003921569_fs_param_only_selected != null) param_player_0p003921569_fs_param_only_selected.SetValue(FragSharpMarshal.Marshal(only_selected));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_fs_param_Data_Texture != null) param_player_0p007843138_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_fs_param_Data_size != null) param_player_0p007843138_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10502,7 +10556,7 @@ namespace Game
                 if (param_player_0p007843138_fs_param_only_selected != null) param_player_0p007843138_fs_param_only_selected.SetValue(FragSharpMarshal.Marshal(only_selected));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_fs_param_Data_Texture != null) param_player_0p01176471_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_fs_param_Data_size != null) param_player_0p01176471_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10513,7 +10567,7 @@ namespace Game
                 if (param_player_0p01176471_fs_param_only_selected != null) param_player_0p01176471_fs_param_only_selected.SetValue(FragSharpMarshal.Marshal(only_selected));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_fs_param_Data_Texture != null) param_player_0p01568628_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_fs_param_Data_size != null) param_player_0p01568628_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10650,7 +10704,7 @@ namespace Game
         }
         public static void Using(Texture2D Data, Texture2D Units, float player, bool only_selected)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_fs_param_Data_Texture != null) param_player_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_fs_param_Data_size != null) param_player_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10661,7 +10715,7 @@ namespace Game
                 if (param_player_0_fs_param_only_selected != null) param_player_0_fs_param_only_selected.SetValue(FragSharpMarshal.Marshal(only_selected));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_fs_param_Data_Texture != null) param_player_0p003921569_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_fs_param_Data_size != null) param_player_0p003921569_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10672,7 +10726,7 @@ namespace Game
                 if (param_player_0p003921569_fs_param_only_selected != null) param_player_0p003921569_fs_param_only_selected.SetValue(FragSharpMarshal.Marshal(only_selected));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_fs_param_Data_Texture != null) param_player_0p007843138_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_fs_param_Data_size != null) param_player_0p007843138_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10683,7 +10737,7 @@ namespace Game
                 if (param_player_0p007843138_fs_param_only_selected != null) param_player_0p007843138_fs_param_only_selected.SetValue(FragSharpMarshal.Marshal(only_selected));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_fs_param_Data_Texture != null) param_player_0p01176471_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_fs_param_Data_size != null) param_player_0p01176471_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10694,7 +10748,7 @@ namespace Game
                 if (param_player_0p01176471_fs_param_only_selected != null) param_player_0p01176471_fs_param_only_selected.SetValue(FragSharpMarshal.Marshal(only_selected));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_fs_param_Data_Texture != null) param_player_0p01568628_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_fs_param_Data_size != null) param_player_0p01568628_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10946,7 +11000,7 @@ namespace Game
         }
         public static void Using(Texture2D Data, Texture2D Unit, float action, float player)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_fs_param_Data_Texture != null) param_player_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_fs_param_Data_size != null) param_player_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10957,7 +11011,7 @@ namespace Game
                 if (param_player_0_fs_param_action != null) param_player_0_fs_param_action.SetValue(FragSharpMarshal.Marshal(action));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_fs_param_Data_Texture != null) param_player_0p003921569_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_fs_param_Data_size != null) param_player_0p003921569_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10968,7 +11022,7 @@ namespace Game
                 if (param_player_0p003921569_fs_param_action != null) param_player_0p003921569_fs_param_action.SetValue(FragSharpMarshal.Marshal(action));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_fs_param_Data_Texture != null) param_player_0p007843138_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_fs_param_Data_size != null) param_player_0p007843138_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10979,7 +11033,7 @@ namespace Game
                 if (param_player_0p007843138_fs_param_action != null) param_player_0p007843138_fs_param_action.SetValue(FragSharpMarshal.Marshal(action));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_fs_param_Data_Texture != null) param_player_0p01176471_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_fs_param_Data_size != null) param_player_0p01176471_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -10990,7 +11044,7 @@ namespace Game
                 if (param_player_0p01176471_fs_param_action != null) param_player_0p01176471_fs_param_action.SetValue(FragSharpMarshal.Marshal(action));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_fs_param_Data_Texture != null) param_player_0p01568628_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_fs_param_Data_size != null) param_player_0p01568628_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11717,7 +11771,7 @@ namespace Game
         }
         public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination_BL, vec2 Selection_BL, vec2 ConversionRatio, float player, float filter)
         {
-            if (abs((float)(player - 0)) < .001 && abs((float)(filter - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0_filter_0_fs_param_Data_Texture != null) param_player_0_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_0_fs_param_Data_size != null) param_player_0_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11733,7 +11787,7 @@ namespace Game
                 if (param_player_0_filter_0_fs_param_ConversionRatio != null) param_player_0_filter_0_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0_filter_1_fs_param_Data_Texture != null) param_player_0_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_1_fs_param_Data_size != null) param_player_0_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11749,7 +11803,7 @@ namespace Game
                 if (param_player_0_filter_1_fs_param_ConversionRatio != null) param_player_0_filter_1_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0_filter_2_fs_param_Data_Texture != null) param_player_0_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_2_fs_param_Data_size != null) param_player_0_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11765,7 +11819,7 @@ namespace Game
                 if (param_player_0_filter_2_fs_param_ConversionRatio != null) param_player_0_filter_2_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0_filter_3_fs_param_Data_Texture != null) param_player_0_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_3_fs_param_Data_size != null) param_player_0_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11781,7 +11835,7 @@ namespace Game
                 if (param_player_0_filter_3_fs_param_ConversionRatio != null) param_player_0_filter_3_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0_filter_4_fs_param_Data_Texture != null) param_player_0_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_4_fs_param_Data_size != null) param_player_0_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11797,7 +11851,7 @@ namespace Game
                 if (param_player_0_filter_4_fs_param_ConversionRatio != null) param_player_0_filter_4_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0_filter_4.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 0)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0p003921569_filter_0_fs_param_Data_Texture != null) param_player_0p003921569_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_0_fs_param_Data_size != null) param_player_0p003921569_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11813,7 +11867,7 @@ namespace Game
                 if (param_player_0p003921569_filter_0_fs_param_ConversionRatio != null) param_player_0p003921569_filter_0_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p003921569_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0p003921569_filter_1_fs_param_Data_Texture != null) param_player_0p003921569_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_1_fs_param_Data_size != null) param_player_0p003921569_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11829,7 +11883,7 @@ namespace Game
                 if (param_player_0p003921569_filter_1_fs_param_ConversionRatio != null) param_player_0p003921569_filter_1_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p003921569_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0p003921569_filter_2_fs_param_Data_Texture != null) param_player_0p003921569_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_2_fs_param_Data_size != null) param_player_0p003921569_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11845,7 +11899,7 @@ namespace Game
                 if (param_player_0p003921569_filter_2_fs_param_ConversionRatio != null) param_player_0p003921569_filter_2_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p003921569_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0p003921569_filter_3_fs_param_Data_Texture != null) param_player_0p003921569_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_3_fs_param_Data_size != null) param_player_0p003921569_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11861,7 +11915,7 @@ namespace Game
                 if (param_player_0p003921569_filter_3_fs_param_ConversionRatio != null) param_player_0p003921569_filter_3_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p003921569_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0p003921569_filter_4_fs_param_Data_Texture != null) param_player_0p003921569_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_4_fs_param_Data_size != null) param_player_0p003921569_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11877,7 +11931,7 @@ namespace Game
                 if (param_player_0p003921569_filter_4_fs_param_ConversionRatio != null) param_player_0p003921569_filter_4_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p003921569_filter_4.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 0)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0p007843138_filter_0_fs_param_Data_Texture != null) param_player_0p007843138_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_0_fs_param_Data_size != null) param_player_0p007843138_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11893,7 +11947,7 @@ namespace Game
                 if (param_player_0p007843138_filter_0_fs_param_ConversionRatio != null) param_player_0p007843138_filter_0_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p007843138_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0p007843138_filter_1_fs_param_Data_Texture != null) param_player_0p007843138_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_1_fs_param_Data_size != null) param_player_0p007843138_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11909,7 +11963,7 @@ namespace Game
                 if (param_player_0p007843138_filter_1_fs_param_ConversionRatio != null) param_player_0p007843138_filter_1_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p007843138_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0p007843138_filter_2_fs_param_Data_Texture != null) param_player_0p007843138_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_2_fs_param_Data_size != null) param_player_0p007843138_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11925,7 +11979,7 @@ namespace Game
                 if (param_player_0p007843138_filter_2_fs_param_ConversionRatio != null) param_player_0p007843138_filter_2_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p007843138_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0p007843138_filter_3_fs_param_Data_Texture != null) param_player_0p007843138_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_3_fs_param_Data_size != null) param_player_0p007843138_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11941,7 +11995,7 @@ namespace Game
                 if (param_player_0p007843138_filter_3_fs_param_ConversionRatio != null) param_player_0p007843138_filter_3_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p007843138_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0p007843138_filter_4_fs_param_Data_Texture != null) param_player_0p007843138_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_4_fs_param_Data_size != null) param_player_0p007843138_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11957,7 +12011,7 @@ namespace Game
                 if (param_player_0p007843138_filter_4_fs_param_ConversionRatio != null) param_player_0p007843138_filter_4_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p007843138_filter_4.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 0)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0p01176471_filter_0_fs_param_Data_Texture != null) param_player_0p01176471_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_0_fs_param_Data_size != null) param_player_0p01176471_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11973,7 +12027,7 @@ namespace Game
                 if (param_player_0p01176471_filter_0_fs_param_ConversionRatio != null) param_player_0p01176471_filter_0_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p01176471_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0p01176471_filter_1_fs_param_Data_Texture != null) param_player_0p01176471_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_1_fs_param_Data_size != null) param_player_0p01176471_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -11989,7 +12043,7 @@ namespace Game
                 if (param_player_0p01176471_filter_1_fs_param_ConversionRatio != null) param_player_0p01176471_filter_1_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p01176471_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0p01176471_filter_2_fs_param_Data_Texture != null) param_player_0p01176471_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_2_fs_param_Data_size != null) param_player_0p01176471_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12005,7 +12059,7 @@ namespace Game
                 if (param_player_0p01176471_filter_2_fs_param_ConversionRatio != null) param_player_0p01176471_filter_2_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p01176471_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0p01176471_filter_3_fs_param_Data_Texture != null) param_player_0p01176471_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_3_fs_param_Data_size != null) param_player_0p01176471_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12021,7 +12075,7 @@ namespace Game
                 if (param_player_0p01176471_filter_3_fs_param_ConversionRatio != null) param_player_0p01176471_filter_3_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p01176471_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0p01176471_filter_4_fs_param_Data_Texture != null) param_player_0p01176471_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_4_fs_param_Data_size != null) param_player_0p01176471_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12037,7 +12091,7 @@ namespace Game
                 if (param_player_0p01176471_filter_4_fs_param_ConversionRatio != null) param_player_0p01176471_filter_4_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p01176471_filter_4.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 0)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0p01568628_filter_0_fs_param_Data_Texture != null) param_player_0p01568628_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_0_fs_param_Data_size != null) param_player_0p01568628_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12053,7 +12107,7 @@ namespace Game
                 if (param_player_0p01568628_filter_0_fs_param_ConversionRatio != null) param_player_0p01568628_filter_0_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p01568628_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0p01568628_filter_1_fs_param_Data_Texture != null) param_player_0p01568628_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_1_fs_param_Data_size != null) param_player_0p01568628_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12069,7 +12123,7 @@ namespace Game
                 if (param_player_0p01568628_filter_1_fs_param_ConversionRatio != null) param_player_0p01568628_filter_1_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p01568628_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0p01568628_filter_2_fs_param_Data_Texture != null) param_player_0p01568628_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_2_fs_param_Data_size != null) param_player_0p01568628_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12085,7 +12139,7 @@ namespace Game
                 if (param_player_0p01568628_filter_2_fs_param_ConversionRatio != null) param_player_0p01568628_filter_2_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p01568628_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0p01568628_filter_3_fs_param_Data_Texture != null) param_player_0p01568628_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_3_fs_param_Data_size != null) param_player_0p01568628_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12101,7 +12155,7 @@ namespace Game
                 if (param_player_0p01568628_filter_3_fs_param_ConversionRatio != null) param_player_0p01568628_filter_3_fs_param_ConversionRatio.SetValue(FragSharpMarshal.Marshal(ConversionRatio));
                 CompiledEffect_player_0p01568628_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0p01568628_filter_4_fs_param_Data_Texture != null) param_player_0p01568628_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_4_fs_param_Data_size != null) param_player_0p01568628_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12733,7 +12787,7 @@ namespace Game
         }
         public static void Using(Texture2D Data, Texture2D Unit, Texture2D TargetData, vec2 Destination, float player, float filter)
         {
-            if (abs((float)(player - 0)) < .001 && abs((float)(filter - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0_filter_0_fs_param_Data_Texture != null) param_player_0_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_0_fs_param_Data_size != null) param_player_0_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12747,7 +12801,7 @@ namespace Game
                 if (param_player_0_filter_0_fs_param_Destination != null) param_player_0_filter_0_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0_filter_1_fs_param_Data_Texture != null) param_player_0_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_1_fs_param_Data_size != null) param_player_0_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12761,7 +12815,7 @@ namespace Game
                 if (param_player_0_filter_1_fs_param_Destination != null) param_player_0_filter_1_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0_filter_2_fs_param_Data_Texture != null) param_player_0_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_2_fs_param_Data_size != null) param_player_0_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12775,7 +12829,7 @@ namespace Game
                 if (param_player_0_filter_2_fs_param_Destination != null) param_player_0_filter_2_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0_filter_3_fs_param_Data_Texture != null) param_player_0_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_3_fs_param_Data_size != null) param_player_0_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12789,7 +12843,7 @@ namespace Game
                 if (param_player_0_filter_3_fs_param_Destination != null) param_player_0_filter_3_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0_filter_4_fs_param_Data_Texture != null) param_player_0_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_4_fs_param_Data_size != null) param_player_0_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12803,7 +12857,7 @@ namespace Game
                 if (param_player_0_filter_4_fs_param_Destination != null) param_player_0_filter_4_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0_filter_4.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 0)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0p003921569_filter_0_fs_param_Data_Texture != null) param_player_0p003921569_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_0_fs_param_Data_size != null) param_player_0p003921569_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12817,7 +12871,7 @@ namespace Game
                 if (param_player_0p003921569_filter_0_fs_param_Destination != null) param_player_0p003921569_filter_0_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p003921569_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0p003921569_filter_1_fs_param_Data_Texture != null) param_player_0p003921569_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_1_fs_param_Data_size != null) param_player_0p003921569_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12831,7 +12885,7 @@ namespace Game
                 if (param_player_0p003921569_filter_1_fs_param_Destination != null) param_player_0p003921569_filter_1_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p003921569_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0p003921569_filter_2_fs_param_Data_Texture != null) param_player_0p003921569_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_2_fs_param_Data_size != null) param_player_0p003921569_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12845,7 +12899,7 @@ namespace Game
                 if (param_player_0p003921569_filter_2_fs_param_Destination != null) param_player_0p003921569_filter_2_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p003921569_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0p003921569_filter_3_fs_param_Data_Texture != null) param_player_0p003921569_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_3_fs_param_Data_size != null) param_player_0p003921569_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12859,7 +12913,7 @@ namespace Game
                 if (param_player_0p003921569_filter_3_fs_param_Destination != null) param_player_0p003921569_filter_3_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p003921569_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0p003921569_filter_4_fs_param_Data_Texture != null) param_player_0p003921569_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_4_fs_param_Data_size != null) param_player_0p003921569_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12873,7 +12927,7 @@ namespace Game
                 if (param_player_0p003921569_filter_4_fs_param_Destination != null) param_player_0p003921569_filter_4_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p003921569_filter_4.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 0)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0p007843138_filter_0_fs_param_Data_Texture != null) param_player_0p007843138_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_0_fs_param_Data_size != null) param_player_0p007843138_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12887,7 +12941,7 @@ namespace Game
                 if (param_player_0p007843138_filter_0_fs_param_Destination != null) param_player_0p007843138_filter_0_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p007843138_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0p007843138_filter_1_fs_param_Data_Texture != null) param_player_0p007843138_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_1_fs_param_Data_size != null) param_player_0p007843138_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12901,7 +12955,7 @@ namespace Game
                 if (param_player_0p007843138_filter_1_fs_param_Destination != null) param_player_0p007843138_filter_1_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p007843138_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0p007843138_filter_2_fs_param_Data_Texture != null) param_player_0p007843138_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_2_fs_param_Data_size != null) param_player_0p007843138_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12915,7 +12969,7 @@ namespace Game
                 if (param_player_0p007843138_filter_2_fs_param_Destination != null) param_player_0p007843138_filter_2_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p007843138_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0p007843138_filter_3_fs_param_Data_Texture != null) param_player_0p007843138_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_3_fs_param_Data_size != null) param_player_0p007843138_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12929,7 +12983,7 @@ namespace Game
                 if (param_player_0p007843138_filter_3_fs_param_Destination != null) param_player_0p007843138_filter_3_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p007843138_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0p007843138_filter_4_fs_param_Data_Texture != null) param_player_0p007843138_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_4_fs_param_Data_size != null) param_player_0p007843138_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12943,7 +12997,7 @@ namespace Game
                 if (param_player_0p007843138_filter_4_fs_param_Destination != null) param_player_0p007843138_filter_4_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p007843138_filter_4.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 0)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0p01176471_filter_0_fs_param_Data_Texture != null) param_player_0p01176471_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_0_fs_param_Data_size != null) param_player_0p01176471_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12957,7 +13011,7 @@ namespace Game
                 if (param_player_0p01176471_filter_0_fs_param_Destination != null) param_player_0p01176471_filter_0_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01176471_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0p01176471_filter_1_fs_param_Data_Texture != null) param_player_0p01176471_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_1_fs_param_Data_size != null) param_player_0p01176471_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12971,7 +13025,7 @@ namespace Game
                 if (param_player_0p01176471_filter_1_fs_param_Destination != null) param_player_0p01176471_filter_1_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01176471_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0p01176471_filter_2_fs_param_Data_Texture != null) param_player_0p01176471_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_2_fs_param_Data_size != null) param_player_0p01176471_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12985,7 +13039,7 @@ namespace Game
                 if (param_player_0p01176471_filter_2_fs_param_Destination != null) param_player_0p01176471_filter_2_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01176471_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0p01176471_filter_3_fs_param_Data_Texture != null) param_player_0p01176471_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_3_fs_param_Data_size != null) param_player_0p01176471_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -12999,7 +13053,7 @@ namespace Game
                 if (param_player_0p01176471_filter_3_fs_param_Destination != null) param_player_0p01176471_filter_3_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01176471_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0p01176471_filter_4_fs_param_Data_Texture != null) param_player_0p01176471_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_4_fs_param_Data_size != null) param_player_0p01176471_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13013,7 +13067,7 @@ namespace Game
                 if (param_player_0p01176471_filter_4_fs_param_Destination != null) param_player_0p01176471_filter_4_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01176471_filter_4.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 0)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0p01568628_filter_0_fs_param_Data_Texture != null) param_player_0p01568628_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_0_fs_param_Data_size != null) param_player_0p01568628_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13027,7 +13081,7 @@ namespace Game
                 if (param_player_0p01568628_filter_0_fs_param_Destination != null) param_player_0p01568628_filter_0_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01568628_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0p01568628_filter_1_fs_param_Data_Texture != null) param_player_0p01568628_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_1_fs_param_Data_size != null) param_player_0p01568628_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13041,7 +13095,7 @@ namespace Game
                 if (param_player_0p01568628_filter_1_fs_param_Destination != null) param_player_0p01568628_filter_1_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01568628_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0p01568628_filter_2_fs_param_Data_Texture != null) param_player_0p01568628_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_2_fs_param_Data_size != null) param_player_0p01568628_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13055,7 +13109,7 @@ namespace Game
                 if (param_player_0p01568628_filter_2_fs_param_Destination != null) param_player_0p01568628_filter_2_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01568628_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0p01568628_filter_3_fs_param_Data_Texture != null) param_player_0p01568628_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_3_fs_param_Data_size != null) param_player_0p01568628_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13069,7 +13123,7 @@ namespace Game
                 if (param_player_0p01568628_filter_3_fs_param_Destination != null) param_player_0p01568628_filter_3_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01568628_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0p01568628_filter_4_fs_param_Data_Texture != null) param_player_0p01568628_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_4_fs_param_Data_size != null) param_player_0p01568628_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13699,7 +13753,7 @@ namespace Game
         }
         public static void Using(Texture2D Data, Texture2D Unit, Texture2D Extra, vec2 Destination, float player, float filter)
         {
-            if (abs((float)(player - 0)) < .001 && abs((float)(filter - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0_filter_0_fs_param_Data_Texture != null) param_player_0_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_0_fs_param_Data_size != null) param_player_0_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13713,7 +13767,7 @@ namespace Game
                 if (param_player_0_filter_0_fs_param_Destination != null) param_player_0_filter_0_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0_filter_1_fs_param_Data_Texture != null) param_player_0_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_1_fs_param_Data_size != null) param_player_0_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13727,7 +13781,7 @@ namespace Game
                 if (param_player_0_filter_1_fs_param_Destination != null) param_player_0_filter_1_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0_filter_2_fs_param_Data_Texture != null) param_player_0_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_2_fs_param_Data_size != null) param_player_0_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13741,7 +13795,7 @@ namespace Game
                 if (param_player_0_filter_2_fs_param_Destination != null) param_player_0_filter_2_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0_filter_3_fs_param_Data_Texture != null) param_player_0_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_3_fs_param_Data_size != null) param_player_0_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13755,7 +13809,7 @@ namespace Game
                 if (param_player_0_filter_3_fs_param_Destination != null) param_player_0_filter_3_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0_filter_4_fs_param_Data_Texture != null) param_player_0_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0_filter_4_fs_param_Data_size != null) param_player_0_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13769,7 +13823,7 @@ namespace Game
                 if (param_player_0_filter_4_fs_param_Destination != null) param_player_0_filter_4_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0_filter_4.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 0)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0p003921569_filter_0_fs_param_Data_Texture != null) param_player_0p003921569_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_0_fs_param_Data_size != null) param_player_0p003921569_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13783,7 +13837,7 @@ namespace Game
                 if (param_player_0p003921569_filter_0_fs_param_Destination != null) param_player_0p003921569_filter_0_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p003921569_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0p003921569_filter_1_fs_param_Data_Texture != null) param_player_0p003921569_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_1_fs_param_Data_size != null) param_player_0p003921569_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13797,7 +13851,7 @@ namespace Game
                 if (param_player_0p003921569_filter_1_fs_param_Destination != null) param_player_0p003921569_filter_1_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p003921569_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0p003921569_filter_2_fs_param_Data_Texture != null) param_player_0p003921569_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_2_fs_param_Data_size != null) param_player_0p003921569_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13811,7 +13865,7 @@ namespace Game
                 if (param_player_0p003921569_filter_2_fs_param_Destination != null) param_player_0p003921569_filter_2_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p003921569_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0p003921569_filter_3_fs_param_Data_Texture != null) param_player_0p003921569_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_3_fs_param_Data_size != null) param_player_0p003921569_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13825,7 +13879,7 @@ namespace Game
                 if (param_player_0p003921569_filter_3_fs_param_Destination != null) param_player_0p003921569_filter_3_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p003921569_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0p003921569_filter_4_fs_param_Data_Texture != null) param_player_0p003921569_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p003921569_filter_4_fs_param_Data_size != null) param_player_0p003921569_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13839,7 +13893,7 @@ namespace Game
                 if (param_player_0p003921569_filter_4_fs_param_Destination != null) param_player_0p003921569_filter_4_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p003921569_filter_4.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 0)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0p007843138_filter_0_fs_param_Data_Texture != null) param_player_0p007843138_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_0_fs_param_Data_size != null) param_player_0p007843138_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13853,7 +13907,7 @@ namespace Game
                 if (param_player_0p007843138_filter_0_fs_param_Destination != null) param_player_0p007843138_filter_0_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p007843138_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0p007843138_filter_1_fs_param_Data_Texture != null) param_player_0p007843138_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_1_fs_param_Data_size != null) param_player_0p007843138_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13867,7 +13921,7 @@ namespace Game
                 if (param_player_0p007843138_filter_1_fs_param_Destination != null) param_player_0p007843138_filter_1_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p007843138_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0p007843138_filter_2_fs_param_Data_Texture != null) param_player_0p007843138_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_2_fs_param_Data_size != null) param_player_0p007843138_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13881,7 +13935,7 @@ namespace Game
                 if (param_player_0p007843138_filter_2_fs_param_Destination != null) param_player_0p007843138_filter_2_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p007843138_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0p007843138_filter_3_fs_param_Data_Texture != null) param_player_0p007843138_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_3_fs_param_Data_size != null) param_player_0p007843138_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13895,7 +13949,7 @@ namespace Game
                 if (param_player_0p007843138_filter_3_fs_param_Destination != null) param_player_0p007843138_filter_3_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p007843138_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0p007843138_filter_4_fs_param_Data_Texture != null) param_player_0p007843138_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p007843138_filter_4_fs_param_Data_size != null) param_player_0p007843138_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13909,7 +13963,7 @@ namespace Game
                 if (param_player_0p007843138_filter_4_fs_param_Destination != null) param_player_0p007843138_filter_4_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p007843138_filter_4.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 0)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0p01176471_filter_0_fs_param_Data_Texture != null) param_player_0p01176471_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_0_fs_param_Data_size != null) param_player_0p01176471_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13923,7 +13977,7 @@ namespace Game
                 if (param_player_0p01176471_filter_0_fs_param_Destination != null) param_player_0p01176471_filter_0_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01176471_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0p01176471_filter_1_fs_param_Data_Texture != null) param_player_0p01176471_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_1_fs_param_Data_size != null) param_player_0p01176471_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13937,7 +13991,7 @@ namespace Game
                 if (param_player_0p01176471_filter_1_fs_param_Destination != null) param_player_0p01176471_filter_1_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01176471_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0p01176471_filter_2_fs_param_Data_Texture != null) param_player_0p01176471_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_2_fs_param_Data_size != null) param_player_0p01176471_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13951,7 +14005,7 @@ namespace Game
                 if (param_player_0p01176471_filter_2_fs_param_Destination != null) param_player_0p01176471_filter_2_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01176471_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0p01176471_filter_3_fs_param_Data_Texture != null) param_player_0p01176471_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_3_fs_param_Data_size != null) param_player_0p01176471_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13965,7 +14019,7 @@ namespace Game
                 if (param_player_0p01176471_filter_3_fs_param_Destination != null) param_player_0p01176471_filter_3_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01176471_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0p01176471_filter_4_fs_param_Data_Texture != null) param_player_0p01176471_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01176471_filter_4_fs_param_Data_size != null) param_player_0p01176471_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13979,7 +14033,7 @@ namespace Game
                 if (param_player_0p01176471_filter_4_fs_param_Destination != null) param_player_0p01176471_filter_4_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01176471_filter_4.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 0)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 0)) < .0019)
             {
                 if (param_player_0p01568628_filter_0_fs_param_Data_Texture != null) param_player_0p01568628_filter_0_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_0_fs_param_Data_size != null) param_player_0p01568628_filter_0_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -13993,7 +14047,7 @@ namespace Game
                 if (param_player_0p01568628_filter_0_fs_param_Destination != null) param_player_0p01568628_filter_0_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01568628_filter_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 1)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 1)) < .0019)
             {
                 if (param_player_0p01568628_filter_1_fs_param_Data_Texture != null) param_player_0p01568628_filter_1_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_1_fs_param_Data_size != null) param_player_0p01568628_filter_1_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -14007,7 +14061,7 @@ namespace Game
                 if (param_player_0p01568628_filter_1_fs_param_Destination != null) param_player_0p01568628_filter_1_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01568628_filter_1.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 2)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 2)) < .0019)
             {
                 if (param_player_0p01568628_filter_2_fs_param_Data_Texture != null) param_player_0p01568628_filter_2_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_2_fs_param_Data_size != null) param_player_0p01568628_filter_2_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -14021,7 +14075,7 @@ namespace Game
                 if (param_player_0p01568628_filter_2_fs_param_Destination != null) param_player_0p01568628_filter_2_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01568628_filter_2.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 3)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 3)) < .0019)
             {
                 if (param_player_0p01568628_filter_3_fs_param_Data_Texture != null) param_player_0p01568628_filter_3_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_3_fs_param_Data_size != null) param_player_0p01568628_filter_3_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -14035,7 +14089,7 @@ namespace Game
                 if (param_player_0p01568628_filter_3_fs_param_Destination != null) param_player_0p01568628_filter_3_fs_param_Destination.SetValue(FragSharpMarshal.Marshal(Destination));
                 CompiledEffect_player_0p01568628_filter_3.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && abs((float)(filter - 4)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019 && abs((float)(filter - 4)) < .0019)
             {
                 if (param_player_0p01568628_filter_4_fs_param_Data_Texture != null) param_player_0p01568628_filter_4_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
                 if (param_player_0p01568628_filter_4_fs_param_Data_size != null) param_player_0p01568628_filter_4_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
@@ -14917,7 +14971,7 @@ namespace Game
         }
         public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D CurrentUnit, float player)
         {
-            if (abs((float)(player - 0)) < .001)
+            if (abs((float)(player - 0)) < .0019)
             {
                 if (param_player_0_vs_param_cameraPos != null) param_player_0_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0_vs_param_cameraAspect != null) param_player_0_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -14932,7 +14986,7 @@ namespace Game
                 if (param_player_0_fs_param_FarColor_dxdy != null) param_player_0_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001)
+            else if (abs((float)(player - 0.003921569)) < .0019)
             {
                 if (param_player_0p003921569_vs_param_cameraPos != null) param_player_0p003921569_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p003921569_vs_param_cameraAspect != null) param_player_0p003921569_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -14947,7 +15001,7 @@ namespace Game
                 if (param_player_0p003921569_fs_param_FarColor_dxdy != null) param_player_0p003921569_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p003921569.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001)
+            else if (abs((float)(player - 0.007843138)) < .0019)
             {
                 if (param_player_0p007843138_vs_param_cameraPos != null) param_player_0p007843138_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p007843138_vs_param_cameraAspect != null) param_player_0p007843138_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -14962,7 +15016,7 @@ namespace Game
                 if (param_player_0p007843138_fs_param_FarColor_dxdy != null) param_player_0p007843138_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p007843138.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001)
+            else if (abs((float)(player - 0.01176471)) < .0019)
             {
                 if (param_player_0p01176471_vs_param_cameraPos != null) param_player_0p01176471_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p01176471_vs_param_cameraAspect != null) param_player_0p01176471_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -14977,7 +15031,7 @@ namespace Game
                 if (param_player_0p01176471_fs_param_FarColor_dxdy != null) param_player_0p01176471_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p01176471.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001)
+            else if (abs((float)(player - 0.01568628)) < .0019)
             {
                 if (param_player_0p01568628_vs_param_cameraPos != null) param_player_0p01568628_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p01568628_vs_param_cameraAspect != null) param_player_0p01568628_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -15623,7 +15677,7 @@ namespace Game
         }
         public static void Using(vec4 cameraPos, float cameraAspect, Texture2D CurrentData, Texture2D PreviousData, Texture2D CurrentUnits, Texture2D PreviousUnits, Texture2D UnitTexture, Texture2D ShadowTexture, float player, float s, float t, float selection_blend, float selection_size, bool solid_blend_flag, float solid_blend)
         {
-            if (abs((float)(player - 0)) < .001 && solid_blend_flag == true)
+            if (abs((float)(player - 0)) < .0019 && solid_blend_flag == true)
             {
                 if (param_player_0_solid_blend_flag_true_vs_param_cameraPos != null) param_player_0_solid_blend_flag_true_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0_solid_blend_flag_true_vs_param_cameraAspect != null) param_player_0_solid_blend_flag_true_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -15655,7 +15709,7 @@ namespace Game
                 if (param_player_0_solid_blend_flag_true_fs_param_FarColor_dxdy != null) param_player_0_solid_blend_flag_true_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0_solid_blend_flag_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0)) < .001 && solid_blend_flag == false)
+            else if (abs((float)(player - 0)) < .0019 && solid_blend_flag == false)
             {
                 if (param_player_0_solid_blend_flag_false_vs_param_cameraPos != null) param_player_0_solid_blend_flag_false_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0_solid_blend_flag_false_vs_param_cameraAspect != null) param_player_0_solid_blend_flag_false_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -15687,7 +15741,7 @@ namespace Game
                 if (param_player_0_solid_blend_flag_false_fs_param_FarColor_dxdy != null) param_player_0_solid_blend_flag_false_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0_solid_blend_flag_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && solid_blend_flag == true)
+            else if (abs((float)(player - 0.003921569)) < .0019 && solid_blend_flag == true)
             {
                 if (param_player_0p003921569_solid_blend_flag_true_vs_param_cameraPos != null) param_player_0p003921569_solid_blend_flag_true_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p003921569_solid_blend_flag_true_vs_param_cameraAspect != null) param_player_0p003921569_solid_blend_flag_true_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -15719,7 +15773,7 @@ namespace Game
                 if (param_player_0p003921569_solid_blend_flag_true_fs_param_FarColor_dxdy != null) param_player_0p003921569_solid_blend_flag_true_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p003921569_solid_blend_flag_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.003921569)) < .001 && solid_blend_flag == false)
+            else if (abs((float)(player - 0.003921569)) < .0019 && solid_blend_flag == false)
             {
                 if (param_player_0p003921569_solid_blend_flag_false_vs_param_cameraPos != null) param_player_0p003921569_solid_blend_flag_false_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p003921569_solid_blend_flag_false_vs_param_cameraAspect != null) param_player_0p003921569_solid_blend_flag_false_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -15751,7 +15805,7 @@ namespace Game
                 if (param_player_0p003921569_solid_blend_flag_false_fs_param_FarColor_dxdy != null) param_player_0p003921569_solid_blend_flag_false_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p003921569_solid_blend_flag_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && solid_blend_flag == true)
+            else if (abs((float)(player - 0.007843138)) < .0019 && solid_blend_flag == true)
             {
                 if (param_player_0p007843138_solid_blend_flag_true_vs_param_cameraPos != null) param_player_0p007843138_solid_blend_flag_true_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p007843138_solid_blend_flag_true_vs_param_cameraAspect != null) param_player_0p007843138_solid_blend_flag_true_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -15783,7 +15837,7 @@ namespace Game
                 if (param_player_0p007843138_solid_blend_flag_true_fs_param_FarColor_dxdy != null) param_player_0p007843138_solid_blend_flag_true_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p007843138_solid_blend_flag_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.007843138)) < .001 && solid_blend_flag == false)
+            else if (abs((float)(player - 0.007843138)) < .0019 && solid_blend_flag == false)
             {
                 if (param_player_0p007843138_solid_blend_flag_false_vs_param_cameraPos != null) param_player_0p007843138_solid_blend_flag_false_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p007843138_solid_blend_flag_false_vs_param_cameraAspect != null) param_player_0p007843138_solid_blend_flag_false_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -15815,7 +15869,7 @@ namespace Game
                 if (param_player_0p007843138_solid_blend_flag_false_fs_param_FarColor_dxdy != null) param_player_0p007843138_solid_blend_flag_false_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p007843138_solid_blend_flag_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && solid_blend_flag == true)
+            else if (abs((float)(player - 0.01176471)) < .0019 && solid_blend_flag == true)
             {
                 if (param_player_0p01176471_solid_blend_flag_true_vs_param_cameraPos != null) param_player_0p01176471_solid_blend_flag_true_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p01176471_solid_blend_flag_true_vs_param_cameraAspect != null) param_player_0p01176471_solid_blend_flag_true_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -15847,7 +15901,7 @@ namespace Game
                 if (param_player_0p01176471_solid_blend_flag_true_fs_param_FarColor_dxdy != null) param_player_0p01176471_solid_blend_flag_true_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p01176471_solid_blend_flag_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01176471)) < .001 && solid_blend_flag == false)
+            else if (abs((float)(player - 0.01176471)) < .0019 && solid_blend_flag == false)
             {
                 if (param_player_0p01176471_solid_blend_flag_false_vs_param_cameraPos != null) param_player_0p01176471_solid_blend_flag_false_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p01176471_solid_blend_flag_false_vs_param_cameraAspect != null) param_player_0p01176471_solid_blend_flag_false_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -15879,7 +15933,7 @@ namespace Game
                 if (param_player_0p01176471_solid_blend_flag_false_fs_param_FarColor_dxdy != null) param_player_0p01176471_solid_blend_flag_false_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p01176471_solid_blend_flag_false.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && solid_blend_flag == true)
+            else if (abs((float)(player - 0.01568628)) < .0019 && solid_blend_flag == true)
             {
                 if (param_player_0p01568628_solid_blend_flag_true_vs_param_cameraPos != null) param_player_0p01568628_solid_blend_flag_true_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p01568628_solid_blend_flag_true_vs_param_cameraAspect != null) param_player_0p01568628_solid_blend_flag_true_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));
@@ -15911,7 +15965,7 @@ namespace Game
                 if (param_player_0p01568628_solid_blend_flag_true_fs_param_FarColor_dxdy != null) param_player_0p01568628_solid_blend_flag_true_fs_param_FarColor_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(FarColor.Width, FarColor.Height)));
                 CompiledEffect_player_0p01568628_solid_blend_flag_true.CurrentTechnique.Passes[0].Apply();
             }
-            else if (abs((float)(player - 0.01568628)) < .001 && solid_blend_flag == false)
+            else if (abs((float)(player - 0.01568628)) < .0019 && solid_blend_flag == false)
             {
                 if (param_player_0p01568628_solid_blend_flag_false_vs_param_cameraPos != null) param_player_0p01568628_solid_blend_flag_false_vs_param_cameraPos.SetValue(FragSharpMarshal.Marshal(cameraPos));
                 if (param_player_0p01568628_solid_blend_flag_false_vs_param_cameraAspect != null) param_player_0p01568628_solid_blend_flag_false_vs_param_cameraAspect.SetValue(FragSharpMarshal.Marshal(cameraAspect));

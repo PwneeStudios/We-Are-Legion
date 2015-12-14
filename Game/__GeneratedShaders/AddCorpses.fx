@@ -87,12 +87,12 @@ sampler fs_param_Magic : register(s4) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__IsUnit__Single(float type)
 {
-    return type >= 0.003921569 - .001 && type < 0.02352941 - .001;
+    return type >= 0.003921569 - .0019 && type < 0.02352941 - .0019;
 }
 
 bool Game__SimShader__IsUnit__unit(float4 u)
@@ -102,7 +102,7 @@ bool Game__SimShader__IsUnit__unit(float4 u)
 
 bool Game__SimShader__LeavesCorpse__unit(float4 u)
 {
-    return Game__SimShader__IsUnit__unit(u) && abs(u.r - 0.01568628) > .001;
+    return Game__SimShader__IsUnit__unit(u) && abs(u.r - 0.01568628) > .0019;
 }
 
 // Compiled vertex shader
@@ -119,15 +119,15 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
-    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (float2(0, 0)) * fs_param_Data_dxdy);
-    float4 corpse_here = tex2D(fs_param_Corpses, psin.TexCoords + (float2(0, 0)) * fs_param_Corpses_dxdy);
-    float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (float2(0, 0)) * fs_param_Magic_dxdy);
-    if (abs(magic_here.g - 0.0) > .001 && abs(unit_here.a - 0.2352941) < .001)
+    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Unit_dxdy);
+    float4 data_here = tex2D(fs_param_Data, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Data_dxdy);
+    float4 corpse_here = tex2D(fs_param_Corpses, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Corpses_dxdy);
+    float4 magic_here = tex2D(fs_param_Magic, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Magic_dxdy);
+    if (abs(magic_here.g - 0.0) > .0019 && abs(unit_here.a - 0.2352941) < .0019)
     {
         corpse_here = float4(0, 0, 0, 0);
     }
-    if (Game__SimShader__Something__data(data_here) && abs(unit_here.a - 0.07058824) < .001 && Game__SimShader__LeavesCorpse__unit(unit_here))
+    if (Game__SimShader__Something__data(data_here) && abs(unit_here.a - 0.07058824) < .0019 && Game__SimShader__LeavesCorpse__unit(unit_here))
     {
         corpse_here.r = data_here.r;
         corpse_here.g = unit_here.r;

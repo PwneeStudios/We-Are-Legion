@@ -61,7 +61,7 @@ float fs_param_blend;
 // The following methods are included because they are referenced by the fragment shader.
 float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, float2 grid_size)
 {
-    float2 coords = vertex.TexCoords * grid_size;
+    float2 coords = vertex.TexCoords * grid_size + float2(-(0.25), -(0.25));
     float i = floor(coords.x);
     float j = floor(coords.y);
     return coords - float2(i, j);
@@ -69,7 +69,7 @@ float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, f
 
 bool Game__SimShader__CorpsePresent__corpse(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 float FragSharpFramework__FragSharpStd__Float__Single(float v)
@@ -79,7 +79,7 @@ float FragSharpFramework__FragSharpStd__Float__Single(float v)
 
 float4 Game__DrawCorpses__Sprite__corpse__vec2__PointSampler(VertexToPixel psin, float4 c, float2 pos, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
-    if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
+    if (pos.x > 1 + .0019 || pos.y > 1 + .0019 || pos.x < 0 - .0019 || pos.y < 0 - .0019)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
@@ -107,7 +107,7 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 here = tex2D(fs_param_Corpses, psin.TexCoords + (float2(0, 0)) * fs_param_Corpses_dxdy);
+    float4 here = tex2D(fs_param_Corpses, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Corpses_dxdy);
     float2 subcell_pos = Game__SimShader__get_subcell_pos__VertexOut__vec2(psin, fs_param_Corpses_size);
     if (Game__SimShader__CorpsePresent__corpse(here))
     {

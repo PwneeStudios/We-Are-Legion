@@ -65,21 +65,21 @@ float FragSharpFramework__FragSharpStd__min__Single__Single__Single(float a, flo
 
 float4 Game__TerritoryColor__Get__Single(VertexToPixel psin, float player)
 {
-    if (abs(player - 0.003921569) < .001)
+    if (abs(player - 0.003921569) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(2+.5,.5+ 1 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(2-0.25,-0.25+ 1 + (int)player) * fs_param_FarColor_dxdy);
     }
-    if (abs(player - 0.007843138) < .001)
+    if (abs(player - 0.007843138) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(2+.5,.5+ 2 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(2-0.25,-0.25+ 2 + (int)player) * fs_param_FarColor_dxdy);
     }
-    if (abs(player - 0.01176471) < .001)
+    if (abs(player - 0.01176471) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(2+.5,.5+ 3 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(2-0.25,-0.25+ 3 + (int)player) * fs_param_FarColor_dxdy);
     }
-    if (abs(player - 0.01568628) < .001)
+    if (abs(player - 0.01568628) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(2+.5,.5+ 4 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(2-0.25,-0.25+ 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
@@ -100,23 +100,23 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 dist = tex2D(fs_param_Path, psin.TexCoords + (float2(0, 0)) * fs_param_Path_dxdy);
+    float4 dist = tex2D(fs_param_Path, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Path_dxdy);
     float4 enemy_dist = float4(FragSharpFramework__FragSharpStd__min__Single__Single__Single(dist.y, dist.z, dist.w), FragSharpFramework__FragSharpStd__min__Single__Single__Single(dist.x, dist.z, dist.w), FragSharpFramework__FragSharpStd__min__Single__Single__Single(dist.x, dist.y, dist.w), FragSharpFramework__FragSharpStd__min__Single__Single__Single(dist.x, dist.y, dist.z));
     float4 clr = float4(0.0, 0.0, 0.0, 0.0);
     float _blend = 1;
-    if (dist.x < 0.02745098 - .001 && dist.x < enemy_dist.x - .001)
+    if (dist.x < 0.02745098 - .0019 && dist.x < enemy_dist.x - .0019)
     {
         clr = Game__TerritoryColor__Get__Single(psin, 0.003921569 + ((int)dist.x / 100));
     }
-    if (dist.y < 0.02745098 - .001 && dist.y < enemy_dist.y - .001)
+    if (dist.y < 0.02745098 - .0019 && dist.y < enemy_dist.y - .0019)
     {
         clr = Game__TerritoryColor__Get__Single(psin, 0.007843138 + ((int)dist.x / 100));
     }
-    if (dist.z < 0.02745098 - .001 && dist.z < enemy_dist.z - .001)
+    if (dist.z < 0.02745098 - .0019 && dist.z < enemy_dist.z - .0019)
     {
         clr = Game__TerritoryColor__Get__Single(psin, 0.01176471 + ((int)dist.x / 100));
     }
-    if (dist.w < 0.02745098 - .001 && dist.w < enemy_dist.w - .001)
+    if (dist.w < 0.02745098 - .0019 && dist.w < enemy_dist.w - .0019)
     {
         clr = Game__TerritoryColor__Get__Single(psin, 0.01568628 + ((int)dist.x / 100));
     }

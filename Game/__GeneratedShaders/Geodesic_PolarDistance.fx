@@ -107,9 +107,9 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 0)) * fs_param_Geo_dxdy), right = tex2D(fs_param_Geo, psin.TexCoords + (float2(1, 0)) * fs_param_Geo_dxdy), up = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, 1)) * fs_param_Geo_dxdy), left = tex2D(fs_param_Geo, psin.TexCoords + (float2(-(1), 0)) * fs_param_Geo_dxdy), down = tex2D(fs_param_Geo, psin.TexCoords + (float2(0, -(1))) * fs_param_Geo_dxdy);
-    float dist_right = Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (float2(1, 0)) * fs_param_Info_dxdy)), dist_up = Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (float2(0, 1)) * fs_param_Info_dxdy)), dist_left = Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (float2(-(1), 0)) * fs_param_Info_dxdy)), dist_down = Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (float2(0, -(1))) * fs_param_Info_dxdy));
-    if (abs(here.r - 0.0) < .001)
+    float4 here = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Geo_dxdy), right = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Geo_dxdy), up = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Geo_dxdy), left = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Geo_dxdy), down = tex2D(fs_param_Geo, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Geo_dxdy);
+    float dist_right = Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_Info_dxdy)), dist_up = Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_Info_dxdy)), dist_left = Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (-float2(0.25,0.25) + float2(-(1), 0)) * fs_param_Info_dxdy)), dist_down = Game__SimShader__polar_dist__geo_info(tex2D(fs_param_Info, psin.TexCoords + (-float2(0.25,0.25) + float2(0, -(1))) * fs_param_Info_dxdy));
+    if (abs(here.r - 0.0) < .0019)
     {
         __FinalOutput.Color = float4(0, 0, 0, 0);
         return __FinalOutput;
@@ -118,41 +118,41 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float4 temp_geo = float4(0, 0, 0, 0);
     float2 pos = psin.TexCoords * fs_param_Geo_size;
     Game__SimShader__set_geo_pos_id__geo__vec2(temp_geo, pos);
-    if (all(abs(here.gba - temp_geo.gba) < .001))
+    if (all(abs(here.gba - temp_geo.gba) < .0019))
     {
         dist = 0;
     }
     else
     {
-        if (abs(here.r - 0.01176471) < .001)
+        if (abs(here.r - 0.01176471) < .0019)
         {
             dist = max(0.0, dist_left - 1);
         }
-        if (abs(here.r - 0.003921569) < .001)
+        if (abs(here.r - 0.003921569) < .0019)
         {
             dist = max(0.0, dist_right - 1);
         }
-        if (abs(here.r - 0.007843138) < .001)
+        if (abs(here.r - 0.007843138) < .0019)
         {
             dist = max(0.0, dist_up - 1);
         }
-        if (abs(here.r - 0.01568628) < .001)
+        if (abs(here.r - 0.01568628) < .0019)
         {
             dist = max(0.0, dist_down - 1);
         }
-        if (abs(right.r - 0.01176471) < .001 && dist_right >= dist - .001)
+        if (abs(right.r - 0.01176471) < .0019 && dist_right >= dist - .0019)
         {
             dist = dist_right + 1;
         }
-        if (abs(left.r - 0.003921569) < .001 && dist_left >= dist - .001)
+        if (abs(left.r - 0.003921569) < .0019 && dist_left >= dist - .0019)
         {
             dist = dist_left + 1;
         }
-        if (abs(up.r - 0.01568628) < .001 && dist_up >= dist - .001)
+        if (abs(up.r - 0.01568628) < .0019 && dist_up >= dist - .0019)
         {
             dist = dist_up + 1;
         }
-        if (abs(down.r - 0.007843138) < .001 && dist_down >= dist - .001)
+        if (abs(down.r - 0.007843138) < .0019 && dist_down >= dist - .0019)
         {
             dist = dist_down + 1;
         }

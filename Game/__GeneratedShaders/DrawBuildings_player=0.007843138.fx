@@ -91,7 +91,7 @@ float fs_param_s;
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__IsBuilding__Single(float type)
 {
-    return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
+    return type >= 0.02352941 - .0019 && type < 0.07843138 - .0019;
 }
 
 bool Game__SimShader__IsBuilding__unit(float4 u)
@@ -101,7 +101,7 @@ bool Game__SimShader__IsBuilding__unit(float4 u)
 
 float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, float2 grid_size)
 {
-    float2 coords = vertex.TexCoords * grid_size;
+    float2 coords = vertex.TexCoords * grid_size + float2(-(0.25), -(0.25));
     float i = floor(coords.x);
     float j = floor(coords.y);
     return coords - float2(i, j);
@@ -109,7 +109,7 @@ float2 Game__SimShader__get_subcell_pos__VertexOut__vec2(VertexToPixel vertex, f
 
 bool Game__SimShader__Something__building(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 float Game__ExplosionSpriteSheet__ExplosionFrame__Single__building(float s, float4 building_here)
@@ -119,7 +119,7 @@ float Game__ExplosionSpriteSheet__ExplosionFrame__Single__building(float s, floa
 
 float4 Game__DrawBuildings__ExplosionSprite__building__unit__vec2__Single__PointSampler(VertexToPixel psin, float4 u, float4 d, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
-    if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
+    if (pos.x > 1 + .0019 || pos.y > 1 + .0019 || pos.x < 0 - .0019 || pos.y < 0 - .0019)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
@@ -132,7 +132,7 @@ float4 Game__DrawBuildings__ExplosionSprite__building__unit__vec2__Single__Point
 bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
-    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
+    return 0.1254902 <= val + .0019 && val < 0.5019608 - .0019;
 }
 
 bool Game__SimShader__fake_selected__building(float4 u)
@@ -157,11 +157,11 @@ float Game__UnitType__BuildingIndex__Single(float type)
 
 float4 Game__DrawBuildings__Sprite__Single__building__unit__vec2__Single__PointSampler(VertexToPixel psin, float player, float4 b, float4 u, float2 pos, float frame, sampler Texture, float2 Texture_size, float2 Texture_dxdy)
 {
-    if (pos.x > 1 + .001 || pos.y > 1 + .001 || pos.x < 0 - .001 || pos.y < 0 - .001)
+    if (pos.x > 1 + .0019 || pos.y > 1 + .0019 || pos.x < 0 - .0019 || pos.y < 0 - .0019)
     {
         return float4(0.0, 0.0, 0.0, 0.0);
     }
-    bool draw_selected = abs(u.g - player) < .001 && Game__SimShader__fake_selected__building(b);
+    bool draw_selected = abs(u.g - player) < .0019 && Game__SimShader__fake_selected__building(b);
     float selected_offset = draw_selected ? 3 : 0;
     pos += FragSharpFramework__FragSharpStd__Float__vec2(float2(b.g, b.a));
     pos.x += FragSharpFramework__FragSharpStd__Float__Single(u.g) * 3;
@@ -187,8 +187,8 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 building_here = tex2D(fs_param_Buildings, psin.TexCoords + (float2(0, 0)) * fs_param_Buildings_dxdy);
-    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
+    float4 building_here = tex2D(fs_param_Buildings, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Buildings_dxdy);
+    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Units_dxdy);
     if (!(Game__SimShader__IsBuilding__unit(unit_here)))
     {
         __FinalOutput.Color = output;
@@ -197,10 +197,10 @@ PixelToFrame FragmentShader(VertexToPixel psin)
     float2 subcell_pos = Game__SimShader__get_subcell_pos__VertexOut__vec2(psin, fs_param_Buildings_size);
     if (Game__SimShader__Something__building(building_here))
     {
-        if (building_here.r >= 0.02745098 - .001)
+        if (building_here.r >= 0.02745098 - .0019)
         {
             float frame = Game__ExplosionSpriteSheet__ExplosionFrame__Single__building(fs_param_s, building_here);
-            if (frame < 16 - .001)
+            if (frame < 16 - .0019)
             {
                 output += Game__DrawBuildings__ExplosionSprite__building__unit__vec2__Single__PointSampler(psin, building_here, unit_here, subcell_pos, frame, fs_param_Explosion, fs_param_Explosion_size, fs_param_Explosion_dxdy);
             }

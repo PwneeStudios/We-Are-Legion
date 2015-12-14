@@ -70,7 +70,7 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 TL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy), TR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy), BL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy), BR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy);
+    float4 TL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_PreviousLevel_dxdy), TR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_PreviousLevel_dxdy), BL = tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_PreviousLevel_dxdy), BR = tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 1)) * fs_param_PreviousLevel_dxdy);
     float count_3byte = Game__SimShader__unpack_val__vec3(TL.xyz) + Game__SimShader__unpack_val__vec3(TR.xyz) + Game__SimShader__unpack_val__vec3(BL.xyz) + Game__SimShader__unpack_val__vec3(BR.xyz);
     float count_1byte = TL.w + TR.w + BL.w + BR.w;
     float4 output = float4(0, 0, 0, 0);

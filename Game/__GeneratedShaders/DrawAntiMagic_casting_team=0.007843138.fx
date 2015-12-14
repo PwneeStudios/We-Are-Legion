@@ -65,9 +65,9 @@ PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
     float4 output = float4(0.0, 0.0, 0.0, 0.0);
-    float4 here = tex2D(fs_param_AntiMagic, psin.TexCoords + (float2(0, 0)) * fs_param_AntiMagic_dxdy);
+    float4 here = tex2D(fs_param_AntiMagic, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_AntiMagic_dxdy);
     float max_val = FragSharpFramework__FragSharpStd__max__Single__Single__Single__Single(here.r, here.g, here.b, here.a);
-    __FinalOutput.Color = max_val > 0.0 + .001 ? float4(0.3, 0.3, 0.3, 0.3) : float4(0.0, 0.0, 0.0, 0.0);
+    __FinalOutput.Color = max_val > 0.0 + .0019 ? float4(0.3, 0.3, 0.3, 0.3) : float4(0.0, 0.0, 0.0, 0.0);
     return __FinalOutput;
 }
 

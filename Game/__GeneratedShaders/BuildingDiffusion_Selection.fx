@@ -57,12 +57,12 @@ sampler fs_param_Building : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__building(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__IsBuilding__Single(float type)
 {
-    return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
+    return type >= 0.02352941 - .0019 && type < 0.07843138 - .0019;
 }
 
 bool Game__SimShader__IsBuilding__unit(float4 u)
@@ -80,7 +80,7 @@ float2 Game__SimShader__center_dir__building(float4 b)
 bool Game__SimShader__selected__data(float4 u)
 {
     float val = u.b;
-    return val >= 0.3764706 - .001;
+    return val >= 0.3764706 - .0019;
 }
 
 float FragSharpFramework__FragSharpStd__fint_round__Single(float v)
@@ -122,7 +122,7 @@ void Game__SimShader__set_selected_fake__building__Boolean(inout float4 u, bool 
 bool Game__SimShader__fake_selected__data(float4 u)
 {
     float val = u.b;
-    return 0.1254902 <= val + .001 && val < 0.5019608 - .001;
+    return 0.1254902 <= val + .0019 && val < 0.5019608 - .0019;
 }
 
 bool Game__SimShader__fake_selected__building(float4 u)
@@ -144,11 +144,11 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 0)) * fs_param_Building_dxdy);
-    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (float2(0, 0)) * fs_param_Unit_dxdy);
+    float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Building_dxdy);
+    float4 unit_here = tex2D(fs_param_Unit, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Unit_dxdy);
     if (Game__SimShader__Something__building(building_here) && Game__SimShader__IsBuilding__unit(unit_here))
     {
-        float4 center = tex2D(fs_param_Building, psin.TexCoords + (Game__SimShader__center_dir__building(building_here)) * fs_param_Building_dxdy);
+        float4 center = tex2D(fs_param_Building, psin.TexCoords + (-float2(0.25,0.25) + Game__SimShader__center_dir__building(building_here)) * fs_param_Building_dxdy);
         if (!(Game__SimShader__Something__building(center)))
         {
             __FinalOutput.Color = float4(0, 0, 0, 0);

@@ -55,24 +55,24 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    if (any(abs(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy) - float4(0, 0, 0, 0)) > .001))
+    if (any(abs(tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_PreviousLevel_dxdy) - float4(0, 0, 0, 0)) > .0019))
     {
-        __FinalOutput.Color = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy);
+        __FinalOutput.Color = tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_PreviousLevel_dxdy);
         return __FinalOutput;
     }
-    if (any(abs(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy) - float4(0, 0, 0, 0)) > .001))
+    if (any(abs(tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_PreviousLevel_dxdy) - float4(0, 0, 0, 0)) > .0019))
     {
-        __FinalOutput.Color = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy);
+        __FinalOutput.Color = tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_PreviousLevel_dxdy);
         return __FinalOutput;
     }
-    if (any(abs(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy) - float4(0, 0, 0, 0)) > .001))
+    if (any(abs(tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_PreviousLevel_dxdy) - float4(0, 0, 0, 0)) > .0019))
     {
-        __FinalOutput.Color = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy);
+        __FinalOutput.Color = tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_PreviousLevel_dxdy);
         return __FinalOutput;
     }
-    if (any(abs(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy) - float4(0, 0, 0, 0)) > .001))
+    if (any(abs(tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 1)) * fs_param_PreviousLevel_dxdy) - float4(0, 0, 0, 0)) > .0019))
     {
-        __FinalOutput.Color = tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy);
+        __FinalOutput.Color = tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 1)) * fs_param_PreviousLevel_dxdy);
         return __FinalOutput;
     }
     __FinalOutput.Color = float4(0, 0, 0, 0);

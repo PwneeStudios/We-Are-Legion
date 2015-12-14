@@ -73,7 +73,7 @@ sampler fs_param_Random : register(s3) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__data(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 float FragSharpFramework__FragSharpStd__fint_floor__Single(float v)
@@ -104,28 +104,28 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 here = tex2D(fs_param_Tiles, psin.TexCoords + (float2(0, 0)) * fs_param_Tiles_dxdy);
-    float4 select = tex2D(fs_param_Select, psin.TexCoords + (float2(0, 0)) * fs_param_Select_dxdy);
-    float4 rndv = tex2D(fs_param_Random, psin.TexCoords + (float2(0, 0)) * fs_param_Random_dxdy);
+    float4 here = tex2D(fs_param_Tiles, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Tiles_dxdy);
+    float4 select = tex2D(fs_param_Select, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Select_dxdy);
+    float4 rndv = tex2D(fs_param_Random, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Random_dxdy);
     float rnd = rndv.x * rndv.x * rndv.x * rndv.x;
     if (Game__SimShader__Something__data(select))
     {
         here.r = 0.007843138;
-        if (abs(0.007843138 - 0.003921569) < .001)
+        if (abs(0.007843138 - 0.003921569) < .0019)
         {
             here.g = Game__SimShader__RndFint__Single__Single__Single(rnd, 0.0, 0.02352941);
             here.b = 0.1215686;
         }
         else
         {
-            if (abs(0.007843138 - 0.007843138) < .001)
+            if (abs(0.007843138 - 0.007843138) < .0019)
             {
                 here.g = Game__SimShader__RndFint__Single__Single__Single(rnd, 0.0, 0.03529412);
                 here.b = 0.1176471;
             }
             else
             {
-                if (abs(0.007843138 - 0.01960784) < .001)
+                if (abs(0.007843138 - 0.01960784) < .0019)
                 {
                     here.g = 0.0;
                     here.b = 0.09803922;

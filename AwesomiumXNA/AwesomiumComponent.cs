@@ -358,7 +358,7 @@ namespace AwesomiumXNA
             if (WebView.Surface != null && ((BitmapSurface)WebView.Surface).IsDirty)
             {
                 BitmapSurface renderBuffer = ((BitmapSurface)WebView.Surface);
-#if false
+#if true
                 // This was the original solution
                 renderBuffer.CopyTo(imagePtr, renderBuffer.Width * 4, 4, true, false);
                 Marshal.Copy(imagePtr, imageBytes, 0, imageBytes.Length);
@@ -376,7 +376,7 @@ namespace AwesomiumXNA
                 }
                 WebViewTexture.SetData(imageBytes);
 #endif
-#if true
+#if false
                 // Found this little trick online, and it's quite a lot faster than either method above (roughly 3x faster)
                 renderBuffer.RenderTexture2D(WebViewTexture);
 #endif

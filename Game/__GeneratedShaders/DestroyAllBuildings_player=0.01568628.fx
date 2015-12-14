@@ -58,12 +58,12 @@ sampler fs_param_Building : register(s2) = sampler_state
 // The following methods are included because they are referenced by the fragment shader.
 bool Game__SimShader__Something__building(float4 u)
 {
-    return u.r > 0 + .001;
+    return u.r > 0 + .0019;
 }
 
 bool Game__SimShader__IsBuilding__Single(float type)
 {
-    return type >= 0.02352941 - .001 && type < 0.07843138 - .001;
+    return type >= 0.02352941 - .0019 && type < 0.07843138 - .0019;
 }
 
 bool Game__SimShader__IsBuilding__unit(float4 u)
@@ -85,9 +85,9 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (float2(0, 0)) * fs_param_Units_dxdy);
-    float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (float2(0, 0)) * fs_param_Building_dxdy);
-    if (Game__SimShader__Something__building(building_here) && Game__SimShader__IsBuilding__unit(unit_here) && abs(unit_here.g - 0.01568628) < .001)
+    float4 unit_here = tex2D(fs_param_Units, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Units_dxdy);
+    float4 building_here = tex2D(fs_param_Building, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_Building_dxdy);
+    if (Game__SimShader__Something__building(building_here) && Game__SimShader__IsBuilding__unit(unit_here) && abs(unit_here.g - 0.01568628) < .0019)
     {
         building_here.r = 0.02745098;
     }

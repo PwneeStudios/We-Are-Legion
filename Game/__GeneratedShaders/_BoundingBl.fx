@@ -90,7 +90,7 @@ VertexToPixel StandardVertexShader(float2 inPos : POSITION0, float2 inTexCoords 
 PixelToFrame FragmentShader(VertexToPixel psin)
 {
     PixelToFrame __FinalOutput = (PixelToFrame)0;
-    float2 TL = Game__SimShader__unpack_vec2__vec4(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 0)) * fs_param_PreviousLevel_dxdy)), TR = Game__SimShader__unpack_vec2__vec4(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 0)) * fs_param_PreviousLevel_dxdy)), BL = Game__SimShader__unpack_vec2__vec4(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(0, 1)) * fs_param_PreviousLevel_dxdy)), BR = Game__SimShader__unpack_vec2__vec4(tex2D(fs_param_PreviousLevel, psin.TexCoords + (float2(1, 1)) * fs_param_PreviousLevel_dxdy));
+    float2 TL = Game__SimShader__unpack_vec2__vec4(tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 0)) * fs_param_PreviousLevel_dxdy)), TR = Game__SimShader__unpack_vec2__vec4(tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 0)) * fs_param_PreviousLevel_dxdy)), BL = Game__SimShader__unpack_vec2__vec4(tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(0, 1)) * fs_param_PreviousLevel_dxdy)), BR = Game__SimShader__unpack_vec2__vec4(tex2D(fs_param_PreviousLevel, psin.TexCoords + (-float2(0.25,0.25) + float2(1, 1)) * fs_param_PreviousLevel_dxdy));
     __FinalOutput.Color = Game__SimShader__pack_vec2__vec2(FragSharpFramework__FragSharpStd__min__vec2__vec2__vec2__vec2(TL, TR, BL, BR));
     return __FinalOutput;
 }
