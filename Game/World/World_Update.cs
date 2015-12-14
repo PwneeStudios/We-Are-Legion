@@ -556,7 +556,6 @@ namespace Game
         public float GameOverZoom;
         void EndOfGameCheck()
         {
-            return;
             if (GameOver || MapEditor) return;
 
             int alive_count = 0;

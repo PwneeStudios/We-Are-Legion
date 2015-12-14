@@ -115,7 +115,6 @@ namespace FragSharpFramework
             Game.UpdateRandomField.Init();
             Game.DoUnitSummary_1.Init();
             Game.DoUnitSummary_2.Init();
-            Game._CountUnitTypeForAllPlayers.Init();
             Game.CountUnitTypeForAllPlayers.Init();
             Game.CountReduce_4x1byte.Init();
             Game.CountUnits.Init();
@@ -10056,57 +10055,6 @@ namespace Game
 }
 
 
-namespace Game
-{
-    public partial class _CountUnitTypeForAllPlayers
-    {
-        private static Effect CompiledEffect;
-        private static EffectParameter param_fs_param_Data_Texture;
-        private static EffectParameter param_fs_param_Data_size;
-        private static EffectParameter param_fs_param_Data_dxdy;
-
-        public static void Init()
-        {
-            CompiledEffect = FragSharp.Content.Load<Effect>("FragSharpShaders/_CountUnitTypeForAllPlayers");
-            param_fs_param_Data_Texture = CompiledEffect.Parameters["fs_param_Data_Texture"];
-            param_fs_param_Data_size = CompiledEffect.Parameters["fs_param_Data_size"];
-            param_fs_param_Data_dxdy = CompiledEffect.Parameters["fs_param_Data_dxdy"];
-        }
-        public static void Apply(Texture2D Data, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data);
-            GridHelper.DrawGrid();
-        }
-        public static void Apply(Texture2D Data, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data);
-            GridHelper.DrawGrid();
-        }
-        public static void Using(Texture2D Data, RenderTarget2D Output, Color Clear)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Clear);
-            Using(Data);
-        }
-        public static void Using(Texture2D Data, RenderTarget2D Output)
-        {
-            GridHelper.GraphicsDevice.SetRenderTarget(Output);
-            GridHelper.GraphicsDevice.Clear(Color.Transparent);
-            Using(Data);
-        }
-        public static void Using(Texture2D Data)
-        {
-            if (param_fs_param_Data_Texture != null) param_fs_param_Data_Texture.SetValue(FragSharpMarshal.Marshal(Data));
-            if (param_fs_param_Data_size != null) param_fs_param_Data_size.SetValue(FragSharpMarshal.Marshal(vec(Data.Width, Data.Height)));
-            if (param_fs_param_Data_dxdy != null) param_fs_param_Data_dxdy.SetValue(FragSharpMarshal.Marshal(1.0f / vec(Data.Width, Data.Height)));
-            CompiledEffect.CurrentTechnique.Passes[0].Apply();
-        }
-    }
-}
 
 
 
