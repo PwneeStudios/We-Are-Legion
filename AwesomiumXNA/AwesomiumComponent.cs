@@ -1,88 +1,59 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using Awesomium.Core;
+﻿using Awesomium.Core;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+
+using System.IO;
+using Microsoft.Xna.Framework.Content;
+
+using Awesomium.Core.Data;
+using Awesomium.Core.Dynamic;
+using AwesomiumXNA;
+
+using System.Net;
+using System.Net.Sockets;
+using System.Runtime.InteropServices;
 
 namespace AwesomiumXNA
 {
+    public class MainDataSource : DataSource
+    {
+        protected override void OnRequest(DataSourceRequest request)
+        {
+            Console.WriteLine("Request for: " + request.Path);
+
+            var response = new DataSourceResponse();
+
+#if DEBUG
+            var data = File.ReadAllBytes(Environment.CurrentDirectory + @"/../../../html/" + request.Path);
+#else
+			var data = File.ReadAllBytes(Environment.CurrentDirectory + @"/html/" + request.Path);
+#endif
+
+            IntPtr unmanagedPointer = Marshal.AllocHGlobal(data.Length);
+            Marshal.Copy(data, 0, unmanagedPointer, data.Length);
+
+            response.Buffer = unmanagedPointer;
+            response.MimeType = "text/html";
+            response.Size = (uint)data.Length;
+            SendResponse(request, response);
+
+            Marshal.FreeHGlobal(unmanagedPointer);
+        }
+    }
+
     public class AwesomiumComponent : DrawableGameComponent
     {
         private delegate Int32 ProcessMessagesDelegate(Int32 code, Int32 wParam, ref Message lParam);
 
-        private static class User32
-        {
-            [DllImport("user32.dll", SetLastError = true)]
-            internal static extern IntPtr SetWindowsHookEx(Int32 windowsHookId, ProcessMessagesDelegate function, IntPtr mod, Int32 threadId);
-
-            [DllImport("user32.dll", SetLastError = true)]
-            internal static extern Int32 UnhookWindowsHookEx(IntPtr hook);
-
-            [DllImport("user32.dll", SetLastError = true)]
-            internal static extern Int32 CallNextHookEx(IntPtr hook, Int32 code, Int32 wParam, ref Message lParam);
-
-            [DllImport("user32.dll", SetLastError = true)]
-            internal static extern Boolean TranslateMessage(ref Message message);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto)]
-            internal static extern IntPtr FindWindow(String className, String windowName);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto)]
-            internal static extern int RegisterWindowMessage(String msg);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto)]
-            internal static extern IntPtr SendMessage(HandleRef hWnd, Int32 msg, Int32 wParam, Int32 lParam);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto)]
-            internal static extern bool SystemParametersInfo(Int32 nAction, Int32 nParam, ref Int32 value, Int32 ignore);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto)]
-            internal static extern int GetSystemMetrics(Int32 nIndex);
-        }
-
-        private static class Kernel32
-        {
-            [DllImport("kernel32.dll", SetLastError = true)]
-            internal static extern Int32 GetCurrentThreadId();
-        }
-
-        private static class SystemMetrics
-        {
-            internal static Int32 MouseWheelScrollDelta
-            {
-                get
-                {
-                    return 120;
-                }
-            }
-
-            internal static Int32 MouseWheelScrollLines
-            {
-                get
-                {
-                    var scrollLines = 0;
-
-                    if (User32.GetSystemMetrics(75) == 0)
-                    {
-                        var hwnd = User32.FindWindow("MouseZ", "Magellan MSWHEEL");
-                        if (hwnd != IntPtr.Zero)
-                        {
-                            var windowMessage = User32.RegisterWindowMessage("MSH_SCROLL_LINES_MSG");
-                            scrollLines = (Int32)User32.SendMessage(new HandleRef(null, hwnd), windowMessage, 0, 0);
-                            if (scrollLines != 0)
-                            {
-                                return scrollLines;
-                            }
-                        }
-                        return 3;
-                    }
-                    User32.SystemParametersInfo(104, 0, ref scrollLines, 0);
-                    return scrollLines;
-                }
-            }
-        }
-
+        // I might be able to scrap these two message things once I'm done moving to mac
         private enum WindowsMessage
         {
             KeyDown = 0x0100,
@@ -125,6 +96,14 @@ namespace AwesomiumXNA
         private Rectangle area;
         private Rectangle? newArea;
         private Boolean resizing;
+        private SpriteBatch spriteBatch;
+        private SynchronizationContext awesomiumContext = null;
+        private BitmapSurface Surface { get; set; }
+        private MouseState lastMouseState;
+        private MouseState currentMouseState;
+        private Keys[] lastPressedKeys;
+        private Keys[] currentPressedKeys = new Keys[0];
+        private static ManualResetEvent awesomiumReady = new ManualResetEvent(false);
 
         public AwesomiumComponent(Game game, Rectangle area)
             : base(game)
@@ -142,48 +121,51 @@ namespace AwesomiumXNA
         {
             this.area = area;
 
+            this.spriteBatch = new SpriteBatch(game.GraphicsDevice);
+
+            /*Thread awesomiumThread = new System.Threading.Thread(new System.Threading.ThreadStart(() =>
+            {
+                WebCore.Started += (s, e) => {
+                    awesomiumContext = SynchronizationContext.Current;
+                    awesomiumReady.Set();
+                };
+
+                WebCore.Run();
+            }));
+
+            awesomiumThread.Start();
+*/
+
             if (!WebCore.IsInitialized)
             {
-                WebCore.Initialize(new WebConfig());
+                WebCore.Initialize(new WebConfig() { });
             }
 
-            WebView = WebCore.CreateWebView(area.Width, area.Height);
+            int w = area.Width;
+            int h = area.Height;
+            Console.WriteLine(area);
 
-            while (WebView.IsLoading)
-            {
-                WebCore.Update();
-            }
+            //awesomiumReady.WaitOne();
 
-            //BitmapSurface asdf = ((BitmapSurface)WebView.Surface);
-            //asdf.Resized += WebView_ResizeComplete;
-            //WebView.FlushAlpha = false;
-            WebView.IsTransparent = true;
+            //WebCore.QueueWork(() =>
+            //{
+            WebView = WebCore.CreateWebView(w, h);
+            //this.WebView = WebCore.CreateWebView(this.area.Width, this.area.Height);
+            // this.WebView = WebCore.CreateWebView(this.area.Width, this.area.Height, WebViewType.Offscreen);
 
             // WebView doesn't seem to listen when I say this
             //WebView.SelfUpdate = true;
             // So I have to say this:
             WebCore.AutoUpdatePeriod = 10000000;   // TEEENN MIILLLIOON
+                                                   //WebCore.AutoUpdatePeriod = 20;   // TEEENN MIILLLIOON
 
-            processMessages = ProcessMessages;
-
-            // Create the message hook.
-            hookHandle = User32.SetWindowsHookEx(3, processMessages, IntPtr.Zero, Kernel32.GetCurrentThreadId());
-
-            WebView.FocusView();
-        }
-
-        public void Release()
-        {
-            // Remove the message hook.
-            if (hookHandle != IntPtr.Zero)
+            this.WebView.IsTransparent = true;
+            this.WebView.CreateSurface += (s, e) =>
             {
-                User32.UnhookWindowsHookEx(hookHandle);
-            }
-        }
-
-        ~AwesomiumComponent()
-        {
-            Release();
+                this.Surface = new BitmapSurface(this.area.Width, this.area.Height);
+                e.Surface = this.Surface;
+            };
+            //});
         }
 
         public Texture2D WebViewTexture { get; private set; }
@@ -202,184 +184,155 @@ namespace AwesomiumXNA
         public bool AllowMouseEvents = true;
 
         static bool shift = false, ctrl = false, alt = false;
-        private Int32 ProcessMessages(Int32 code, Int32 wParam, ref Message lParam)
-        {
-            if (code == 0 && wParam == 1)
-            {
-                switch ((WindowsMessage)lParam.Msg)
-                {
-                case WindowsMessage.KeyDown:
-                    if ((uint)lParam.WParam == 16)
-                        shift = true;
-                    if ((uint)lParam.WParam == 17)
-                        ctrl = true;
-                    if ((uint)lParam.WParam == 18)
-                        alt = true;
-
-                    //Console.WriteLine(lParam.WParam);
-                    if (WebView.FocusedElementType == FocusedElementType.TextInput || (uint)lParam.WParam == 27)
-                        WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam,
-                            (shift ? Modifiers.ShiftKey : 0) | (ctrl ? Modifiers.ControlKey : 0) | (alt ? Modifiers.AltKey : 0)));
-
-                    break;
-
-                case WindowsMessage.KeyUp:
-                    if ((uint)lParam.WParam == 16)
-                        shift = false;
-                    if ((uint)lParam.WParam == 17)
-                        ctrl = false;
-                    if ((uint)lParam.WParam == 18)
-                        alt = false;
-
-                    //Console.WriteLine(lParam.WParam);
-                    if (WebView.FocusedElementType == FocusedElementType.TextInput || (uint)lParam.WParam == 27)
-                        WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam,
-                            (shift ? Modifiers.ShiftKey : 0) | (ctrl ? Modifiers.ControlKey : 0) | (alt ? Modifiers.AltKey : 0)));
-
-                        break;
-
-                case WindowsMessage.Char:
-                    //Console.WriteLine(lParam.WParam);
-                    if (WebView.FocusedElementType == FocusedElementType.TextInput)
-                        WebView.InjectKeyboardEvent(new WebKeyboardEvent((uint)lParam.Msg, lParam.WParam, lParam.LParam,
-                            (shift ? Modifiers.ShiftKey : 0) | (ctrl ? Modifiers.ControlKey : 0) | (alt ? Modifiers.AltKey : 0)));
-
-                    break;
-
-                case WindowsMessage.MouseMove:
-                    //if (!AllowMouseEvents) break;
-
-                    var mouse = Mouse.GetState();
-                    WebView.InjectMouseMove(mouse.X - area.X, mouse.Y - area.Y);
-                    break;
-
-                case WindowsMessage.LeftButtonDown:
-                    if (!AllowMouseEvents) break;
-                    WebView.InjectMouseDown(MouseButton.Left);
-                    break;
-                case WindowsMessage.LeftButtonUp:
-                    //if (!AllowMouseEvents) break;
-                    WebView.InjectMouseUp(MouseButton.Left);
-                    break;
-                case WindowsMessage.LeftButtonDoubleClick:
-                    if (!AllowMouseEvents) break;
-                    WebView.InjectMouseDown(MouseButton.Left);
-                    break;
-
-                case WindowsMessage.RightButtonDown:
-                    if (!AllowMouseEvents) break;
-                    WebView.InjectMouseDown(MouseButton.Right);
-                    break;
-                case WindowsMessage.RightButtonUp:
-                    if (!AllowMouseEvents) break;
-                    WebView.InjectMouseUp(MouseButton.Right);
-                    break;
-                case WindowsMessage.RightButtonDoubleClick:
-                    if (!AllowMouseEvents) break;
-                    WebView.InjectMouseDown(MouseButton.Right);
-                    break;
-
-                case WindowsMessage.MiddleButtonDown:
-                    if (!AllowMouseEvents) break;
-                    WebView.InjectMouseDown(MouseButton.Middle);
-                    break;
-                case WindowsMessage.MiddleButtonUp:
-                    if (!AllowMouseEvents) break;
-                    WebView.InjectMouseUp(MouseButton.Middle);
-                    break;
-                case WindowsMessage.MiddleButtonDoubleClick:
-                    if (!AllowMouseEvents) break;
-                    WebView.InjectMouseDown(MouseButton.Middle);
-                    break;
-
-                case WindowsMessage.MouseWheel:
-                    //if (!AllowMouseEvents) break;
-                    var delta = (((Int32)lParam.WParam) >> 16);
-                    WebView.InjectMouseWheel(delta / SystemMetrics.MouseWheelScrollDelta * 16 * SystemMetrics.MouseWheelScrollLines, 0);
-                    break;
-                }
-                User32.TranslateMessage(ref lParam);
-            }
-
-            return User32.CallNextHookEx(IntPtr.Zero, code, wParam, ref lParam);
-        }
 
         //private void WebView_ResizeComplete(Object sender, SurfaceResizedEventArgs e)
         //{
         //    resizing = false;
         //}
 
+        public void SetResourceInterceptor(IResourceInterceptor interceptor)
+        {
+            //awesomiumContext.Post(state =>
+            //{
+            WebCore.ResourceInterceptor = interceptor;
+            //}, null);
+        }
+
+        public void Execute(string method, params object[] args)
+        {
+            string script = string.Format("viewModel.{0}({1})", method, string.Join(",", args.Select(x => "\"" + x.ToString() + "\"")));
+            this.WebView.ExecuteJavascript(script);
+        }
+
         protected override void LoadContent()
         {
-            if (area.IsEmpty)
+            if (this.area.IsEmpty)
             {
-                area = GraphicsDevice.Viewport.Bounds;
-                newArea = GraphicsDevice.Viewport.Bounds;
+                this.area = this.GraphicsDevice.Viewport.Bounds;
+                this.newArea = this.GraphicsDevice.Viewport.Bounds;
             }
-            WebViewTexture = new Texture2D(Game.GraphicsDevice, area.Width, area.Height, false, SurfaceFormat.Color);
-            imageBytes = new Byte[area.Width * 4 * area.Height];
-            imagePtr = Marshal.AllocHGlobal(imageBytes.Length);
+            this.WebViewTexture = new Texture2D(this.Game.GraphicsDevice, this.area.Width, this.area.Height, false, SurfaceFormat.Color);
+
+            this.imageBytes = new Byte[this.area.Width * 4 * this.area.Height];
         }
 
         public override void Update(GameTime gameTime)
         {
-            //if (newArea.HasValue && !resizing && gameTime.TotalGameTime.TotalSeconds > 0.10f)
-            //{
-            //    area = newArea.Value;
-            //    if (area.IsEmpty)
-            //        area = GraphicsDevice.Viewport.Bounds;
+            WebCore.Update();
 
-            //    ((BitmapSurface)WebView.Surface).Resized += WebView_ResizeComplete;
-            //    WebView.Resize(area.Width, area.Height);
-            //    WebViewTexture = new Texture2D(Game.GraphicsDevice, area.Width, area.Height, false, SurfaceFormat.Color);
-            //    imageBytes = new Byte[area.Width * 4 * area.Height];
-            //    imagePtr = Marshal.AllocHGlobal(imageBytes.Length);
-            //    resizing = true;
-
-            //    newArea = null;
-            //}
-
-            // Manually update the webcore so that we're not running 2 clocks
-            try
+            if (this.newArea.HasValue && !this.resizing && gameTime.TotalGameTime.TotalSeconds > 0.10f)
             {
-                WebCore.Update();
+                this.area = this.newArea.Value;
+                if (this.area.IsEmpty)
+                    this.area = this.GraphicsDevice.Viewport.Bounds;
+
+                this.WebView.Resize(this.area.Width, this.area.Height);
+                this.WebViewTexture = new Texture2D(this.Game.GraphicsDevice, this.area.Width, this.area.Height, false, SurfaceFormat.Color);
+                this.imageBytes = new Byte[this.area.Width * 4 * this.area.Height];
+                this.resizing = true;
+
+                this.newArea = null;
             }
-            catch (Exception e)
+
+            lastMouseState = currentMouseState;
+            currentMouseState = Mouse.GetState();
+
+            this.WebView.InjectMouseMove(currentMouseState.X - this.area.X, currentMouseState.Y - this.area.Y);
+
+            if (currentMouseState.LeftButton == ButtonState.Pressed && lastMouseState.LeftButton == ButtonState.Released)
             {
-                Console.WriteLine("Shit's fucked.");
+                this.WebView.InjectMouseDown(MouseButton.Left);
             }
-            
+            if (currentMouseState.LeftButton == ButtonState.Released && lastMouseState.LeftButton == ButtonState.Pressed)
+            {
+                this.WebView.InjectMouseUp(MouseButton.Left);
+            }
+            if (currentMouseState.RightButton == ButtonState.Pressed && lastMouseState.RightButton == ButtonState.Released)
+            {
+                this.WebView.InjectMouseDown(MouseButton.Right);
+            }
+            if (currentMouseState.RightButton == ButtonState.Released && lastMouseState.RightButton == ButtonState.Pressed)
+            {
+                this.WebView.InjectMouseUp(MouseButton.Right);
+            }
+            if (currentMouseState.MiddleButton == ButtonState.Pressed && lastMouseState.MiddleButton == ButtonState.Released)
+            {
+                this.WebView.InjectMouseDown(MouseButton.Middle);
+            }
+            if (currentMouseState.MiddleButton == ButtonState.Released && lastMouseState.MiddleButton == ButtonState.Pressed)
+            {
+                this.WebView.InjectMouseUp(MouseButton.Middle);
+            }
+
+            if (currentMouseState.ScrollWheelValue != lastMouseState.ScrollWheelValue)
+            {
+                this.WebView.InjectMouseWheel((currentMouseState.ScrollWheelValue - lastMouseState.ScrollWheelValue), 0);
+            }
+
+            lastPressedKeys = currentPressedKeys;
+            currentPressedKeys = Keyboard.GetState().GetPressedKeys();
+
+            // Key Down
+            foreach (var key in currentPressedKeys)
+            {
+                if (!lastPressedKeys.Contains(key))
+                {
+                    this.WebView.InjectKeyboardEvent(new WebKeyboardEvent()
+                    {
+                        Type = WebKeyboardEventType.KeyDown,
+                        VirtualKeyCode = (VirtualKey)(int)key,
+                        NativeKeyCode = (int)key
+                    });
+
+                    if ((int)key >= 65 && (int)key <= 90)
+                    {
+                        this.WebView.InjectKeyboardEvent(new WebKeyboardEvent()
+                        {
+                            Type = WebKeyboardEventType.Char,
+                            Text = key.ToString().ToLower()
+                        });
+                    }
+                    else if (key == Keys.Space)
+                    {
+                        this.WebView.InjectKeyboardEvent(new WebKeyboardEvent()
+                        {
+                            Type = WebKeyboardEventType.Char,
+                            Text = " "
+                        });
+                    }
+                }
+            }
+
+            // Key Up
+            foreach (var key in lastPressedKeys)
+            {
+                if (!currentPressedKeys.Contains(key))
+                {
+                    this.WebView.InjectKeyboardEvent(new WebKeyboardEvent()
+                    {
+                        Type = WebKeyboardEventType.KeyUp,
+                        VirtualKeyCode = (VirtualKey)(int)key,
+                        NativeKeyCode = (int)key
+                    });
+                }
+            }
+
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            if (WebCore.IsInitialized)
-            if (WebView.Surface != null && ((BitmapSurface)WebView.Surface).IsDirty)
+            if (Surface != null && Surface.IsDirty && !resizing)
             {
-                BitmapSurface renderBuffer = ((BitmapSurface)WebView.Surface);
-#if true
-                // This was the original solution
-                renderBuffer.CopyTo(imagePtr, renderBuffer.Width * 4, 4, true, false);
-                Marshal.Copy(imagePtr, imageBytes, 0, imageBytes.Length);
-                WebViewTexture.SetData(imageBytes);
-#endif
-#if false
-                // This was MindworX's attempt to make it faster, and it's just barely faster than the above
                 unsafe
                 {
                     // This part saves us from double copying everything.
-                    fixed (Byte* imagePtr = imageBytes)
+                    fixed (Byte* imagePtr = this.imageBytes)
                     {
-                        renderBuffer.CopyTo((IntPtr)imagePtr, renderBuffer.Width * 4, 4, false, false);
+                        Surface.CopyTo((IntPtr)imagePtr, Surface.Width * 4, 4, true, false);
                     }
                 }
-                WebViewTexture.SetData(imageBytes);
-#endif
-#if false
-                // Found this little trick online, and it's quite a lot faster than either method above (roughly 3x faster)
-                renderBuffer.RenderTexture2D(WebViewTexture);
-#endif
+                this.WebViewTexture.SetData(this.imageBytes);
             }
 
             base.Draw(gameTime);

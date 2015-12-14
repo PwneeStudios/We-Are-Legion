@@ -1,19 +1,37 @@
 using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
+
+using Windows = System.Windows.Forms;
 
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Awesomium.Core;
-using Awesomium.Core.Data;
-using Newtonsoft.Json;
+using Microsoft.Xna.Framework.Input;
 
 using FragSharpHelper;
+using FragSharpFramework;
+using Input = FragSharpHelper.Input;
+
+using Awesomium.Core;
+using Awesomium.Core.Data;
+using Awesomium.Core.Dynamic;
 using AwesomiumXNA;
+
+using System.Text;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Web.Script.Serialization;
+
+using Newtonsoft.Json;
 
 namespace Game
 {
+    using Dict = Dictionary<string, object>;
+
     public class MainDataSource : DataSource
     {
         protected override void OnRequest(DataSourceRequest request)
@@ -21,11 +39,11 @@ namespace Game
             Console.WriteLine("Request for: " + request.Path);
 
             var response = new DataSourceResponse();
-            
+
 #if DEBUG
-            var data = File.ReadAllBytes(Environment.CurrentDirectory + @"\..\..\..\html\" + request.Path);
+            var data = File.ReadAllBytes(Environment.CurrentDirectory + @"/../../../html/" + request.Path);
 #else
-            var data = File.ReadAllBytes(Environment.CurrentDirectory + @"\html\" + request.Path);
+            var data = File.ReadAllBytes(Environment.CurrentDirectory + @"/html/" + request.Path);
 #endif
 
             IntPtr unmanagedPointer = Marshal.AllocHGlobal(data.Length);
@@ -50,35 +68,47 @@ namespace Game
             if (awesomium != null)
             {
                 Components.Remove(awesomium);
-                awesomium.Release();
+                //awesomium.Release();
                 awesomium.Dispose();
             }
-            
-            awesomium = new AwesomiumComponent(this, GraphicsDevice.Viewport.Bounds);
-            
-            Console.WriteLine("GraphicsDevice.Viewport.Bounds");
-            Console.WriteLine(GraphicsDevice.Viewport.Bounds);
-            Console.WriteLine(GraphicsDevice.Viewport.Bounds.Width);
-            //awesomium = new AwesomiumComponent(this, new Rectangle(0, 0, 1920, 1080));
-            awesomium.WebView.ParentWindow = Window.Handle;
+
+            awesomium = new AwesomiumComponent(this, new Rectangle(0, 0, Program.Width, Program.Height));
+            //awesomium = new AwesomiumComponent (this, GraphicsDevice.Viewport.Bounds);
+
+            //awesomium.WebView.ParentWindow = Window.Handle;
 
             // Don't forget to add the awesomium component to the game
             Components.Add(awesomium);
 
-            // Add a data source that will simply act as a pass-through
-            awesomium.WebView.WebSession.AddDataSource("root", new MainDataSource());
+            WebCore.QueueWork(() => {
+                // Add a data source that will simply act as a pass-through
+                awesomium.WebView.WebSession.AddDataSource("root", new MainDataSource());
 
-            // This will trap all console messages
-            awesomium.WebView.ConsoleMessage += WebView_ConsoleMessage;
+                // This will trap all console messages
+                awesomium.WebView.ConsoleMessage += WebView_ConsoleMessage;
 
-            // A document must be loaded in order for me to make a global JS object, but the presence of
-            // the global JS object affects the first page to be loaded, so give it an egg:
-            awesomium.WebView.LoadHTML("<html><head><title>Loading...</title></head><body></body></html>");
-            while (!awesomium.WebView.IsDocumentReady)
+                // A document must be loaded in order for me to make a global JS object, but the presence of
+                // the global JS object affects the first page to be loaded, so give it an egg:
+                while (!awesomium.WebView.IsLive)
+                {
+                    Thread.Sleep(1);
+                }
+
+                awesomium.WebView.LoadHTML("<html><head><title>Loading...</title></head><body></body></html>");
+            });
+
+            WebCore.QueueWork(LoadMainPage);
+        }
+
+        void LoadMainPage()
+        {
+            if (!awesomium.WebView.IsDocumentReady)
             {
-                WebCore.Update();
+                WebCore.QueueWork(LoadMainPage);
+                //WebCore.Update();
+                return;
             }
-            
+
             // Trap log commands so that we can differentiate between log statements and JS errors
             JSObject console = awesomium.WebView.CreateGlobalJavascriptObject("console");
             console.Bind("log", WebView_ConsoleLog);
@@ -89,9 +119,17 @@ namespace Game
             BindMethods();
 
             awesomium.WebView.Source = @"asset://root/index.html".ToUri();
-            while (!awesomium.WebView.IsDocumentReady)
+
+            //WaitForPage ();
+        }
+
+        void WaitForPage()
+        {
+            if (!awesomium.WebView.IsDocumentReady)
             {
+                WebCore.QueueWork(WaitForPage);
                 WebCore.Update();
+                return;
             }
         }
 
@@ -105,10 +143,9 @@ namespace Game
         {
             // All JS errors will come here
             string msg = String.Format("Awesomium JS Error: {0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);
-            
+
             Console.WriteLine(msg);
             Program.LogDump(msg);
-            //throw new Exception(msg);
         }
 
         /// <summary>
@@ -134,7 +171,7 @@ namespace Game
         public void CalculateMouseDownOverUi()
         {
             if (!GameInputEnabled)
-            { 
+            {
                 awesomium.AllowMouseEvents = true;
                 MouseOverHud = true;
                 MouseDownOverUi = true;
@@ -156,6 +193,7 @@ namespace Game
             }
             else
             {
+
                 try
                 {
                     Render.UnsetDevice();
@@ -181,29 +219,28 @@ namespace Game
 
         public void Send(string function, params object[] args)
         {
-            if (function == "back")
-                Console.WriteLine("going back!");
-
             string s = "";
             bool first = true;
 
             foreach (var arg in args)
             {
                 if (!first) { s += ","; }
-                
+
                 s += Jsonify(arg);
                 first = false;
             }
 
-            try
-            {
-                awesomium.WebView.ExecuteJavascript(function + "(" + s + ");");
-                //var result = awesomium.WebView.ExecuteJavascriptWithResult(function + "(" + s + ");");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Could not communicate with Awesomium, {0}({1}): {2}", function, s, e);
-            }
+            WebCore.QueueWork(() => {
+                try
+                {
+                    awesomium.WebView.ExecuteJavascript(function + "(" + s + ");");
+                    //var result = awesomium.WebView.ExecuteJavascriptWithResult(function + "(" + s + ");");
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Could not communicate with Awesomium, {0}({1}): {2}", function, s, e);
+                }
+            });
         }
     }
 }
