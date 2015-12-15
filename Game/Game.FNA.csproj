@@ -227,10 +227,6 @@
       <Project>{fd3b0d50-46b3-4a83-9a6d-c641569142cf}</Project>
       <Name>Hjg.Pngcs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SteamWrapper\SteamWrapper.vcxproj">
-      <Project>{a36eedb7-1111-47af-9862-a2a36583897a}</Project>
-      <Name>SteamWrapper</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6,Profile=Client">

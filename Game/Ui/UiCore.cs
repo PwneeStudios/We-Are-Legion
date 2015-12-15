@@ -135,14 +135,14 @@ namespace Game
 
         JSValue WebView_ConsoleLog(object sender, JavascriptMethodEventArgs javascriptMethodEventArgs)
         {
-            Console.WriteLine(javascriptMethodEventArgs.Arguments[0].ToString());
+            //Console.WriteLine(javascriptMethodEventArgs.Arguments[0].ToString());
             return JSValue.Null;
         }
 
         void WebView_ConsoleMessage(object sender, ConsoleMessageEventArgs e)
         {
             // All JS errors will come here
-            string msg = String.Format("Awesomium JS Error: {0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);
+            string msg = string.Format("Awesomium JS Error: {0}, {1} on line {2}", e.Message, e.Source, e.LineNumber);
 
             Console.WriteLine(msg);
             Program.LogDump(msg);

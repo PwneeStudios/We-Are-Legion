@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using Steamworks;
 
-namespace Steamworks
+namespace SteamWrapper
 {
     public class CallbackClass
     {
@@ -69,7 +69,7 @@ namespace Steamworks
 
             byte[] pvData = new byte[4096];
 
-            int readed = NativeMethods.ISteamMatchmaking_GetLobbyChatEntry(
+            SteamMatchmaking.GetLobbyChatEntry(
                 (CSteamID)pCallback.m_ulSteamIDLobby,
                 (int)pCallback.m_iChatID,
                 out sender,
@@ -81,10 +81,8 @@ namespace Steamworks
             if (SteamMatches.s_OnChatMsg != null)
             {
                 string msg = StringHelper.GetString(pvData);
-                //var id = sender.ConvertToUint64();
-                //var pchName = NativeMethods.ISteamFriends_GetFriendPersonaName (sender);
-                ulong id = 5;
-                string name = "Hello";
+                var id = sender.m_SteamID;
+                string name = SteamFriends.GetFriendPersonaName(sender);
 
                 SteamMatches.s_OnChatMsg.Invoke(msg, id, name);
             }
@@ -106,7 +104,7 @@ namespace Steamworks
 
                 for (int index = 0; index < SteamStats.s_nLeaderboardEntriesFound; index++)
                 {
-                    NativeMethods.ISteamUserStats_GetDownloadedLeaderboardEntry(
+                    SteamUserStats.GetDownloadedLeaderboardEntry(
                         pLeaderboardScoresDownloaded.m_hSteamLeaderboardEntries, index, out SteamStats.m_leaderboardEntries[index], null, 0);
                 }
             }
@@ -177,12 +175,12 @@ namespace Steamworks
         public static String PlayerName()
         {
             InteropHelp.TestIfAvailableClient();
-            return InteropHelp.PtrToStringUTF8(NativeMethods.ISteamFriends_GetPersonaName());
+            return SteamFriends.GetPersonaName();
         }
 
-        public static bool RestartViaSteamIfNecessary(AppId_t AppId)
+        public static bool RestartViaSteamIfNecessary(uint AppId)
         {
-            bool result = NativeMethods.SteamAPI_RestartAppIfNecessary(AppId);
+            bool result = SteamAPI.RestartAppIfNecessary((AppId_t)AppId);
             return result;
         }
 
@@ -193,22 +191,22 @@ namespace Steamworks
 
         public static void Shutdown()
         {
-            NativeMethods.SteamAPI_Shutdown();
+            SteamAPI.Shutdown();
         }
 
         public static bool SteamIsConnected()
         {
-            return SteamIsRunning() && NativeMethods.ISteamUser_BLoggedOn();
+            return SteamIsRunning() && SteamUser.BLoggedOn();
         }
 
         public static bool SteamIsRunning()
         {
-            return NativeMethods.SteamAPI_IsSteamRunning();
+            return SteamAPI.IsSteamRunning();
         }
 
         public static void Update()
         {
-            NativeMethods.SteamAPI_RunCallbacks();
+            SteamAPI.RunCallbacks();
         }
     }
 
@@ -231,18 +229,23 @@ namespace Steamworks
     {
         public static byte[] GetBytes(string str)
         {
-            byte[] bytes = new byte[str.Length * sizeof(char)];
-            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            int msgLength = str.Length * sizeof(char);
+
+            byte[] bytes = new byte[msgLength + 4];
+            var length = BitConverter.GetBytes(msgLength);
+
+            System.Buffer.BlockCopy(length, 0, bytes, 0, 4);
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 4, msgLength);
+
             return bytes;
         }
 
-        public static string GetString(byte[] bytes, int length = 0)
+        public static string GetString(byte[] bytes)
         {
-            if (length == 0)
-                length = bytes.Length;
+            int length = BitConverter.ToInt32(bytes, 0);
 
             char[] chars = new char[length / sizeof(char)];
-            System.Buffer.BlockCopy(bytes, 0, chars, 0, length);
+            System.Buffer.BlockCopy(bytes, 4, chars, 0, length);
             return new string(chars);
         }
     }
@@ -288,6 +291,12 @@ namespace Steamworks
             ChatMember_Kicked = 4,       // User kicked
             ChatMember_Banned = 5;       // User kicked and banned
 
+        public static bool InLobby()
+        {
+            //REMOVE//if ( s_CurrentLobby.m_handle == null ) return false;
+            return false;
+        }
+
         public static void FindLobbies(Action<bool> OnFind)
         {
             s_OnFindLobbies = OnFind;
@@ -297,7 +306,7 @@ namespace Steamworks
             //if ( SteamMatchmaking() == 0 ) return;
             InteropHelp.TestIfAvailableClient();
 
-            SteamAPICall_t hSteamAPICall = (SteamAPICall_t)NativeMethods.ISteamMatchmaking_RequestLobbyList();
+            var hSteamAPICall = SteamMatchmaking.RequestLobbyList();
             g_CallResultLobbyMatchList = new CallResult<LobbyMatchList_t>(CallbackClass.instance.OnFindLobbies);
             g_CallResultLobbyMatchList.Set(hSteamAPICall); //( hSteamAPICall, SteamStats.g_CallbackClassInstance, CallbackClass.OnFindLobbies );
         }
@@ -311,15 +320,15 @@ namespace Steamworks
             //if ( SteamMatchmaking() == 0 ) return;
             InteropHelp.TestIfAvailableClient();
 
-            int cFriends = NativeMethods.ISteamFriends_GetFriendCount(EFriendFlags.k_EFriendFlagImmediate);
+            int cFriends = SteamFriends.GetFriendCount(EFriendFlags.k_EFriendFlagImmediate);
             for (int i = 0; i < cFriends; i++)
             {
                 FriendGameInfo_t friendGameInfo;
-                CSteamID steamIDFriend = (CSteamID)NativeMethods.ISteamFriends_GetFriendByIndex(i, EFriendFlags.k_EFriendFlagImmediate);
-                if (NativeMethods.ISteamFriends_GetFriendGamePlayed(steamIDFriend, out friendGameInfo) && friendGameInfo.m_steamIDLobby.IsValid())
+                CSteamID steamIDFriend = (CSteamID)SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagImmediate);
+                if (SteamFriends.GetFriendGamePlayed(steamIDFriend, out friendGameInfo) && friendGameInfo.m_steamIDLobby.IsValid())
                 {
                     m_friendLobbies[s_nFriendLobbiesFound++] = friendGameInfo.m_steamIDLobby;
-                    NativeMethods.ISteamMatchmaking_RequestLobbyData(friendGameInfo.m_steamIDLobby);
+                    SteamMatchmaking.RequestLobbyData(friendGameInfo.m_steamIDLobby);
                     //int cap = SteamMatchmaking().GetLobbyMemberLimit( friendGameInfo.m_steamIDLobby );
                     //Console.WriteLine("Found friend lobby with capacity {0}", cap);
                 }
@@ -351,18 +360,14 @@ namespace Steamworks
             }
             else
             {
-                return (CSteamID)NativeMethods.ISteamMatchmaking_GetLobbyByIndex(Index);
+                return (CSteamID)SteamMatchmaking.GetLobbyByIndex(Index);
             }
         }
 
         public static string GetLobbyData(int Index, string Key)
         {
             CSteamID steamIDLobby = GetLobby(Index);
-            InteropHelp.TestIfAvailableClient();
-            using (var Key2 = new InteropHelp.UTF8StringHandle(Key))
-            {
-                return InteropHelp.PtrToStringUTF8(NativeMethods.ISteamMatchmaking_GetLobbyData(steamIDLobby, Key2));
-            }
+            return SteamMatchmaking.GetLobbyData(steamIDLobby, Key);
         }
 
         public static void JoinCreatedLobby(
@@ -401,7 +406,7 @@ namespace Steamworks
         {
             SetLobbyCallbacks(OnJoinLobby, OnChatUpdate, OnChatMsg, OnDataUpdate);
 
-            SteamAPICall_t hSteamAPICall = (SteamAPICall_t)NativeMethods.ISteamMatchmaking_JoinLobby(LobbyID);
+            SteamAPICall_t hSteamAPICall = (SteamAPICall_t)SteamMatchmaking.JoinLobby(LobbyID);
             g_CallResultJoinLobby.Set(hSteamAPICall);
         }
 
@@ -452,7 +457,7 @@ namespace Steamworks
             ELobbyType type = IntToLobbyType(LobbyType);
 
             InteropHelp.TestIfAvailableClient();
-            SteamAPICall_t hSteamAPICall = (SteamAPICall_t)NativeMethods.ISteamMatchmaking_CreateLobby(type, 4);
+            SteamAPICall_t hSteamAPICall = (SteamAPICall_t)SteamMatchmaking.CreateLobby(type, 4);
             g_CallResultLobbyCreated = new CallResult<LobbyCreated_t>(CallbackClass.instance.OnLobbyCreated);
             g_CallResultLobbyCreated.Set(hSteamAPICall); //, SteamStats.g_CallbackClassInstance, CallbackClass.OnLobbyCreated );
         }
@@ -468,11 +473,7 @@ namespace Steamworks
 
             //REMOVE//if ( s_CurrentLobby.m_handle == null ) return;
 
-            using (var pchKey2 = new InteropHelp.UTF8StringHandle(Key))
-            using (var pchValue2 = new InteropHelp.UTF8StringHandle(Value))
-            {
-                NativeMethods.ISteamMatchmaking_SetLobbyData(s_CurrentLobby.m_handle, pchKey2, pchValue2);
-            }
+            SteamMatchmaking.SetLobbyData(s_CurrentLobby.m_handle, Key, Value);
         }
 
         public static string GetLobbyData(string Key)
@@ -491,22 +492,19 @@ namespace Steamworks
 
             //REMOVE//if ( s_CurrentLobby.m_handle == null ) return "";
 
-            using (var pchKey2 = new InteropHelp.UTF8StringHandle(Key))
-            {
-                return InteropHelp.PtrToStringUTF8(NativeMethods.ISteamMatchmaking_GetLobbyData(s_CurrentLobby.m_handle, pchKey2));
-            }
+            return SteamMatchmaking.GetLobbyData(s_CurrentLobby.m_handle, Key);
         }
 
         public static int GetLobbyMemberCount(int Index)
         {
             CSteamID steamIDLobby = GetLobby(Index);
-            return NativeMethods.ISteamMatchmaking_GetNumLobbyMembers(steamIDLobby);
+            return SteamMatchmaking.GetNumLobbyMembers(steamIDLobby);
         }
 
         public static int GetLobbyCapacity(int Index)
         {
             CSteamID steamIDLobby = GetLobby(Index);
-            return NativeMethods.ISteamMatchmaking_GetLobbyMemberLimit(steamIDLobby);
+            return SteamMatchmaking.GetLobbyMemberLimit(steamIDLobby);
         }
 
         public static bool SetLobbyMemberLimit(int MaxMembers)
@@ -514,7 +512,7 @@ namespace Steamworks
             if (SteamCore.InOfflineMode()) return false;
             //REMOVE//if ( s_CurrentLobby.m_handle == null ) return false;
 
-            return NativeMethods.ISteamMatchmaking_SetLobbyMemberLimit(s_CurrentLobby.m_handle, MaxMembers);
+            return SteamMatchmaking.SetLobbyMemberLimit(s_CurrentLobby.m_handle, MaxMembers);
         }
 
         public static void SetLobbyType(int LobbyType)
@@ -523,7 +521,7 @@ namespace Steamworks
             //REMOVE//if ( s_CurrentLobby.m_handle == null ) return;
 
             ELobbyType type = IntToLobbyType(LobbyType);
-            NativeMethods.ISteamMatchmaking_SetLobbyType(s_CurrentLobby.m_handle, type);
+            SteamMatchmaking.SetLobbyType(s_CurrentLobby.m_handle, type);
         }
 
         public static void SendChatMsg(string Msg)
@@ -536,15 +534,8 @@ namespace Steamworks
 
             //REMOVE//if ( s_CurrentLobby.m_handle == null ) return;
 
-            //marshal_context context;
-            //char   pchMsg = context.marshal_as< char   >( Msg );
-
             var bytes = StringHelper.GetBytes(Msg);
-
-            using (var pchMsg2 = new InteropHelp.UTF8StringHandle(Msg))
-            {
-                NativeMethods.ISteamMatchmaking_SendLobbyChatMsg(s_CurrentLobby.m_handle, bytes, bytes.Length);
-            }
+            SteamMatchmaking.SendLobbyChatMsg(s_CurrentLobby.m_handle, bytes, bytes.Length);
         }
 
         public static int GetLobbyMemberCount()
@@ -555,10 +546,10 @@ namespace Steamworks
             }
 
             //REMOVE//if ( s_CurrentLobby.m_handle == null ) return -1;
-            return NativeMethods.ISteamMatchmaking_GetNumLobbyMembers(s_CurrentLobby.m_handle);
+            return SteamMatchmaking.GetNumLobbyMembers(s_CurrentLobby.m_handle);
         }
 
-        public static String GetMememberName(int Index)
+        public static String GetMemberName(int Index)
         {
             if (SteamCore.InOfflineMode())
             {
@@ -567,12 +558,12 @@ namespace Steamworks
 
             //REMOVE//if ( s_CurrentLobby.m_handle == null ) return "";
 
-            CSteamID steamIDLobbyMember = (CSteamID)NativeMethods.ISteamMatchmaking_GetLobbyMemberByIndex(s_CurrentLobby.m_handle, Index);
+            CSteamID steamIDLobbyMember = (CSteamID)SteamMatchmaking.GetLobbyMemberByIndex(s_CurrentLobby.m_handle, Index);
 
-            return InteropHelp.PtrToStringUTF8(NativeMethods.ISteamFriends_GetFriendPersonaName(steamIDLobbyMember));
+            return SteamFriends.GetFriendPersonaName(steamIDLobbyMember);
         }
 
-        public static UInt64 GetMememberId(int Index)
+        public static UInt64 GetMemberId(int Index)
         {
             if (SteamCore.InOfflineMode())
             {
@@ -581,7 +572,7 @@ namespace Steamworks
 
             //REMOVE//if ( s_CurrentLobby.m_handle == null ) return 0;
 
-            CSteamID steamIDLobbyMember = (CSteamID)NativeMethods.ISteamMatchmaking_GetLobbyMemberByIndex(s_CurrentLobby.m_handle, Index);
+            CSteamID steamIDLobbyMember = (CSteamID)SteamMatchmaking.GetLobbyMemberByIndex(s_CurrentLobby.m_handle, Index);
 
             return (UInt64)steamIDLobbyMember;
         }
@@ -591,14 +582,14 @@ namespace Steamworks
             if (SteamCore.InOfflineMode()) return true;
 
             //REMOVE//if ( s_CurrentLobby.m_handle == null ) return false;
-            return (CSteamID)NativeMethods.ISteamUser_GetSteamID() == (CSteamID)NativeMethods.ISteamMatchmaking_GetLobbyOwner(s_CurrentLobby.m_handle);
+            return (CSteamID)SteamUser.GetSteamID() == (CSteamID)SteamMatchmaking.GetLobbyOwner(s_CurrentLobby.m_handle);
         }
 
         public static void LeaveLobby()
         {
             //REMOVE//if ( s_CurrentLobby.m_handle == null ) return;
 
-            NativeMethods.ISteamMatchmaking_LeaveLobby(s_CurrentLobby.m_handle);
+            SteamMatchmaking.LeaveLobby(s_CurrentLobby.m_handle);
             s_CurrentLobby.m_handle.Clear();
         }
 
@@ -606,7 +597,7 @@ namespace Steamworks
         {
             //REMOVE//if ( s_CurrentLobby.m_handle == null ) return;
 
-            NativeMethods.ISteamMatchmaking_SetLobbyJoinable(s_CurrentLobby.m_handle, Joinable);
+            SteamMatchmaking.SetLobbyJoinable(s_CurrentLobby.m_handle, Joinable);
         }
     }
 
@@ -622,9 +613,9 @@ namespace Steamworks
 
         public static void SendMessage(CSteamID User, String Message)
         {
-            byte[] pchMsg = new byte[Message.Length];
+            var bytes = StringHelper.GetBytes(Message);
 
-            NativeMethods.ISteamGameServerNetworking_SendP2PPacket(User, pchMsg, (uint)Message.Length, EP2PSend.k_EP2PSendReliable, 0);
+            SteamGameServerNetworking.SendP2PPacket(User, bytes, (uint)bytes.Length, EP2PSend.k_EP2PSendReliable, 0);
         }
 
         public static void SendBytes(SteamPlayer User, byte[] Bytes)
@@ -653,21 +644,13 @@ namespace Steamworks
             //}
             //len = count;
 
-            NativeMethods.ISteamGameServerNetworking_SendP2PPacket(User, pchMsg, len, EP2PSend.k_EP2PSendReliable, 0);
-
-            //delete[] pchMsg;
+            SteamGameServerNetworking.SendP2PPacket(User, pchMsg, len, EP2PSend.k_EP2PSendReliable, 0);
         }
 
         public static bool MessageAvailable()
         {
-            //UInt32 msgSize = 0;
-            bool result = false;
-            //bool result = SteamNetworking().IsP2PPacketAvailable( msgSize );
-
-            //if ( result )
-            //{
-            //    return result;
-            //}
+            uint msgSize = 0;
+            bool result = SteamNetworking.IsP2PPacketAvailable(out msgSize);
 
             return result;
         }
@@ -675,7 +658,7 @@ namespace Steamworks
         public static Tuple<UInt64, String> ReadMessage()
         {
             UInt32 msgSize = 0;
-            bool result = NativeMethods.ISteamGameServerNetworking_IsP2PPacketAvailable(out msgSize, 0);
+            bool result = SteamGameServerNetworking.IsP2PPacketAvailable(out msgSize, 0);
 
             if (!result)
             {
@@ -687,7 +670,7 @@ namespace Steamworks
             CSteamID steamIDRemote;
             UInt32 bytesRead = 0;
 
-            if (NativeMethods.ISteamGameServerNetworking_ReadP2PPacket(packet, msgSize, out bytesRead, out steamIDRemote, 0))
+            if (SteamGameServerNetworking.ReadP2PPacket(packet, msgSize, out bytesRead, out steamIDRemote, 0))
             {
                 msg = packet.ToString();
             }
@@ -698,7 +681,7 @@ namespace Steamworks
         public static Tuple<UInt64, byte[]> ReadBytes()
         {
             UInt32 msgSize = 0;
-            bool result = NativeMethods.ISteamGameServerNetworking_IsP2PPacketAvailable(out msgSize, 0);
+            bool result = SteamGameServerNetworking.IsP2PPacketAvailable(out msgSize, 0);
 
             if (!result)
             {
@@ -710,7 +693,7 @@ namespace Steamworks
             UInt32 bytesRead = 0;
 
             byte[] Bytes = new byte[msgSize];
-            if (NativeMethods.ISteamGameServerNetworking_ReadP2PPacket(packet, msgSize, out bytesRead, out steamIDRemote, 0))
+            if (SteamGameServerNetworking.ReadP2PPacket(packet, msgSize, out bytesRead, out steamIDRemote, 0))
             {
                 for (int i = 0; i < msgSize; i++)
                 {
@@ -733,7 +716,7 @@ namespace Steamworks
 
         public static void AcceptP2PSessionWithPlayer(SteamPlayer Player)
         {
-            NativeMethods.ISteamGameServerNetworking_AcceptP2PSessionWithUser(Player.m_handle);
+            SteamGameServerNetworking.AcceptP2PSessionWithUser(Player.m_handle);
         }
     }
 
@@ -758,7 +741,7 @@ namespace Steamworks
         public String Name()
         {
             InteropHelp.TestIfAvailableClient();
-            return InteropHelp.PtrToStringUTF8(NativeMethods.ISteamFriends_GetFriendPersonaName(m_handle));
+            return SteamFriends.GetFriendPersonaName(m_handle);
         }
     }
 
@@ -791,22 +774,17 @@ namespace Steamworks
             //    return false;
             //}
             // Request user stats.
-            return NativeMethods.ISteamUserStats_RequestCurrentStats();
+            return SteamUserStats.RequestCurrentStats();
         }
 
         public bool GiveAchievement(string AchievementApiName)
         {
-            //SteamUserStats().StoreStats();
-
-            using (var pchName2 = new InteropHelp.UTF8StringHandle(AchievementApiName))
-            {
-                return NativeMethods.ISteamUserStats_SetAchievement(pchName2);
-            }
+            return SteamUserStats.SetAchievement(AchievementApiName);
         }
 
         public int NumEntries(SteamLeaderboard_t hSteamLeaderboard)
         {
-            return NativeMethods.ISteamUserStats_GetLeaderboardEntryCount(hSteamLeaderboard);
+            return SteamUserStats.GetLeaderboardEntryCount(hSteamLeaderboard);
         }
 
         public int NumEntriesFound()
@@ -828,17 +806,14 @@ namespace Steamworks
             //    return;
             //}
 
-            using (var pchLeaderboardName2 = new InteropHelp.UTF8StringHandle(LeaderboardName))
-            {
-                SteamAPICall_t hSteamAPICall = (SteamAPICall_t)NativeMethods.ISteamUserStats_FindLeaderboard(pchLeaderboardName2);
-                SteamMatches.g_CallResultFindLeaderboard = new CallResult<LeaderboardFindResult_t>(CallbackClass.instance.OnFindLeaderboard);
-                SteamMatches.g_CallResultFindLeaderboard.Set(hSteamAPICall); //, SteamStats.g_CallbackClassInstance, CallbackClass.OnFindLeaderboard);
-            }
+            SteamAPICall_t hSteamAPICall = (SteamAPICall_t)SteamUserStats.FindLeaderboard(LeaderboardName);
+            SteamMatches.g_CallResultFindLeaderboard = new CallResult<LeaderboardFindResult_t>(CallbackClass.instance.OnFindLeaderboard);
+            SteamMatches.g_CallResultFindLeaderboard.Set(hSteamAPICall); //, SteamStats.g_CallbackClassInstance, CallbackClass.OnFindLeaderboard);
         }
 
         public void UploadScore(LeaderboardHandle Handle, int Value)
         {
-            SteamAPICall_t hSteamAPICall = (SteamAPICall_t)NativeMethods.ISteamUserStats_UploadLeaderboardScore(Handle.m_handle, ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodKeepBest, Value, null, 0);
+            SteamAPICall_t hSteamAPICall = (SteamAPICall_t)SteamUserStats.UploadLeaderboardScore(Handle.m_handle, ELeaderboardUploadScoreMethod.k_ELeaderboardUploadScoreMethodKeepBest, Value, null, 0);
         }
 
         public void RequestEntries(LeaderboardHandle Handle, int RequestType, int Start, int End, Action<bool> OnDownload)
@@ -846,7 +821,7 @@ namespace Steamworks
             s_OnDownload = OnDownload;
 
             // Request the specified leaderboard data.
-            SteamAPICall_t hSteamAPICall = (SteamAPICall_t)NativeMethods.ISteamUserStats_DownloadLeaderboardEntries(
+            SteamAPICall_t hSteamAPICall = (SteamAPICall_t)SteamUserStats.DownloadLeaderboardEntries(
                 Handle.m_handle, (ELeaderboardDataRequest)(RequestType), Start, End);
 
             // Register for the async callback
@@ -866,7 +841,7 @@ namespace Steamworks
 
         public string Results_GetPlayer(int Index)
         {
-            return InteropHelp.PtrToStringUTF8(NativeMethods.ISteamFriends_GetFriendPersonaName(m_leaderboardEntries[Index].m_steamIDUser));
+            return SteamFriends.GetFriendPersonaName(m_leaderboardEntries[Index].m_steamIDUser);
         }
 
         public int Results_GetId(int Index)
@@ -880,12 +855,12 @@ namespace Steamworks
         public static Action<bool> s_OnGamepadInputEnd;
         public string GetText()
         {
-            uint cchText = NativeMethods.ISteamUtils_GetEnteredGamepadTextLength();
-            IntPtr pchText = new IntPtr();
+            uint cchText = SteamUtils.GetEnteredGamepadTextLength();
 
-            NativeMethods.ISteamUtils_GetEnteredGamepadTextInput(pchText, cchText);
+            string pchText;
+            SteamUtils.GetEnteredGamepadTextInput(out pchText, cchText);
 
-            return pchText.ToString();
+            return pchText;
         }
 
         public bool ShowGamepadTextInput(string Description, string InitialText, uint MaxCharacters, Action<bool> OnGamepadInputEnd)
@@ -902,7 +877,7 @@ namespace Steamworks
             using (var pchInitialText = new InteropHelp.UTF8StringHandle(InitialText))
             {
                 bool val = false; // delete this line after the REMOVE is taken out
-                                  //REMOVE//bool val = NativeMethods.ISteamGameServerUtils_ShowGamepadTextInput(EGamepadTextInputMode.k_EGamepadTextInputModeNormal, EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine, pchDescription, unCharMax, pchInitialText);
+                                  //REMOVE//bool val = SteamGameServerUtils_ShowGamepadTextInput(EGamepadTextInputMode.k_EGamepadTextInputModeNormal, EGamepadTextInputLineMode.k_EGamepadTextInputLineModeSingleLine, pchDescription, unCharMax, pchInitialText);
 
                 return val;
             }

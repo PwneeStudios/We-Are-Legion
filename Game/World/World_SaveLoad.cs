@@ -349,7 +349,7 @@ namespace Game
         {
             lock (DataGroup)
             {
-                Render.UnsetDevice();
+                //Render.UnsetDevice();
 
                 var stream = new FileStream(FileName, FileMode.Open);
                 var reader = new BinaryReader(stream);
@@ -364,6 +364,7 @@ namespace Game
                     Startup();
                 }
             }
+
             //Migrate();
         }
 

@@ -180,7 +180,7 @@ namespace Game
                     int member_count = SteamMatches.GetLobbyMemberCount(i);
                     int capacity = SteamMatches.GetLobbyCapacity(i);
 
-                    Console.WriteLine("lobby {0} name: {1} members: {2}/{3}", i, lobby_name, member_count, capacity);
+                    // Console.WriteLine("lobby {0} name: {1} members: {2}/{3}", i, lobby_name, member_count, capacity);
 
                     if (capacity <= 0) continue;
 
