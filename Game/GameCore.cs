@@ -1,8 +1,6 @@
 using System;
 using System.IO;
 
-using Windows = System.Windows.Forms;
-
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -154,8 +152,8 @@ namespace Game
         {
             if (!DoWinFormSetting) return;
 
-            Form.MinimizeBox = false;
-            Form.MaximizeBox = false;
+            //Form.MinimizeBox = false;
+            //Form.MaximizeBox = false;
         }
 
         private void EnsureFormPosition()
@@ -164,7 +162,7 @@ namespace Game
 
             if (Program.PosX >= 0 && Program.PosY >= 0)
             {
-                Form.Location = new System.Drawing.Point(Program.PosX - 14, Program.PosY);
+                //Form.Location = new System.Drawing.Point(Program.PosX - 14, Program.PosY);
             }
         }
 
@@ -172,43 +170,43 @@ namespace Game
         {
             if (!DoWinFormSetting) return;
 
-            Form.TopMost = true;
+            //Form.TopMost = true;
         }
 
         private void SetFormWindowed()
         {
             if (!DoWinFormSetting) return;
 
-            Form.TopMost = true;
-            Form.FormBorderStyle = Windows.FormBorderStyle.FixedSingle;
+            //Form.TopMost = true;
+            //Form.FormBorderStyle = Windows.FormBorderStyle.FixedSingle;
         }
 
         private void SetFormFullscreen()
         {
             if (!DoWinFormSetting) return;
 
-            Control.Location = new System.Drawing.Point(0, 0);
-            Form.TopMost = true;
-            Form.FormBorderStyle = Windows.FormBorderStyle.None;
+            //Control.Location = new System.Drawing.Point(0, 0);
+            //Form.TopMost = true;
+            //Form.FormBorderStyle = Windows.FormBorderStyle.None;
         }
 
         private void CycleFormTopMost()
         {
             if (!DoWinFormSetting) return;
 
-            Form.TopMost = true;
-            Form.TopMost = false;
+            //Form.TopMost = true;
+            //Form.TopMost = false;
         }
 
         private void EnsureFormPos()
         {
             if (!DoWinFormSetting) return;
 
-            if (DrawCount % 100 == 0 && CurrentConfig.Fullscreen && (Form.Location.X < 0 || Form.Location.Y < 0))
-            {
-                Console.WriteLine("Form is outside bounds of monitor, moving form now. Draw count {0}", DrawCount);
-                Form.Location = new System.Drawing.Point(0, 0);
-            }
+            //if (DrawCount % 100 == 0 && CurrentConfig.Fullscreen && (Form.Location.X < 0 || Form.Location.Y < 0))
+            //{
+            //    Console.WriteLine("Form is outside bounds of monitor, moving form now. Draw count {0}", DrawCount);
+            //    Form.Location = new System.Drawing.Point(0, 0);
+            //}
         }
 
 #if DEBUG
@@ -357,23 +355,30 @@ namespace Game
             ActivateFakeFullScreen = true;
         }
 
-        Windows.Control Control
-        {
-            get
-            {
-                IntPtr hWnd = Window.Handle;
-                var control = Windows.Control.FromHandle(hWnd);
-                return control;
-            }
-        }
+        // Use these to grab the Control and Form for the XNA window.
+        // This is needed on vanilla XNA on Windows in order to
+        // manipulate the window to allow it to be always on top.
+        // This is unfortunately necessary because when the app
+        // loses top level focus the GPU can lose context and the
+        // entire game state is lost. This doesn't seem to be a 
+        // problem with FNA.
+        //Windows.Control Control
+        //{
+        //    get
+        //    {
+        //        IntPtr hWnd = Window.Handle;
+        //        var control = Windows.Control.FromHandle(hWnd);
+        //        return control;
+        //    }
+        //}
 
-        Windows.Form Form
-        {
-            get
-            {
-                return Control.FindForm();
-            }
-        }
+        //Windows.Form Form
+        //{
+        //    get
+        //    {
+        //        return Control.FindForm();
+        //    }
+        //}
 
         void ApplyConfigToForm()
         {

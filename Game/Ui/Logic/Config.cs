@@ -1,7 +1,5 @@
 using System.IO;
 
-using Windows = System.Windows.Forms;
-
 using Newtonsoft.Json;
 using Awesomium.Core;
 
@@ -88,16 +86,14 @@ namespace Game
             {
                 ApplyConfigToForm();
 
-                var s = Windows.Screen.FromControl(Control).Bounds;
-                graphics.PreferredBackBufferWidth = s.Width;
-                graphics.PreferredBackBufferHeight = s.Height;
-
+                graphics.IsFullScreen = true;
                 graphics.ApplyChanges();
             }
             else
             {
                 ApplyConfigToForm();
 
+                graphics.IsFullScreen = false;
                 graphics.PreferredBackBufferWidth = CurrentConfig.Width;
                 graphics.PreferredBackBufferHeight = CurrentConfig.Height;
                 graphics.ApplyChanges();
