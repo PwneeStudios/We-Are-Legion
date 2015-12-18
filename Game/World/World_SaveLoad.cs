@@ -4,9 +4,6 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
-using Hjg.Pngcs;
-using Hjg.Pngcs.Chunks;
-
 using Microsoft.Xna.Framework.Graphics;
 
 using FragSharpFramework;
@@ -82,57 +79,6 @@ namespace Game
                 bitmap.UnlockBits(bitmapData);
                 bitmap.Save(stream, ImageFormat.Png);
             }
-        }
-
-        public static Texture2D _FromPng(Stream stream, Texture2D texture = null)
-        {
-            var pngr = new PngReader(stream);
-
-            var ms = new MemoryStream();
-            var pngw = new PngWriter(ms, pngr.ImgInfo);
-
-            Console.WriteLine(pngr.ToString());                // Just information.
-            int chunkBehav = ChunkCopyBehaviour.COPY_ALL_SAFE; // Tell to copy all 'safe' chunks.
-            pngw.CopyChunksFirst(pngr, chunkBehav);            // Copy some metadata from reader.
-
-            int channels = pngr.ImgInfo.Channels;
-            int w = pngr.ImgInfo.Cols;
-            int h = pngr.ImgInfo.Rows;
-            var bytes = new byte[w * h * channels];
-
-            int count = 0;
-            for (int row = 0; row < pngr.ImgInfo.Rows; row++)
-            {
-                ImageLine l1 = pngr.ReadRowInt(row);           // Format: RGBRGB... or RGBARGBA...
-                for (int j = 0; j < pngr.ImgInfo.Cols; j++)
-                {
-                    byte R = (byte)l1.Scanline[j * channels];
-                    byte G = (byte)l1.Scanline[j * channels + 1];
-                    byte B = (byte)l1.Scanline[j * channels + 2];
-                    byte A = (byte)l1.Scanline[j * channels + 3];
-
-                    bytes[count++] = B;
-                    bytes[count++] = G;
-                    bytes[count++] = R;
-                    bytes[count++] = A;
-
-                    //Console.WriteLine("Pixel value: {0} {1} {2} {3}");
-                }
-
-                pngw.WriteRow(l1, row);
-            }
-
-            pngw.End();
-            ms.Close();
-            pngr.End();
-
-            if (texture == null) {
-                texture = new Texture2D(GameClass.Graphics, w, h);
-            }
-            
-            texture.SetData(bytes);
-
-            return texture;
         }
 
         public static Texture2D FromPng(Stream stream, Texture2D texture = null)
