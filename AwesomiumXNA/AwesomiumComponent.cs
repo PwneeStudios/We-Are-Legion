@@ -53,7 +53,6 @@ namespace AwesomiumXNA
     {
         private delegate Int32 ProcessMessagesDelegate(Int32 code, Int32 wParam, ref Message lParam);
 
-        // I might be able to scrap these two message things once I'm done moving to mac
         private enum WindowsMessage
         {
             KeyDown = 0x0100,
@@ -123,19 +122,6 @@ namespace AwesomiumXNA
 
             this.spriteBatch = new SpriteBatch(game.GraphicsDevice);
 
-            /*Thread awesomiumThread = new System.Threading.Thread(new System.Threading.ThreadStart(() =>
-            {
-                WebCore.Started += (s, e) => {
-                    awesomiumContext = SynchronizationContext.Current;
-                    awesomiumReady.Set();
-                };
-
-                WebCore.Run();
-            }));
-
-            awesomiumThread.Start();
-*/
-
             if (!WebCore.IsInitialized)
             {
                 WebCore.Initialize(new WebConfig() { });
@@ -145,19 +131,12 @@ namespace AwesomiumXNA
             int h = area.Height;
             Console.WriteLine(area);
 
-            //awesomiumReady.WaitOne();
-
-            //WebCore.QueueWork(() =>
-            //{
             WebView = WebCore.CreateWebView(w, h);
-            //this.WebView = WebCore.CreateWebView(this.area.Width, this.area.Height);
-            // this.WebView = WebCore.CreateWebView(this.area.Width, this.area.Height, WebViewType.Offscreen);
 
             // WebView doesn't seem to listen when I say this
-            //WebView.SelfUpdate = true;
+            // WebView.SelfUpdate = true;
             // So I have to say this:
-            WebCore.AutoUpdatePeriod = 10000000;   // TEEENN MIILLLIOON
-                                                   //WebCore.AutoUpdatePeriod = 20;   // TEEENN MIILLLIOON
+            WebCore.AutoUpdatePeriod = 10000000;
 
             this.WebView.IsTransparent = true;
             this.WebView.CreateSurface += (s, e) =>
@@ -165,7 +144,6 @@ namespace AwesomiumXNA
                 this.Surface = new BitmapSurface(this.area.Width, this.area.Height);
                 e.Surface = this.Surface;
             };
-            //});
         }
 
         public Texture2D WebViewTexture { get; private set; }
@@ -192,10 +170,7 @@ namespace AwesomiumXNA
 
         public void SetResourceInterceptor(IResourceInterceptor interceptor)
         {
-            //awesomiumContext.Post(state =>
-            //{
             WebCore.ResourceInterceptor = interceptor;
-            //}, null);
         }
 
         public void Execute(string method, params object[] args)
@@ -320,20 +295,17 @@ namespace AwesomiumXNA
             base.Update(gameTime);
         }
 
-        public override void Draw(GameTime gameTime)
+        public unsafe override void Draw(GameTime gameTime)
         {
-            if (Surface != null && Surface.IsDirty && !resizing)
-            {
-                unsafe
-                {
-                    // This part saves us from double copying everything.
-                    fixed (Byte* imagePtr = this.imageBytes)
-                    {
-                        Surface.CopyTo((IntPtr)imagePtr, Surface.Width * 4, 4, true, false);
-                    }
-                }
-                this.WebViewTexture.SetData(this.imageBytes);
-            }
+            //if (WebCore.IsInitialized && Surface != null && Surface.IsDirty)
+            //{
+            //    fixed (Byte* imagePtr = imageBytes)
+            //    {
+            //        Surface.CopyTo((IntPtr)imagePtr, Surface.Width * 4, 4, false, false);
+            //    }
+
+            //    WebViewTexture.SetData(imageBytes);
+            //}
 
             base.Draw(gameTime);
         }

@@ -69,9 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AwesomiumComponent.cs" />
-    <Compile Include="AwesomiumSharpExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TextureConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\FNA\FNA.csproj">
