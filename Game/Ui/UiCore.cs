@@ -49,17 +49,15 @@ namespace Game
 
         void AwesomiumInitialize()
         {
+            return;
+
             if (awesomium != null)
             {
                 Components.Remove(awesomium);
-                //awesomium.Release();
                 awesomium.Dispose();
             }
 
             awesomium = new AwesomiumComponent(this, new Rectangle(0, 0, Program.Width, Program.Height));
-            //awesomium = new AwesomiumComponent (this, GraphicsDevice.Viewport.Bounds);
-
-            //awesomium.WebView.ParentWindow = Window.Handle;
 
             // Don't forget to add the awesomium component to the game
             Components.Add(awesomium);
@@ -143,7 +141,7 @@ namespace Game
 
         private void DrawWebView()
         {
-            if (awesomium.WebViewTexture != null)
+            if (awesomium != null && awesomium.WebViewTexture != null)
             {
                 Render.StartText();
                 Render.MySpriteBatch.Draw(awesomium.WebViewTexture, GraphicsDevice.Viewport.Bounds, Color.White);
@@ -156,7 +154,7 @@ namespace Game
         {
             if (!GameInputEnabled)
             {
-                awesomium.AllowMouseEvents = true;
+                if (awesomium != null) awesomium.AllowMouseEvents = true;
                 MouseOverHud = true;
                 MouseDownOverUi = true;
                 return;
@@ -164,11 +162,11 @@ namespace Game
 
             if (World != null && World.BoxSelecting)
             {
-                awesomium.AllowMouseEvents = false;
+                if (awesomium != null) awesomium.AllowMouseEvents = false;
             }
             else
             {
-                awesomium.AllowMouseEvents = true;
+                if (awesomium != null) awesomium.AllowMouseEvents = true;
             }
 
             if (!Input.LeftMouseDown || !MouseOverHud)
@@ -181,7 +179,7 @@ namespace Game
                 try
                 {
                     Render.UnsetDevice();
-                    MouseDownOverUi = awesomium.WebViewTexture.GetData(Input.CurMousePos).A > 20;
+                    if (awesomium != null) MouseDownOverUi = awesomium.WebViewTexture.GetData(Input.CurMousePos).A > 20;
                 }
                 catch
                 {
@@ -214,17 +212,21 @@ namespace Game
                 first = false;
             }
 
-            WebCore.QueueWork(() => {
-                try
+            if (awesomium != null)
+            {
+                WebCore.QueueWork(() =>
                 {
-                    awesomium.WebView.ExecuteJavascript(function + "(" + s + ");");
-                    //var result = awesomium.WebView.ExecuteJavascriptWithResult(function + "(" + s + ");");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Could not communicate with Awesomium, {0}({1}): {2}", function, s, e);
-                }
-            });
+                    try
+                    {
+                        awesomium.WebView.ExecuteJavascript(function + "(" + s + ");");
+                        //var result = awesomium.WebView.ExecuteJavascriptWithResult(function + "(" + s + ");");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("Could not communicate with Awesomium, {0}({1}): {2}", function, s, e);
+                    }
+                });
+            }
         }
     }
 }

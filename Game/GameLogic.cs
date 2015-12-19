@@ -23,8 +23,8 @@ namespace Game
 
 #if DEBUG
         //GameState State = GameState.ToEditor;
-        //GameState State = GameState.ToMap;
-        GameState State = GameState.TitleScreen;
+        GameState State = GameState.ToMap;
+        //GameState State = GameState.TitleScreen;
 #else
         GameState State = GameState.TitleScreen;
 #endif
@@ -107,7 +107,7 @@ namespace Game
                     AmbientSounds.EndAll();
 
                     // No mouse input to Awesomium
-                    awesomium.AllowMouseEvents = false;
+                    if (awesomium != null) awesomium.AllowMouseEvents = false;
 
                     Render.StandardRenderSetup();
 
@@ -143,7 +143,7 @@ namespace Game
 
                     if (!InputHelper.SomethingDown())
                     {
-                        awesomium.AllowMouseEvents = true;
+                        if (awesomium != null) awesomium.AllowMouseEvents = true;
                     }
 
                     if (_MapLoading != MapLoading)
@@ -267,7 +267,7 @@ namespace Game
                 case GameState.Game:
                     StartGameMusicIfNeeded();
 
-                    if (awesomium.WebViewTexture != null)
+                    if (awesomium != null && awesomium.WebViewTexture != null)
                     {
                         CalculateMouseDownOverUi();
                     }

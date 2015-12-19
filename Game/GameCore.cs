@@ -446,7 +446,6 @@ namespace Game
             // Check if window is off center and recenter if necessary.
             EnsureFormPos();
 
-            //_Draw(gameTime);
             try
             {
                 _Draw(gameTime);

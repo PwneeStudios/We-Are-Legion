@@ -37,7 +37,7 @@ namespace Game
             Send("setMode", "main-menu");
 
             State = GameState.MainMenu;
-            awesomium.AllowMouseEvents = true;
+            if (awesomium != null) awesomium.AllowMouseEvents = true;
             
             SetMapThreadFunc(GameMapName);
 
@@ -90,7 +90,7 @@ namespace Game
             Send("setScreen", "game-menu");
 
             State = GameState.MainMenu;
-            awesomium.AllowMouseEvents = true;
+            if (awesomium != null) awesomium.AllowMouseEvents = true;
         }
 
         JSValue QuitApp(object sender, JavascriptMethodEventArgs e)
