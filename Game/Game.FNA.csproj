@@ -212,6 +212,10 @@
       <XnaReferenceType>Content</XnaReferenceType>
       <Project>{3B7C433E-A48C-4456-ACAE-C63EC83E631C}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Hjg.Pngcs\Hjg.Pngcs.csproj">
+      <Project>{fd3b0d50-46b3-4a83-9a6d-c641569142cf}</Project>
+      <Name>Hjg.Pngcs</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6,Profile=Client">
