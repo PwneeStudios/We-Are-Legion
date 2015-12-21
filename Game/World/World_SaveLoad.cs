@@ -40,7 +40,7 @@ namespace Game
             reader.Read(b, 0, length);
 
             var mstream = new MemoryStream(b);
-            Png.__FromPng(mstream, texture);
+            Png.FromPng(mstream, texture);
             mstream.Close();
 
             return texture;
@@ -74,11 +74,6 @@ namespace Game
             var pngr = new PngReader(stream);
 
             var ms = new MemoryStream();
-            var pngw = new PngWriter(ms, pngr.ImgInfo);
-
-            Console.WriteLine(pngr.ToString());                // Just information.
-            int chunkBehav = ChunkCopyBehaviour.COPY_ALL_SAFE; // Tell to copy all 'safe' chunks.
-            pngw.CopyChunksFirst(pngr, chunkBehav);            // Copy some metadata from reader.
 
             int channels = pngr.ImgInfo.Channels;
             int w = pngr.ImgInfo.Cols;
@@ -100,14 +95,9 @@ namespace Game
                     bytes[count++] = G;
                     bytes[count++] = R;
                     bytes[count++] = A;
-
-                    //Console.WriteLine("Pixel value: {0} {1} {2} {3}");
                 }
-
-                pngw.WriteRow(l1, row);
             }
 
-            pngw.End();
             ms.Close();
             pngr.End();
 
