@@ -1,10 +1,113 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 using Steamworks;
 
+using Microsoft.Xna.Framework.Graphics;
+
 namespace SteamWrapper
 {
+    public class SteamHtml
+    {
+        public static HHTMLBrowser Browser;
+        public static Texture2D Texture;
+        static byte[] pixels;
+
+        static CallResult<HTML_BrowserReady_t> g_CallResultBrowserReady;
+
+        static Callback<HTML_CloseBrowser_t> Event_CloseBrowser;
+        static Callback<HTML_NeedsPaint_t> Event_NeedsPaint;
+        static Callback<HTML_StartRequest_t> Event_StartRequest;
+        static Callback<HTML_FinishedRequest_t> Event_FinishedRequest;
+
+        public static void Initialize()
+        {
+            return;
+
+            bool result = SteamHTMLSurface.Init();
+
+            SteamHTMLSurface.SetSize(HHTMLBrowser.Invalid, 1280, 720);
+            Texture = new Texture2D(Game.GameClass.Graphics, 1280, 720);
+            pixels = new byte[1280 * 720 * 4];
+
+            var hSteamAPICall = SteamHTMLSurface.CreateBrowser("WAL", null);
+            g_CallResultBrowserReady = new CallResult<HTML_BrowserReady_t>(OnBrowserReady);
+            g_CallResultBrowserReady.Set(hSteamAPICall);
+
+            Event_CloseBrowser = new Callback<HTML_CloseBrowser_t>(OnCloseBrowser);
+            Event_StartRequest = new Callback<HTML_StartRequest_t>(OnStartRequest);
+            Event_FinishedRequest = new Callback<HTML_FinishedRequest_t>(OnFinishedRequest);
+            Event_NeedsPaint = new Callback<HTML_NeedsPaint_t>(OnNeedsPaint);
+        }
+
+        public static void OnBrowserReady(HTML_BrowserReady_t pBrowserReady, bool bIOFailure)
+        {
+            if (bIOFailure) return;
+
+            Browser = pBrowserReady.unBrowserHandle;
+            SteamHTMLSurface.SetSize(Browser, 1280, 720);
+
+            var data = "http://steamcommunity.com/";
+#if DEBUG
+            //var data = "file://" + Environment.CurrentDirectory + @"/../../../html/index.html";
+            //var data = "file://" + Environment.CurrentDirectory + @"/html/index.html";
+#else
+            var data = "file://" + Environment.CurrentDirectory + @"/html/index.html";
+#endif
+
+            SteamHTMLSurface.LoadURL(Browser, data, null);
+        }
+
+        public static void OnCloseBrowser(HTML_CloseBrowser_t pParam)
+        {
+            Browser = HHTMLBrowser.Invalid;
+        }
+
+        public static void OnNeedsPaint(HTML_NeedsPaint_t pParam)
+        {
+            Console.WriteLine("Browser needs painting.");
+
+            if (pParam.unWide != 1280)
+            {
+                Console.WriteLine("bad texture width for html\n");
+                return;
+            }
+
+            if (pParam.unTall != 720)
+            {
+                Console.WriteLine("bad texture height for html\n");
+                return;
+            }
+            return;
+
+            Marshal.Copy(pParam.pBGRA, pixels, 0, pixels.Length);
+            for (int i = 0; i < pixels.Length; i += 4)
+            {
+                if (pixels[i] == 0 && pixels[i + 1] == 0 && pixels[i + 2] == 0)
+                {
+                    pixels[i + 3] = 0;
+                }
+            }
+            Texture.SetData(pixels);
+        }
+
+        public static void OnStartRequest(HTML_StartRequest_t pParam)
+        {
+            Console.WriteLine("Browser request initiated.");
+
+            SteamHTMLSurface.AllowStartRequest(Browser, true);
+        }
+
+        public static void OnFinishedRequest(HTML_FinishedRequest_t pParam)
+        {
+            Console.WriteLine("Browser request finished.");
+
+            // Uncomment this if you want to scale a pages contents when you display it
+            //SteamHTMLSurface()->SetPageScaleFactor( m_unBrowserHandle, 2.0, 0, 0 );
+        }
+    }
+
     public class CallbackClass
     {
         public static CallbackClass instance = new CallbackClass();
@@ -120,14 +223,6 @@ namespace SteamWrapper
 
             SteamMatches.s_OnCreateLobby.Invoke(bIOFailure);
         }
-
-
-        //public STEAM_CALLBACK(CallbackClass, OnChatMsg, LobbyChatMsg_t, m_OnChatMsg)
-        //{
-        //    //
-        //}
-
-        // There are like a dozen more STEAM_CALLBACK things
     }
 
     public struct LeaderboardHandle
@@ -302,12 +397,11 @@ namespace SteamWrapper
             s_nLobbiesFound = 0;
             s_nFriendLobbiesFound = 0;
 
-            //if ( SteamMatchmaking() == 0 ) return;
             InteropHelp.TestIfAvailableClient();
 
             var hSteamAPICall = SteamMatchmaking.RequestLobbyList();
             g_CallResultLobbyMatchList = new CallResult<LobbyMatchList_t>(CallbackClass.instance.OnFindLobbies);
-            g_CallResultLobbyMatchList.Set(hSteamAPICall); //( hSteamAPICall, SteamStats.g_CallbackClassInstance, CallbackClass.OnFindLobbies );
+            g_CallResultLobbyMatchList.Set(hSteamAPICall);
         }
 
         public static void FindFriendLobbies(Action<bool> OnFind)

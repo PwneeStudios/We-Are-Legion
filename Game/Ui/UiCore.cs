@@ -49,6 +49,7 @@ namespace Game
 
         void AwesomiumInitialize()
         {
+            SteamWrapper.SteamHtml.Initialize();
             return;
 
             if (awesomium != null)
@@ -141,10 +142,11 @@ namespace Game
 
         private void DrawWebView()
         {
-            if (awesomium != null && awesomium.WebViewTexture != null)
+            //if (awesomium != null && awesomium.WebViewTexture != null)
             {
                 Render.StartText();
-                Render.MySpriteBatch.Draw(awesomium.WebViewTexture, GraphicsDevice.Viewport.Bounds, Color.White);
+                //Render.MySpriteBatch.Draw(awesomium.WebViewTexture, GraphicsDevice.Viewport.Bounds, Color.White);
+                Render.MySpriteBatch.Draw(SteamWrapper.SteamHtml.Texture, GraphicsDevice.Viewport.Bounds, Color.White);
                 Render.EndText();
             }
         }
