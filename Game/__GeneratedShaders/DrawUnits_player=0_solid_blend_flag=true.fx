@@ -174,19 +174,19 @@ float4 Game__SelectedUnitColor__Get__Single(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(1-0.25,-0.25+ 1 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(1, 1 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.007843138) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(1-0.25,-0.25+ 2 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(1, 2 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01176471) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(1-0.25,-0.25+ 3 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(1, 3 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01568628) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(1-0.25,-0.25+ 4 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(1, 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
@@ -267,19 +267,19 @@ float4 Game__UnitColor__Get__Single(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(0-0.25,-0.25+ 1 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(0, 1 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.007843138) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(0-0.25,-0.25+ 2 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(0, 2 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01176471) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(0-0.25,-0.25+ 3 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(0, 3 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01568628) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(0-0.25,-0.25+ 4 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(0, 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }

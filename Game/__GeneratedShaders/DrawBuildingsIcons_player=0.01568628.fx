@@ -119,19 +119,19 @@ float4 Game__SelectedUnitColor__Get__Single(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(1-0.25,-0.25+ 1 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(1, 1 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.007843138) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(1-0.25,-0.25+ 2 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(1, 2 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01176471) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(1-0.25,-0.25+ 3 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(1, 3 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01568628) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(1-0.25,-0.25+ 4 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(1, 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }
@@ -163,7 +163,7 @@ float Game__UnitType__BuildingIndex__Single(float type)
 
 float4 Game__BuildingMarkerColors__Get__Single__Single(VertexToPixel psin, float player, float type)
 {
-    return tex2D(fs_param_FarColor, float2(3 + FragSharpFramework__FragSharpStd__Int__Single(Game__UnitType__BuildingIndex__Single(type))-0.25,-0.25+ FragSharpFramework__FragSharpStd__Int__Single(player)) * fs_param_FarColor_dxdy);
+    return tex2D(fs_param_FarColor, float2(3 + FragSharpFramework__FragSharpStd__Int__Single(Game__UnitType__BuildingIndex__Single(type)), FragSharpFramework__FragSharpStd__Int__Single(player)) * fs_param_FarColor_dxdy);
 }
 
 // Compiled vertex shader

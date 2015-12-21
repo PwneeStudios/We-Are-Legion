@@ -67,19 +67,19 @@ float4 Game__TerritoryColor__Get__Single(VertexToPixel psin, float player)
 {
     if (abs(player - 0.003921569) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(2-0.25,-0.25+ 1 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(2, 1 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.007843138) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(2-0.25,-0.25+ 2 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(2, 2 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01176471) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(2-0.25,-0.25+ 3 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(2, 3 + (int)player) * fs_param_FarColor_dxdy);
     }
     if (abs(player - 0.01568628) < .0019)
     {
-        return tex2D(fs_param_FarColor, float2(2-0.25,-0.25+ 4 + (int)player) * fs_param_FarColor_dxdy);
+        return tex2D(fs_param_FarColor, float2(2, 4 + (int)player) * fs_param_FarColor_dxdy);
     }
     return float4(0.0, 0.0, 0.0, 0.0);
 }

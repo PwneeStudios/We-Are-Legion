@@ -105,7 +105,7 @@ float4 Game__DrawTiles__Sprite__tile__vec2__PointSampler__Boolean__Single(Vertex
     clr = tex2D(Texture, pos);
     if (solid_blend_flag)
     {
-        float4 solid_clr = tex2D(fs_param_FarColor, float2(FragSharpFramework__FragSharpStd__Int__Single(c.r)-0.25,-0.25+ 6 + (int)(c.r)) * fs_param_FarColor_dxdy);
+        float4 solid_clr = tex2D(fs_param_FarColor, float2(FragSharpFramework__FragSharpStd__Int__Single(c.r), 6 + (int)(c.r)) * fs_param_FarColor_dxdy);
         clr = solid_blend * clr + (1 - solid_blend) * solid_clr;
     }
     return clr;
