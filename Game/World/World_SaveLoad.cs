@@ -69,6 +69,11 @@ namespace Game
             }
         }
 
+        public static void _ToPng(Texture2D texture, Stream stream)
+        {
+            texture.SaveAsPng(stream, texture.Width, texture.Height);
+        }
+
         public static Texture2D FromPng(Stream stream, Texture2D texture = null)
         {
             var pngr = new PngReader(stream);
