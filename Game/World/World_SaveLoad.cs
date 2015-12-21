@@ -32,7 +32,7 @@ namespace Game
 
     public static class BinaryReaderExtension
     {
-        public static Texture2D ReadTextureData(this BinaryReader reader, Texture2D texture)
+        public static Texture2D ReadTextureData(this BinaryReader reader, Texture2D texture = null)
         {
             int length = reader.ReadInt32();
             Console.WriteLine("Array read size is {0}", length);
@@ -40,24 +40,9 @@ namespace Game
             reader.Read(b, 0, length);
 
             var mstream = new MemoryStream(b);
-            Png.FromPng(mstream, texture);
+            Png.__FromPng(mstream, texture);
             mstream.Close();
 
-            return texture;
-        }
-
-        public static Texture2D ReadTexture2D(this BinaryReader reader)
-        {
-            int length = reader.ReadInt32();
-            Console.WriteLine("Array read size is {0}", length);
-            byte[] b = new byte[length];
-            reader.Read(b, 0, length);
-
-            var mstream = new MemoryStream(b);
-            var texture = Png.FromPng(mstream);
-            
-            mstream.Close();
-            
             return texture;
         }
     }
@@ -84,7 +69,7 @@ namespace Game
             }
         }
 
-        public static Texture2D _FromPng(Stream stream, Texture2D texture = null)
+        public static Texture2D FromPng(Stream stream, Texture2D texture = null)
         {
             var pngr = new PngReader(stream);
 
@@ -135,7 +120,7 @@ namespace Game
             return texture;
         }
 
-        public static Texture2D FromPng(Stream stream, Texture2D texture = null)
+        public static Texture2D _FromPng(Stream stream, Texture2D texture = null)
         {
             using (Bitmap bitmap = new Bitmap(stream))
             {
@@ -158,6 +143,16 @@ namespace Game
                 texture.SetData(textureData);
                 return texture;
             }
+        }
+
+        public static Texture2D __FromPng(Stream stream, Texture2D texture = null)
+        {
+            var loadedTexture = Texture2D.FromStream(GameClass.Graphics, stream);
+
+            if (texture == null) return loadedTexture;
+
+            texture.SetData(loadedTexture.GetData());
+            return texture;
         }
     }
 
@@ -403,11 +398,11 @@ namespace Game
         public void LoadCurrentState(BinaryReader reader)
         {
             // Grid data
-            DataGroup.CurrentData.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.CurrentUnits.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.Extra.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.TargetData.SetData(reader.ReadTexture2D().GetData());
-            DataGroup.Corpses.SetData(reader.ReadTexture2D().GetData());
+            reader.ReadTextureData(DataGroup.CurrentData);
+            reader.ReadTextureData(DataGroup.CurrentUnits);
+            reader.ReadTextureData(DataGroup.Extra);
+            reader.ReadTextureData(DataGroup.TargetData);
+            reader.ReadTextureData(DataGroup.Corpses);
 
             // Info
             for (int i = 1; i <= 4; i++) PlayerInfo[i].Read(reader);
