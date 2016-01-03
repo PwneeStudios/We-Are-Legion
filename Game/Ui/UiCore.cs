@@ -142,10 +142,9 @@ namespace Game
 
         private void DrawWebView()
         {
-            //if (awesomium != null && awesomium.WebViewTexture != null)
+            if (SteamWrapper.SteamHtml.Texture != null)
             {
                 Render.StartText();
-                //Render.MySpriteBatch.Draw(awesomium.WebViewTexture, GraphicsDevice.Viewport.Bounds, Color.White);
                 Render.MySpriteBatch.Draw(SteamWrapper.SteamHtml.Texture, GraphicsDevice.Viewport.Bounds, Color.White);
                 Render.EndText();
             }

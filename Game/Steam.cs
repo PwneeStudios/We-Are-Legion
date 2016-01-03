@@ -23,8 +23,6 @@ namespace SteamWrapper
 
         public static void Initialize()
         {
-            return;
-
             bool result = SteamHTMLSurface.Init();
 
             SteamHTMLSurface.SetSize(HHTMLBrowser.Invalid, 1280, 720);
@@ -79,8 +77,7 @@ namespace SteamWrapper
                 Console.WriteLine("bad texture height for html\n");
                 return;
             }
-            return;
-
+            
             Marshal.Copy(pParam.pBGRA, pixels, 0, pixels.Length);
             for (int i = 0; i < pixels.Length; i += 4)
             {
