@@ -471,6 +471,7 @@ namespace Game
             if (SteamAvailable)
             {
                 SteamCore.Update();
+                SteamHtml.Update();
             }
 
             GameClass.Time = gameTime;

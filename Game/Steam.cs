@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using Steamworks;
 
 using Microsoft.Xna.Framework.Graphics;
+using FragSharpHelper;
 
 namespace SteamWrapper
 {
@@ -39,6 +40,16 @@ namespace SteamWrapper
             Event_NeedsPaint = new Callback<HTML_NeedsPaint_t>(OnNeedsPaint);
         }
 
+        public static void Update()
+        {
+            if (Browser == null) return;
+
+            if (Input.LeftMousePressed) SteamHTMLSurface.MouseDown(Browser, EHTMLMouseButton.eHTMLMouseButton_Left);
+            if (Input.LeftMouseReleased) SteamHTMLSurface.MouseUp(Browser, EHTMLMouseButton.eHTMLMouseButton_Left);
+
+            SteamHTMLSurface.MouseMove(Browser, (int)Input.CurMousePos.x, (int)Input.CurMousePos.y);
+        }
+
         public static void OnBrowserReady(HTML_BrowserReady_t pBrowserReady, bool bIOFailure)
         {
             if (bIOFailure) return;
@@ -46,13 +57,7 @@ namespace SteamWrapper
             Browser = pBrowserReady.unBrowserHandle;
             SteamHTMLSurface.SetSize(Browser, 1280, 720);
 
-            var data = "http://steamcommunity.com/";
-#if DEBUG
-            //var data = "file://" + Environment.CurrentDirectory + @"/../../../html/index.html";
-            //var data = "file://" + Environment.CurrentDirectory + @"/html/index.html";
-#else
             var data = "file://" + Environment.CurrentDirectory + @"/html/index.html";
-#endif
 
             SteamHTMLSurface.LoadURL(Browser, data, null);
         }
