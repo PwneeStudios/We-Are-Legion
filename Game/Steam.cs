@@ -21,6 +21,7 @@ namespace SteamWrapper
         static Callback<HTML_NeedsPaint_t> Event_NeedsPaint;
         static Callback<HTML_StartRequest_t> Event_StartRequest;
         static Callback<HTML_FinishedRequest_t> Event_FinishedRequest;
+        static Callback<HTML_URLChanged_t> Event_URLChanged;
 
         public static void Initialize()
         {
@@ -38,6 +39,7 @@ namespace SteamWrapper
             Event_StartRequest = new Callback<HTML_StartRequest_t>(OnStartRequest);
             Event_FinishedRequest = new Callback<HTML_FinishedRequest_t>(OnFinishedRequest);
             Event_NeedsPaint = new Callback<HTML_NeedsPaint_t>(OnNeedsPaint);
+            Event_URLChanged = new Callback<HTML_URLChanged_t>(OnURLChange);
         }
 
         public static void Update()
@@ -92,6 +94,16 @@ namespace SteamWrapper
                 }
             }
             Texture.SetData(pixels);
+        }
+
+        public static void OnURLChange(HTML_URLChanged_t pParam)
+        {
+            Game.SoundWad.Wad.FindByName("PlaceBuilding").Play();
+
+            Console.WriteLine("Browser url changed.");
+            Console.WriteLine(pParam.pchURL);
+            Console.WriteLine(pParam.pchPageTitle);
+            Console.WriteLine(pParam.pchPostData);
         }
 
         public static void OnStartRequest(HTML_StartRequest_t pParam)

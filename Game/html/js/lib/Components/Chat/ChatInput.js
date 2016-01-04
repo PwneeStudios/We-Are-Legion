@@ -1,11 +1,13 @@
-define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], function(_, React, ReactBootstrap, interop, events, ui) {
+'use strict';
+
+define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], function (_, React, ReactBootstrap, interop, events, ui) {
     var Input = ReactBootstrap.Input;
-    
+
     var Div = ui.Div;
     var UiImage = ui.UiImage;
     var UiButton = ui.UiButton;
     var RenderAtMixin = ui.RenderAtMixin;
-    
+
     var pos = ui.pos;
     var size = ui.size;
     var width = ui.width;
@@ -13,83 +15,80 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
 
     return React.createClass({
         mixins: [RenderAtMixin, events.ShowUpdateMixin],
-                
-        onShowUpdate: function(values) {
+
+        onShowUpdate: function onShowUpdate(values) {
             this.setState({
                 ShowChat: values.ShowChat,
-                ChatGlobal: values.ChatGlobal,
+                ChatGlobal: values.ChatGlobal
             });
         },
 
-        getInitialState: function() {
+        getInitialState: function getInitialState() {
             return {
-                value: '',
+                value: ''
             };
         },
-    
-        onTextChange: function() {
+
+        onTextChange: function onTextChange() {
             this.setState({
-                value:this.refs.input.getValue()
+                value: this.refs.input.getValue()
             });
         },
-        
-        focus: function() {
+
+        focus: function focus() {
             var input = this.refs.input;
             if (input) {
                 input.getInputDOMNode().focus();
             }
         },
 
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
             this.focus();
         },
-        
-        componentDidUpdate: function() {
+
+        componentDidUpdate: function componentDidUpdate() {
             this.focus();
         },
-        
-        onKeyDown: function(e) {
+
+        onKeyDown: function onKeyDown(e) {
             var keyCode = e.which || e.keyCode;
             if (keyCode == '13') {
                 if (interop.InXna()) {
                     var message = this.refs.input.getInputDOMNode().value;
-                    
+
                     if (this.props.lobbyChat) {
                         xna.OnLobbyChatEnter(message);
                     } else {
                         xna.OnChatEnter(message);
                     }
-                    
+
                     this.setState({
-                        value:'',
+                        value: ''
                     });
                 }
             }
         },
-        
-        renderAt: function() {
+
+        renderAt: function renderAt() {
             if (this.state.ShowChat || this.props.show) {
                 var style = {
-                    'pointer-events':'auto',
-                    'background-color':'lightgray',
+                    'pointer-events': 'auto',
+                    'background-color': 'lightgray'
                 };
 
-                return (
-                    React.createElement("div", null, 
-                        React.createElement(Input, {value: this.state.value, ref: "input", type: "text", 
-                         addonBefore: this.state.ChatGlobal ? "All" : "Team", 
-                         style: style, 
-                         onChange: this.onTextChange, onKeyDown: this.onKeyDown, 
-                         onMouseOver: interop.onOver, onMouseLeave: interop.onLeave, 
-                         onBlur: this.focus})
-                    )
+                return React.createElement(
+                    'div',
+                    null,
+                    React.createElement(Input, { value: this.state.value, ref: 'input', type: 'text',
+                        addonBefore: this.state.ChatGlobal ? "All" : "Team",
+                        style: style,
+                        onChange: this.onTextChange, onKeyDown: this.onKeyDown,
+                        onMouseOver: interop.onOver, onMouseLeave: interop.onLeave,
+                        onBlur: this.focus })
                 );
             } else {
-                return (
-                    React.createElement("div", null
-                    )
-                );
+                return React.createElement('div', null);
             }
-        },
+        }
     });
 });

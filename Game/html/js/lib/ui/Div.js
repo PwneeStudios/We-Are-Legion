@@ -1,12 +1,14 @@
-define(['lodash', 'react'], function(_, React) {
+'use strict';
+
+define(['lodash', 'react'], function (_, React) {
     return React.createClass({
-        render: function() {
+        render: function render() {
             var style = {
-                width:'100%',
-                height:'100%',
-                'pointer-events':'none',
+                width: '100%',
+                height: '100%',
+                'pointer-events': 'none'
             };
-            
+
             style = _.assign(style, this.props.pos, this.props.size, this.props.style);
 
             if (this.props.nonBlocking) {
@@ -14,11 +16,11 @@ define(['lodash', 'react'], function(_, React) {
             } else if (this.props.blocking) {
                 style['pointer-events'] = 'auto';
             }
-            
-            return (
-                React.createElement("div", {style: style, className: this.props.className}, 
-                    this.props.children
-                )
+
+            return React.createElement(
+                'div',
+                { style: style, className: this.props.className },
+                this.props.children
             );
         }
     });

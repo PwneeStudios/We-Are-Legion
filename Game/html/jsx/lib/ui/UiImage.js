@@ -19,8 +19,8 @@ define(['lodash', 'react', 'interop', 'ui/RenderAtMixin'], function(_, React, in
             var backgroundPos = background_x + '%' + ' ' + background_y + '%';
 
             var background_x = 0, background_y = 0;
-            background_size_x = image.dim && image.dim[0] >= 1 ? 100 * image.dim[0] : 100;
-            background_size_y = image.dim && image.dim[1] >= 1 ? 100 * image.dim[1] : 100;
+            var background_size_x = image.dim && image.dim[0] >= 1 ? 100 * image.dim[0] : 100;
+            var background_size_y = image.dim && image.dim[1] >= 1 ? 100 * image.dim[1] : 100;
             var backgroundSize = background_size_x + '%' + ' ' + background_size_y + '%';
             
             var style = {backgroundImage: 'url('+image.url+')', backgroundPosition:backgroundPos, backgroundSize:backgroundSize};

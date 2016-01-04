@@ -1,24 +1,19 @@
-define(['lodash', 'react', 'interop', 'events',
-        'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual',
-        'Components/GameOver', 'Components/GamePaused', 'Components/ConfirmLeaveGame', 'Components/Disconnected', 'Components/Waiting', 'Components/DisconnectedFromLobby', 'Components/Failed', 'Components/Desync',
-        'Components/EditorUi'],
-    function(_, React, interop, events,
-            InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual,
-            GameOver, GamePaused, ConfirmLeaveGame, Disconnected, Waiting, DisconnectedFromLobby, Failed, Desync,
-            EditorUi) {
- 
+'use strict';
+
+define(['lodash', 'react', 'interop', 'events', 'Components/InGameUi', 'Components/GameLobby', 'Components/GameMenu', 'Components/InGameMenu', 'Components/OptionsMenu', 'Components/CreateGame', 'Components/FindGame', 'Components/Manual', 'Components/GameOver', 'Components/GamePaused', 'Components/ConfirmLeaveGame', 'Components/Disconnected', 'Components/Waiting', 'Components/DisconnectedFromLobby', 'Components/Failed', 'Components/Desync', 'Components/EditorUi'], function (_, React, interop, events, InGameUi, GameLobby, GameMenu, InGameMenu, OptionsMenu, CreateGame, FindGame, Manual, GameOver, GamePaused, ConfirmLeaveGame, Disconnected, Waiting, DisconnectedFromLobby, Failed, Desync, EditorUi) {
+
     return React.createClass({
         mixins: [events.SetModeMixin],
 
-        onSetMode: function(mode) {
+        onSetMode: function onSetMode(mode) {
             this.setMode(mode);
         },
 
-        onSetScreen: function(screen) {
+        onSetScreen: function onSetScreen(screen) {
             this.setScreen(screen);
         },
 
-        leaveGame: function() {
+        leaveGame: function leaveGame() {
             if (interop.InXna()) {
                 interop.xna().LeaveGame();
             } else {
@@ -30,7 +25,7 @@ define(['lodash', 'react', 'interop', 'events',
             }
         },
 
-        quitApp: function() {
+        quitApp: function quitApp() {
             if (interop.InXna()) {
                 interop.xna().QuitApp();
             } else {
@@ -38,10 +33,10 @@ define(['lodash', 'react', 'interop', 'events',
             }
         },
 
-        getInitialState: function() {
+        getInitialState: function getInitialState() {
             window.leaveGame = this.leaveGame;
             window.quitApp = this.quitApp;
-            
+
             window.dumpState = this.dumpState;
             window.restoreState = this.restoreState;
 
@@ -59,10 +54,10 @@ define(['lodash', 'react', 'interop', 'events',
             window.modes = {};
             window.mode = null;
 
-            return { };
+            return {};
         },
 
-        onKeyDown: function(e) {
+        onKeyDown: function onKeyDown(e) {
             // When the user presses the escape key...
             if (e.keyCode == 27) {
                 if (canGoBack() && window.onEscape) {
@@ -71,11 +66,11 @@ define(['lodash', 'react', 'interop', 'events',
             }
         },
 
-        dumpState: function() {
+        dumpState: function dumpState() {
             if (interop.InXna()) {
                 var state = {
-                    mode:window.mode,
-                    modes:window.modes,
+                    mode: window.mode,
+                    modes: window.modes
                 };
 
                 var dump = JSON.stringify(state);
@@ -83,7 +78,7 @@ define(['lodash', 'react', 'interop', 'events',
             }
         },
 
-        restoreState: function(state) {
+        restoreState: function restoreState(state) {
             if (interop.InXna()) {
                 var _state = JSON.parse(state);
 
@@ -94,7 +89,7 @@ define(['lodash', 'react', 'interop', 'events',
             }
         },
 
-        componentDidMount: function() {
+        componentDidMount: function componentDidMount() {
             setMode('none');
 
             setMode('main-menu');
@@ -117,7 +112,7 @@ define(['lodash', 'react', 'interop', 'events',
             //setScreen('confirm-leave-game');
         },
 
-        screenHistory: function() {
+        screenHistory: function screenHistory() {
             if (mode) {
                 return modes[mode];
             } else {
@@ -125,7 +120,7 @@ define(['lodash', 'react', 'interop', 'events',
             }
         },
 
-        refresh: function(e) {
+        refresh: function refresh(e) {
             if (this.screenHistory().length > 0) {
                 var prev = this.screenHistory().pop();
 
@@ -138,19 +133,19 @@ define(['lodash', 'react', 'interop', 'events',
             }
         },
 
-        allowBack: function() {
+        allowBack: function allowBack() {
             this.backEnabled = true;
         },
 
-        preventBack: function() {
+        preventBack: function preventBack() {
             this.backEnabled = false;
         },
 
-        canGoBack: function() {
+        canGoBack: function canGoBack() {
             return this.backEnabled && this.screenHistory().length > 1;
         },
 
-        back: function(e) {
+        back: function back(e) {
             if (this.screenHistory().length > 1) {
                 this.screenHistory().pop();
 
@@ -163,13 +158,13 @@ define(['lodash', 'react', 'interop', 'events',
             }
         },
 
-        removeMode: function(mode) {
+        removeMode: function removeMode(mode) {
             if (mode in modes) {
                 modes[mode] = [];
             }
         },
 
-        setMode: function(newMode) {
+        setMode: function setMode(newMode) {
             if (mode === newMode) {
                 return;
             }
@@ -184,57 +179,75 @@ define(['lodash', 'react', 'interop', 'events',
             this.refresh();
         },
 
-        setScreen: function(screen, params) {
+        setScreen: function setScreen(screen, params) {
             if (typeof params === 'undefined') {
-                params = { };
+                params = {};
             }
 
-            this.screenHistory().push({screen:screen,params:params});
+            this.screenHistory().push({ screen: screen, params: params });
 
             this.setState({
-                screen:screen,
-                params:params,
+                screen: screen,
+                params: params
             });
 
             console.log('setting screen to ' + screen);
         },
 
-        render: function() {
+        render: function render() {
             var body = null;
 
             console.log('render screen ' + this.state.screen + ' ' + JSON.stringify(this.state.params));
 
             switch (this.state.screen) {
-                case 'game-menu': body = React.createElement(GameMenu, null); break;
-                case 'options': body = React.createElement(OptionsMenu, null); break;
-                case 'manual': body = React.createElement(Manual, null); break;
-                case 'create-game': body = React.createElement(CreateGame, null); break;
-                case 'find-game': body = React.createElement(FindGame, null); break;
-                case 'game-lobby': body = React.createElement(GameLobby, null); break;
-                
-                case 'in-game-ui': body = React.createElement(InGameUi, null); break;
-                case 'editor-ui': body = React.createElement(EditorUi, null); break;
-                case 'game-over': body = React.createElement(GameOver, null); break;
-                case 'in-game-menu': body = React.createElement(InGameMenu, null); break;
-                case 'game-paused': body = React.createElement(GamePaused, null); break;
-                case 'confirm-leave-game': body = React.createElement(ConfirmLeaveGame, null); break;
-                case 'disconnected': body = React.createElement(Disconnected, null); break;
-                case 'disconnected-from-lobby': body = React.createElement(DisconnectedFromLobby, null); break;
-                case 'failed': body = React.createElement(Failed, null); break;
-                case 'waiting': body = React.createElement(Waiting, null); break;
-                case 'desync': body = React.createElement(Desync, null); break;
+                case 'game-menu':
+                    body = React.createElement(GameMenu, null);break;
+                case 'options':
+                    body = React.createElement(OptionsMenu, null);break;
+                case 'manual':
+                    body = React.createElement(Manual, null);break;
+                case 'create-game':
+                    body = React.createElement(CreateGame, null);break;
+                case 'find-game':
+                    body = React.createElement(FindGame, null);break;
+                case 'game-lobby':
+                    body = React.createElement(GameLobby, null);break;
 
-                case 'none': body = null; break;
+                case 'in-game-ui':
+                    body = React.createElement(InGameUi, null);break;
+                case 'editor-ui':
+                    body = React.createElement(EditorUi, null);break;
+                case 'game-over':
+                    body = React.createElement(GameOver, null);break;
+                case 'in-game-menu':
+                    body = React.createElement(InGameMenu, null);break;
+                case 'game-paused':
+                    body = React.createElement(GamePaused, null);break;
+                case 'confirm-leave-game':
+                    body = React.createElement(ConfirmLeaveGame, null);break;
+                case 'disconnected':
+                    body = React.createElement(Disconnected, null);break;
+                case 'disconnected-from-lobby':
+                    body = React.createElement(DisconnectedFromLobby, null);break;
+                case 'failed':
+                    body = React.createElement(Failed, null);break;
+                case 'waiting':
+                    body = React.createElement(Waiting, null);break;
+                case 'desync':
+                    body = React.createElement(Desync, null);break;
+
+                case 'none':
+                    body = null;break;
             }
 
             if (body) {
                 body.props.params = this.state.params;
             }
 
-            return (
-                React.createElement("div", null, 
-                    body
-                )
+            return React.createElement(
+                'div',
+                null,
+                body
             );
         }
     });

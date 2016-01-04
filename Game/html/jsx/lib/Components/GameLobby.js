@@ -143,7 +143,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
                 var myKingdomChoices = arrayClone(kingdomChoices);
                 var numPlayers = this.props.player.length + 1;
 
-                for (i = 1; i < numPlayers; i++) {
+                for (var i = 1; i < numPlayers; i++) {
                     if (i === this.props.player) continue;
 
                     var player = this.props.players[i-1];
@@ -275,7 +275,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
         joinLobby: function() {
             if (!interop.InXna()) {
-                values =
+                var values =
                     {"SteamID":100410705,"LobbyName":"Cookin' Ash's lobby","Maps":['Beset', 'Clash of Madness', 'Nice'],
                     "LobbyInfo":
                     "{\"Players\":[{\"LobbyIndex\":0,\"Name\":\"Cookin' Ash\",\"SteamID\":9100410705,\"GamePlayer\":1,\"GameTeam\":1},{\"LobbyIndex\":0,\"Name\":\"other player\",\"SteamID\":12,\"GamePlayer\":2,\"GameTeam\":3},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0},{\"LobbyIndex\":0,\"Name\":null,\"SteamID\":0,\"GamePlayer\":0,\"GameTeam\":0}],\"Spectators\":[{\"Spectator\":true,\"LobbyIndex\":0,\"Name\":\"Cookin' Ash\",\"SteamID\":100410705,\"GamePlayer\":1,\"GameTeam\":1},{\"LobbyIndex\":0,\"Name\":\"other player\",\"SteamID\":12,\"GamePlayer\":2,\"GameTeam\":3}]}",

@@ -264,12 +264,10 @@ IF $(ConfigurationName) EQU $(ConfigurationName)FALSE (
 ECHO Copying maps
 xcopy "$(SolutionDir)Content\Maps" "$(TargetDir)Content\Maps\" /E /D /Y
 
-IF $(ConfigurationName) EQU Release (
-  ECHO Copying html directory
-  ECHO $(ProjectDir)html
-  ECHO $(TargetDir)html
-  xcopy "$(ProjectDir)html" "$(TargetDir)html\" /E /D /Y
-)
+ECHO Copying html directory
+ECHO $(ProjectDir)html
+ECHO $(TargetDir)html
+xcopy "$(ProjectDir)html" "$(TargetDir)html\" /E /D /Y
 
 IF $(ConfigurationName) EQU ReleaseFALSE (
   ECHO Running PngToCsData

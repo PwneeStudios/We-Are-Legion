@@ -1,4 +1,6 @@
-define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function(_, React, ReactBootstrap, interop, events, ui, Chat) {
+'use strict';
+
+define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Components/Chat'], function (_, React, ReactBootstrap, interop, events, ui, Chat) {
     var Panel = ReactBootstrap.Panel;
     var Button = ReactBootstrap.Button;
     var Well = ReactBootstrap.Well;
@@ -6,7 +8,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var NavItem = ReactBootstrap.NavItem;
     var Popover = ReactBootstrap.Popover;
     var Table = ReactBootstrap.Table;
-    
+
     var Div = ui.Div;
     var Gap = ui.Gap;
     var UiImage = ui.UiImage;
@@ -16,7 +18,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
     var MenuItem = ui.MenuItem;
     var MenuTitle = ui.MenuTitle;
     var RenderAtMixin = ui.RenderAtMixin;
-    
+
     var pos = ui.pos;
     var size = ui.size;
     var width = ui.width;
@@ -24,25 +26,32 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
 
     return React.createClass({
         mixins: [],
-                
-        getInitialState: function() {
-            return {
-            };
+
+        getInitialState: function getInitialState() {
+            return {};
         },
 
-        leave: function() {
+        leave: function leave() {
             interop.leaveLobby();
             back();
             back();
         },
 
-        render: function() {
-            return (
-                React.createElement(Menu, null, 
-                    React.createElement(MenuTitle, null, this.props.params.message), 
-                    React.createElement(MenuItem, {eventKey: 2, onClick: this.leave}, "OK")
+        render: function render() {
+            return React.createElement(
+                Menu,
+                null,
+                React.createElement(
+                    MenuTitle,
+                    null,
+                    this.props.params.message
+                ),
+                React.createElement(
+                    MenuItem,
+                    { eventKey: 2, onClick: this.leave },
+                    'OK'
                 )
             );
         }
     });
-}); 
+});

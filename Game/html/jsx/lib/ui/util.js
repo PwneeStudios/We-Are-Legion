@@ -1,5 +1,5 @@
 define(['lodash', 'react'], function(_, React) {
-    util = {
+    var util = {
         pos: function(x, y, type) {
             if (typeof type === 'undefined') {
                 type = 'absolute';

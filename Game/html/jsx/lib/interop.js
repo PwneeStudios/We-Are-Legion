@@ -208,6 +208,12 @@ define(['lodash'], function(_) {
         },
 
         playSound: function(sound, vol) {
+            if (!window.updateKey) window.updateKey = 1;
+            else window.updateKey++;
+
+            //window.location.hash='#hello' + window.updateKey;
+            window.location.hash='#playSound,sound,vol,' + window.updateKey;
+
             if (interop.InXna()) {
                 if (typeof vol === 'undefined') {
                     vol = 1;

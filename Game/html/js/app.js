@@ -1,3 +1,5 @@
+'use strict';
+
 require.config({
     baseUrl: 'js/lib',
     paths: {
@@ -7,8 +9,8 @@ require.config({
         //react: 'react/react-with-addons.min',
         'react-bootstrap': 'react-bootstrap/react-bootstrap.min',
         lodash: 'lodash/lodash.min',
-        main: '../main',
-    },
+        main: '../main'
+    }
 });
 
 require(['main']);

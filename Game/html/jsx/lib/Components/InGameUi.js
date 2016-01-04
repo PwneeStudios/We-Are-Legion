@@ -15,7 +15,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
     var width = ui.width;
     var subImage = ui.subImage;
 
-    makeTooltip = InGameUtil.makeTooltip;
+    var makeTooltip = InGameUtil.makeTooltip;
 
     var setUiActions = function() {
         var buildingScale = 0.835;

@@ -23,7 +23,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
     var width = ui.width;
     var subImage = ui.subImage;
 
-    makeTooltip = InGameUtil.makeTooltip;
+    var makeTooltip = InGameUtil.makeTooltip;
 
     var setActions = function() {
         var buildingScale = 0.835;
