@@ -101,6 +101,8 @@ namespace SteamWrapper
             Marshal.Copy(pParam.pBGRA, pixels, 0, pixels.Length);
             for (int i = 0; i < pixels.Length; i += 4)
             {
+                Game.CoreMath.Swap(ref pixels[i], ref pixels[i + 2]);
+
                 if (pixels[i] == 0 && pixels[i + 1] == 0 && pixels[i + 2] == 0)
                 {
                     pixels[i + 3] = 0;
