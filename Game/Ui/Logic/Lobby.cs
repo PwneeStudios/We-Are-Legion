@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Newtonsoft.Json;
-using Awesomium.Core;
 
 using FragSharpFramework;
 using SteamWrapper;
@@ -17,23 +16,6 @@ namespace Game
 
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
-        void BindMethods_Lobby()
-        {
-            xnaObj.Bind("LobbyUiCreated", LobbyUiCreated);
-            xnaObj.Bind("DrawMapPreviewAt", DrawMapPreviewAt);
-            xnaObj.Bind("HideMapPreview", HideMapPreview);
-            xnaObj.Bind("SetMap", SetMap);
-            xnaObj.Bind("StartGame", StartGame);
-            xnaObj.Bind("StartGameCountdown", StartGameCountdown);
-            xnaObj.Bind("LeaveLobby", LeaveLobby);
-            xnaObj.Bind("SendChat", SendChat);
-            xnaObj.Bind("SelectTeam", SelectTeam);
-            xnaObj.Bind("SelectKingdom", SelectKingdom);
-            xnaObj.Bind("Join", Join);
-            xnaObj.Bind("Spectate", Spectate);
-            xnaObj.Bind("OnLobbyChatEnter", OnLobbyChatEnter);
-        }
-
         PlayerLobbyInfo ThisPlayer
         {
             get
@@ -66,19 +48,17 @@ namespace Game
         }
 
         public World BlankWorld;
-        JSValue LobbyUiCreated(object sender, JavascriptMethodEventArgs e)
+        void LobbyUiCreated(object sender, JavascriptMethodEventArgs e)
         {
             World = BlankWorld;
             GameMapName = null;
             NewMap = null;
-
-            return JSValue.Null;
         }
 
         public bool DrawMapPreview = false;
         public vec2 MapPreviewPos = vec2.Zero;
         public vec2 MapPreviewSize = vec2.Zero;
-        JSValue DrawMapPreviewAt(object sender, JavascriptMethodEventArgs e)
+        void DrawMapPreviewAt(object sender, JavascriptMethodEventArgs e)
         {
             float x = CoreMath.ParseFloat(e.Arguments[0].ToString());
             float y = CoreMath.ParseFloat(e.Arguments[1].ToString());
@@ -89,27 +69,16 @@ namespace Game
             MapPreviewSize = new vec2(width, height);
 
             DrawMapPreview = true;
-
-            return JSValue.Null;
         }
 
-        JSValue HideMapPreview(object sender, JavascriptMethodEventArgs e)
+        void HideMapPreview(object sender, JavascriptMethodEventArgs e)
         {
             DrawMapPreview = false;
-            return JSValue.Null;
         }
 
         Thread SetMapThread, PrevMapThread;
         bool MapLoading = false;
         string GameMapName = null;
-        JSValue SetMap(object sender, JavascriptMethodEventArgs e)
-        {
-            string new_map = e.Arguments[0];
-            
-            SetMap(new_map);
-
-            return JSValue.Null;
-        }
 
         void SetMap(string map_name)
         {
@@ -174,11 +143,9 @@ namespace Game
             NewMap = _NewMap;
         }
 
-        JSValue StartGame(object sender, JavascriptMethodEventArgs e)
+        void StartGame(object sender, JavascriptMethodEventArgs e)
         {
             _StartGame();
-
-            return JSValue.Null;
         }
 
         LobbyInfo GetLobbyInfo()
@@ -240,34 +207,28 @@ namespace Game
             SteamMatches.SetLobbyData("GameStarted", "");
         }
 
-        JSValue StartGameCountdown(object sender, JavascriptMethodEventArgs e)
+        void StartGameCountdown(object sender, JavascriptMethodEventArgs e)
         {
             // Only the lobby owner can start the match.
-            if (!SteamMatches.IsLobbyOwner()) return JSValue.Null;
+            if (!SteamMatches.IsLobbyOwner())
 
             // We never set the lobby to unjoinable.
             //SteamMatches.SetLobbyJoinable(false);
 
             SteamMatches.SetLobbyData("CountDownStarted", "true");
             SteamMatches.SetLobbyData("GameStarted", "");
-
-            return JSValue.Null;
         }
 
-        JSValue LeaveLobby(object sender, JavascriptMethodEventArgs e)
+        void LeaveLobby(object sender, JavascriptMethodEventArgs e)
         {
             Console.WriteLine("leaving lobby");
             SteamMatches.LeaveLobby();
-
-            return JSValue.Null;
         }
 
-        JSValue SendChat(object sender, JavascriptMethodEventArgs e)
+        void SendChat(object sender, JavascriptMethodEventArgs e)
         {
             string msg = e.Arguments[0].ToString();
             SteamMatches.SendChatMsg(msg);
-
-            return JSValue.Null;
         }
 
         void SendAnnouncement(string message)
@@ -276,38 +237,30 @@ namespace Game
             SteamMatches.SendChatMsg(msg);
         }
 
-        JSValue SelectTeam(object sender, JavascriptMethodEventArgs e)
+        void SelectTeam(object sender, JavascriptMethodEventArgs e)
         {
             string team = e.Arguments[0].ToString();
             string msg = string.Format("%t{0}", team);
 
             SteamMatches.SendChatMsg(msg);
-
-            return JSValue.Null;
         }
 
-        JSValue SelectKingdom(object sender, JavascriptMethodEventArgs e)
+        void SelectKingdom(object sender, JavascriptMethodEventArgs e)
         {
             string kingdom = e.Arguments[0].ToString();
             string msg = string.Format("%k{0}", kingdom);
 
             SteamMatches.SendChatMsg(msg);
-
-            return JSValue.Null;
         }
 
-        JSValue Join(object sender, JavascriptMethodEventArgs e)
+        void Join(object sender, JavascriptMethodEventArgs e)
         {
             SteamMatches.SendChatMsg("%j1");
-
-            return JSValue.Null;
         }
 
-        JSValue Spectate(object sender, JavascriptMethodEventArgs e)
+        void Spectate(object sender, JavascriptMethodEventArgs e)
         {
             SteamMatches.SendChatMsg("%j0");
-
-            return JSValue.Null;
         }
 
         bool IsHost = false;
@@ -676,19 +629,15 @@ namespace Game
             SteamMatches.SetLobbyData("MaxPlayers", Program.MaxPlayers.ToString());
         }
 
-        JSValue OnLobbyChatEnter(object sender, JavascriptMethodEventArgs e)
+        void OnLobbyChatEnter(string message)
         {
-            if (Program.GameStarted) return JSValue.Null;
-
-            string message = e.Arguments[0];
+            if (Program.GameStarted)
 
             if (message != null && message.Length > 0)
             {
                 Console.WriteLine("lobby chat message: " + message);
                 SteamMatches.SendChatMsg(message);
             }
-
-            return JSValue.Null;
         }
 
         void OnLobbyDataUpdate()

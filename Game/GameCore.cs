@@ -135,7 +135,7 @@ namespace Game
             Spells.Initialize();
             Networking.Start();
 
-            AwesomiumInitialize();
+            SteamWrapper.SteamHtml.Initialize();
 
             Activated += ActivatedEvent;
             Deactivated += DeactivatedEvent;

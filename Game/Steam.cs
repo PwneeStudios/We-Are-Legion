@@ -1,16 +1,21 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 using Steamworks;
 
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
+
 using FragSharpHelper;
 
 namespace SteamWrapper
 {
     public class SteamHtml
     {
+        public static bool AllowMouseEvents = true;
+
         public static HHTMLBrowser Browser;
         public static Texture2D Texture;
         static byte[] pixels;
@@ -98,12 +103,16 @@ namespace SteamWrapper
 
         public static void OnURLChange(HTML_URLChanged_t pParam)
         {
-            Game.SoundWad.Wad.FindByName("PlaceBuilding").Play();
-
-            Console.WriteLine("Browser url changed.");
-            Console.WriteLine(pParam.pchURL);
-            Console.WriteLine(pParam.pchPageTitle);
-            Console.WriteLine(pParam.pchPostData);
+            try
+            {
+                string invocation = pParam.pchURL.Split('#')[1];
+                Console.WriteLine($"Invocating {invocation}");
+                Game.GameClass.Game.ExecuteInvocation(invocation);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error executing function in {pParam.pchURL}.");
+            }
         }
 
         public static void OnStartRequest(HTML_StartRequest_t pParam)

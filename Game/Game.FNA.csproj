@@ -71,10 +71,6 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Awesomium.Core, Version=1.7.5.1, Culture=neutral, PublicKeyToken=e1a0d7c8071a5214, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\Program Files (x86)\Awesomium Technologies LLC\Awesomium SDK\1.7.5.1\wrappers\Awesomium.NET\Assemblies\Awesomium.Core.dll</HintPath>
-    </Reference>
     <Reference Include="FragSharpFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\FragSharp\FragSharpFramework\bin\x86\Release\FragSharpFramework.dll</HintPath>
@@ -108,6 +104,7 @@
     <Compile Include="Sound\AmbientSound.cs" />
     <Compile Include="Sound\Sound.cs" />
     <Compile Include="Sound\SoundWad.cs" />
+    <Compile Include="Web.cs" />
     <Compile Include="Steam.cs" />
     <Compile Include="TestSteam.cs" />
     <Compile Include="GameLogic.cs" />
@@ -202,10 +199,6 @@
     <ProjectReference Include="..\..\FNA\FNA.csproj">
       <Project>{35253ce1-c864-4cd3-8249-4d1319748e8f}</Project>
       <Name>FNA</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AwesomiumXNA\AwesomiumXNA.FNA.csproj">
-      <Project>{251bcedb-cc58-4266-b087-6d404a4a1785}</Project>
-      <Name>AwesomiumXNA.FNA</Name>
     </ProjectReference>
     <ProjectReference Include="..\content\Content.contentproj">
       <Name>Content</Name>

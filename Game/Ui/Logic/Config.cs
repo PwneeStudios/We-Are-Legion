@@ -1,7 +1,6 @@
 using System.IO;
 
 using Newtonsoft.Json;
-using Awesomium.Core;
 
 namespace Game
 {
@@ -114,11 +113,7 @@ namespace Game
             graphics.ApplyChanges();
 
             Send("dumpState");
-            WebCore.Update();
-            AwesomiumInitialize();
-            WebCore.Update();
             Send("restoreState", DumpedState);
-            WebCore.Update();
         }
     }
 }

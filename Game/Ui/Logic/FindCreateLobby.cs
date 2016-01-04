@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 
-using Awesomium.Core;
-
 using SteamWrapper;
 
 namespace Game
@@ -11,22 +9,9 @@ namespace Game
 
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
-        void BindMethods_FindLobby()
-        {
-            xnaObj.Bind("CreateLobby", CreateLobby);
-            xnaObj.Bind("SetLobbyType", SetLobbyType);
-
-            xnaObj.Bind("FindLobbies", FindLobbies);
-            xnaObj.Bind("FindFriendLobbies", FindFriendLobbies);
-            xnaObj.Bind("JoinLobby", JoinLobby);
-            xnaObj.Bind("WatchGame", WatchGame);
-        }
-
         static bool InTrainingLobby = false;
-        JSValue CreateLobby(object sender, JavascriptMethodEventArgs e)
+        void CreateLobby(int lobbyType, bool InTrainingLobby)
         {
-            int lobbyType = StringToLobbyType(e.Arguments[0]);
-            InTrainingLobby = bool.Parse(e.Arguments[1]);
             Program.GameStarted = false;
 
             if (!SteamCore.SteamIsConnected())
@@ -34,20 +19,15 @@ namespace Game
                 SteamCore.SetOfflineMode(true);
             }
 
-            if (SteamMatches.InLobby()) return JSValue.Null;
+            if (SteamMatches.InLobby())
 
             try { SteamMatches.LeaveLobby(); } catch { };
             SteamMatches.CreateLobby(OnCreateLobby, lobbyType);
-
-            return JSValue.Null;
         }
 
-        JSValue SetLobbyType(object sender, JavascriptMethodEventArgs e)
+        void SetLobbyType(int lobbyType)
         {
-            int lobbyType = StringToLobbyType(e.Arguments[0]);
-
             SteamMatches.SetLobbyType(lobbyType);
-            return JSValue.Null;
         }
 
         private static int StringToLobbyType(string _lobbyType)
@@ -62,17 +42,16 @@ namespace Game
             return SteamMatches.LobbyType_Public;
         }
 
-        JSValue FindLobbies(object sender, JavascriptMethodEventArgs e)
+        void FindLobbies(object sender, JavascriptMethodEventArgs e)
         {
             InTrainingLobby = false;
 
             if (!SteamCore.SteamIsConnected()) Offline();
 
             SteamMatches.FindLobbies(OnFindLobbies);
-            return JSValue.Null;
         }
 
-        JSValue FindFriendLobbies(object sender, JavascriptMethodEventArgs e)
+        void FindFriendLobbies(object sender, JavascriptMethodEventArgs e)
         {
             InTrainingLobby = false;
 
@@ -80,29 +59,24 @@ namespace Game
 
             SteamMatches.SetLobbyCallbacks(null, null, null, () => OnFindLobbies(false));
             SteamMatches.FindFriendLobbies(OnFindLobbies);
-            return JSValue.Null;
         }
 
-        JSValue JoinLobby(object sender, JavascriptMethodEventArgs e)
+        void JoinLobby(object sender, JavascriptMethodEventArgs e)
         {
             InTrainingLobby = false;
             Program.GameStarted = false;
 
-            if (SteamMatches.InLobby()) return JSValue.Null;
+            if (SteamMatches.InLobby())
             
             try { SteamMatches.LeaveLobby(); } catch { };
 
             int lobby = (int)e.Arguments[0];
             SteamMatches.JoinLobby(lobby, OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);
-
-            return JSValue.Null;
         }
 
-        JSValue WatchGame(object sender, JavascriptMethodEventArgs e)
+        void WatchGame(object sender, JavascriptMethodEventArgs e)
         {
             JoinLobby(sender, e);
-
-            return JSValue.Null;
         }
 
         void OnCreateLobby(bool result)

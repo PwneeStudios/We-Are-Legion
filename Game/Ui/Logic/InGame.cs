@@ -1,18 +1,10 @@
 using System;
 using System.Collections.Generic;
 
-using Awesomium.Core;
-
 namespace Game
 {
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
-        void BindMethods_InGame()
-        {
-            xnaObj.Bind("ActionButtonPressed", ActionButtonPressed);
-            xnaObj.Bind("OnChatEnter", OnChatEnter);
-        }
-
         void UpdateJsData()
         {
             obj["UnitCount"] = World.DataGroup.UnitCountUi;
@@ -71,7 +63,7 @@ namespace Game
             Send("addChatMessage", obj);
         }
 
-        JSValue ActionButtonPressed(object sender, JavascriptMethodEventArgs e)
+        void ActionButtonPressed(object sender, JavascriptMethodEventArgs e)
         {
             try
             {
@@ -91,14 +83,10 @@ namespace Game
             {
                 Console.WriteLine("Action did not specify a name:string.");
             }
-
-            return JSValue.Null;
         }
 
-        JSValue OnChatEnter(object sender, JavascriptMethodEventArgs e)
+        void OnChatEnter(string message)
         {
-            string message = e.Arguments[0];
-
             if (message != null && message.Length > 0)
             {
                 Console.WriteLine("ui chat message: " + message);
@@ -106,8 +94,6 @@ namespace Game
             }
 
             ToggleChat(Toggle.Off);
-
-            return JSValue.Null;
         }
     }
 }

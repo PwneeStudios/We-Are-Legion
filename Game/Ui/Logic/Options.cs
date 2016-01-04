@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.Xna.Framework.Graphics;
-using Awesomium.Core;
 
 namespace Game
 {
@@ -11,21 +10,7 @@ namespace Game
 
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
-        void BindMethods_Options()
-        {
-            xnaObj.Bind("SetMusicVolume", SetMusicVolume);
-            xnaObj.Bind("GetMusicVolume", GetMusicVolume);
-            xnaObj.Bind("SetSoundVolume", SetSoundVolume);
-            xnaObj.Bind("GetSoundVolume", GetSoundVolume);
-            xnaObj.Bind("SetFullscreen", SetFullscreen);
-            xnaObj.Bind("GetFullscreen", GetFullscreen);
-            xnaObj.Bind("GetFullscreenValues", GetFullscreenValues);
-            xnaObj.Bind("SetResolution", SetResolution);
-            xnaObj.Bind("GetResolution", GetResolution);
-            xnaObj.Bind("GetResolutionValues", GetResolutionValues);
-        }
-
-        float ArgTo0to1(JSValue arg)
+        float ArgTo0to1(float arg)
         {
             string stringVal;
 
@@ -46,49 +31,43 @@ namespace Game
             return val;
         }
 
-        JSValue SetSoundVolume(object sender, JavascriptMethodEventArgs e)
+        void SetSoundVolume(float volume)
         {
-            CurrentConfig.SoundVolume = ArgTo0to1(e.Arguments[0]);
+            CurrentConfig.SoundVolume = ArgTo0to1(volume);
             AmbientSounds.UpdateVolumes();
             SaveConfig();
-
-            return JSValue.Null;
         }
 
-        JSValue GetSoundVolume(object sender, JavascriptMethodEventArgs e)
+        float GetSoundVolume()
         {
             return CurrentConfig.SoundVolume;
         }
 
-        JSValue SetMusicVolume(object sender, JavascriptMethodEventArgs e)
+        void SetMusicVolume(float volume)
         {
-            CurrentConfig.MusicVolume = ArgTo0to1(e.Arguments[0]);
+            CurrentConfig.MusicVolume = ArgTo0to1(volume);
             SaveConfig();
-
-            return JSValue.Null;
         }
 
-        JSValue GetMusicVolume(object sender, JavascriptMethodEventArgs e)
+        float GetMusicVolume()
         {
             return CurrentConfig.MusicVolume;
         }
 
-        JSValue SetFullscreen(object sender, JavascriptMethodEventArgs e)
+        void SetFullscreen(object sender, JavascriptMethodEventArgs e)
         {
             CurrentConfig.Fullscreen = (bool)e.Arguments[0];
             
             SaveConfig();
             ApplyConfig();
-
-            return JSValue.Null;
         }
 
-        JSValue GetFullscreen(object sender, JavascriptMethodEventArgs e)
+        bool GetFullscreen()
         {
             return CurrentConfig.Fullscreen;
         }
 
-        JSValue GetFullscreenValues(object sender, JavascriptMethodEventArgs e)
+        string GetFullscreenValues(object sender, JavascriptMethodEventArgs e)
         {
             var options = new List<Dict>();
             var dict = new Dict();
@@ -106,7 +85,7 @@ namespace Game
             return Jsonify(options);
         }
 
-        JSValue SetResolution(object sender, JavascriptMethodEventArgs e)
+        void SetResolution(object sender, JavascriptMethodEventArgs e)
         {
             int Resolution = (int)e.Arguments[0];
 
@@ -114,8 +93,6 @@ namespace Game
             {
                 SetResolution(Resolutions[Resolution]);
             }
-
-            return JSValue.Null;
         }
 
         void SetResolution(DisplayMode mode)
@@ -127,7 +104,7 @@ namespace Game
             ApplyConfig();
         }
 
-        JSValue GetResolution(object sender, JavascriptMethodEventArgs e)
+        int GetResolution()
         {
             int index = Resolutions.FindIndex(match =>
                 match.Width == graphics.PreferredBackBufferWidth &&
@@ -165,7 +142,7 @@ namespace Game
             }
         }
 
-        JSValue GetResolutionValues(object sender, JavascriptMethodEventArgs e)
+        string GetResolutionValues(object sender, JavascriptMethodEventArgs e)
         {
             var options = new List<object>();
 

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-using Awesomium.Core;
 using FragSharpFramework;
 
 namespace Game
@@ -285,15 +284,6 @@ namespace Game
         public void SynchronizeNetwork()
         {
             GameClass.Game.Send("setScreen", "desync");
-
-            for (int i = 0; i < 10; i++)
-                try
-                {
-                    WebCore.Update();
-                }
-                catch (Exception e)
-                {
-                }
 
             SaveCurrentStateInBuffer();
 

@@ -108,7 +108,7 @@ namespace Game
                     AmbientSounds.EndAll();
 
                     // No mouse input to Awesomium
-                    if (awesomium != null) awesomium.AllowMouseEvents = false;
+                    SteamWrapper.SteamHtml.AllowMouseEvents = false;
 
                     Render.StandardRenderSetup();
 
@@ -144,7 +144,7 @@ namespace Game
 
                     if (!InputHelper.SomethingDown())
                     {
-                        if (awesomium != null) awesomium.AllowMouseEvents = true;
+                        SteamWrapper.SteamHtml.AllowMouseEvents = true;
                     }
 
                     if (_MapLoading != MapLoading)
@@ -268,10 +268,7 @@ namespace Game
                 case GameState.Game:
                     StartGameMusicIfNeeded();
 
-                    if (awesomium != null && awesomium.WebViewTexture != null)
-                    {
-                        CalculateMouseDownOverUi();
-                    }
+                    CalculateMouseDownOverUi();
 
                     DrawGame(gameTime);
 
