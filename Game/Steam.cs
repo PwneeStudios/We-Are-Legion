@@ -57,6 +57,14 @@ namespace SteamWrapper
             SteamHTMLSurface.MouseMove(Browser, (int)Input.CurMousePos.x, (int)Input.CurMousePos.y);
         }
 
+        public static void ExecuteJS(string code)
+        {
+            if (Browser == null) return;
+
+            Console.WriteLine($"Executing js {code}");
+            SteamHTMLSurface.ExecuteJavascript(Browser, code);
+        }
+
         public static void OnBrowserReady(HTML_BrowserReady_t pBrowserReady, bool bIOFailure)
         {
             if (bIOFailure) return;

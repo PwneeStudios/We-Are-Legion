@@ -98,7 +98,7 @@ namespace Game
                 first = false;
             }
 
-            //fixme
+            SteamWrapper.SteamHtml.ExecuteJS($"{function}({s})");
         }
     }
 }
