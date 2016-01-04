@@ -18,7 +18,7 @@ namespace Game
         /// <summary>
         /// On Exit callback from JavaScript from Awesomium
         /// </summary>
-        public void OnExit(object sender, JavascriptMethodEventArgs e)
+        public void OnExit()
         {
             Exit();
         }

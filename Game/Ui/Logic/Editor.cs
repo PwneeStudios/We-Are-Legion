@@ -46,12 +46,12 @@ namespace Game
             Send("command", command);
         }
 
-        void StartEditor(object sender, JavascriptMethodEventArgs e)
+        public void StartEditor()
         {
             State = GameState.ToEditor;
         }
 
-        void PlayButtonPressed(object sender, JavascriptMethodEventArgs e)
+        public void PlayButtonPressed()
         {
             World.Editor_ToggleMapEditor();
 
@@ -61,14 +61,14 @@ namespace Game
             }
         }
 
-        void EditorUiClicked(object sender, JavascriptMethodEventArgs e)
+        public void EditorUiClicked()
         {
             if (!World.MapEditorActive)
 
             World.SetModeToSelect();
         }
 
-        void ToggleChat(bool state)
+        public void ToggleChat(bool state)
         {
             if (state)
             {
@@ -80,7 +80,7 @@ namespace Game
             }
         }
 
-        object _GetMaps(string path)
+        public object _GetMaps(string path)
         {
             var Maps = new List<object>();
 
@@ -102,14 +102,14 @@ namespace Game
             return Maps;
         }
 
-        string GetMaps(string directory)
+        public string GetMaps(string directory)
         {
             string path = Path.Combine(MapDirectory, directory);
 
             return Jsonify(_GetMaps(path));
         }
 
-        void LoadMap(string path)
+        public void LoadMap(string path)
         {
             path.Replace('/', '\\');
 
@@ -120,7 +120,7 @@ namespace Game
             NewWorldEditor(path);
         }
 
-        void SaveMap(string path = null)
+        public void SaveMap(string path = null)
         {
             if (path == null)
             {
@@ -150,7 +150,7 @@ namespace Game
             World.Save(path);
         }
 
-        void CreateNewMap(object sender, JavascriptMethodEventArgs e)
+        public void CreateNewMap()
         {
             NewWorldEditor();
         }

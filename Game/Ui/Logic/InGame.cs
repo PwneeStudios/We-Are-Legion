@@ -5,7 +5,7 @@ namespace Game
 {
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
-        void UpdateJsData()
+        public void UpdateJsData()
         {
             obj["UnitCount"] = World.DataGroup.UnitCountUi;
             obj["MyPlayerInfo"] = World.MyPlayerInfo;
@@ -16,7 +16,7 @@ namespace Game
             Send("update", obj);
         }
 
-        void UpdateParams()
+        public void UpdateParams()
         {
             if (World.MyPlayerInfo == null || World.MapEditor) return;
 
@@ -29,7 +29,7 @@ namespace Game
             Send("setParams", obj);
         }
 
-        void UpdateShow()
+        public void UpdateShow()
         {
             Send("show", new
             {
@@ -63,11 +63,10 @@ namespace Game
             Send("addChatMessage", obj);
         }
 
-        void ActionButtonPressed(object sender, JavascriptMethodEventArgs e)
+        public void ActionButtonPressed(string action)
         {
             try
             {
-                string action = (string)e.Arguments[0];
                 Console.WriteLine(action);
 
                 try
@@ -85,7 +84,7 @@ namespace Game
             }
         }
 
-        void OnChatEnter(string message)
+        public void OnChatEnter(string message)
         {
             if (message != null && message.Length > 0)
             {

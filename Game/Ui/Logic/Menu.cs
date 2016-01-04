@@ -7,12 +7,12 @@ namespace Game
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
         static string DumpedState = "";
-        void DumpState(object sender, JavascriptMethodEventArgs e)
+        public void DumpState(string state)
         {
-            DumpedState = (string)e.Arguments[0];
+            DumpedState = state;
         }
 
-        void ReturnToLobby(object sender, JavascriptMethodEventArgs e)
+        public void ReturnToLobby()
         {
             LeaveGameNetwork();
 
@@ -27,7 +27,7 @@ namespace Game
             SetMapThreadFunc(GameMapName);
         }
 
-        void LeaveGame(object sender, JavascriptMethodEventArgs e)
+        public void LeaveGame()
         {
             // Use this if you want leaving a game to return you to the lobby,
             // rather than returning you to the main menu.
@@ -40,7 +40,7 @@ namespace Game
             ReturnToMainMenu();
         }
 
-        private static void LeaveGameNetwork()
+        public static void LeaveGameNetwork()
         {
             if (Program.Server)
             {
@@ -74,17 +74,17 @@ namespace Game
             SteamWrapper.SteamHtml.AllowMouseEvents = true;
         }
 
-        void QuitApp(object sender, JavascriptMethodEventArgs e)
+        public void QuitApp()
         {
             Exit();
         }
 
-        void RequestPause(object sender, JavascriptMethodEventArgs e)
+        public void RequestPause()
         {
             Networking.ToServer(new Message(MessageType.RequestPause));
         }
 
-        void RequestUnpause(object sender, JavascriptMethodEventArgs e)
+        public void RequestUnpause()
         {
             Networking.ToServer(new Message(MessageType.RequestUnpause));
         }

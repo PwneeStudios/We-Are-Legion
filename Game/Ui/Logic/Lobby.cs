@@ -39,7 +39,7 @@ namespace Game
         }
 
         bool _MapLoading = false;
-        void SetMapLoading()
+        public void SetMapLoading()
         {
             var obj = new Dict();
             obj["LobbyMapLoading"] = MapLoading;
@@ -48,7 +48,7 @@ namespace Game
         }
 
         public World BlankWorld;
-        void LobbyUiCreated(object sender, JavascriptMethodEventArgs e)
+        public void LobbyUiCreated()
         {
             World = BlankWorld;
             GameMapName = null;
@@ -58,20 +58,15 @@ namespace Game
         public bool DrawMapPreview = false;
         public vec2 MapPreviewPos = vec2.Zero;
         public vec2 MapPreviewSize = vec2.Zero;
-        void DrawMapPreviewAt(object sender, JavascriptMethodEventArgs e)
+        public void DrawMapPreviewAt(float x, float y, float width, float height)
         {
-            float x = CoreMath.ParseFloat(e.Arguments[0].ToString());
-            float y = CoreMath.ParseFloat(e.Arguments[1].ToString());
             MapPreviewPos = new vec2(x, y);
-
-            float width = CoreMath.ParseFloat(e.Arguments[2].ToString());
-            float height = CoreMath.ParseFloat(e.Arguments[3].ToString());
             MapPreviewSize = new vec2(width, height);
 
             DrawMapPreview = true;
         }
 
-        void HideMapPreview(object sender, JavascriptMethodEventArgs e)
+        public void HideMapPreview()
         {
             DrawMapPreview = false;
         }
@@ -80,7 +75,7 @@ namespace Game
         bool MapLoading = false;
         string GameMapName = null;
 
-        void SetMap(string map_name)
+        public void SetMap(string map_name)
         {
             Console.WriteLine("set map to {0}", map_name);
 
@@ -116,7 +111,7 @@ namespace Game
         }
 
         World NewMap = null;
-        void SetMapThreadFunc(string map)
+        public void SetMapThreadFunc(string map)
         {
             if (PrevMapThread != null && PrevMapThread.IsAlive && Thread.CurrentThread != PrevMapThread)
             {
@@ -143,12 +138,12 @@ namespace Game
             NewMap = _NewMap;
         }
 
-        void StartGame(object sender, JavascriptMethodEventArgs e)
+        public void StartGame()
         {
             _StartGame();
         }
 
-        LobbyInfo GetLobbyInfo()
+        public LobbyInfo GetLobbyInfo()
         {
             LobbyInfo info = new LobbyInfo();
 
@@ -166,7 +161,7 @@ namespace Game
             return info;
         }
 
-        void _StartGame()
+        public void _StartGame()
         {
             //var lobby_data = SteamMatches.GetLobbyData("LobbyInfo");
             //var lobby = JsonConvert.DeserializeObject(lobby_data, typeof(LobbyInfo));
@@ -199,7 +194,7 @@ namespace Game
             SteamMatches.SetLobbyData("GameStarted", "true");
         }
 
-        void ResetLobby()
+        public void ResetLobby()
         {
             if (!SteamMatches.IsLobbyOwner()) return;
 
@@ -207,7 +202,7 @@ namespace Game
             SteamMatches.SetLobbyData("GameStarted", "");
         }
 
-        void StartGameCountdown(object sender, JavascriptMethodEventArgs e)
+        public void StartGameCountdown()
         {
             // Only the lobby owner can start the match.
             if (!SteamMatches.IsLobbyOwner())
@@ -219,52 +214,49 @@ namespace Game
             SteamMatches.SetLobbyData("GameStarted", "");
         }
 
-        void LeaveLobby(object sender, JavascriptMethodEventArgs e)
+        public void LeaveLobby()
         {
             Console.WriteLine("leaving lobby");
             SteamMatches.LeaveLobby();
         }
 
-        void SendChat(object sender, JavascriptMethodEventArgs e)
+        public void SendChat(string msg)
         {
-            string msg = e.Arguments[0].ToString();
             SteamMatches.SendChatMsg(msg);
         }
 
-        void SendAnnouncement(string message)
+        public void SendAnnouncement(string message)
         {
             string msg = string.Format("%a{0}", message);
             SteamMatches.SendChatMsg(msg);
         }
 
-        void SelectTeam(object sender, JavascriptMethodEventArgs e)
+        public void SelectTeam(string team)
         {
-            string team = e.Arguments[0].ToString();
             string msg = string.Format("%t{0}", team);
 
             SteamMatches.SendChatMsg(msg);
         }
 
-        void SelectKingdom(object sender, JavascriptMethodEventArgs e)
+        public void SelectKingdom(string kingdom)
         {
-            string kingdom = e.Arguments[0].ToString();
             string msg = string.Format("%k{0}", kingdom);
 
             SteamMatches.SendChatMsg(msg);
         }
 
-        void Join(object sender, JavascriptMethodEventArgs e)
+        public void Join()
         {
             SteamMatches.SendChatMsg("%j1");
         }
 
-        void Spectate(object sender, JavascriptMethodEventArgs e)
+        public void Spectate()
         {
             SteamMatches.SendChatMsg("%j0");
         }
 
         bool IsHost = false;
-        void OnJoinLobby(bool result)
+        public void OnJoinLobby(bool result)
         {
             LobbyInfo = new LobbyInfo(Program.MaxPlayers);
 
@@ -305,14 +297,14 @@ namespace Game
             }
         }
 
-        void OnP2PSessionRequest(UInt64 Player)
+        public void OnP2PSessionRequest(UInt64 Player)
         {
             Console.WriteLine("Accept session with {0}", Player);
             SteamP2P.AcceptP2PSessionWithPlayer(new SteamPlayer(Player));
             GetNames();
         }
 
-        void OnP2PSessionConnectFail(UInt64 Player)
+        public void OnP2PSessionConnectFail(UInt64 Player)
         {
             Console.WriteLine("Failed connection attempt with {0}", Player);
         }
@@ -333,7 +325,7 @@ namespace Game
         }
 
         List<string> Maps;
-        void BuildMapList()
+        public void BuildMapList()
         {
             if (InTrainingLobby)
             {
@@ -350,7 +342,7 @@ namespace Game
             }
         }
 
-        void SendLobbyData()
+        public void SendLobbyData()
         {
             var obj = new Dict();
             obj["SteamID"] = SteamCore.PlayerId();
@@ -375,12 +367,12 @@ namespace Game
             Send("lobby", obj);
         }
 
-        string Wrap(string s)
+        public string Wrap(string s)
         {
             return MessageStr.Seperator + s + MessageStr.Seperator;
         }
 
-        void BuildArgs()
+        public void BuildArgs()
         {
             if (!SteamMatches.IsLobbyOwner()) return;
 
@@ -442,7 +434,7 @@ namespace Game
             ConstructCommonArgs(teams, kingdoms, num_players, server, users, spectators);
         }
 
-        private void ConstructCommonArgs(StringBuilder teams, StringBuilder kingdoms, int num_players, string server, string users, string spectators)
+        public void ConstructCommonArgs(StringBuilder teams, StringBuilder kingdoms, int num_players, string server, string users, string spectators)
         {
             string options = InTrainingLobby ? "--keep-computer-dragonlords" : "--remove-computer-dragonlords";
             string networking = string.Format("--steam-networking --steam-server {0} --steam-users {1} --steam-spectators {2}", server, users, spectators);
@@ -453,14 +445,14 @@ namespace Game
                 networking, kingdoms, teams, num_players, Wrap(GameMapName), Wrap(game_params), Wrap(spells), options);
         }
 
-        private void ConstructArgs(StringBuilder teams, StringBuilder kingdoms, int num_players, string server, string users, string spectators, PlayerLobbyInfo player, bool spectator)
+        public void ConstructArgs(StringBuilder teams, StringBuilder kingdoms, int num_players, string server, string users, string spectators, PlayerLobbyInfo player, bool spectator)
         {
             string type = player.Host ? "--server" : "--client";
 
             player.Args = string.Format("{0} --p {1}", type, player.GamePlayer);
         }
 
-        void BuildLobbyInfo(ulong joining_player_id = 0)
+        public void BuildLobbyInfo(ulong joining_player_id = 0)
         {
             if (!SteamMatches.IsLobbyOwner()) return;
 
@@ -534,7 +526,7 @@ namespace Game
             SetLobbyInfo();
         }
 
-        int FirstTeamAvailableTo(PlayerLobbyInfo player)
+        public int FirstTeamAvailableTo(PlayerLobbyInfo player)
         {
             for (int team = 1; team <= Program.MaxTeams; team++)
             {
@@ -547,7 +539,7 @@ namespace Game
             return 0;
         }
 
-        int FirstKingdomAvailableTo(PlayerLobbyInfo player)
+        public int FirstKingdomAvailableTo(PlayerLobbyInfo player)
         {
             for (int kingdom = 1; kingdom <= Program.MaxPlayers; kingdom++)
             {
@@ -560,7 +552,7 @@ namespace Game
             return 0;
         }
 
-        bool TeamAvailableTo(int team, PlayerLobbyInfo player)
+        public bool TeamAvailableTo(int team, PlayerLobbyInfo player)
         {
             if (player.SteamID == 0)
             {
@@ -585,7 +577,7 @@ namespace Game
             }
         }
 
-        bool KingdomAvailableTo(int kingdom, PlayerLobbyInfo player)
+        public bool KingdomAvailableTo(int kingdom, PlayerLobbyInfo player)
         {
             if (player.SteamID == 0)
             {
@@ -599,7 +591,7 @@ namespace Game
             }
         }
 
-        void SetLobbyInfo()
+        public void SetLobbyInfo()
         {
             if (!SteamMatches.IsLobbyOwner()) return;
 
@@ -629,7 +621,7 @@ namespace Game
             SteamMatches.SetLobbyData("MaxPlayers", Program.MaxPlayers.ToString());
         }
 
-        void OnLobbyChatEnter(string message)
+        public void OnLobbyChatEnter(string message)
         {
             if (Program.GameStarted)
 
@@ -640,7 +632,7 @@ namespace Game
             }
         }
 
-        void OnLobbyDataUpdate()
+        public void OnLobbyDataUpdate()
         {
             Console.WriteLine("lobby data updated");
 
@@ -655,7 +647,7 @@ namespace Game
             SendLobbyData();
         }
 
-        void OnLobbyChatUpdate(int StateChange, UInt64 id)
+        public void OnLobbyChatUpdate(int StateChange, UInt64 id)
         {
             Console.WriteLine("lobby chat updated");
 
@@ -689,7 +681,7 @@ namespace Game
             }
         }
 
-        void OnLobbyChatMsg(string msg, UInt64 id, string name)
+        public void OnLobbyChatMsg(string msg, UInt64 id, string name)
         {
             Console.WriteLine("chat msg = {0}", msg);
 
@@ -701,7 +693,7 @@ namespace Game
             }
         }
 
-        bool ProcessAsAction(string msg, UInt64 id, string name)
+        public bool ProcessAsAction(string msg, UInt64 id, string name)
         {
             if (msg[0] != '%') return false; // Action message must start with a '%'
             if (msg.Length < 3) return false; // Action message must have at least 3 characters, eg '%p3'
@@ -827,7 +819,7 @@ namespace Game
             return true;
         }
 
-        private bool TryToJoin(string name, PlayerLobbyInfo player)
+        public bool TryToJoin(string name, PlayerLobbyInfo player)
         {
             if (!player.Spectator) return false;
 

@@ -10,7 +10,7 @@ namespace Game
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
         static bool InTrainingLobby = false;
-        void CreateLobby(int lobbyType, bool InTrainingLobby)
+        public void CreateLobby(int lobbyType, bool InTrainingLobby)
         {
             Program.GameStarted = false;
 
@@ -25,12 +25,12 @@ namespace Game
             SteamMatches.CreateLobby(OnCreateLobby, lobbyType);
         }
 
-        void SetLobbyType(int lobbyType)
+        public void SetLobbyType(int lobbyType)
         {
             SteamMatches.SetLobbyType(lobbyType);
         }
 
-        private static int StringToLobbyType(string _lobbyType)
+        public static int StringToLobbyType(string _lobbyType)
         {
             switch (_lobbyType)
             {
@@ -42,7 +42,7 @@ namespace Game
             return SteamMatches.LobbyType_Public;
         }
 
-        void FindLobbies(object sender, JavascriptMethodEventArgs e)
+        public void FindLobbies()
         {
             InTrainingLobby = false;
 
@@ -51,7 +51,7 @@ namespace Game
             SteamMatches.FindLobbies(OnFindLobbies);
         }
 
-        void FindFriendLobbies(object sender, JavascriptMethodEventArgs e)
+        public void FindFriendLobbies()
         {
             InTrainingLobby = false;
 
@@ -61,7 +61,7 @@ namespace Game
             SteamMatches.FindFriendLobbies(OnFindLobbies);
         }
 
-        void JoinLobby(object sender, JavascriptMethodEventArgs e)
+        public void JoinLobby(int lobby)
         {
             InTrainingLobby = false;
             Program.GameStarted = false;
@@ -70,16 +70,15 @@ namespace Game
             
             try { SteamMatches.LeaveLobby(); } catch { };
 
-            int lobby = (int)e.Arguments[0];
             SteamMatches.JoinLobby(lobby, OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);
         }
 
-        void WatchGame(object sender, JavascriptMethodEventArgs e)
+        public void WatchGame(int lobby)
         {
-            JoinLobby(sender, e);
+            JoinLobby(lobby);
         }
 
-        void OnCreateLobby(bool result)
+        public void OnCreateLobby(bool result)
         {
             if (result)
             {
@@ -101,7 +100,7 @@ namespace Game
             SteamMatches.JoinCreatedLobby(OnJoinLobby, OnLobbyChatUpdate, OnLobbyChatMsg, OnLobbyDataUpdate);                
         }
 
-        private static void SetLobbyName()
+        public static void SetLobbyName()
         {
             string lobby_name = "";
 
@@ -117,7 +116,7 @@ namespace Game
             SteamMatches.SetLobbyData("name", lobby_name);
         }
 
-        void Offline()
+        public void Offline()
         {
             var obj = new
             {
@@ -128,7 +127,7 @@ namespace Game
             Send("lobbies", obj);
         }
 
-        void OnFindLobbies(bool result)
+        public void OnFindLobbies(bool result)
         {
             if (result)
             {

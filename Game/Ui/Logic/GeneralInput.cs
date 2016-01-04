@@ -5,14 +5,14 @@ namespace Game
         public bool GameInputEnabled = true;
         public bool MinimapEnabled = true;
         public bool UnitDisplayEnabled = true;
-        void DisableGameInput(object sender, JavascriptMethodEventArgs e)
+        public void DisableGameInput()
         {
             GameInputEnabled = false;
             MinimapEnabled = false;
             UnitDisplayEnabled = false;
         }
 
-        void EnableGameInput(object sender, JavascriptMethodEventArgs e)
+        public void EnableGameInput()
         {
             GameInputEnabled = true;
             MinimapEnabled = true;
@@ -20,13 +20,13 @@ namespace Game
         }
 
         public bool MouseOverHud = false;
-        void OnMouseLeave(object sender, JavascriptMethodEventArgs e)
+        public void OnMouseLeave()
         {
             MouseOverHud = false;
             //Console.WriteLine(MouseOverHud);
         }
 
-        void OnMouseOver(object sender, JavascriptMethodEventArgs e)
+        public void OnMouseOver()
         {
             MouseOverHud = true;
             //Console.WriteLine(MouseOverHud);

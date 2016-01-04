@@ -58,7 +58,7 @@ namespace Game
             }
         }
 
-        void LoadConfig()
+        public void LoadConfig()
         {
             try
             {
@@ -71,7 +71,7 @@ namespace Game
             }
         }
 
-        void SaveConfig()
+        public void SaveConfig()
         {
             var config = Jsonify(CurrentConfig);
             File.WriteAllText(ConfigFilePath, config);
@@ -79,7 +79,7 @@ namespace Game
 
         bool NeedsApplication = false;
 
-        void ApplyConfig(bool Activate = true)
+        public void ApplyConfig(bool Activate = true)
         {
             if (CurrentConfig.Fullscreen)
             {
@@ -106,7 +106,7 @@ namespace Game
             }
         }
 
-        void DoActivation()
+        public void DoActivation()
         {
             NeedsApplication = false;
 

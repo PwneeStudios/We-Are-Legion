@@ -10,7 +10,7 @@ namespace Game
 
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
-        float ArgTo0to1(float arg)
+        public float ArgTo0to1(float arg)
         {
             string stringVal;
 
@@ -31,7 +31,7 @@ namespace Game
             return val;
         }
 
-        void SetSoundVolume(float volume)
+        public void SetSoundVolume(float volume)
         {
             CurrentConfig.SoundVolume = ArgTo0to1(volume);
             AmbientSounds.UpdateVolumes();
@@ -43,20 +43,20 @@ namespace Game
             return CurrentConfig.SoundVolume;
         }
 
-        void SetMusicVolume(float volume)
+        public void SetMusicVolume(float volume)
         {
             CurrentConfig.MusicVolume = ArgTo0to1(volume);
             SaveConfig();
         }
 
-        float GetMusicVolume()
+        public float GetMusicVolume()
         {
             return CurrentConfig.MusicVolume;
         }
 
-        void SetFullscreen(object sender, JavascriptMethodEventArgs e)
+        public void SetFullscreen(bool fullscreen)
         {
-            CurrentConfig.Fullscreen = (bool)e.Arguments[0];
+            CurrentConfig.Fullscreen = fullscreen;
             
             SaveConfig();
             ApplyConfig();
@@ -67,7 +67,7 @@ namespace Game
             return CurrentConfig.Fullscreen;
         }
 
-        string GetFullscreenValues(object sender, JavascriptMethodEventArgs e)
+        public string GetFullscreenValues()
         {
             var options = new List<Dict>();
             var dict = new Dict();
@@ -85,10 +85,8 @@ namespace Game
             return Jsonify(options);
         }
 
-        void SetResolution(object sender, JavascriptMethodEventArgs e)
+        public void SetResolution(int Resolution)
         {
-            int Resolution = (int)e.Arguments[0];
-
             if (Resolution >= 0 && Resolution < Resolutions.Count)
             {
                 SetResolution(Resolutions[Resolution]);
@@ -104,7 +102,7 @@ namespace Game
             ApplyConfig();
         }
 
-        int GetResolution()
+        public int GetResolution()
         {
             int index = Resolutions.FindIndex(match =>
                 match.Width == graphics.PreferredBackBufferWidth &&
@@ -121,7 +119,7 @@ namespace Game
         }
 
         static List<DisplayMode> _Modes = null;
-        List<DisplayMode> Resolutions
+        public List<DisplayMode> Resolutions
         {
             get
             {
@@ -142,7 +140,7 @@ namespace Game
             }
         }
 
-        string GetResolutionValues(object sender, JavascriptMethodEventArgs e)
+        public string GetResolutionValues()
         {
             var options = new List<object>();
 
