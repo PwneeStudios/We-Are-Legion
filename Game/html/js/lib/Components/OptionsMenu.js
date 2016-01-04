@@ -46,14 +46,14 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             this.setState({ value: value });
 
             if (interop.InXna()) {
-                xna['Set' + this.props.variable](value);
+                //xna['Set' + this.props.variable](value);fixme
             }
         },
 
         getInitialState: function getInitialState() {
             var value = 0.0;
             if (interop.InXna()) {
-                value = xna['Get' + this.props.variable]();
+                //value = xna['Get' + this.props.variable]();fixme
             }
 
             return { value: value };
@@ -89,7 +89,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
         onSelect: function onSelect(item) {
             if (interop.InXna()) {
-                xna['Set' + this.props.variable](item.value);
+                //xna['Set' + this.props.variable](item.value);fixme
             }
         },
 
@@ -97,11 +97,11 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             var choices, value;
 
             if (interop.InXna()) {
-                value = xna['Get' + this.props.variable]();
+                //value = xna['Get' + this.props.variable]();fixme
                 choices = interop.get('Get' + this.props.variable + 'Values');
                 choices = choices || this.props.choices;
 
-                var item = xna['Get' + this.props.variable]();
+                //var item = xna['Get' + this.props.variable]();fixme
                 value = _.find(choices, function (o) {
                     return o.value === value;
                 });
@@ -180,7 +180,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
             var disableResolutions = false;
             if (interop.InXna()) {
-                var value = xna.GetFullscreen();
+                var value = interop.getFullscreen();
                 if (value) {
                     disableResolutions = true;
                 }

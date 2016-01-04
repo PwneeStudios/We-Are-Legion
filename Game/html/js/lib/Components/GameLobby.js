@@ -123,13 +123,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
 
         selectTeam: function selectTeam(item) {
             if (interop.InXna()) {
-                xna.SelectTeam(item.value);
+                interop.selectTeam(item.value);
             }
         },
 
         selectKingdom: function selectKingdom(item) {
             if (interop.InXna()) {
-                xna.SelectKingdom(item.value);
+                interop.selectKingdom(item.value);
             }
         },
 
@@ -332,7 +332,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
 
         startGame: function startGame() {
             if (interop.InXna()) {
-                xna.StartGame();
+                interop.startGame();
             }
         },
 
@@ -340,7 +340,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             console.log('click start');
 
             if (interop.InXna()) {
-                xna.StartGameCountdown();
+                interop.startGameCountdown();
             } else {
                 setTimeout(function () {
                     console.log('do lobby update with');

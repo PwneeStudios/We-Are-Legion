@@ -1,7 +1,29 @@
 define(['lodash'], function(_) {
+    var invoke = (invocation, ...args) => {
+        if (!window.updateKey) window.updateKey = 1;
+        else window.updateKey++;
+        
+        invocation += '(';
+        
+        if (args && args.length > 0) {
+            for (let i = 0; i < args.length; i++) {
+                invocation += args[i];
+                
+                if (i < args.length - 1) {
+                    invocation += ','
+                }
+            }
+        }
+        
+        invocation += ')';
+
+        window.location.hash='#' + invocation + window.updateKey;
+    };
+    
     var interop = {
         InXna: function() {
-            return typeof xna !== 'undefined';
+            //return typeof xna !== 'undefined';
+            return true;
         },
         
         xna: function() {
@@ -9,145 +31,145 @@ define(['lodash'], function(_) {
         },
         
         onOver: function() {
-            //console.log('over');
             if (interop.InXna()) {
-                xna.OnMouseOver();
+                invoke("OnMouseOver");
             }
         },
 
         onLeave: function() {
-            //console.log('leave');
             if (interop.InXna()) {
-                xna.OnMouseLeave();
+                invoke("OnMouseLeave");
             }
         },
 
         disableGameInput: function() {
             if (interop.InXna()) {
-                xna.DisableGameInput();
+                invoke("DisableGameInput");
             }
         },
 
         enableGameInput: function() {
             if (interop.InXna()) {
-                xna.EnableGameInput();
+                invoke("EnableGameInput");
             }
         },
 
         lobbyUiCreated: function() {
             if (interop.InXna()) {
-                xna.LobbyUiCreated();
+                invoke("LobbyUiCreated");
             }
         },
 
         drawMapPreviewAt: function(x, y, width, height) {
             if (interop.InXna()) {
-                xna.DrawMapPreviewAt(x, y, width, height);
+                invoke("DrawMapPreviewAt",x, y, width, height);
             }
         },
 
         hideMapPreview: function() {
             if (interop.InXna()) {
-                xna.HideMapPreview();
+                invoke("HideMapPreview");
             }
         },
 
         setMap: function(map) {
             if (interop.InXna()) {
-                xna.SetMap(map);
+                invoke("SetMap", map);
             }
         },
 
         get: function(funcName) {
-            var stringResult = xna[funcName]();
-            return JSON.parse(stringResult);
+            return 0;
+            //fixme
+            //var stringResult = xna[funcName]();
+            //return JSON.parse(stringResult);
         },
 
         findLobbies: function(friends) {
             if (interop.InXna()) {
                 if (friends) {
-                    xna.FindFriendLobbies();
+                    invoke("FindFriendLobbies");
                 } else {
-                    xna.FindLobbies();
+                    invoke("FindLobbies");
                 }
             }
         },
 
         createLobby: function(type, training) {
             if (interop.InXna()) {
-                xna.CreateLobby(type, training);
+                invoke("CreateLobby", type, training);
             }
         },
 
         joinLobby: function(index) {
             if (interop.InXna()) {
-                xna.JoinLobby(index);
+                invoke("JoinLobby", index);
             }
         },
 
         leaveLobby: function() {
             if (interop.InXna()) {
-                xna.LeaveLobby();
+                invoke("LeaveLobby");
             }
         },
 
         returnToLobby: function() {
             if (interop.InXna()) {
-                xna.ReturnToLobby();
+                invoke("ReturnToLobby");
             }
         },
 
         setLobbyType: function(type) {
             if (interop.InXna()) {
-                xna.SetLobbyType(type);
+                invoke("SetLobbyType", type);
             }
         },
 
         requestPause: function(index) {
             if (interop.InXna()) {
-                xna.RequestPause();
+                invoke("RequestPause");
             }
         },
 
         requestUnpause: function(index) {
             if (interop.InXna()) {
-                xna.RequestUnpause();
+                invoke("RequestUnpause");
             }
         },
 
         toggleEditor: function(index) {
             if (interop.InXna()) {
-                xna.PlayButtonPressed();
+                invoke("PlayButtonPressed");
             }
         },
 
         setUnitPaint: function(type) {
             if (interop.InXna()) {
-                xna.SetUnitPaint(type);
+                invoke("SetUnitPaint", type);
             }
         },
 
         setTilePaint: function(type) {
             if (interop.InXna()) {
-                xna.SetTilePaint(type);
+                invoke("SetTilePaint", type);
             }
         },
 
         setPlayer: function(player) {
             if (interop.InXna()) {
-                xna.SetPlayer(player);
+                invoke("SetPlayer", player);
             }
         },
 
         setPaintChoice: function(choice) {
             if (interop.InXna()) {
-                xna.SetPaintChoice(choice);
+                invoke("SetPaintChoice", choice);
             }
         },
 
         getMaps: function(directory) {
             if (interop.InXna()) {
-                return JSON.parse(xna.GetMaps(directory));
+                return JSON.parse(invoke("GetMaps", directory));
             } else {
                 return maps = [{name:'CUSTOM',list:['__map1','__map2','__map3']},'Beset','Clash of Madness','Nice',{name:'DOWNLOADS',list:['map1','map2',{name:'CUSTOM',list:['__map1','__map2','__map3']},'map3',]}];
             }
@@ -155,69 +177,113 @@ define(['lodash'], function(_) {
 
         loadMap: function(path) {
             if (interop.InXna()) {
-                xna.LoadMap(path);
+                invoke("LoadMap", path);
             }
         },
 
         saveMap: function(path) {
             if (interop.InXna()) {
-                xna.SaveMap(path);
+                invoke("SaveMap", path);
             }
         },
 
         createNewMap: function(path) {
             if (interop.InXna()) {
-                xna.CreateNewMap(path);
+                invoke("CreateNewMap", path);
             }
         },
 
         editorUiClicked: function() {
             if (interop.InXna()) {
-                xna.EditorUiClicked();
+                invoke("EditorUiClicked");
             }
         },
 
         toggleChat: function(state) {
             if (interop.InXna()) {
-                xna.ToggleChat(state);
+                invoke("ToggleChat", state);
             }
         },
 
         startEditor: function() {
             if (interop.InXna()) {
-                xna.StartEditor();
+                invoke("StartEditor");
             }
         },
 
         watchGame: function(lobby) {
             if (interop.InXna()) {
-                xna.WatchGame(lobby);
+                invoke("WatchGame", lobby);
             }
         },
 
         join: function() {
             if (interop.InXna()) {
-                xna.Join();
+                invoke("Join");
             }
         },
 
         spectate: function() {
             if (interop.InXna()) {
-                xna.Spectate();
+                invoke("Spectate");
             }
         },
 
         playSound: function(sound, vol) {
-            if (!window.updateKey) window.updateKey = 1;
-            else window.updateKey++;
-            window.location.hash='#' + 'PlaySound(PlaceBuilding,1)' + window.updateKey;
-
             if (interop.InXna()) {
                 if (typeof vol === 'undefined') {
                     vol = 1;
                 }
 
-                xna.PlaySound(sound, vol);
+                invoke("PlaySound", sound, vol);
+            }
+        },
+        
+        onLobbyChatEnter: function(message) {
+            if (interop.InXna()) {
+                invoke("OnLobbyChatEnter", message);
+            }
+        },
+        
+        onChatEnter: function(message) {
+            if (interop.InXna()) {
+                invoke("OnChatEnter", message);
+            }
+        },
+
+        actionButtonPressed: function(name) {
+            if (interop.InXna()) {
+                invoke("ActionButtonPressed", name);
+            }
+        },
+        
+        selectTeam: function(team) {
+            if (interop.InXna()) {
+                invoke("SelectTeam", team);
+            }
+        },
+
+        selectKingdom: function(kingdom) {
+            if (interop.InXna()) {
+                invoke("SelectKingdom", kingdom);
+            }
+        },
+
+        startGame: function() {
+            if (interop.InXna()) {
+                invoke("StartGame");
+            }
+        },
+        
+        startGameCountdown: function() {
+            if (interop.InXna()) {
+                invoke("StartGameCountdown");
+            }
+        },
+        
+        getFullscreen: function() {
+            if (interop.InXna()) {
+                invoke("GetFullscreen");
             }
         },
     };

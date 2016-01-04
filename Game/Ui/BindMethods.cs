@@ -1,4 +1,4 @@
-using System;
+using System.Reflection;
 
 namespace Game
 {
@@ -19,7 +19,16 @@ namespace Game
             }
 
             var function = this.GetType().GetMethod(function_name);
-            var args = function.GetParameters();
+
+            ParameterInfo[] args = null;
+            try
+            {
+                args = function.GetParameters();
+            }
+            catch
+            {
+                function.Invoke(this, new object[] { });
+            }
 
             object[] typed_args = new object[args.Length];
             for (int i = 0; i < args.Length; i++)

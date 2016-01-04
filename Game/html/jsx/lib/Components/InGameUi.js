@@ -162,7 +162,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
         onClick: function() {
             if (interop.InXna()) {
-                xna.ActionButtonPressed(this.props.name);
+                interop.actionButtonPressed(this.props.name);
             }
         },
 

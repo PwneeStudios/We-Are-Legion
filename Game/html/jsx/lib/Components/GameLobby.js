@@ -127,13 +127,13 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
         selectTeam: function(item) {
             if (interop.InXna()) {
-                xna.SelectTeam(item.value);
+                interop.selectTeam(item.value);
             }
         },
 
         selectKingdom: function(item) {
             if (interop.InXna()) {
-                xna.SelectKingdom(item.value);
+                interop.selectKingdom(item.value);
             }
         },
         
@@ -330,7 +330,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
 
         startGame: function() {
             if (interop.InXna()) {
-                xna.StartGame();
+                interop.startGame();
             }
         },
 
@@ -338,7 +338,7 @@ function(_, React, ReactBootstrap, interop, events, ui,
             console.log('click start');
 
             if (interop.InXna()) {
-                xna.StartGameCountdown();
+                interop.startGameCountdown();
             } else {
                 setTimeout(function() {
                     console.log('do lobby update with');

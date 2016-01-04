@@ -178,7 +178,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             } else if (this.props.unit) {
                 interop.setUnitPaint(this.props.unit);
             } else if (interop.InXna()) {
-                xna.ActionButtonPressed(this.props.name);
+                interop.actionButtonPressed(this.props.name);
             }
         },
 

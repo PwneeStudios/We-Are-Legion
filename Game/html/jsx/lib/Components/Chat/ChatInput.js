@@ -55,9 +55,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui'], functi
                     var message = this.refs.input.getInputDOMNode().value;
                     
                     if (this.props.lobbyChat) {
-                        xna.OnLobbyChatEnter(message);
+                        interop.onLobbyChatEnter(message);
                     } else {
-                        xna.OnChatEnter(message);
+                        interop.onChatEnter(message);
                     }
                     
                     this.setState({
