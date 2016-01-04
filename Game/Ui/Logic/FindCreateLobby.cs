@@ -10,7 +10,7 @@ namespace Game
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
         static bool InTrainingLobby = false;
-        public void CreateLobby(int lobbyType, bool InTrainingLobby)
+        public void CreateLobby(string lobbyType, bool InTrainingLobby)
         {
             Program.GameStarted = false;
 
@@ -22,7 +22,7 @@ namespace Game
             if (SteamMatches.InLobby())
 
             try { SteamMatches.LeaveLobby(); } catch { };
-            SteamMatches.CreateLobby(OnCreateLobby, lobbyType);
+            SteamMatches.CreateLobby(OnCreateLobby, StringToLobbyType(lobbyType));
         }
 
         public void SetLobbyType(int lobbyType)

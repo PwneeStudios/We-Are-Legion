@@ -321,7 +321,7 @@ namespace Game
                 {
                     GameClass.Game.Send("back");
                     ShowingWaiting = false;
-                    GameClass.Game.ToggleChat(Toggle.Off);
+                    GameClass.Game.ToggleChatViaFlag(Toggle.Off);
                 }
             }
             else

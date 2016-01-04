@@ -22,7 +22,7 @@ define(['lodash'], function (_) {
 
         invocation += ')';
 
-        window.location.hash = '#' + invocation + window.updateKey;
+        window.location.hash = '#invoke!guid' + window.updateKey + '!' + invocation;
     };
 
     var interop = {

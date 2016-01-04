@@ -41,7 +41,7 @@ namespace Game
 
         public bool ShowChat = false;
         public bool ChatGlobal = true;
-        public void ToggleChat(Toggle value = Toggle.Flip)
+        public void ToggleChatViaFlag(Toggle value = Toggle.Flip)
         {
             value.Apply(ref ShowChat);
             UpdateShow();
@@ -92,7 +92,7 @@ namespace Game
                 Networking.ToServer(new MessageChat(ChatGlobal, Game.PlayerName(), message));
             }
 
-            ToggleChat(Toggle.Off);
+            ToggleChatViaFlag(Toggle.Off);
         }
     }
 }

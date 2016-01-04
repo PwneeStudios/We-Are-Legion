@@ -205,7 +205,7 @@ namespace Game
         public void StartGameCountdown()
         {
             // Only the lobby owner can start the match.
-            if (!SteamMatches.IsLobbyOwner())
+            if (!SteamMatches.IsLobbyOwner()) return;
 
             // We never set the lobby to unjoinable.
             //SteamMatches.SetLobbyJoinable(false);

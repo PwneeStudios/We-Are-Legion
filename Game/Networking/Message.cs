@@ -426,7 +426,7 @@ namespace Game
             GameClass.World.DesyncPause = false;
             GameClass.World.PreventDragonLordMessageCount = 20;
             
-            GameClass.Game.ToggleChat(Toggle.Off);
+            GameClass.Game.ToggleChatViaFlag(Toggle.Off);
         }
     }
 

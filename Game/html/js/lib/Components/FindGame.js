@@ -109,7 +109,6 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         findLobbies: function findLobbies(friendsFlag) {
             var _this = this;
 
-            console.log('hola');
             this.refresh = function () {
                 interop.findLobbies(friendsFlag);
                 _this.setState(_this.loadingState);

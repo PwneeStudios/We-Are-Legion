@@ -61,7 +61,7 @@ namespace SteamWrapper
         {
             if (Browser == null) return;
 
-            Console.WriteLine($"Executing js {code}");
+            //Console.WriteLine($"Executing js {code}");
             SteamHTMLSurface.ExecuteJavascript(Browser, code);
         }
 
@@ -109,11 +109,23 @@ namespace SteamWrapper
             Texture.SetData(pixels);
         }
 
+        public static int InvocationGuid = -1;
         public static void OnURLChange(HTML_URLChanged_t pParam)
         {
             try
             {
-                string invocation = pParam.pchURL.Split('#')[1];
+                string invocation = pParam.pchURL.After('#');
+
+                if (!invocation.StartsWith("invoke!")) return;
+
+                string guid_str = invocation.Split('!')[1];
+                int guid = int.Parse(guid_str.Substring("guid".Length));
+
+                if (guid <= InvocationGuid) return;
+                InvocationGuid = guid;
+
+                invocation = invocation.After('!').After('!');
+
                 Console.WriteLine($"Invocating {invocation}");
                 Game.GameClass.Game.ExecuteInvocation(invocation);
             }
@@ -352,6 +364,11 @@ namespace SteamWrapper
 
     public static class StringHelper
     {
+        public static string After(this string str, char c)
+        {
+            return str.Substring(str.IndexOf(c) + 1);
+        }
+
         public static byte[] GetBytes(string str)
         {
             int msgLength = str.Length * sizeof(char);

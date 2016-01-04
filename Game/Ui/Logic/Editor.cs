@@ -72,11 +72,11 @@ namespace Game
         {
             if (state)
             {
-                GameClass.Game.ToggleChat(Toggle.On);
+                GameClass.Game.ToggleChatViaFlag(Toggle.On);
             }
             else
             {
-                GameClass.Game.ToggleChat(Toggle.Off);
+                GameClass.Game.ToggleChatViaFlag(Toggle.Off);
             }
         }
 
