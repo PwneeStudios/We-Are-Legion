@@ -10,7 +10,7 @@ define(['lodash'], function(_) {
         
         return {
             componentDidMount: function() {
-                console.log('push something! ' + eventName);
+                log('push something! ' + eventName);
                 callbacks.push(this);
             },
             

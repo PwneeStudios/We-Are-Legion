@@ -10,7 +10,7 @@ define(['lodash'], function(_) {
                 invocation += args[i];
                 
                 if (i < args.length - 1) {
-                    invocation += ','
+                    invocation += '``'
                 }
             }
         }
@@ -19,6 +19,14 @@ define(['lodash'], function(_) {
 
         window.location.hash='#invoke!guid' + window.updateKey + '!' + invocation;
     };
+    
+    var log = (msg) => {
+        console.log(msg);
+        invoke('JsLog', msg);
+    };
+    
+    window.invoke = invoke;
+    window.log = log;
     
     var interop = {
         InXna: function() {

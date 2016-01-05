@@ -3,7 +3,7 @@ require(['jquery', 'react', 'Components/GameUi'], function($, React, GameUi) {
     var $style = $("<style type='text/css'>").appendTo('head'); 
 
     onresize = onload = function() {
-    	console.log('on load!');
+    	log('on load!');
 
         window.w = window.innerWidth;
         window.h = window.innerHeight;

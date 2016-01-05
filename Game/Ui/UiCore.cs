@@ -87,6 +87,8 @@ namespace Game
 
         public void Send(string function, params object[] args)
         {
+            if (function == "setMode") Console.WriteLine('!');
+
             string s = "";
             bool first = true;
 

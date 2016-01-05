@@ -378,12 +378,12 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
         },
 
         onUpdateEditor: function(values) {
-            //console.log(JSON.stringify(values));
+            //log(JSON.stringify(values));
             this.setState(values);
         },
 
         onCommand: function(command) {
-            console.log(command);
+            log(command);
             if (command === 'save-as') {
                 this.refs.saveAs.getDOMNode().click();
             } else if (command === 'save') {
@@ -408,7 +408,7 @@ function(_, sound, React, ReactBootstrap, interop, events, ui,
         lerp: function(x1, y1, x2, y2, t)
         {
             var width = x2 - x1;
-            s = (t - x1) / width;
+            var s = (t - x1) / width;
 
             return y2 * s + y1 * (1 - s);
         },

@@ -309,7 +309,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
         lerp: function lerp(x1, y1, x2, y2, t) {
             var width = x2 - x1;
-            s = (t - x1) / width;
+            var s = (t - x1) / width;
 
             return y2 * s + y1 * (1 - s);
         },

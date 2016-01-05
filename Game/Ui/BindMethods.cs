@@ -1,9 +1,17 @@
+using System;
 using System.Reflection;
+
+using SteamWrapper;
 
 namespace Game
 {
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
+        public void JsLog(string msg)
+        {
+            Console.WriteLine(msg.Abbreviated());
+        }
+
         public void ExecuteInvocation(string invocation)
         {
             var pieces = invocation.Split('(', ')');
@@ -11,7 +19,7 @@ namespace Game
             string function_name = pieces[0];
             try
             {
-                pieces = pieces[1].Split(',');
+                pieces = pieces[1].Split(new string[] { "``" }, StringSplitOptions.RemoveEmptyEntries);
             }
             catch
             {

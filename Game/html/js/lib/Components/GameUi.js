@@ -174,7 +174,7 @@ define(['lodash', 'react', 'interop', 'events', 'Components/InGameUi', 'Componen
                 modes[mode] = [];
             }
 
-            console.log('setting mode to ' + newMode);
+            log('setting mode to ' + newMode);
 
             this.refresh();
         },
@@ -191,13 +191,13 @@ define(['lodash', 'react', 'interop', 'events', 'Components/InGameUi', 'Componen
                 params: params
             });
 
-            console.log('setting screen to ' + screen);
+            log('setting screen to ' + screen);
         },
 
         render: function render() {
             var body = null;
 
-            console.log('render screen ' + this.state.screen + ' ' + JSON.stringify(this.state.params));
+            log('render screen ' + this.state.screen + ' ' + JSON.stringify(this.state.params));
 
             switch (this.state.screen) {
                 case 'game-menu':

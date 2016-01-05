@@ -40,8 +40,8 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         },
 
         render: function() {
-            console.log('a wild lobby');
-            console.log(JSON.stringify(this.props.data));
+            log('a wild lobby');
+            log(JSON.stringify(this.props.data));
 
             var info = this.props.data.NumPlayers + ' / ' + this.props.data.MaxPlayers;
             if (this.props.data.NumSpectators) {
@@ -67,7 +67,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         mixins: [events.FindLobbiesMixin, events.AllowBackMixin],
 
         onFindLobbies: function(values) {
-            console.log('found lobbies');
+            log('found lobbies');
 
             this.setState({
                 loading: false,

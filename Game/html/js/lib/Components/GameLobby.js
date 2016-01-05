@@ -195,37 +195,37 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
 
         //events.AllowBackMixin,
         onLobbyUpdate: function onLobbyUpdate(values) {
-            console.log('lobby update!');
+            log('lobby update!');
 
             if (!this.state.loading && values.LobbyLoading) {
                 return;
             }
 
-            console.log('should we startStartGameCountdown?');
-            console.log(JSON.stringify(values));
-            console.log(values.CountDownStarted);
-            console.log(values.GameStarted);
-            console.log(this.state.starting);
-            console.log(!this.state.starting);
-            console.log(values.CountDownStarted && !this.state.starting);
-            console.log(values.CountDownStarted && !this.state.starting && !values.GameStarted);
-            console.log('----------');
-            console.log(values.CountDownStarted);
-            console.log(values.GameStarted);
-            console.log(this.state.starting);
-            console.log(!this.state.starting);
-            console.log(values.CountDownStarted && !this.state.starting);
-            console.log(values.CountDownStarted && !this.state.starting && !values.GameStarted);
-            console.log('----------');
+            log('should we startStartGameCountdown?');
+            log(JSON.stringify(values));
+            log(values.CountDownStarted);
+            log(values.GameStarted);
+            log(this.state.starting);
+            log(!this.state.starting);
+            log(values.CountDownStarted && !this.state.starting);
+            log(values.CountDownStarted && !this.state.starting && !values.GameStarted);
+            log('----------');
+            log(values.CountDownStarted);
+            log(values.GameStarted);
+            log(this.state.starting);
+            log(!this.state.starting);
+            log(values.CountDownStarted && !this.state.starting);
+            log(values.CountDownStarted && !this.state.starting && !values.GameStarted);
+            log('----------');
 
             if (values.CountDownStarted && !this.state.starting && !values.GameStarted) {
-                console.log('startStartGameCountdown');
-                console.log(JSON.stringify(values));
-                console.log(values.CountDownStarted);
-                console.log(values.GameStarted);
-                console.log(this.state.starting);
+                log('startStartGameCountdown');
+                log(JSON.stringify(values));
+                log(values.CountDownStarted);
+                log(values.GameStarted);
+                log(this.state.starting);
                 this.startStartGameCountdown();
-                console.log(values.CountDownStarted && !this.state.starting && !values.GameStarted);
+                log(values.CountDownStarted && !this.state.starting && !values.GameStarted);
             }
 
             var lobbyInfo = values.LobbyInfo ? JSON.parse(values.LobbyInfo) : this.state.lobbyInfo || null;
@@ -234,7 +234,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 for (var i = 0; i < lobbyInfo.Players.length; i++) {
                     if (lobbyInfo.Players[i].SteamID === values.SteamID) {
                         player = lobbyInfo.Players[i];
-                        console.log('found the player in players');
+                        log('found the player in players');
                     }
                 }
 
@@ -242,11 +242,11 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                     for (var i = 0; i < lobbyInfo.Spectators.length; i++) {
                         if (lobbyInfo.Spectators[i].SteamID === values.SteamID) {
                             player = lobbyInfo.Spectators[i];
-                            console.log('found the player in spectators');
+                            log('found the player in spectators');
                         }
                     }
                 } else {
-                    console.log('no spectators found');
+                    log('no spectators found');
                 }
             }
 
@@ -297,7 +297,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
                 interop.joinLobby(this.props.params.lobbyIndex);
             }
 
-            console.log('made the lobby');
+            log('made the lobby');
         },
 
         getInitialState: function getInitialState() {
@@ -337,13 +337,13 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         },
 
         onClickStart: function onClickStart() {
-            console.log('click start');
+            log('click start');
 
             if (interop.InXna()) {
                 interop.startGameCountdown();
             } else {
                 setTimeout(function () {
-                    console.log('do lobby update with');
+                    log('do lobby update with');
                     window.lobby({
                         CountDownStarted: true,
                         GameStarted: false
@@ -385,7 +385,7 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
         },
 
         onMapPick: function onMapPick(map) {
-            console.log(map);
+            log(map);
             interop.setMap(map);
         },
 
@@ -421,9 +421,9 @@ define(['lodash', 'react', 'react-bootstrap', 'interop', 'events', 'ui', 'Compon
             var numPlayers = this.state.lobbyInfo.Players.length;
 
             if (spectate) {
-                console.log('we are spectating');
+                log('we are spectating');
             } else {
-                console.log('we are in the game');
+                log('we are in the game');
             }
 
             if (this.state.lobbyInfo.Spectators) {

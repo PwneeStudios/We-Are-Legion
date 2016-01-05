@@ -83,6 +83,9 @@ namespace Game
 
         void GameLogic(GameTime gameTime)
         {
+            //Send("setMode", "in-game");
+            //Send("setScreen", "in-game-ui");
+
             switch (State)
             {
                 case GameState.ToEditor:
