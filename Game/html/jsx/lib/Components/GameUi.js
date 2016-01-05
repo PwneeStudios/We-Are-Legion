@@ -98,7 +98,7 @@ define(['lodash', 'react', 'interop', 'events',
             setMode('none');
 
             setMode('main-menu');
-            //setScreen('game-menu');
+            setScreen('game-menu');
 
             // Test menus
             //setScreen('options');
@@ -111,7 +111,7 @@ define(['lodash', 'react', 'interop', 'events',
             //setMode('in-game');
             //setScreen('game-over', {victory:false});
             //setScreen('game-over', {victory:true});
-            setScreen('in-game-ui');
+            //setScreen('in-game-ui');
             //setScreen('editor-ui');
             //setScreen('in-game-menu');
             //setScreen('confirm-leave-game');

@@ -770,7 +770,7 @@ namespace SteamWrapper
         {
             var bytes = StringHelper.GetBytes(Message);
 
-            SteamGameServerNetworking.SendP2PPacket(User, bytes, (uint)bytes.Length, EP2PSend.k_EP2PSendReliable, 0);
+            SteamNetworking.SendP2PPacket(User, bytes, (uint)bytes.Length, EP2PSend.k_EP2PSendReliable, 0);
         }
 
         public static void SendBytes(SteamPlayer User, byte[] Bytes)
@@ -799,7 +799,7 @@ namespace SteamWrapper
             //}
             //len = count;
 
-            SteamGameServerNetworking.SendP2PPacket(User, pchMsg, len, EP2PSend.k_EP2PSendReliable, 0);
+            SteamNetworking.SendP2PPacket(User, pchMsg, len, EP2PSend.k_EP2PSendReliable, 0);
         }
 
         public static bool MessageAvailable()
@@ -813,7 +813,7 @@ namespace SteamWrapper
         public static Tuple<UInt64, String> ReadMessage()
         {
             UInt32 msgSize = 0;
-            bool result = SteamGameServerNetworking.IsP2PPacketAvailable(out msgSize, 0);
+            bool result = SteamNetworking.IsP2PPacketAvailable(out msgSize, 0);
 
             if (!result)
             {
@@ -825,7 +825,7 @@ namespace SteamWrapper
             CSteamID steamIDRemote;
             UInt32 bytesRead = 0;
 
-            if (SteamGameServerNetworking.ReadP2PPacket(packet, msgSize, out bytesRead, out steamIDRemote, 0))
+            if (SteamNetworking.ReadP2PPacket(packet, msgSize, out bytesRead, out steamIDRemote, 0))
             {
                 msg = packet.ToString();
             }
@@ -836,7 +836,7 @@ namespace SteamWrapper
         public static Tuple<UInt64, byte[]> ReadBytes()
         {
             UInt32 msgSize = 0;
-            bool result = SteamGameServerNetworking.IsP2PPacketAvailable(out msgSize, 0);
+            bool result = SteamNetworking.IsP2PPacketAvailable(out msgSize, 0);
 
             if (!result)
             {
@@ -848,7 +848,7 @@ namespace SteamWrapper
             UInt32 bytesRead = 0;
 
             byte[] Bytes = new byte[msgSize];
-            if (SteamGameServerNetworking.ReadP2PPacket(packet, msgSize, out bytesRead, out steamIDRemote, 0))
+            if (SteamNetworking.ReadP2PPacket(packet, msgSize, out bytesRead, out steamIDRemote, 0))
             {
                 for (int i = 0; i < msgSize; i++)
                 {
@@ -871,7 +871,7 @@ namespace SteamWrapper
 
         public static void AcceptP2PSessionWithPlayer(SteamPlayer Player)
         {
-            SteamGameServerNetworking.AcceptP2PSessionWithUser(Player.m_handle);
+            SteamNetworking.AcceptP2PSessionWithUser(Player.m_handle);
         }
     }
 
