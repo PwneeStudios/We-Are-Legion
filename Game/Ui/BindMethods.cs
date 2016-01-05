@@ -12,6 +12,11 @@ namespace Game
             Console.WriteLine(msg.Abbreviated());
         }
 
+        public void JsError(string msg)
+        {
+            Console.WriteLine(msg);
+        }
+
         public void ExecuteInvocation(string invocation)
         {
             var pieces = invocation.Split('(', ')');

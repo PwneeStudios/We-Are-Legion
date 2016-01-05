@@ -25,17 +25,38 @@ define(['lodash'], function(_) {
         invoke('JsLog', msg);
     };
     
+    var error = (message, url, lineNumber, colNumber, obj) => {
+        var msg = `error encounted at ${lineNumber} : ${colNumber}: ${message}`;
+        console.log(msg, obj);
+        invoke('JsError', msg);
+    };
+    
     window.invoke = invoke;
     window.log = log;
-    
+    window.onerror = error;
+
     var interop = {
         InXna: function() {
             //return typeof xna !== 'undefined';
             return true;
         },
+
+        leaveGame: function() {
+            if (interop.InXna()) {
+                invoke("LeaveGame");
+            }
+        },
         
-        xna: function() {
-            return xna;
+        quitApp: function() {
+            if (interop.InXna()) {
+                invoke("QuitApp");
+            }
+        },
+        
+        dumpState: function(state) {
+            if (interop.InXna()) {
+                invoke("DumpState", state);
+            }
         },
         
         onOver: function() {

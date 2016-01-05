@@ -30,8 +30,15 @@ define(['lodash'], function (_) {
         invoke('JsLog', msg);
     };
 
+    var error = function error(message, url, lineNumber, colNumber, obj) {
+        var msg = 'error encounted at ' + lineNumber + ' : ' + colNumber + ': ' + message;
+        console.log(msg, obj);
+        invoke('JsError', msg);
+    };
+
     window.invoke = invoke;
     window.log = log;
+    window.onerror = error;
 
     var interop = {
         InXna: function InXna() {
@@ -39,19 +46,23 @@ define(['lodash'], function (_) {
             return true;
         },
 
-        xna: (function (_xna) {
-            function xna() {
-                return _xna.apply(this, arguments);
+        leaveGame: function leaveGame() {
+            if (interop.InXna()) {
+                invoke("LeaveGame");
             }
+        },
 
-            xna.toString = function () {
-                return _xna.toString();
-            };
+        quitApp: function quitApp() {
+            if (interop.InXna()) {
+                invoke("QuitApp");
+            }
+        },
 
-            return xna;
-        })(function () {
-            return xna;
-        }),
+        dumpState: function dumpState(state) {
+            if (interop.InXna()) {
+                invoke("DumpState", state);
+            }
+        },
 
         onOver: function onOver() {
             if (interop.InXna()) {

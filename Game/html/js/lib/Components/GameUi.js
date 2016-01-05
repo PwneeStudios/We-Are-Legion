@@ -15,7 +15,7 @@ define(['lodash', 'react', 'interop', 'events', 'Components/InGameUi', 'Componen
 
         leaveGame: function leaveGame() {
             if (interop.InXna()) {
-                interop.xna().LeaveGame();
+                interop.leaveGame();
             } else {
                 removeMode("in-game");
                 removeMode("main-menu");
@@ -27,7 +27,7 @@ define(['lodash', 'react', 'interop', 'events', 'Components/InGameUi', 'Componen
 
         quitApp: function quitApp() {
             if (interop.InXna()) {
-                interop.xna().QuitApp();
+                interop.quitApp();
             } else {
                 return;
             }
@@ -74,7 +74,7 @@ define(['lodash', 'react', 'interop', 'events', 'Components/InGameUi', 'Componen
                 };
 
                 var dump = JSON.stringify(state);
-                interop.xna().DumpState(dump);
+                interop.dumpState(dump);
             }
         },
 
@@ -93,7 +93,7 @@ define(['lodash', 'react', 'interop', 'events', 'Components/InGameUi', 'Componen
             setMode('none');
 
             setMode('main-menu');
-            setScreen('game-menu');
+            //setScreen('game-menu');
 
             // Test menus
             //setScreen('options');
@@ -106,7 +106,7 @@ define(['lodash', 'react', 'interop', 'events', 'Components/InGameUi', 'Componen
             //setMode('in-game');
             //setScreen('game-over', {victory:false});
             //setScreen('game-over', {victory:true});
-            //setScreen('in-game-ui');
+            setScreen('in-game-ui');
             //setScreen('editor-ui');
             //setScreen('in-game-menu');
             //setScreen('confirm-leave-game');
