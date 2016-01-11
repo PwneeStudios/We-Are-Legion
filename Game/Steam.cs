@@ -1,5 +1,5 @@
 ﻿using System;
-using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
@@ -28,6 +28,9 @@ namespace SteamWrapper
         static Callback<HTML_FinishedRequest_t> Event_FinishedRequest;
         static Callback<HTML_URLChanged_t> Event_URLChanged;
 
+        static Keys[] lastPressedKeys;
+        static Keys[] currentPressedKeys = new Keys[0];
+
         public static void Initialize()
         {
             bool result = SteamHTMLSurface.Init();
@@ -47,6 +50,82 @@ namespace SteamWrapper
             Event_URLChanged = new Callback<HTML_URLChanged_t>(OnURLChange);
         }
 
+        public static char KeyToChar(Keys key)
+        {
+            bool shift = Keys.LeftShift.Down() || Keys.RightShift.Down();
+
+            switch (key)
+            {
+                //Alphabet keys
+                case Keys.A: if (shift) { return 'A'; } else { return 'a'; }
+                case Keys.B: if (shift) { return 'B'; } else { return 'b'; }
+                case Keys.C: if (shift) { return 'C'; } else { return 'c'; }
+                case Keys.D: if (shift) { return 'D'; } else { return 'd'; }
+                case Keys.E: if (shift) { return 'E'; } else { return 'e'; }
+                case Keys.F: if (shift) { return 'F'; } else { return 'f'; }
+                case Keys.G: if (shift) { return 'G'; } else { return 'g'; }
+                case Keys.H: if (shift) { return 'H'; } else { return 'h'; }
+                case Keys.I: if (shift) { return 'I'; } else { return 'i'; }
+                case Keys.J: if (shift) { return 'J'; } else { return 'j'; }
+                case Keys.K: if (shift) { return 'K'; } else { return 'k'; }
+                case Keys.L: if (shift) { return 'L'; } else { return 'l'; }
+                case Keys.M: if (shift) { return 'M'; } else { return 'm'; }
+                case Keys.N: if (shift) { return 'N'; } else { return 'n'; }
+                case Keys.O: if (shift) { return 'O'; } else { return 'o'; }
+                case Keys.P: if (shift) { return 'P'; } else { return 'p'; }
+                case Keys.Q: if (shift) { return 'Q'; } else { return 'q'; }
+                case Keys.R: if (shift) { return 'R'; } else { return 'r'; }
+                case Keys.S: if (shift) { return 'S'; } else { return 's'; }
+                case Keys.T: if (shift) { return 'T'; } else { return 't'; }
+                case Keys.U: if (shift) { return 'U'; } else { return 'u'; }
+                case Keys.V: if (shift) { return 'V'; } else { return 'v'; }
+                case Keys.W: if (shift) { return 'W'; } else { return 'w'; }
+                case Keys.X: if (shift) { return 'X'; } else { return 'x'; }
+                case Keys.Y: if (shift) { return 'Y'; } else { return 'y'; }
+                case Keys.Z: if (shift) { return 'Z'; } else { return 'z'; }
+
+                //Decimal keys
+                case Keys.D0: if (shift) { return ')'; } else { return '0'; }
+                case Keys.D1: if (shift) { return '!'; } else { return '1'; }
+                case Keys.D2: if (shift) { return '@'; } else { return '2'; }
+                case Keys.D3: if (shift) { return '#'; } else { return '3'; }
+                case Keys.D4: if (shift) { return '$'; } else { return '4'; }
+                case Keys.D5: if (shift) { return '%'; } else { return '5'; }
+                case Keys.D6: if (shift) { return '^'; } else { return '6'; }
+                case Keys.D7: if (shift) { return '&'; } else { return '7'; }
+                case Keys.D8: if (shift) { return '*'; } else { return '8'; }
+                case Keys.D9: if (shift) { return '('; } else { return '9'; }
+
+                //Decimal numpad keys
+                case Keys.NumPad0: return '0';
+                case Keys.NumPad1: return '1';
+                case Keys.NumPad2: return '2';
+                case Keys.NumPad3: return '3';
+                case Keys.NumPad4: return '4';
+                case Keys.NumPad5: return '5';
+                case Keys.NumPad6: return '6';
+                case Keys.NumPad7: return '7';
+                case Keys.NumPad8: return '8';
+                case Keys.NumPad9: return '9';
+
+                //Special keys
+                case Keys.OemTilde: if (shift) { return '~'; } else { return '`'; }
+                case Keys.OemSemicolon: if (shift) { return ':'; } else { return ';'; }
+                case Keys.OemQuotes: if (shift) { return '"'; } else { return '\''; }
+                case Keys.OemQuestion: if (shift) { return '?'; } else { return '/'; }
+                case Keys.OemPlus: if (shift) { return '+'; } else { return '='; }
+                case Keys.OemPipe: if (shift) { return '|'; } else { return '\\'; }
+                case Keys.OemPeriod: if (shift) { return '>'; } else { return '.'; }
+                case Keys.OemOpenBrackets: if (shift) { return '{'; } else { return '['; }
+                case Keys.OemCloseBrackets: if (shift) { return '}'; } else { return ']'; }
+                case Keys.OemMinus: if (shift) { return '_'; } else { return '-'; }
+                case Keys.OemComma: if (shift) { return '<'; } else { return ','; }
+                case Keys.Space: return ' ';
+            }
+
+            return (char)0;
+        }
+
         public static void Update()
         {
             if (Browser == null) return;
@@ -55,6 +134,39 @@ namespace SteamWrapper
             if (Input.LeftMouseReleased) SteamHTMLSurface.MouseUp(Browser, EHTMLMouseButton.eHTMLMouseButton_Left);
 
             SteamHTMLSurface.MouseMove(Browser, (int)Input.CurMousePos.x, (int)Input.CurMousePos.y);
+
+            lastPressedKeys = currentPressedKeys;
+            currentPressedKeys = Keyboard.GetState().GetPressedKeys();
+
+            // Key Down
+            foreach (var key in currentPressedKeys)
+            {
+                if (!lastPressedKeys.Contains(key))
+                {
+                    uint code = (uint)key;
+
+                    var mod = Keys.LeftShift.Down() || Keys.RightShift.Down() ?
+                        EHTMLKeyModifiers.k_eHTMLKeyModifier_ShiftDown : EHTMLKeyModifiers.k_eHTMLKeyModifier_None;
+
+                    SteamHTMLSurface.KeyDown(Browser, code, mod);
+
+                    if (KeyToChar(key) != (char)0)
+                    {
+                        SteamHTMLSurface.KeyChar(Browser, (uint)KeyToChar(key), EHTMLKeyModifiers.k_eHTMLKeyModifier_None);
+                    }
+                }
+            }
+
+            // Key Up
+            foreach (var key in lastPressedKeys)
+            {
+                if (!currentPressedKeys.Contains(key))
+                {
+                    uint code = (uint)key;
+
+                    SteamHTMLSurface.KeyUp(Browser, code, EHTMLKeyModifiers.k_eHTMLKeyModifier_None);
+                }
+            }
         }
 
         public static void ExecuteJS(string code)
