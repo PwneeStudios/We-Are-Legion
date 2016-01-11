@@ -623,7 +623,7 @@ namespace Game
 
         public void OnLobbyChatEnter(string message)
         {
-            if (Program.GameStarted)
+            if (Program.GameStarted) return;
 
             if (message != null && message.Length > 0)
             {
