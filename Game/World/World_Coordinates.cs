@@ -10,7 +10,7 @@ namespace Game
             var world = ScreenToWorldCoord(pos);
             world.y = -world.y;
 
-            var grid_coord = DataGroup.GridSize * (world + vec2.Ones) / 2;
+            var grid_coord = DataGroup.GridSize * (world + vec2.Ones) / 2 - vec(.25f, .27f);
 
             return grid_coord;
         }
@@ -25,7 +25,7 @@ namespace Game
 
         public vec2 GridToWorldCood(vec2 pos)
         {
-            pos = 2 * pos / DataGroup.GridSize - vec2.Ones;
+            pos = 2 * (pos + vec(.25f, .27f)) / DataGroup.GridSize - vec2.Ones;
             pos.y = -pos.y;
             return pos;
         }
