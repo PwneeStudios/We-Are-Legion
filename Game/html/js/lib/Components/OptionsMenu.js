@@ -46,17 +46,27 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             this.setState({ value: value });
 
             if (interop.InXna()) {
-                //xna['Set' + this.props.variable](value);fixme
+                window.invoke('Set' + this.props.variable, value);
             }
         },
 
         getInitialState: function getInitialState() {
-            var value = 0.0;
-            if (interop.InXna()) {
-                //value = xna['Get' + this.props.variable]();fixme
-            }
+            return { value: 0 };
+        },
 
-            return { value: value };
+        componentDidMount: function componentDidMount() {
+            var _this = this;
+            window['get' + this.props.variable] = function (value) {
+                return _this.setState({ value: value });
+            };
+
+            if (interop.InXna()) {
+                window.invoke('Get' + this.props.variable);
+            }
+        },
+
+        componentWillUnmount: function componentWillUnmount() {
+            window['get' + this.props.variable] = function () {};
         },
 
         render: function render() {
@@ -89,30 +99,39 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
 
         onSelect: function onSelect(item) {
             if (interop.InXna()) {
-                //xna['Set' + this.props.variable](item.value);fixme
+                window.invoke('Set' + this.props.variable, value);
             }
+        },
+
+        getInitialState: function getInitialState() {
+            return {};
+        },
+
+        componentDidMount: function componentDidMount() {
+            var _this = this;
+            window['get' + this.props.variable] = function (value) {
+                return _this.setState({ value: value });
+            };
+            window['get' + this.props.variable + 'Values'] = function (choices) {
+                return _this.setState({ choices: choices });
+            };
+
+            if (interop.InXna()) {
+                window.invoke('Get' + this.props.variable);
+                window.invoke('Get' + this.props.variable + 'Values');
+            }
+        },
+
+        componentWillUnmount: function componentWillUnmount() {
+            window['get' + this.props.variable] = function () {};
+            window['get' + this.props.variable + 'Values'] = function () {};
         },
 
         render: function render() {
             var choices, value;
 
-            if (interop.InXna()) {
-                //value = xna['Get' + this.props.variable]();fixme
-                choices = interop.get('Get' + this.props.variable + 'Values');
-                choices = choices || this.props.choices;
-
-                //var item = xna['Get' + this.props.variable]();fixme
-                value = _.find(choices, function (o) {
-                    return o.value === value;
-                });
-
-                if (!value) {
-                    value = choices[0];
-                }
-            } else {
-                choices = this.props.choices;
-                value = choices[0];
-            }
+            choices = this.state.choices || this.props.choices;
+            value = this.state.value || choices[0];
 
             return React.createElement(
                 'tr',
@@ -179,22 +198,17 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             var fullscreenChoices = [{ name: 'Fullscreen', value: true }, { name: 'Windowed', value: false }];
 
             var disableResolutions = false;
-            if (interop.InXna()) {
+            /*if (interop.InXna()) {
                 var value = interop.getFullscreen();
                 if (value) {
                     disableResolutions = true;
                 }
-            }
+            }fixme*/
 
-            var screenOptions = [React.createElement(
-                MenuDropdown,
-                { disabled: disableResolutions, scroll: true, variable: 'Resolution', choices: resolutionChoices },
-                'Resolution'
-            ), React.createElement(
-                MenuDropdown,
-                { variable: 'Fullscreen', choices: fullscreenChoices },
-                'Fullscreen setting'
-            )];
+            // var screenOptions = [
+            // <MenuDropdown disabled={disableResolutions} scroll variable='Resolution' choices={resolutionChoices}>Resolution</MenuDropdown>,
+            // <MenuDropdown variable='Fullscreen' choices={fullscreenChoices}>Fullscreen setting</MenuDropdown>,
+            // ];
 
             return React.createElement(
                 Menu,
@@ -204,12 +218,6 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                     { variable: 'SoundVolume' },
                     'Sound'
                 ),
-                React.createElement(
-                    MenuSlider,
-                    { variable: 'MusicVolume' },
-                    'Music'
-                ),
-                this.props.params.inGame ? null : screenOptions,
                 React.createElement(
                     MenuButton,
                     { onClick: back },

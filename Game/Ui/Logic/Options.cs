@@ -38,9 +38,9 @@ namespace Game
             SaveConfig();
         }
 
-        float GetSoundVolume()
+        public void GetSoundVolume()
         {
-            return CurrentConfig.SoundVolume;
+            Send("getSoundVolume", CurrentConfig.SoundVolume);
         }
 
         public void SetMusicVolume(float volume)
@@ -49,9 +49,9 @@ namespace Game
             SaveConfig();
         }
 
-        public float GetMusicVolume()
+        public void GetMusicVolume()
         {
-            return CurrentConfig.MusicVolume;
+            Send("getMusicVolume", CurrentConfig.MusicVolume);
         }
 
         public void SetFullscreen(bool fullscreen)
@@ -62,12 +62,12 @@ namespace Game
             ApplyConfig();
         }
 
-        bool GetFullscreen()
+        public void GetFullscreen()
         {
-            return CurrentConfig.Fullscreen;
+            Send("getFullscreen", CurrentConfig.Fullscreen);
         }
 
-        public string GetFullscreenValues()
+        public void GetFullscreenValues()
         {
             var options = new List<Dict>();
             var dict = new Dict();
@@ -82,7 +82,7 @@ namespace Game
             dict["value"] = false;
             options.Add(dict);
 
-            return Jsonify(options);
+            Send("getFullscreenValues", Jsonify(options));
         }
 
         public void SetResolution(int Resolution)
@@ -102,20 +102,18 @@ namespace Game
             ApplyConfig();
         }
 
-        public int GetResolution()
+        public void GetResolution()
         {
             int index = Resolutions.FindIndex(match =>
                 match.Width == graphics.PreferredBackBufferWidth &&
                 match.Height == graphics.PreferredBackBufferHeight);
 
-            if (index >= 0)
+            if (index < 0)
             {
-                return index;
+                index = 0;
             }
-            else
-            {
-                return 0;
-            }
+
+            Send("getResolution", index);
         }
 
         static List<DisplayMode> _Modes = null;
@@ -140,7 +138,7 @@ namespace Game
             }
         }
 
-        public string GetResolutionValues()
+        public void GetResolutionValues()
         {
             var options = new List<object>();
 
@@ -157,7 +155,7 @@ namespace Game
                 );
             }
 
-            return Jsonify(options);
+            Send("getResolutionValues", Jsonify(options));
         }
     }
 }
