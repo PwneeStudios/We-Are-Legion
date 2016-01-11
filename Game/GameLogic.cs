@@ -110,7 +110,7 @@ namespace Game
                     StartMenuMusicIfNeeded();
                     AmbientSounds.EndAll();
 
-                    // No mouse input to Awesomium
+                    // No mouse input to web browser.
                     SteamWrapper.SteamHtml.AllowMouseEvents = false;
 
                     Render.StandardRenderSetup();

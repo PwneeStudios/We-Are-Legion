@@ -108,6 +108,7 @@ namespace SteamWrapper
                     pixels[i + 3] = 0;
                 }
             }
+
             Texture.SetData(pixels);
         }
 
@@ -294,7 +295,7 @@ namespace SteamWrapper
 
             return true;
         }
-
+            
         public static bool InOfflineMode()
         {
             return s_bOffline;

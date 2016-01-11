@@ -15,14 +15,6 @@ namespace Game
 {
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
-        /// <summary>
-        /// On Exit callback from JavaScript from Awesomium
-        /// </summary>
-        public void OnExit()
-        {
-            Exit();
-        }
-
         private void DrawWebView()
         {
             if (SteamWrapper.SteamHtml.Texture != null)
@@ -36,8 +28,6 @@ namespace Game
         public bool MouseDownOverUi = false;
         public void CalculateMouseDownOverUi()
         {
-            //fixme
-            /*
             if (!GameInputEnabled)
             {
                 SteamWrapper.SteamHtml.AllowMouseEvents = true;
@@ -61,17 +51,16 @@ namespace Game
             }
             else
             {
-
                 try
                 {
                     Render.UnsetDevice();
-                    MouseDownOverUi = awesomium.WebViewTexture.GetData(Input.CurMousePos).A > 20;
+                    MouseDownOverUi = SteamWrapper.SteamHtml.Texture.GetData(Input.CurMousePos).A > 20;
                 }
                 catch
                 {
                     MouseDownOverUi = false;
                 }
-            }*/
+            }
         }
 
         JsonSerializer jsonify = new JsonSerializer();
