@@ -6,26 +6,10 @@ namespace Game
 {
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
-        void BindMethods_Editor()
-        {
-            /*fixme
-            xnaObj.Bind("StartEditor", StartEditor);
-
-            xnaObj.Bind("PlayButtonPressed", PlayButtonPressed);
-            xnaObj.Bind("EditorUiClicked", EditorUiClicked);
-            xnaObj.Bind("ToggleChat", ToggleChat);
-
-            xnaObj.Bind("SetUnitPaint", (sender, e) => { World.SetUnitPaint((int)e.Arguments[0]); });
-            xnaObj.Bind("SetTilePaint", (sender, e) => { World.SetTilePaint((int)e.Arguments[0]); });
-            xnaObj.Bind("SetPlayer", (sender, e) => { World.Editor_SwitchPlayer((int)e.Arguments[0]); });
-            xnaObj.Bind("SetPaintChoice", (sender, e) => { World.SetUnitPlaceStyle((int)e.Arguments[0]); });
-
-            xnaObj.Bind("GetMaps", GetMaps);
-            xnaObj.Bind("LoadMap", LoadMap);
-            xnaObj.Bind("SaveMap", SaveMap);
-            xnaObj.Bind("CreateNewMap", CreateNewMap);
-            */
-        }
+        public void SetUnitPaint(int type) { World.SetUnitPaint(type); }
+        public void SetTilePaint(int type) { World.SetTilePaint(type); }
+        public void SetPlayer(int player) { World.Editor_SwitchPlayer(player); }
+        public void SetPaintChoice(int style) { World.SetUnitPlaceStyle(style); }
 
         public void UpdateEditorJsData()
         {
