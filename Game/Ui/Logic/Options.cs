@@ -82,7 +82,7 @@ namespace Game
             dict["value"] = false;
             options.Add(dict);
 
-            Send("getFullscreenValues", Jsonify(options));
+            Send("getFullscreenValues", options);
         }
 
         public void SetResolution(int Resolution)
@@ -155,7 +155,7 @@ namespace Game
                 );
             }
 
-            Send("getResolutionValues", Jsonify(options));
+            Send("getResolutionValues", options);
         }
     }
 }

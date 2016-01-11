@@ -79,7 +79,7 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
     var MenuDropdown = React.createClass({
         onSelect: function(item) {
             if (interop.InXna()) {
-                window.invoke('Set' + this.props.variable, value);
+                window.invoke('Set' + this.props.variable, item.value);
             }
         },
 
@@ -89,12 +89,12 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         
         componentDidMount: function() {
             var _this = this;
-            window['get' + this.props.variable] = value => _this.setState({value:value});
             window['get' + this.props.variable + 'Values'] = choices => _this.setState({choices:choices});
+            window['get' + this.props.variable] = value => _this.setState({value:value});
             
             if (interop.InXna()) {
-                window.invoke('Get' + this.props.variable);
                 window.invoke('Get' + this.props.variable + 'Values');
+                window.invoke('Get' + this.props.variable);
             }
         },
         
@@ -107,7 +107,17 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             var choices, value;
 
             choices = this.state.choices || this.props.choices;
-            value = this.state.value || choices[0];
+            
+            if (_.isUndefined(this.state.value)) {
+                value = 'wooh';
+            } else {
+                for (var i = 0; i < this.state.choices; i++) {
+                    if (this.state.choices[i].value == this.state.value) {
+                        value = this.state.choices[i];
+                    }
+                }
+            }
+            window.log('value', value);
 
             return (
                 <tr style={{'background-color':'#1c1e22'}}>
@@ -204,17 +214,17 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
                 }
             }fixme*/
 
-            // var screenOptions = [
-                // <MenuDropdown disabled={disableResolutions} scroll variable='Resolution' choices={resolutionChoices}>Resolution</MenuDropdown>,
-                // <MenuDropdown variable='Fullscreen' choices={fullscreenChoices}>Fullscreen setting</MenuDropdown>,
-            // ];
+            var screenOptions = [
+                <MenuDropdown disabled={disableResolutions} scroll variable='Resolution' choices={resolutionChoices}>Resolution</MenuDropdown>,
+                <MenuDropdown variable='Fullscreen' choices={fullscreenChoices}>Fullscreen setting</MenuDropdown>,
+            ];
 
             return (
                 <Menu width={30} type='table'>
                     <MenuSlider variable='SoundVolume'>Sound</MenuSlider>
-                    {/*<MenuSlider variable='MusicVolume'>Music</MenuSlider>
+                    <MenuSlider variable='MusicVolume'>Music</MenuSlider>
 
-                    {this.props.params.inGame ? null : screenOptions}*/}
+                    {this.props.params.inGame ? null : screenOptions}
 
                     <MenuButton onClick={back}>Back</MenuButton>
                 </Menu>
