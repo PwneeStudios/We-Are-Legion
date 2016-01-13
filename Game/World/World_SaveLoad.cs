@@ -1,11 +1,8 @@
 using System;
 using System.IO;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 
 using Hjg.Pngcs;
-using Hjg.Pngcs.Chunks;
 
 using Microsoft.Xna.Framework.Graphics;
 
@@ -51,26 +48,6 @@ namespace Game
     {
         public static void ToPng(Texture2D texture, Stream stream)
         {
-            int w = texture.Width, h = texture.Height;
-
-            using (Bitmap bitmap = new Bitmap(w, h, PixelFormat.Format32bppArgb))
-            {
-                byte[] textureData = new byte[4 * w * h];
-                texture.GetData<byte>(textureData);
-
-                Rectangle rect = new Rectangle(0, 0, w, h);
-                var bitmapData = bitmap.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-                var safePtr = bitmapData.Scan0;
-
-                Marshal.Copy(textureData, 0, safePtr, textureData.Length);
-
-                bitmap.UnlockBits(bitmapData);
-                bitmap.Save(stream, ImageFormat.Png);
-            }
-        }
-
-        public static void _ToPng(Texture2D texture, Stream stream)
-        {
             texture.SaveAsPng(stream, texture.Width, texture.Height);
         }
 
@@ -112,41 +89,6 @@ namespace Game
             
             texture.SetData(bytes);
 
-            return texture;
-        }
-
-        public static Texture2D _FromPng(Stream stream, Texture2D texture = null)
-        {
-            using (Bitmap bitmap = new Bitmap(stream))
-            {
-                int w = bitmap.Width, h = bitmap.Height;
-                byte[] textureData = new byte[4 * w * h];
-
-                if (texture == null)
-                {
-                    texture = new Texture2D(GameClass.Graphics, w, h);
-                }
-
-                Rectangle rect = new Rectangle(0, 0, w, h);
-                var bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                var safePtr = bitmapData.Scan0;
-
-                Marshal.Copy(safePtr, textureData, 0, textureData.Length);
-
-                bitmap.UnlockBits(bitmapData);
-
-                texture.SetData(textureData);
-                return texture;
-            }
-        }
-
-        public static Texture2D __FromPng(Stream stream, Texture2D texture = null)
-        {
-            var loadedTexture = Texture2D.FromStream(GameClass.Graphics, stream);
-
-            if (texture == null) return loadedTexture;
-
-            texture.SetData(loadedTexture.GetData());
             return texture;
         }
     }
