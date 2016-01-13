@@ -108,12 +108,16 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         },
 
         componentDidMount: function componentDidMount() {
+            var _this2 = this;
+
             var _this = this;
             window['get' + this.props.variable + 'Values'] = function (choices) {
-                return _this.setState({ choices: choices });
-            };
-            window['get' + this.props.variable] = function (value) {
-                return _this.setState({ value: value });
+                window['get' + _this2.props.variable] = function (value) {
+                    _this.setState({
+                        choices: choices,
+                        value: value
+                    });
+                };
             };
 
             if (interop.InXna()) {
@@ -133,15 +137,16 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             choices = this.state.choices || this.props.choices;
 
             if (_.isUndefined(this.state.value)) {
-                value = 'wooh';
+                value = ' ';
             } else {
-                for (var i = 0; i < this.state.choices; i++) {
+                value = this.state.choices[0];
+
+                for (var i = 0; i < this.state.choices.length; i++) {
                     if (this.state.choices[i].value == this.state.value) {
                         value = this.state.choices[i];
                     }
                 }
             }
-            window.log('value', value);
 
             return React.createElement(
                 'tr',

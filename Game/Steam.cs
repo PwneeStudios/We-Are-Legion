@@ -241,7 +241,7 @@ namespace SteamWrapper
 
                 invocation = invocation.After('!').After('!');
 
-                Console.WriteLine($"Invocating {invocation.Abbreviated()}");
+                //Console.WriteLine($"Invocating {invocation.Abbreviated()}");
                 Game.GameClass.Game.ExecuteInvocation(invocation);
             }
             catch (Exception e)
@@ -481,9 +481,9 @@ namespace SteamWrapper
     {
         public static string Abbreviated(this string str)
         {
-            if (str.Length > 30)
+            if (str.Length > 50)
             {
-                return $"JS log: {str.Substring(0, 30)}...";
+                return $"JS log: {str.Substring(0, 50)}...";
             }
             else
             {

@@ -89,8 +89,14 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
         
         componentDidMount: function() {
             var _this = this;
-            window['get' + this.props.variable + 'Values'] = choices => _this.setState({choices:choices});
-            window['get' + this.props.variable] = value => _this.setState({value:value});
+            window['get' + this.props.variable + 'Values'] = choices => {
+                window['get' + this.props.variable] = value => {
+                    _this.setState({
+                        choices:choices,
+                        value:value,
+                    });
+                };
+            }
             
             if (interop.InXna()) {
                 window.invoke('Get' + this.props.variable + 'Values');
@@ -109,15 +115,16 @@ define(['lodash', 'sound', 'react', 'react-bootstrap', 'interop', 'events', 'ui'
             choices = this.state.choices || this.props.choices;
             
             if (_.isUndefined(this.state.value)) {
-                value = 'wooh';
+                value = ' ';
             } else {
-                for (var i = 0; i < this.state.choices; i++) {
+                value = this.state.choices[0];
+
+                for (var i = 0; i < this.state.choices.length; i++) {
                     if (this.state.choices[i].value == this.state.value) {
                         value = this.state.choices[i];
                     }
                 }
             }
-            window.log('value', value);
 
             return (
                 <tr style={{'background-color':'#1c1e22'}}>
