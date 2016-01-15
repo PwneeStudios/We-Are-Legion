@@ -1,0 +1,1 @@
+APPTITLE="We Are Legion Installer"
