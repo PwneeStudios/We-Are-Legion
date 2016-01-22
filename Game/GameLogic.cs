@@ -26,8 +26,8 @@ namespace Game
         //GameState State = GameState.ToMap;
         GameState State = GameState.TitleScreen;
 #else
-        //GameState State = GameState.TitleScreen;
-        GameState State = GameState.ToMap;
+        GameState State = GameState.TitleScreen;
+        //GameState State = GameState.ToMap;
 #endif
 
         double TimeSinceLoad = 0, TimeLoading = 0;

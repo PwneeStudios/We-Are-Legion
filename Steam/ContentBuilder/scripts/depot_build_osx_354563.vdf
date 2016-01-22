@@ -1,0 +1,52 @@
+"DepotBuildConfig"
+{
+    "DepotID" "354563"
+
+    "FileMapping"
+    {
+        "LocalPath" "../../../Game/bin/x86/Release/Content/*"
+        "DepotPath" "./We Are Legion.app/Contents/MacOS/Content/"
+        "recursive" "1"
+    }
+
+    "FileMapping"
+    {
+        "LocalPath" "../../../Game/bin/x86/Release/html/*"
+        "DepotPath" "./We Are Legion.app/Contents/MacOS/html/"
+        "recursive" "1"
+    }
+
+    "FileMapping"
+    {
+        "LocalPath" "../../../Game/bin/x86/Release/WeAreLegion.exe"
+        "DepotPath" "./We Are Legion.app/Contents/MacOS/"
+    }
+    
+    "FileMapping"
+    {
+        "LocalPath" "../../../Game/bin/x86/Release/FNA*"
+        "DepotPath" "./We Are Legion.app/Contents/MacOS/"
+    }
+    
+    "FileMapping"
+    {
+        "LocalPath" "../../../Game/bin/x86/Release/Pngcs.dll"
+        "DepotPath" "./We Are Legion.app/Contents/MacOS/"
+    }
+
+    "FileMapping"
+    {
+        "LocalPath" "./osx/*"
+        "DepotPath" "."
+        "recursive" "1"
+    }
+
+    "FileExclusion" "../../../Game/bin/x86/Release/steam_appid.txt"
+    
+    "FileExclusion" "../../../Game/bin/x86/Release/*.pdb"
+    "FileExclusion" "../../../Game/bin/x86/Release/*.sqlite"
+    
+    "FileExclusion" "../../../Game/bin/x86/Release/config.txt"
+    "FileExclusion" "../../../Game/bin/x86/Release/dump"
+    "FileExclusion" "../../../Game/bin/x86/Release/debug.log"
+}

@@ -12,8 +12,9 @@
 	
 	"depots"
 	{
-		"354561" "depot_build_windows_354561.vdf"
-        "354562" "depot_build_osx_354562.vdf"
-        "354563" "depot_build_linux_354563.vdf"
+		"354561" "depot_build_content_354561.vdf"
+        "354562" "depot_build_windows_354562.vdf"
+        "354563" "depot_build_osx_354563.vdf"
+        "354564" "depot_build_linux_354564.vdf"
 	}
 }

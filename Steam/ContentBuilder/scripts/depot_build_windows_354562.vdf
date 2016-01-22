@@ -1,0 +1,27 @@
+"DepotBuildConfig"
+{
+    "DepotID" "354562"
+
+    "FileMapping"
+    {
+        "LocalPath" "../../../Game/bin/x86/Release/*"
+        "DepotPath" "."
+        "recursive" "1"
+    }
+
+    "FileMapping"
+    {
+        "LocalPath" "./windows/*"
+        "DepotPath" "."
+        "recursive" "1"
+    }
+    
+    "FileExclusion" "../../../Game/bin/x86/Release/steam_appid.txt"
+    
+    "FileExclusion" "../../../Game/bin/x86/Release/*.pdb"
+    "FileExclusion" "../../../Game/bin/x86/Release/*.sqlite"
+    
+    "FileExclusion" "../../../Game/bin/x86/Release/config.txt"
+    "FileExclusion" "../../../Game/bin/x86/Release/dump"
+    "FileExclusion" "../../../Game/bin/x86/Release/debug.log"
+}

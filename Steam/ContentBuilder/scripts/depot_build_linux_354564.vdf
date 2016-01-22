@@ -1,0 +1,52 @@
+"DepotBuildConfig"
+{
+    "DepotID" "354564"
+
+    "FileMapping"
+    {
+        "LocalPath" "../../../Game/bin/x86/Release/Content/*"
+        "DepotPath" "./Content/"
+        "recursive" "1"
+    }
+
+    "FileMapping"
+    {
+        "LocalPath" "../../../Game/bin/x86/Release/html/*"
+        "DepotPath" "./html/"
+        "recursive" "1"
+    }
+
+    "FileMapping"
+    {
+        "LocalPath" "../../../Game/bin/x86/Release/WeAreLegion.exe"
+        "DepotPath" "."
+    }
+    
+    "FileMapping"
+    {
+        "LocalPath" "../../../Game/bin/x86/Release/FNA*"
+        "DepotPath" "."
+    }
+    
+    "FileMapping"
+    {
+        "LocalPath" "../../../Game/bin/x86/Release/Pngcs.dll"
+        "DepotPath" "."
+    }
+
+    "FileMapping"
+    {
+        "LocalPath" "./linux/*"
+        "DepotPath" "."
+        "recursive" "1"
+    }
+
+    "FileExclusion" "../../../Game/bin/x86/Release/steam_appid.txt"
+    
+    "FileExclusion" "../../../Game/bin/x86/Release/*.pdb"
+    "FileExclusion" "../../../Game/bin/x86/Release/*.sqlite"
+    
+    "FileExclusion" "../../../Game/bin/x86/Release/config.txt"
+    "FileExclusion" "../../../Game/bin/x86/Release/dump"
+    "FileExclusion" "../../../Game/bin/x86/Release/debug.log"
+}

@@ -1,0 +1,12 @@
+"DepotBuildConfig"
+{
+    "DepotID" "354561"
+
+    "FileMapping"
+    {
+        "LocalPath" "../../../Game/bin/x86/Release/"
+        "DepotPath" "."
+    }
+
+    "FileExclusion" "../../../Game/bin/x86/Release/*"
+}
