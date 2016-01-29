@@ -99,7 +99,7 @@ namespace Game
             // Focus on player's dragon lord.
             if (!GameClass.Game.ShowChat && Keys.Space.Down())
             {
-                var dl_pos = CurDragonLordPos[MyPlayerNumber];
+                var dl_pos = PrevDragonLordPos[MyPlayerNumber];
 
                 if (dl_pos > vec(1,1))
                 {
@@ -495,7 +495,7 @@ namespace Game
 
                 if (player.CreateDragonLordDeathEffect)
                 {
-                    player.DragonLordDeathPos = CurDragonLordPos[p];
+                    player.DragonLordDeathPos = PrevDragonLordPos[p];
                     DragonLordDeath(player.DragonLordDeathPos, p);
 
                     if (!GameOver) Sounds.DyingDragonLord.MaybePlay();
