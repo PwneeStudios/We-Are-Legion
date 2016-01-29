@@ -64,6 +64,11 @@ namespace Game
             {
                 var config = File.ReadAllText(ConfigFilePath);
                 _CurrentConfig = (Config)JsonConvert.DeserializeObject(config, typeof(Config));
+                if (_CurrentConfig.Fullscreen)
+                {
+                    _CurrentConfig.Width = GraphicsManager.GraphicsDevice.Adapter.CurrentDisplayMode.Width;
+                    _CurrentConfig.Height = GraphicsManager.GraphicsDevice.Adapter.CurrentDisplayMode.Height;
+                }
             }
             catch
             {
