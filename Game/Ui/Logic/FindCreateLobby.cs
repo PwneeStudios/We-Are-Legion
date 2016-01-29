@@ -10,8 +10,9 @@ namespace Game
     public partial class GameClass : Microsoft.Xna.Framework.Game
     {
         static bool InTrainingLobby = false;
-        public void CreateLobby(string lobbyType, bool InTrainingLobby)
+        public void CreateLobby(string lobbyType, bool trainingLobby)
         {
+            InTrainingLobby = trainingLobby;
             Program.GameStarted = false;
 
             if (!SteamCore.SteamIsConnected())
