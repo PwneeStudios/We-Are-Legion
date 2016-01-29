@@ -47,8 +47,6 @@ namespace Game
             PlayerInfo[2].DragonLords = Int(count.PlayerTwo);
             PlayerInfo[3].DragonLords = Int(count.PlayerThree);
             PlayerInfo[4].DragonLords = Int(count.PlayerFour);
-
-            PlayerInfo[1].DragonLords = 1;
         }
 
         public bool[]
