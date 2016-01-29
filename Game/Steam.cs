@@ -31,13 +31,18 @@ namespace SteamWrapper
         static Keys[] lastPressedKeys;
         static Keys[] currentPressedKeys = new Keys[0];
 
-        public static void Initialize()
+        static uint Width, Height;
+
+        public static void Initialize(uint _Width, uint _Height)
         {
+            Width = _Width;
+            Height = _Height;
+
             bool result = SteamHTMLSurface.Init();
 
-            SteamHTMLSurface.SetSize(HHTMLBrowser.Invalid, 1280, 720);
-            Texture = new Texture2D(Game.GameClass.Graphics, 1280, 720);
-            pixels = new byte[1280 * 720 * 4];
+            SteamHTMLSurface.SetSize(HHTMLBrowser.Invalid, Width, Height);
+            Texture = new Texture2D(Game.GameClass.Graphics, (int)Width, (int)Height);
+            pixels = new byte[Width * Height * 4];
 
             var hSteamAPICall = SteamHTMLSurface.CreateBrowser("WAL", null);
             g_CallResultBrowserReady = new CallResult<HTML_BrowserReady_t>(OnBrowserReady);
@@ -182,7 +187,7 @@ namespace SteamWrapper
             if (bIOFailure) return;
 
             Browser = pBrowserReady.unBrowserHandle;
-            SteamHTMLSurface.SetSize(Browser, 1280, 720);
+            SteamHTMLSurface.SetSize(Browser, Width, Height);
 
             var data = "file://" + Environment.CurrentDirectory + @"/html/index.html";
 
@@ -198,13 +203,13 @@ namespace SteamWrapper
         {
             Console.WriteLine("Browser needs painting.");
 
-            if (pParam.unWide != 1280)
+            if (pParam.unWide != Width)
             {
                 Console.WriteLine("bad texture width for html\n");
                 return;
             }
 
-            if (pParam.unTall != 720)
+            if (pParam.unTall != Height)
             {
                 Console.WriteLine("bad texture height for html\n");
                 return;
