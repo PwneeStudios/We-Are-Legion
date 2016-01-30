@@ -283,6 +283,8 @@ namespace Game
 
         public void SynchronizeNetwork()
         {
+            if (GameOver) return;
+
             GameClass.Game.Send("setScreen", "desync");
 
             SaveCurrentStateInBuffer();
