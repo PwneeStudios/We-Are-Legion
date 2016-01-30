@@ -478,24 +478,28 @@ namespace Game
             }
         }
 
-        public void GameOver(int winning_team)
+        void GameOverInitialize()
         {
+            ResetLobby();
             GetNames();
             Sounds.GameOver.MaybePlay();
+        }
+
+        public void GameOver(int winning_team)
+        {
+            GameOverInitialize();
             Send("setScreen", "game-over", new { spectator = true, victory = false, winningTeam = winning_team, info = World.PlayerInfo });
         }
 
         public void Defeat(int winning_team)
         {
-            GetNames();
-            Sounds.GameOver.MaybePlay();
+            GameOverInitialize();
             Send("setScreen", "game-over", new { victory = false, winningTeam = winning_team, info = World.PlayerInfo });
         }
 
         public void Victory(int winning_team)
         {
-            GetNames();
-            Sounds.GameOver.MaybePlay();
+            GameOverInitialize();
             Send("setScreen", "game-over", new { victory = true, winningTeam = winning_team, info = World.PlayerInfo });
         }
 
