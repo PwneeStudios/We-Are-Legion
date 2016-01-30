@@ -14,6 +14,8 @@ namespace Game
 
         public void ReturnToLobby()
         {
+            LeaveGame(); return; // FIXME. Returning to lobby is buggy right now. Remove this line after the bug is fixed.
+
             LeaveGameNetwork();
 
             ResetLobby();
