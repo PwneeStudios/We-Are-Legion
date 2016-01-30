@@ -74,8 +74,8 @@ namespace Game
             }
 
             graphics.IsFullScreen = false;
-            graphics.PreferredBackBufferWidth = 1280;
-            graphics.PreferredBackBufferHeight = 720;
+            graphics.PreferredBackBufferWidth = CurrentConfig.Width;
+            graphics.PreferredBackBufferHeight = CurrentConfig.Height;
             graphics.ApplyChanges();
             ApplyConfig(Activate:false);
 
@@ -139,9 +139,9 @@ namespace Game
             Spells.Initialize();
             Networking.Start();
 
-            //SteamWrapper.SteamHtml.Initialize((uint)CurrentConfig.Width, (uint)CurrentConfig.Height);
+            SteamWrapper.SteamHtml.Initialize((uint)CurrentConfig.Width, (uint)CurrentConfig.Height);
             //SteamWrapper.SteamHtml.Initialize(2880, 1800);
-            SteamWrapper.SteamHtml.Initialize(1280, 720);
+            //SteamWrapper.SteamHtml.Initialize(1280, 720);
 
             Activated += ActivatedEvent;
             Deactivated += DeactivatedEvent;
