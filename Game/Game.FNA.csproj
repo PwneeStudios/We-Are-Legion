@@ -71,6 +71,10 @@
     <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FNA, Version=0.0.0.1, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\x86\Release\FNA.dll</HintPath>
+    </Reference>
     <Reference Include="FragSharpFramework, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\FragSharp\FragSharpFramework\bin\x86\Release\FragSharpFramework.dll</HintPath>
@@ -195,10 +199,6 @@
     <Content Include="WAL-Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FNA\FNA.csproj">
-      <Project>{35253ce1-c864-4cd3-8249-4d1319748e8f}</Project>
-      <Name>FNA</Name>
-    </ProjectReference>
     <ProjectReference Include="..\content\Content.contentproj">
       <Name>Content</Name>
       <XnaReferenceType>Content</XnaReferenceType>
