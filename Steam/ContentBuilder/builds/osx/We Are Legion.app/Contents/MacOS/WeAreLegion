@@ -21,4 +21,3 @@ else
 		./WeAreLegion.bin.x86 $@
 	fi
 fi
-
