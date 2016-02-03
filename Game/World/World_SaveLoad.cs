@@ -10,6 +10,16 @@ using FragSharpFramework;
 
 namespace Game
 {
+    public partial class GameClass : Microsoft.Xna.Framework.Game
+    {
+        void Test_SaveLoad()
+        {
+            var fs = new FileStream("C:\\Users\\Jordan\\Desktop\\TestSave.png", FileMode.Create);
+            Png.ToPng(Assets.ExplosionTexture_1, fs);
+            fs.Close();
+        }
+    }
+
     public static class BinaryWriterExtension
     {
         public static void Write(this BinaryWriter writer, Texture2D texture)
@@ -48,7 +58,35 @@ namespace Game
     {
         public static void ToPng(Texture2D texture, Stream stream)
         {
-            texture.SaveAsPng(stream, texture.Width, texture.Height);
+            int channels = 4;
+            int w = texture.Width;
+            int h = texture.Height;
+
+            var pngw = new PngWriter(stream, new ImageInfo(w, h, 8, true));
+            var bytes = new byte[w * channels];
+
+            var colors = texture.GetData();
+
+            for (int row = 0; row < h; row++)
+            {
+                int count = 0;
+                for (int j = 0; j < w; j++)
+                {
+                    byte R = (byte)colors[row * w + j].R;
+                    byte G = (byte)colors[row * w + j].G;
+                    byte B = (byte)colors[row * w + j].B;
+                    byte A = (byte)colors[row * w + j].A;
+
+                    bytes[count++] = B;
+                    bytes[count++] = G;
+                    bytes[count++] = R;
+                    bytes[count++] = A;
+                }
+
+                pngw.WriteRowByte(bytes, row);
+            }
+
+            pngw.End();
         }
 
         public static Texture2D FromPng(Stream stream, Texture2D texture = null)
@@ -290,6 +328,23 @@ namespace Game
 
                 reader.Close();
                 stream.Close();
+
+                /*
+
+                // Test saving and loading.
+                // Uncommenting this block of code should result in identical behavior when loading maps.
+
+                Save("C:\\Users\\Jordan\\Desktop\\TestSave.png");
+
+                var _stream = new FileStream("C:\\Users\\Jordan\\Desktop\\TestSave.png", FileMode.Open);
+                var _reader = new BinaryReader(_stream);
+
+                Load(_reader);
+
+                _reader.Close();
+                _stream.Close();
+
+                */
 
                 if (!DataOnly)
                 {

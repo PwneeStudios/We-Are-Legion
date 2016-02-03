@@ -134,6 +134,9 @@ namespace Game
             GridHelper.Initialize(GraphicsDevice);
 
             Assets.Initialize();
+
+            //Test_SaveLoad();
+
             Sounds.Initialize();
             Render.Initialize();
             Spells.Initialize();
